@@ -22,3 +22,11 @@ Menne M.J., Durre I., Vose R.S., Gleason B.E. & Houston T.G. (2012) An overview 
 Mitchell T.D. & Jones P.D. (2005) An improved method of constructing a database of monthly climate observations and associated high-resolution grids. International Journal of Climatology, 25, 693–712. 
 			
 /* ------------------------------------ */
+
+Start a simulation:
+1. compile the code with the help of the makefile: "make all"
+2. update the settings of the simulation run in the parameter file
+3. execute the program: "./wachstum"
+
+/* ------------------------------------ */
+

@@ -1,0 +1,228 @@
+﻿//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+// 0. General functionality: Display, output and submodule switches
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+// 0.1 Display
+// 0.2 Output
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+// 0.1 -----> Display (in console)
+//
+parameterlesenanzeige=1;	// (int 0,1) print parameter value input 
+jahranzeige=1;				// (int 0,1) print yearly output in console
+qualijahranzeige=0;			// (int 0,1) print information of weather data
+samenausbranzeige=0;		// (int 0,1) print long dispersed seed dispersal events
+mortanzeige=0;				// (int 0,1) print mortality calculations for each individual >200 cm
+
+
+
+// 0.2 -----> Output (in data files)
+// the data files and own output parameters (which years, ...) can be specified in "datenausgabe.cpp" 
+//	//O1-ausgabecurrencies	=> general stand based information
+//	//O2-ausgabeindividuen	=> individual trees with state variables
+//	//O3-ausgabedichte		=> density grid cells only if trees are influencing
+
+datenausgabe=1;				// (int 0,1) write data to files 
+ausgabemodus=0;				// (int) choice of data output files 
+							//	// 0=="normal" => every five years O1 during spin up and in experimental phase of every year O1-O2 and O3-O4 for years 1960 and 2010
+
+
+							
+							
+							
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+// 1. Simulation set up
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+// 1.1 Weather
+// 1.2 Simulation run characteristics
+// 1.3 Plot layout
+// 1.4 Seed dispersal type and introduction 
+// 1.5 Growth function parameters and influences
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+
+
+
+// 1.1 -----> Weather
+wetterwahl=1001;			// (int) Type of weather forcing series
+							//	// 1001== the six locations that were visited at the southern Taymyr-Peninsula
+										//	# ID YPLOTPOS SiteSIM  SiteReal
+										//	# 1         0    ch02   CH02III
+										//	# 2         1    ch06   CH06III
+										//	# 3         3    ch12    CH12II
+										//	# 4         4    ch17    CH17II
+										//	# 5         7    ty04 13TY04VII
+										//	# 6         8    ty07 13TY07VII
+precwetter=1;				// (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
+							//	//  0==not at all
+							//	//  1==linearly if smaller than threshold
+							//	//  2==parabola function with a global maximum at the optimum
+precindexstrength=0.095415;	// ... (double) (IF precwetter==1) factor for calculation of precipitation index
+precindexexponent=1.0;		// ... (double) (IF precwetter==1) exponent for calculation of precipitation index
+evapod=1.5;					// (double) Evapotranspiration based on Dolmann, 2004) 
+weathercalcgradient=0;		// (int 0,1) Approximation of temperature and precipitation values on a gradient depending on their latidudinal position
+							//	// 0==without a gradient
+							//	// 1==calculation of a linear gradient
+Nposmax=72.267;				// ... (double) (IF weathercalcgradient==1) the northermost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
+Nposmin=72.2625; 			// ... (double) (IF weathercalcgradient==1) the southermost plot's position
+lineartransekt=0;			// (int 0,1) Approximation of temperature and precipitation values on a south-north gradient on each simulated plot
+							//	// 0==synchronous forcing per plot
+							//	// 1==linearly changing from south to north
+startlag=10; 					// Number of years left out at the beginning of the climate series during spin up
+								//	// ... 10 => standard for all simulations because long year climate variables are calculated over 10 years
+								
+								
+								
+								
+// 1.2 -----> Simulation run characteristics
+simdauer=93;						// (int) Duration of the simulation period depending on the available weather data series
+									//	// 93 for wetterwahl==1001 ==> simulation from 1929 until 2011 for startlag==10 (s. below)
+runs=1;								// (int) Number of repeated simulations
+ivortmax=1000;						// (int) Spin up phase befor the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+stabilfirstweatheryears=30;			// (int) Number of years - starting at the first year of the available climate series - that are used during spin up 
+stabilperiod=0;						// (int 0,1) Simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
+stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
+stabilpercentchangethreshold=0.02;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
+resetyear=0;						// (int) Year to save all container for a later resume from this time point
+									//	// currently three different temperature series will be run for each simulation repeat beginning at resetyear: -0.5, 0 and +0.5 °C manipulated temperature series 
+
+
+
+
+
+// 1.3 -----> Plot number
+mapxlength=1;				// (int) Number of parralel executed plots for each climate
+mapylength=6;				// (int) Number of plots along a transect
+							//	// ... if wetterwahl==1001 the maximum is 6
+sizemagnif=5;				// (int) Resolution of the density grid; a value of 5 determines a 20 cm sub grid
+
+
+
+
+
+	
+// 1.4 -----> Seed dispersal type and handling + seed introduction
+seedintro=1;				// (int 0,1) Seed input to simulated plot(s)
+jahremitsameneintrag=100;	// (int) Years of seed introduction at the beginning of each simulation
+etabbg=1000;				// (int) Number of seeds introduced per year (FOR EACH jahremitsameneintrag) and plot
+seedintropermanent=0;		// (int) Should seeds permanently introduced 
+etabbgpermanent=10;			//	// ... (int) if seedintropermanent==1 Number of seeds introduced per year and plot 
+realseedconnect=0;			// (int 0,1) Plot position for the initial seed introduction
+							//	// 0==into all plots along a transect
+							//	// 1==only southernmost plot
+seeddispmode=2;				// (int 1,2) Positions for seed introduction
+							//	// 1==negative exponentially from the south border of each plot
+							//	// 2==randomly into the plot
+seedtravelbetween=0;		// (int 0,1) Seed travel between plots along a transect
+
+
+
+
+
+
+// 1.5 -----> Growth function parameters and influences
+basaleinflussaltneu=0.0;	// (double) Basal diameter influence for year's basal diameter growth
+relwachstumeinfluss=1;		// (int 0,1) Influence of current growth (reduced by density depending processes) on seed production and mortality estimation
+aatnddratio=62.89988;		// (double) AAT-NDD-Ratio for growth calculation
+incfac=10;					// (int) Factor for calculating area influenced by individual trees
+dichteart=2;				// (int 1,2,3) Mode of density calculation
+							//	// 1==without density calculations
+							//	// 2==ZOI-kind of density calculation
+							//	// 3==random determination of surrounding fields
+calcinfarea=1;				// (int) Calculation mode for area size determination
+							//	// 1==linearly increasing (e.g. 8 m at basal diameter of 80 cm)
+dichtewertmanipulatorexp=1;	// (double) Exponent to scale the influence of a tree to the density tile
+densitysmallweighing=0;		// (double) Exponent to scale the influence of individuals on the denstity tiles which are only influencing one tile
+densitytreetile=0;			// (double) Exponent to change the density value input from each tree into the density grid
+							//	// 1==value equals basal diameter decreasing with distance from centre
+							//	// 0==value ranges from 1 to 0 with increasing distance
+densitytiletree=2;			// (int 1,2) Mode for calculating the influence of density values within tiles for each tree
+							//	// 1==sum of the current values of the trees influence on each tile
+							//	// 2==multiplied by the current values of the trees influence on each tile (as in densitytreetile=0)
+desitymaxreduction=0.9;		// (double 0-1) Maximum value the density value can reach
+dichtewertdbasaleinfluss=0;	// (double) Exponent to scale the influence of the tree's diameter to its influencing density value 
+dichtheightrel=2;			// (int 1,2) Interaction modification mode of tree height and density influence strength
+							//	// 1==three different constant values for the three height classes
+							//	// 2==linearly decreasing from centre of the tree and influenced by the tree's age and additionally a minimum of value 0.1 is set
+	
+	
+	
+	
+	
+// 2. Larix gmelinii (Rupr.) Rupr. specific parameter
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+// 2.1 Reproduction
+// 2.2 Diameter growth
+// 2.3 Height estimation
+// 2.4 Mortality estimation
+//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+
+
+// 2.1 -----> Reproduction
+zapfenalter=15;					// (int) Minimum age trees begin to bear cones
+samenflugrate=0.63931;			// (double 0-1) Chance a seed is released from the producing tree
+dispersalmode=4;				// (int 0,1,2,3,4) dispersal mode for seeds (95% der Samen in 100 m Entfernung) 	
+								//	// 0==randomly
+								//	// 1==negaive exponentially
+								//	// 2==fat tailed
+								//	// 3==gaussian
+								//	// 4==gaussian and fat tailed combined
+entfernungsteiler=0.277025;		// (double) Dispersal distance factor
+samenprodfaktor=16.043965;		// (double) Seed production factor
+keimungsrate=0.40063;			// (double 0-1) Germination rate
+keimungwettereinfluss=0.447975;	// (double) Influence of the climate to germination
+
+
+
+
+
+// 2.2 -----> Diameter growth
+gdbasal=0.04;				// (double) Basal diameter growth rate of trees H<130 cm
+gdbrust=0.06;				// (double) Breast height diameter breast height of trees H>130 cm
+gdbasalsapl=0.06;			// (double) Basal diameter growth rate of trees H>130 cm
+precgrenzwert=371.717745;	// (double) Precipitation optimum (0-+oo)
+
+
+
+
+
+// 2.3 -----> Height estimation
+allometriefunktionstyp=2;			// (int 1,2) Allometric function mode
+									//	// 1==linearly
+									//	// 2==non-linarly
+dbasalhoeheallosteig=42.88;			// (double) (IF allometriefunktionstyp == 1) slope for height estimation from basal diameter
+dbasalhoehealloexp=1.0;				// (double) (IF allometriefunktionstyp == 1) exponent for height estimation from basal diameter
+dbrusthoeheallosteig=42.88;			// (double) (IF allometriefunktionstyp == 1) slope for height estimation from breast height diameter
+dbrusthoehealloexp=1.0;				// (double) (IF allometriefunktionstyp == 1) exponent for height estimation from breast height diameter
+dbasalhoehesteignonlin=44.43163;	// (double) (IF allometriefunktionstyp == 2) slope for height estimation from basal diameter
+dbrusthoehesteignonlin=7.02;		// (double) (IF allometriefunktionstyp == 2) slope for height estimation from breast height diameter
+
+
+
+
+
+// 2.4 -----> Mortality estimation
+mortbg=0.02382;					// (double 0-1) Background mortality
+hoechstalter=609;				// (int) Maximum tree age
+malt=8.18785;					// (double) Mortality factor if a tree exceeds the maximum age
+mjung=0.762855;					// (double) Mortality factor for young in individuals
+jugendmorteinflussexp=0.79295;	// (double) Exponent determining duration time of youth mortality
+								//  // <1==longer
+								//  // >1==shorter
+mgrowth=0.561275;				// (double) Factor for adjusting the influence of current tree growth on mortality
+relwachstummorteinflussexp=1.0;	// (double) Influence exponent of current tree growth on mortality
+								//	//  1==linear influence
+								//	// >1==stronger
+								//	// <1==weaker
+								//	//  0==no influence
+mdichte=0.248435;				// (double) Mortality factor for density
+dichtewertmaximumbeihoehe=0.0;	// IF >0 the density influence is strongest at half this specified height follwoing a circle-function
+mwetter=0.42539;				// (double) Mortality factor for climate
+hoehewettermorteinflussexp=0.0;	// (double) Exponent for determining an influence of the tree height on the climate mortality
+mtrockenheit=0.237805;			// (double) Mortalitaetsfaktor_Trockenheit (0-+oo)
+samenbaummort=0.44724;			// (double 0-1) Mortality rate of seeds in cones on the trees
+samenbodenmort=0.55803;			// (double 0-1) Mortality rate of seeds at the ground
+
+
+
+
+

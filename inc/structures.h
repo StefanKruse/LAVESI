@@ -35,7 +35,7 @@
 		//^^redefine to double and maybe use this??
 		
 		double	densitywert;						//!<
-		unsigned short thawing_depthneinfluss;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
+		unsigned short thawing_depthinfluence;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
 		bool	longdispersed;					//!<
 		double	entfernung;						
 		bool    growing;						//!< eingesetzte Bäume sind statisch und wachsen nicht

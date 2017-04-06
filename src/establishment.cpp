@@ -49,13 +49,13 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 					int j=(int) floor(pseed->xcoo*parameter[0].sizemagnif);
 					
 					// Formel aus PE Kapitel mit Feuer
-					double keimungauflageneinfluss=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->auflagenstaerke )+1.495; 
+					double keimungauflageinfluence=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->auflagenstaerke )+1.495; 
 					// (1-0.01)/(200-600)==Steigung damit durch bei 6 cm => 0.01 und 1.0 bei 2 cm, wichtig dabei: +1.495cm!!
 					
 
-					if (keimungauflageneinfluss<0.01)
+					if (keimungauflageinfluence<0.01)
 					{
-						keimungauflageneinfluss=0.01;	// Minimaler 
+						keimungauflageinfluence=0.01;	// Minimaler 
 					}
 					
 					/// ... und weather.
@@ -104,7 +104,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 					if(pseed->species==1)
 					{
 						
-						if (zufallsz< (parameter[0].keimungsrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstgmel))*keimungauflageneinfluss) ) //original
+						if (zufallsz< (parameter[0].keimungsrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstgmel))*keimungauflageinfluence) ) //original
 						{  
 
 							if (maxbasalwachstum>0.0) 
@@ -184,7 +184,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								pTree->thawing_depthneinfluss=100;
+								pTree->thawing_depthinfluence=100;
 								pTree->entfernung=pseed->entfernung;
 								pTree->growing=true;
 								pTree->species=pseed->species;
@@ -208,7 +208,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 					}
 					else if(pseed->species==2)
 					{
-						if (zufallsz< (parameter[0].keimungsrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstsib))*keimungauflageneinfluss) ) //original
+						if (zufallsz< (parameter[0].keimungsrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstsib))*keimungauflageinfluence) ) //original
 						{  
 
 							if (maxbasalwachstum>0.0) 
@@ -281,7 +281,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								pTree->thawing_depthneinfluss=100;
+								pTree->thawing_depthinfluence=100;
 								pTree->entfernung=pseed->entfernung;						
 								pTree->growing=true;
 								pTree->species=pseed->species;

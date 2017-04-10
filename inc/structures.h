@@ -17,8 +17,8 @@
 		int		namep;							//!<
 		int		line;							//!<
 		int		generation;						//!<
-		int		yr_of_establishment;				//!< Etabliert im Jahr X
-		int		yr_of_dying;						//!< gestorben im Jahr X
+		int		yr_of_establishment;			//!< Etabliert im Jahr X
+		int		yr_of_dying;					//!< gestorben im Jahr X
 		double	dbasal;							//!< basaler Durchmesser
 		//vector<double> Dbasalliste;
 		double	dbasalrel;						//!< 

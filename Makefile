@@ -68,10 +68,10 @@ weather_input.o: src/weather_input.cpp $(HEADER)
 all: ageing.o data_output.o establishment.o distribution.o fire.o growth.o influx.o main.o mortality.o normdistributedrn.o parameterintro.o plot_update.o reset.o SA_parametervariation.o seed_dispersal.o seed_production.o treedistribution.o weather_input.o executables
 	
 executables: $(OBJS)
-	$(CC) -o growth ./*.o -lm -z muldefs
+	$(CC) -o LAVESIgen ./*.o -lm -z muldefs
 	rm -rf *.o
 	
 .PHONY : clean
 clean: 
-	rm -rf data*.csv output/data*.csv *o growth
+	rm -rf data*.csv output/data*.csv *o LAVESIgen
 

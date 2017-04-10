@@ -1,0 +1,7 @@
+# help e.g. under https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+
+# exclude o(bject) and a(rchive)
+*.[oa]
+
+# exclude temporary files
+*~

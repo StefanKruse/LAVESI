@@ -1,6 +1,6 @@
 ﻿//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
-// 0. General functionality: Display, output and submodels
+// 0. General functionality: Display, output and submodel switches
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 // 0.1 Display
 // 0.2 Output
@@ -8,11 +8,11 @@
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 
-//STARTWERT parameteri
+//Start values for parameters
 parameteri=0;
 
 // 0.1 -----> Display
-parameterlesenanzeige=0;	// Display: 	-read in parameters (0,1)
+parameterlesenanzeige=0;	// Display: 	-show read-in parameters (0,1)
 jahranzeige=0;				// ... 			-yearly steps (0,1) => year,basal area,seed information, HeightClassesDistr
 qualijahranzeige=0;			// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
 seedausbranzeige=0;			// ... 			-seed dispersal (0,1)

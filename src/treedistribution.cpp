@@ -350,7 +350,7 @@ void TreesIni()
 							pTree->seedproduced=0; 				//
 							pTree->speicher=1;						//
 							pTree->densitywert=0;//Nochmal nachschauen
-							pTree->thawing_depthneinfluss=100;		//
+							pTree->thawing_depthinfluence=100;		//
 							pTree->growing=true;					//
 							if(parameter[0].specpres==0 ||parameter[0].specpres==1)
 							{

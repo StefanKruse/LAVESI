@@ -87,7 +87,7 @@ void SaveAllLists(void)
 			pTree_copy->seedproduced=pTree->seedproduced;
 			pTree_copy->speicher=pTree->speicher;
 			pTree_copy->densitywert=pTree->densitywert;
-			pTree_copy->thawing_depthneinfluss=pTree->thawing_depthneinfluss;
+			pTree_copy->thawing_depthinfluence=pTree->thawing_depthinfluence;
 			pTree_copy->longdispersed=pTree->longdispersed;
 			pTree_copy->growing=pTree->growing;
 				/*if(countertree==1)
@@ -584,7 +584,7 @@ void RestoreAllLists(void)
 			pTree_copy->seedproduced=pTree->seedproduced;
 			pTree_copy->speicher=pTree->speicher;
 			pTree_copy->densitywert=pTree->densitywert;
-			pTree_copy->thawing_depthneinfluss=pTree->thawing_depthneinfluss;
+			pTree_copy->thawing_depthinfluence=pTree->thawing_depthinfluence;
 			pTree_copy->longdispersed=pTree->longdispersed;
 			pTree_copy->growing=pTree->growing;
 				if(countertree==1)

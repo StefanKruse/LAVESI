@@ -251,10 +251,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					
 					// Berechne den Einfluss der thawing_depth auf das Wachstum des Treees
 					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)) 
-						pTree->thawing_depthneinfluss= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
+						pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 					
 					else
-						pTree->thawing_depthneinfluss=100;
+						pTree->thawing_depthinfluence=100;
 				}
 				
 
@@ -334,10 +334,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					sumthawing_depth=( sumthawing_depth / (double) anzahlflaechen );
 					
 					if (sumthawing_depth  <2000)
-						pTree->thawing_depthneinfluss = (unsigned short) ((200.0/2000.0) * sumthawing_depth);
+						pTree->thawing_depthinfluence = (unsigned short) ((200.0/2000.0) * sumthawing_depth);
 					
 					else
-						pTree->thawing_depthneinfluss = 100;
+						pTree->thawing_depthinfluence = 100;
 
 				}
 

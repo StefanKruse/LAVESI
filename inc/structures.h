@@ -17,8 +17,8 @@
 		int		namep;							//!<
 		int		line;							//!<
 		int		generation;						//!<
-		int		yr_of_establishment;				//!< Etabliert im Jahr X
-		int		yr_of_dying;						//!< gestorben im Jahr X
+		int		yr_of_establishment;			//!< Etabliert im Jahr X
+		int		yr_of_dying;					//!< gestorben im Jahr X
 		double	dbasal;							//!< basaler Durchmesser
 		//vector<double> Dbasalliste;
 		double	dbasalrel;						//!< 
@@ -35,7 +35,7 @@
 		//^^redefine to double and maybe use this??
 		
 		double	densitywert;						//!<
-		unsigned short thawing_depthneinfluss;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
+		unsigned short thawing_depthinfluence;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
 		bool	longdispersed;					//!<
 		double	entfernung;						
 		bool    growing;						//!< eingesetzte Bäume sind statisch und wachsen nicht

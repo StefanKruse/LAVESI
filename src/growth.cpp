@@ -21,7 +21,7 @@ double getMaxbasalwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 									-weather_list[yearposition]->weatherfactorming)
 									/((double) treerows))*pTree->ycoo 
 								+weather_list[yearposition]->weatherfactorming)
-								* (((double) pTree->thawing_depthneinfluss)/100 );		
+								* (((double) pTree->thawing_depthinfluence)/100 );		
 			}
 			else if(pTree->species==2)
 			{
@@ -30,7 +30,7 @@ double getMaxbasalwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 									-weather_list[yearposition]->weatherfactormins)
 									/((double) treerows))*pTree->ycoo 
 								+weather_list[yearposition]->weatherfactormins)
-								* ((((double) pTree->thawing_depthneinfluss*0.8)/100 )-0.6);	// Angepasster thawing_depthneinfluss für Lsibirica, damit analog zu Lgmelinii 20% des Wachstum bei 20% der minimal benötigten thawing_depth stattfinden
+								* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);	// Angepasster thawing_depthinfluence für Lsibirica, damit analog zu Lgmelinii 20% des Wachstum bei 20% der minimal benötigten thawing_depth stattfinden
 			}		
 		}
 		else
@@ -60,12 +60,12 @@ double getMaxbasalwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 			if(pTree->species==1)
 			{
 				maxbw_help = exp(parameter[0].gdbasalconstgmel+parameter[0].gdbasalfacgmel*pTree->dbasal+parameter[0].gdbasalfacqgmel*pTree->dbasal*pTree->dbasal)*
-							weather_list[yearposition]->weatherfactorg* (((double) pTree->thawing_depthneinfluss)/100 );
+							weather_list[yearposition]->weatherfactorg* (((double) pTree->thawing_depthinfluence)/100 );
 			}
 			else if(pTree->species==2)
 			{
 				maxbw_help = exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal)*
-							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthneinfluss*0.8)/100 )-0.6);	// Angepasster thawing_depthneinfluss für Lsibirica, damit analog zu Lgmelinii 20% des Wachstum bei 20% der minimal benötigten thawing_depth stattfinden
+							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);	// Angepasster thawing_depthinfluence für Lsibirica, damit analog zu Lgmelinii 20% des Wachstum bei 20% der minimal benötigten thawing_depth stattfinden
 			}
 		}
 		else
@@ -111,7 +111,7 @@ double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 									-weather_list[yearposition]->weatherfactorming)
 									/((double) treerows))*pTree->ycoo 
 								+weather_list[yearposition]->weatherfactorming)
-								* (((double) pTree->thawing_depthneinfluss)/100 );				
+								* (((double) pTree->thawing_depthinfluence)/100 );				
 			}
 			else if(pTree->species==2)
 			{
@@ -120,7 +120,7 @@ double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 									-weather_list[yearposition]->weatherfactormins)
 									/((double) treerows))*pTree->ycoo 
 								+weather_list[yearposition]->weatherfactormins)
-								* ((((double) pTree->thawing_depthneinfluss*0.8)/100 )-0.6);
+								* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);
 			}
 		}
 		else
@@ -150,12 +150,12 @@ double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 			if(pTree->species==1)
 			{
 				maxbrw_help = exp(parameter[0].gdbrustconstgmel+parameter[0].gdbrustfacgmel*pTree->dbrust+parameter[0].gdbrustfacqgmel*pTree->dbrust*pTree->dbrust)*
-							weather_list[yearposition]->weatherfactorg* (((double) pTree->thawing_depthneinfluss)/100 );
+							weather_list[yearposition]->weatherfactorg* (((double) pTree->thawing_depthinfluence)/100 );
 			}
 			else if(pTree->species==2)
 			{
 				maxbrw_help = exp(parameter[0].gdbrustconstsib+parameter[0].gdbrustfacsib*pTree->dbrust+parameter[0].gdbrustfacqsib*pTree->dbrust*pTree->dbrust)*
-							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthneinfluss*0.8)/100 )-0.6);
+							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);
 			}
 		}
 		else
@@ -179,9 +179,9 @@ double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
 /****************************************************************************************//**
  * \brief calculate basal and breast height growth of each tree in the simulation
  *
- * basalwachstum = maxbasalwachstum * densitywert * thawing_depthneinfluss/100;	\n
+ * basalwachstum = maxbasalwachstum * densitywert * thawing_depthinfluence/100;	\n
  * basalwachstum = basalwachstum + basalwachstum * basaleinflussaltneu * dbasal; \n
- * brustwachstum = maxbrustwachstum * densitywert * thawing_depthneinfluss)/100;  \n
+ * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
 void Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
@@ -220,7 +220,7 @@ void Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearp
 			double basalwachstum = maxbasalwachstum
 									* ( (double) pTree->speicher/* GELOESCHT "/3" */ ) //==1
 									* (1.0-pTree->densitywert);
-									//* (((double) pTree->thawing_depthneinfluss)/100 );	// der Wert 100 ist der Standardwert. Schon in getMaxbasalwachstum berechnet.
+									//* (((double) pTree->thawing_depthinfluence)/100 );	// der Wert 100 ist der Standardwert. Schon in getMaxbasalwachstum berechnet.
 									
 			basalwachstum  = basalwachstum
 							+basalwachstum*parameter[0].basaleinflussaltneu
@@ -260,7 +260,7 @@ void Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearp
 				brustwachstum = maxbrustwachstum
 										* ( (double) pTree->speicher/* GELOESCHT "/3" */ ) 
 										* (1.0-pTree->densitywert);
-										//* ( ((double) pTree->thawing_depthneinfluss)/100 );	// der Wert 100 ist der Standardwert. Schon in getMaxbrustwachstum berechnet.
+										//* ( ((double) pTree->thawing_depthinfluence)/100 );	// der Wert 100 ist der Standardwert. Schon in getMaxbrustwachstum berechnet.
 				
 				if (brustwachstum<0.0)
 				{

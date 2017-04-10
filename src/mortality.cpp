@@ -523,8 +523,52 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 		//
-		for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )
+
+
+// loop around the loop for multi-core-processing
+// before run a program parallel set the number of helpers by 
+// ... export OMP_NUM_THREADS=4
+int ipar;
+list<Tree*>::iterator posb;
+#pragma omp parallel default(shared) private(ipar,posb)
+{
+#pragma omp for schedule(guided)
+
+
+ 	/* to test just a simple for loop and as output the thread num
+		for(ipar=0; ipar<9; ++ipar)
 		{
+			//cout << "- " << endl;
+
+			int id = omp_get_thread_num();
+			//id = omp.get.thread.num();
+			//printf("%d: Hello World!\n", id);
+			printf("hello(%d)",id);
+			printf("world(%d)\n",id);
+
+			cout << endl;
+			cout << endl;
+
+		}
+
+	}// this closes the for loop when testing
+	*/
+
+		//for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )//++posb
+		//cout << tree_list.size() << endl;
+		for(ipar=0; ipar<tree_list.size(); ++ipar)
+		{
+			/* added for omp a for loop along int ipar and 
+				for that the iterator to each tree
+				must be advanced to assure access
+				to each tree
+				TODO check the performace of this part
+				TODO check if a faster/easier possibility
+				exists for this
+			*/
+			posb=tree_list.begin();
+			advance(posb, ipar);
+			
 			pTree=(*posb);
 			
 			if (pTree->seednewly_produced>0)
@@ -585,18 +629,21 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 					pseed->age=0;
 					pseed->species=pTree->species;//MutterTreespezies
 					pseed->elternheight=pTree->height;
-					seed_list.push_back(pseed);// 3. seed in Liste einfuegen
+
+
+// to guarantee that each process is accessing the seed list not simultaneously define it as critical
+#pragma omp critical(seed_list)
+{
+					seed_list.push_back(pseed);// 3. add seed to seed_list
+}
+
+
 				} // Neuen seed erstellen Ende
-				++posb;
+
 				Vname.clear();//cpSNP1.clear();cpSNP2.clear();
 			} // seed wurden erstellt Ende
-			else
-			{
-				++posb;
-			}
-
 		}//Ende HauptTreeschleife
-
+}// end of multi-processing loop
 		
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/
 		TreeMort(yearposition, weather_list, tree_list);
@@ -604,5 +651,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		//cout << "seed_list.size() nach Mortalität = " << seed_list.size() << endl;
 	
 	}//Ende weather_listnschleife
-
 }
+
+
+

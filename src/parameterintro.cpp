@@ -645,7 +645,7 @@ void Parametereinlesen(void)
 	
 	
 	strcpy(uebergabestring,"rel_trait_variance");
-	parameter[0].rel_trait_variance=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen, &parameter[0]);
+	parameter[0].rel_trait_variance=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	
 	//strcpy(uebergabestring,"SNPMutationrate");
 	//parameter[0].SNPMutationrate=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);

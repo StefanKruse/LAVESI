@@ -31,5 +31,6 @@
 #include <climits>	
 #include <float.h>	
 
+#include <omp.h> //for multi-processor support ... help e.g. https://goulassoup.wordpress.com/2011/10/28/openmp-tutorial/
 
 using namespace std;

@@ -426,10 +426,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
  *
  *******************************************************************************************/
  
-#ifndef _distribution_H_
-#define _distribution_H_
- #include "distribution.cpp"
-#endif
+
  
 void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
 {
@@ -522,7 +519,6 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		} 
 		
 		
-			//AB HIER GLEICHT ES IN ETWA age seedPRODUKTION.CPP
 		// Berechnung des aktuellen Ortes in Koordinaten
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
@@ -561,14 +557,17 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 					pseed->ycoo=pTree->ycoo;
 					pseed->namem=pTree->name;
 					
-					//BefrWahrsch(pseed->xcoo,pseed->ycoo,world_positon_b,Jahr,pseed->namep,pseed->cpSNP[0],pseed->cpSNP[1]);
 					if((parameter[0].einschwingen==false)&&(Vname.size()>0)&&(parameter[0].pollenvert==1)){
 					iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
 					pseed->namep	=Vname[iran];
 					//pseed->cpSNP[0]=cpSNP1[iran];
 					//pseed->cpSNP[1]=cpSNP2[iran];
-					}else{
-					pseed->namep=0;}
+					
+					//pseed->descent=
+					//pseed->pollenfall=
+					//pseed->maxgrowth=
+					
+					}else{pseed->namep=0;}
 					//pseed->cpSNP[0]=0;
 					//pseed->cpSNP[1]=0;}
 					/*cout<<pseed->namep<<endl;

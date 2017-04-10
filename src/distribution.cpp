@@ -120,7 +120,7 @@ void BefrWahrsch(double x, double y, vector<std::list<Tree*> >::iterator world_p
 		 mwrichtung/=cntr2;
                  //mean value of wind speed:
 		 geschwindigkeit/=cntr2;
-
+		//pe= pTree->pollenfall/geschwindigkeit;
 		 pe=parameter[0].pollenfall/geschwindigkeit;
 		 
 		 //inverse kappa afterwards:
@@ -279,8 +279,10 @@ void seeddisp(double rn, int yr, double& dx, double& dy){
                         
     if (pseed->species==1){
         maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescentg));
+		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
     }else if (pseed->species==2){
         maxentfernung = (parameter[0].SeedTravelBreezes*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescents));
+		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
     }                                        
 
     if(parameter[0].dispersalmode==5){

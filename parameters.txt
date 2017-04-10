@@ -24,7 +24,7 @@ Data_output=1;					// file output (0,1)
 ausgabemodus=4;					// mode of file output (0,4)
 								// 0=="normal" -> 3 times 1010&2010, 
 								// 1==	"SensitivityAnalysis -> 2fach Phasenausgabe log und Capacity" 			?
-								// 		hier(einige) Ausgabedateien nicht für versch. weatherchoiceen programmiert
+								// 		hier(einige) Ausgabedateien nicht für versch. weather choices programmiert
 								// 2=="SA_2" -> once after the population reached a stable state using random weather
 								// 3=="ClimateGradient with TimeSlices"
 								// 4=="Temperature experiment with TimeSlices"
@@ -310,6 +310,7 @@ Gregorym=1.25;
 
 
 // 3.2 -----> genetic data
+rel_trait_variance=0.05;
 //SNPMutationrate=0.0001;
 //microsatelliteMutationrate=0.0001;
 

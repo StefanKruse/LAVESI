@@ -46,6 +46,13 @@
 		// int cpSNP[2],mtSNP[2]; //0...255 ?
 		 
 		// vector<int> microsatellites;
+		
+		
+		 double maxgrowth;
+		 
+		 double pollenfall;
+		 
+		 double descent;
 	};
 
 
@@ -69,6 +76,12 @@
 		
 		
 		 int mtSNP[2],cpSNP[2];//chloroplastensnps??
+		 
+		 double maxgrowth;
+		 
+		 double pollenfall;
+		 
+		 double descent;
 	
 	};
 	
@@ -383,6 +396,8 @@
 		double Gregorym,GregoryC;
 		
 		bool computationtime;
+		
+		double rel_trait_variance;
 		
 	};
 

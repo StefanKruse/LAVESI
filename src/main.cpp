@@ -282,7 +282,7 @@ void Einschwingphase()
 				}
 				
 				
-				// Ziehen eines zufaelligen Jahres fuer das weather 
+				// take a random year for weather 
 				double x = rand()/(RAND_MAX + 1.0);
 				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
 			
@@ -297,8 +297,7 @@ void Einschwingphase()
 				///vegetationDynamics(int yearposition, int jahr, int t);
 				vegetationDynamics(yearposition, jahr,t);
 				
-					
-
+				
 				
 				// Berechnung der Abweichung von Referenzwerten
 				double meanpercentchange=0;
@@ -321,8 +320,7 @@ void Einschwingphase()
 						{
 							cout << "BA" << endl << pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1] << endl;
 
-							meanpercentchange+=fabs(
-								(pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-2]-pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1])
+							meanpercentchange+=fabs((pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-2]-pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1])
 								/
 								(pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1]));
 						}
@@ -493,9 +491,9 @@ void Jahresschritte()
 		if (parameter[0].resetyear>0)
 		{
 
-			bool SCHageweilVergleichGUT=true;
+			bool SCHalterweilVergleichGUT=true;
 			
-			if(SCHageweilVergleichGUT==true)
+			if(SCHalterweilVergleichGUT==true)
 			{
 
 				// Parametervariation je nach Expsetting

@@ -972,16 +972,19 @@ int main()
 			srand((unsigned) time(NULL));
 
 			// Anzeigen der Ueberschrift und Programmversion
-			printf("\n---->\tLaVeSi\n");
+			printf("\n---->\tLAVESI\n");
 			printf("\n You have started  LAVESI, " 
-					"A Simulation of the vegetation dynamics of LARIX GMELINII (RUPR.) KUZEN. ,"
-					"driven by weather data."
-					"\n\n Version:\t 2.06 "
-					"\n Date:\t\t 11.11.2015" 
+					"An individually-based and spatial explicit simulation model"
+					"for the vegetation dynamics of LARIX GMELINII (RUPR.) KUZEN."
+					"- driven by weather data."
+					"\n\n Version:\t 2.07 (Multiprocessing)"
+					"\n Date:\t\t 10.04.2017" 
 					"\n authors:"
 					"\n\t Stefan Kruse\tstefan.kruse@awi.de"
+					"\n\t Alexander Gerdes\talexander.gerdes@awi.de"
+					"\n\t Nadja Kath\tnadja.kath@awi.de"
 					"\n\t Mareike Wieczorek\tmareike.wieczorek@awi.de"
-					"\n\t Nadja Kath\tnadja.kath@awi.de\n");
+					"\n");
 			printf("\n<----\n");
 
 

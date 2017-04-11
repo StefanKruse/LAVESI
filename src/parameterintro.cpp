@@ -90,7 +90,6 @@ void Parametereinlesen(void)
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
 		{parameter[0].qualijahranzeige=true;}
 	else {parameter[0].qualijahranzeige=false;};
-	
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].qualijahranzeige)?"true":"false");}
 	
@@ -108,7 +107,6 @@ void Parametereinlesen(void)
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
 		{parameter[0].seedausbranzeige=true;}
 	else {parameter[0].seedausbranzeige=false;};
-
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedausbranzeige)?"true":"false");}
 
@@ -116,7 +114,6 @@ void Parametereinlesen(void)
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
 		{parameter[0].mortanzeige=true;}
 	else {parameter[0].mortanzeige=false;};
-	
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].mortanzeige)?"true":"false");}
 

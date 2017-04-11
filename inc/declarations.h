@@ -10,10 +10,8 @@
 		char trennzeichen[] = "=;";
 		struct Parameter parameter[1];
 		// Zum Einlesen der weatherdaten
-		//const int maxlaenge=1206;	// Szenarienlaenge betraegt max 1206 Jahre von 800-2005
 
-	// Listen
-	 
+	// Lists and pointers
 	vector<list<Tree*> >	 world_tree_list;
 	Tree *pTree;		// Pointer auf einen Tree
 	Tree *pTree_copy;		// Pointer auf einen Tree
@@ -55,3 +53,5 @@
 		// Umweltdaten/Vegetationstypen:
 		std::vector<std::vector<double> > vegetationtype( treecols , vector<double>( treerows ) );
 			//vectors are faster for iteration
+
+

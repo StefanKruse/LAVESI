@@ -94,17 +94,12 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			/*!::Fire(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list)*/
 			Fire(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_weather_list);
 	clock_t end_time_feuer = clock();
-	if(parameter[0].computationtime==1){
-	}
-	
 		
 			// Data_output
 	clock_t start_time_Data_output = clock();
 			/*!::Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)*/
  			Data_output(treerows, treecols, t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
 	clock_t end_time_Data_output = clock();
-	if(parameter[0].computationtime==1){
-	}					
 						
 			// MORTALITÄT,
 	clock_t start_time_mortalitaet = clock();
@@ -118,6 +113,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			/*!::Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
 			Ageing(treerows, treecols, &parameter[0], world_tree_list, world_seed_list);
 	clock_t end_time_Ageing = clock();
+
+	// print the computation time to the console and into a file
 	if(parameter[0].computationtime==1){
 		
 		cout << endl << "plot update time: " << (((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) << endl;
@@ -136,6 +133,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin());
 		list<Tree*>& tree_list = *world_positon_b;
+
 		open:
 		FILE *fp2;
 		fp2 =fopen("t_N.txt","a+");
@@ -153,6 +151,15 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		(end_time_kartenup - start_time_kartenup)
 		)/ CLOCKS_PER_SEC));
 		fclose(fp2);
+
+		//open:
+		FILE *fp3;
+		fp3 =fopen("t_N_mort.txt","a+");
+		if(fp3==0){goto open;}
+		fprintf(fp2,"%lu;%d;%f\n",tree_list.size(),parameter[0].ivort, 
+		((double)(end_time_mortalitaet - start_time_mortalitaet))
+		/ CLOCKS_PER_SEC);
+		fclose(fp3);
 	}
 	
  }

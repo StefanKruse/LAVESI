@@ -11,3 +11,9 @@
 
 # exclude output dir
 output/
+# exclude time usage output files
+t_*.txt
+
+# exclude TEST-folder
+TEST/
+

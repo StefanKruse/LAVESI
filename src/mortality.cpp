@@ -528,13 +528,27 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 // loop around the loop for multi-core-processing
 // before run a program parallel set the number of helpers by 
 // ... export OMP_NUM_THREADS=4
-int ipar;
-list<Tree*>::iterator posb;
-#pragma omp parallel default(shared) private(ipar,posb)
+// 1. create a vector with pointers on the elements of the list
+	/*std::vector<Tree*> treepointervec;
+	for(auto it=tree_list.begin(); it!=tree_list.end(); ++it)
+	{
+		//treepointervec.push_back(&(*it));
+		treepointervec.push_back(&(*it));
+	}
+
+	cout << tree_list.size() << " - " << treepointervec.size() << endl << endl;
+	*/
+// this does not compile because "no known conversion for argument 1 from ‘Tree**’ to ‘Tree*&&’"...
+// ... other trial with task
+// 2. loop with omp through each element of the list
+//var2 for loop Sven//#pragma omp parallel default(shared) private(pTree,pseed)
+//var3 now with task to use iterators 
+// ... following https://stackoverflow.com/questions/8691459/how-do-i-parallelize-a-for-loop-through-a-c-stdlist-using-openmp
+//... but it seems that it does not work - it is even slower with OMP_NUM_THREADS=2
+#pragma omp parallel
+#pragma omp single
 {
-#pragma omp for schedule(guided)
-
-
+//var2 for loop Sven//#pragma omp for schedule(guided)
  	/* to test just a simple for loop and as output the thread num
 		for(ipar=0; ipar<9; ++ipar)
 		{
@@ -545,19 +559,20 @@ list<Tree*>::iterator posb;
 			//printf("%d: Hello World!\n", id);
 			printf("hello(%d)",id);
 			printf("world(%d)\n",id);
-
 			cout << endl;
 			cout << endl;
-
 		}
 
 	}// this closes the for loop when testing
 	*/
 
-		//for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )//++posb
+		for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)//++posb
 		//cout << tree_list.size() << endl;
-		for(ipar=0; ipar<tree_list.size(); ++ipar)
+		//for(size_t i=0; i<treepointervec.size(); ++i)
 		{
+			//var3 with task
+			#pragma omp task firstprivate(posb)
+		
 			/* added for omp a for loop along int ipar and 
 				for that the iterator to each tree
 				must be advanced to assure access
@@ -566,11 +581,10 @@ list<Tree*>::iterator posb;
 				TODO check if a faster/easier possibility
 				exists for this
 			*/
-			posb=tree_list.begin();
-			advance(posb, ipar);
-			
-			pTree=(*posb);
-			
+			//seed *pseed;
+			//pTree=treepointervec[i];//(*posb);
+			pTree=(*posb);			
+
 			if (pTree->seednewly_produced>0)
 			{
 				// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
@@ -643,6 +657,7 @@ list<Tree*>::iterator posb;
 				Vname.clear();//cpSNP1.clear();cpSNP2.clear();
 			} // seed wurden erstellt Ende
 		}//Ende HauptTreeschleife
+#pragma omp taskwait //var3 task
 }// end of multi-processing loop
 		
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/

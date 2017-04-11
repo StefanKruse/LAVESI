@@ -528,8 +528,9 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 // loop around the loop for multi-core-processing
 // before run a program parallel set the number of helpers by 
 // ... export OMP_NUM_THREADS=4
-// ... or explicitly overwrite the environmental variable here
+// ... or explicitly overwrite the environmental variable by setting the helper number directly
 // // --- some code to test the speed-up
+// // --- 
 if(parameter[0].ivort==1)
 {
 	
@@ -537,8 +538,9 @@ if(parameter[0].ivort==1)
 	cout << " OMP current number of helpers=" << omp_get_num_procs() << endl;
 	cout << " OMP current number of helpers=" << omp_get_num_threads() << endl << endl;
 	
+
 	omp_set_dynamic(0); //disable dynamic teams
-	for(int helpernumi=1; helpernumi<17; helpernumi=helpernumi*2)
+	for(int helpernumi=1; helpernumi<3; helpernumi=helpernumi*2)
 	{
 		// record time before parallel execution
 		double start_time=omp_get_wtime();
@@ -547,7 +549,7 @@ if(parameter[0].ivort==1)
 		#pragma omp parallel
 		{
 			#pragma omp for
-			for(int i=0; i<1000000000; ++i)
+			for(int i=0; i<100000000; ++i)
 			{
 				sqrt(sqrt(i^i));
 			}
@@ -558,66 +560,130 @@ if(parameter[0].ivort==1)
 		cout << " -- OMP helper(N=" << helpernumi << " -> " << end_time-start_time << endl;
 		
 	}
-	
 
-}
-cout << " exiting !" << endl;
-exit(1);
-// 1. create a vector with pointers on the elements of the list
-	/*std::vector<Tree*> treepointervec;
-	for(auto it=tree_list.begin(); it!=tree_list.end(); ++it)
-	{
-		//treepointervec.push_back(&(*it));
-		treepointervec.push_back(&(*it));
-	}
 
-	cout << tree_list.size() << " - " << treepointervec.size() << endl << endl;
-	*/
-// this does not compile because "no known conversion for argument 1 from ‘Tree**’ to ‘Tree*&&’"...
-// ... other trial with task
-// 2. loop with omp through each element of the list
-//var2 for loop Sven//#pragma omp parallel default(shared) private(pTree,pseed)
-//var3 now with task to use iterators 
-// ... following https://stackoverflow.com/questions/8691459/how-do-i-parallelize-a-for-loop-through-a-c-stdlist-using-openmp
-//... but it seems that it does not work - it is even slower with OMP_NUM_THREADS=2
-#pragma omp parallel
-#pragma omp single
-{
-//var2 for loop Sven//#pragma omp for schedule(guided)
- 	/* to test just a simple for loop and as output the thread num
-		for(ipar=0; ipar<9; ++ipar)
+	if(false)
+	{// start if seed_list trial
+	// try to for-loop parallel over tree_list
+	// ... for each tree add 1000 new seeds to seed_list
+	// ==> worked fine but with multiple helpers it was slower than with only one - probably because of to simple algorithms and the bottleneck that only one helper can access at a certain time the seed_list-object
+		omp_set_dynamic(0); //disable dynamic teams
+		for(int helpernumi=1; helpernumi<3; helpernumi=helpernumi*2)
 		{
-			//cout << "- " << endl;
-
-			int id = omp_get_thread_num();
-			//id = omp.get.thread.num();
-			//printf("%d: Hello World!\n", id);
-			printf("hello(%d)",id);
-			printf("world(%d)\n",id);
-			cout << endl;
-			cout << endl;
-		}
-
-	}// this closes the for loop when testing
-	*/
-
-		for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)//++posb
-		//cout << tree_list.size() << endl;
-		//for(size_t i=0; i<treepointervec.size(); ++i)
-		{
-			//var3 with task
-			#pragma omp task firstprivate(posb)
+			// record time before parallel execution
+			double start_time=omp_get_wtime();
 		
-			/* added for omp a for loop along int ipar and 
-				for that the iterator to each tree
-				must be advanced to assure access
-				to each tree
-				TODO check the performace of this part
-				TODO check if a faster/easier possibility
-				exists for this
-			*/
-			//seed *pseed;
-			//pTree=treepointervec[i];//(*posb);
+			omp_set_num_threads(helpernumi);
+			//base loop over different number of helpers
+
+			cout << " - OMP - before -- seed_list_N=" << seed_list.size() << " -- tree_list_N=" << tree_list.size() << endl;
+			#pragma omp parallel
+			{//pragma parallel
+			#pragma omp single//for task
+			for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
+			{
+			#pragma omp task firstprivate(posb)//should work with iterators by task preset
+				pTree=(*posb);
+
+				for(int iii=0; iii<2; ++iii)
+				{
+					pseed= new seed();
+					pseed->namem=pTree->name;
+
+					// add some part of code that needs time to compute
+					for(int i=0; i<100000000; ++i)
+					{
+						sqrt(sqrt(i^i));
+					}
+
+					// to guarantee that each process is accessing the seed list not simultaneously define it as critical
+					#pragma omp critical(seed_list)
+					{
+						seed_list.push_back(pseed);// 3. add seed to seed_list
+					}
+				}
+			}																																																																										
+			}//end pragma parallel
+			cout << " - OMP - after -- seed_list_N=" << seed_list.size() << " -- tree_list_N=" << tree_list.size()  << endl;
+
+			// print out the time used for execution
+			double end_time=omp_get_wtime();
+			cout << " -- OMP/list helper(N=" << helpernumi << " -> " << end_time-start_time << endl;
+		
+		}// end for helpernumber
+	}// end if seed_list trial
+
+
+	///trial 22
+	if(false)
+	{// start if seed_list trial
+	// try to for-loop parallel over tree_list
+	// ... for each tree add 1000 new seeds to seed_list
+	// ==> worked fine but with multiple helpers it was slower than with only one - probably because of to simple algorithms and the bottleneck that only one helper can access at a certain time the seed_list-object
+		omp_set_dynamic(0); //disable dynamic teams
+		for(int helpernumi=1; helpernumi<3; helpernumi=helpernumi*2)
+		{
+			// record time before parallel execution
+			double start_time=omp_get_wtime();
+		
+			omp_set_num_threads(helpernumi);
+			//base loop over different number of helpers
+
+			#pragma omp parallel default(shared) private(pTree,pseed)
+			#pragma omp for schedule(guided)
+			//for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
+			for (int pari=0; pari< tree_list.size(); ++pari)
+			{
+				list<Tree*>::iterator posb = tree_list.begin();
+				advance(posb, pari);
+				pTree=(*posb);
+
+				for(int iii=0; iii<2; ++iii)
+				{
+					pseed= new seed();
+					pseed->namem=pTree->name;
+
+					// add some part of code that needs time to compute
+					for(int i=0; i<100000000; ++i)
+					{
+						sqrt(sqrt(i^i));
+					}
+
+					// to guarantee that each process is accessing the seed list not simultaneously define it as critical
+					#pragma omp critical(seed_list)
+					{
+						seed_list.push_back(pseed);// 3. add seed to seed_list
+					}
+				}
+			}																																																																										
+
+			// print out the time used for execution
+			double end_time=omp_get_wtime();
+			cout << " -- OMP/list helper(N=" << helpernumi << " -> " << end_time-start_time << endl;
+		
+		}// end for helpernumber
+	}// end if seed_list trial
+
+
+
+	// just for testing the OMP-helpers
+	//cout << " exiting !" << endl;
+	//exit(1);
+}// end if ivort==1
+
+
+		// loop with omp through each element of the list
+		omp_set_dynamic(0); //disable dynamic teams
+		omp_set_num_threads(2); //set the number of helpers
+		#pragma omp parallel default(shared) private(pTree,pseed)
+		#pragma omp for schedule(guided)
+		for (int pari=0; pari< tree_list.size(); ++pari)
+		{
+			// since the iterator must be an int for omp, the iterator has to be 
+			// ... constructed for each tree instance and advanced to the correct position
+			list<Tree*>::iterator posb = tree_list.begin();
+			advance(posb, pari);
+
 			pTree=(*posb);			
 
 			if (pTree->seednewly_produced>0)
@@ -633,8 +699,11 @@ exit(1);
 					}
 				}
 				
-				 if((parameter[0].einschwingen==false)&&(seedlebend>0)&& parameter[0].pollenvert==1){
-					 BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname,cpSNP1,cpSNP2);}
+				//if((parameter[0].einschwingen==false)&&(seedlebend>0)&& parameter[0].pollenvert==1){
+				if((seedlebend>0)&& parameter[0].pollenvert==1)
+				{
+					 BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname,cpSNP1,cpSNP2);
+				}
 
 				
 				// gehe für Variable durch und erfinde seed		
@@ -680,11 +749,11 @@ exit(1);
 					pseed->elternheight=pTree->height;
 
 
-// to guarantee that each process is accessing the seed list not simultaneously define it as critical
-#pragma omp critical(seed_list)
-{
-					seed_list.push_back(pseed);// 3. add seed to seed_list
-}
+					// to guarantee that each process is accessing the seed list not simultaneously define it as critical
+					#pragma omp critical(seed_list)
+					{
+						seed_list.push_back(pseed);// 3. add seed to seed_list
+					}
 
 
 				} // Neuen seed erstellen Ende
@@ -692,8 +761,6 @@ exit(1);
 				Vname.clear();//cpSNP1.clear();cpSNP2.clear();
 			} // seed wurden erstellt Ende
 		}//Ende HauptTreeschleife
-#pragma omp taskwait //var3 task
-}// end of multi-processing loop
 		
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/
 		TreeMort(yearposition, weather_list, tree_list);

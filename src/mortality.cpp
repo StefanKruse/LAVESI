@@ -528,6 +528,41 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 // loop around the loop for multi-core-processing
 // before run a program parallel set the number of helpers by 
 // ... export OMP_NUM_THREADS=4
+// ... or explicitly overwrite the environmental variable here
+// // --- some code to test the speed-up
+if(parameter[0].ivort==1)
+{
+	
+	// test with 1/2/4/8/16 helpers the speedup
+	cout << " OMP current number of helpers=" << omp_get_num_procs() << endl;
+	cout << " OMP current number of helpers=" << omp_get_num_threads() << endl << endl;
+	
+	omp_set_dynamic(0); //disable dynamic teams
+	for(int helpernumi=1; helpernumi<17; helpernumi=helpernumi*2)
+	{
+		// record time before parallel execution
+		double start_time=omp_get_wtime();
+		
+		omp_set_num_threads(helpernumi);
+		#pragma omp parallel
+		{
+			#pragma omp for
+			for(int i=0; i<1000000000; ++i)
+			{
+				sqrt(sqrt(i^i));
+			}
+		}
+		
+		// print out the time used for execution
+		double end_time=omp_get_wtime();
+		cout << " -- OMP helper(N=" << helpernumi << " -> " << end_time-start_time << endl;
+		
+	}
+	
+
+}
+cout << " exiting !" << endl;
+exit(1);
 // 1. create a vector with pointers on the elements of the list
 	/*std::vector<Tree*> treepointervec;
 	for(auto it=tree_list.begin(); it!=tree_list.end(); ++it)

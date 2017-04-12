@@ -76,5 +76,5 @@ executables: $(OBJS)
 	
 .PHONY : clean
 clean: 
-	rm -rf data*.csv output/data*.csv *o LAVESIgen
+	rm -rf data*.csv output/data*.csv t_*.txt *o LAVESIgen
 

@@ -1,11 +1,8 @@
 HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/funktionen.h
 CFLAGS= -c -O0 -g3 -ggdb3 -std=c++0x -Wno-parentheses -Wall -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
-LDFLAGS=
 CC=g++	#$(CXX)
 OBJS = $(./%.o)
 
-#parallel: CFLAGS += -fopenmp
-#parallel: LDFLAGS += -fopenmp
 parallel: CC += -fopenmp
 parallel: all
 

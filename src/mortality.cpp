@@ -677,7 +677,7 @@ if(parameter[0].ivort==1)
 		omp_set_num_threads(2); //set the number of helpers
 		#pragma omp parallel default(shared) private(pTree,pseed)
 		#pragma omp for schedule(guided)
-		for (int pari=0; pari< tree_list.size(); ++pari)
+		for (unsigned int pari=0; pari< tree_list.size(); ++pari)
 		{
 			// since the iterator must be an int for omp, the iterator has to be 
 			// ... constructed for each tree instance and advanced to the correct position

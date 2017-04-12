@@ -410,6 +410,8 @@ void ClearAllLists(void)
 		// Um auf ein bestimmtes Element in der Welt zuzugreifen muss ein Iterator bis
 		// zum entsprechenden Element justiert werden und dann eine tree_list als Referenz
 		// erzeugt werden
+		
+				
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
 		list<Tree*>& tree_list = *world_positon_b;
 
@@ -435,7 +437,7 @@ void ClearAllLists(void)
 			delete pTree;
 		} // Ende tree_list ableufen;
 		tree_list.clear();
-		cout << endl << "           !!! tree_list gelöscht!         " << endl;
+		cout << endl << "           !!! tree_list deleted!         " << endl;
 
 		
 		// seed_listn loeschen
@@ -445,7 +447,7 @@ void ClearAllLists(void)
 			delete pseed;
 		} // Ende seed_list ablaufen
 		seed_list.clear();
-		cout << endl << "           !!! seed_list gelöscht!         " << endl;
+		cout << endl << "           !!! seed_list deleted!         " << endl;
 
 
 
@@ -456,7 +458,7 @@ void ClearAllLists(void)
 			delete pKarten;
 		} // Kartenschleife Ende
 		plot_list.clear();
-		cout << endl << "           !!! plot_list gelöscht!         " << endl;
+		cout << endl << "           !!! plot_list deleted!         " << endl;
 
 
 		for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos)
@@ -479,15 +481,43 @@ void ClearAllLists(void)
 			pEvaluation->meantreeageliste.clear();
 			pEvaluation->meantreeagerunmeanliste.clear();
 			delete pEvaluation;
+			
+			
+		
+		//vector<double> BAliste;					//!<
+		//vector<double> BArunmeanliste;			//!<
+				
+		//vector<int> nheight0b40liste;
+		//vector<double> nheight0b40runmeanliste;
+		//vector<int> nheight41b200liste;
+		//vector<double> nheight41b200runmeanliste;
+		//vector<int> nheight201b10000liste;
+		//vector<double> nheight201b10000runmeanliste;
+		
+		//vector<double> meanbreastdiameterliste;
+		//vector<double> meanbreastdiameterrunmeanliste;
+		
+		//vector<int> stemcountliste;
+		//vector<int> stemcountrunmeanliste;
+		
+		//vector<double> meantreeheightliste;
+		//vector<double> meantreeheightrunmeanliste;
+		//vector<double> meantreeageliste;
+		//vector<double> meantreeagerunmeanliste;
+		
 		} // Ende evaluation_list ablaufen
 		evaluation_list.clear();
-		cout << endl << "           !!! evaluation_list gelöscht!         " << endl;
+		cout << endl << "           !!! evaluation_list deleted!         " << endl;
 		
 	}	// Weltschleife Ende
 	
+	//cout<<"clearing wind directions\n";
 		winddir.clear();
+	//cout<<"clearing wind speeds\n";
 		windspd.clear();
+	//cout<<"clearing years\n";
 		globalyears.clear();
+	//cout<<"clearing vegetypes\n";
 		vegetationtype.clear();
 		
 		//delete[] winddir;

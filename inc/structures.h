@@ -4,6 +4,12 @@
 	struct Tree 
 	{
 		
+		
+		 double maxgrowth;
+		 
+		 double pollenfall;
+		 
+		 double descent;
 		//add pollen_terminal_velocity, seed_terminal_velocity and mean_age or:
 		//maxage, maxheight, (maxdbasalrel), maxbasalwachstum: push back into tree_list after calculation after the stabilization phase?
 		//				^ safe each of these traits individually ^
@@ -21,16 +27,16 @@
 		int		yr_of_dying;					//!< gestorben im Jahr X
 		double	dbasal;							//!< basaler Durchmesser
 		//vector<double> Dbasalliste;
-		double	dbasalrel;						//!< 
+		double	dbasalrel;						//!< is \in (0,1), 
 		double	dbrust;							//!< Brustdurchmesser
 		//vector<double> Dbrustliste;//AUSKOMMENTIEREN?
 		double	dbrustrel;						//!<
 		double	height;							//!< Treehöhe
 		int		age;							//!< Treeage
 		int		cone;							//!< cone am Tree ja/nein(coneanzahl?)
-		double	coneheight;					//!< 
+		double	coneheight;						//!< 
 		int		seednewly_produced;				//!<
-		int		seedproduced;				//!<
+		int		seedproduced;					//!<
 		int		speicher;						//!< Energiespeicher aus guten Jahren
 		//^^redefine to double and maybe use this??
 		
@@ -41,18 +47,14 @@
 		bool    growing;						//!< eingesetzte Bäume sind statisch und wachsen nicht
 		int 	species;							//!< Art des Treees: 1 = Larix gmelinii, 2 = Larix sibirica,
 		
-		//^ Ageingative approach: use "int species" as an indicator which "externally" saved values for max/ or mean growth shall be used!!
+		//^ alternative approach: use "int species" as an indicator which "externally" saved values for max/ or mean growth shall be used!!
 
 		// int cpSNP[2],mtSNP[2]; //0...255 ?
 		 
 		// vector<int> microsatellites;
 		
 		
-		 double maxgrowth;
-		 
-		 double pollenfall;
-		 
-		 double descent;
+		
 	};
 
 

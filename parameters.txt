@@ -17,7 +17,7 @@ jahranzeige=0;				// ... 			-yearly steps (0,1) => year,basal area,seed informat
 qualijahranzeige=0;			// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
 seedausbranzeige=0;			// ... 			-seed dispersal (0,1)
 mortanzeige=0;				// ...			-mortality of trees >200 cm (0,1)
-computationtime=1;			// ...			-include visualisation and output of computation time as 
+computationtime=0;			// ...			-include visualisation and output of computation time as 
 								 a function of the plot size and number of trees (0,1)
 
 // 0.2 -----> Output

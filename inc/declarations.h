@@ -51,7 +51,8 @@
 		 
 
 		// Umweltdaten/Vegetationstypen:
-		std::vector<std::vector<double> > vegetationtype( treecols , vector<double>( treerows ) );
+		std::vector<std::vector<double> > vegetationtype;//( treecols , vector<double>( treerows ) );
+		//double vegetationtype[treecols][treerows];
 			//vectors are faster for iteration
 
 

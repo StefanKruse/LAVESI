@@ -25,5 +25,5 @@
  void ClearAllLists_copy(void);
  
  
- void influx(int treerows, int treecols,int year,  struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,vector<vector<double>> &vegetationtype);
+ void influx(int treerows, int treecols,int year,  struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,vector<vector<double>> &vegtype);
 

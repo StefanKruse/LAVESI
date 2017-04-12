@@ -395,7 +395,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 				if (dateizeiger == NULL)
 				{
-					dateizeiger = fopen (dateiname.c_str(), "w");
+					dateizeiger = fopen (dateiname.c_str(), "w+");
 					fprintf(dateizeiger, "Wiederholung;");
 					fprintf(dateizeiger, "YPLOTPOS;");
 					fprintf(dateizeiger, "XPLOTPOS;");
@@ -753,7 +753,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 				if (dateizeiger == NULL)
 				{
-				  dateizeiger = fopen (dateiname.c_str(), "w");
+				  dateizeiger = fopen (dateiname.c_str(), "w+");
 					fprintf(dateizeiger, "Wiederholung;");
 					fprintf(dateizeiger, "YPLOTPOS;");
 					fprintf(dateizeiger, "XPLOTPOS;");
@@ -857,7 +857,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 			if (dateizeiger == NULL)
 			{
-				dateizeiger = fopen (dateiname.c_str(), "w");
+				dateizeiger = fopen (dateiname.c_str(), "w+");
 		
 				// Parameter
 				fprintf(dateizeiger, "Wiederholung;");
@@ -1083,7 +1083,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 					// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 					if (dateizeiger == NULL)
 					{
-				   dateizeiger = fopen (dateiname.c_str(), "w");
+				   dateizeiger = fopen (dateiname.c_str(), "w+");
 
 						if (dateizeiger == NULL)
 						{
@@ -1179,7 +1179,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 			if (dateizeiger == NULL)
 			{
-			  dateizeiger = fopen (dateiname.c_str(), "w");
+			  dateizeiger = fopen (dateiname.c_str(), "w+");
 				fprintf(dateizeiger, "Wiederholung;");
 				fprintf(dateizeiger, "YPLOTPOS;");
 				fprintf(dateizeiger, "XPLOTPOS;");

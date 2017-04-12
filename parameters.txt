@@ -5,6 +5,7 @@
 // 0.1 Display
 // 0.2 Output
 // 0.3 Submodels
+// 0.4 Computation environment
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 
@@ -35,6 +36,10 @@ thawing_depth=1;				// Active layer calculation (0,1)
 vegetation=0;				// representation of an organic layer (0,1)
 feuer=0;					// fire module influencing organic layer and dry mortality (0,1)
 
+
+// 0.4 Computation environment
+// the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
+omp_num_threads=4;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//

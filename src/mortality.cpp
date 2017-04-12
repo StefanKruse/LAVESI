@@ -674,7 +674,7 @@ if(parameter[0].ivort==1)
 
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
-		omp_set_num_threads(4); //set the number of helpers
+		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		#pragma omp parallel default(shared) private(pTree,pseed,Vname)
 		#pragma omp for schedule(guided)
 		for (unsigned int pari=0; pari< tree_list.size(); ++pari)
@@ -686,6 +686,8 @@ if(parameter[0].ivort==1)
 
 			pTree=(*posb);			
 
+			if(parameter[0].ivort==1)cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
+			
 			if (pTree->seednewly_produced>0)
 			{
 				// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben

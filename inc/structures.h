@@ -143,6 +143,8 @@
 
 		// festlegen in parameter.txt, aufgerufen in  Feuer
 		int		feuer;							//!< soll das Modul Feuer ausgefuehrt werden? 0=nein, 1=ganze Flaeche	
+		// mulit-core processing with omp
+		int		omp_num_threads;
 
 		// festlegen in parameter.txt, aufgerufen in  weathereingabe
 		int		precweather;						//!< soll der Niederschlag einen Einfluss auf das Wachstum haben? 0=nein, 1=linearer Einfluss bei Abweichung von Grenzwert und 2="normaler" Einfluss mittels Parabel

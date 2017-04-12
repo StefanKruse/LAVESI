@@ -1,8 +1,8 @@
 
 // Deklarationen globaler Variablen und Arrays wenn das Programm gestartet wird
 	// Raster in entsprechender Groesze deklarieren
-	const int treerows=1000;		//	/*neu*/ 40 x 75 fuer CH17I mit 250 Einheiten = 100 m nun ...??
-	const int treecols=1000;		// /*neu*/ ... 1 Einheit = 1 m
+	const int treerows=200;		//	/*neu*/ 40 x 75 fuer CH17I mit 250 Einheiten = 100 m nun ...??
+	const int treecols=200;		// /*neu*/ ... 1 Einheit = 1 m
 
 	// Parameter fuer den Startzustand deklarieren und initialisieren
 		// Zum Einlesen von Parametern

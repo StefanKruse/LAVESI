@@ -47,7 +47,7 @@
  ************************************************************************************/
  
 
-void BefrWahrsch(double x, double y, vector<std::list<Tree*> >::iterator world_positon_b, int yr, vector<int> &pName, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
+void BefrWahrsch(double x, double y, vector<std::list<Tree*> >::iterator world_positon_b, int yr, vector<int> &pName)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
 {
   int year=yr-1;
   list<Tree*>& tree_list = *world_positon_b;
@@ -155,7 +155,7 @@ void BefrWahrsch(double x, double y, vector<std::list<Tree*> >::iterator world_p
    			p=exp(kappa*cos(phi-richtung))/(2*I0kappa)*(exp(-2*pe*pow(dr,1-0.5*m)/(sqrt(M_PI)*C*(1-0.5*m)))) ;
 			//f(dr) aus Microbiology of the atmosphere, p(phi) ist von-Mises-Distribution
 
-                        if(rand()>p*RAND_MAX){
+            if(rand()>p*RAND_MAX){
 			++posb;
 			//	pName.push_back(pTree_copy->name);
 			//	cpSNPs1.push_back(pTree_copy->cpSNP[0]);

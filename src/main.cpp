@@ -156,7 +156,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		FILE *fp3;
 		fp3 =fopen("t_N_mort.txt","a+");
 		if(fp3==0){goto openmort;}
-		fprintf(fp2,"%lu;%d;%f\n",tree_list.size(),parameter[0].ivort, 
+		fprintf(fp3,"%lu;%d;%f\n",tree_list.size(),parameter[0].ivort, 
 		((double)(end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC);
 		fclose(fp3);
 	}

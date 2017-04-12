@@ -674,14 +674,14 @@ if(parameter[0].ivort==1)
 
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
-		omp_set_num_threads(2); //set the number of helpers
-		#pragma omp parallel default(shared) private(pTree,pseed)
+		omp_set_num_threads(4); //set the number of helpers
+		#pragma omp parallel default(shared) private(pTree,pseed,Vname)
 		#pragma omp for schedule(guided)
 		for (unsigned int pari=0; pari< tree_list.size(); ++pari)
 		{
+			list<Tree*>::iterator posb = tree_list.begin();
 			// since the iterator must be an int for omp, the iterator has to be 
 			// ... constructed for each tree instance and advanced to the correct position
-			list<Tree*>::iterator posb = tree_list.begin();
 			advance(posb, pari);
 
 			pTree=(*posb);			
@@ -702,7 +702,7 @@ if(parameter[0].ivort==1)
 				//if((parameter[0].einschwingen==false)&&(seedlebend>0)&& parameter[0].pollenvert==1){
 				if((seedlebend>0)&& parameter[0].pollenvert==1)
 				{
-					 BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname,cpSNP1,cpSNP2);
+					BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
 				}
 
 				
@@ -719,7 +719,7 @@ if(parameter[0].ivort==1)
 					pseed->ycoo=pTree->ycoo;
 					pseed->namem=pTree->name;
 					
-					if((parameter[0].einschwingen==false)&&(Vname.size()>0)&&(parameter[0].pollenvert==1)){
+					if((Vname.size()>0)&&(parameter[0].pollenvert==1)){
 					iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
 					pseed->namep	=Vname[iran];
 					//pseed->cpSNP[0]=cpSNP1[iran];

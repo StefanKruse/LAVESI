@@ -117,6 +117,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	// print the computation time to the console and into a file
 	if(parameter[0].computationtime==1){
 		
+		/*
 		cout << endl << "plot update time: " << (((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) << endl;
 		cout << endl << "growth time: " << (((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) << endl;
 		cout << endl << "seed dispersal time: " << (((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC) << endl;
@@ -127,8 +128,35 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		cout << endl << "data output time: " << (((double) (end_time_Data_output - start_time_Data_output))/ CLOCKS_PER_SEC) << endl;
 		cout << endl << "mortality time: " << (((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC) << endl;
 		cout << endl << "ageing time: " << (((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) << endl;
+		*/
 		
-		//vector<vector<Karten*> >::iterator posw = world_plot_list.begin();
+		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))printf("\n - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
+		printf("\n - %10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f", 
+				(((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) ,
+				(((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) ,
+				(((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC),
+				(((double) (end_time_seedproduktion - start_time_seedproduktion))/ CLOCKS_PER_SEC),
+				(((double) (end_time_Treeverteilung - start_time_Treeverteilung))/ CLOCKS_PER_SEC),
+				(((double) (end_time_etablierung - start_time_etablierung))/ CLOCKS_PER_SEC),
+				(((double) (end_time_feuer - start_time_feuer))/ CLOCKS_PER_SEC),
+				(((double) (end_time_Data_output - start_time_Data_output))/ CLOCKS_PER_SEC) ,
+				(((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC),
+				(((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) ,
+				((double) ((end_time_Ageing - start_time_Ageing)+
+					(end_time_mortalitaet - start_time_mortalitaet)+
+					(end_time_Data_output - start_time_Data_output)+
+					(end_time_feuer - start_time_feuer)+
+					(end_time_etablierung - start_time_etablierung)+
+					(end_time_Treeverteilung - start_time_Treeverteilung)+
+					(end_time_seedproduktion - start_time_seedproduktion)+
+					(end_time_seedausbreitung - start_time_seedausbreitung)+
+					(end_time_wachstum - start_time_wachstum)+
+					(end_time_kartenup - start_time_kartenup)
+					)/ CLOCKS_PER_SEC)
+				 );
+
+				 
+		 //vector<vector<Karten*> >::iterator posw = world_plot_list.begin();
 		//vector<Karten*>& plot_list = *posw;
 		
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin());

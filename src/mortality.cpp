@@ -669,7 +669,7 @@ if(parameter[0].ivort==1)
 	// just for testing the OMP-helpers
 	//cout << " exiting !" << endl;
 	//exit(1);
-}// end if ivort==1
+}// end if ivort==1 for omp trial
 
 
 		// loop with omp through each element of the list
@@ -686,7 +686,7 @@ if(parameter[0].ivort==1)
 
 			pTree=(*posb);			
 
-			if(parameter[0].ivort==1)cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
+			if(parameter[0].ivort==1 & pari==0)cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
 			
 			if (pTree->seednewly_produced>0)
 			{

@@ -131,7 +131,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		*/
 		
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))printf("\n - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
-		printf("\n - %10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f", 
+		printf("\n - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
 				(((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) ,
 				(((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) ,
 				(((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC),
@@ -167,7 +167,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		fp2 =fopen("t_N.txt","a+");
 		if(fp2==0){goto open;}
 		fprintf(fp2,"%lu \t %f \n",tree_list.size(), 
-		((double)((end_time_Ageing - start_time_Ageing)+
+		((double) ((end_time_Ageing - start_time_Ageing)+
 		(end_time_mortalitaet - start_time_mortalitaet)+
 		(end_time_Data_output - start_time_Data_output)+
 		(end_time_feuer - start_time_feuer)+
@@ -184,8 +184,32 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		FILE *fp3;
 		fp3 =fopen("t_N_mort.txt","a+");
 		if(fp3==0){goto openmort;}
-		fprintf(fp3,"%lu;%d;%f\n",tree_list.size(),parameter[0].ivort, 
-		((double)(end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC);
+		fprintf(fp3,"%lu;%d;%f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f\n",
+			tree_list.size(),
+			parameter[0].ivort, 
+			((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC,
+			(((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) ,// from here newly introduced to record all
+				(((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) ,
+				(((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC),
+				(((double) (end_time_seedproduktion - start_time_seedproduktion))/ CLOCKS_PER_SEC),
+				(((double) (end_time_Treeverteilung - start_time_Treeverteilung))/ CLOCKS_PER_SEC),
+				(((double) (end_time_etablierung - start_time_etablierung))/ CLOCKS_PER_SEC),
+				(((double) (end_time_feuer - start_time_feuer))/ CLOCKS_PER_SEC),
+				(((double) (end_time_Data_output - start_time_Data_output))/ CLOCKS_PER_SEC) ,
+				(((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC),
+				(((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) ,
+				((double) ((end_time_Ageing - start_time_Ageing)+
+					(end_time_mortalitaet - start_time_mortalitaet)+
+					(end_time_Data_output - start_time_Data_output)+
+					(end_time_feuer - start_time_feuer)+
+					(end_time_etablierung - start_time_etablierung)+
+					(end_time_Treeverteilung - start_time_Treeverteilung)+
+					(end_time_seedproduktion - start_time_seedproduktion)+
+					(end_time_seedausbreitung - start_time_seedausbreitung)+
+					(end_time_wachstum - start_time_wachstum)+
+					(end_time_kartenup - start_time_kartenup)
+					)/ CLOCKS_PER_SEC)
+			);
 		fclose(fp3);
 	}
 	

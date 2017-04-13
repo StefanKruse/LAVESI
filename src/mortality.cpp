@@ -34,7 +34,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 		
 		// biotic influence:
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-		{ 
+		{
 			pTree=(*pos);
 	
 			
@@ -224,7 +224,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 
 					
 					
-					
+					/* to reduce computation load, delete the following printout section
 					//StefanC: Ausgabe der Infos des sterbenden Treees
 					double toteinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 					if ((pTree->age>10)&(toteinschreibzufall<0.0000001)) 
@@ -305,13 +305,11 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 							fprintf(dateizeiger, "%4.5f;", parameter[0].mortbg);
 							if(pTree->species==1)
 							{
-
 								fprintf(dateizeiger, "%4.5f;", weathermortaddg);
 								fprintf(dateizeiger, "%4.5f;", maxhg);			
 								fprintf(dateizeiger, "%4.5f;", Treemortg);							
 								fprintf(dateizeiger, "%4.5f;", sapl_mort_gmel);
 								fprintf(dateizeiger, "%4.5f;", weather_mort_gmel);
-								
 							}
 							else
 							{
@@ -330,64 +328,8 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 
 							fclose (dateizeiger);
 					} //StefanC: Ende der Ausgabefunktion fuer tote Treee
+					*/
 					
-					// if (pTree->coneheight!=99999)
-					//{  
-			
-						///LIST OUTPUT NOW!
-							/*
-							if(parameter[0].pollenvert==2){
-							
-							FILE *dateizeiger;
-							string dateiname;
-
-							// Dateinamen zusammensetzen
-							char dateinamesuf[10];
-							sprintf(dateinamesuf, "%.4d", parameter[0].windsource);
-							dateiname="output/data_genealogie_" + string(dateinamesuf) + ".csv";
-					 
-							// Datei versuchen zum Lesen und Schreiben zu oeffnen
-							dateizeiger = fopen (dateiname.c_str(), "r+");
-							// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
-							if (dateizeiger == NULL)
-							{
-							  dateizeiger = fopen (dateiname.c_str(), "w");
-								fprintf(dateizeiger, "name;");
-								fprintf(dateizeiger, "maturationyear;")
-								fprintf(dateizeiger, "dyingyear;");
-								fprintf(dateizeiger, "NameM;");
-								//fprintf(dateizeiger, "NameP");
-								fprintf(dateizeiger, "xcoo;");
-								fprintf(dateizeiger, "ycoo;");
-								fprintf(dateizeiger, "art;");
-								fprintf(dateizeiger, "\n");
-
-								if (dateizeiger == NULL)
-								{
-									fprintf(stderr, "Error, could not open genealogy file\n");
-									exit(1);
-								}
-							}
-
-							// Die neuen Informationen werden ans Ende der Datei geschrieben
-							fseek(dateizeiger,0,SEEK_END);
-
-							// Datenaufbereiten und in die Datei schreiben
-							fprintf(dateizeiger, "%d;", pTree->name);
-							fprintf(dateizeiger, "%d;",0);
-							fprintf(dateizeiger, "%d;", jahr);
-							fprintf(dateizeiger, "%d;", pTree->namem);							//fprintf(dateizeiger, "%d;", pTree->namep);//nee
-							fprintf(dateizeiger, "%4.5f;", pTree->xcoo);
-							fprintf(dateizeiger, "%4.5f;", pTree->ycoo);	
-							fprintf(dateizeiger, "%d;", pseed->species);
-							fprintf(dateizeiger, "\n");
-
-							fclose (dateizeiger);
-							}
-					}
-							*/
-
-					//vector<double>().swap(pTree->Dbrustliste);
 					delete pTree;//LEGT yr_of_dying FEST
 					pos=tree_list.erase(pos);
 				}
@@ -469,6 +411,8 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 
 		aktort++;
 
+		clock_t start_time_mortpoll=clock();
+		
 		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
 		/// seedmortalität
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
@@ -530,7 +474,6 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 // ... export OMP_NUM_THREADS=4
 // ... or explicitly overwrite the environmental variable by setting the helper number directly
 // // --- some code to test the speed-up
-// // --- 
 if(parameter[0].ivort==1)
 {
 	
@@ -688,7 +631,6 @@ if(parameter[0].ivort==1)
 
 			// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 			pTree=(*posb);			
-
 			vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
 
 			if((parameter[0].ivort==1) & (pari==0))
@@ -719,6 +661,8 @@ if(parameter[0].ivort==1)
 					// seed wurden erstellt Beginn
 					
 					//cout << " --> seedlebend " << seedlebend;
+					// TODO to speed up with multi-core-processing we need to reduce the times when the helpers want to access the bottleneck
+					// ... therefore, create first a newlist, fill it with new seeds and then append it in the end in one execution
 					for (int sl=0; sl<seedlebend; sl++)
 					{ // Neuen seed erstellen Beginn
 						pseed= new seed();			// 1. Neuen seed erzeugen
@@ -776,10 +720,32 @@ if(parameter[0].ivort==1)
 			} // seed wurden erstellt Ende
 		}//Ende HauptTreeschleife
 		
+		clock_t end_time_poll=clock();
+		
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/
 		TreeMort(yearposition, weather_list, tree_list);
 		
 		//cout << "seed_list.size() nach Mortalität = " << seed_list.size() << endl;
+	
+		clock_t end_time_mortpoll=clock();
+		
+		// timer output for pollination/mortality-ratio
+		// TODO check which process is the most intensive one -> BefrWahrsch or seed.push_back? if the latter, than try to implement first a list which is for each tree then in the end added to the "master"seed_list
+		if(parameter[0].computationtime==1)
+		{
+			openpoll:
+			FILE *fp4;
+			fp4=fopen("t_N_poll.txt","a+");
+			if(fp4==0){goto openpoll;}
+			fprintf(fp4,"%lu;%d;%10.2f;%10.2f\n",
+					tree_list.size(),
+					parameter[0].ivort, 
+					((double) (end_time_poll - start_time_mortpoll))/ CLOCKS_PER_SEC,
+					((double) (end_time_mortpoll - end_time_poll))/ CLOCKS_PER_SEC
+				);
+			fclose(fp4);
+		}
+	
 	
 	}//Ende weather_listnschleife
 }

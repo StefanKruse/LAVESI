@@ -106,7 +106,7 @@ simdauer=80;					//length of a simulation (1-(   1077   )-6099)
 								// ... ?? warum nicht bis 2013
 								// 6099==for assembled weather series (weatherchoice==9)
 runs=1;						// Anzahl an Simulationen == Wiederholungen (1-oo)
-ivortmax=100;				// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
+ivortmax=200;				// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
 								//Example: Entweder 0 fuer keine Einschwingphase oder minimal 10 wegen Isothermberechnung
 								//   0==without
 								// >10==with

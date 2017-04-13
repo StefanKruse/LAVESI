@@ -12,7 +12,10 @@
 		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_first_trial/01_core",
 		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_first_trial/02_core",
 		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_first_trial/16_core",
-		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_first_trial/02_core_Vname"
+		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_first_trial/02_core_Vname",
+		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_second_trial_mort/02_core1",
+		"N:/geonob1/BioIng/Programming_LAVESI/omp_speed_second_trial_mort/02_core2"
+
 		)
 		
 	timedf=NULL
@@ -43,11 +46,11 @@
 
 
 ### data analyses
-	# png(paste0(gitcodepathpostprocess, "comptime.png"))
+	png(paste0(gitcodepathpostprocess, "comptime.png"))
 		with(timedf, plot(T_mort~TreeListSize, log="xy", col=Cores, pch=ifelse(Ivort<100,15, 1)))
 			title(main="Computation time")
 			legend("topleft", c(levels(timedf$Cores), "ivort<100", "ivort>=100"), col=c(1:length(levels(timedf$Cores)),1,1), pch=c(rep(1,length(folderstoanalyse)), 15,1), pt.cex=2, pt.lwd=3)
-	# dev.off()
+	dev.off()
 
 
 

@@ -17,3 +17,6 @@ t_*.txt
 # exclude TEST-folder
 TEST/
 
+# exclude postprocessing-output files
+postprocessing/*.png
+

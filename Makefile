@@ -78,3 +78,6 @@ executables: $(OBJS)
 clean: 
 	rm -rf data*.csv output/data*.csv t_*.txt *o LAVESIgen
 
+cleanoutput:
+	rm -rf data*.csv output/data*.csv t_*.txt
+

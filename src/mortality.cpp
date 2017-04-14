@@ -663,6 +663,7 @@ if(parameter[0].ivort==1)
 					//cout << " --> seedlebend " << seedlebend;
 					// TODO to speed up with multi-core-processing we need to reduce the times when the helpers want to access the bottleneck
 					// ... therefore, create first a newlist, fill it with new seeds and then append it in the end in one execution
+					list<seed*> newseed_list;
 					for (int sl=0; sl<seedlebend; sl++)
 					{ // Neuen seed erstellen Beginn
 						pseed= new seed();			// 1. Neuen seed erzeugen
@@ -706,11 +707,18 @@ if(parameter[0].ivort==1)
 
 
 						// to guarantee that each process is accessing the seed list not simultaneously define it as critical
-						#pragma omp critical(seed_list)
-						{
-							seed_list.push_back(pseed);// 3. add seed to seed_list
-						}
+						//#pragma omp critical(seed_list)
+						//{
+							//seed_list  // old list
+							newseed_list.push_back(pseed);// 3. add seed to seed_list
+						//}
 					} // Neuen seed erstellen Ende
+
+					// append all at once to the seed_list
+					#pragma omp critical(seed_list)
+					{
+						seed_list.splice(seed_list.end(), newseed_list);
+					}
 
 					if(parameter[0].pollenvert==1)
 					{

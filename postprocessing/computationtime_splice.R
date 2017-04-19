@@ -50,14 +50,14 @@
 
   
   
-	with(timedf[timedf$TreeListSize>5000,], plot(T_mort~TreeListSize, log="xy", col=Cores, pch=ifelse(Ivort<100,15, 1)))
+	with(timedf[timedf$TreeListSize>7500,], plot(T_mort~TreeListSize, log="xy", col=Cores, pch=ifelse(Ivort<100,15, 1)))
 	title(main="Computation time")
 	legend("topleft", c(levels(timedf$Cores), "ivort<100", "ivort>=100"), col=c(1:length(levels(timedf$Cores)),1,1), pch=c(rep(1,length(folderstoanalyse)), 15,1), pt.cex=2, pt.lwd=3)
   
   # ablines for different runs
   for(lvli in levels(timedf$Cores))
   {
-    lm1=with(timedf[timedf$TreeListSize>5000 & timedf$Cores==lvli,], lm(T_mort~TreeListSize))
+    lm1=with(timedf[timedf$TreeListSize>7500 & timedf$Cores==lvli,], lm(T_mort~TreeListSize))
     str(lm1)
     ypred=lm1$fitted.values
     xpred=lm1$model$TreeListSize

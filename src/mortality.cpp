@@ -616,12 +616,28 @@ if(parameter[0].ivort==1)
 	// exit(1);
 }// end if ivort==1 for omp trial
 
+/* New trial
 
+with help of:
+http://stackoverflow.com/questions/18669296/c-openmp-parallel-for-loop-alternatives-to-stdvector
+
+Try to define an own reduction-method as follows (more types can be found at the webpage)...
+
+
+
+#pragma omp declare reduction (merge : std::vector<int> : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
+std::vector<int> vec;
+#pragma omp parallel for reduction(merge: vec)
+for(int i=0; i<100; i++) vec.push_back(i);
+
+
+
+*/
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		#pragma omp parallel default(shared) private(pTree,pseed)
-		#pragma omp for schedule(guided)
+		#pragma omp for schedule(guided)//maybe change to "static" and define chunk-sizes - but the latter one uses contiguous iterations which might outperform if separated to several threads
 		for (unsigned int pari=0; pari< tree_list.size(); ++pari)
 		{
 			list<Tree*>::iterator posb = tree_list.begin();

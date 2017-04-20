@@ -617,9 +617,114 @@ if(parameter[0].ivort==1)
 }// end if ivort==1 for omp trial
 
 
+// BASIC VERSION START --------------------------------------------------------------------------------------
+double start_basicversion=omp_get_wtime();
+//Basic version - without parallel computation
+int seedlistsizebeforebasic=seed_list.size();
+
+			for (unsigned int pari=0; pari< tree_list.size(); ++pari)
+			{
+				list<Tree*>::iterator posb = tree_list.begin();
+				// since the iterator must be an int for omp, the iterator has to be 
+				// ... constructed for each tree instance and advanced to the correct position
+				advance(posb, pari);
+
+				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
+				pTree=(*posb);			
+				vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+
+				if((parameter[0].ivort==1) & (pari==0))
+					cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
+				
+				if (pTree->seednewly_produced>0)
+				{
+					// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
+					int seedlebend=0;
+					for(int sna=0; sna < pTree->seednewly_produced; sna++)
+					{
+						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+						if (zufallsz>=parameter[0].seedTreemort) 
+						{
+							++seedlebend;
+						}
+					}
+					
+					if(seedlebend>0)
+					{
+						if(parameter[0].pollenvert==1)
+						{
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
+						}
+
+					
+						// gehe für Variable durch und erfinde seed		
+						// seed wurden erstellt Beginn
+						
+						//cout << " --> seedlebend " << seedlebend;
+						list<seed*> newseed_list;
+						for (int sl=0; sl<seedlebend; sl++)
+						{ // Neuen seed erstellen Beginn
+							pseed= new seed();			// 1. Neuen seed erzeugen
+							pseed->yworldcoo=aktortyworldcoo;	// 2. Werte dem seed zuweisen
+							pseed->xworldcoo=aktortxworldcoo;
+							pseed->xcoo=pTree->xcoo;
+							pseed->ycoo=pTree->ycoo;
+							pseed->namem=pTree->name;
+							
+							if((Vname.size()>0)&&(parameter[0].pollenvert==1))
+							{
+								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
+								pseed->namep=Vname[iran];
+								//pseed->cpSNP[0]=cpSNP1[iran];
+								//pseed->cpSNP[1]=cpSNP2[iran];
+								
+								//pseed->descent=
+								//pseed->pollenfall=
+								//pseed->maxgrowth=
+							} else
+							{
+								pseed->namep=0;
+							}
+							//pseed->cpSNP[0]=0;
+							//pseed->cpSNP[1]=0;}
+							/*cout<<pseed->namep<<endl;
+							cout<<pseed->cpSNP[0]<<endl;
+							cout<<pseed->cpSNP[1]<<endl;*/
+							
+
+							//pseed->mtSNP[0]=pTree->mtSNP[0];
+							//pseed->mtSNP[1]=pTree->mtSNP[1];
+							
+							pseed->line=pTree->line;
+							pseed->generation=pTree->generation+1;	// Generation=0 ist von außen eingebracht
+							pseed->imcone=true;
+							pseed->gewicht=1;
+							pseed->age=0;
+							pseed->species=pTree->species;//MutterTreespezies
+							pseed->elternheight=pTree->height;
+
+							newseed_list.push_back(pseed);// 3. add seed to seed_list
+						} // Neuen seed erstellen Ende
+
+						// append all at once to the seed_list
+						seed_list.splice(seed_list.end(), newseed_list);
+
+						if(parameter[0].pollenvert==1)
+						{
+							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
+						}
+					}// end if seedlebend>0
+				} // seed wurden erstellt Ende
+			}//Ende HauptTreeschleife
+double end_basicversion=omp_get_wtime();
+// BASIC VERSION END --------------------------------------------------------------------------------------
+
 // TEST 1 START --------------------------------------------------------------------------------------
 double start_ompversion1=omp_get_wtime();
 //Testversion 1 - working but no speed-up due to bottleneck
+
+int seedlistsizebeforetest1=seed_list.size();
+
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -740,7 +845,7 @@ double end_ompversion1=omp_get_wtime();
 double start_ompversion2=omp_get_wtime();
 //Testversion 2 - test of reduction
 
-int seedlistsizebefore=seed_list.size();
+int seedlistsizebeforetest2=seed_list.size();
 // #pragma omp declare reduction(mergelists : std::list<seed*> : seed_list.splice(seed_list.end(), newseed_list))
 // list<seed*> newseed_list;
 //#pragma omp parallel for reduction(mergelists: newseed_list)
@@ -883,14 +988,15 @@ http://stackoverflow.com/questions/18669296/c-openmp-parallel-for-loop-alternati
 				seed_list.splice(seed_list.end(), newseed_list);
 			}
 		}// end parallel region
-int seedlistsizeafter=seed_list.size();
+int seedlistsizefinal=seed_list.size();
 double end_ompversion2=omp_get_wtime();
 // TEST 2 END --------------------------------------------------------------------------------------
 
 // print computation times
-cout << endl <<  " -- OMP --- Version 1 : " << end_ompversion1-start_ompversion1 << endl;
+cout << endl <<  " -- OMP --- Basic   0 : " << end_basicversion-start_basicversion << endl;
+cout << " -- OMP --- Version 1 : " << end_ompversion1-start_ompversion1 << endl;
 cout << " -- OMP --- Version 2 : " << end_ompversion2-start_ompversion2 << endl;
-cout << " -- OMP --- Version 1/2 ... seed_list_size before-after = " << seedlistsizebefore << "/" << seedlistsizeafter << endl;
+cout << " -- OMP --- seed_list_sizes (before/afterbasic/afterTest1/afterTest2) = " << seedlistsizebeforebasic << "/" << seedlistsizebeforetest1 << "/" << seedlistsizebeforetest2 <<  "/" << seedlistsizefinal << endl;
 
 
 

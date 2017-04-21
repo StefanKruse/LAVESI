@@ -1,4 +1,11 @@
-﻿/****************************************************************************************//**
+﻿#ifndef _distribution_H_///TODO: DELETE THIS!
+#define _distribution_H_
+#include "distribution.cpp"
+#endif
+
+
+
+/****************************************************************************************//**
  * \brief calculate tree mortality
  *
  * depends on abiotic factors (temperature and number of days with temperatures above 20 degrees)
@@ -6,17 +13,6 @@
  *
  *
  *******************************************************************************************/
- 
- 
- 
- 
- 
- #ifndef _distribution_H_///TODO: DELETE THIS!
-  #define _distribution_H_
-  #include "distribution.cpp"
-  #endif
-  
-  
 void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)
 {
 		//console output:
@@ -357,29 +353,21 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 
 
 
-
-
-
 /****************************************************************************************//**
  * \brief calculate tree and seed mortality
  *
- * first call TreeMort() then calculate seeds
+ * first create surviving seeds then call TreeMort() 
  *
  *
  *******************************************************************************************/
- 
-
- 
 void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
 {
-	
 	// vector<int> Vname,cpSNP1,cpSNP2;//moved down into omp-parallel-for part
 	// int iran;
 	int aktort=0;
 	
-	
-	for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
-	{
+	for(vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
+	{// START: world loop
 		// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Referenz
 		// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 		// realisiert ist weiterverfahren werden
@@ -404,7 +392,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		
 		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
 		/// seedmortalität
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
 		{ 
 			pseed=(*pos);
 			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -457,230 +445,69 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 
 		// Loop for each seed that is to be produced for each tree
 	
+		// loop around the loop for MULTI-CORE-PROCESSING
+		// before run a program parallel set the number of helpers by changing the environment variable
+		// ... ... export OMP_NUM_THREADS=4
+		// ... or explicitly overwrite the environmental variable by setting the helper number directly
+		// ... ... omp_set_num_threads(int); // which is set in the parameter.txt file variable "omp_num_threads"
+		// This implementation was formerly (21st April and backwards) named "Testversion 2" - give each thread a local seed_list and splice them together in the end
 
-	
-	
-	
-	
-		if(false){//START: COMPUTATION TIME TRIAL
-		
-			
-			// TEST 2 START --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-			//Testversion 2 - give each thread a local seed_list and splice them together in the end
+		// loop with omp through each element of the list
+		omp_set_dynamic(0); //disable dynamic teams
+		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		#pragma omp parallel default(shared) private(pTree,pseed)
+		{ // START: parallel region
+			// declare a local seed list to be filled by each thread
+			list<seed*> newseed_list;
 
-
-
-			// loop with omp through each element of the list
-			omp_set_dynamic(0); //disable dynamic teams
-				
-			for(int helpernumi=1; helpernumi<33; ++helpernumi)
-			{// START: for each helper
-					// variables for run-time output
-					double start_time=omp_get_wtime();// record time before parallel execution
-					int seedlistsizebeforecomptime=seed_list.size();
-						
-					// set the number of threads
-					omp_set_num_threads(helpernumi);
-
-					#pragma omp parallel default(shared) private(pTree,pseed)
-					{ // START: parallel region
-						// declare a local list for each thread
-						list<seed*> newseed_list;
-
-						#pragma omp for nowait schedule(guided) 
-						for (unsigned int pari=0; pari< tree_list.size(); ++pari)
-						{
-							list<Tree*>::iterator posb = tree_list.begin();
-							// since the iterator must be an int for omp, the iterator has to be 
-							// ... constructed for each tree instance and advanced to the correct position
-							advance(posb, pari);
-
-							// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
-							pTree=(*posb);			
-							vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-
-							if((parameter[0].ivort==1) & (pari==0))
-								cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
-							
-							if (pTree->seednewly_produced>0)
-							{
-								// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
-								int seedlebend=0;
-								for(int sna=0; sna < pTree->seednewly_produced; sna++)
-								{
-									double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-									if (zufallsz>=parameter[0].seedTreemort) 
-									{
-										++seedlebend;
-									}
-								}
-								
-								if(seedlebend>0)
-								{
-									if(parameter[0].pollenvert==1)
-									{
-										BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
-									}
-
-								
-									// gehe für Variable durch und erfinde seed		
-									// seed wurden erstellt Beginn
-									
-									//cout << " --> seedlebend " << seedlebend;
-									// TODO to speed up with multi-core-processing we need to reduce the times when the helpers want to access the bottleneck
-									// ... therefore, create first a newlist, fill it with new seeds and then append it in the end in one execution
-									
-									for (int sl=0; sl<seedlebend; sl++)
-									{ // Neuen seed erstellen Beginn
-										pseed= new seed();			// 1. Neuen seed erzeugen
-										pseed->yworldcoo=aktortyworldcoo;	// 2. Werte dem seed zuweisen
-										pseed->xworldcoo=aktortxworldcoo;
-										pseed->xcoo=pTree->xcoo;
-										pseed->ycoo=pTree->ycoo;
-										pseed->namem=pTree->name;
-										
-										if((Vname.size()>0)&&(parameter[0].pollenvert==1))
-										{
-											int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
-											pseed->namep=Vname[iran];
-											//pseed->cpSNP[0]=cpSNP1[iran];
-											//pseed->cpSNP[1]=cpSNP2[iran];
-											
-											//pseed->descent=
-											//pseed->pollenfall=
-											//pseed->maxgrowth=
-										} else
-										{
-											pseed->namep=0;
-										}
-										//pseed->cpSNP[0]=0;
-										//pseed->cpSNP[1]=0;}
-										/*cout<<pseed->namep<<endl;
-										cout<<pseed->cpSNP[0]<<endl;
-										cout<<pseed->cpSNP[1]<<endl;*/
-										
-
-										//pseed->mtSNP[0]=pTree->mtSNP[0];
-										//pseed->mtSNP[1]=pTree->mtSNP[1];
-										
-										pseed->line=pTree->line;
-										pseed->generation=pTree->generation+1;	// Generation=0 ist von außen eingebracht
-										pseed->imcone=true;
-										pseed->gewicht=1;
-										pseed->age=0;
-										pseed->species=pTree->species;//MutterTreespezies
-										pseed->elternheight=pTree->height;
-
-										newseed_list.push_back(pseed);// 3. add seed to seed_list
-									} // Neuen seed erstellen Ende
-
-									if(parameter[0].pollenvert==1)// maybe move this up to use only one time the if-clause
-									{
-										Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
-									}
-								}// end if seedlebend>0
-							} // seed wurden erstellt Ende
-						}//Ende HauptTreeschleife
-						
-						// append all at once to the seed_list for each thread
-						#pragma omp critical//(seed_list)
-						{
-							seed_list.splice(seed_list.end(), newseed_list);
-						}
-					} // END: parallel region
-						
-					double end_time=omp_get_wtime();
-					int seedlistsizeaftercomptime=seed_list.size();
-
-				// write comp time to a file
-					opentimecomp:
-					FILE *fp5;
-					fp5=fopen("t_N_comptime.txt","a+");
-					if(fp5==0){goto opentimecomp;}
-					fprintf(fp5,"%lu;%d;%d;%20.10f;%d\n",
-							tree_list.size(),
-							parameter[0].ivort, 
-							helpernumi,
-							end_time-start_time,
-							seedlistsizeaftercomptime-seedlistsizebeforecomptime					
-						);
-					fclose(fp5);
-			
-			
-			
-			
-				
-			}// END: for each helper
-			
-	
-	
-	
-	
-	
-				// variables for run-time output
-				int seedlistsizefinal=seed_list.size();
-				double end_ompversion2=omp_get_wtime();
-			// TEST 2 END ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-		
-		}// END: COMPUTATION TIME TRIAL
-		else {//START ELSE: time trial
-		
-		// BASIC VERSION START -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		// Basic version - without parallel computation
-
-			// variables for run-time output
-			double start_basicversion=omp_get_wtime();
-			int seedlistsizebeforebasic=seed_list.size();
-
-			for (unsigned int pari=0; pari< tree_list.size(); ++pari)
-			{
+			#pragma omp for nowait schedule(guided) 
+			for(unsigned int pari=0; pari<tree_list.size(); ++pari)
+			{// START: main tree loop
+				list<Tree*>::iterator posb=tree_list.begin();
 				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
-				list<Tree*>::iterator posb = tree_list.begin();
 				advance(posb, pari);
 
 				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 				pTree=(*posb);			
-				vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file // maybe move this inside the if a seed is surviving section
+				vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
 
-				if((parameter[0].ivort==1) & (pari==0))
-					cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
+				if((parameter[0].ivort==1) & (pari==0))// check the number of used threads
+					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
 				
-				if (pTree->seednewly_produced>0)
-				{
-					// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
+				if(pTree->seednewly_produced>0)
+				{//START: tree produces seeds
+					// ramdomly determine the number of surving seeds
 					int seedlebend=0;
 					for(int sna=0; sna < pTree->seednewly_produced; sna++)
 					{
 						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-						if (zufallsz>=parameter[0].seedTreemort) 
+						if(zufallsz>=parameter[0].seedTreemort) 
 						{
 							++seedlebend;
 						}
 					}
 					
 					if(seedlebend>0)
-					{
+					{// START: if seedlebend>0
 						if(parameter[0].pollenvert==1)
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
 						}
-
-					
-						// gehe für Variable durch und erfinde seed		
-						// seed wurden erstellt Beginn
-						
-						//cout << " --> seedlebend " << seedlebend;
-						list<seed*> newseed_list;
-						for (int sl=0; sl<seedlebend; sl++)
-						{ // Neuen seed erstellen Beginn
-							pseed= new seed();			// 1. Neuen seed erzeugen
-							pseed->yworldcoo=aktortyworldcoo;	// 2. Werte dem seed zuweisen
+				
+						// get the characteristics for each survining seed and push these back new to seed_list
+						for(int sl=0; sl<seedlebend; sl++)
+						{// START: create new seeds
+							// create a new seed
+							pseed= new seed();
+							
+							// add information
+							pseed->yworldcoo=aktortyworldcoo;
 							pseed->xworldcoo=aktortxworldcoo;
 							pseed->xcoo=pTree->xcoo;
 							pseed->ycoo=pTree->ycoo;
 							pseed->namem=pTree->name;
 							
+							// if chosen, determine the father by pollination out of available (matured) trees
 							if((Vname.size()>0)&&(parameter[0].pollenvert==1))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
@@ -706,313 +533,38 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 							//pseed->mtSNP[1]=pTree->mtSNP[1];
 							
 							pseed->line=pTree->line;
-							pseed->generation=pTree->generation+1;	// Generation=0 ist von außen eingebracht
+							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
 							pseed->imcone=true;
 							pseed->gewicht=1;
 							pseed->age=0;
-							pseed->species=pTree->species;//MutterTreespezies
+							pseed->species=pTree->species;// species is inherited from the seed source
 							pseed->elternheight=pTree->height;
 
-							newseed_list.push_back(pseed);// 3. add seed to seed_list
-						} // Neuen seed erstellen Ende
+							// add seed to seed_list
+							newseed_list.push_back(pseed);
+						}// END: create new seeds
 
-						// append all at once to the seed_list
-						seed_list.splice(seed_list.end(), newseed_list);
-
-						if(parameter[0].pollenvert==1)
+						/*if(parameter[0].pollenvert==1)// maybe this is not needed because it is now locally constructed for each tree
 						{
 							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
 						}
-					}// end if seedlebend>0
-				} // seed wurden erstellt Ende
-			}//Ende HauptTreeschleife
-
-			// variables for run-time output
-			double end_basicversion=omp_get_wtime();
-		// BASIC VERSION END -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-		// loop around the loop for MULTI-CORE-PROCESSING
-		// before run a program parallel set the number of helpers by changing the environment variable
-		// ... ... export OMP_NUM_THREADS=4
-		// ... or explicitly overwrite the environmental variable by setting the helper number directly
-		// ... ... omp_set_num_threads(int); // which is set in the parameter.txt file variable "omp_num_threads"
-
-		// TEST 1 START -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		//Testversion 1 - working but no speed-up due to bottleneck
-
-			// variables for run-time output
-			double start_ompversion1=omp_get_wtime();
-			int seedlistsizebeforetest1=seed_list.size();
-
-			// loop with omp through each element of the list
-			omp_set_dynamic(0); //disable dynamic teams
-			omp_set_num_threads(parameter[0].omp_num_threads); // set the number of helpers to the chosen number
-			#pragma omp parallel default(shared) private(pTree,pseed)
+						*/
+					}// END: if seedlebend>0
+				}// END: tree produces seeds
+			}//END: main tree loop
+			
+			// append all newly created seed from each thread at once to the seed_list
+			#pragma omp critical
 			{
-				#pragma omp for schedule(guided)//maybe change to "static" and define chunk-sizes - but the latter one uses contiguous iterations which might outperform if separated to several threads
-				for (unsigned int pari=0; pari< tree_list.size(); ++pari)
-				{
-					// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
-					list<Tree*>::iterator posb = tree_list.begin();
-					advance(posb, pari);
-
-					// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
-					pTree=(*posb);			
-					vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file // maybe move this inside the if a seed is surviving section
-
-					if((parameter[0].ivort==1) & (pari==0))
-						cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
-					
-					if (pTree->seednewly_produced>0)
-					{
-						// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
-						int seedlebend=0;
-						for(int sna=0; sna < pTree->seednewly_produced; sna++)
-						{
-							double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-							if (zufallsz>=parameter[0].seedTreemort) 
-							{
-								++seedlebend;
-							}
-						}
-						
-						if(seedlebend>0)
-						{ // START: seed is suviving
-							
-							if(parameter[0].pollenvert==1)
-							{ // define the 
-								BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
-							}
-
-							
-							//  to speed up with multi-core-processing we need to reduce the times when the helpers want to access the bottleneck
-							// ... therefore, create first a newlist, fill it with new seeds and then append it in the end in one execution
-							list<seed*> newseed_list;
-							for (int sl=0; sl<seedlebend; sl++)
-							{ // START: create new seed
-								pseed= new seed();			// 1. Neuen seed erzeugen
-								pseed->yworldcoo=aktortyworldcoo;	// 2. Werte dem seed zuweisen
-								pseed->xworldcoo=aktortxworldcoo;
-								pseed->xcoo=pTree->xcoo;
-								pseed->ycoo=pTree->ycoo;
-								pseed->namem=pTree->name;
-								
-								if((Vname.size()>0)&&(parameter[0].pollenvert==1))
-								{
-									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
-									pseed->namep=Vname[iran];
-									//pseed->cpSNP[0]=cpSNP1[iran];
-									//pseed->cpSNP[1]=cpSNP2[iran];
-									
-									//pseed->descent=
-									//pseed->pollenfall=
-									//pseed->maxgrowth=
-								} else
-								{
-									pseed->namep=0;
-								}
-								//pseed->cpSNP[0]=0;
-								//pseed->cpSNP[1]=0;}
-								/*cout<<pseed->namep<<endl;
-								cout<<pseed->cpSNP[0]<<endl;
-								cout<<pseed->cpSNP[1]<<endl;*/
-								
-
-								//pseed->mtSNP[0]=pTree->mtSNP[0];
-								//pseed->mtSNP[1]=pTree->mtSNP[1];
-								
-								pseed->line=pTree->line;
-								pseed->generation=pTree->generation+1;	// Generation=0 ist von außen eingebracht
-								pseed->imcone=true;
-								pseed->gewicht=1;
-								pseed->age=0;
-								pseed->species=pTree->species;//MutterTreespezies
-								pseed->elternheight=pTree->height;
-
-								newseed_list.push_back(pseed);// 3. add seed to seed_list
-							} // END: create new seed
-
-							// append all at once to the seed_list
-							#pragma omp critical(seed_list)
-							{
-								seed_list.splice(seed_list.end(), newseed_list);
-							}
-
-							if(parameter[0].pollenvert==1)// maybe move this up to use only one time the if-clause
-							{
-								Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
-							}
-						}// END: seed is suviving
-					} // seed wurden erstellt Ende
-				}//Ende HauptTreeschleife
-			}// End parallel main loop
+				seed_list.splice(seed_list.end(), newseed_list);
+			}
+		} // END: parallel region
 			
-			// variables for run-time output
-			double end_ompversion1=omp_get_wtime();
-		// TEST 1 END ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-		// TEST 2 START --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		//Testversion 2 - give each thread a local seed_list and splice them together in the end
-
-			// variables for run-time output
-			double start_ompversion2=omp_get_wtime();
-			int seedlistsizebeforetest2=seed_list.size();
-
-			// loop with omp through each element of the list
-			omp_set_dynamic(0); //disable dynamic teams
-			omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-			#pragma omp parallel default(shared) private(pTree,pseed)
-			{ // START: parallel region
-				// declare a local list for each thread
-				list<seed*> newseed_list;
-
-				#pragma omp for nowait schedule(guided) 
-				for (unsigned int pari=0; pari< tree_list.size(); ++pari)
-				{
-					list<Tree*>::iterator posb = tree_list.begin();
-					// since the iterator must be an int for omp, the iterator has to be 
-					// ... constructed for each tree instance and advanced to the correct position
-					advance(posb, pari);
-
-					// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
-					pTree=(*posb);			
-					vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-
-					if((parameter[0].ivort==1) & (pari==0))
-						cout << " OMP set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << endl << endl;
-					
-					if (pTree->seednewly_produced>0)
-					{
-						// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
-						int seedlebend=0;
-						for(int sna=0; sna < pTree->seednewly_produced; sna++)
-						{
-							double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-							if (zufallsz>=parameter[0].seedTreemort) 
-							{
-								++seedlebend;
-							}
-						}
-						
-						if(seedlebend>0)
-						{
-							if(parameter[0].pollenvert==1)
-							{
-								BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
-							}
-
-						
-							// gehe für Variable durch und erfinde seed		
-							// seed wurden erstellt Beginn
-							
-							//cout << " --> seedlebend " << seedlebend;
-							// TODO to speed up with multi-core-processing we need to reduce the times when the helpers want to access the bottleneck
-							// ... therefore, create first a newlist, fill it with new seeds and then append it in the end in one execution
-							
-							for (int sl=0; sl<seedlebend; sl++)
-							{ // Neuen seed erstellen Beginn
-								pseed= new seed();			// 1. Neuen seed erzeugen
-								pseed->yworldcoo=aktortyworldcoo;	// 2. Werte dem seed zuweisen
-								pseed->xworldcoo=aktortxworldcoo;
-								pseed->xcoo=pTree->xcoo;
-								pseed->ycoo=pTree->ycoo;
-								pseed->namem=pTree->name;
-								
-								if((Vname.size()>0)&&(parameter[0].pollenvert==1))
-								{
-									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
-									pseed->namep=Vname[iran];
-									//pseed->cpSNP[0]=cpSNP1[iran];
-									//pseed->cpSNP[1]=cpSNP2[iran];
-									
-									//pseed->descent=
-									//pseed->pollenfall=
-									//pseed->maxgrowth=
-								} else
-								{
-									pseed->namep=0;
-								}
-								//pseed->cpSNP[0]=0;
-								//pseed->cpSNP[1]=0;}
-								/*cout<<pseed->namep<<endl;
-								cout<<pseed->cpSNP[0]<<endl;
-								cout<<pseed->cpSNP[1]<<endl;*/
-								
-
-								//pseed->mtSNP[0]=pTree->mtSNP[0];
-								//pseed->mtSNP[1]=pTree->mtSNP[1];
-								
-								pseed->line=pTree->line;
-								pseed->generation=pTree->generation+1;	// Generation=0 ist von außen eingebracht
-								pseed->imcone=true;
-								pseed->gewicht=1;
-								pseed->age=0;
-								pseed->species=pTree->species;//MutterTreespezies
-								pseed->elternheight=pTree->height;
-
-								newseed_list.push_back(pseed);// 3. add seed to seed_list
-							} // Neuen seed erstellen Ende
-
-							if(parameter[0].pollenvert==1)// maybe move this up to use only one time the if-clause
-							{
-								Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
-							}
-						}// end if seedlebend>0
-					} // seed wurden erstellt Ende
-				}//Ende HauptTreeschleife
-				
-				// append all at once to the seed_list for each thread
-				#pragma omp critical//(seed_list)
-				{
-					seed_list.splice(seed_list.end(), newseed_list);
-				}
-			} // END: parallel region
-			
-			// variables for run-time output
-			int seedlistsizefinal=seed_list.size();
-			double end_ompversion2=omp_get_wtime();
-		// TEST 2 END ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-		// print computation times
-		cout << endl <<  " -- OMP --- Basic   0 : " << end_basicversion-start_basicversion << endl;
-		cout << " -- OMP --- Version 1 : " << end_ompversion1-start_ompversion1 << endl;
-		cout << " -- OMP --- Version 2 : " << end_ompversion2-start_ompversion2 << endl;
-		cout << " -- OMP --- seed_list_sizes (before/afterbasic/afterTest1/afterTest2) = " << seedlistsizebeforebasic << "/" << seedlistsizebeforetest1 << "/" << seedlistsizebeforetest2 <<  "/" << seedlistsizefinal << endl;
-	}// END ELSE: time trial
-
-		
-		
-		
-		
-		
-		
-		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		clock_t end_time_poll=clock();
-		
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/
 		TreeMort(yearposition, weather_list, tree_list);
-		
-		//cout << "seed_list.size() nach Mortalität = " << seed_list.size() << endl;
-	
 		clock_t end_time_mortpoll=clock();
 		
-		// timer output for pollination/mortality-ratio
-		// TODO check which process is the most intensive one -> BefrWahrsch or seed.push_back? if the latter, than try to implement first a list which is for each tree then in the end added to the "master"seed_list
 		if(parameter[0].computationtime==1)
 		{
 			openpoll:
@@ -1029,7 +581,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		}
 	
 	
-	}//Ende weather_listnschleife
+	}// END: world loop
 
 }
 

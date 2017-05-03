@@ -18,11 +18,11 @@ jahranzeige=0;				// ... 			-yearly steps (0,1) => year,basal area,seed informat
 qualijahranzeige=0;			// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
 seedausbranzeige=0;			// ... 			-seed dispersal (0,1)
 mortanzeige=0;				// ...			-mortality of trees >200 cm (0,1)
-computationtime=1;			// ...			-include visualisation and output of computation time as 
+computationtime=0;			// ...			-include visualisation and output of computation time as 
 								 a function of the plot size and number of trees (0,1)
 
 // 0.2 -----> Output
-Data_output=1;					// file output (0,1)
+Data_output=0;					// file output (0,1)
 ausgabemodus=4;					// mode of file output (0,4)
 								// 0=="normal" -> 3 times 1010&2010, 
 								// 1==	"SensitivityAnalysis -> 2fach Phasenausgabe log und Capacity" 			?
@@ -39,7 +39,7 @@ feuer=0;					// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=8;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=16;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -138,7 +138,7 @@ sizemagnif=5;				// Resolution of density grid (>0-oo)
 
 seedintro=1;				// Yearly seed input (0,1)
 seedintropermanent=1;		//1//was ist hier der Unterschied zu seedintro? Wie realisiert man eine einmalige seedintroduction?
-etabbg=10000;					
+etabbg=1000;					
 etabbgpermanent=2;			// Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot (0-+oo)
 jahremitseedeintrag=10;	// Years of seed introduction (0-+oo)
 realseedconnect=0;			// Plot position for seed introduction seedgrundetablierung logisch (0,1)

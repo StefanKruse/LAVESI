@@ -18,7 +18,9 @@
  void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
  void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);
 
- void BefrWahrsch(double , double , vector<std::list<Tree*> >::iterator , int , vector<int> );
+ void BefrWahrsch(double a , double b,struct Parameter *parameter, vector<list<Tree*> >::iterator f, int e, vector<int> &d);
+ 
+ void seeddisp(double ad, int bd, double& cd, double& dd);
  
  void Parametereinlesen(void);
  void SaveAllLists(void);
@@ -27,5 +29,5 @@
  void ClearAllLists_copy(void);
  
  
- void influx(int treerows, int treecols,int year,  struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,vector<vector<double>> &vegtype);
+ void influx(int treerows, int treecols,int year, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<vector<double>> &vegtype);
 

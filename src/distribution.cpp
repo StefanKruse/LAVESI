@@ -46,9 +46,10 @@
  * 
  ************************************************************************************/
  
-
-void BefrWahrsch(double x, double y, vector<std::list<Tree*> >::iterator world_positon_b, int yr, vector<int> &pName)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
+//				(pTree->xcoo,pTree->ycoo,struct *parameter,world_positon_b,Jahr,Vname);
+void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, int yr, vector<int> &pName)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
 {
+	
   int year=yr-1;
   list<Tree*>& tree_list = *world_positon_b;
   double  richtung=0.0,mwrichtung=0.0;

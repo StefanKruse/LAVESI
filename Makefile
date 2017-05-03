@@ -1,5 +1,5 @@
 HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/funktionen.h
-CFLAGS= -c -O0 -g3 -ggdb3 -std=c++0x -Wno-parentheses -Wall -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
+CFLAGS= -c -O0 -g3 -g -ggdb3 -std=c++0x -Wno-parentheses -Wall -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
 CC=g++	#$(CXX)
 OBJS = $(./%.o)
 
@@ -71,7 +71,7 @@ weather_input.o: src/weather_input.cpp $(HEADER)
 all: ageing.o data_output.o establishment.o distribution.o fire.o growth.o influx.o main.o mortality.o normdistributedrn.o parameterintro.o plot_update.o reset.o SA_parametervariation.o seed_dispersal.o seed_production.o treedistribution.o weather_input.o executables
 	
 executables: $(OBJS)
-	$(CC) -o LAVESIgen ./*.o -lm -z muldefs
+	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./fire.o ./growth.o ./influx.o ./main.o ./mortality.o ./normdistributedrn.o ./parameterintro.o ./plot_update.o ./reset.o ./SA_parametervariation.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o -lm -z muldefs -o LAVESIgen
 	rm -rf *.o
 	
 .PHONY : clean

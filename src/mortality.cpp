@@ -10,11 +10,6 @@
  
  
  
- 
- #ifndef _distribution_H_///TODO: DELETE THIS!
-  #define _distribution_H_
-  #include "distribution.cpp"
-  #endif
   
   
 void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)
@@ -40,14 +35,14 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 			
 			if(pTree->growing==true)
 			{
-				// Falls Hoechstage ueberschritten wird ein zusaetzlicher Wert aufgeschlagen
+				// Falls maximal age ueberschritten wird ein zusaetzlicher Wert aufgeschlagen
 				double agesmort=0.0;
-				if (pTree->age>parameter[0].hoechstage) 
+				if (pTree->age>parameter[0].maximalage) 
 				{
 					agesmort=1.0;
 				}
 		
-				// heightnabhaengige Einfluesse
+				// height dependend influences
 				double wachstumrel=1.0;
 				if (pTree->height<130.0) 
 				{
@@ -59,7 +54,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				}
 
 				// ==> hat was mit Konkurrenzeffekt zu tun. 
-				//     Kleiner Tree - kaum beeinflusst, 
+				//     small Tree - kaum beeinflusst, 
 				//	   150 cm  - am stärksten beeinflusst, 
 				//	   300 cm und größer - kaum beeinflusst 
 				//	   im Moment ausgeschaltet
@@ -791,7 +786,6 @@ for(int i=0; i<100; i++) vec.push_back(i);
 			
 			if (pTree->seednewly_produced>0)
 			{
-				// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
 				int seedlebend=0;
 				for(int sna=0; sna < pTree->seednewly_produced; sna++)
 				{

@@ -18,6 +18,8 @@
  void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
  void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);
 
+ void BefrWahrsch(double , double , vector<std::list<Tree*> >::iterator , int , vector<int> );
+ 
  void Parametereinlesen(void);
  void SaveAllLists(void);
  void ClearAllLists(void);

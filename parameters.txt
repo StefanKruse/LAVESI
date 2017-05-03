@@ -267,8 +267,8 @@ dbrustheightsteignonlin=7.02;		//BrustheightSteigungNichtlinear  (IF allometrief
 
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;				// background mortality (0-1) => para=0.02382
-hoechstage=609;			// maximal age (0-+oo)
-malt=8.18785;					// Mortalitaetsfaktor for trees older than "hoechstage" (0-+oo) (standard=10.0)
+maximalage=609;			// maximal age (0-+oo)
+malt=8.18785;					// Mortalitaetsfaktor for trees older than "maximalage" (0-+oo) (standard=10.0)
 mjung=0.762855;					// Mortalitaetsfaktor_Jugend (standard=0.95)
 jugendmorteinflussexp=0.79295;	// Exponent determining duration time of youth mortality (0-+oo) (standard=0.5)
 								//  <1==longer

@@ -537,10 +537,10 @@ void Parametereinlesen(void)
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].mortbg);}
 
-	strcpy(uebergabestring,"hoechstage");
-	parameter[0].hoechstage=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"maximalage");
+	parameter[0].maximalage=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].hoechstage);}
+		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].maximalage);}
 
 	strcpy(uebergabestring,"malt");
 	parameter[0].malt=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);

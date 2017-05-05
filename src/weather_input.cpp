@@ -141,6 +141,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 		counter++;
 						
 	}
+	
 	fclose(f);
 }
 
@@ -206,6 +207,7 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list)
 				}
 				counter++;
 			}
+			
 			fclose(fp);
 }
 
@@ -370,6 +372,7 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 				}
 				counter++;
 			}
+			
 			fclose(f);
 
 }
@@ -449,6 +452,7 @@ void getPrec2(char dateinameprec[50],vector<weather*>& weather_list)
 				}
 				counter++;
 			}
+			
 			fclose(fp);
 
 }
@@ -616,6 +620,7 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 		counter++;
 						
 	}
+	
 	fclose(f);
 }
 

@@ -1,7 +1,7 @@
-﻿#ifndef _distribution_H_///TODO: DELETE THIS!
-#define _distribution_H_
-#include "distribution.cpp"
-#endif
+﻿
+
+
+
 
 
 
@@ -38,7 +38,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 			{
 				// Falls Hoechstage ueberschritten wird ein zusaetzlicher Wert aufgeschlagen
 				double agesmort=0.0;
-				if (pTree->age>parameter[0].hoechstage) 
+				if (pTree->age>parameter[0].maximalage) 
 				{
 					agesmort=1.0;
 				}
@@ -491,7 +491,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 					{// START: if seedlebend>0
 						if(parameter[0].pollenvert==1)
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
 						}
 				
 						// get the characteristics for each survining seed and push these back new to seed_list

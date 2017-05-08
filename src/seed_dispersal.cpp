@@ -103,12 +103,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
  * 
  *
  *******************************************************************************************/
-#include <numeric>
 
-#ifndef _distribution_H_
-#define _distribution_H_
- #include "distribution.cpp"
-#endif
+
+//#ifndef _distribution_H_
+//#define _distribution_H_
+// #include "distribution.cpp"
+//#endif
 
  void seedausbreitung(int treerows, int treecols,int jahr, int yearposition, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
 {

@@ -5,6 +5,9 @@
 #include<fstream>
 #include<string>
 #include<cstring>
+
+#include <numeric>
+
 #include<sstream>
 
 //#include<unistd.h>	// beinhaltet getcwd()-Funktion erstmal auskommentiert

@@ -884,7 +884,7 @@ void passWeather()
  *******************************************************************************************/
 extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)
 {
-//     winddir.clear();windspd.clear();
+
 	// -- -- -- -- weathereinlesen BEGINN -- -- -- -- //
 	char dateinametemp[50];
 	char dateinameprec[50];
@@ -892,7 +892,7 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 	
 	
 	int findyr1=0,findyr2=-100,jahr=0,cntr=0;
-        vector<double> wdir,wspd;
+	vector<double> wdir,wspd;
 	string filename;
 	std::ostringstream ss;
 	string item;
@@ -937,7 +937,7 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
   						//cout<<"opening "<<filename<<endl;
  						op:
 						ifstream fileinp(filename.c_str());
-  						if(!fileinp){t++; goto op;}
+  						if(!fileinp){goto op;}
 
 						while(fileinp>>item){
 // 						  itemvector.push_back(item);
@@ -960,7 +960,6 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 						//cout<<"Größe wspd="<<wspd.size()<<endl;
 				}
 				wspd.clear();wdir.clear();
-                        
 			}
 	
 		}

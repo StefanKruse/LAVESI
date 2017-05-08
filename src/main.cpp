@@ -4,9 +4,9 @@
 
 
 // used headers
-//#include "libraries.h"
-//#include "structures.h"
-//#include "declarations.h"
+//#include "./inc/libraries.h"
+//#include "./inc/structures.h"
+//#include "./inc/declarations.h"
 
 // Programmmodule
 
@@ -480,6 +480,14 @@ void Einschwingphase()
 			
 		}
 		
+		//DIVERSIFY THE TRAITS HERE, eg:
+		//for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();)
+		//{
+		//	pTree=(*pos);
+		//	pTree->thawing_depthinfluence=NormverteilungRN(pTree->thawing_depthinfluence,0.05*pTree->thawing_depthinfluence);
+		//	cout<<pTree->thawing_depthinfluence<<endl;
+		//}
+		
 		parameter[0].einschwingen=false;
 
 }
@@ -500,6 +508,10 @@ void Jahresschritte()
 {
 
 		printf("\n\nJahresschritte beginnen ...\n");
+		
+		
+		
+		
 		
 		for (int t=0;t<parameter[0].simdauer;t++)
 		{ // Jahresschrittschleife Beginn
@@ -917,7 +929,7 @@ void runSimulation()
  *
  *
  *******************************************************************************************/
-void finishSimulation(int yearposition)
+void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK AT THE END OF EACH SIMULATION
 {
 		printf("\n\nEndausgabe\n");
 		int aktort=0;
@@ -954,42 +966,42 @@ void finishSimulation(int yearposition)
 			
 			printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
 			
-			int seedimconezahl=0;
+			int number_of_seeds_in_cone=0;
 			for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
 			{
 					if ((*pos)->imcone==true) 
-						seedimconezahl++;
+						number_of_seeds_in_cone++;
 			};
-			printf("seedanzahlZ= %d\n", seedimconezahl);
+			printf("seed number Z= %d\n", number_of_seeds_in_cone);
 
 			// weather_listn loeschen
 			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
 			{// weather_list Beginn
-				pweather=weather_list[iweather];
+				 pweather=weather_list[iweather];
 				delete pweather;
-			} // weather_list Ende
+			}// weather_list Ende
 			weather_list.clear();
 
 		} // Weltschleife Ende
 		
 		// Aufruf der Funktion zum Listenloeschen
- 		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
+		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
 
 		// Nach jeder Wiederholung werden die WeltListen gelöscht
- 		world_tree_list.clear();
- 		world_seed_list.clear();
- 		world_weather_list.clear();
- 		world_plot_list.clear();
- 		world_evaluation_list.clear();
- 		if (parameter[0].resetyear>0)
- 		{
- 			ClearAllLists_copy();
- 			
- 			world_tree_list_copy.clear();
- 			world_seed_list_copy.clear();
- 			world_plot_list_copy.clear();
- 			world_evaluation_list_copy.clear();
- 		}
+		world_tree_list.clear();
+		world_seed_list.clear();
+		world_weather_list.clear();
+		world_plot_list.clear();
+		world_evaluation_list.clear();
+		if (parameter[0].resetyear>0)
+		{
+			ClearAllLists_copy();
+			
+			world_tree_list_copy.clear();
+			world_seed_list_copy.clear();
+			world_plot_list_copy.clear();
+			world_evaluation_list_copy.clear();
+		}
 		
 }
 
@@ -1032,9 +1044,9 @@ int main()
 			// Anzeigen der Ueberschrift und Programmversion
 			printf("\n---->\tLAVESI\n");
 			printf("\n You have started  LAVESI, " 
-					"An individually-based and spatial explicit simulation model "
-					"for the vegetation dynamics of LARIX GMELINII (RUPR.) KUZEN. "
-					"- driven by weather data."
+					"An individually-based and spatial explicit simulation model"
+					" for the vegetation dynamics of LARIX GMELINII (RUPR.) KUZEN."
+					" - driven by weather data."
 					"\n\n Version:\t 2.07 (Multiprocessing)"
 					"\n Date:\t\t 10.04.2017" 
 					"\n authors:"
@@ -1182,8 +1194,7 @@ int main()
 		fp=fopen("t_A.txt","a+");
 		fprintf(fp,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));
 	}
-// 	fclose(fp);
 
- 	return 0;
+	return 0;
 	
 }

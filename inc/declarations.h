@@ -13,24 +13,25 @@
 
 	// Lists and pointers
 	vector<list<Tree*> >	 world_tree_list;
-	Tree *pTree;		// Pointer auf einen Tree
+	 Tree *pTree;		// Pointer auf einen Tree
+	//*pTree=new Tree();
 	Tree *pTree_copy;		// Pointer auf einen Tree
 	
 	vector<list<seed*> >	 world_seed_list;
-	seed *pseed;		// Pointer auf einen seed
+	 seed *pseed;		// Pointer auf einen seed
 	seed *pseed_copy;		// Pointer auf einen seed
 	
 	vector<vector<weather*> > world_weather_list;
-	weather *pweather;	// Pointer auf ein weather eines Jahres
+	 weather *pweather;	// Pointer auf ein weather eines Jahres
 	
 	// densitykarten
 	vector<vector<Karten*> > world_plot_list;
-	Karten *pKarten;	// Pointer auf ein Kartenelement im Kartenarray
+	 Karten *pKarten;	// Pointer auf ein Kartenelement im Kartenarray
 	Karten *pKarten_copy;	// Pointer auf ein Kartenelement im Kartenarray
 	
 	// Evaluation/Ausgabe
 	vector<vector<Evaluation*> > world_evaluation_list;
-	Evaluation *pEvaluation;	// Pointer auf ein Evaluationsobjekt
+	 Evaluation *pEvaluation;	// Pointer auf ein Evaluationsobjekt
 	Evaluation *pEvaluation_copy;	// Pointer auf ein Evaluationsobjekt
 
 	
@@ -46,8 +47,8 @@
 			
 		//wind data, associated years
 		 vector<int> globalyears;
- 		 vector<vector<double> > windspd;
- 		 vector<vector<double> > winddir;
+		 vector<vector<double> > windspd;
+		 vector<vector<double> > winddir;
 		 
 
 		// Umweltdaten/Vegetationstypen:

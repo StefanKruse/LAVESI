@@ -389,7 +389,7 @@ void SaveAllLists(void)
 /****************************************************************************************//**
  * \brief 
  *
- * delete all information about trees, seeds, maps and analysis values from current container
+ * //delete all information about trees, seeds, maps and analysis values from current container
  *
  *
  *
@@ -431,8 +431,8 @@ void ClearAllLists(void)
 		
 
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos)
-		{ // Beginn tree_list ablaufen
-			pTree=(*pos);
+		{ // Begin tree_list ablaufen
+			 pTree=(*pos);
 			//pTree->Dbrustliste.clear();
 			delete pTree;
 		} // Ende tree_list ableufen;
@@ -442,8 +442,8 @@ void ClearAllLists(void)
 		
 		// seed_listn loeschen
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
-		{ // Beginnn seed_list ablaufen
-			pseed=(*pos);
+		{ // Begin seed_list ablaufen
+			 pseed= (*pos);
 			delete pseed;
 		} // Ende seed_list ablaufen
 		seed_list.clear();
@@ -454,8 +454,8 @@ void ClearAllLists(void)
 		// Alle Kartenelemente loeschen
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{ // Kartenschleife Beginn
-			pKarten=plot_list[kartenpos];
-			delete pKarten;
+			 pKarten= plot_list[kartenpos];
+			//delete pKarten;
 		} // Kartenschleife Ende
 		plot_list.clear();
 		cout << endl << "           !!! plot_list deleted!         " << endl;
@@ -463,7 +463,7 @@ void ClearAllLists(void)
 
 		for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos)
 		{ // Beginn evaluation_list ablaufen
-			pEvaluation=(*pos);
+			pEvaluation= (*pos);
 			pEvaluation->BAliste.clear();
 			pEvaluation->BArunmeanliste.clear();
 			pEvaluation->nheight0b40liste.clear();
@@ -472,7 +472,7 @@ void ClearAllLists(void)
 			pEvaluation->nheight41b200runmeanliste.clear();
 			pEvaluation->nheight201b10000liste.clear();
 			pEvaluation->nheight201b10000runmeanliste.clear();
- 			pEvaluation->meanbreastdiameterliste.clear();
+			pEvaluation->meanbreastdiameterliste.clear();
 			pEvaluation->meanbreastdiameterrunmeanliste.clear();
 			pEvaluation->stemcountliste.clear();
 			pEvaluation->stemcountrunmeanliste.clear();
@@ -480,7 +480,7 @@ void ClearAllLists(void)
 			pEvaluation->meantreeheightrunmeanliste.clear();
 			pEvaluation->meantreeageliste.clear();
 			pEvaluation->meantreeagerunmeanliste.clear();
- 			delete pEvaluation;
+			delete pEvaluation;
 			
 			
 		
@@ -506,21 +506,21 @@ void ClearAllLists(void)
 		//vector<double> meantreeagerunmeanliste;
 		
 		} // Ende evaluation_list ablaufen
- 		evaluation_list.clear();
-		cout << endl << "           !!! evaluation_list deleted!         " << endl;
+		evaluation_list.clear();
+		cout << endl << "           !!! evaluation_list //deleted!         " << endl;
 		
 	}	// Weltschleife Ende
 	
 	//cout<<"clearing wind directions\n";
-// 		winddir.clear();
+		winddir.clear();
 	//cout<<"clearing wind speeds\n";
-// 		windspd.clear();
+		windspd.clear();
 	//cout<<"clearing years\n";
-// 		globalyears.clear();
+		globalyears.clear();
 	//cout<<"clearing vegetypes\n";
-// 		vegetationtype.clear();
+		//vegetationtype.clear();
 		
-// 		delete[] winddir;
+		////delete[] winddir;
 
 	cout << "ClearAllLists beendet!" << endl << endl;
 		
@@ -920,7 +920,7 @@ void RestoreAllLists(void)
 /****************************************************************************************//**
  * \brief 
  *
- * delete all information about trees, seeds, maps and analysis values from current container
+ * //delete all information about trees, seeds, maps and analysis values from current container
  *
  *
  *
@@ -954,7 +954,7 @@ void ClearAllLists_copy(void)
 		{ // Beginn tree_list ablaufen
 			pTree=(*pos);
 		//	pTree->Dbrustliste.clear();
-			delete pTree;
+			//delete pTree;
 		} // Ende tree_list ableufen;
 		tree_list.clear();
 		cout << endl << "           !!! tree_list gelöscht!         " << endl;
@@ -964,7 +964,7 @@ void ClearAllLists_copy(void)
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{ // Beginnn seed_list ablaufen
 			pseed=(*pos);
-			delete pseed;
+			//delete pseed;
 		} // Ende seed_list ablaufen
 		seed_list.clear();
 		cout << endl << "           !!! seed_list gelöscht!         " << endl;
@@ -975,7 +975,7 @@ void ClearAllLists_copy(void)
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{ // Kartenschleife Beginn
 			pKarten=plot_list[kartenpos];
-			delete pKarten;
+			//delete pKarten;
 		} // Kartenschleife Ende
 		plot_list.clear();
 		cout << endl << "           !!! plot_list gelöscht!         " << endl;
@@ -1000,7 +1000,7 @@ void ClearAllLists_copy(void)
 			pEvaluation->meantreeheightrunmeanliste.clear();
 			pEvaluation->meantreeageliste.clear();
 			pEvaluation->meantreeagerunmeanliste.clear();
-			delete pEvaluation;
+			//delete pEvaluation;
 		} // Ende evaluation_list ablaufen
 		evaluation_list.clear();
 		cout << endl << "           !!! evaluation_list gelöscht!         " << endl;

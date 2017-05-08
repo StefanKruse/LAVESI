@@ -184,7 +184,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								pTree->thawing_depthinfluence=NormverteilungRN( 100,  100*0.05);//5% variation as a test value
+								pTree->thawing_depthinfluence=100;
 								pTree->entfernung=pseed->entfernung;
 								pTree->growing=true;
 								pTree->species=pseed->species;
@@ -281,7 +281,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								pTree->thawing_depthinfluence=NormverteilungRN( 100,  100*0.05); //MAYBE SAVE THE VARIABILITY (standard deviation) as a 
+								pTree->thawing_depthinfluence=100;
 								pTree->entfernung=pseed->entfernung;						
 								pTree->growing=true;
 								pTree->species=pseed->species;

@@ -14,15 +14,15 @@ parameteri=0;
 
 // 0.1 -----> Display
 parameterlesenanzeige=0;	// Display: 	-show read-in parameters (0,1)
-jahranzeige=1;				// ... 			-yearly steps (0,1) => year,basal area,seed information, HeightClassesDistr
+jahranzeige=0;				// ... 			-yearly steps (0,1) => year,basal area,seed information, HeightClassesDistr
 qualijahranzeige=0;			// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
 seedausbranzeige=0;			// ... 			-seed dispersal (0,1)
-mortanzeige=1;				// ...			-mortality of trees >200 cm (0,1)
+mortanzeige=0;				// ...			-mortality of trees >200 cm (0,1)
 computationtime=0;			// ...			-include visualisation and output of computation time as 
 								 a function of the plot size and number of trees (0,1)
 
 // 0.2 -----> Output
-Data_output=1;					// file output (0,1)
+Data_output=0;					// file output (0,1)
 ausgabemodus=4;					// mode of file output (0,4)
 								// 0=="normal" -> 3 times 1010&2010, 
 								// 1==	"SensitivityAnalysis -> 2fach Phasenausgabe log und Capacity" 			?
@@ -267,8 +267,8 @@ dbrustheightsteignonlin=7.02;		//BrustheightSteigungNichtlinear  (IF allometrief
 
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;				// background mortality (0-1) => para=0.02382
-hoechstage=609;			// maximal age (0-+oo)
-malt=8.18785;					// Mortalitaetsfaktor for trees older than "hoechstage" (0-+oo) (standard=10.0)
+maximalage=609;			// maximal age (0-+oo)
+malt=8.18785;					// Mortalitaetsfaktor for trees older than "maximalage" (0-+oo) (standard=10.0)
 mjung=0.762855;					// Mortalitaetsfaktor_Jugend (standard=0.95)
 jugendmorteinflussexp=0.79295;	// Exponent determining duration time of youth mortality (0-+oo) (standard=0.5)
 								//  <1==longer

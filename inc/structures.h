@@ -13,6 +13,15 @@
 		//add pollen_terminal_velocity, seed_terminal_velocity and mean_age or:
 		//maxage, maxheight, (maxdbasalrel), maxbasalwachstum: push back into tree_list after calculation after the stabilization phase?
 		//				^ safe each of these traits individually ^
+		//
+		//double pollen_terminal_velocity;
+		//double seed_terminal_velocity;
+		//int mean_age;
+		//int max_age;
+		//double maxheight;
+		//double maxdbasalrel;
+		//possibility 1
+		//
 		
 		int		xworldcoo;						//!<
 		int		yworldcoo;						//!<
@@ -45,12 +54,18 @@
 		bool	longdispersed;					//!<
 		double	entfernung;						
 		bool    growing;						//!< eingesetzte Bäume sind statisch und wachsen nicht
-		int 	species;							//!< Art des Treees: 1 = Larix gmelinii, 2 = Larix sibirica,
+		int 	species;							//!< 1 = Larix gmelinii, 2 = Larix sibirica,
 		
+		
+		//
+		//
+		//
+		//
 		//^ alternative approach: use "int species" as an indicator which "externally" saved values for max/ or mean growth shall be used!!
 
-		// int cpSNP[2],mtSNP[2]; //0...255 ?
-		 
+		// int cpSNP[2],mtSNP[2]; //constant length of 0...255? 
+		// or
+		// vector<int> SNPs;//variable size
 		// vector<int> microsatellites;
 		
 		
@@ -311,7 +326,7 @@
 
 		// festlegen in parameter.txt oder Main aufgerufen in  Mortalität
 		double	mortbg;  						//!< Hintergrundmortalität, geschaetzt aus Daten abgeleitet => keine Steigung ab etwa age 150 bis 350 => Vmtl. vom weather?!
-		int		hoechstage;  					//!< PE
+		int		maximalage;  					//!< PE
 
 		// festlegen in parameter.txt oder Main aufgerufen in  Ageing
 		int		coneage; 					//!< =15;  age bei den ersten cone; nach PE  

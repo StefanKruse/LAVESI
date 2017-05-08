@@ -682,7 +682,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				// Ende
 				fprintf(dateizeiger, "\n");
 				
-				fclose (dateizeiger);
+				fclose(dateizeiger);
 
 				//StefanC: Zusaetzliche Ausgabe in Konsole
 				if (parameter[0].jahranzeige ==true)
@@ -814,10 +814,8 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 					++pos;
 				} // Ende tree_list ablaufen
 
-				fclose (dateizeiger);
+				fclose(dateizeiger);
 				
-// 				exit(1);
-
 			}//modulo
 			
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
@@ -1083,7 +1081,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 					// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 					if (dateizeiger == NULL)
 					{
-				   dateizeiger = fopen (dateiname.c_str(), "w+");
+						dateizeiger = fopen (dateiname.c_str(), "w+");
 
 						if (dateizeiger == NULL)
 						{
@@ -1135,8 +1133,8 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 						fprintf(dateizeiger, "\n");
 					}
 
-					fclose (dateizeiger);
 				*/
+					fclose(dateizeiger);
 				} // Ausgabe Ende
 
 				++posit;
@@ -1226,7 +1224,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				} // Nur wenn Treedensitywerte vorhanden und im Auswertefenster  auch ausgeben Ende
 			} // Ende Kartenschleife
 
-			fclose (dateizeiger);
+			fclose(dateizeiger);
 
 			// -- -- -- -- -- -- -- --  Treedensity -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

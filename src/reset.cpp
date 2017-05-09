@@ -455,7 +455,7 @@ void ClearAllLists(void)
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{ // Kartenschleife Beginn
 			 pKarten= plot_list[kartenpos];
-			//delete pKarten;
+			delete pKarten;
 		} // Kartenschleife Ende
 		plot_list.clear();
 		cout << endl << "           !!! plot_list deleted!         " << endl;
@@ -511,16 +511,7 @@ void ClearAllLists(void)
 		
 	}	// Weltschleife Ende
 	
-	//cout<<"clearing wind directions\n";
-		winddir.clear();
-	//cout<<"clearing wind speeds\n";
-		windspd.clear();
-	//cout<<"clearing years\n";
-		globalyears.clear();
-	//cout<<"clearing vegetypes\n";
-		//vegetationtype.clear();
-		
-		////delete[] winddir;
+	
 
 	cout << "ClearAllLists beendet!" << endl << endl;
 		

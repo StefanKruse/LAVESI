@@ -133,7 +133,7 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
                  }
 		
                 wdir.clear();
-		wspd.clear();
+				wspd.clear();
 		 
                 //Simpson integration + elec424.wikia.com/wiki/Modified_Bessel_Functions:
                  I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa));

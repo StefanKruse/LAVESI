@@ -85,7 +85,7 @@ precweather=1;				// Influence of precipitation on maximum growth (0,1,2)
 								//  2==parabola function with a global maximum at the optimum
 
 evapod=1.5;					// Evapotranspiration (0-+oo) "Evaporation rates of 1.5 mm/day mean growing season" (Dolmann, 2004)
-weathercalcgradient=0;		// Correction of temp. and prec. values by approximate values depending on their latidudinal position (int 1,0)
+weathercalcgradient=1;		// Correction of temp. and prec. values by approximate values depending on their latidudinal position (int 1,0)
 								// 0==without a gradient
 								// 1==calculation of a linear gradient
 lineartransekt=0;			//mode of weather (constant or linear from southern to northern sites) on each plot (0,1)

@@ -1,8 +1,8 @@
 
 // Deklarationen globaler Variablen und Arrays wenn das Programm gestartet wird
 	// Raster in entsprechender Groesze deklarieren
-	const int treerows=10;	// in metres
-	const int treecols=10;
+	const int treerows=1000;	// in metres
+	const int treecols=1000;
 
 	// Parameter fuer den Startzustand deklarieren und initialisieren
 		// Zum Einlesen von Parametern

@@ -525,7 +525,7 @@ void Jahresschritte()
 			// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 			int jahr=parameter[0].startjahr+t;
 			
-			//influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);
+			if(!(jahr%10)){cout<<jahr<<endl; influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);}
 
 			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
@@ -933,6 +933,9 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 {
 		printf("\n\nEndausgabe\n");
 		int aktort=0;
+		
+		
+		
 
 		for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 		{	// Weltschleife Beginn
@@ -949,6 +952,7 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 			list<Tree*>& tree_list = *world_positon_b;
 
 			vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
+			//vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 			list<seed*>& seed_list = *world_positon_s;
 
 			//vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
@@ -973,7 +977,10 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 						number_of_seeds_in_cone++;
 			};
 			printf("seed number Z= %d\n", number_of_seeds_in_cone);
-
+				
+				
+		
+				
 			// weather_listn loeschen
 			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
 			{// weather_list Beginn
@@ -984,15 +991,30 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 
 		} // Weltschleife Ende
 		
-		// Aufruf der Funktion zum Listenloeschen
-		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
-
+	
 		// Nach jeder Wiederholung werden die WeltListen gelöscht
 		world_tree_list.clear();
 		world_seed_list.clear();
 		world_weather_list.clear();
 		world_plot_list.clear();
 		world_evaluation_list.clear();
+		
+		// Aufruf der Funktion zum Listenloeschen
+		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
+
+		
+		//cout<<"clearing wind directions\n";
+		winddir.clear();
+	//cout<<"clearing wind speeds\n";
+		windspd.clear();
+	//cout<<"clearing years\n";
+		globalyears.clear();
+	//cout<<"clearing vegetypes\n";
+		//vegetationtype.clear();
+		
+		////delete[] winddir;
+		
+		
 		if (parameter[0].resetyear>0)
 		{
 			ClearAllLists_copy();

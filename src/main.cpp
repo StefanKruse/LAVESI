@@ -166,25 +166,25 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		FILE *fp2;
 		fp2 =fopen("t_N.txt","a+");
 		if(fp2==0){goto open;}
-		fprintf(fp2,"%lu \t %f \n",tree_list.size(), 
-		((double) ((end_time_Ageing - start_time_Ageing)+
-		(end_time_mortalitaet - start_time_mortalitaet)+
-		(end_time_Data_output - start_time_Data_output)+
-		(end_time_feuer - start_time_feuer)+
-		(end_time_etablierung - start_time_etablierung)+
-		(end_time_Treeverteilung - start_time_Treeverteilung)+
-		(end_time_seedproduktion - start_time_seedproduktion)+
-		(end_time_seedausbreitung - start_time_seedausbreitung)+
-		(end_time_wachstum - start_time_wachstum)+
-		(end_time_kartenup - start_time_kartenup)
-		)/ CLOCKS_PER_SEC));
+			fprintf(fp2,"%lu \t %f \n",tree_list.size(), 
+			((double) ((end_time_Ageing - start_time_Ageing)+
+			(end_time_mortalitaet - start_time_mortalitaet)+
+			(end_time_Data_output - start_time_Data_output)+
+			(end_time_feuer - start_time_feuer)+
+			(end_time_etablierung - start_time_etablierung)+
+			(end_time_Treeverteilung - start_time_Treeverteilung)+
+			(end_time_seedproduktion - start_time_seedproduktion)+
+			(end_time_seedausbreitung - start_time_seedausbreitung)+
+			(end_time_wachstum - start_time_wachstum)+
+			(end_time_kartenup - start_time_kartenup)
+			)/ CLOCKS_PER_SEC));
 		fclose(fp2);
 
 		openmort:
 		FILE *fp3;
 		fp3 =fopen("t_N_mort.txt","a+");
 		if(fp3==0){goto openmort;}
-		fprintf(fp3,"%lu;%d;%f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f\n",
+			fprintf(fp3,"%lu;%d;%f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f\n",
 			tree_list.size(),
 			parameter[0].ivort, 
 			((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC,
@@ -1214,7 +1214,8 @@ int main()
 	if(parameter[0].computationtime==1){
 		FILE *fp;
 		fp=fopen("t_A.txt","a+");
-		fprintf(fp,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));
+			fprintf(fp,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));
+		fclose(fp);
 	}
 
 	return 0;

@@ -364,6 +364,7 @@ void TreesIni()
 					}
 					counter++;//um den header zu überspringen
 				}
+
 				fclose(f);
 			}// Weltschleife Ende
 		}

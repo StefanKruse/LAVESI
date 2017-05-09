@@ -185,4 +185,5 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 
 			fprintf(fp,"%d ; %lf \n",year,influxrate);
 
+	fclose(fp);
 } 

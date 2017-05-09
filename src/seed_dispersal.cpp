@@ -56,17 +56,17 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 	//StefanC: Ausgabe der LDSD-seed
 	// Code-Bsp. hier http://www2.informatik.uni-halle.de/lehre/c/c_fopen.html
 	FILE *dateizeiger;
-		string dateiname;
+	string dateiname;
 
-			// Dateinamen zusammensetzen
-			dateiname="output/dataseed_LDSD.csv";
-	 
-			// Datei versuchen zum Lesen und Schreiben zu oeffnen
-			dateizeiger = fopen (dateiname.c_str(), "r+");
+		// Dateinamen zusammensetzen
+		dateiname="output/dataseed_LDSD.csv";
+ 
+		// Datei versuchen zum Lesen und Schreiben zu oeffnen
+		dateizeiger = fopen(dateiname.c_str(), "r+");
 			// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 			if (dateizeiger == NULL)
 			{
-			  dateizeiger = fopen (dateiname.c_str(), "w");
+			  dateizeiger = fopen(dateiname.c_str(), "w");
 				fprintf(dateizeiger, "ivort;");
 				fprintf(dateizeiger, "aktort;");
 				fprintf(dateizeiger, "entfernung;");
@@ -92,7 +92,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			fprintf(dateizeiger, "%d;", neueweltcoo);		
 			fprintf(dateizeiger, "\n");
 
-			fclose (dateizeiger);
+		fclose(dateizeiger);
 }
 
 
@@ -215,7 +215,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);	
 							fprintf(dateizeiger, "\n");
 
-							fclose (dateizeiger);
+							fclose(dateizeiger);
 							//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Ende
 						}
 						

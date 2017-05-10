@@ -470,7 +470,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 				pTree=(*posb);			
 				vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-
+				vector<double> Vthdpth;
 				if((parameter[0].ivort==1) & (pari==0))// check the number of used threads
 					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
 				
@@ -491,7 +491,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 					{// START: if seedlebend>0
 						if(parameter[0].pollenvert==1)
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname);//;,cpSNP1,cpSNP2);
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname,Vthdpth);//;,cpSNP1,cpSNP2);
 						}
 				
 						// get the characteristics for each survining seed and push these back new to seed_list
@@ -512,6 +512,10 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
 								pseed->namep=Vname[iran];
+								
+								pseed->thawing_depthinfluence=Vthdpth[iran];
+								
+								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
 								//pseed->cpSNP[0]=cpSNP1[iran];
 								//pseed->cpSNP[1]=cpSNP2[iran];
 								
@@ -521,6 +525,8 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 							} else
 							{
 								pseed->namep=0;
+								
+								pseed->thawing_depthinfluence=100;
 							}
 							//pseed->cpSNP[0]=0;
 							//pseed->cpSNP[1]=0;}

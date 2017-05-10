@@ -90,7 +90,7 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
 						} while (anteil<=0.0);//invertiert denken, ist richtig.
 						// sonst fuehrt der Wert 0 zu unendlich groszen Zahlen!
 
-						entfernung= (log(anteil)/(-0.2))/parameter[0].entfernungsteiler;
+						entfernung= (log(anteil)/(-0.2))/parameter[0].distanceratio;
 
 					} while ( (entfernung>= (double) (treerows-1)) || (entfernung<0.0) );
 
@@ -177,7 +177,15 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
 					pseed->longdispersed=false;
 					pseed->species=specieszufall;
 					pseed->elternheight=0;
+					
+					pseed->thawing_depthinfluence=100;
+					
 					seed_list.push_back(pseed);			// 3. seed in Liste einfuegen
+					
+					
+					
+					
+					
 					
 													//hier drunter die Abfrage ist vermutlich fehlerhaft
 					if ( (pseed->yworldcoo<0.0) | (pseed->yworldcoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) )

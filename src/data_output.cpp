@@ -483,7 +483,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 					fprintf(dateizeiger, "weatherfaktor_gmel;");				
 					fprintf(dateizeiger, "weatherfaktor_sib;");							
 					fprintf(dateizeiger, "AuftretenFeuer;");
-					fprintf(dateizeiger, "thawing_depth;");
+					fprintf(dateizeiger, "thawing_depth_infl;");
 					fprintf(dateizeiger, "\n");
 				
 					if (dateizeiger == NULL)
@@ -771,7 +771,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 					fprintf(dateizeiger, "coneheight;");
 					fprintf(dateizeiger, "seedprodAKT;");
 					fprintf(dateizeiger, "seedprodSUM;");
-					fprintf(dateizeiger, "thawing_depth;");
+					fprintf(dateizeiger, "thawing_depth_infl;");
 					fprintf(dateizeiger, "\n");
 
 					if (dateizeiger == NULL)
@@ -807,7 +807,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 						fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
 						fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
 						fprintf(dateizeiger, "%d;", pTree->seedproduced);
-						fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
+						fprintf(dateizeiger, "%d;", pTree->thawing_depthinfluence);
 						fprintf(dateizeiger, "\n");
 					} // Ende Ausschnitt
 
@@ -885,7 +885,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				fprintf(dateizeiger, "Speicher;");
 				fprintf(dateizeiger, "densitywert;");
 				fprintf(dateizeiger, "Entfernung;");
-				fprintf(dateizeiger, "thawing_depth;");	
+				fprintf(dateizeiger, "thawing_depth_infl;");	
 				//fprintf(dateizeiger, "cpSNP;");
 				//fprintf(dateizeiger, "cpSNP;");
 				
@@ -936,7 +936,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				fprintf(dateizeiger, "%d;", pTree->speicher);
 				fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
 				fprintf(dateizeiger, "%4.5f;", pTree->entfernung);
-				fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
+				fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
 				
 				//fprintf(dateizeiger, "%d;",pTree->cpSNP[0]);
 				//fprintf(dateizeiger, "%d;",pTree->cpSNP[1]);

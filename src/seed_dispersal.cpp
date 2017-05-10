@@ -14,17 +14,17 @@
 	}
 	else if (parameter[0].dispersalmode==1)
 	{ // neg. exponential
-		entf_help= parameter[0].entfernungsteiler * ((log(ratiorn_help)/(-0.2))/0.16);
+		entf_help= parameter[0].distanceratio * ((log(ratiorn_help)/(-0.2))/0.16);
 	}
 	else if (parameter[0].dispersalmode==2)
 	{ // fat tailed/power law
 		double fatalpha=0.5;
-		entf_help= parameter[0].entfernungsteiler *  pow(ratiorn_help, (-1*(1+fatalpha)) );
+		entf_help= parameter[0].distanceratio *  pow(ratiorn_help, (-1*(1+fatalpha)) );
 	}
 	else if (parameter[0].dispersalmode==3)
 	{ // gaussian
 		double gaussweite=40, gaussmaxh=1, gaussposcenter=0;
-		entf_help= parameter[0].entfernungsteiler *  sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter;
+		entf_help= parameter[0].distanceratio *  sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter;
 	}
 	else if (parameter[0].dispersalmode==4 || parameter[0].dispersalmode==5)
 	{ // gaussian combined with fat tailed
@@ -32,7 +32,7 @@
 		double gaussweite=20, gaussmaxh=1, gaussposcenter=0;	//gaussweite variieren??
 																//oder unten 4500m?
 		double fatalpha=0.5;
-		entf_help= parameter[0].entfernungsteiler * 
+		entf_help= parameter[0].distanceratio * 
 		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter) +
 		(1/gaussfatratio)*(pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
 		

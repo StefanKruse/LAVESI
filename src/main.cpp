@@ -510,11 +510,12 @@ void Jahresschritte()
 		printf("\n\nJahresschritte beginnen ...\n");
 		
 		
-		
-		
-		
+	
 		for (int t=0;t<parameter[0].simdauer;t++)
 		{ // Jahresschrittschleife Beginn
+	
+	
+		
 			
 			parameter[0].ivort++;
 
@@ -525,7 +526,7 @@ void Jahresschritte()
 			// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 			int jahr=parameter[0].startjahr+t;
 			
-			if(!(jahr%10)){cout<<jahr<<endl; influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);}
+			//if(!(jahr%10)){cout<<jahr<<endl; influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);}
 
 			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 

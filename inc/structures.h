@@ -50,7 +50,7 @@
 		//^^redefine to double and maybe use this??
 		
 		double	densitywert;						//!<
-		unsigned short thawing_depthinfluence;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
+		double thawing_depthinfluence;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
 		bool	longdispersed;					//!<
 		double	entfernung;						
 		bool    growing;						//!< eingesetzte Bäume sind statisch und wachsen nicht
@@ -89,7 +89,7 @@
 		bool	longdispersed;					//!<
 		double 	entfernung;						// die Entfernung, die der Same zurückgelegt hat
 		int		species;						//!< Art: 1= L.gmelinii, 2=L.sibirica
-		double 	elternheight;					// dies schreibt die height des ElterTreees hinein, um die Ausbreitungsentfernung der seed einschätzen zu können
+		double 	elternheight;					// dies schreibt die height des ElternTrees hinein, um die Ausbreitungsentfernung der seed einschätzen zu können
 		
 		
 		 int mtSNP[2],cpSNP[2];//chloroplastensnps??
@@ -99,6 +99,8 @@
 		 double pollenfall;
 		 
 		 double descent;
+		 
+		double thawing_depthinfluence;
 	
 	};
 	
@@ -347,7 +349,7 @@
 		double SeedDescents;							// gibt nach Matlack 1987 die Sinkflugrate von L.sibirica wieder, anhand anderer seed desselben Papers geschaetzt
 		
 		// festlegen in parameter.txt oder Main aufgerufen in  seedausbreitung, Treeverteilung
-		double	entfernungsteiler; 				//!< =0.16; geschaetzt von 0.4 geaendert weil nun 1 Einheit = 1 m und nicht 0.4 m
+		double	distanceratio; 				//!< =0.16; geschaetzt von 0.4 geaendert weil nun 1 Einheit = 1 m und nicht 0.4 m
 
 		// festlegen in parameter.txt oder Main aufgerufen in  Etablierung
 		double	keimungsrate; 					//!< =0.05; geschaetzt

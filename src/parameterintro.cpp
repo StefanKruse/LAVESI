@@ -295,8 +295,8 @@ void Parametereinlesen(void)
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{printf("Schreibe:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].SeedDescents);}	
 		
-	strcpy(uebergabestring,"entfernungsteiler");
-	parameter[0].entfernungsteiler=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"distanceratio");
+	parameter[0].distanceratio=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].mortbg);}
 

@@ -47,7 +47,7 @@
  ************************************************************************************/
  
 //				(pTree->xcoo,pTree->ycoo,struct *parameter,world_positon_b,Jahr,Vname);
-void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, int yr, vector<int> &pName)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
+void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, int yr, vector<int> &pName, vector<double>  &thdpthinfl)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
 {
 	
   int year=yr-1;
@@ -164,6 +164,7 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 			//	++posb; 
 			}else{
 				pName.push_back(pTree_copy->name);
+				thdpthinfl.push_back(pTree->thawing_depthinfluence);
 				//cpSNPs1.push_back(pTree_copy->cpSNP[0]);
 				//cpSNPs2.push_back(pTree_copy->cpSNP[1]);
 				++posb; 
@@ -197,17 +198,17 @@ double getEntfernung(double D, double ratiorn_help)
 	}
 	else if (parameter[0].dispersalmode==1)
 	{ // neg. exponential
-		entf_help= parameter[0].entfernungsteiler * ((log(ratiorn_help)/(-0.2))/0.16);
+		entf_help= parameter[0].distanceratio * ((log(ratiorn_help)/(-0.2))/0.16);
 	}
 	else if (parameter[0].dispersalmode==2)
 	{ // fat tailed/power law
 		double fatalpha=0.5;
-		entf_help= parameter[0].entfernungsteiler *  pow(ratiorn_help, (-1*(1+fatalpha)) );
+		entf_help= parameter[0].distanceratio *  pow(ratiorn_help, (-1*(1+fatalpha)) );
 	}
 	else if (parameter[0].dispersalmode==3)
 	{ // gaussian
 		double gaussweite=D, gaussmaxh=1, gaussposcenter=0;
-		entf_help= parameter[0].entfernungsteiler *  sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter;
+		entf_help= parameter[0].distanceratio *  sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter;
 	}
 	else if (parameter[0].dispersalmode==4 || parameter[0].dispersalmode==5)
 	{       // gaussian combined with fat tailed:
@@ -216,7 +217,7 @@ double getEntfernung(double D, double ratiorn_help)
 																//oder unten 4500m?
 		double fatalpha=0.5;
 		entf_help= 
-		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter)+(1/gaussfatratio)*parameter[0].entfernungsteiler * (pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
+		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter)+(1/gaussfatratio)*parameter[0].distanceratio * (pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
 	}
 	else 
 	{

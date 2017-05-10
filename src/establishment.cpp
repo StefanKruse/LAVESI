@@ -184,10 +184,15 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								pTree->thawing_depthinfluence=100;
+								if(rand()%1000){pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
+								//cout<<"etablierung:"<<pTree->thawing_depthinfluence<<endl;
+								}else{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
 								pTree->entfernung=pseed->entfernung;
 								pTree->growing=true;
 								pTree->species=pseed->species;
+								
+								//pTree->thawing_depthinfluence=100;
+								
 								tree_list.push_back(pTree);				// Tree in Liste einfuegen
 
 								delete pseed;							// Und seed löschen

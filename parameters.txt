@@ -22,7 +22,7 @@ computationtime=0;			// ...			-include visualisation and output of computation t
 								 a function of the plot size and number of trees (0,1)
 
 // 0.2 -----> Output
-Data_output=0;					// file output (0,1)
+Data_output=1;					// file output (0,1)
 ausgabemodus=4;					// mode of file output (0,4)
 								// 0=="normal" -> 3 times 1010&2010, 
 								// 1==	"SensitivityAnalysis -> 2fach Phasenausgabe log und Capacity" 			?
@@ -144,7 +144,7 @@ jahremitseedeintrag=10;	// Years of seed introduction (0-+oo)
 realseedconnect=0;			// Plot position for seed introduction seedgrundetablierung logisch (0,1)
 								// 0==everywhere along a transect
 								// 1==only southermost site
-seeddispmode=2;				// Positions for seed introduction (1,2)
+seeddispmode=1;				// Positions for seed introduction (1,2)
 								// 1==neg. exp. from south border 
 								// 2==randomly into the plot
 seedtravelbetween=0;		// Seed travel between plots along a transect (0,1)
@@ -230,7 +230,7 @@ SeedTravelBreezes=45.0;						// nach Matlack 1987 geschaetzte Entfernung für Fl
 SeedDescentg=0.86;							// nach Matlack 1987 geschaetzte Sinkflugrate von L.gmelinii 
 SeedDescents=0.93;							// nach Matlack 1987 geschaetzte Sinkflugrate von L.sibirica
 											
-entfernungsteiler=0.16;		// Reichweitenteiler (<0-+oo)
+distanceratio=0.16;		// Reichweitenteiler (<0-+oo)
 seedprodfaktor=8;			// seedproduktionsfaktor
 keimungsrate=0.01;			// germination rate
 keimungweathereinfluss=0.447975;	// Keimungseinflussweather: (0,+oo) kein einfluss oder 1 dann +(WERT*(maxbasawachstum/basaldurchmesserwachstumsrate)) (standard was set to 0.1)
@@ -301,7 +301,7 @@ weatherzahlgmelc=0.101;					// legt Kurvenverlauf des Julindex für gmel fest
 //everything that has to do with wind data driven pollen an seed dispersal
 
 // 3.1 -----> Wind data
-windsource=2;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
+windsource=5;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
 								//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 								
 periodRB=0;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)

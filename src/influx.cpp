@@ -209,7 +209,7 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 			//09.05.17: change to this to a pollen distribution function in y-direction
 			
 			//influxrate=(p/A);
-			for(j=0;j<10*treecols;j++) fprintf(fp,"%lf ; %lf \n",y[j],p[j]);
+			for(j=0;j<10*treecols;j++) fprintf(fp,"%lf ; %lf \n",y[j],p[j]/tree_list.size());
 
 	fclose(fp);
 } 

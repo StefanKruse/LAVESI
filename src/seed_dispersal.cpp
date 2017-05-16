@@ -220,10 +220,15 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						}
 						
 						pseed->xcoo=pseed->xcoo+jquer;
-						pseed->ycoo=pseed->ycoo+iquer;
+						pseed->ycoo=pseed->ycoo+iquer;//einfach hier einen output
        						pseed->entfernung=entfernung;	
+                                                
+//                                                if(ivort>parameter[0].ivortmax && jahr %10){
+                                                    //output
+                                                    
+  //                                              }
 
-						
+                                        
 						
 						/****************************************************************************************//**
 						* \brief calculate Long Distance Dispersal between transekts

@@ -807,7 +807,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 						fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
 						fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
 						fprintf(dateizeiger, "%d;", pTree->seedproduced);
-						fprintf(dateizeiger, "%d;", pTree->thawing_depthinfluence);
+						fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
 						fprintf(dateizeiger, "\n");
 					} // Ende Ausschnitt
 

@@ -53,7 +53,7 @@ omp_num_threads=4;			// Number of cores used for computation, set internally on 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 // 1.1 -----> Weather
-weatherchoice=24;	//22;				// Type of weather forcing series (1,9,10,11,12,13, 111,222,999)
+weatherchoice=22;	//22;				// Type of weather forcing series (1,9,10,11,12,13, 111,222,999)
 								//  1==constant station data of the means 1947-1999, 
 								//  9==assembled weather series (ESM-6K + MilleniumRun + ice core + weather station) 
 								// 10==CRU Data CH06	"CH06CRUtemp.csv	CH06CRUprec.csv"
@@ -301,12 +301,12 @@ weatherzahlgmelc=0.101;					// legt Kurvenverlauf des Julindex für gmel fest
 //everything that has to do with wind data driven pollen an seed dispersal
 
 // 3.1 -----> Wind data
-windsource=5;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
+windsource=2;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
 								//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 								
 periodRB=0;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
 pollenvert=1;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
-pollenrichtungsvarianz=50;		//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
+pollenrichtungsvarianz=10;		//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
 //pollenthreshold=2.5;			//threshold velocity for pollen (Grace Lu, "The effect of Wind on the Emission of Grass Pollen", 2004)///NOT IMPLEMENTED
 pollenfall=0.126;				//pollen fall velocity
 pollenpertree=1000;				//est. pollen number per tree..

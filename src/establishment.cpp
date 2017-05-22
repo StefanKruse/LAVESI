@@ -63,7 +63,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 					double maxbasalwachstum = 0;
 
 					if (parameter[0].lineartransekt==true)
-					{
+					{ //if(yearposition<80){
 						if(pseed->species==1)
 						{
 							maxbasalwachstum = exp(parameter[0].gdbasalconstgmel+parameter[0].gdbasalfacgmel*0+parameter[0].gdbasalfacqgmel*0*0)*
@@ -93,6 +93,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 							maxbasalwachstum = exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*0+parameter[0].gdbasalfacqsib*0*0)*
 											weather_list[yearposition]->weatherfactors;
 						}
+                                        //}
 					}
 
 					double zufallsz= 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));

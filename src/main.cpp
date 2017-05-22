@@ -287,6 +287,7 @@ void Einschwingphase()
 			
 			
 				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; // calculate actual year position in list, according to first year in the Weather-List and the random year
+				//yearposition=yearposition%80;
 				//cout<<world_weather_list[0][0]->jahr<<endl;
 	
 				// Fortschrittsanzeige
@@ -530,7 +531,7 @@ void Jahresschritte()
 
 			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
-
+                        yearposition=yearposition%80;
 
 			if (parameter[0].jahranzeige ==true) 
 				printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);

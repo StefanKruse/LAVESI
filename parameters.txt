@@ -150,7 +150,7 @@ seeddispmode=1;				// Positions for seed introduction (1,2)
 seedtravelbetween=0;		// Seed travel between plots along a transect (0,1)
 
 // 1.5 -----> Initial plot conditions - Trees
-starttrees=0;				// Type of initial tree set up (0, 10,11,12,13)
+starttrees=12;				// Type of initial tree set up (0, 10,11,12,13)
 								//   0==without initial trees
 								//  10==CH06		"CH06III_Treevert2011.csv"
 								//  11==CH02		"CH02II_Treevert2011.csv"
@@ -163,6 +163,7 @@ starttrees=0;				// Type of initial tree set up (0, 10,11,12,13)
 								// !!! be careful: if the tree data set is not from Chatanga, please notice that the tree species is set to Larix gmelinii automatically by now if specpres is set to
 								//0 (both species) or 1 (L.gmelinii)
 								//
+								// PLANNED:::new 1000=> means that a density of 1000 old trees is the starting point - later to be transferred to a read function from a desired density based on earlier simulations that were saved -- needs to be implemented!
 
 // -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;	// Basal diameter influence for year's basal diameter growth (0-+oo) 

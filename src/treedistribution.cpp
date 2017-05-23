@@ -254,7 +254,7 @@ void TreesIni()
 						f = fopen("CH02II_Treevert2011.csv","r");
 					else if (parameter[0].weatherchoice==111 && aktort==3)
 						// ==CH17	
-						f = fopen("CH17I_Treevert2011.csv","r");
+						f = fopen("input/CH17I_Treevert2011.csv","r");
 					else if (parameter[0].weatherchoice==111 && aktort==4)
 						// ==CH12		
 						f = fopen("CH12II_Treevert2011.csv","r");
@@ -279,8 +279,11 @@ void TreesIni()
 					// ==CH02		
 					f = fopen("CH02II_Treevert2011.csv","r");
 				else if (parameter[0].starttrees==12)
+				{
 					// ==CH17	
-					f = fopen("CH17I_Treevert2011.csv","r");
+					f = fopen("input/CH17I_Treevert2011.csv","r");
+					printf("load: input/CH17I_Treevert2011.csv");
+				}
 				else if (parameter[0].starttrees==13)
 					// ==CH12		
 					f = fopen("CH12II_Treevert2011.csv","r");
@@ -344,10 +347,13 @@ void TreesIni()
 							pTree->namem=0;							// "//" means it stays the same in the vegetationtype-routine
 							pTree->namep=0;							//
 							pTree->line=++parameter[0].lineakt;
+							pTree->generation=0;
 							pTree->yr_of_establishment=0;				//
 							pTree->dbasal=dbasalbuf;
+								pTree->dbasalrel=1.0;
 							//pTree->Dbasalliste.push_back(dbasalbuf);
 							pTree->dbrust=dbrustbuf;
+								pTree->dbrustrel=1.0;
 							//pTree->Dbrustliste.push_back(dbrustbuf);			
 							pTree->height=heightbuf;
 							pTree->age=agebuf; 
@@ -533,12 +539,10 @@ void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int
 	
 	// Entweder wenn gewaehlt seed eintragen ...
 	if ((parameter[0].starter==true))
-		///Seedin()
 		Seedin();
 			
 	// ... oder aus eine Dateien mit Treeverteilungen auf den Untersuchungsflaechen im Jahr 2011 einlesen
 	else
-		///TreesIni()
 		TreesIni();
 
 }

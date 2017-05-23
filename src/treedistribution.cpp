@@ -302,6 +302,17 @@ void TreesIni()
 					f = fopen("input/CH17I_Treevert2011_1000_1000.csv","r");
 					printf("load: input/CH17I_Treevert2011_1000_1000.csv");
 				}
+				else if (parameter[0].starttrees==122000)
+				{
+					// ==CH17	
+					f = fopen("input/CH17I_Treevert2011_2000_2000.csv","r");
+					printf("load: input/CH17I_Treevert2011_2000_2000.csv");
+				}
+				else if (parameter[0].starttrees==125000)
+				{
+					f = fopen("input/CH17I_Treevert2011_5000_5000.csv","r");
+					printf("load: input/CH17I_Treevert2011_5000_5000.csv");
+				}
 				else if (parameter[0].starttrees==13)
 					// ==CH12		
 					f = fopen("CH12II_Treevert2011.csv","r");

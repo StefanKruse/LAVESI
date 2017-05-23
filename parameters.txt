@@ -164,7 +164,7 @@ starttrees=120500;				// Type of initial tree set up (0, 10,11,12,13)
 								//0 (both species) or 1 (L.gmelinii)
 								//
 								// PLANNED:::new 1000=> means that a density of 1000 old trees is the starting point - later to be transferred to a read function from a desired density based on earlier simulations that were saved -- needs to be implemented!
-								// 120100 letzte ziffern für flaechengroesze 0100 100x100, 0500 500x500 1000 1000x1000 currently implemented
+								// 120100 letzte ziffern für flaechengroesze 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 currently implemented
 
 // -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;	// Basal diameter influence for year's basal diameter growth (0-+oo) 

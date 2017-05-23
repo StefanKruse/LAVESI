@@ -6,7 +6,8 @@ str(tredat)
 
 write.table(tredat[,2:8], "CH17I_Treevert2011_100_100.csv", sep=";", dec=".", quote=FALSE)
 
-for(expan in c(5,10))#,20,50))# for each 100*
+# for(expan in c(5,10))#,20,50))# for each 100*
+for(expan in c(20))#,20,50))# for each 100*
 {
 trnew=NULL
 # expan=5

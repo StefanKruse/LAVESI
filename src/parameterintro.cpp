@@ -639,6 +639,9 @@ void Parametereinlesen(void)
 	strcpy(uebergabestring,"pollenvert");
 	parameter[0].pollenvert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	
+	strcpy(uebergabestring,"pollenDistdensplot");
+	parameter[0].pollenDistdensplot=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
+	
 	strcpy(uebergabestring,"pollenrichtungsvarianz");
 	parameter[0].pollenrichtungsvarianz=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	

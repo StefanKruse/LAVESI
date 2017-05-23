@@ -405,6 +405,7 @@
 		double pollenrichtungsvarianz;
 		
 		int pollenvert;//switch genealogy!
+		int pollenDistdensplot;
 		
 		int pollenpertree;
 		

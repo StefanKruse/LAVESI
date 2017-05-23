@@ -284,6 +284,24 @@ void TreesIni()
 					f = fopen("input/CH17I_Treevert2011.csv","r");
 					printf("load: input/CH17I_Treevert2011.csv");
 				}
+				else if (parameter[0].starttrees==120100)
+				{
+					// ==CH17	
+					f = fopen("input/CH17I_Treevert2011_100_100.csv","r");
+					printf("load: input/CH17I_Treevert2011_100_100.csv");
+				}
+				else if (parameter[0].starttrees==120500)
+				{
+					// ==CH17	
+					f = fopen("input/CH17I_Treevert2011_500_500.csv","r");
+					printf("load: input/CH17I_Treevert2011_500_500.csv");
+				}
+				else if (parameter[0].starttrees==121000)
+				{
+					// ==CH17	
+					f = fopen("input/CH17I_Treevert2011_1000_1000.csv","r");
+					printf("load: input/CH17I_Treevert2011_1000_1000.csv");
+				}
 				else if (parameter[0].starttrees==13)
 					// ==CH12		
 					f = fopen("CH12II_Treevert2011.csv","r");
@@ -311,6 +329,7 @@ void TreesIni()
 					exit(1);
 				}
 
+				
 				char puffer[255];
 				int counter=1;
 				

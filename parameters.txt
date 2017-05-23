@@ -140,7 +140,7 @@ seedintro=1;				// Yearly seed input (0,1)
 seedintropermanent=1;		//1//was ist hier der Unterschied zu seedintro? Wie realisiert man eine einmalige seedintroduction?
 etabbg=1000;					
 etabbgpermanent=2;			// Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot (0-+oo)
-jahremitseedeintrag=10;	// Years of seed introduction (0-+oo)
+jahremitseedeintrag=0;//10;	// Years of seed introduction (0-+oo)
 realseedconnect=0;			// Plot position for seed introduction seedgrundetablierung logisch (0,1)
 								// 0==everywhere along a transect
 								// 1==only southermost site
@@ -150,7 +150,7 @@ seeddispmode=1;				// Positions for seed introduction (1,2)
 seedtravelbetween=0;		// Seed travel between plots along a transect (0,1)
 
 // 1.5 -----> Initial plot conditions - Trees
-starttrees=12;				// Type of initial tree set up (0, 10,11,12,13)
+starttrees=120500;				// Type of initial tree set up (0, 10,11,12,13)
 								//   0==without initial trees
 								//  10==CH06		"CH06III_Treevert2011.csv"
 								//  11==CH02		"CH02II_Treevert2011.csv"
@@ -164,6 +164,7 @@ starttrees=12;				// Type of initial tree set up (0, 10,11,12,13)
 								//0 (both species) or 1 (L.gmelinii)
 								//
 								// PLANNED:::new 1000=> means that a density of 1000 old trees is the starting point - later to be transferred to a read function from a desired density based on earlier simulations that were saved -- needs to be implemented!
+								// 120100 letzte ziffern für flaechengroesze 0100 100x100, 0500 500x500 1000 1000x1000 currently implemented
 
 // -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;	// Basal diameter influence for year's basal diameter growth (0-+oo) 

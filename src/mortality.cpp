@@ -389,55 +389,92 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		aktort++;
 
 		clock_t start_time_mortpoll=clock();
+
+
+		/* PARALLELIZATION OF THE SEED MORTALITY LOOP 
 		
-		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
-		/// seedmortalität
-		for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
-		{// START: seed mortality
-			pseed=(*pos);
-			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+			x1.create dummy_seed_list_globally => "seed_list_global"
+			x2.create dummy_seed_list_locally for each thread => "seed_list_local"
+			x3.iter over orig_seed_list parallel
+				copy only surviving seeds to dummy_seed_list_locally
+			x4.splice dummy_seed_list_locally to dummy_seed_list_globally
+			5.swap content of dummy_seed_list_globally to orig_seed_list "seed_list"
+		
+		*/
+		// parallelization-1. 
+		list<seed*> seed_list_global;
+
+		
+		// loop with omp through each element of the list
+		omp_set_dynamic(0); //disable dynamic teams
+		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		#pragma omp parallel default(shared) private(pseed)
+		{ // START: parallel region
+			// declare a local seed list to be filled by each thread
+			// parallelization-2. 
+			list<seed*> seed_list_local;
 			
-			///seed is on ground && random number < probability (0.8)
-			if (pseed->imcone==false)
-			{
-				if (zufallsz<parameter[0].seedbodenmort) 
-				{
-					delete pseed;
-					pos=seed_list.erase(pos);
-				}else
-				{
-					++pos;
-				}
-			}
-			
-			///seed in cone && random number < probability (0.8)
-			else if (pseed->imcone==true)
-			{
-				if (zufallsz<parameter[0].seedTreemort) 
-				{
-					delete pseed;
-					pos=seed_list.erase(pos);
-				}
+			#pragma omp for nowait schedule(guided) 
+			// for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+			for(unsigned int pari=0; pari<seed_list.size(); ++pari)
+			{// START: seed mortality
+				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
+				list<seed*>::iterator pos = seed_list.begin();
+				advance(pos, pari);
+				pseed=(*pos);
 				
-				else
+				double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+				
+				///seed is on ground && random number < probability (0.8)
+				if (pseed->imcone==false)
 				{
-					++pos;
+					if (zufallsz<parameter[0].seedbodenmort) 
+					{
+						// delete pseed;
+						// pos=seed_list.erase(pos);
+					} else
+					{
+						cout << endl << "-> seed list size before" << seed_list_local.size() << " -+- seed_list original list length " << seed_list.size();
+						
+						// parallelization-3. copy only surviving
+						// is it sufficient to push_back? are the positions conserved from the original list or does this lead to errors?
+						seed_list_local.push_back(pseed);
+						
+						cout << endl << "-> seed list size after " << seed_list_local.size() << " -+- seed_list original list length " << seed_list.size();
+					}
 				}
+				///seed in cone && random number < probability (0.8)
+				else if (pseed->imcone==true)
+				{
+					if (zufallsz<parameter[0].seedTreemort) 
+					{
+						// delete pseed;
+						// pos=seed_list.erase(pos);
+					} else
+					{
+						// parallelization-3. copy only surviving
+						seed_list_local.push_back(pseed);
+					}
+
+				}
+				else
+				{	// check imcone-variable set? 
+					printf("\n no value of a seed at pseed->imcone / mortality.cpp\n"); 
+					exit(1);
+				}
+			}//END: seed mortality
+	
+			// append all newly created seed from each thread at once to the seed_list
+			#pragma omp critical
+			{
+				seed_list_global.splice(seed_list_global.end(), seed_list_local);
 			}
-			
-			else
-			{	// Sicherheitsabfrage imcone-Variable gesetzt? 
-				/* Abfrage ob das Programm beendet oder fortgesetzt werden soll */ 
-				signed int abbrechenmortalitaetfehler; 
-				printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
-				printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
-				scanf("%d", &abbrechenmortalitaetfehler); if (abbrechenmortalitaetfehler!=1) {printf("LaVeSi wurde nach einem Fehler in der Mortalitaetsfunktion beendet\n\n");exit(1);}
+		} // END: parallel region
 		
-				delete pseed;
-				pos=seed_list.erase(pos);						
-			} 
-		
-		}//END: seed mortality
+		// parallelization-5.
+		seed_list.swap(seed_list_global);
+		// ... must the "seed_list_global" list be deleted or are all destructors called at the end of this scope?
+		seed_list_global.clear();
 
 		clock_t end_time_seedsuviving=clock();
 

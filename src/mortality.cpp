@@ -393,7 +393,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
 		/// seedmortalität
 		for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
-		{ 
+		{// START: seed mortality
 			pseed=(*pos);
 			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 			
@@ -437,7 +437,10 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 				pos=seed_list.erase(pos);						
 			} 
 		
-		} 
+		}//END: seed mortality
+
+		clock_t end_time_seedsuviving=clock();
+
 		
 		// Berechnung des aktuellen Ortes in Koordinaten
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
@@ -577,13 +580,27 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 			FILE *fp4;
 			fp4=fopen("t_N_poll.txt","a+");
 			if(fp4==0){goto openpoll;}
-			fprintf(fp4,"%lu;%d;%10.2f;%10.2f\n",
+			fprintf(fp4,"%lu;%d;%10.2f;%10.2f;%10.2f\n",
 					tree_list.size(),
 					parameter[0].ivort, 
 					((double) (end_time_poll - start_time_mortpoll))/ CLOCKS_PER_SEC,
-					((double) (end_time_mortpoll - end_time_poll))/ CLOCKS_PER_SEC
+					((double) (end_time_mortpoll - end_time_poll))/ CLOCKS_PER_SEC,
+					((double) (end_time_seedsuviving - start_time_mortpoll))/ CLOCKS_PER_SEC
 				);
 			fclose(fp4);
+			
+			/* script to analyse computation times in R
+			
+				# read output data of general computation times
+				dain=read.table(paste0("M:/Documents/Programmierung/git/LAVESI/","/t_N_mort.txt"), header=FALSE, sep=";", dec=".")
+				names(dain)=c("N_tree", "time", "mort", "kartenup", "wachstum", "seeddisp", "seedprod", "treedistribu", "etablier", "fire", "output", "mortality", "ageing", "all")
+				str(dain)
+				
+				# read specifically mortality/pollination computation times
+				dain_p=read.table(paste0("M:/Documents/Programmierung/git/LAVESI/","/t_N_poll.txt"), header=FALSE, sep=";", dec=".")
+				names(dain_p)=c("N_tree", "time", "polli", "treemort", "seedmort")
+				
+			*/
 		}
 	
 	

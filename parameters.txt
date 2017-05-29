@@ -18,8 +18,7 @@ jahranzeige=1;				// ... 			-yearly steps (0,1) => year,basal area,seed informat
 qualijahranzeige=0;			// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
 seedausbranzeige=0;			// ... 			-seed dispersal (0,1)
 mortanzeige=0;				// ...			-mortality of trees >200 cm (0,1)
-computationtime=0;			// ...			-include visualisation and output of computation time as 
-								 a function of the plot size and number of trees (0,1)
+computationtime=1;			// ...			-include visualisation and output of computation time a function of the plot size and number of trees (0,1)
 
 // 0.2 -----> Output
 Data_output=1;					// file output (0,1)
@@ -39,7 +38,7 @@ feuer=0;					// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=4;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=1;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -106,14 +105,14 @@ simdauer=80;					//length of a simulation (1-(   1077   )-6099)
 								// ... ?? warum nicht bis 2013
 								// 6099==for assembled weather series (weatherchoice==9)
 runs=1;						// Anzahl an Simulationen == Wiederholungen (1-oo)
-ivortmax=500;				// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
+ivortmax=20;				// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
 								//Example: Entweder 0 fuer keine Einschwingphase oder minimal 10 wegen Isothermberechnung
 								//   0==without
 								// >10==with
 stabilperiod=0;						// Vor den Simulationslaeufen kann eine Stabilisierungsphase vorgeschoben werden (int 0,1)///////////////////////////////////////
 stabilmovingwindow=10;	/////////////10			// Fensterweite zur Berechnung der Mittelwerte fuer die Evaluierung des Zustands des Systems (int 1-oo)
 stabilpercentchangethreshold=0.005;	// Schwellenwert der bei Unterschreitung anzeigt ob ein System Stabil ist (double 0-1)
-resetyear=0;				// Year to save all Container for later resume from this time point
+resetyear=0;				// Year to save all Container for later resume from this time point (on-the-fly)
 
 specpres=0;					// either 0 (both species, Larix gmelinii and L.sibirica in model), 
 							// 1 (only Larix gmelinii in model) or 2 (only Larix sibirica in model)
@@ -307,7 +306,7 @@ windsource=2;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 
 								//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 								
 periodRB=0;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
-pollenvert=1;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
+pollenvert=0;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
 pollenDistdensplot==1// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten
 pollenrichtungsvarianz=10;		//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
 //pollenthreshold=2.5;			//threshold velocity for pollen (Grace Lu, "The effect of Wind on the Emission of Grass Pollen", 2004)///NOT IMPLEMENTED

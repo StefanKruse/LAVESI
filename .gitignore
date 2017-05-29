@@ -13,6 +13,8 @@
 output/
 # exclude time usage output files
 t_*.txt
+# exclude pollen-dispersal output files
+pollDist*
 
 # exclude TEST-folder
 TEST/

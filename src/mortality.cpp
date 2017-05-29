@@ -598,7 +598,46 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 				
 				# read specifically mortality/pollination computation times
 				dain_p=read.table(paste0("M:/Documents/Programmierung/git/LAVESI/","/t_N_poll.txt"), header=FALSE, sep=";", dec=".")
-				names(dain_p)=c("N_tree", "time", "polli", "treemort", "seedmort")
+				names(dain_p)=c("N_tree", "time", "pollseedmort", "treemort", "seedmort")
+				#names(dain_p)=c("N_tree", "time", "pollseedmort", "treemort")
+				# .. redo and calc when all three output variables are included
+				
+				dain=merge(dain, dain_p, sort=FALSE)
+				
+				# subset/postprocess
+					damat=dain[c(4:11,13, 15:16)]
+					rm=apply(damat,1,sum)
+					for(rowi in 1:dim(damat)[1])
+					{
+						damat[rowi,]=damat[rowi,]/rm[rowi]
+					}
+					clbp=rainbow(s=0.5,n=dim(damat)[2])
+					# add nas for missing fill up to 100 yrs
+						dfiad=as.data.frame(matrix(NA, nrow=100-dim(damat)[1], ncol=dim(damat)[2]))
+						names(dfiad)=names(damat)
+						damat=rbind(damat,dfiad)
+		
+		
+				# plot
+				dev.new(height=400*1,width=1000)
+				par(mar=c(4,0,1,0))
+				layout(matrix(c(1:(2*1)), ncol=2, nrow=1, byrow=TRUE), width=c(1,0.2), height=1)
+				layout.show(2)
+
+					par(mar=c(4,0,1,0))
+						barplot(t(as.matrix(damat)), main=paste0(" -> mean time for one year (sim years=", max(dain$time),"): ",round(mean(rm),0)," sec"), border=NA, yaxt="n", col=clbp, axes=FALSE, names.arg=rep(NA,100))
+							# overlay full time for computation
+							par(new=TRUE)
+							with(dain, plot(all~time, type="l", lwd=2, xaxt="n", yaxt="n", ylab="", xlab="", bty="n", xlim=c(0,100)))
+							# axis(2,line=-2)
+							# with(dain, points(rm~time, type="l", col="red", lty=2, lwd=2, xaxt="n", yaxt="n", ylab="", xlab="", bty="n"))
+
+					par(mar=c(8,0,1,3))
+						barplot(apply(damat[1:dim(dain[4:13])[1],],2,mean), border=NA, yaxt="n", las=2, col=clbp)
+						# pie(apply(damat,2,mean), border=NA, yaxt="n", las=2, col=clbp)
+						axis(side=4,las=1)
+				
+				
 				
 			*/
 		}

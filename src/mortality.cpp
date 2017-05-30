@@ -400,11 +400,19 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 			x4.splice dummy_seed_list_locally to dummy_seed_list_globally
 			5.swap content of dummy_seed_list_globally to orig_seed_list "seed_list"
 		
+		
+		### ist so einfach nicht möglich
+		https://stackoverflow.com/questions/8691459/how-do-i-parallelize-a-for-loop-through-a-c-stdlist-using-openmp
+		
+		!!!!!!
+		
+		
+		
+		
 		*/
 		// parallelization-1. 
 		list<seed*> seed_list_global;
 
-		
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -472,9 +480,13 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		} // END: parallel region
 		
 		// parallelization-5.
+		cout << endl << "-> seed_list_global size before" << seed_list_global.size() << " -+- seed_list original list length " << seed_list.size();
+
 		seed_list.swap(seed_list_global);
 		// ... must the "seed_list_global" list be deleted or are all destructors called at the end of this scope?
 		seed_list_global.clear();
+		
+		cout << endl << "-> seed_list_global size after " << seed_list_global.size() << " -+- seed_list original list length " << seed_list.size();
 
 		clock_t end_time_seedsuviving=clock();
 

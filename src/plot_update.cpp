@@ -892,9 +892,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &weather_list)
 {
-	for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
-		{ 
-			
+	if(parameter[0].omp_num_threads==1)
+	{// only one core
+		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
+		{
 			pKarten=plot_list[kartenpos];
 			pKarten->Treedensitywert=0;
 			pKarten->Treeanzahl=0;
@@ -904,22 +905,84 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 			{
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
-											          *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
+													  *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
 													  +(1/0.95)) ); // Logistisches Wachstum Kapazitaet=0.95; N0=0.01; r=(1/200); Verschiebung auf mind. 0.05 bis 1.0
 				
 				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	// in 0.1mm Schritten; 6mm Zuwachs jaehrlich aus 30 cm Aufwachs in 50 jahren (Aus Literatur)
 
 				pKarten->auflagenstaerkemittel = (unsigned short) ( (double) 
-											     (pKarten->auflagenstaerke8
-											     +pKarten->auflagenstaerke7
-											     +pKarten->auflagenstaerke6
-											     +pKarten->auflagenstaerke5
-											     +pKarten->auflagenstaerke4
-											     +pKarten->auflagenstaerke3
-											     +pKarten->auflagenstaerke2
-											     +pKarten->auflagenstaerke1
-											     +pKarten->auflagenstaerke0
-											     +pKarten->auflagenstaerke)
+												 (pKarten->auflagenstaerke8
+												 +pKarten->auflagenstaerke7
+												 +pKarten->auflagenstaerke6
+												 +pKarten->auflagenstaerke5
+												 +pKarten->auflagenstaerke4
+												 +pKarten->auflagenstaerke3
+												 +pKarten->auflagenstaerke2
+												 +pKarten->auflagenstaerke1
+												 +pKarten->auflagenstaerke0
+												 +pKarten->auflagenstaerke)
+												 /10.0); //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
+
+				pKarten->auflagenstaerke8 = pKarten->auflagenstaerke7;
+				pKarten->auflagenstaerke7 = pKarten->auflagenstaerke6;
+				pKarten->auflagenstaerke6 = pKarten->auflagenstaerke5;
+				pKarten->auflagenstaerke5 = pKarten->auflagenstaerke4;
+				pKarten->auflagenstaerke4 = pKarten->auflagenstaerke3;
+				pKarten->auflagenstaerke3 = pKarten->auflagenstaerke2;
+				pKarten->auflagenstaerke2 = pKarten->auflagenstaerke1;
+				pKarten->auflagenstaerke1 = pKarten->auflagenstaerke0;
+				pKarten->auflagenstaerke0 = pKarten->auflagenstaerke;
+			}
+			
+
+			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
+			{
+				// Berechnung der Daempfung die durch die organische Auflage entsteht (Dämpfung vermindert thawing_depth, Formel aus Lit)
+				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 ist Steigung um bei etwa 4000 den Maximalwert zu erreichen
+				
+				if (daempfung>=0.9) 
+					daempfung=0.9;
+				
+				// Berechnung der SAL
+				pKarten->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+			}
+		} // Kartenschleife Ende
+	}// only one core
+
+	if(parameter[0].omp_num_threads>1)
+	{// more than one core
+		omp_set_dynamic(1); //disable dynamic teams
+		// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		
+		#pragma omp parallel for private(pKarten)
+		for(int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
+		{
+			pKarten=plot_list[kartenpos];
+			pKarten->Treedensitywert=0;
+			pKarten->Treeanzahl=0;
+			// pKarten->Dbasalliste.clear();
+			
+			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)
+			{
+				double auflagenwachstumsrate =0.05
+											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
+													  *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
+													  +(1/0.95)) ); // Logistisches Wachstum Kapazitaet=0.95; N0=0.01; r=(1/200); Verschiebung auf mind. 0.05 bis 1.0
+				
+				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	// in 0.1mm Schritten; 6mm Zuwachs jaehrlich aus 30 cm Aufwachs in 50 jahren (Aus Literatur)
+
+				pKarten->auflagenstaerkemittel = (unsigned short) ( (double) 
+												 (pKarten->auflagenstaerke8
+												 +pKarten->auflagenstaerke7
+												 +pKarten->auflagenstaerke6
+												 +pKarten->auflagenstaerke5
+												 +pKarten->auflagenstaerke4
+												 +pKarten->auflagenstaerke3
+												 +pKarten->auflagenstaerke2
+												 +pKarten->auflagenstaerke1
+												 +pKarten->auflagenstaerke0
+												 +pKarten->auflagenstaerke)
 												 /10.0); //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
 				pKarten->auflagenstaerke8 = pKarten->auflagenstaerke7;
@@ -947,6 +1010,10 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 			}
 		} // Kartenschleife Ende
 
+	}// more than one core
+	
+	
+	
 }
 
 

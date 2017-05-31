@@ -134,7 +134,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 		///Loop around all Seeds
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
-		{ 
+		{
 			pseed=(*pos);
 
 			///If Seed is in a cone
@@ -160,7 +160,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						
 						// seed dispersal output:			
 						double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-						
+					
+						/*
 						if(seedeinschreibzufall<0.001){
                                                     entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
                                                     richtung=atan2(iquer,jquer);
@@ -218,6 +219,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							fclose(dateizeiger);
 							//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Ende
 						}
+						*/
 						
 						pseed->xcoo=pseed->xcoo+jquer;
 						pseed->ycoo=pseed->ycoo+iquer;//einfach hier einen output

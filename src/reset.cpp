@@ -153,7 +153,6 @@ void SaveAllLists(void)
 			pseed_copy->longdispersed=pseed->longdispersed;	
 			seed_list_copy.push_back(pseed_copy);				// seed in Liste einfuegen
 
-			
 				if(counterseed==1)
 				{
 					cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;

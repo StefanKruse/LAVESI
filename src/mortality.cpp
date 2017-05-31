@@ -16,9 +16,9 @@
 void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)
 {
 		//console output:
-		if (parameter[0].jahranzeige ==true) {
-				cout << "tree_list.size() vor Mortalität = " << tree_list.size() << endl;
-		}
+		// if (parameter[0].jahranzeige ==true) {
+				// cout << "tree_list.size() vor Mortalität = " << tree_list.size() << endl;
+		// }
 		
 		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitaetsratenaufschlag darstellt
 		double anstiegweathermortg=160;
@@ -343,10 +343,10 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 		} // Ende tree_list ablaufen
 		
 		// Zusaetzliche Ausgabe in Konsole
-		if (parameter[0].jahranzeige ==true)
-		{
-				cout << "tree_list.size() nach Mortalität = " << tree_list.size() << endl;
-		}
+		// if (parameter[0].jahranzeige ==true)
+		// {
+				// cout << "tree_list.size() nach Mortalität = " << tree_list.size() << endl;
+		// }
 
 
 }
@@ -388,28 +388,103 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 
 		aktort++;
 
-		clock_t start_time_mortpoll=clock();
+		double start_time_mortpoll=omp_get_wtime();
+		
+	// https://stackoverflow.com/questions/16777810/c-omp-omp-get-wtime-returning-time-0-00 
+	// ... problem time() returns cpu-time not real time use omp_get_wtime()!!
+	// printf... with "%.16" for double ini
+	
+	
+	
+	/*	// start: ORI CODE*/
+		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
+		/// seedmortalität
+		for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		{
+			pseed=(*pos);
+			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+			
+			///seed is on ground && random number < probability (0.8)
+			if (pseed->imcone==false)
+			{
+				if (zufallsz<parameter[0].seedbodenmort) 
+				{
+					delete pseed;
+					pos=seed_list.erase(pos);
+				}else
+				{
+					++pos;
+				}
+			}
+			
+			///seed in cone && random number < probability (0.8)
+			else if (pseed->imcone==true)
+			{
+				if (zufallsz<parameter[0].seedTreemort) 
+				{
+					delete pseed;
+					pos=seed_list.erase(pos);
+				}
+				
+				else
+				{
+					++pos;
+				}
+			}
+			
+			else
+			{	// Sicherheitsabfrage imcone-Variable gesetzt? 
+				signed int abbrechenmortalitaetfehler; 
+				printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
+				printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
+				scanf("%d", &abbrechenmortalitaetfehler); if (abbrechenmortalitaetfehler!=1) {printf("LaVeSi wurde nach einem Fehler in der Mortalitaetsfunktion beendet\n\n");exit(1);}
+		
+				delete pseed;
+				pos=seed_list.erase(pos);						
+			}
+		}
+	// end: ORI CODE
+	
+	
 
 
-		/* PARALLELIZATION OF THE SEED MORTALITY LOOP 
-		
-			x1.create dummy_seed_list_globally => "seed_list_global"
-			x2.create dummy_seed_list_locally for each thread => "seed_list_local"
-			x3.iter over orig_seed_list parallel
-				copy only surviving seeds to dummy_seed_list_locally
-			x4.splice dummy_seed_list_locally to dummy_seed_list_globally
-			5.swap content of dummy_seed_list_globally to orig_seed_list "seed_list"
-		
-		
+	/* PARALLELIZATION OF THE SEED MORTALITY LOOP 
+	
+	
+	SEED MORTALITY PARALLELIZATION NO_1 		
+		x1.create dummy_seed_list_globally => "seed_list_global"
+		x2.create dummy_seed_list_locally for each thread => "seed_list_local"
+		x3.iter over orig_seed_list parallel
+			copy only surviving seeds to dummy_seed_list_locally
+		x4.splice dummy_seed_list_locally to dummy_seed_list_globally
+		5.swap content of dummy_seed_list_globally to orig_seed_list "seed_list"
+	
+	
 		### ist so einfach nicht möglich
-		https://stackoverflow.com/questions/8691459/how-do-i-parallelize-a-for-loop-through-a-c-stdlist-using-openmp
+		# im Moment ist es dadurch sehr langsam, vmtl. wegen des iterieren/advance!
 		
-		!!!!!!
+	
+	SEED MORTALITY PARALLELIZATION NO_2
+			++ by hand
+			https://stackoverflow.com/questions/8691459/how-do-i-parallelize-a-for-loop-through-a-c-stdlist-using-openmp
+			
+	SEED MORTALITY PARALLELIZATION NO_3
+		based on NO_2 but with a local list to which the data is pushed (or copied??)
 		
+		including various versions to test the efficiency
+
+	
+	*/
 		
-		
-		
-		*/
+	/* SEED MORTALITY PARALLELIZATION NO_1 			
+		// time usage of program
+			//TIME:
+		// clock_t sm00; // start for each seed 
+			//cumulativ Seconds:
+		// clock_t sm01=0; // after advance
+		// clock_t sm02=0; // after random number
+		// clock_t sm99=0; // after if-else and copy
+
 		// parallelization-1. 
 		list<seed*> seed_list_global;
 
@@ -426,12 +501,17 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 			// for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
 			for(unsigned int pari=0; pari<seed_list.size(); ++pari)
 			{// START: seed mortality
+				// sm00=clock(); // start for each seed
 				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
 				list<seed*>::iterator pos = seed_list.begin();
 				advance(pos, pari);
 				pseed=(*pos);
 				
+				// sm01+=clock() - sm00; // after advance
+
 				double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+				
+				// sm02+=clock() - sm00; // after random number
 				
 				///seed is on ground && random number < probability (0.8)
 				if (pseed->imcone==false)
@@ -442,13 +522,13 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 						// pos=seed_list.erase(pos);
 					} else
 					{
-						cout << endl << "-> seed list size before" << seed_list_local.size() << " -+- seed_list original list length " << seed_list.size();
+						// cout << endl << "-> seed list size before" << seed_list_local.size() << " -+- seed_list original list length " << seed_list.size();
 						
 						// parallelization-3. copy only surviving
 						// is it sufficient to push_back? are the positions conserved from the original list or does this lead to errors?
 						seed_list_local.push_back(pseed);
 						
-						cout << endl << "-> seed list size after " << seed_list_local.size() << " -+- seed_list original list length " << seed_list.size();
+						// cout << endl << "-> seed list size after " << seed_list_local.size() << " -+- seed_list original list length " << seed_list.size();
 					}
 				}
 				///seed in cone && random number < probability (0.8)
@@ -470,6 +550,8 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 					printf("\n no value of a seed at pseed->imcone / mortality.cpp\n"); 
 					exit(1);
 				}
+				// clock_t sm99c=clock();
+				// sm99+=sm99c - sm00; // after if-else and copy
 			}//END: seed mortality
 	
 			// append all newly created seed from each thread at once to the seed_list
@@ -478,17 +560,536 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 				seed_list_global.splice(seed_list_global.end(), seed_list_local);
 			}
 		} // END: parallel region
-		
+		// cout << endl << endl << "TIMEs : advance(sm01)=" << sm01 << " : randomn(sm02)=" << sm02 <<  " : end(sm99)=" << sm99 << 	endl << endl;
+	
 		// parallelization-5.
-		cout << endl << "-> seed_list_global size before" << seed_list_global.size() << " -+- seed_list original list length " << seed_list.size();
+		// cout << endl << "-> seed_list_global size before" << seed_list_global.size() << " -+- seed_list original list length " << seed_list.size();
 
 		seed_list.swap(seed_list_global);
 		// ... must the "seed_list_global" list be deleted or are all destructors called at the end of this scope?
 		seed_list_global.clear();
 		
-		cout << endl << "-> seed_list_global size after " << seed_list_global.size() << " -+- seed_list original list length " << seed_list.size();
+		// cout << endl << "-> seed_list_global size after " << seed_list_global.size() << " -+- seed_list original list length " << seed_list.size();
 
-		clock_t end_time_seedsuviving=clock();
+		
+	*/
+
+	
+	/* SEED MORTALITY PARALLELIZATION NO_2 		
+
+// cout << " -> seed_list.size() = " << seed_list.size() << endl;	
+if(parameter[0].ivort==2)
+{
+// copy list
+// seed_list_copy=seed_list;
+		list<seed*> seed_list_copy;
+		cout << endl;
+		cout << "seed_list.size()=" << seed_list.size() << endl;
+		cout << "seed_list_copy.size() vor Kopieren=" << seed_list_copy.size() << endl;
+		
+		int counterseed=1;	// Für die Ausgabe des ersten Treees
+		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		{
+			pseed=(*pos);
+
+			/// Alle Daten des seeds in ein neues Objekt in der ..._copy-Liste erzeugen
+			pseed_copy= new seed();						// Neuen seed erzeugen
+			pseed_copy->xworldcoo=pseed->xworldcoo;			
+			pseed_copy->yworldcoo=pseed->yworldcoo;	
+			pseed_copy->xcoo=pseed->xcoo;			
+			pseed_copy->ycoo=pseed->ycoo;		
+			pseed_copy->namem=pseed->namem;			
+			pseed_copy->namep=pseed->namep;		
+			pseed_copy->line=pseed->line;			
+			pseed_copy->generation=pseed->generation;
+			pseed_copy->species=pseed->species;
+			pseed_copy->imcone=pseed->imcone;		
+			pseed_copy->gewicht=pseed->gewicht;	
+			pseed_copy->age=pseed->age;			
+			pseed_copy->longdispersed=pseed->longdispersed;	
+				// new
+			pseed_copy->entfernung=pseed->entfernung;	
+			pseed_copy->species=pseed->species;
+			pseed_copy->elternheight=pseed->elternheight;
+			pseed_copy->mtSNP[2]=pseed->mtSNP[2];
+			pseed_copy->cpSNP[2]=pseed->cpSNP[2];
+			pseed_copy->maxgrowth=pseed->maxgrowth;
+			pseed_copy->pollenfall=pseed->pollenfall;
+			pseed_copy->descent=pseed->descent;
+			pseed_copy->thawing_depthinfluence=pseed->thawing_depthinfluence;
+				// new end
+			seed_list_copy.push_back(pseed_copy);				// seed in Liste einfuegen
+			
+				if(counterseed==1)
+				{
+					cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;
+				}
+
+			++pos;
+			++counterseed;
+		}
+		
+		cout << "seed_list_copy.size() nach Kopieren=" << seed_list_copy.size() << endl;
+		cout << endl;
+		
+		
+// parallele loop
+	// for(int helperi=1; helperi<9; helperi=helperi*2)
+	for(int helperi=2; helperi<9; helperi=helperi*2)
+	{
+	double comptime=0;
+	int repeats=100;
+	for(int wdh=0; wdh<repeats; wdh++)
+	{// arbitr loop to check comp time for general loop
+		cout << ".";
+	
+		// clean list first
+		// fill list with buffer-list
+			// cout << "seed_list.size()=" << seed_list.size() << endl;
+			for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
+			{
+				pseed=(*pos);
+				delete pseed;
+				pos=seed_list.erase(pos);
+			}	
+			// cout << "seed_list.size() nach loeschen=" << seed_list.size() << endl;
+			// cout << "seed_list_copy.size() vor Kopieren=" << seed_list_copy.size() << endl;
+		
+			// int counterseed=1;	// Für die Ausgabe des ersten Treees
+			for (list<seed*>::iterator pos = seed_list_copy.begin(); pos != seed_list_copy.end(); )
+			{
+				pseed=(*pos);
+
+				/// Alle Daten des seeds in ein neues Objekt in der ..._copy-Liste erzeugen
+				pseed_copy= new seed();						// Neuen seed erzeugen
+				pseed_copy->xworldcoo=pseed->xworldcoo;			
+				pseed_copy->yworldcoo=pseed->yworldcoo;	
+				pseed_copy->xcoo=pseed->xcoo;			
+				pseed_copy->ycoo=pseed->ycoo;		
+				pseed_copy->namem=pseed->namem;			
+				pseed_copy->namep=pseed->namep;		
+				pseed_copy->line=pseed->line;			
+				pseed_copy->generation=pseed->generation;
+				pseed_copy->species=pseed->species;
+				pseed_copy->imcone=pseed->imcone;		
+				pseed_copy->gewicht=pseed->gewicht;	
+				pseed_copy->age=pseed->age;			
+				pseed_copy->longdispersed=pseed->longdispersed;	
+					// new
+				pseed_copy->entfernung=pseed->entfernung;	
+				pseed_copy->species=pseed->species;
+				pseed_copy->elternheight=pseed->elternheight;
+				pseed_copy->mtSNP[2]=pseed->mtSNP[2];
+				pseed_copy->cpSNP[2]=pseed->cpSNP[2];
+				pseed_copy->maxgrowth=pseed->maxgrowth;
+				pseed_copy->pollenfall=pseed->pollenfall;
+				pseed_copy->descent=pseed->descent;
+				pseed_copy->thawing_depthinfluence=pseed->thawing_depthinfluence;
+					// new end
+				seed_list.push_back(pseed_copy);				// seed in Liste einfuegen
+				
+					// if(counterseed==1)
+					// {
+						// cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;
+					// }
+
+				++pos;
+				++counterseed;
+			}
+			
+			// cout << "seed_list_copy.size() nach Kopieren=" << seed_list_copy.size() << endl;
+			// cout << "seed_list.size() nach copy=" << seed_list.size() << endl;
+			// cout << endl;
+	
+	
+	
+	double startt = omp_get_wtime();
+	
+		omp_set_dynamic(0); //disable dynamic teams
+		// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		omp_set_num_threads(helperi); //set the number of helpers
+		
+		// if(parameter[0].ivort==1)// check the number of used threads
+			// cout << endl << endl << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+					
+		// seed_list	
+		#pragma omp parallel private(pseed)
+		{
+			int thread_count = omp_get_num_threads();
+			int thread_num   = omp_get_thread_num();
+			size_t chunk_size= seed_list.size() / thread_count;
+			auto begin = seed_list.begin();
+			std::advance(begin, thread_num * chunk_size);
+			auto end = begin;
+			
+			// if(thread_num==0)
+				// cout << endl << endl << " -- OMP -- set current number of helpers to =" << helperi << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl;
+			
+			if(thread_num == (thread_count - 1)) // last thread iterates the remaining sequence
+			{
+				end = seed_list.end();
+				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
+			} else
+			{
+				std::advance(end, chunk_size);
+				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
+			}
+			
+			#pragma omp barrier
+			for(auto it = begin; it != end; )
+			{
+				// it->process();
+				pseed=(*it);
+				// cout << pseed->imcone << "  ";
+				double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+				///seed is on ground && random number < probability (0.8)
+				if (pseed->imcone==false)
+				{
+					if (zufallsz<parameter[0].seedbodenmort) 
+					{
+						delete pseed;
+						it=seed_list.erase(it);
+						// ++it;
+					} else
+					{
+						++it;
+					}
+				} else if (pseed->imcone==true)
+				{
+					if (zufallsz<parameter[0].seedTreemort) 
+					{
+						delete pseed;
+						it=seed_list.erase(it);
+						// ++it;
+					} else
+					{
+						++it;
+					}
+				} else
+				{	// check imcone-variable set? 
+					cout << "->" << pseed->imcone << "<-";
+					printf("\n no value of a seed at pseed->imcone / mortality.cpp\n"); 
+					exit(1);
+				}
+			
+			}
+		}
+	comptime+=(double) omp_get_wtime()-startt;
+	}
+	printf("%d:::%20.20f",helperi,comptime/((double) repeats));
+	cout << "         -> seed_list.size() = " << seed_list.size() << endl;	
+
+	}
+
+	exit(1);
+}
+
+
+	*/
+
+	
+	/* SEED MORTALITY PARALLELIZATION NO_3 			
+
+// cout << " -> seed_list.size() = " << seed_list.size() << endl;	
+if(parameter[0].ivort==2)
+{
+// copy list
+// seed_list_copy=seed_list;
+		list<seed*> seed_list_copy;
+		cout << endl;
+		cout << "seed_list.size()=" << seed_list.size() << endl;
+		cout << "seed_list_copy.size() vor Kopieren=" << seed_list_copy.size() << endl;
+		
+		int counterseed=1;	// Für die Ausgabe des ersten Treees
+		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		{
+			pseed=(*pos);
+
+			/// Alle Daten des seeds in ein neues Objekt in der ..._copy-Liste erzeugen
+			pseed_copy= new seed();						// Neuen seed erzeugen
+			pseed_copy->xworldcoo=pseed->xworldcoo;			
+			pseed_copy->yworldcoo=pseed->yworldcoo;	
+			pseed_copy->xcoo=pseed->xcoo;			
+			pseed_copy->ycoo=pseed->ycoo;		
+			pseed_copy->namem=pseed->namem;			
+			pseed_copy->namep=pseed->namep;		
+			pseed_copy->line=pseed->line;			
+			pseed_copy->generation=pseed->generation;
+			pseed_copy->species=pseed->species;
+			pseed_copy->imcone=pseed->imcone;		
+			pseed_copy->gewicht=pseed->gewicht;	
+			pseed_copy->age=pseed->age;			
+			pseed_copy->longdispersed=pseed->longdispersed;	
+				// new
+			pseed_copy->entfernung=pseed->entfernung;	
+			pseed_copy->species=pseed->species;
+			pseed_copy->elternheight=pseed->elternheight;
+			pseed_copy->mtSNP[2]=pseed->mtSNP[2];
+			pseed_copy->cpSNP[2]=pseed->cpSNP[2];
+			pseed_copy->maxgrowth=pseed->maxgrowth;
+			pseed_copy->pollenfall=pseed->pollenfall;
+			pseed_copy->descent=pseed->descent;
+			pseed_copy->thawing_depthinfluence=pseed->thawing_depthinfluence;
+				// new end
+			seed_list_copy.push_back(pseed_copy);				// seed in Liste einfuegen
+			
+				if(counterseed==1)
+				{
+					cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;
+				}
+
+			++pos;
+			++counterseed;
+		}
+		
+		cout << "seed_list_copy.size() nach Kopieren=" << seed_list_copy.size() << endl;
+		cout << endl;
+		
+		
+// parallele loop
+	// for(int helperi=1; helperi<9; helperi=helperi*2)
+	for(int helperi=0; helperi<9; )
+	{
+		double comptime=0;
+		int repeats=10;
+		for(int wdh=0; wdh<repeats; wdh++)
+		{// arbitr loop to check comp time for general loop
+			cout << ".";
+		
+			// clean list first
+			// fill list with buffer-list
+				// cout << "seed_list.size()=" << seed_list.size() << endl;
+				for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
+				{
+					pseed=(*pos);
+					delete pseed;
+					pos=seed_list.erase(pos);
+				}	
+				// cout << "seed_list.size() nach loeschen=" << seed_list.size() << endl;
+				// cout << "seed_list_copy.size() vor Kopieren=" << seed_list_copy.size() << endl;
+			
+				// int counterseed=1;	// Für die Ausgabe des ersten Treees
+				for (list<seed*>::iterator pos = seed_list_copy.begin(); pos != seed_list_copy.end(); )
+				{
+					pseed=(*pos);
+
+					/// Alle Daten des seeds in ein neues Objekt in der ..._copy-Liste erzeugen
+					pseed_copy= new seed();						// Neuen seed erzeugen
+					pseed_copy->xworldcoo=pseed->xworldcoo;			
+					pseed_copy->yworldcoo=pseed->yworldcoo;	
+					pseed_copy->xcoo=pseed->xcoo;			
+					pseed_copy->ycoo=pseed->ycoo;		
+					pseed_copy->namem=pseed->namem;			
+					pseed_copy->namep=pseed->namep;		
+					pseed_copy->line=pseed->line;			
+					pseed_copy->generation=pseed->generation;
+					pseed_copy->species=pseed->species;
+					pseed_copy->imcone=pseed->imcone;		
+					pseed_copy->gewicht=pseed->gewicht;	
+					pseed_copy->age=pseed->age;			
+					pseed_copy->longdispersed=pseed->longdispersed;	
+						// new
+					pseed_copy->entfernung=pseed->entfernung;	
+					pseed_copy->species=pseed->species;
+					pseed_copy->elternheight=pseed->elternheight;
+					pseed_copy->mtSNP[2]=pseed->mtSNP[2];
+					pseed_copy->cpSNP[2]=pseed->cpSNP[2];
+					pseed_copy->maxgrowth=pseed->maxgrowth;
+					pseed_copy->pollenfall=pseed->pollenfall;
+					pseed_copy->descent=pseed->descent;
+					pseed_copy->thawing_depthinfluence=pseed->thawing_depthinfluence;
+						// new end
+					seed_list.push_back(pseed_copy);				// seed in Liste einfuegen
+					
+						// if(counterseed==1)
+						// {
+							// cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;
+						// }
+
+					++pos;
+					++counterseed;
+				}
+				
+				// cout << "seed_list_copy.size() nach Kopieren=" << seed_list_copy.size() << endl;
+				// cout << "seed_list.size() nach copy=" << seed_list.size() << endl;
+				// cout << endl;
+		
+		
+		
+			double startt = omp_get_wtime();
+			
+			// linear old
+			if(helperi==0)
+			{ // linear
+			// start: ORI CODE
+				//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
+				/// seedmortalität
+				for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+				{ 
+					pseed=(*pos);
+					double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+					
+					///seed is on ground && random number < probability (0.8)
+					if (pseed->imcone==false)
+					{
+						if (zufallsz<parameter[0].seedbodenmort) 
+						{
+							delete pseed;
+							pos=seed_list.erase(pos);
+						}else
+						{
+							++pos;
+						}
+					}
+					
+					///seed in cone && random number < probability (0.8)
+					else if (pseed->imcone==true)
+					{
+						if (zufallsz<parameter[0].seedTreemort) 
+						{
+							delete pseed;
+							pos=seed_list.erase(pos);
+						}
+						
+						else
+						{
+							++pos;
+						}
+					}
+					
+					else
+					{	// Sicherheitsabfrage imcone-Variable gesetzt? 
+						signed int abbrechenmortalitaetfehler; 
+						printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
+						printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
+						scanf("%d", &abbrechenmortalitaetfehler); if (abbrechenmortalitaetfehler!=1) {printf("LaVeSi wurde nach einem Fehler in der Mortalitaetsfunktion beendet\n\n");exit(1);}
+				
+						delete pseed;
+						pos=seed_list.erase(pos);						
+					}
+				}
+			// end: ORI CODE
+			} else
+			{ // parallel
+				omp_set_dynamic(0); //disable dynamic teams
+				// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+				omp_set_num_threads(helperi); //set the number of helpers
+				
+				// if(parameter[0].ivort==1)// check the number of used threads
+					// cout << endl << endl << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+							
+				// create global seed list for surviving seeds found by all threads
+				list<seed*> seed_list_surviving_global;
+				
+				
+				// seed_list	
+				#pragma omp parallel private(pseed)
+				{
+					// initialize the info for each of the thread
+					int thread_count = omp_get_num_threads();
+					int thread_num   = omp_get_thread_num();
+					size_t chunk_size= seed_list.size() / thread_count;
+					auto begin = seed_list.begin();
+					std::advance(begin, thread_num * chunk_size);
+					auto end = begin;
+					
+					// if(thread_num==0)
+						// cout << endl << endl << " -- OMP -- set current number of helpers to =" << helperi << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl;
+					
+					if(thread_num == (thread_count - 1)) // last thread iterates the remaining sequence
+					{
+						end = seed_list.end();
+						// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
+					} else
+					{
+						std::advance(end, chunk_size);
+						// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
+					}
+					
+					// create a local list for each thread to copy all surviving seed into
+					list<seed*> seed_list_surviving_local;
+
+					// wait for all threads to initialize and then proceed
+					#pragma omp barrier
+					
+					for(auto it = begin; it != end; ++it)
+					{
+						// it->process();
+						pseed=(*it);
+						// cout << pseed->imcone << "  ";
+						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+						///seed is on ground && random number < probability (0.8)
+						if (pseed->imcone==false)
+						{
+							if (zufallsz<parameter[0].seedbodenmort) 
+							{
+								// delete pseed;
+								// it=seed_list.erase(it);
+								// ++it;
+								
+								seed_list_surviving_local.push_back(pseed);
+							} else
+							{
+								// ++it;
+							}
+						} else if (pseed->imcone==true)
+						{
+							if (zufallsz<parameter[0].seedTreemort) 
+							{
+								// delete pseed;
+								// it=seed_list.erase(it);
+								// ++it;
+								
+								seed_list_surviving_local.push_back(pseed);
+							} else
+							{
+								// ++it;
+							}
+						} else
+						{	// check imcone-variable set? 
+							cout << "->" << pseed->imcone << "<-";
+							printf("\n no value of a seed at pseed->imcone / mortality.cpp\n"); 
+							exit(1);
+						}
+					}
+					
+					// append all newly created seed from each thread at once to the seed_list_surviving_global
+					// vielleicht 
+					#pragma omp critical
+					{
+						seed_list_surviving_global.splice(seed_list_surviving_global.end(), seed_list_surviving_local);
+					}
+					
+				}
+				// if(wdh<=3)cout << "seed_list_surviving_global=" << seed_list_surviving_global.size() << " +++ seed_list=" << seed_list.size();
+				
+				seed_list.swap(seed_list_surviving_global);
+					
+				// if(wdh<=3)cout << "seed_list(after swap)=" << seed_list.size() << endl;
+			}
+			
+			comptime+=(double) omp_get_wtime()-startt;
+		}
+		
+		printf("%d:::%20.20f",helperi,comptime/((double) repeats));
+		cout << "         -> seed_list.size() = " << seed_list.size() << endl;	
+
+		if(helperi==0)
+			helperi=1;
+		else
+			helperi=helperi*2;
+	}
+
+	exit(1);
+}
+
+*/
+
+	
+	
+	
+	
+		double end_time_seedsuviving=omp_get_wtime();
 
 		
 		// Berechnung des aktuellen Ortes in Koordinaten
@@ -618,10 +1219,10 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 			}
 		} // END: parallel region
 			
-		clock_t end_time_poll=clock();
+		double end_time_poll=omp_get_wtime();
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/
 		TreeMort(yearposition, weather_list, tree_list);
-		clock_t end_time_mortpoll=clock();
+		double end_time_mortpoll=omp_get_wtime();
 		
 		if(parameter[0].computationtime==1)
 		{
@@ -629,12 +1230,13 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 			FILE *fp4;
 			fp4=fopen("t_N_poll.txt","a+");
 			if(fp4==0){goto openpoll;}
-			fprintf(fp4,"%lu;%d;%10.2f;%10.2f;%10.2f\n",
-					tree_list.size(),
+			fprintf(fp4,"%d;%lu;%lu;%10.10f;%10.10f;%10.10f\n",
 					parameter[0].ivort, 
-					((double) (end_time_poll - start_time_mortpoll))/ CLOCKS_PER_SEC,
-					((double) (end_time_mortpoll - end_time_poll))/ CLOCKS_PER_SEC,
-					((double) (end_time_seedsuviving - start_time_mortpoll))/ CLOCKS_PER_SEC
+					seed_list.size(),
+					tree_list.size(),
+					(end_time_poll - end_time_seedsuviving), // pollination total
+					(end_time_mortpoll - end_time_poll), // only tree mortality
+					(end_time_seedsuviving - start_time_mortpoll) // seed mortality
 				);
 			fclose(fp4);
 			

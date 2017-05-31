@@ -16,9 +16,12 @@ t_*.txt
 # exclude pollen-dispersal output files
 pollDist*
 
+
 # exclude TEST-folder
 TEST/
 
 # exclude postprocessing-output files
 postprocessing/*.png
 
+# exclude Windows-files
+Thumbs.db

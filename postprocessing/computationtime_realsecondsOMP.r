@@ -3,7 +3,7 @@ setwd("M:/Documents/Programmierung/git/LAVESI")
 
 {# plot all start
 t_N_mort=read.table("t_N_mort.txt", sep=";")
-str(t_N_mort)
+# str(t_N_mort)
 			# tree_list.size(),
 			# parameter[0].ivort, 
 			# end_time_mortalitaet - start_time_mortalitaet,
@@ -29,7 +29,7 @@ str(t_N_mort)
 					# (end_time_kartenup - start_time_kartenup)
 			# );
 names(t_N_mort)=c("N_tree", "time", "mort", "kartenup", "wachstum", "seedausbreit", "seedprod", "treeverteilung", "etablierung", "feuer", "dataoutput", "mortality", "ageing", "all")
-str(t_N_mort)
+# str(t_N_mort)
 
 
 
@@ -91,7 +91,7 @@ t_N_poll=read.table("t_N_poll.txt", sep=";")
 					# timer_eachtree_seedadd_all,
 					# timer_eachtree_total_all
 names(t_N_poll)=c("time", "N_seed", "N_tree", "pollination", "treemortality", "seedmortality", "P_advance", "P_vectini", "seedsurv", "seedadd", "total")
-str(t_N_poll)
+# str(t_N_poll)
 
 	# par(mfrow=c(1,2), las=2, mar=c(8,4,0,0))
 	barplot(apply(t_N_poll[,4:6],2,mean)/sum(apply(t_N_poll[,4:6],2,mean)))
@@ -110,7 +110,7 @@ t_N_plotupdate=read.table("t_N_plotupdate.txt", sep=";")
 					# time_AddTreeDensity-time_ResetMaps, 
 					# omp_get_wtime()-time_AddTreeDensity
 names(t_N_plotupdate)=c("time", "N_tree", "ResetMaps", "AddTreeDensity", "IndividualTreeDensity")
-str(t_N_plotupdate)
+# str(t_N_plotupdate)
 
 	# par(mfrow=c(1,2), las=2, mar=c(8,4,0,0))
 	barplot(apply(t_N_plotupdate[,3:5],2,mean)/sum(apply(t_N_plotupdate[,3:5],2,mean)))

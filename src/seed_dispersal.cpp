@@ -113,15 +113,15 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
  void seedausbreitung(int treerows, int treecols,int jahr, int yearposition, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
 {
    						
-// cout<<jahr<<endl;
-						
+		
 	int aktort=0;
-        double iquer=0,jquer=0;
+    double iquer=0,jquer=0;
 
+	/*
 	list<seed*> LDDseed_list; // Liste zum Zwischenspeichern der LDD ausgebreiteten seed
-	 
+	*/
 						
-						///Loop around all Seed Lists
+	///Loop around all Seed Lists
 	for (vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 
 		list<seed*>& seed_list = *posw;
@@ -133,13 +133,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 		int rausgeflogenN=0, rausgeflogenO=0, rausgeflogenS=0, rausgeflogenW=0;
 
 		///Loop around all Seeds
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{
 			pseed=(*pos);
 
 			///If Seed is in a cone
 			if (pseed->imcone==true)
-			{ 
+			{
 				double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 								
 				///and random number < rate of emerging seeds
@@ -156,7 +156,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						double entfernung = 0;
 						float richtung=0.0;
 
-                                                seeddisp(ratiorn, jahr, jquer, iquer);
+						seeddisp(ratiorn, jahr, jquer, iquer);
 						
 						// seed dispersal output:			
 						double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -222,15 +222,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						*/
 						
 						pseed->xcoo=pseed->xcoo+jquer;
-						pseed->ycoo=pseed->ycoo+iquer;//einfach hier einen output
-       						pseed->entfernung=entfernung;	
-                                                
-//                                                if(ivort>parameter[0].ivortmax && jahr %10){
-                                                    //output
-                                                    
-  //                                              }
+						pseed->ycoo=pseed->ycoo+iquer;
+       					pseed->entfernung=entfernung;	
 
-                                        
+
 						
 						/****************************************************************************************//**
 						* \brief calculate Long Distance Dispersal between transekts
@@ -239,9 +234,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						*******************************************************************************************/
 						// Entfernungen zwischen Einzelpatches ermitteln
 						// Umrechnung von Grad in Meter  "1 Grad = 60 x 1852 m = 111120 m"
+						/*
 						double abschnittslaenge=((parameter[0].Nposmax-parameter[0].Nposmin)*111120)/parameter[0].mapylength;
+						*/
 						
+						/// DEPRECEATED!!! not supported in this version
 						//SEEDTRAVELBETWEEN==TRUE-> mit periodischen RB verknüpfen!!!!!!!!!!!!!!!!!!
+						/*
 						if ( (parameter[0].mapylength>1 || parameter[0].mapxlength>1) && parameter[0].seedtravelbetween==true && entfernung>(abschnittslaenge/2))
 						{  // Long Distance Dispersal in andere Flaechen Beginn
 
@@ -270,7 +269,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								richtungsname='W';
 								richtungsfaktor=-1; // nach Westen
 							}
-cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Faktor =" << richtungsfaktor << " ... und Entfernung - halbe ABSCHNITT=" << (entfernung-(abschnittslaenge/2)) << " ... Abschnittlaenge=" << abschnittslaenge << endl;
+							cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Faktor =" << richtungsfaktor << " ... und Entfernung - halbe ABSCHNITT=" << (entfernung-(abschnittslaenge/2)) << " ... Abschnittlaenge=" << abschnittslaenge << endl;
 							
 							///if seed flies out of the plot direction
 							// Eintragsflaeche ermitteln Beginn
@@ -346,7 +345,7 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 										
 										// delete pseed; // Dies wuerde den Speicher an der Position freigeben und somit weiteres Verwenden unmoeglich machen!!
 										
-										pos=seed_list.erase(pos);
+										pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 									} 
 									else
 									{ // Same erreicht nicht den nächsten Plot 
@@ -361,7 +360,7 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 
 										delete pseed;
 										//RAUSFLIEGENDE WERDEN GELÖSCHT!
-										pos=seed_list.erase(pos);
+										pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 									} // seed bleibt im Feld Beginn	
 								}
 								else if (richtungsname=='O' || richtungsname=='W')
@@ -404,7 +403,7 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 										
 										// delete pseed; // Dies wuerde den Speicher an der Position an der noch die Infos des seeds stehen freigeben und somit weiteres Verwenden unmoeglich machen!!
 										
-										pos=seed_list.erase(pos);
+										pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 									}
 									else
 									{ // Same erreicht nicht den nächsten Plot 
@@ -418,13 +417,13 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 											rausgeflogenW++;
 											if(parameter[0].periodRB==1){pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));}
 										if(parameter[0].periodRB==0){ delete pseed;
-													      pos=seed_list.erase(pos);}
+													      pos=seed_list.erase(pos);}			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 									} // seed bleibt im Feld Beginn
 								}
 
 
 						} // Long Distance Dispersal in andere Flaechen Ende
-						
+						*/
 						
 
 
@@ -433,8 +432,8 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 						*
 						*
 						*******************************************************************************************/
-						else
-						{ // "normales" Verhalten, also Same landet außerhalb des Plots aber erreicht nicht den nächsten Plot 
+						// else
+						// { // "normales" Verhalten, also Same landet außerhalb des Plots aber erreicht nicht den nächsten Plot 
 							//(dazu müsste er mind. die Hälfte der Strecke zurücklegen), mit Same Beginn
 							bool sameausserhalb=false;
 							
@@ -540,24 +539,13 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 							{
 								++pos;
 							}
-						} // "normales" Verhalten mit seed Ende
+						// } // "normales" Verhalten mit seed Ende
 					} // RN Groeszer Null Ende
-					
-					else if (ratiorn<=0.0)
-					{
-						++pos;
-					}
+
 				}  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
-				
-				else if (flug > parameter[0].seedflugrate)
-				{
-					++pos;
-				}
+
 			} //Imcone? Ende
-			else if (pseed->imcone!=true)
-			{
-				++pos;
-			}
+			
 		} // Ende seed_list ablaufen
 
 
@@ -575,6 +563,7 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 	*
 	*
 	*******************************************************************************************/
+	/*
 	// seed die weit ausgebreitet wurden werden in die entsprechend seed_listn am neuen Ort geschrieben
 	if ( (parameter[0].seedtravelbetween==true) & (LDDseed_list.size()>0) )
 	{ // Seeds in WeltListen schreiben Beginn 
@@ -612,6 +601,7 @@ cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Fa
 		} // seed_list ablaufen Ende
 	} // Seeds in WeltListen schreiben Ende
 
+	*/
 }
 
 

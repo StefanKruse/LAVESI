@@ -1096,7 +1096,106 @@ if(parameter[0].ivort==2)
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
+
+		
 		// Loop for each seed that is to be produced for each tree
+		
+		// timers for parallel processing 
+		double timer_eachtree_advance_all=0;
+		double timer_eachtree_vectini_all=0;
+		double timer_eachtree_seedsurv_all=0;// from here only surviving seeds
+		double timer_eachtree_seedadd_all=0;// from here only surviving seeds
+		double timer_eachtree_total_all=0;// from here only surviving seeds
+	
+	if(parameter[0].pollenvert==0)
+	{ // only one kernel specified by parameter[0].omp_num_threads
+// start ORI
+		for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
+		{
+			pTree=(*posb);
+			vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+			vector<double> Vthdpth;
+				
+			if (pTree->seednewly_produced>0)
+			{
+				// gehe durch Anzahl der seed pro Tree und erwürfel Tod/Leben
+				int seedlebend=0;
+				for(int sna=0; sna < pTree->seednewly_produced; sna++)
+				{
+					double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+					if (zufallsz>=parameter[0].seedTreemort) 
+					{
+						++seedlebend;
+					}
+				}
+				
+				if(seedlebend>0)
+				{
+					if(parameter[0].pollenvert==1)
+					{
+						BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+					}
+
+					for (int sl=0; sl<seedlebend; sl++)
+					{ // Neuen seed erstellen Beginn
+						pseed= new seed();			// 1. Neuen seed erzeugen
+						pseed->yworldcoo=aktortyworldcoo;	// 2. Werte dem seed zuweisen
+						pseed->xworldcoo=aktortxworldcoo;
+						pseed->xcoo=pTree->xcoo;
+						pseed->ycoo=pTree->ycoo;
+						pseed->namem=pTree->name;
+						
+						//BefrWahrsch(pseed->xcoo,pseed->ycoo,world_positon_b,Jahr,pseed->namep,pseed->cpSNP[0],pseed->cpSNP[1]);
+						if((Vname.size()>0)&&(parameter[0].pollenvert==1))
+						{
+							int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
+							pseed->namep=Vname[iran];
+							pseed->thawing_depthinfluence=Vthdpth[iran];
+							
+							//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
+							//pseed->cpSNP[0]=cpSNP1[iran];
+							//pseed->cpSNP[1]=cpSNP2[iran];
+							
+							//pseed->descent=
+							//pseed->pollenfall=
+							//pseed->maxgrowth=
+						} else
+						{
+							pseed->namep=0;
+							pseed->thawing_depthinfluence=100;
+						}
+						//pseed->cpSNP[0]=0;
+						//pseed->cpSNP[1]=0;}
+						/*cout<<pseed->namep<<endl;
+						cout<<pseed->cpSNP[0]<<endl;
+						cout<<pseed->cpSNP[1]<<endl;*/
+						
+
+						//pseed->mtSNP[0]=pTree->mtSNP[0];
+						//pseed->mtSNP[1]=pTree->mtSNP[1];
+						
+						pseed->line=pTree->line;
+						pseed->generation=pTree->generation+1;	// Generation=0 ist von außen eingebracht
+						pseed->imcone=true;
+						pseed->gewicht=1;
+						pseed->age=0;
+						pseed->species=pTree->species;//MutterTreespezies
+						pseed->elternheight=pTree->height;
+						
+						seed_list.push_back(pseed);// 3. seed in Liste einfuegen
+					} // Neuen seed erstellen Ende
+				
+				// Vname.clear();//cpSNP1.clear();cpSNP2.clear();
+				}// END: if seedlebend>0
+
+			} // seed wurden erstellt Ende
+
+		}//Ende HauptTreeschleife
+
+// end ORI
+	} else
+	{ // more than one kernel specified by parameter[0].omp_num_threads
+	
 	
 		// loop around the loop for MULTI-CORE-PROCESSING
 		// before run a program parallel set the number of helpers by changing the environment variable
@@ -1108,12 +1207,7 @@ if(parameter[0].ivort==2)
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-		// timers
-		double timer_eachtree_advance_all=0;
-		double timer_eachtree_vectini_all=0;
-		double timer_eachtree_seedsurv_all=0;// from here only surviving seeds
-		double timer_eachtree_seedadd_all=0;// from here only surviving seeds
-		double timer_eachtree_total_all=0;// from here only surviving seeds
+
 		#pragma omp parallel default(shared) private(pTree,pseed)
 		{ // START: parallel region
 			// declare a local seed list to be filled by each thread
@@ -1270,7 +1364,7 @@ if(parameter[0].ivort==2)
 		printf("%10.20f\n",timer_eachtree_seedsurv_all);
 		printf("%10.20f\n",timer_eachtree_seedadd_all);
 		printf("%10.20f\n",timer_eachtree_total_all);
-		
+	}	
 		
 		
 			

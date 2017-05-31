@@ -38,8 +38,9 @@ str(t_N_mort)
 
 # plot
 namesi="1core500"
-layout(matrix(c(1:(2*length(namesi))), ncol=2, nrow=length(namesi), byrow=TRUE), width=c(1,0.4), height=1)
-layout.show(2*length(namesi))
+# layout(matrix(c(1:(2*length(namesi))), ncol=2, nrow=length(namesi), byrow=TRUE), width=c(1,0.4), height=1)
+# layout.show(2*length(namesi))
+par(mfrow=c(2,2), las=2, mar=c(8,4,0,0))
 maxx=25#580
 
 	damat=t_N_mort[4:13]
@@ -69,6 +70,9 @@ maxx=25#580
 	
 	
 	
+	
+	
+	
 t_N_poll=read.table("t_N_poll.txt", sep=";")
 					# parameter[0].ivort, 
 					# seed_list.size(),
@@ -85,9 +89,10 @@ t_N_poll=read.table("t_N_poll.txt", sep=";")
 names(t_N_poll)=c("time", "N_seed", "N_tree", "pollination", "treemortality", "seedmortality", "P_advance", "P_vectini", "seedsurv", "seedadd", "total")
 str(t_N_poll)
 
-	par(mfrow=c(1,2), las=2, mar=c(8,4,0,0))
+	# par(mfrow=c(1,2), las=2, mar=c(8,4,0,0))
 	barplot(apply(t_N_poll[,4:6],2,mean)/sum(apply(t_N_poll[,4:6],2,mean)))
-	barplot(apply(t_N_poll[,7:11],2,mean)/sum(apply(t_N_poll[,7:11],2,mean)))
+	barplot(apply(t_N_poll[,7:10],2,mean)/sum(apply(t_N_poll[,7:10],2,mean)))
+	# barplot(apply(t_N_poll[,7:11],2,mean)/sum(apply(t_N_poll[,7:11],2,mean)))
 
 
 

@@ -574,7 +574,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 				// 2 == split list to X lists => had to outsource the delete precedure because otherwise it would lead to SEGFAULTs!
 			if(mcorevariant==1)
 			{// OMP==1
-			cout << endl << " OMP seed dispersal variant (1 was chosen)=" << mcorevariant << endl;
+			// cout << endl << " OMP seed dispersal variant (1 was chosen)=" << mcorevariant << endl;
 				///Loop around all Seeds
 				for(unsigned int pari=0; pari<seed_list.size(); )//++pari)
 				// for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
@@ -746,7 +746,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			}// OMP==1
 			if(mcorevariant==2)
 			{// OMP==2
-			cout << endl << " OMP seed dispersal variant (2 was chosen)=" << mcorevariant << endl;
+			// cout << endl << " OMP seed dispersal variant (2 was chosen)=" << mcorevariant << endl;
 			
 				
 				double time_start_seeddisp=omp_get_wtime();
@@ -942,8 +942,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					} // Ende seed_list ablaufen
 				}//END: pragma for
 				
-				cout << " seed_list.size (before)=" << seed_list.size() << endl;
-				double time_start_delete=omp_get_wtime();
+				// cout << " seed_list.size (before)=" << seed_list.size() << endl;
+				// double time_start_delete=omp_get_wtime();
 				for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
 				{// START: delete seeds with sameausserhalb==true
 					pseed=(*pos);
@@ -957,9 +957,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						++pos;
 					}
 				}// END: delete seeds
-				cout << " seed_list.size (after)=" << seed_list.size() << endl;
-				cout << " Time(seeddisp)=" << time_start_delete-time_start_seeddisp << endl;
-				cout << " Time(deletion)=" << omp_get_wtime()-time_start_delete << endl;
+				// cout << " seed_list.size (after)=" << seed_list.size() << endl;
+				// cout << " Time(seeddisp)=" << time_start_delete-time_start_seeddisp << endl;
+				// cout << " Time(deletion)=" << omp_get_wtime()-time_start_delete << endl;
 			}// OMP==2
 
 		}

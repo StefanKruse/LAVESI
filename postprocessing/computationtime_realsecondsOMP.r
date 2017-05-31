@@ -1,6 +1,7 @@
 
 setwd("M:/Documents/Programmierung/git/LAVESI")
 
+{# plot all start
 t_N_mort=read.table("t_N_mort.txt", sep=";")
 str(t_N_mort)
 			# tree_list.size(),
@@ -37,11 +38,11 @@ str(t_N_mort)
 
 
 # plot
-namesi="1core500"
+namei="16core500"
 # layout(matrix(c(1:(2*length(namesi))), ncol=2, nrow=length(namesi), byrow=TRUE), width=c(1,0.4), height=1)
 # layout.show(2*length(namesi))
 par(mfrow=c(2,2), las=2, mar=c(8,4,0,0))
-maxx=25#580
+maxx=dim(damat)[1]#580
 
 	damat=t_N_mort[4:13]
 	rm=apply(damat,1,sum)
@@ -58,19 +59,22 @@ maxx=25#580
 		
 	par(mar=c(4,0,1,0))
 
-	barplot(t(as.matrix(damat)), main=paste0(namei, " -> mean time for one year (sim years=", max(t_N_mort$time),"): ",round(mean(rm),0)," sec"), border=NA, yaxt="n", col=clbp, axes=FALSE, names.arg=rep(NA,maxx))
+	barplot(t(as.matrix(damat)), border=NA, yaxt="n", col=clbp, axes=FALSE, names.arg=rep(NA,maxx))
+	title(main=paste0(namei, " -> mean time for one year (sim years=", max(t_N_mort$time),"): ",round(mean(rm),0)," sec"),cex.main=0.7)
 		# overlay full time for computation
 		par(new=TRUE)
 		with(t_N_mort, plot(all~time, type="l", lwd=2, xaxt="n", yaxt="n", ylab="", xlab="", bty="n", xlim=c(0,maxx)))
 
 	par(mar=c(8,0,1,3))
 	
-	barplot(apply(damat[1:dim(t_N_mort[4:13])[1],],2,mean), border=NA, yaxt="n", las=2, col=clbp)
+	# barplot(apply(damat[1:dim(t_N_mort[4:13])[1],],2,mean), border=NA, yaxt="n", las=2, col=clbp)
+	# axis(side=4,las=1)
+	
+	par(mar=c(8,0,1,3))
+	barplot(apply(t_N_mort[4:13][1:dim(t_N_mort[4:13])[1],],2,mean), border=NA, yaxt="n", las=2, col=clbp)
 	axis(side=4,las=1)
-	
-	
-	
-	
+	mtext(side=4, "comp. time [s]",las=3, line=-1)
+
 	
 	
 t_N_poll=read.table("t_N_poll.txt", sep=";")
@@ -91,10 +95,27 @@ str(t_N_poll)
 
 	# par(mfrow=c(1,2), las=2, mar=c(8,4,0,0))
 	barplot(apply(t_N_poll[,4:6],2,mean)/sum(apply(t_N_poll[,4:6],2,mean)))
-	barplot(apply(t_N_poll[,7:10],2,mean)/sum(apply(t_N_poll[,7:10],2,mean)))
+	# barplot(apply(t_N_poll[,7:10],2,mean)/sum(apply(t_N_poll[,7:10],2,mean)))
 	# barplot(apply(t_N_poll[,7:11],2,mean)/sum(apply(t_N_poll[,7:11],2,mean)))
 
+	
+	
+	
+	
+	
+t_N_plotupdate=read.table("t_N_plotupdate.txt", sep=";")
+					# parameter[0].ivort, 
+					# tree_list.size(),
+					# time_ResetMaps-time_start_0,
+					# time_AddTreeDensity-time_ResetMaps, 
+					# omp_get_wtime()-time_AddTreeDensity
+names(t_N_plotupdate)=c("time", "N_tree", "ResetMaps", "AddTreeDensity", "IndividualTreeDensity")
+str(t_N_plotupdate)
 
+	# par(mfrow=c(1,2), las=2, mar=c(8,4,0,0))
+	barplot(apply(t_N_plotupdate[,3:5],2,mean)/sum(apply(t_N_plotupdate[,3:5],2,mean)))
+
+}#plot all end
 
 
 	

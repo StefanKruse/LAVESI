@@ -1108,27 +1108,50 @@ if(parameter[0].ivort==2)
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		// timers
+		double timer_eachtree_advance_all=0;
+		double timer_eachtree_vectini_all=0;
+		double timer_eachtree_seedsurv_all=0;// from here only surviving seeds
+		double timer_eachtree_seedadd_all=0;// from here only surviving seeds
+		double timer_eachtree_total_all=0;// from here only surviving seeds
 		#pragma omp parallel default(shared) private(pTree,pseed)
 		{ // START: parallel region
 			// declare a local seed list to be filled by each thread
 			list<seed*> newseed_list;
-
+				// timers
+				int n_trees=0;
+				double timer_eachtree_advance=0;
+				double timer_eachtree_vectini=0;
+				double timer_eachtree_seedsurv=0;// from here only surviving seeds
+				double timer_eachtree_seedadd=0;// from here only surviving seeds
+				double timer_eachtree_total=0;// from here only surviving seeds
+			
 			#pragma omp for nowait schedule(guided) 
 			for(unsigned int pari=0; pari<tree_list.size(); ++pari)
 			{// START: main tree loop
+					double start_timer_eachtree=omp_get_wtime();
+					++n_trees;//for later calculating mean of computation times
+				
 				list<Tree*>::iterator posb=tree_list.begin();
 				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
 				advance(posb, pari);
+					double end_timer_eachtree_advance=omp_get_wtime();
+					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
 
 				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 				pTree=(*posb);			
 				vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
 				vector<double> Vthdpth;
+				
+					double end_timer_eachtree_vecini=omp_get_wtime();
+					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
+
 				if((parameter[0].ivort==1) & (pari==0))// check the number of used threads
 					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
 				
 				if(pTree->seednewly_produced>0)
 				{//START: tree produces seeds
+						
 					// ramdomly determine the number of surving seeds
 					int seedlebend=0;
 					for(int sna=0; sna < pTree->seednewly_produced; sna++)
@@ -1139,6 +1162,9 @@ if(parameter[0].ivort==2)
 							++seedlebend;
 						}
 					}
+						double end_timer_seedsurv_vecini=omp_get_wtime();
+						timer_eachtree_seedsurv+=end_timer_seedsurv_vecini-end_timer_eachtree_vecini;
+
 					
 					if(seedlebend>0)
 					{// START: if seedlebend>0
@@ -1147,7 +1173,7 @@ if(parameter[0].ivort==2)
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname,Vthdpth);//;,cpSNP1,cpSNP2);
 						}
 				
-						// get the characteristics for each survining seed and push these back new to seed_list
+						// get the characteristics for each surviving seed and push these back new to seed_list
 						for(int sl=0; sl<seedlebend; sl++)
 						{// START: create new seeds
 							// create a new seed
@@ -1165,7 +1191,6 @@ if(parameter[0].ivort==2)
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
 								pseed->namep=Vname[iran];
-								
 								pseed->thawing_depthinfluence=Vthdpth[iran];
 								
 								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
@@ -1178,7 +1203,6 @@ if(parameter[0].ivort==2)
 							} else
 							{
 								pseed->namep=0;
-								
 								pseed->thawing_depthinfluence=100;
 							}
 							//pseed->cpSNP[0]=0;
@@ -1209,15 +1233,46 @@ if(parameter[0].ivort==2)
 						}
 						*/
 					}// END: if seedlebend>0
+						double end_timer_seedsurv_seedadd=omp_get_wtime();
+						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
+
 				}// END: tree produces seeds
+					timer_eachtree_total+=omp_get_wtime()-start_timer_eachtree;
+
 			}//END: main tree loop
 			
 			// append all newly created seed from each thread at once to the seed_list
 			#pragma omp critical
 			{
 				seed_list.splice(seed_list.end(), newseed_list);
+				
+				// timing calculations
+					timer_eachtree_advance_all+=timer_eachtree_advance/n_trees;
+					timer_eachtree_vectini_all+=timer_eachtree_vectini/n_trees;
+					timer_eachtree_seedsurv_all+=timer_eachtree_seedsurv/n_trees;
+					timer_eachtree_seedadd_all+=timer_eachtree_seedadd/n_trees;
+					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
 			}
 		} // END: parallel region
+			
+			
+			
+		// write timers to file
+		// cout << endl;
+		// cout << timer_eachtree_advance_all << endl;
+		// cout << timer_eachtree_vectini_all << endl;
+		// cout << timer_eachtree_seedsurv_all << endl;
+		// cout << timer_eachtree_seedadd_all << endl;
+		// cout << timer_eachtree_total_all << endl;
+		cout << endl;
+		printf("%10.20f\n",timer_eachtree_advance_all);
+		printf("%10.20f\n",timer_eachtree_vectini_all);
+		printf("%10.20f\n",timer_eachtree_seedsurv_all);
+		printf("%10.20f\n",timer_eachtree_seedadd_all);
+		printf("%10.20f\n",timer_eachtree_total_all);
+		
+		
+		
 			
 		double end_time_poll=omp_get_wtime();
 		/*!TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)*/
@@ -1230,13 +1285,19 @@ if(parameter[0].ivort==2)
 			FILE *fp4;
 			fp4=fopen("t_N_poll.txt","a+");
 			if(fp4==0){goto openpoll;}
-			fprintf(fp4,"%d;%lu;%lu;%10.10f;%10.10f;%10.10f\n",
+			fprintf(fp4,"%d;%lu;%lu;%10.10f;%10.10f;%10.10f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
 					parameter[0].ivort, 
 					seed_list.size(),
 					tree_list.size(),
 					(end_time_poll - end_time_seedsuviving), // pollination total
 					(end_time_mortpoll - end_time_poll), // only tree mortality
-					(end_time_seedsuviving - start_time_mortpoll) // seed mortality
+					(end_time_seedsuviving - start_time_mortpoll), // seed mortality
+					//timers each tree
+					timer_eachtree_advance_all,
+					timer_eachtree_vectini_all,
+					timer_eachtree_seedsurv_all,
+					timer_eachtree_seedadd_all,
+					timer_eachtree_total_all
 				);
 			fclose(fp4);
 			

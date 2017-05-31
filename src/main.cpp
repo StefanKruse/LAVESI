@@ -30,36 +30,36 @@ int yearposition; //deletion
 void vegetationDynamics(int yearposition, int jahr, int t)
 {
 	// densityKARTE updaten
-	clock_t start_time_kartenup = clock();
+	double start_time_kartenup = omp_get_wtime();
 			/*!::Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)*/
 			Kartenupdate(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
-	clock_t end_time_kartenup = clock();
+	double end_time_kartenup = omp_get_wtime();
 
 	
 			// growth
-	clock_t start_time_wachstum = clock();
+	double start_time_wachstum = omp_get_wtime();
 			/*!::Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
 			Wachstum(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_weather_list, world_plot_list);
-	clock_t end_time_wachstum = clock();
+	double end_time_wachstum = omp_get_wtime();
 
 			
 			// seed dispersal
-	clock_t start_time_seedausbreitung = clock();
+	double start_time_seedausbreitung = omp_get_wtime();
 			/*!::seedausbreitung(int treerows, int treecols, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)*/
 			seedausbreitung(treerows, treecols, jahr, yearposition, &parameter[0], world_seed_list);
-	clock_t end_time_seedausbreitung = clock();
+	double end_time_seedausbreitung = omp_get_wtime();
 	
 	
 	
 			// seed production
-	clock_t start_time_seedproduktion = clock();
+	double start_time_seedproduktion = omp_get_wtime();
 			/*!::seedproduktion(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
 			seedproduktion(treerows, treecols, &parameter[0], world_tree_list, world_seed_list, world_weather_list,yearposition);
-	clock_t end_time_seedproduktion = clock();
+	double end_time_seedproduktion = omp_get_wtime();
 	
 	
 			// Tree distribution	
-	clock_t start_time_Treeverteilung = clock();	
+	double start_time_Treeverteilung = omp_get_wtime();	
 			if (parameter[0].defTreevert==0 && parameter[0].seedintro==true && parameter[0].jahremitseedeintrag>0)
 			{// seedeinbringen Beginn
 				
@@ -78,41 +78,41 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				parameter[0].starter=true;//seed statt trees
 				Treeverteilung(treerows, treecols, &parameter[0],  wortlaengemax, yearposition, world_tree_list, world_seed_list, vegetationtype);
 			}
-	clock_t end_time_Treeverteilung = clock();
+	double end_time_Treeverteilung = omp_get_wtime();
 	
 	
 			// establishment
-	clock_t start_time_etablierung = clock();
+	double start_time_etablierung = omp_get_wtime();
 			/*!::Etablierung(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/			
 			Etablierung(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 			//printf("\n jahr=%d\n ", jahr+3998);
-	clock_t end_time_etablierung = clock();
+	double end_time_etablierung = omp_get_wtime();
 	
 	
 			// fire
-	clock_t start_time_feuer = clock();
+	double start_time_feuer = omp_get_wtime();
 			/*!::Fire(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list)*/
 			Fire(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_weather_list);
-	clock_t end_time_feuer = clock();
+	double end_time_feuer = omp_get_wtime();
 		
 			// Data_output
-	clock_t start_time_Data_output = clock();
+	double start_time_Data_output = omp_get_wtime();
 			/*!::Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)*/
  			Data_output(treerows, treecols, t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
-	clock_t end_time_Data_output = clock();
+	double end_time_Data_output = omp_get_wtime();
 						
 			// MORTALITÄT,
-	clock_t start_time_mortalitaet = clock();
+	double start_time_mortalitaet = omp_get_wtime();
 			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
 			Mortalitaet(treerows, treecols, &parameter[0],jahr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
-	clock_t end_time_mortalitaet = clock();
+	double end_time_mortalitaet = omp_get_wtime();
 	
 			
 			// Ageing
-	clock_t start_time_Ageing = clock();
+	double start_time_Ageing = omp_get_wtime();
 			/*!::Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
 			Ageing(treerows, treecols, &parameter[0], world_tree_list, world_seed_list);
-	clock_t end_time_Ageing = clock();
+	double end_time_Ageing = omp_get_wtime();
 
 	// print the computation time to the console and into a file
 	if(parameter[0].computationtime==1){
@@ -131,18 +131,18 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		*/
 		
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))printf("\n - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
-		printf("\n - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
-				(((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) ,
-				(((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) ,
-				(((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC),
-				(((double) (end_time_seedproduktion - start_time_seedproduktion))/ CLOCKS_PER_SEC),
-				(((double) (end_time_Treeverteilung - start_time_Treeverteilung))/ CLOCKS_PER_SEC),
-				(((double) (end_time_etablierung - start_time_etablierung))/ CLOCKS_PER_SEC),
-				(((double) (end_time_feuer - start_time_feuer))/ CLOCKS_PER_SEC),
-				(((double) (end_time_Data_output - start_time_Data_output))/ CLOCKS_PER_SEC) ,
-				(((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC),
-				(((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) ,
-				((double) ((end_time_Ageing - start_time_Ageing)+
+		printf("\n - %10.20f%10.20f%10.20f%10.20f%10.20f%10.20f%10.20f%10.20f%10.20f%10.20f%10.20f", 
+				end_time_kartenup - start_time_kartenup ,
+				end_time_wachstum - start_time_wachstum ,
+				end_time_seedausbreitung - start_time_seedausbreitung,
+				end_time_seedproduktion - start_time_seedproduktion,
+				end_time_Treeverteilung - start_time_Treeverteilung,
+				end_time_etablierung - start_time_etablierung,
+				end_time_feuer - start_time_feuer,
+				end_time_Data_output - start_time_Data_output ,
+				end_time_mortalitaet - start_time_mortalitaet,
+				end_time_Ageing - start_time_Ageing ,
+				((end_time_Ageing - start_time_Ageing)+
 					(end_time_mortalitaet - start_time_mortalitaet)+
 					(end_time_Data_output - start_time_Data_output)+
 					(end_time_feuer - start_time_feuer)+
@@ -152,7 +152,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					(end_time_seedausbreitung - start_time_seedausbreitung)+
 					(end_time_wachstum - start_time_wachstum)+
 					(end_time_kartenup - start_time_kartenup)
-					)/ CLOCKS_PER_SEC)
+					)
 				 );
 
 				 
@@ -166,8 +166,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		FILE *fp2;
 		fp2 =fopen("t_N.txt","a+");
 		if(fp2==0){goto open;}
-			fprintf(fp2,"%lu \t %f \n",tree_list.size(), 
-			((double) ((end_time_Ageing - start_time_Ageing)+
+			fprintf(fp2,"%lu \t %10.20f \n",tree_list.size(), 
+			((end_time_Ageing - start_time_Ageing)+
 			(end_time_mortalitaet - start_time_mortalitaet)+
 			(end_time_Data_output - start_time_Data_output)+
 			(end_time_feuer - start_time_feuer)+
@@ -177,28 +177,28 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			(end_time_seedausbreitung - start_time_seedausbreitung)+
 			(end_time_wachstum - start_time_wachstum)+
 			(end_time_kartenup - start_time_kartenup)
-			)/ CLOCKS_PER_SEC));
+			));
 		fclose(fp2);
 
 		openmort:
 		FILE *fp3;
 		fp3 =fopen("t_N_mort.txt","a+");
 		if(fp3==0){goto openmort;}
-			fprintf(fp3,"%lu;%d;%f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f;%10.2f\n",
+			fprintf(fp3,"%lu;%d;%f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
 			tree_list.size(),
 			parameter[0].ivort, 
-			((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC,
-			(((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) ,// from here newly introduced to record all
-				(((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) ,
-				(((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC),
-				(((double) (end_time_seedproduktion - start_time_seedproduktion))/ CLOCKS_PER_SEC),
-				(((double) (end_time_Treeverteilung - start_time_Treeverteilung))/ CLOCKS_PER_SEC),
-				(((double) (end_time_etablierung - start_time_etablierung))/ CLOCKS_PER_SEC),
-				(((double) (end_time_feuer - start_time_feuer))/ CLOCKS_PER_SEC),
-				(((double) (end_time_Data_output - start_time_Data_output))/ CLOCKS_PER_SEC) ,
-				(((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC),
-				(((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) ,
-				((double) ((end_time_Ageing - start_time_Ageing)+
+			end_time_mortalitaet - start_time_mortalitaet,
+			end_time_kartenup - start_time_kartenup ,// from here newly introduced to record all
+				end_time_wachstum - start_time_wachstum ,
+				end_time_seedausbreitung - start_time_seedausbreitung,
+				end_time_seedproduktion - start_time_seedproduktion,
+				end_time_Treeverteilung - start_time_Treeverteilung,
+				end_time_etablierung - start_time_etablierung,
+				end_time_feuer - start_time_feuer,
+				end_time_Data_output - start_time_Data_output ,
+				end_time_mortalitaet - start_time_mortalitaet,
+				end_time_Ageing - start_time_Ageing ,
+				(end_time_Ageing - start_time_Ageing)+
 					(end_time_mortalitaet - start_time_mortalitaet)+
 					(end_time_Data_output - start_time_Data_output)+
 					(end_time_feuer - start_time_feuer)+
@@ -208,7 +208,6 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					(end_time_seedausbreitung - start_time_seedausbreitung)+
 					(end_time_wachstum - start_time_wachstum)+
 					(end_time_kartenup - start_time_kartenup)
-					)/ CLOCKS_PER_SEC)
 			);
 		fclose(fp3);
 	}

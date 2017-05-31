@@ -38,7 +38,7 @@ feuer=0;					// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=8;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=1;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -306,7 +306,7 @@ windsource=2;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 
 								//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 								
 periodRB=0;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
-pollenvert=1;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
+pollenvert=0;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
 pollenDistdensplot==1// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten
 pollenrichtungsvarianz=10;		//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
 //pollenthreshold=2.5;			//threshold velocity for pollen (Grace Lu, "The effect of Wind on the Emission of Grass Pollen", 2004)///NOT IMPLEMENTED

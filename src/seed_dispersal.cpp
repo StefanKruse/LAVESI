@@ -119,7 +119,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 	/*
 	list<seed*> LDDseed_list; // Liste zum Zwischenspeichern der LDD ausgebreiteten seed
 	*/
-						
+			
+
+
+	
+	
+	
+
+			
 	///Loop around all Seed Lists
 	for(vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 

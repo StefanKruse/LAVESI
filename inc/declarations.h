@@ -57,3 +57,5 @@
 			//vectors are faster for iteration
 
 
+				int cntr;
+				vector<double> wdir,wspd;   

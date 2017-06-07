@@ -45,8 +45,38 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			
 			// seed dispersal
 	double start_time_seedausbreitung = omp_get_wtime();
+	
+			// global from seeddisp in distribution.cpp
+				int findyr1=0,findyr2=0;
+				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5){
+					if(parameter[0].windsource==1){
+					findyr1=1947;findyr2=2012;
+					}else if(parameter[0].windsource==2){
+					findyr1=1979;findyr2=2012;
+					}else if(parameter[0].windsource==3){
+					findyr1=1959;findyr2=2002;
+					}
+									
+					if(jahr<findyr1 or jahr>findyr2){jahr=(findyr1+floor(rand()/RAND_MAX*(findyr2-findyr1)));}
+									
+					for(int i=0;i<(signed)globalyears.size();i++){
+						if(globalyears[i]==jahr){
+							for(int pos=0;pos<(signed)winddir[i].size();pos++){
+								wdir.push_back(winddir[i][pos]);
+								wspd.push_back(windspd[i][pos]);
+							} } }
+						
+					cntr=2*wdir.size();
+				}else{cntr=0;}
+			// global end from seeddisp in distribution.cpp
+
 			/*!::seedausbreitung(int treerows, int treecols, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)*/
 			seedausbreitung(treerows, treecols, jahr, yearposition, &parameter[0], world_seed_list);
+			
+			// global from seeddisp in distribution.cpp
+				wdir.clear();
+				wspd.clear();      
+			// global end from seeddisp in distribution.cpp
 	double end_time_seedausbreitung = omp_get_wtime();
 	
 	

@@ -232,53 +232,31 @@ double getEntfernung(double D, double ratiorn_help)
 
 
 void seeddisp(double rn, int yr, double& dx, double& dy){
-    int findyr1=0,findyr2=0;
-    int cntr=0,ripm=0;
-    vector<double> wdir,wspd;   
-    double entfernung = 0;
-    double maxentfernung = 0;
-    float richtung=0.0;
-    float geschwindigkeit=0.0;
-    
-    if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5){
-        if(parameter[0].windsource==1){
-        findyr1=1947;findyr2=2012;
-        }else if(parameter[0].windsource==2){
-        findyr1=1979;findyr2=2012;
-        }else if(parameter[0].windsource==3){
-        findyr1=1959;findyr2=2002;
-        }
-                        
-        if(yr<findyr1 or yr>findyr2){yr=(findyr1+floor(rand()/RAND_MAX*(findyr2-findyr1)));}
-                        
-        for(int i=0;i<(signed)globalyears.size();i++){
-            if(globalyears[i]==yr){
-                for(int pos=0;pos<(signed)winddir[i].size();pos++){
-                    wdir.push_back(winddir[i][pos]);
-                    wspd.push_back(windspd[i][pos]);
-                } } }
-            
-        cntr=2*wdir.size();
-    }else{cntr=0;}
 
-    if(parameter[0].windsource==4){
-        richtung=M_PI/180 *270;
-        cntr=1;//speed up
-    }else if(parameter[0].windsource==5){
-        richtung=M_PI*0.5;
-        cntr=1;//speed up
-    }else if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)){
-    
+	// local
+	float richtung=0.0;
+	float geschwindigkeit=0.0;
+	double entfernung = 0;
+	double maxentfernung = 0;
+	if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)){
+		// int ripm=0;
+		
         //choose a month between may and september:
-        ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
+        int ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
         richtung = M_PI/180 *(wdir.at(ripm));
         geschwindigkeit=(wspd.at(ripm));
         cntr=1;//speed up
     }else if(cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)){
         richtung=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
         geschwindigkeit=0.36;
-    }
-                        
+    } else if(parameter[0].windsource==4){
+        richtung=M_PI/180 *270;
+        cntr=1;//speed up
+    }else if(parameter[0].windsource==5){
+        richtung=M_PI*0.5;
+        cntr=1;//speed up
+    } 
+	
     if (pseed->species==1){
         maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescentg));
 		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
@@ -295,6 +273,6 @@ void seeddisp(double rn, int yr, double& dx, double& dy){
     
     dy=sin(richtung)*entfernung;
     dx=cos(richtung)*entfernung;
-    wdir.clear();
-    wspd.clear();      
+    // wdir.clear();
+    // wspd.clear();      
 }

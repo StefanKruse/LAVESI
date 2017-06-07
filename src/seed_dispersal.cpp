@@ -133,9 +133,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 		if(parameter[0].omp_num_threads==1)
 		{
+			double cum_time_individual_seed=0;//timer for indi seed 
+			double cum_time_seeddisp=0;
+				
 			///Loop around all Seeds
 			for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
 			{
+				double time_start_individual_seed=omp_get_wtime();
+				
 				pseed=(*pos);
 
 				///If Seed is in a cone
@@ -156,9 +161,11 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							
 							double entfernung = 0;
 							float richtung=0.0;
-
-							seeddisp(ratiorn, jahr, jquer, iquer);
 							
+							double time_start_individual_seed_seeddisp=omp_get_wtime();
+							seeddisp(ratiorn, jahr, jquer, iquer);
+							cum_time_seeddisp+=omp_get_wtime()-time_start_individual_seed_seeddisp;
+
 							
 							
 							/*						
@@ -563,7 +570,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 				{
 					++pos;
 				}
+				
+				cum_time_individual_seed+=omp_get_wtime()-time_start_individual_seed;
+				
+
 			} // Ende seed_list ablaufen
+			
+			cout << endl << "All seeds:" << cum_time_individual_seed << " with seeddisp-function:" << cum_time_seeddisp << endl;
+				
 		} else
 		{ // multi-core-processing
 
@@ -752,7 +766,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 				double time_start_seeddisp=omp_get_wtime();
 				
 				omp_set_dynamic(0); //disable dynamic teams
-				// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 					
 				#pragma omp parallel private(pseed)

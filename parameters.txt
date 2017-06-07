@@ -38,7 +38,7 @@ feuer=0;					// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=1;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=16;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -105,7 +105,7 @@ simdauer=80;					//length of a simulation (1-(   1077   )-6099)
 								// ... ?? warum nicht bis 2013
 								// 6099==for assembled weather series (weatherchoice==9)
 runs=1;						// Anzahl an Simulationen == Wiederholungen (1-oo)
-ivortmax=20;				// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
+ivortmax=420;				// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
 								//Example: Entweder 0 fuer keine Einschwingphase oder minimal 10 wegen Isothermberechnung
 								//   0==without
 								// >10==with
@@ -149,7 +149,7 @@ seeddispmode=1;				// Positions for seed introduction (1,2)
 seedtravelbetween=0;		// Seed travel between plots along a transect (0,1)
 
 // 1.5 -----> Initial plot conditions - Trees
-starttrees=120500;				// Type of initial tree set up (0, 10,11,12,13)
+starttrees=120100050000;		// Type of initial tree set up (0, 10,11,12,13)
 								//   0==without initial trees
 								//  10==CH06		"CH06III_Treevert2011.csv"
 								//  11==CH02		"CH02II_Treevert2011.csv"
@@ -163,7 +163,8 @@ starttrees=120500;				// Type of initial tree set up (0, 10,11,12,13)
 								//0 (both species) or 1 (L.gmelinii)
 								//
 								// PLANNED:::new 1000=> means that a density of 1000 old trees is the starting point - later to be transferred to a read function from a desired density based on earlier simulations that were saved -- needs to be implemented!
-								// 120100 letzte ziffern für flaechengroesze 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 currently implemented
+								// 120100 aka SSAAAATT erste zwei Ziffern für Site (S), mittlere 4 ziffern für flaechengroesze BREITE (Area:A) 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 currently implemented, letzte 6 ziffern für Transektbesetzung mit Bäumen von Süden ausgehend (T) in Metern
+								// 12-0100-050000 + 
 
 // -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;	// Basal diameter influence for year's basal diameter growth (0-+oo) 
@@ -305,7 +306,7 @@ weatherzahlgmelc=0.101;					// legt Kurvenverlauf des Julindex für gmel fest
 windsource=2;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
 								//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 								
-periodRB=0;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
+periodRB=1;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
 pollenvert=0;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
 								// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
 pollenDistdensplot==1// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten

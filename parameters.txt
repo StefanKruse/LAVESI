@@ -135,8 +135,8 @@ sizemagnif=5;				// Resolution of density grid (>0-oo)
 	
 // 1.4 -----> Seed dispersal type and handling + seed introduction
 
-seedintro=1;				// Yearly seed input (0,1)
-seedintropermanent=1;		//1//was ist hier der Unterschied zu seedintro? Wie realisiert man eine einmalige seedintroduction?
+seedintro=0;				// Yearly seed input (0,1)
+seedintropermanent=0;		//1//was ist hier der Unterschied zu seedintro? Wie realisiert man eine einmalige seedintroduction?
 etabbg=1000;					
 etabbgpermanent=2;			// Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot (0-+oo)
 jahremitseedeintrag=0;//10;	// Years of seed introduction (0-+oo)

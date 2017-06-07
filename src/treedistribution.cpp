@@ -360,10 +360,10 @@ void TreesIni()
 					if (counter>=2)
 					{
 						strtok(puffer, ";");						//split puffer, delimiter is ";"
-						sscanf(strtok(NULL, ";"), "%lg", &xbuffer); //sscanf->
-						xcoobuf=xbuffer/*-1*/; // -1 auskommentiert für Fläche CH17*7*4, da die Koordinaten bei 0 beginnen und %d in %lg (double) geändert
 						sscanf(strtok(NULL, ";"), "%lg", &ybuffer);
 						ycoobuf=ybuffer/*-1*/;
+						sscanf(strtok(NULL, ";"), "%lg", &xbuffer); //sscanf->
+						xcoobuf=xbuffer/*-1*/; // -1 auskommentiert für Fläche CH17*7*4, da die Koordinaten bei 0 beginnen und %d in %lg (double) geändert
 						heightbuf=strtod(strtok(NULL, ";"),NULL);
 						dbasalbuf=strtod(strtok(NULL, ";"),NULL);
 						dbrustbuf=strtod(strtok(NULL, ";"),NULL);

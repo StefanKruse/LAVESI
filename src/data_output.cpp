@@ -357,7 +357,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- trees Currencies -- -- -- -- -- -- -- //
 	
-			if ( (parameter[0].einschwingen==true && (parameter[0].ivort%5)==0 ) || (parameter[0].einschwingen==false) )
+			if ( parameter[0].ivort==1 ||  (parameter[0].einschwingen==true && (parameter[0].ivort%5)==0 ) || (parameter[0].einschwingen==false) )
 			{	
 
 				// Deklarationen
@@ -707,7 +707,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
 
-			if ( (parameter[0].einschwingen==true && (parameter[0].ivort%50)==0) || (parameter[0].einschwingen==false) )
+			if ( parameter[0].ivort==1 || (parameter[0].einschwingen==true && (parameter[0].ivort%1)==5) || (parameter[0].einschwingen==false) )
 			{	
 
 				// Dateinamen zusammensetzen
@@ -717,16 +717,19 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 // 					sprintf(dateinamesuf, "_%.3d_%.4d", parameter[0].wiederholung,parameter[0].weatherchoice);
 					s1<<parameter[0].wiederholung;
 					s2<<parameter[0].weatherchoice;
-					dateiname="output/dataentwicklung_positionsanalyse_" + s1.str()+"_"+s2.str() + ".csv";
+					s3<<parameter[0].ivort;
+					dateiname="output/dataentwicklung_positionsanalyse_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
 					s1.str("");s1.clear();
 					s2.str("");s2.clear();
+					s3.str("");s3.clear();
 				}
 				else 
 				{	
 // 					char dateinamesufn[5];
 // 					sprintf(dateinamesufn, "_%.4d", parameter[0].weatherchoice);
 					s1<<parameter[0].weatherchoice;
-					dateiname="output/datatrees_positionsanalyse_" + s1.str() + ".csv";
+					s3<<parameter[0].ivort;
+					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s3.str() + ".csv";
 					
 					if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
 					{
@@ -746,6 +749,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 						}
 					}
 					s1.str("");s1.clear();
+					s3.str("");s3.clear();
 				}
 
 				// Datei versuchen zum Lesen und Schreiben zu oeffnen
@@ -788,8 +792,8 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				{ // Beginn tree_list ablaufen
 					pTree=(*pos);
 					
-					if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
-					{ // Beginn Ausschnitt
+					// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
+					// { // Beginn Ausschnitt
 						fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
 						fprintf(dateizeiger, "%d;", pTree->yworldcoo);
 						fprintf(dateizeiger, "%d;", pTree->xworldcoo);
@@ -809,7 +813,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 						fprintf(dateizeiger, "%d;", pTree->seedproduced);
 						fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
 						fprintf(dateizeiger, "\n");
-					} // Ende Ausschnitt
+					// } // Ende Ausschnitt
 
 					++pos;
 				} // Ende tree_list ablaufen

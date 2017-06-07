@@ -313,7 +313,7 @@ void TreesIni()
 					f = fopen("input/CH17I_Treevert2011_5000_5000.csv","r");
 					printf("load: input/CH17I_Treevert2011_5000_5000.csv");
 				}
-				else if (parameter[0].starttrees==120100050000)
+				else if (parameter[0].starttrees==120100050)
 				{
 					f = fopen("input/CH17I_Treevert2011_100_50000.csv","r");
 					printf("load: input/CH17I_Treevert2011_100_50000.csv");

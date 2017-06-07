@@ -339,7 +339,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				if ((parameter[0].einschwingen==false) && ((jahr==1911) || (jahr==1900) || (jahr==1920) || (jahr==1930) || (jahr==1940) || (jahr==1950) || (jahr==1960) || (jahr==1970) || (jahr==1980) || (jahr==1990) || (jahr==2000) || (jahr==2010) || (jahr==2011)))
 				{
 					ausgabeposition=true;
-					ausgabeindividuen=true;
+					// ausgabeindividuen=true;
 					//ausgabedendro=true;
 					ausgabedensity=true;
 				}
@@ -357,7 +357,8 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- trees Currencies -- -- -- -- -- -- -- //
 	
-			if ( parameter[0].ivort==1 ||  (parameter[0].einschwingen==true && (parameter[0].ivort%5)==0 ) || (parameter[0].einschwingen==false) )
+			// if ( parameter[0].ivort==1 ||  (parameter[0].einschwingen==true && (parameter[0].ivort%5)==0 ) || (parameter[0].einschwingen==false) )
+			if ( parameter[0].einschwingen==true || parameter[0].einschwingen==false )
 			{	
 
 				// Deklarationen
@@ -707,7 +708,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
 
-			if ( parameter[0].ivort==1 || (parameter[0].einschwingen==true && (parameter[0].ivort%1)==5) || (parameter[0].einschwingen==false) )
+			if ( parameter[0].ivort==1 || (parameter[0].einschwingen==true && (parameter[0].ivort%10)==0) || (parameter[0].einschwingen==false) )
 			{	
 
 				// Dateinamen zusammensetzen
@@ -727,15 +728,16 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				{	
 // 					char dateinamesufn[5];
 // 					sprintf(dateinamesufn, "_%.4d", parameter[0].weatherchoice);
-					s1<<parameter[0].weatherchoice;
+					s1<<parameter[0].wiederholung;
+					s2<<parameter[0].weatherchoice;
 					s3<<parameter[0].ivort;
-					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s3.str() + ".csv";
+					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
 					
 					if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
 					{
 // 						char dateinamesuf[10];
 // 						sprintf(dateinamesuf, "%.5d_%.4d", jahr,parameter[0].weatherchoice);
-						dateiname="output/datatrees_positionsanalyse_" + s1.str() + ".csv";
+						dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
 					}
 					else if (parameter[0].ausgabemodus==1) // hier weatherchoice nicht berücksichtigt! 	
 					{
@@ -748,77 +750,155 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 							dateiname="output/datatrees_positionsanalyse_SAETTIGUNGSJAHR.csv";
 						}
 					}
+					
 					s1.str("");s1.clear();
+					s2.str("");s2.clear();
 					s3.str("");s3.clear();
 				}
 
-				// Datei versuchen zum Lesen und Schreiben zu oeffnen
-				dateizeiger = fopen (dateiname.c_str(), "r+");
-				// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
-				if (dateizeiger == NULL)
+				if(parameter[0].periodRB==3)//Transect
 				{
-				  dateizeiger = fopen (dateiname.c_str(), "w+");
-					fprintf(dateizeiger, "Wiederholung;");
-					fprintf(dateizeiger, "YPLOTPOS;");
-					fprintf(dateizeiger, "XPLOTPOS;");
-					fprintf(dateizeiger, "Jahr;");
-					fprintf(dateizeiger, "zufallsJahr;");
-					fprintf(dateizeiger, "weatherchoice;");
-					fprintf(dateizeiger, "DBasal;");
-					fprintf(dateizeiger, "DBrust;");
-					fprintf(dateizeiger, "height;");
-					fprintf(dateizeiger, "age;");
-					fprintf(dateizeiger, "X;");
-					fprintf(dateizeiger, "Y;");
-					fprintf(dateizeiger, "densitywert;");
-					fprintf(dateizeiger, "Generation;");
-					fprintf(dateizeiger, "coneheight;");
-					fprintf(dateizeiger, "seedprodAKT;");
-					fprintf(dateizeiger, "seedprodSUM;");
-					fprintf(dateizeiger, "thawing_depth_infl;");
-					fprintf(dateizeiger, "\n");
-
+					// Datei versuchen zum Lesen und Schreiben zu oeffnen
+					dateizeiger = fopen (dateiname.c_str(), "r+");
+					// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 					if (dateizeiger == NULL)
 					{
-						fprintf(stderr, "Fehler: Datei konnte nicht geoeffnet werden!\n");
-						exit(1);
-					}
-				}
-
-				// Die neuen Informationen werden ans Ende der Datei geschrieben
-				fseek(dateizeiger,0,SEEK_END);
-
-				for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-				{ // Beginn tree_list ablaufen
-					pTree=(*pos);
-					
-					// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
-					// { // Beginn Ausschnitt
-						fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
-						fprintf(dateizeiger, "%d;", pTree->yworldcoo);
-						fprintf(dateizeiger, "%d;", pTree->xworldcoo);
-						fprintf(dateizeiger, "%d;", parameter[0].ivort);
-						fprintf(dateizeiger, "%d;", jahr);
-						fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-						fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
-						fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
-						fprintf(dateizeiger, "%4.4f;", pTree->height);
-						fprintf(dateizeiger, "%d;", pTree->age);
-						fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
-						fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
-						fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
-						fprintf(dateizeiger, "%d;", pTree->generation);
-						fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
-						fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
-						fprintf(dateizeiger, "%d;", pTree->seedproduced);
-						fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
+					  dateizeiger = fopen (dateiname.c_str(), "w+");
+						// fprintf(dateizeiger, "Wiederholung;");
+						// fprintf(dateizeiger, "YPLOTPOS;");
+						// fprintf(dateizeiger, "XPLOTPOS;");
+						// fprintf(dateizeiger, "Jahr;");
+						// fprintf(dateizeiger, "zufallsJahr;");
+						// fprintf(dateizeiger, "weatherchoice;");
+						fprintf(dateizeiger, "Name;");
+						fprintf(dateizeiger, "NameM;");
+						fprintf(dateizeiger, "DBasal;");
+						fprintf(dateizeiger, "DBrust;");
+						fprintf(dateizeiger, "height;");
+						fprintf(dateizeiger, "age;");
+						fprintf(dateizeiger, "X;");
+						fprintf(dateizeiger, "Y;");
+						fprintf(dateizeiger, "densitywert;");
+						fprintf(dateizeiger, "Generation;");
+						// fprintf(dateizeiger, "coneheight;");
+						fprintf(dateizeiger, "seedprodAKT;");
+						fprintf(dateizeiger, "seedprodSUM;");
+						// fprintf(dateizeiger, "thawing_depth_infl;");
 						fprintf(dateizeiger, "\n");
-					// } // Ende Ausschnitt
 
-					++pos;
-				} // Ende tree_list ablaufen
+						if (dateizeiger == NULL)
+						{
+							fprintf(stderr, "Fehler: Datei konnte nicht geoeffnet werden!\n");
+							exit(1);
+						}
+					}
 
-				fclose(dateizeiger);
+					// Die neuen Informationen werden ans Ende der Datei geschrieben
+					fseek(dateizeiger,0,SEEK_END);
+
+					for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
+					{ // Beginn tree_list ablaufen
+						pTree=(*pos);
+						
+						// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
+						// { // Beginn Ausschnitt
+							// fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+							// fprintf(dateizeiger, "%d;", pTree->yworldcoo);
+							// fprintf(dateizeiger, "%d;", pTree->xworldcoo);
+							// fprintf(dateizeiger, "%d;", parameter[0].ivort);
+							// fprintf(dateizeiger, "%d;", jahr);
+							// fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
+							fprintf(dateizeiger, "%d;", pTree->name);
+							fprintf(dateizeiger, "%d;", pTree->namem);
+							fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
+							fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
+							fprintf(dateizeiger, "%4.4f;", pTree->height);
+							fprintf(dateizeiger, "%d;", pTree->age);
+							fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
+							fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
+							fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
+							fprintf(dateizeiger, "%d;", pTree->generation);
+							// fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
+							fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
+							fprintf(dateizeiger, "%d;", pTree->seedproduced);
+							// fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
+							fprintf(dateizeiger, "\n");
+						// } // Ende Ausschnitt
+
+						++pos;
+					} // Ende tree_list ablaufen
+
+					fclose(dateizeiger);
+				} else
+				{
+					// Datei versuchen zum Lesen und Schreiben zu oeffnen
+					dateizeiger = fopen (dateiname.c_str(), "r+");
+					// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+					if (dateizeiger == NULL)
+					{
+					  dateizeiger = fopen (dateiname.c_str(), "w+");
+						fprintf(dateizeiger, "Wiederholung;");
+						fprintf(dateizeiger, "YPLOTPOS;");
+						fprintf(dateizeiger, "XPLOTPOS;");
+						fprintf(dateizeiger, "Jahr;");
+						fprintf(dateizeiger, "zufallsJahr;");
+						fprintf(dateizeiger, "weatherchoice;");
+						fprintf(dateizeiger, "DBasal;");
+						fprintf(dateizeiger, "DBrust;");
+						fprintf(dateizeiger, "height;");
+						fprintf(dateizeiger, "age;");
+						fprintf(dateizeiger, "X;");
+						fprintf(dateizeiger, "Y;");
+						fprintf(dateizeiger, "densitywert;");
+						fprintf(dateizeiger, "Generation;");
+						fprintf(dateizeiger, "coneheight;");
+						fprintf(dateizeiger, "seedprodAKT;");
+						fprintf(dateizeiger, "seedprodSUM;");
+						fprintf(dateizeiger, "thawing_depth_infl;");
+						fprintf(dateizeiger, "\n");
+
+						if (dateizeiger == NULL)
+						{
+							fprintf(stderr, "Fehler: Datei konnte nicht geoeffnet werden!\n");
+							exit(1);
+						}
+					}
+
+					// Die neuen Informationen werden ans Ende der Datei geschrieben
+					fseek(dateizeiger,0,SEEK_END);
+
+					for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
+					{ // Beginn tree_list ablaufen
+						pTree=(*pos);
+						
+						// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
+						// { // Beginn Ausschnitt
+							fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+							fprintf(dateizeiger, "%d;", pTree->yworldcoo);
+							fprintf(dateizeiger, "%d;", pTree->xworldcoo);
+							fprintf(dateizeiger, "%d;", parameter[0].ivort);
+							fprintf(dateizeiger, "%d;", jahr);
+							fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
+							fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
+							fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
+							fprintf(dateizeiger, "%4.4f;", pTree->height);
+							fprintf(dateizeiger, "%d;", pTree->age);
+							fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
+							fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
+							fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
+							fprintf(dateizeiger, "%d;", pTree->generation);
+							fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
+							fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
+							fprintf(dateizeiger, "%d;", pTree->seedproduced);
+							fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
+							fprintf(dateizeiger, "\n");
+						// } // Ende Ausschnitt
+
+						++pos;
+					} // Ende tree_list ablaufen
+
+					fclose(dateizeiger);
+				}
 				
 			}//modulo
 			

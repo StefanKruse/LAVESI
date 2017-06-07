@@ -307,7 +307,7 @@ weatherzahlgmelc=0.101;					// legt Kurvenverlauf des Julindex für gmel fest
 windsource=2;					//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
 								//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 								
-periodRB=1;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
+periodRB=3;						//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2), or for N-S-transects meaning only seeds leaving east-or-westwards get newly introduced
 pollenvert=0;					//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
 								// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
 pollenDistdensplot==1// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten

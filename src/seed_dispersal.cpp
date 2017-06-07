@@ -856,6 +856,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											 //  pseed->mtSNP[1]=rand();
 			// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 			// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
+											} else if((parameter[0].periodRB==3))
+											{
+												sameausserhalb=true;
+												rausgeflogenS++;
 											} else 
 											{
 												sameausserhalb=true;
@@ -874,6 +878,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//   pseed->mtSNP[1]=rand();
 			// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 			// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
+											} else if((parameter[0].periodRB==3))
+											{
+												sameausserhalb=true;
+												rausgeflogenS++;
 											} else 
 											{
 												sameausserhalb=true;
@@ -890,7 +898,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										 
 										if(pseed->xcoo<0.0)
 										{
-											if((parameter[0].periodRB==1))
+											if((parameter[0].periodRB==1 || parameter[0].periodRB==3))
 											{
 											   //pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 											   pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1))+(double)(treecols-1);
@@ -909,7 +917,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											}
 										} else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
 										{
-											if(parameter[0].periodRB==1)
+											if(parameter[0].periodRB==1 || parameter[0].periodRB==3)
 											{
 												pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 												pseed->namem=0;

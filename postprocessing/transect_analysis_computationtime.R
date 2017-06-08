@@ -4,6 +4,9 @@ setwd("N:/geonob1/BioIng/UserData/stkruse/Programming_LAVESI/")
 
 
 folders=c("omp_transect_first")			
+folders=c("omp_transect_first_8cores")	
+
+		
 printORplot="print"
 for(foldi in folders)
 {# plot all start
@@ -125,4 +128,6 @@ if(printORplot=="print")
 	dev.off()	
 
 }#plot all end
+
+
 

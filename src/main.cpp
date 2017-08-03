@@ -47,7 +47,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double start_time_seedausbreitung = omp_get_wtime();
 	
 			// global from seeddisp in distribution.cpp
-				int findyr1=0,findyr2=0;
+				int findyr1=0,findyr2=0,yr;
 				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5){
 					if(parameter[0].windsource==1){
 					findyr1=1947;findyr2=2012;
@@ -57,10 +57,11 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					findyr1=1959;findyr2=2002;
 					}
 									
-					if(jahr<findyr1 or jahr>findyr2){jahr=(findyr1+floor(rand()/RAND_MAX*(findyr2-findyr1)));}
+					if(jahr<findyr1 or jahr>findyr2){yr=(findyr1+(int)(rand()/(RAND_MAX+1.0)*(findyr2-findyr1)));
+					}else{yr=jahr;}
 									
 					for(int i=0;i<(signed)globalyears.size();i++){
-						if(globalyears[i]==jahr){
+						if(globalyears[i]==yr){
 							for(int pos=0;pos<(signed)winddir[i].size();pos++){
 								wdir.push_back(winddir[i][pos]);
 								wspd.push_back(windspd[i][pos]);
@@ -71,11 +72,11 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// global end from seeddisp in distribution.cpp
 
 			/*!::seedausbreitung(int treerows, int treecols, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)*/
-			seedausbreitung(treerows, treecols, jahr, yearposition, &parameter[0], world_seed_list);
+			seedausbreitung(treerows, treecols, yr, yearposition, &parameter[0], world_seed_list);
 			
 			// global from seeddisp in distribution.cpp
-				wdir.clear();
-				wspd.clear();      
+				// wdir.clear();
+				// wspd.clear();      
 			// global end from seeddisp in distribution.cpp
 	double end_time_seedausbreitung = omp_get_wtime();
 	
@@ -134,7 +135,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// MORTALITÄT,
 	double start_time_mortalitaet = omp_get_wtime();
 			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
-			Mortalitaet(treerows, treecols, &parameter[0],jahr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+			Mortalitaet(treerows, treecols, &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+			wdir.clear();
+			wspd.clear();    
 	double end_time_mortalitaet = omp_get_wtime();
 	
 			
@@ -160,8 +163,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		cout << endl << "ageing time: " << (((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) << endl;
 		*/
 		
-		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))printf("\n - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
-		printf("\n - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
+		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
+			printf("\n   - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
+		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
+				parameter[0].ivort,
 				end_time_kartenup - start_time_kartenup ,
 				end_time_wachstum - start_time_wachstum ,
 				end_time_seedausbreitung - start_time_seedausbreitung,
@@ -190,9 +195,11 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		//vector<Karten*>& plot_list = *posw;
 		
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin());
+		vector<list<seed*> >::iterator world_position_s = (world_seed_list.begin());
 		list<Tree*>& tree_list = *world_positon_b;
+		list<seed*>& seed_list = *world_position_s;
 
-		open:
+		/*open:
 		FILE *fp2;
 		fp2 =fopen("t_N.txt","a+");
 		if(fp2==0){goto open;}
@@ -209,6 +216,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			(end_time_kartenup - start_time_kartenup)
 			));
 		fclose(fp2);
+		*/
 
 		openmort:
 		FILE *fp3;
@@ -240,7 +248,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					(end_time_kartenup - start_time_kartenup)
 			);
 		fclose(fp3);
-	}
+	}//END: computation time output
 	
  }
 
@@ -556,14 +564,16 @@ void Jahresschritte()
 			// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 			int jahr=parameter[0].startjahr+t;
 			
-			if(!(jahr%10 && parameter[0].pollenDistdensplot==1)){cout<<jahr<<endl; influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);}
+			// if(!(jahr%10 && parameter[0].pollenDistdensplot==1)){cout<<jahr<<endl; influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);}
 
 			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
-                        yearposition=yearposition%80;
+                        // yearposition=yearposition%80;
 
 			if (parameter[0].jahranzeige ==true) 
+			{
 				printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
+			}
 			
 			/*else 
 			{
@@ -999,7 +1009,7 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 			
 			
 			
-			printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
+			// printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
 			
 			int number_of_seeds_in_cone=0;
 			for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
@@ -1007,7 +1017,7 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 					if ((*pos)->imcone==true) 
 						number_of_seeds_in_cone++;
 			};
-			printf("seed number Z= %d\n", number_of_seeds_in_cone);
+			// printf("seed number Z= %d\n", number_of_seeds_in_cone);
 				
 				
 		

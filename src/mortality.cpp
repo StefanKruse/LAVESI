@@ -1736,7 +1736,6 @@ if(mcorevariant==3)
 				
 		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{// START: parallel region
-		
 
 			// initialize the info for each of the thread
 			int thread_count = omp_get_num_threads();

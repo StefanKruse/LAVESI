@@ -623,36 +623,54 @@ void Parametereinlesen(void)
 
 	strcpy(uebergabestring,"windsource");
 	parameter[0].windsource=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].windsource);}
 	
 	strcpy(uebergabestring,"periodRB");
 	parameter[0].periodRB=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].periodRB);}
 	
 	strcpy(uebergabestring,"outputall");
 	parameter[0].outputall=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);}
 	
 	strcpy(uebergabestring,"defTreevert");
 	parameter[0].defTreevert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].defTreevert);}
+		
 	//strcpy(uebergabestring,"pollenthreshold");
 	//parameter[0].pollenthreshold=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	
 	strcpy(uebergabestring,"pollenvert");
 	parameter[0].pollenvert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenvert);}
 	
 	strcpy(uebergabestring,"pollenDistdensplot");
 	parameter[0].pollenDistdensplot=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenDistdensplot);}
+		
 	strcpy(uebergabestring,"pollenrichtungsvarianz");
 	parameter[0].pollenrichtungsvarianz=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollenrichtungsvarianz);}
 	
 	
 	strcpy(uebergabestring,"pollenpertree");
 	parameter[0].pollenpertree=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenpertree);}
+		
 	
 	strcpy(uebergabestring,"rel_trait_variance");
 	parameter[0].rel_trait_variance=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	
+	if (parameter[0].parameterlesenanzeige ==true)
+	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].rel_trait_variance);}
+		
 	//strcpy(uebergabestring,"SNPMutationrate");
 	//parameter[0].SNPMutationrate=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	

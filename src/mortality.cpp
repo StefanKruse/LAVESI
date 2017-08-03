@@ -43,7 +43,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					agesmort=1.0;
 				}
 		
-				// heightnabhaengige Einfluesse
+				// height dependent influences
 				double wachstumrel=1.0;
 				if (pTree->height<130.0) 
 				{
@@ -1207,8 +1207,30 @@ if(parameter[0].ivort==2)
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-		#pragma omp parallel default(shared) private(pTree,pseed)
+		/// #####################################
+		/// #####################################
+		/// new paralellisierung for BefrWarh!!
+		// ... also include in private:
+		// pTree_copy
+		///
+			  // list<Tree*>& tree_list = *world_positon_b;
+			  double  richtung=0.0;
+			  double  geschwindigkeit=0.0;
+			  unsigned int    ripm=0,cntr=0;
+			  // vector<int> SNP1,SNP2;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  I0kappa=0.0;
+			  double pe=0.01;
+			  double  C=parameter[0].GregoryC;
+			  double  m=parameter[0].Gregorym;
+			  
+///
+			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				vector<double> Vthdpth;
+///
+		/// #####################################
+		/// #####################################
+		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
 			// declare a local seed list to be filled by each thread
 			list<seed*> newseed_list;
@@ -1234,8 +1256,8 @@ if(parameter[0].ivort==2)
 
 				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 				pTree=(*posb);			
-				vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-				vector<double> Vthdpth;
+				// vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				// vector<double> Vthdpth;
 				
 					double end_timer_eachtree_vecini=omp_get_wtime();
 					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
@@ -1262,9 +1284,11 @@ if(parameter[0].ivort==2)
 					
 					if(seedlebend>0)
 					{// START: if seedlebend>0
-						if(parameter[0].pollenvert==1)
+						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
 						}
 				
 						// get the characteristics for each surviving seed and push these back new to seed_list
@@ -1281,11 +1305,11 @@ if(parameter[0].ivort==2)
 							pseed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
-							if((Vname.size()>0)&&(parameter[0].pollenvert==1))
+							if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
 							{
-								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
-								pseed->namep=Vname[iran];
-								pseed->thawing_depthinfluence=Vthdpth[iran];
+								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
+								pseed->namep=Vname.at(iran);
+								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
 								
 								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
 								//pseed->cpSNP[0]=cpSNP1[iran];
@@ -1348,6 +1372,45 @@ if(parameter[0].ivort==2)
 					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
 			}
 		} // END: parallel region
+
+		
+		// neue Ausgabe um zu beschleunigen
+		// ... seed list: only if age==0 &&namep!=0
+		// ... Ivort/X/Y/
+		if( ( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9) ) && (parameter[0].ausgabemodus!=9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+		{
+						//print data in the most probable cases:
+						char output[50];
+
+						FILE *fdir;
+						sprintf(output,"output/windgen_YR%.4d_REP%.3d.txt",Jahr,parameter[0].wiederholung);
+						
+						fdir=fopen(output,"r+");
+						
+						if(fdir==NULL){
+						fdir=fopen(output,"w+");
+						// fprintf(fdir,"IVORT \t distance \t rel_angle \t windspd \t winddir\n");
+						fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
+						}
+						
+						fseek(fdir,0,SEEK_END);
+
+						// # print data
+								for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
+								{
+									pseed=(*pos);
+									
+									if(pseed->age==0 && pseed->namep!=0)
+									{
+										fprintf(fdir,"%d \t %lf \t %lf \t %d \t %d \n",parameter[0].ivort,
+										pseed->xcoo,pseed->ycoo,pseed->namep,pseed->namem);
+									}
+								}
+								
+								
+						fclose(fdir);
+
+		}
 			
 			
 			

@@ -131,7 +131,7 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
 				{
 					printf("\n\nLaVeSi wurde beendet\n");
 					printf("Aktueller Schritt => Treeverteilung.cpp\n");
-					printf("... Grund: Keine Auschoice eines Seeddispersalmodes");
+					printf("... reason: no choice of a seed dispersal mode");
 					exit(1);
 				}
 				

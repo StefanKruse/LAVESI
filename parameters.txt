@@ -22,7 +22,7 @@ computationtime=1;			// ...			-include visualisation and output of computation t
 
 // 0.2 -----> Output
 Data_output=1;					// file output (0,1)
-ausgabemodus=4;   //9;					// mode of file output (0,4)
+ausgabemodus=9;   //9;					// mode of file output (0,4)
 								// 0=="normal" -> 3 times 1010&2010, 
 								// 1==	"SensitivityAnalysis -> 2fach Phasenausgabe log und Capacity" 			?
 								// 		hier(einige) Ausgabedateien nicht für versch. weather choices programmiert
@@ -38,7 +38,7 @@ feuer=0;					// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=1;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=8;			// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -52,7 +52,7 @@ omp_num_threads=1;			// Number of cores used for computation, set internally on 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 // 1.1 -----> Weather
-weatherchoice=21;	//22;				// Type of weather forcing series (1,9,10,11,12,13, 111,222,999)
+weatherchoice=24;	//22;				// Type of weather forcing series (1,9,10,11,12,13, 111,222,999)
 								//  1==constant station data of the means 1947-1999, 
 								//  9==assembled weather series (ESM-6K + MilleniumRun + ice core + weather station) 
 								// 10==CRU Data CH06	"CH06CRUtemp.csv	CH06CRUprec.csv"

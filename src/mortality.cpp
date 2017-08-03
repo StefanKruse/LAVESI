@@ -1106,7 +1106,9 @@ if(parameter[0].ivort==2)
 		double timer_eachtree_seedsurv_all=0;// from here only surviving seeds
 		double timer_eachtree_seedadd_all=0;// from here only surviving seeds
 		double timer_eachtree_total_all=0;// from here only surviving seeds
-	
+		
+		double timer_tresedliv_all=0;//find pollenfather
+		double timer_createseeds_all=0;//creates seeds
 	/*if(parameter[0].pollenvert==0)
 	{ // only one kernel specified by parameter[0].omp_num_threads
 // start ORI
@@ -1229,7 +1231,15 @@ if(parameter[0].ivort==2)
 	{
 	*/
 
-
+// manually chose the implementation of multi-core-processing
+int mcorevariant=3;
+	// 1 == only advance
+	// ... ==> result: advance makes the computation really really slow!!
+	// 2 == split list to X lists => had to outsource the delete precedure because otherwise it would lead to SEGFAULTs!
+	// 3 == trees are ordered by age which is highly correlated with seedprodAKT
+	// ... try to find last tree with seeds and then split lists over first until last tree
+if(mcorevariant==1)
+{// OMP==1
 	// more than one kernel specified by parameter[0].omp_num_threads
 	
 	
@@ -1413,6 +1423,514 @@ if(parameter[0].ivort==2)
 		} // END: parallel region
 
 		
+		
+}// OMP==1
+if(mcorevariant==2)
+{// OMP==2
+
+// more than one kernel specified by parameter[0].omp_num_threads
+	
+	
+		// loop around the loop for MULTI-CORE-PROCESSING
+		// before run a program parallel set the number of helpers by changing the environment variable
+		// ... ... export OMP_NUM_THREADS=4
+		// ... or explicitly overwrite the environmental variable by setting the helper number directly
+		// ... ... omp_set_num_threads(int); // which is set in the parameter.txt file variable "omp_num_threads"
+		// This implementation was formerly (21st April and backwards) named "Testversion 2" - give each thread a local seed_list and splice them together in the end
+
+		// loop with omp through each element of the list
+		omp_set_dynamic(0); //disable dynamic teams
+		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		// omp_set_num_threads(1); //set the number of helpers
+		// directly modified as the parralelization is slowing the computations
+		
+		
+				if((parameter[0].ivort==1))// check the number of used threads
+				{
+					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+				}
+				
+				
+		/// #####################################
+		/// #####################################
+		/// new paralellisierung for BefrWarh!!
+		// ... also include in private:
+		// pTree_copy
+		///
+			  // list<Tree*>& tree_list = *world_positon_b;
+			  double  richtung=0.0;
+			  double  geschwindigkeit=0.0;
+			  unsigned int    ripm=0,cntr=0;
+			  // vector<int> SNP1,SNP2;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  I0kappa=0.0;
+			  double pe=0.01;
+			  double  C=parameter[0].GregoryC;
+			  double  m=parameter[0].Gregorym;
+			  
+///
+			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				vector<double> Vthdpth;
+///
+		/// #####################################
+		/// #####################################
+		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		{ // START: parallel region
+		
+
+			// initialize the info for each of the thread
+			int thread_count = omp_get_num_threads();
+			int thread_num   = omp_get_thread_num();
+			size_t chunk_size= tree_list.size() / thread_count;
+			auto begin = tree_list.begin();
+			std::advance(begin, thread_num * chunk_size);
+			auto end = begin;
+			
+			if(thread_num == (thread_count - 1)) // last thread iterates the remaining sequence
+			{
+				end = tree_list.end();
+				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
+			} else
+			{
+				std::advance(end, chunk_size);
+				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
+			}
+					
+					
+					
+					
+			// declare a local seed list to be filled by each thread
+			list<seed*> newseed_list;
+				// timers
+				int n_trees=0;
+				double timer_eachtree_advance=0;
+				double timer_eachtree_vectini=0;
+				double timer_eachtree_seedsurv=0;// from here only surviving seeds
+				double timer_eachtree_seedadd=0;// from here only surviving seeds
+				double timer_eachtree_total=0;// from here only surviving seeds
+			
+			
+			
+			// wait for all threads to initialize and then proceed
+			#pragma omp barrier
+			for(auto it = begin; it != end; ++it)
+			{// START: main tree loop
+			
+			// #pragma omp for nowait schedule(guided) 
+			// for(unsigned int pari=0; pari<tree_list.size(); ++pari)
+			// {// START: main tree loop
+					double start_timer_eachtree=omp_get_wtime();
+					++n_trees;//for later calculating mean of computation times
+				
+				// list<Tree*>::iterator posb=tree_list.begin();
+				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
+				// advance(posb, pari);
+					double end_timer_eachtree_advance=omp_get_wtime();
+					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
+
+				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
+				// pTree=(*posb);			
+				pTree=(*it);			
+				// vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				// vector<double> Vthdpth;
+				
+					double end_timer_eachtree_vecini=omp_get_wtime();
+					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
+
+				// if((parameter[0].ivort==1) & (pari==0))// check the number of used threads
+					// cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+				
+				if(pTree->seednewly_produced>0)
+				{//START: tree produces seeds
+						
+					// ramdomly determine the number of surving seeds
+					int seedlebend=0;
+					for(int sna=0; sna < pTree->seednewly_produced; sna++)
+					{
+						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+						if(zufallsz>=parameter[0].seedTreemort) 
+						{
+							++seedlebend;
+						}
+					}
+						double end_timer_seedsurv_vecini=omp_get_wtime();
+						timer_eachtree_seedsurv+=end_timer_seedsurv_vecini-end_timer_eachtree_vecini;
+
+					
+					if(seedlebend>0)
+					{// START: if seedlebend>0
+						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						{
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+						}
+				
+						// get the characteristics for each surviving seed and push these back new to seed_list
+						for(int sl=0; sl<seedlebend; sl++)
+						{// START: create new seeds
+							// create a new seed
+							pseed= new seed();
+							
+							// add information
+							pseed->yworldcoo=aktortyworldcoo;
+							pseed->xworldcoo=aktortxworldcoo;
+							pseed->xcoo=pTree->xcoo;
+							pseed->ycoo=pTree->ycoo;
+							pseed->namem=pTree->name;
+							
+							// if chosen, determine the father by pollination out of available (matured) trees
+							if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
+							{
+								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
+								pseed->namep=Vname.at(iran);
+								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
+								
+								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
+								//pseed->cpSNP[0]=cpSNP1[iran];
+								//pseed->cpSNP[1]=cpSNP2[iran];
+								
+								//pseed->descent=
+								//pseed->pollenfall=
+								//pseed->maxgrowth=
+							} else
+							{
+								pseed->namep=0;
+								pseed->thawing_depthinfluence=100;
+							}
+							//pseed->cpSNP[0]=0;
+							//pseed->cpSNP[1]=0;}
+							/*cout<<pseed->namep<<endl;
+							cout<<pseed->cpSNP[0]<<endl;
+							cout<<pseed->cpSNP[1]<<endl;*/
+							
+
+							//pseed->mtSNP[0]=pTree->mtSNP[0];
+							//pseed->mtSNP[1]=pTree->mtSNP[1];
+							
+							pseed->line=pTree->line;
+							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
+							pseed->imcone=true;
+							pseed->gewicht=1;
+							pseed->age=0;
+							pseed->species=pTree->species;// species is inherited from the seed source
+							pseed->elternheight=pTree->height;
+
+							// add seed to seed_list
+							newseed_list.push_back(pseed);
+						}// END: create new seeds
+
+						/*if(parameter[0].pollenvert==1)// maybe this is not needed because it is now locally constructed for each tree
+						{
+							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
+						}
+						*/
+					}// END: if seedlebend>0
+						double end_timer_seedsurv_seedadd=omp_get_wtime();
+						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
+
+				}// END: tree produces seeds
+					timer_eachtree_total+=omp_get_wtime()-start_timer_eachtree;
+
+			}//END: main tree loop on each core
+			
+			
+			
+			
+			
+			// append all newly created seed from each thread at once to the seed_list
+			#pragma omp critical
+			{
+				seed_list.splice(seed_list.end(), newseed_list);
+				
+				// timing calculations
+					timer_eachtree_advance_all+=timer_eachtree_advance/n_trees;
+					timer_eachtree_vectini_all+=timer_eachtree_vectini/n_trees;
+					timer_eachtree_seedsurv_all+=timer_eachtree_seedsurv/n_trees;
+					timer_eachtree_seedadd_all+=timer_eachtree_seedadd/n_trees;
+					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
+			}
+		} // END: parallel region
+
+		
+
+	
+}// OMP==2
+if(mcorevariant==3)
+{// OMP==3
+
+// more than one kernel specified by parameter[0].omp_num_threads
+	
+	
+		// loop around the loop for MULTI-CORE-PROCESSING
+		// before run a program parallel set the number of helpers by changing the environment variable
+		// ... ... export OMP_NUM_THREADS=4
+		// ... or explicitly overwrite the environmental variable by setting the helper number directly
+		// ... ... omp_set_num_threads(int); // which is set in the parameter.txt file variable "omp_num_threads"
+		// This implementation was formerly (21st April and backwards) named "Testversion 2" - give each thread a local seed_list and splice them together in the end
+
+		// loop with omp through each element of the list
+		omp_set_dynamic(0); //disable dynamic teams
+		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		// omp_set_num_threads(1); //set the number of helpers
+		// directly modified as the parralelization is slowing the computations
+		
+		
+				if((parameter[0].ivort==1))// check the number of used threads
+				{
+					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+				}
+				
+				
+		/// #####################################
+		/// #####################################
+		/// new paralellisierung for BefrWarh!!
+		// ... also include in private:
+		// pTree_copy
+		///
+			  // list<Tree*>& tree_list = *world_positon_b;
+			  double  richtung=0.0;
+			  double  geschwindigkeit=0.0;
+			  unsigned int    ripm=0,cntr=0;
+			  // vector<int> SNP1,SNP2;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  I0kappa=0.0;
+			  double pe=0.01;
+			  double  C=parameter[0].GregoryC;
+			  double  m=parameter[0].Gregorym;
+			  
+///
+			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				vector<double> Vthdpth;
+///
+		/// #####################################
+		/// #####################################
+		
+						
+				// set end to last tree with produced seeds
+				list<Tree*>::iterator lasttreewithseeds_iter=tree_list.begin();
+				int lasttreewithseeds_pos=0;
+				int treeiter=0;
+				for(list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
+				{
+					pTree=(*posb);
+					
+					treeiter=treeiter+1;
+					
+					// cout << treeiter << "/ ";
+					
+					if(pTree->seednewly_produced>0)
+					{
+						lasttreewithseeds_pos=treeiter;
+					}
+				}
+				advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
+				cout << endl << "---- lasttreewithseeds_pos=" << lasttreewithseeds_pos << " ==> tree_list.size()=" << tree_list.size() << endl << endl;
+				
+				// if(lasttreewithseeds_pos>10)
+					// exit(1);
+				
+				
+				
+				
+				
+		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		{// START: parallel region
+		
+
+			// initialize the info for each of the thread
+			int thread_count = omp_get_num_threads();
+			int thread_num   = omp_get_thread_num();
+			// size_t chunk_size= tree_list.size() / thread_count;
+			size_t chunk_size= lasttreewithseeds_pos / thread_count;
+			auto begin = tree_list.begin();
+			std::advance(begin, thread_num * chunk_size);
+			auto end = begin;
+			
+			if(thread_num == (thread_count - 1)) // last thread iterates the remaining sequence
+			{
+				// end = tree_list.end();
+				end = lasttreewithseeds_iter;
+				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
+			} else
+			{
+				std::advance(end, chunk_size);
+				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
+			}
+					
+					
+					
+					
+			// declare a local seed list to be filled by each thread
+			list<seed*> newseed_list;
+				// timers
+				int n_trees=0;
+				double timer_eachtree_advance=0;
+				double timer_eachtree_vectini=0;
+				double timer_eachtree_seedsurv=0;// from here only surviving seeds
+				double timer_eachtree_seedadd=0;// from here only surviving seeds
+				double timer_eachtree_total=0;// from here only surviving seeds
+				
+				double timer_tresedliv=0;//find pollenfather
+				double timer_createseeds=0;//creates seeds
+
+			
+			
+			
+			// wait for all threads to initialize and then proceed
+			#pragma omp barrier
+			for(auto it = begin; it != end; ++it)
+			{// START: main tree loop
+			
+			// #pragma omp for nowait schedule(guided) 
+			// for(unsigned int pari=0; pari<tree_list.size(); ++pari)
+			// {// START: main tree loop
+					double start_timer_eachtree=omp_get_wtime();
+					++n_trees;//for later calculating mean of computation times
+				
+				// list<Tree*>::iterator posb=tree_list.begin();
+				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
+				// advance(posb, pari);
+					double end_timer_eachtree_advance=omp_get_wtime();
+					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
+
+				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
+				// pTree=(*posb);			
+				pTree=(*it);			
+				// vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				// vector<double> Vthdpth;
+				
+					double end_timer_eachtree_vecini=omp_get_wtime();
+					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
+
+				// if((parameter[0].ivort==1) & (pari==0))// check the number of used threads
+					// cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+				
+				if(pTree->seednewly_produced>0)
+				{//START: tree produces seeds
+						
+					// ramdomly determine the number of surving seeds
+					int seedlebend=0;
+					for(int sna=0; sna < pTree->seednewly_produced; sna++)
+					{
+						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+						if(zufallsz>=parameter[0].seedTreemort) 
+						{
+							++seedlebend;
+						}
+					}
+						double end_timer_seedsurv_vecini=omp_get_wtime();
+						timer_eachtree_seedsurv+=end_timer_seedsurv_vecini-end_timer_eachtree_vecini;
+
+					
+					if(seedlebend>0)
+					{// START: if seedlebend>0
+						double start_timer_tresedliv=omp_get_wtime();	
+						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						{
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+						}
+						double end_timer_tresedliv=omp_get_wtime();	
+						timer_tresedliv+=end_timer_tresedliv-start_timer_tresedliv;
+						// get the characteristics for each surviving seed and push these back new to seed_list
+						for(int sl=0; sl<seedlebend; sl++)
+						{// START: create new seeds
+							// create a new seed
+							pseed= new seed();
+							
+							// add information
+							pseed->yworldcoo=aktortyworldcoo;
+							pseed->xworldcoo=aktortxworldcoo;
+							pseed->xcoo=pTree->xcoo;
+							pseed->ycoo=pTree->ycoo;
+							pseed->namem=pTree->name;
+							
+							// if chosen, determine the father by pollination out of available (matured) trees
+							if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
+							{
+								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
+								pseed->namep=Vname.at(iran);
+								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
+								
+								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
+								//pseed->cpSNP[0]=cpSNP1[iran];
+								//pseed->cpSNP[1]=cpSNP2[iran];
+								
+								//pseed->descent=
+								//pseed->pollenfall=
+								//pseed->maxgrowth=
+							} else
+							{
+								pseed->namep=0;
+								pseed->thawing_depthinfluence=100;
+							}
+							//pseed->cpSNP[0]=0;
+							//pseed->cpSNP[1]=0;}
+							/*cout<<pseed->namep<<endl;
+							cout<<pseed->cpSNP[0]<<endl;
+							cout<<pseed->cpSNP[1]<<endl;*/
+							
+
+							//pseed->mtSNP[0]=pTree->mtSNP[0];
+							//pseed->mtSNP[1]=pTree->mtSNP[1];
+							
+							pseed->line=pTree->line;
+							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
+							pseed->imcone=true;
+							pseed->gewicht=1;
+							pseed->age=0;
+							pseed->species=pTree->species;// species is inherited from the seed source
+							pseed->elternheight=pTree->height;
+
+							// add seed to seed_list
+							newseed_list.push_back(pseed);
+						}// END: create new seeds
+						double end_timer_createseeds=omp_get_wtime();	
+						timer_createseeds+=end_timer_createseeds-end_timer_tresedliv;
+
+						/*if(parameter[0].pollenvert==1)// maybe this is not needed because it is now locally constructed for each tree
+						{
+							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
+						}
+						*/
+					}// END: if seedlebend>0
+						double end_timer_seedsurv_seedadd=omp_get_wtime();
+						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
+
+				}// END: tree produces seeds
+					timer_eachtree_total+=omp_get_wtime()-start_timer_eachtree;
+
+			}//END: main tree loop on each core
+			
+			
+			
+			
+			
+			// append all newly created seed from each thread at once to the seed_list
+			#pragma omp critical
+			{
+				seed_list.splice(seed_list.end(), newseed_list);
+				
+				// timing calculations
+					timer_eachtree_advance_all+=timer_eachtree_advance/n_trees;
+					timer_eachtree_vectini_all+=timer_eachtree_vectini/n_trees;
+					timer_eachtree_seedsurv_all+=timer_eachtree_seedsurv/n_trees;
+					timer_eachtree_seedadd_all+=timer_eachtree_seedadd/n_trees;
+					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
+					
+					timer_tresedliv_all+=timer_tresedliv/n_trees;
+					timer_createseeds_all+=timer_createseeds/n_trees;
+			}
+		} // END: parallel region
+
+		
+
+	
+}// OMP==3
+		
+		
 		// neue Ausgabe um zu beschleunigen
 		// ... seed list: only if age==0 &&namep!=0
 		// ... Ivort/X/Y/
@@ -1481,7 +1999,7 @@ if(parameter[0].ivort==2)
 			FILE *fp4;
 			fp4=fopen("t_N_poll.txt","a+");
 			if(fp4==0){goto openpoll;}
-			fprintf(fp4,"%d;%lu;%lu;%10.10f;%10.10f;%10.10f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
+			fprintf(fp4,"%d;%lu;%lu;%10.10f;%10.10f;%10.10f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
 					parameter[0].ivort, 
 					seed_list.size(),
 					tree_list.size(),
@@ -1493,37 +2011,47 @@ if(parameter[0].ivort==2)
 					timer_eachtree_vectini_all,
 					timer_eachtree_seedsurv_all,
 					timer_eachtree_seedadd_all,
-					timer_eachtree_total_all
+					timer_eachtree_total_all,
+					
+					timer_tresedliv_all,
+					timer_createseeds_all
 				);
 			fclose(fp4);
 			
 			/* script to analyse computation times in R
 			
 				# read output data of general computation times
-				dain=read.table(paste0("M:/Documents/Programmierung/git/LAVESI/","/t_N_mort.txt"), header=FALSE, sep=";", dec=".")
+				dain=read.table(paste0("M:/Documents/Programmierung/git/LAVESI_wind/LAVESI/","/t_N_mort.txt"), header=FALSE, sep=";", dec=".")
 				names(dain)=c("N_tree", "time", "mort", "kartenup", "wachstum", "seeddisp", "seedprod", "treedistribu", "etablier", "fire", "output", "mortality", "ageing", "all")
 				str(dain)
 				
 				# read specifically mortality/pollination computation times
-				dain_p=read.table(paste0("M:/Documents/Programmierung/git/LAVESI/","/t_N_poll.txt"), header=FALSE, sep=";", dec=".")
-				names(dain_p)=c("N_tree", "time", "pollseedmort", "treemort", "seedmort")
+				dain_p=read.table(paste0("M:/Documents/Programmierung/git/LAVESI_wind/LAVESI/","/t_N_poll.txt"), header=FALSE, sep=";", dec=".")
+				names(dain_p)=c("time", "N_seed","N_tree", "pollseedmort", "treemort", "seedmort", "advanc","vecti","seedsurv","seedadd","eachtree", "BefrW", "SeedCreate")
+				str(dain_p)
+				summary(dain_p)
 				#names(dain_p)=c("N_tree", "time", "pollseedmort", "treemort")
 				# .. redo and calc when all three output variables are included
-				
+								dev.new();pie(apply(dain_p[,c("advanc","vecti","seedsurv","BefrW", "SeedCreate")], 2, function(x)sum(na.omit(x))))
+								
 				dain=merge(dain, dain_p, sort=FALSE)
+				str(dain)
 				
 				# subset/postprocess
-					damat=dain[c(4:11,13, 15:16)]
-					rm=apply(damat,1,sum)
+					damat=dain[c(4:11,13, 16:17)]
+					rm=apply(damat,1,function(x)sum(na.omit(x)))
 					for(rowi in 1:dim(damat)[1])
 					{
 						damat[rowi,]=damat[rowi,]/rm[rowi]
 					}
 					clbp=rainbow(s=0.5,n=dim(damat)[2])
 					# add nas for missing fill up to 100 yrs
+					if(dim(damat)[1]<100)
+					{
 						dfiad=as.data.frame(matrix(NA, nrow=100-dim(damat)[1], ncol=dim(damat)[2]))
 						names(dfiad)=names(damat)
 						damat=rbind(damat,dfiad)
+					}
 		
 		
 				# plot
@@ -1533,7 +2061,7 @@ if(parameter[0].ivort==2)
 				layout.show(2)
 
 					par(mar=c(4,0,1,0))
-						barplot(t(as.matrix(damat)), main=paste0(" -> mean time for one year (sim years=", max(dain$time),"): ",round(mean(rm),0)," sec"), border=NA, yaxt="n", col=clbp, axes=FALSE, names.arg=rep(NA,100))
+						barplot(t(as.matrix(damat)), main=paste0(" -> mean time for one year (sim years=", max(dain$time),"): ",round(mean(rm),0)," sec"), border=NA, yaxt="n", col=clbp, axes=FALSE)#, names.arg=rep(NA,100))
 							# overlay full time for computation
 							par(new=TRUE)
 							with(dain, plot(all~time, type="l", lwd=2, xaxt="n", yaxt="n", ylab="", xlab="", bty="n", xlim=c(0,100)))

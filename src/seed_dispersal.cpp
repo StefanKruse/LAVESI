@@ -32,6 +32,7 @@
 		double gaussweite=20, gaussmaxh=1, gaussposcenter=0;	//gaussweite variieren??
 																//oder unten 4500m?
 		double fatalpha=0.5;
+		double fatalpha=0.5;
 		entf_help= parameter[0].distanceratio * 
 		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter) +
 		(1/gaussfatratio)*(pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
@@ -638,7 +639,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								double entfernung = 0;
 								float richtung=0.0;
 
-								seeddisp(ratiorn, jahr, jquer, iquer);
+								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 								
 								pseed->xcoo=pseed->xcoo+jquer;
 								pseed->ycoo=pseed->ycoo+iquer;

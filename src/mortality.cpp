@@ -1107,14 +1107,42 @@ if(parameter[0].ivort==2)
 		double timer_eachtree_seedadd_all=0;// from here only surviving seeds
 		double timer_eachtree_total_all=0;// from here only surviving seeds
 	
-	if(parameter[0].pollenvert==0)
+	/*if(parameter[0].pollenvert==0)
 	{ // only one kernel specified by parameter[0].omp_num_threads
 // start ORI
+
+
+		// loop with omp through each element of the list
+		// omp_set_dynamic(0); //disable dynamic teams
+		// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		/// #####################################
+		/// #####################################
+		/// new paralellisierung for BefrWarh!!
+		// ... also include in private:
+		// pTree_copy
+		///
+			  // list<Tree*>& tree_list = *world_positon_b;
+			  double  richtung=0.0;
+			  double  geschwindigkeit=0.0;
+			  unsigned int    ripm=0,cntr=0;
+			  // vector<int> SNP1,SNP2;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  I0kappa=0.0;
+			  double pe=0.01;
+			  double  C=parameter[0].GregoryC;
+			  double  m=parameter[0].Gregorym;
+			  
+///
+			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+				vector<double> Vthdpth;
+///
+		/// #####################################
+		/// #####################################
 		for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
 		{
 			pTree=(*posb);
-			vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-			vector<double> Vthdpth;
+			// vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+			// vector<double> Vthdpth;
 				
 			if (pTree->seednewly_produced>0)
 			{
@@ -1131,10 +1159,12 @@ if(parameter[0].ivort==2)
 				
 				if(seedlebend>0)
 				{
-					if(parameter[0].pollenvert==1)
-					{
-						BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,Vname,Vthdpth);//;,cpSNP1,cpSNP2);
-					}
+						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						{
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+						}
 
 					for (int sl=0; sl<seedlebend; sl++)
 					{ // Neuen seed erstellen Beginn
@@ -1145,30 +1175,32 @@ if(parameter[0].ivort==2)
 						pseed->ycoo=pTree->ycoo;
 						pseed->namem=pTree->name;
 						
-						//BefrWahrsch(pseed->xcoo,pseed->ycoo,world_positon_b,Jahr,pseed->namep,pseed->cpSNP[0],pseed->cpSNP[1]);
-						if((Vname.size()>0)&&(parameter[0].pollenvert==1))
-						{
-							int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size();
-							pseed->namep=Vname[iran];
-							pseed->thawing_depthinfluence=Vthdpth[iran];
-							
-							//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
-							//pseed->cpSNP[0]=cpSNP1[iran];
-							//pseed->cpSNP[1]=cpSNP2[iran];
-							
-							//pseed->descent=
-							//pseed->pollenfall=
-							//pseed->maxgrowth=
-						} else
-						{
-							pseed->namep=0;
-							pseed->thawing_depthinfluence=100;
-						}
+						// if chosen, determine the father by pollination out of available (matured) trees
+						if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
+							{
+								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
+								pseed->namep=Vname.at(iran);
+								
+								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
+								
+								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
+								//pseed->cpSNP[0]=cpSNP1[iran];
+								//pseed->cpSNP[1]=cpSNP2[iran];
+								
+								//pseed->descent=
+								//pseed->pollenfall=
+								//pseed->maxgrowth=
+							} else
+							{
+								pseed->namep=0;
+								
+								pseed->thawing_depthinfluence=100;
+							}
 						//pseed->cpSNP[0]=0;
 						//pseed->cpSNP[1]=0;}
-						/*cout<<pseed->namep<<endl;
-						cout<<pseed->cpSNP[0]<<endl;
-						cout<<pseed->cpSNP[1]<<endl;*/
+						//cout<<pseed->namep<<endl;
+						//cout<<pseed->cpSNP[0]<<endl;
+						//cout<<pseed->cpSNP[1]<<endl;
 						
 
 						//pseed->mtSNP[0]=pTree->mtSNP[0];
@@ -1194,7 +1226,11 @@ if(parameter[0].ivort==2)
 
 // end ORI
 	} else
-	{ // more than one kernel specified by parameter[0].omp_num_threads
+	{
+	*/
+
+
+	// more than one kernel specified by parameter[0].omp_num_threads
 	
 	
 		// loop around the loop for MULTI-CORE-PROCESSING
@@ -1410,7 +1446,7 @@ if(parameter[0].ivort==2)
 								
 						fclose(fdir);
 
-		}
+		}// file output
 			
 			
 			
@@ -1421,13 +1457,13 @@ if(parameter[0].ivort==2)
 		// cout << timer_eachtree_seedsurv_all << endl;
 		// cout << timer_eachtree_seedadd_all << endl;
 		// cout << timer_eachtree_total_all << endl;
-		cout << endl;
-		printf("%10.20f\n",timer_eachtree_advance_all);
-		printf("%10.20f\n",timer_eachtree_vectini_all);
-		printf("%10.20f\n",timer_eachtree_seedsurv_all);
-		printf("%10.20f\n",timer_eachtree_seedadd_all);
-		printf("%10.20f\n",timer_eachtree_total_all);
-	}	
+		// cout << endl;
+		// printf("%10.20f\n",timer_eachtree_advance_all);
+		// printf("%10.20f\n",timer_eachtree_vectini_all);
+		// printf("%10.20f\n",timer_eachtree_seedsurv_all);
+		// printf("%10.20f\n",timer_eachtree_seedadd_all);
+		// printf("%10.20f\n",timer_eachtree_total_all);
+	//}// end if omp choice
 		
 		
 			

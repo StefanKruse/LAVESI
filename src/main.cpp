@@ -195,9 +195,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		//vector<Karten*>& plot_list = *posw;
 		
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin());
-		vector<list<seed*> >::iterator world_position_s = (world_seed_list.begin());
+		// vector<list<seed*> >::iterator world_position_s = (world_seed_list.begin());
 		list<Tree*>& tree_list = *world_positon_b;
-		list<seed*>& seed_list = *world_position_s;
+		// list<seed*>& seed_list = *world_position_s;
 
 		/*open:
 		FILE *fp2;
@@ -1009,16 +1009,21 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 			
 			
 			
-			// printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
 			
 			int number_of_seeds_in_cone=0;
 			for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
 			{
-					if ((*pos)->imcone==true) 
+					if ((*pos)->imcone==true)
+					{
 						number_of_seeds_in_cone++;
-			};
-			// printf("seed number Z= %d\n", number_of_seeds_in_cone);
-				
+					}
+			}
+			
+			if(parameter[0].jahranzeige ==true)
+			{
+				printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
+				printf("seed number Z= %d\n", number_of_seeds_in_cone);
+			}
 				
 		
 				

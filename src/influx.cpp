@@ -18,10 +18,10 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 	int i, j;
 	int aktort=0;
 	//vector<double> influx;
-	double influxrate=0.0;
+	// double influxrate=0.0;
 	//list<Tree*>& tree_list = *world_positon_b;
  
-  double  richtung=0.0,A=0.0;
+  double  richtung=0.0;//,A=0.0;
   double  geschwindigkeit=0.0;//,lambda=0.67;
   int    findyr1=2,findyr2=-100;
   int pickyear=0;

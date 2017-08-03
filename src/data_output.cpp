@@ -345,6 +345,10 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				}
 
 			}
+			else if (parameter[0].ausgabemodus==9) // "OMP"
+			{
+				ausgabecurrencies=true;
+			}
 		}// Ende Je nach choice Daten ausgeben
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -856,6 +860,7 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 						fprintf(dateizeiger, "seedprodSUM;");
 						fprintf(dateizeiger, "thawing_depth_infl;");
 						fprintf(dateizeiger, "\n");
+
 
 						if (dateizeiger == NULL)
 						{

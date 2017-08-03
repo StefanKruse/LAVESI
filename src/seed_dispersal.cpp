@@ -167,20 +167,24 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							pseed->imcone=false;
 							
 							double entfernung = 0;
-							float richtung=0.0;
+							double richtung=0.0;
+							double geschwindigkeit=0;
+							double wrichtung=0.0;
 							
 							double time_start_individual_seed_seeddisp=omp_get_wtime();
-							seeddisp(ratiorn, jahr, jquer, iquer);
+							seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 							cum_time_seeddisp+=omp_get_wtime()-time_start_individual_seed_seeddisp;
 
 							
 							
-							/*						
-							// seed dispersal output:			
+													
+							// seed dispersal output:
+					if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9)
+					{							
 							double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 						
 
-							if(seedeinschreibzufall<0.001){
+							if(seedeinschreibzufall<0.01){
 														entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
 														richtung=atan2(iquer,jquer);
 														
@@ -189,26 +193,31 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								string dateiname;
 
 								// Dateinamen zusammensetzen
-								char dateinamesuf[10];
-								sprintf(dateinamesuf, "%.4d", parameter[0].weatherchoice);
-								dateiname="output/dataseed_entfernung" + string(dateinamesuf) + ".csv";
-						 
+								char dateinamesuf[12];
+								sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+								dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
+							
 								// Datei versuchen zum Lesen und Schreiben zu oeffnen
 								dateizeiger = fopen (dateiname.c_str(), "r+");
 								// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
 								if (dateizeiger == NULL)
 								{
 								  dateizeiger = fopen (dateiname.c_str(), "w");
+									fprintf(dateizeiger,"IVORT;");
 									fprintf(dateizeiger, "name;");
 									fprintf(dateizeiger, "jahr;");
-									fprintf(dateizeiger, "elternheight;");
-									fprintf(dateizeiger, "entfernung;");
-									fprintf(dateizeiger, "richtung;");
+									fprintf(dateizeiger, "parentheight;");
+									//fprintf(dateizeiger, "xentfernung;");
+									//fprintf(dateizeiger, "yentfernung;");
+									fprintf(dateizeiger, "distance;");
+									fprintf(dateizeiger, "direction;");
 									fprintf(dateizeiger, "xcoo;");
 									fprintf(dateizeiger, "ycoo;");
 									fprintf(dateizeiger, "art;");
 									fprintf(dateizeiger, "weatherchoice;");
 									fprintf(dateizeiger, "thawing_depth;");	
+									fprintf(dateizeiger, "windspd;");
+									fprintf(dateizeiger, "winddir;");
 									fprintf(dateizeiger, "\n");
 
 									if (dateizeiger == NULL)
@@ -218,26 +227,29 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									}
 								}
 
-								// Die neuen Informationen werden ans Ende der Datei geschrieben
 								fseek(dateizeiger,0,SEEK_END);
 
-								// Datenaufbereiten und in die Datei schreiben
+								fprintf(dateizeiger, "%d;",parameter[0].ivort);
 								fprintf(dateizeiger, "%d;", pseed->namem);
 								fprintf(dateizeiger, "%d;", jahr);
 								fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
-								fprintf(dateizeiger, "%4.5f;", entfernung);
+								//fprintf(dateizeiger, "%f;", iquer);
+								//fprintf(dateizeiger, "%f;", jquer);
+								fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
 								fprintf(dateizeiger, "%4.5f;", richtung);
 								fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
 								fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
 								fprintf(dateizeiger, "%d;", pseed->species);
 								fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-								fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);	
+								fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
+								fprintf(dateizeiger, "%lf;",geschwindigkeit);
+								fprintf(dateizeiger, "%lf;", wrichtung);
 								fprintf(dateizeiger, "\n");
 
 								fclose(dateizeiger);
-								//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Ende
 							}
-							*/
+					}//output end if
+							
 							
 							pseed->xcoo=pseed->xcoo+jquer;
 							pseed->ycoo=pseed->ycoo+iquer;

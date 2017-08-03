@@ -185,9 +185,10 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								if(rand()%1000){pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
+								// if(rand()%1000){pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
+									pTree->thawing_depthinfluence=100;//NormverteilungRN(100, 0.10*100);
 								//cout<<"etablierung:"<<pTree->thawing_depthinfluence<<endl;
-								}else{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
+								// }else{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
 								pTree->entfernung=pseed->entfernung;
 								pTree->growing=true;
 								pTree->species=pseed->species;

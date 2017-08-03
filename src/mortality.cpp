@@ -1243,6 +1243,9 @@ if(parameter[0].ivort==2)
 		// loop with omp through each element of the list
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+		// omp_set_num_threads(1); //set the number of helpers
+		// directly modified as the parralelization is slowing the computations
+		
 		/// #####################################
 		/// #####################################
 		/// new paralellisierung for BefrWarh!!

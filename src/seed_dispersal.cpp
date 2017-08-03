@@ -139,7 +139,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 		// Anzeige Rausfliegender
 		int rausgeflogenN=0, rausgeflogenO=0, rausgeflogenS=0, rausgeflogenW=0;
 
-		if(parameter[0].omp_num_threads==1)
+		if(parameter[0].omp_num_threads==0)
 		{
 			double cum_time_individual_seed=0;//timer for indi seed 
 			double cum_time_seeddisp=0;
@@ -180,76 +180,76 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							
 													
 							// seed dispersal output:
-					if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9)
-					{							
-							double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-						
+								if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9)
+								{							
+										double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+									
 
-							if(seedeinschreibzufall<0.01){
-														entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
-														richtung=atan2(iquer,jquer);
-														
-								//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
-								FILE *dateizeiger;
-								string dateiname;
+										if(seedeinschreibzufall<0.01){
+																	entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+																	richtung=atan2(iquer,jquer);
+																	
+											//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
+											FILE *dateizeiger;
+											string dateiname;
 
-								// Dateinamen zusammensetzen
-								char dateinamesuf[12];
-								sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
-								dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
-							
-								// Datei versuchen zum Lesen und Schreiben zu oeffnen
-								dateizeiger = fopen (dateiname.c_str(), "r+");
-								// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
-								if (dateizeiger == NULL)
-								{
-								  dateizeiger = fopen (dateiname.c_str(), "w");
-									fprintf(dateizeiger,"IVORT;");
-									fprintf(dateizeiger, "name;");
-									fprintf(dateizeiger, "jahr;");
-									fprintf(dateizeiger, "parentheight;");
-									//fprintf(dateizeiger, "xentfernung;");
-									//fprintf(dateizeiger, "yentfernung;");
-									fprintf(dateizeiger, "distance;");
-									fprintf(dateizeiger, "direction;");
-									fprintf(dateizeiger, "xcoo;");
-									fprintf(dateizeiger, "ycoo;");
-									fprintf(dateizeiger, "art;");
-									fprintf(dateizeiger, "weatherchoice;");
-									fprintf(dateizeiger, "thawing_depth;");	
-									fprintf(dateizeiger, "windspd;");
-									fprintf(dateizeiger, "winddir;");
-									fprintf(dateizeiger, "\n");
+											// Dateinamen zusammensetzen
+											char dateinamesuf[12];
+											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
+										
+											// Datei versuchen zum Lesen und Schreiben zu oeffnen
+											dateizeiger = fopen (dateiname.c_str(), "r+");
+											// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+											if (dateizeiger == NULL)
+											{
+											  dateizeiger = fopen (dateiname.c_str(), "w");
+												fprintf(dateizeiger,"IVORT;");
+												fprintf(dateizeiger, "name;");
+												fprintf(dateizeiger, "jahr;");
+												fprintf(dateizeiger, "parentheight;");
+												//fprintf(dateizeiger, "xentfernung;");
+												//fprintf(dateizeiger, "yentfernung;");
+												fprintf(dateizeiger, "distance;");
+												fprintf(dateizeiger, "direction;");
+												fprintf(dateizeiger, "xcoo;");
+												fprintf(dateizeiger, "ycoo;");
+												fprintf(dateizeiger, "art;");
+												fprintf(dateizeiger, "weatherchoice;");
+												fprintf(dateizeiger, "thawing_depth;");	
+												fprintf(dateizeiger, "windspd;");
+												fprintf(dateizeiger, "winddir;");
+												fprintf(dateizeiger, "\n");
 
-									if (dateizeiger == NULL)
-									{
-										fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
-										exit(1);
-									}
-								}
+												if (dateizeiger == NULL)
+												{
+													fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
+													exit(1);
+												}
+											}
 
-								fseek(dateizeiger,0,SEEK_END);
+											fseek(dateizeiger,0,SEEK_END);
 
-								fprintf(dateizeiger, "%d;",parameter[0].ivort);
-								fprintf(dateizeiger, "%d;", pseed->namem);
-								fprintf(dateizeiger, "%d;", jahr);
-								fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
-								//fprintf(dateizeiger, "%f;", iquer);
-								//fprintf(dateizeiger, "%f;", jquer);
-								fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
-								fprintf(dateizeiger, "%4.5f;", richtung);
-								fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
-								fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
-								fprintf(dateizeiger, "%d;", pseed->species);
-								fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-								fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
-								fprintf(dateizeiger, "%lf;",geschwindigkeit);
-								fprintf(dateizeiger, "%lf;", wrichtung);
-								fprintf(dateizeiger, "\n");
+											fprintf(dateizeiger, "%d;",parameter[0].ivort);
+											fprintf(dateizeiger, "%d;", pseed->namem);
+											fprintf(dateizeiger, "%d;", jahr);
+											fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
+											//fprintf(dateizeiger, "%f;", iquer);
+											//fprintf(dateizeiger, "%f;", jquer);
+											fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
+											fprintf(dateizeiger, "%4.5f;", richtung);
+											fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
+											fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
+											fprintf(dateizeiger, "%d;", pseed->species);
+											fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
+											fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
+											fprintf(dateizeiger, "%lf;",geschwindigkeit);
+											fprintf(dateizeiger, "%lf;", wrichtung);
+											fprintf(dateizeiger, "\n");
 
-								fclose(dateizeiger);
-							}
-					}//output end if
+											fclose(dateizeiger);
+										}
+								}//output end if
 							
 							
 							pseed->xcoo=pseed->xcoo+jquer;
@@ -643,6 +643,81 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								
 								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 								
+								
+								// seed dispersal output:
+								if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+								{							
+										double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+									
+
+										if(seedeinschreibzufall<0.01){
+																	entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+																	richtung=atan2(iquer,jquer);
+																	
+											//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
+											FILE *dateizeiger;
+											string dateiname;
+
+											// Dateinamen zusammensetzen
+											char dateinamesuf[12];
+											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
+										
+											// Datei versuchen zum Lesen und Schreiben zu oeffnen
+											dateizeiger = fopen (dateiname.c_str(), "r+");
+											// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+											if (dateizeiger == NULL)
+											{
+											  dateizeiger = fopen (dateiname.c_str(), "w");
+												fprintf(dateizeiger,"IVORT;");
+												fprintf(dateizeiger, "name;");
+												fprintf(dateizeiger, "jahr;");
+												fprintf(dateizeiger, "parentheight;");
+												//fprintf(dateizeiger, "xentfernung;");
+												//fprintf(dateizeiger, "yentfernung;");
+												fprintf(dateizeiger, "distance;");
+												fprintf(dateizeiger, "direction;");
+												fprintf(dateizeiger, "xcoo;");
+												fprintf(dateizeiger, "ycoo;");
+												fprintf(dateizeiger, "art;");
+												fprintf(dateizeiger, "weatherchoice;");
+												fprintf(dateizeiger, "thawing_depth;");	
+												fprintf(dateizeiger, "windspd;");
+												fprintf(dateizeiger, "winddir;");
+												fprintf(dateizeiger, "\n");
+
+												if (dateizeiger == NULL)
+												{
+													fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
+													exit(1);
+												}
+											}
+
+											fseek(dateizeiger,0,SEEK_END);
+
+											fprintf(dateizeiger, "%d;",parameter[0].ivort);
+											fprintf(dateizeiger, "%d;", pseed->namem);
+											fprintf(dateizeiger, "%d;", jahr);
+											fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
+											//fprintf(dateizeiger, "%f;", iquer);
+											//fprintf(dateizeiger, "%f;", jquer);
+											fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
+											fprintf(dateizeiger, "%4.5f;", richtung);
+											fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
+											fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
+											fprintf(dateizeiger, "%d;", pseed->species);
+											fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
+											fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
+											fprintf(dateizeiger, "%lf;",geschwindigkeit);
+											fprintf(dateizeiger, "%lf;", wrichtung);
+											fprintf(dateizeiger, "\n");
+
+											fclose(dateizeiger);
+										}
+								}//output end if
+								
+								
+								
 								pseed->xcoo=pseed->xcoo+jquer;
 								pseed->ycoo=pseed->ycoo+iquer;
 								pseed->entfernung=entfernung;	
@@ -813,7 +888,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					
 					// wait for all threads to initialize and then proceed
 					#pragma omp barrier
-					
 					for(auto it = begin; it != end; ++it)
 					{
 						pseed=(*it);
@@ -846,12 +920,84 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									
 									pseed->imcone=false;
 									
-									double entfernung = 0;
+									double entfernung=0.0;
 									double richtung=0.0;
-									double geschwindigkeit=0;
+									double geschwindigkeit=0.0;
 									double wrichtung=0.0;
 
 									seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
+
+									// seed dispersal output:
+									if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									{	
+											double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+										
+
+											if(seedeinschreibzufall<0.01){
+																		entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+																		richtung=atan2(iquer,jquer);
+																		
+												//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
+												FILE *dateizeiger;
+												string dateiname;
+
+												// Dateinamen zusammensetzen
+												char dateinamesuf[12];
+												sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+												dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
+											
+												// Datei versuchen zum Lesen und Schreiben zu oeffnen
+												dateizeiger = fopen (dateiname.c_str(), "r+");
+												// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+												if (dateizeiger == NULL)
+												{
+												  dateizeiger = fopen (dateiname.c_str(), "w");
+													fprintf(dateizeiger,"IVORT;");
+													fprintf(dateizeiger, "name;");
+													fprintf(dateizeiger, "jahr;");
+													fprintf(dateizeiger, "parentheight;");
+													//fprintf(dateizeiger, "xentfernung;");
+													//fprintf(dateizeiger, "yentfernung;");
+													fprintf(dateizeiger, "distance;");
+													fprintf(dateizeiger, "direction;");
+													fprintf(dateizeiger, "xcoo;");
+													fprintf(dateizeiger, "ycoo;");
+													fprintf(dateizeiger, "art;");
+													fprintf(dateizeiger, "weatherchoice;");
+													fprintf(dateizeiger, "thawing_depth;");	
+													fprintf(dateizeiger, "windspd;");
+													fprintf(dateizeiger, "winddir;");
+													fprintf(dateizeiger, "\n");
+
+													if (dateizeiger == NULL)
+													{
+														fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
+														exit(1);
+													}
+												}
+
+												fseek(dateizeiger,0,SEEK_END);
+
+												fprintf(dateizeiger, "%d;",parameter[0].ivort);
+												fprintf(dateizeiger, "%d;", pseed->namem);
+												fprintf(dateizeiger, "%d;", jahr);
+												fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
+												//fprintf(dateizeiger, "%f;", iquer);
+												//fprintf(dateizeiger, "%f;", jquer);
+												fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
+												fprintf(dateizeiger, "%4.5f;", richtung);
+												fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
+												fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
+												fprintf(dateizeiger, "%d;", pseed->species);
+												fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
+												fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
+												fprintf(dateizeiger, "%lf;",geschwindigkeit);
+												fprintf(dateizeiger, "%lf;", wrichtung);
+												fprintf(dateizeiger, "\n");
+
+												fclose(dateizeiger);
+											}
+									}//output end if
 									
 									pseed->xcoo=pseed->xcoo+jquer;
 									pseed->ycoo=pseed->ycoo+iquer;

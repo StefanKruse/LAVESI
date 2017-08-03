@@ -637,8 +637,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								pseed->imcone=false;
 								
 								double entfernung = 0;
-								float richtung=0.0;
-
+								double richtung=0.0;
+								double geschwindigkeit=0;
+								double wrichtung=0.0;
+								
 								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 								
 								pseed->xcoo=pseed->xcoo+jquer;
@@ -845,9 +847,11 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									pseed->imcone=false;
 									
 									double entfernung = 0;
-									float richtung=0.0;
+									double richtung=0.0;
+									double geschwindigkeit=0;
+									double wrichtung=0.0;
 
-									seeddisp(ratiorn, jahr, jquer, iquer);
+									seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 									
 									pseed->xcoo=pseed->xcoo+jquer;
 									pseed->ycoo=pseed->ycoo+iquer;

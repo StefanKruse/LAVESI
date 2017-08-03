@@ -18,9 +18,14 @@
  void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
  void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);
 
- void BefrWahrsch(double a , double b,struct Parameter *parameter, vector<list<Tree*> >::iterator f, int e, vector<int> &d,vector<double> &thawingdepthinher);
+ // void BefrWahrsch(double a , double b,struct Parameter *parameter, vector<list<Tree*> >::iterator f, int e, vector<int> &d,vector<double> &thawingdepthinher);
+ void BefrWahrsch(	//double a , double b,struct Parameter *parameter, vector<list<Tree*> >::iterator f, int e, vector<int> &d,vector<double> &thawingdepthinher);
  
- void seeddisp(double ad, int bd, double& cd, double& dd);
+					double x, double y,struct Parameter *parameter, vector<list<Tree*> >::iterator world_positon_b, int yr, 
+				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
+			vector<int> &pName, vector<double>  &thdpthinfl
+			);
+ void seeddisp(double ad, int bd, double& cd, double& dd, double &vv, double &vd);
  
  void Parametereinlesen(void);
  void SaveAllLists(void);

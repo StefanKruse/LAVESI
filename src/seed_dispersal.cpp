@@ -115,7 +115,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 {
 		
 	int aktort=0;
-    double iquer=0,jquer=0;
+    // double iquer=0,jquer=0;
 
 	/*
 	list<seed*> LDDseed_list; // Liste zum Zwischenspeichern der LDD ausgebreiteten seed
@@ -172,6 +172,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							double geschwindigkeit=0;
 							double wrichtung=0.0;
 							
+							double jquer=0;
+							double iquer=0;
+
 							double time_start_individual_seed_seeddisp=omp_get_wtime();
 							seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 							cum_time_seeddisp+=omp_get_wtime()-time_start_individual_seed_seeddisp;
@@ -640,7 +643,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								double richtung=0.0;
 								double geschwindigkeit=0;
 								double wrichtung=0.0;
-								
+								double jquer=0;
+								double iquer=0;
+
 								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
 								
 								
@@ -924,14 +929,21 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									double richtung=0.0;
 									double geschwindigkeit=0.0;
 									double wrichtung=0.0;
+									double jquer=0;
+									double iquer=0;
 
 									seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
+									
+// cout << " - " << sqrt(pow(iquer,2)+pow(jquer,2)) << " " << entfernung;
+// cout << " - " << jquer << "/" << iquer;
 
 									// seed dispersal output:
-									if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									// if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									if(parameter[0].ivort>1 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
 									{	
 											double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 										
+
 
 											if(seedeinschreibzufall<0.01){
 																		entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
@@ -984,7 +996,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
 												//fprintf(dateizeiger, "%f;", iquer);
 												//fprintf(dateizeiger, "%f;", jquer);
-												fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
+												fprintf(dateizeiger, "%4.5f;",entfernung);
 												fprintf(dateizeiger, "%4.5f;", richtung);
 												fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
 												fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
@@ -1002,7 +1014,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									pseed->xcoo=pseed->xcoo+jquer;
 									pseed->ycoo=pseed->ycoo+iquer;
 									pseed->entfernung=entfernung;	
-
 
 								
 									/****************************************************************************************//**

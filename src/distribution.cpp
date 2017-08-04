@@ -290,6 +290,15 @@ double getEntfernung(double D, double ratiorn_help)
 		double fatalpha=0.5;
 		entf_help= 
 		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter)+(1/gaussfatratio)*parameter[0].distanceratio * (pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
+		
+		/* for R
+		
+		
+			pow=function(x,exp){x^exp}
+			( 0.5*( 2*(sqrt( 2*pow(11.77,2)*(-1*log(c(0,1)/1)) )+0)+(1/2)*0.16 * (pow(c(0,1), (-1*(1+0.5)) )) ) )
+			
+		
+		*/
 	}
 	else 
 	{
@@ -336,6 +345,7 @@ void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, doub
     if (pseed->species==1){
         maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescentg));
 		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
+		// cout << " - " << maxentfernung;
     }else if (pseed->species==2){
         maxentfernung = (parameter[0].SeedTravelBreezes*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescents));
 		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
@@ -346,9 +356,12 @@ void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, doub
     }else if(parameter[0].dispersalmode!=5){
         entfernung=getEntfernung(maxentfernung,rn);
     }
-    
+    // cout << " - " << richtung;
+	
     dy=sin(richtung)*entfernung;
     dx=cos(richtung)*entfernung;
+	
+	// cout << " - " << dy << "/" << dx;
 	
 	windspeed=geschwindigkeit;
 	winddirection=richtung;    

@@ -925,7 +925,7 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 		ss.str("");
 		ss.clear();  	
 		
-		if((jahr<findyr2+1) && (jahr>findyr1-1)){ 
+		if((jahr<findyr2+1) && (jahr>findyr1-1)){
 							
 		ss<<jahr;
 							
@@ -948,11 +948,18 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 // 						  itemvector.push_back(item);
 						  cntr++;
 						  if(cntr%2){
-						    if(stof(item)<270){
-						      wdir.push_back(stof(item)+90);
-						    }else if(stof(item)>270){
-						      wdir.push_back(stof(item)-270);
-						    }else{wdir.push_back(0);}
+						    // if(stof(item)<270){
+						      // wdir.push_back(stof(item)+90);
+						    // }else if(stof(item)>270){
+						      // wdir.push_back(stof(item)-270);
+						    // }else{wdir.push_back(0);}
+						    if(stof(item)>=0 && stof(item)<=360)
+							{
+								wdir.push_back(stof(item));
+						    }else
+							{
+								wdir.push_back(0);
+							}
 						  }else{wspd.push_back(stof(item));}
 						}
 						

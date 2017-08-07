@@ -49,7 +49,8 @@
 //				(pTree->xcoo,pTree->ycoo,struct *parameter,world_positon_b,Jahr,Vname);
 void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, int yr, 
 				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
-			vector<int> &pName, vector<double>  &thdpthinfl		
+			vector<int> &pName, vector<double>  &thdpthinfl,
+											int outputtreesiter
 		)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
 {
 	/*
@@ -168,93 +169,126 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
                  I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa));
 		*/
 		
-		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5){
-                
-        cntr=1;//floor(windspd[i].size()*2.5*0.1666)-windspd[i].at(floor(windspd[i].size()*4.5*0.1666));
-
-		
-        }else if(parameter[0].windsource==4){
-			richtung=	M_PI * ( 270 / 180 );
+		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
+		{
+			cntr=1;//floor(windspd[i].size()*2.5*0.1666)-windspd[i].at(floor(windspd[i].size()*4.5*0.1666));
+        }else if(parameter[0].windsource==4)
+		{
+			richtung=	M_PI * ( 0 / 180 );
 			geschwindigkeit=2.777;
  		  //kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
-		}else if(parameter[0].windsource==5){
-			richtung=	M_PI * ( 90 / 180 );
+		}else if(parameter[0].windsource==5)
+		{
+			richtung=	M_PI * ( 180 / 180 );
 			geschwindigkeit=2.777;
  		   //kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
-		}else if(parameter[0].windsource==0){
+		}else if(parameter[0].windsource==0)
+		{
            richtung=2*M_PI*(rand()/RAND_MAX); 
 		   geschwindigkeit=2.777;
 		}
 
 
-		if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)){
-
-		 // ripm=(unsigned int)floor(winddir.size()*2.5*0.16666+rand()/(RAND_MAX+1.0)*winddir.size()*4.5*0.16666);//((unsigned int)floor(0.5*cntr - cntr*0.16666));//etwa Anfang Mai
-		 ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
-	
-		 // richtung=180/M_PI * wdir.at(ripm);
-		 richtung=	M_PI * ( wdir.at(ripm) / 180 );
+		if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3))
+		{
+			// ripm=(unsigned int)floor(winddir.size()*2.5*0.16666+rand()/(RAND_MAX+1.0)*winddir.size()*4.5*0.16666);//((unsigned int)floor(0.5*cntr - cntr*0.16666));//etwa Anfang Mai
+			ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
 		
-		 geschwindigkeit=wspd.at(ripm);
+			// richtung=180/M_PI * wdir.at(ripm);
+			richtung=	M_PI * ( wdir.at(ripm) / 180 );
+			geschwindigkeit=wspd.at(ripm);
 		
-		}else if((cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)) || parameter[0].windsource==0){
+		}else if((cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)) || parameter[0].windsource==0)
+		{
 		   richtung=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
 		   geschwindigkeit=2.777;//10 km/h
-                 }
-		 pe=parameter[0].pollenfall/geschwindigkeit;
+        }
+		
+		pe=parameter[0].pollenfall/geschwindigkeit;
 		 
         //Simpson integration + elec424.wikia.com/wiki/Modified_Bessel_Functions:
         I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa));
 				 
 				 
-				 
         for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )
 		{
-                        pTree_copy= *posb;
+			pTree_copy= *posb;
 			
-                        //only if the pollinating tree has cones:
-			if(pTree_copy->cone!=0){
+            //only if the pollinating tree has cones:
+			if(pTree_copy->cone!=0)
+			{
 				
- 			dx=(pTree_copy->xcoo)-x; 
-			dy=(pTree_copy->ycoo)-y; 
- 			dr=sqrt(dx*dx+dy*dy);
-			
- 			if((dr!=0)){
-                        //set to 0=west:
- 			  phi=atan2(dx,dy);
- 			}else{phi=richtung+0.5*M_PI;}//makes self-pollination less probable: p~1/I0(kappa)
- 			
-   			p=exp(kappa*cos(phi-richtung))/(2*I0kappa)*(exp(-2*pe*pow(dr,1-0.5*m)/(sqrt(M_PI)*C*(1-0.5*m)))) ;
-			//f(dr) aus Microbiology of the atmosphere, p(phi) ist von-Mises-Distribution
+				dx=(pTree_copy->xcoo)-x; 
+				dy=(pTree_copy->ycoo)-y; 
+				dr=sqrt(dx*dx+dy*dy);
+				
+				if((dr!=0)){
+							//set to 0=west:
+				  phi=atan2(dx,dy);
+				}else{phi=richtung+0.5*M_PI;}//makes self-pollination less probable: p~1/I0(kappa)
+				
+				p=exp(kappa*(cos(phi-richtung)*-1))/(2*I0kappa)*(exp(-2*pe*pow(dr,1-0.5*m)/(sqrt(M_PI)*C*(1-0.5*m))));
+				//f(dr) aus Microbiology of the atmosphere, p(phi) ist von-Mises-Distribution
 
-            if(rand()>p*RAND_MAX){
-			++posb;
-			//	pName.push_back(pTree_copy->name);
-			//	cpSNPs1.push_back(pTree_copy->cpSNP[0]);
-			//	cpSNPs2.push_back(pTree_copy->cpSNP[1]);
-			//	++posb; 
-			}else{
-				pName.push_back(pTree_copy->name);
-				// thdpthinfl.push_back(pTree->thawing_depthinfluence);
-				thdpthinfl.push_back(100);
-				//cpSNPs1.push_back(pTree_copy->cpSNP[0]);
-				//cpSNPs2.push_back(pTree_copy->cpSNP[1]);
-				++posb; 
+				/* RCODE
+					# constants
+					kappa=(180/(10*pi)^2)
+					I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa))
+					C=0.6
+					m=1.25
+					pollenfall=0.126
+					pe=pollenfall/2.777
+
+
+					# variables
+					dx=-5
+					dy=5
+					phi=atan2(dx,dy)
+					phi
+					dr=sqrt(dx*dx+dy*dy)
+					dr
+
+					#N/E/S/W winds
+					windri=c(0,pi/2,pi,3*pi/2)
+					coss=cos(phi-windri)*-1
+					round(coss,1)
+						###round(cos(windri-phi),1)
+					
+					p=exp(kappa*coss)/(2*I0kappa)*(exp(-2*pe*(dr^(1-0.5*m))/(sqrt(pi)*C*(1-0.5*m))))
+					p
+					
+				*/
 				
-                                
+				if(rand()>p*RAND_MAX){
+				++posb;
+				//	pName.push_back(pTree_copy->name);
+				//	cpSNPs1.push_back(pTree_copy->cpSNP[0]);
+				//	cpSNPs2.push_back(pTree_copy->cpSNP[1]);
+				//	++posb; 
+				}else{
+					pName.push_back(pTree_copy->name);
+					// thdpthinfl.push_back(pTree->thawing_depthinfluence);
+					thdpthinfl.push_back(100);
+					//cpSNPs1.push_back(pTree_copy->cpSNP[0]);
+					//cpSNPs2.push_back(pTree_copy->cpSNP[1]);
+					++posb; 
+				}
+				
 				//data output for pollen flight analysis:
-				/*if(((year==1989)||(year==1998)||(year==1987)||(year==1997)) &&(dr>0)&&(rand()<0.0001*RAND_MAX)){
-				//print data in the most probable cases:
-				FILE *fdir;
-				outputstring<<year;
-				output="windgen_"+outputstring.str()+"_.txt";
-				fdir=fopen(output.c_str(),"a+");
-				fprintf(fdir,"%f \t %f\n",dr,phi);
-				fclose(fdir);
-				outputstring.str("");
-				outputstring.clear();
-				}*/
-			}
+				// if( parameter[0].ivort==1057 && parameter[0].omp_num_threads==1) // ivort==1057 => 1990
+				if(parameter[0].pollenvert==1 && parameter[0].omp_num_threads==1 && outputtreesiter<=5 && parameter[0].ivort==1057) // ivort==1057 => 1990
+				{
+					//print data
+					FILE *fdir;
+					char filenamechar[25];
+					sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].wiederholung);
+					string output="output/windgen_pollination_total_" + string(filenamechar) + ".txt";
+					fdir=fopen(output.c_str(),"a+");
+					fprintf(fdir,"%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name, pTree_copy->xcoo, pTree_copy->ycoo, x, y);
+					fclose(fdir);
+					// outputstring.str("");
+					// outputstring.clear();
+				}
 			}else{++posb;}
 		}
 		// cntr=0;cntr2=0;
@@ -290,7 +324,10 @@ double getEntfernung(double D, double ratiorn_help)
 		double fatalpha=0.5;
 		entf_help= 
 		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter)+(1/gaussfatratio)*parameter[0].distanceratio * (pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
-		
+
+
+//cout << " => " << entf_help;		
+
 		/* for R
 		
 		
@@ -312,7 +349,7 @@ double getEntfernung(double D, double ratiorn_help)
 
 
 
-void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, double &winddirection)
+void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, double &winddirection, double parhei, int seedspec)
 {
     int cntr=1,ripm=0;
 
@@ -323,11 +360,11 @@ void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, doub
     double geschwindigkeit=0.0;
 	
     if(parameter[0].windsource==4){
-        richtung=	M_PI * ( 270 / 180 );
+        richtung=	M_PI * ( 0 / 180 );
         cntr=0;//speed up
 		geschwindigkeit=2.7777;
     }else if(parameter[0].windsource==5){
-        richtung=	M_PI * ( 90 / 180 );
+        richtung=	M_PI * ( 180 / 180 );
         cntr=0;//speed up
 		geschwindigkeit=2.7777;
     }else if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)){
@@ -342,25 +379,68 @@ void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, doub
         geschwindigkeit=2.7777;
     }
 	
-    if (pseed->species==1){
-        maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescentg));
+    if (seedspec==1){
+
+        maxentfernung = (geschwindigkeit*0.75*parhei*0.01/(parameter[0].SeedDescentg));
+//        maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescentg));
 		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
 		// cout << " - " << maxentfernung;
-    }else if (pseed->species==2){
-        maxentfernung = (parameter[0].SeedTravelBreezes*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescents));
+    }else if (seedspec==2){
+        maxentfernung = (parameter[0].SeedTravelBreezes*0.75*parhei*0.01/(parameter[0].SeedDescents));     
+//    maxentfernung = (parameter[0].SeedTravelBreezes*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescents));
 		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
     }                                        
 
     if(parameter[0].dispersalmode==5){
+
+
+//cout << " (( ph/pseed-elternh=" << parhei << "/" << pseed->elternheight << " + mentf=" << maxentfernung << " ))";
+
         entfernung= getEntfernung(maxentfernung,rn);                                       
     }else if(parameter[0].dispersalmode!=5){
         entfernung=getEntfernung(maxentfernung,rn);
     }
     // cout << " - " << richtung;
 	
-    dy=sin(richtung)*entfernung;
-    dx=cos(richtung)*entfernung;
+    // dy=sin(richtung)*entfernung;
+    // dx=cos(richtung)*entfernung;
+    dy=cos(richtung)*entfernung;
+    dx=sin(richtung)*entfernung;
+	/* RCODE
 	
+		wind in north direction
+			winddirrect=0
+			entfernungstest=10
+			###dy=sin(winddirrect)*entfernungstest
+			dy=cos(winddirrect)*entfernungstest
+			dy
+			###dx=cos(winddirrect)*entfernungstest
+			dx=sin(winddirrect)*entfernungstest
+			dx
+		wind in east direction
+			winddirrect=pi/2
+			entfernungstest=10
+			dy=cos(winddirrect)*entfernungstest
+			dy
+			dx=sin(winddirrect)*entfernungstest
+			dx
+		wind in south direction
+			winddirrect=pi
+			entfernungstest=10
+			dy=cos(winddirrect)*entfernungstest
+			dy
+			dx=sin(winddirrect)*entfernungstest
+			dx
+		wind in west direction
+			winddirrect=3*pi/2
+			entfernungstest=10
+			dy=cos(winddirrect)*entfernungstest
+			dy
+			dx=sin(winddirrect)*entfernungstest
+			dx
+		
+	
+	*/
 	// cout << " - " << dy << "/" << dx;
 	
 	windspeed=geschwindigkeit;

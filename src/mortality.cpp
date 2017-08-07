@@ -1337,7 +1337,8 @@ if(mcorevariant==1)
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
-											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+											Vname,Vthdpth,
+											n_trees);//;,cpSNP1,cpSNP2);
 						}
 				
 						// get the characteristics for each surviving seed and push these back new to seed_list
@@ -1563,7 +1564,8 @@ if(mcorevariant==2)
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
-											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+											Vname,Vthdpth,
+											n_trees);//;,cpSNP1,cpSNP2);
 						}
 				
 						// get the characteristics for each surviving seed and push these back new to seed_list
@@ -1725,7 +1727,7 @@ if(mcorevariant==3)
 					}
 				}
 				advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
-				cout << endl << "---- lasttreewithseeds_pos=" << lasttreewithseeds_pos << " ==> tree_list.size()=" << tree_list.size() << endl << endl;
+				// cout << endl << "---- lasttreewithseeds_pos=" << lasttreewithseeds_pos << " ==> tree_list.size()=" << tree_list.size() << endl << endl;
 				
 				// if(lasttreewithseeds_pos>10)
 					// exit(1);
@@ -1825,11 +1827,14 @@ if(mcorevariant==3)
 					if(seedlebend>0)
 					{// START: if seedlebend>0
 						double start_timer_tresedliv=omp_get_wtime();	
-						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+// cout << endl << " -> Jahr=" << Jahr << " + ivort=" <<  parameter[0].ivort << endl;
+						// if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						if( (parameter[0].pollenvert==1 && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
-											Vname,Vthdpth);//;,cpSNP1,cpSNP2);
+											Vname,Vthdpth,
+											n_trees);//;,cpSNP1,cpSNP2);
 						}
 						double end_timer_tresedliv=omp_get_wtime();	
 						timer_tresedliv+=end_timer_tresedliv-start_timer_tresedliv;
@@ -1933,33 +1938,36 @@ if(mcorevariant==3)
 		// neue Ausgabe um zu beschleunigen
 		// ... seed list: only if age==0 &&namep!=0
 		// ... Ivort/X/Y/
-		if( ( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9) ) && (parameter[0].ausgabemodus!=9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+		//if( ( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9) ) && (parameter[0].ausgabemodus!=9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+		if(parameter[0].ivort>1045)
 		{
+// cout << endl << " -> Jahr=" << Jahr << " + ivort=" <<  parameter[0].ivort << endl;
+
 						//print data in the most probable cases:
 						char output[50];
 
 						FILE *fdir;
-						sprintf(output,"output/windgen_YR%.4d_REP%.3d.txt",Jahr,parameter[0].wiederholung);
+						sprintf(output,"output/windgen_IVORT%.4d_REP%.3d.txt",parameter[0].ivort,parameter[0].wiederholung);
 						
-						fdir=fopen(output,"r+");
+						fdir=fopen(output,"a+");
 						
 						if(fdir==NULL){
-						fdir=fopen(output,"w+");
+						fdir=fopen(output,"a+");
 						// fprintf(fdir,"IVORT \t distance \t rel_angle \t windspd \t winddir\n");
 						fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
 						}
 						
-						fseek(fdir,0,SEEK_END);
+						// fseek(fdir,0,SEEK_END);
 
 						// # print data
 								for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 								{
 									pseed=(*pos);
 									
-									if(pseed->age==0 && pseed->namep!=0)
+									// if(pseed->age==0 && pseed->namep!=0)
+									if(pseed->age==0)
 									{
-										fprintf(fdir,"%d \t %lf \t %lf \t %d \t %d \n",parameter[0].ivort,
-										pseed->xcoo,pseed->ycoo,pseed->namep,pseed->namem);
+										fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pseed->xcoo,pseed->ycoo,pseed->namep,pseed->namem);
 									}
 								}
 								

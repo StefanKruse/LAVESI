@@ -23,9 +23,10 @@
  
 					double x, double y,struct Parameter *parameter, vector<list<Tree*> >::iterator world_positon_b, int yr, 
 				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
-			vector<int> &pName, vector<double>  &thdpthinfl
+			vector<int> &pName, vector<double>  &thdpthinfl,
+			int outputtreesiter
 			);
- void seeddisp(double ad, int bd, double& cd, double& dd, double &vv, double &vd);
+ void seeddisp(double ad, int bd, double& cd, double& dd, double &vv, double &vd, double parhei, int seedspec);
  
  void Parametereinlesen(void);
  void SaveAllLists(void);

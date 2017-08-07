@@ -176,7 +176,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							double iquer=0;
 
 							double time_start_individual_seed_seeddisp=omp_get_wtime();
-							seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
+							seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 							cum_time_seeddisp+=omp_get_wtime()-time_start_individual_seed_seeddisp;
 
 							
@@ -273,7 +273,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							*/
 							
 							/// DEPRECEATED!!! not supported in this version
-							//SEEDTRAVELBETWEEN==TRUE-> mit periodischen RB verknüpfen!!!!!!!!!!!!!!!!!!
+							//SEEDTRAVELBETWEEN==TRUE-> mit periodischen RB verkn\FCpfen!!!!!!!!!!!!!!!!!!
 							/*
 							if ( (parameter[0].mapylength>1 || parameter[0].mapxlength>1) && parameter[0].seedtravelbetween==true && entfernung>(abschnittslaenge/2))
 							{  // Long Distance Dispersal in andere Flaechen Beginn
@@ -308,7 +308,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								///if seed flies out of the plot direction
 								// Eintragsflaeche ermitteln Beginn
 									
-									// Wie weit fliegt der Same, nur in das angrenzende Feld oder noch weiter darüber hinaus?
+									// Wie weit fliegt der Same, nur in das angrenzende Feld oder noch weiter dar\FCber hinaus?
 									int neueweltcoo=0;
 
 									if ((entfernung-(abschnittslaenge/2))<abschnittslaenge)
@@ -382,7 +382,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 										} 
 										else
-										{ // Same erreicht nicht den nächsten Plot 
+										{ // Same erreicht nicht den n\E4chsten Plot 
 											if (pseed->ycoo> (double) (treerows-1)) 
 											{
 												rausgeflogenN++;
@@ -393,7 +393,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											}
 
 											delete pseed;
-											//RAUSFLIEGENDE WERDEN GELÖSCHT!
+											//RAUSFLIEGENDE WERDEN GEL\D6SCHT!
 											pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 										} // seed bleibt im Feld Beginn	
 									}
@@ -440,7 +440,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 										}
 										else
-										{ // Same erreicht nicht den nächsten Plot 
+										{ // Same erreicht nicht den n\E4chsten Plot 
 											if (pseed->xcoo> (double) (treerows-1)) 
 												rausgeflogenO++; 
 												 if(parameter[0].periodRB==1){
@@ -467,8 +467,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							*
 							*******************************************************************************************/
 							// else
-							// { // "normales" Verhalten, also Same landet außerhalb des Plots aber erreicht nicht den nächsten Plot 
-								//(dazu müsste er mind. die Hälfte der Strecke zurücklegen), mit Same Beginn
+							// { // "normales" Verhalten, also Same landet au\DFerhalb des Plots aber erreicht nicht den n\E4chsten Plot 
+								//(dazu m\FCsste er mind. die H\E4lfte der Strecke zur\FCcklegen), mit Same Beginn
 								bool sameausserhalb=false;
 								
 								// Ueberpruefung ob im Feld sonst fliegt dieser aus dem Feld
@@ -513,7 +513,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//delete pseed;
 										sameausserhalb=true;
 										//cout<<"seed in a lake\n";
-										//IN SEEN LANDENDE seed WERDEN GELÖSCHT!
+										//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
 										//pos=seed_list.erase(pos);
 								}
 								 
@@ -561,7 +561,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//delete pseed;
 										sameausserhalb=true;
 										//cout<<"seed in a lake\n";
-										//IN SEEN LANDENDE seed WERDEN GELÖSCHT!
+										//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
 										//pos=seed_list.erase(pos);
 								}
 		
@@ -646,7 +646,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								double jquer=0;
 								double iquer=0;
 
-								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
+								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 								
 								
 								// seed dispersal output:
@@ -778,7 +778,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//delete pseed;
 											sameausserhalb=true;
 											//cout<<"seed in a lake\n";
-											//IN SEEN LANDENDE seed WERDEN GELÖSCHT!
+											//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
 											//pos=seed_list.erase(pos);
 									}
 									 
@@ -826,7 +826,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//delete pseed;
 											sameausserhalb=true;
 											//cout<<"seed in a lake\n";
-											//IN SEEN LANDENDE seed WERDEN GELÖSCHT!
+											//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
 											//pos=seed_list.erase(pos);
 									}
 			
@@ -865,7 +865,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			// cout << endl << " OMP seed dispersal variant (2 was chosen)=" << mcorevariant << endl;
 			
 				
-				double time_start_seeddisp=omp_get_wtime();
+				//double time_start_seeddisp=omp_get_wtime();
 				
 				omp_set_dynamic(0); //disable dynamic teams
 				omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -932,15 +932,18 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									double jquer=0;
 									double iquer=0;
 
-									seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung);
+// cout << endl << " namem=" << pseed->namem << "=> seed ph=" << pseed->elternheight;
+
+									seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 									
 // cout << " - " << sqrt(pow(iquer,2)+pow(jquer,2)) << " " << entfernung;
 // cout << " - " << jquer << "/" << iquer;
 
 									// seed dispersal output:
-									// if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
-									if(parameter[0].ivort>1 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
-									{	
+									if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									// if(parameter[0].ivort==1057 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									// if(parameter[0].ivort>1 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									{
 											double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 										
 
@@ -1073,7 +1076,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												//delete pseed;
 												sameausserhalb=true;
 												//cout<<"seed in a lake\n";
-												//IN SEEN LANDENDE seed WERDEN GELÖSCHT!
+												//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
 												//pos=seed_list.erase(pos);
 										}
 										 
@@ -1121,7 +1124,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												//delete pseed;
 												sameausserhalb=true;
 												//cout<<"seed in a lake\n";
-												//IN SEEN LANDENDE seed WERDEN GELÖSCHT!
+												//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
 												//pos=seed_list.erase(pos);
 										}
 				

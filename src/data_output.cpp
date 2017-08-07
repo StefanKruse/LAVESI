@@ -345,6 +345,16 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 				}
 
 			}
+			else if (parameter[0].ausgabemodus==5) // "TemperatureExperiment"
+			{
+				ausgabecurrencies=true;
+				
+				if (parameter[0].ivort>1045)
+				{
+					ausgabeindividuen=true;
+				}
+
+			}
 			else if (parameter[0].ausgabemodus==9) // "OMP"
 			{
 				ausgabecurrencies=true;
@@ -919,13 +929,20 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 			// -- -- -- -- -- BEGINN Individuelle trees -- -- -- -- -- -- //
 
 			// Dateinamen zusammensetzen
-			if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==2 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
+			if (parameter[0].ausgabemodus!=1)
 			{
 // 				char dateinamesuf[10];
 // 				sprintf(dateinamesuf, "%.5d_%.4d", jahr,parameter[0].weatherchoice);
-				s1<<jahr;s2<<parameter[0].weatherchoice;
-				dateiname="output/datatrees_" + s1.str()+"_"+s2.str() + ".csv";
-				s1.str("");s1.clear();s2.str("");s2.clear();
+				// s1<<jahr;s2<<parameter[0].weatherchoice;
+				// dateiname="output/datatrees_" + s1.str()+"_"+s2.str() + ".csv";
+				// s1.str("");s1.clear();s2.str("");s2.clear();
+					s1<<parameter[0].wiederholung;
+					s2<<parameter[0].weatherchoice;
+					s3<<parameter[0].ivort;
+					dateiname="output/datatrees_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
+					s1.str("");s1.clear();
+					s2.str("");s2.clear();
+					s3.str("");s3.clear();
 			}
 			else if (parameter[0].ausgabemodus==1)// hier weatherchoice nicht berücksichtigt!
 			{

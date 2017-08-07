@@ -47,8 +47,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double start_time_seedausbreitung = omp_get_wtime();
 	
 			// global from seeddisp in distribution.cpp
-				int findyr1=0,findyr2=0,yr;
-				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5){
+
+				int findyr1=0,findyr2=0,yr=0;
+				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
+				{
 					if(parameter[0].windsource==1){
 					findyr1=1947;findyr2=2012;
 					}else if(parameter[0].windsource==2){
@@ -56,20 +58,33 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					}else if(parameter[0].windsource==3){
 					findyr1=1959;findyr2=2002;
 					}
+				}
 									
-					if(jahr<findyr1 or jahr>findyr2){yr=(findyr1+(int)(rand()/(RAND_MAX+1.0)*(findyr2-findyr1)));
-					}else{yr=jahr;}
-									
-					for(int i=0;i<(signed)globalyears.size();i++){
-						if(globalyears[i]==yr){
-							for(int pos=0;pos<(signed)winddir[i].size();pos++){
-								wdir.push_back(winddir[i][pos]);
-								wspd.push_back(windspd[i][pos]);
-							} } }
-						
-					cntr=2*wdir.size();
-				}else{cntr=0;}
+				if(jahr<findyr1 or jahr>findyr2)
+				{
+					yr=(findyr1+(int)(rand()/(RAND_MAX+1.0)*(findyr2-findyr1)));
+				}else
+				{
+					yr=jahr;
+				}
+								
+				for(int i=0;i<(signed)globalyears.size();i++)
+				{
+					if(globalyears[i]==yr)
+					{
+						for(int pos=0;pos<(signed)winddir[i].size();pos++)
+						{
+							wdir.push_back(winddir[i][pos]);
+							wspd.push_back(windspd[i][pos]);
+						} 
+					}
+				}
+					
+				// cntr=2*wdir.size();
+			// }//else{cntr=0;}
 			// global end from seeddisp in distribution.cpp
+			
+// cout << endl << " alle tpars vor seedausbr ==> yr=" << yr << " + ivort=" <<  parameter[0].ivort << " + yearposition=" <<  yearposition << " + jahr=" <<  jahr << endl;
 
 			/*!::seedausbreitung(int treerows, int treecols, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)*/
 			seedausbreitung(treerows, treecols, yr, yearposition, &parameter[0], world_seed_list);
@@ -135,6 +150,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// MORTALITÄT,
 	double start_time_mortalitaet = omp_get_wtime();
 			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
+// cout << endl << " Uebergabe and Mortalitaet -> yr=" << yr << " + ivort=" <<  parameter[0].ivort << endl;
 			Mortalitaet(treerows, treecols, &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 			wdir.clear();
 			wspd.clear();    

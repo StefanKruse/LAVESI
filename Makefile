@@ -76,7 +76,7 @@ executables: $(OBJS)
 	
 .PHONY : clean
 clean: 
-	rm -rf data*.csv output/data*.csv pollDist* output/windgen*.txt t_*.txt *o LAVESIgen
+	rm -rf data*.csv nohup.out output/data*.csv pollDist* output/windgen*.txt t_*.txt *o LAVESIgen
 
 cleanoutput:
 	rm -rf data*.csv output/data*.csv t_*.txt

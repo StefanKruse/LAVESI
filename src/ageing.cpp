@@ -8,14 +8,7 @@
  * 5. if tree has cones already
  *
  *******************************************************************************************/
- 
-  //#ifndef _headers_H_
-  //#define _headers_H_
-  //#include "libraries.h"
-  //#include "declarations.h"
-  //#include "structures"
-  //#endif
- 
+
 void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)
 {
 
@@ -47,21 +40,6 @@ void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list
 					
 		}
 	}
-
-	/*int probe;
-	probe=1*1;
-	cout << "probe=" << probe << endl;
-	signed int probe_abbruch;
-	// Abfrage ob das Programm beendet oder fortgesetzt werden soll
-	printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n");
-	scanf("%d", &probe_abbruch);
-
-	if (probe_abbruch!=1) 
-	{
-		printf("LaVeSi wurde beendet\n\n"); 
-		exit(0);
-	}
-	*/ // Probe für persoenlichen Output
 
 	int mat_age_length=183; // length of array maturationheight
 
@@ -96,14 +74,14 @@ void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list
 			pTree=(*pos);
 			pTree->age++;
 
-			///Tree trägt keine cone
+			//Tree does not bear cones
 			if (pTree->cone==0)
 			{ 
 				
-				// Und hat noch keine Maturierationsheight
+				// and does not have a maturation height assigned to it
 				if (pTree->coneheight==99999)
 				{  
-					// treesn die in das age der Maturation kommen bekommen einen Wert 
+					// trees die in das age der Maturation kommen bekommen einen Wert 
 					// zugewiesen, ab dem sie cone tragen
 					// coneheight = höhe ab der dieser Tree cone trägt
 					// coneage = 15 (aus PE)
@@ -134,61 +112,7 @@ void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list
 
 				//Tree hat bereits Maturierationsheight zugewiesen bekommen
 				else if (pTree->coneheight!=99999)
-				{  
-			
-						///LIST OUTPUT NOW!
-							/*
-							if(parameter[0].pollenvert==2){
-							
-							FILE *dateizeiger;
-							string dateiname;
-
-							// Dateinamen zusammensetzen
-							char dateinamesuf[10];
-							sprintf(dateinamesuf, "%.4d", parameter[0].windsource);
-							dateiname="output/data_genealogie_" + string(dateinamesuf) + ".csv";
-					 
-							// Datei versuchen zum Lesen und Schreiben zu oeffnen
-							dateizeiger = fopen (dateiname.c_str(), "r+");
-							// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
-							if (dateizeiger == NULL)
-							{
-							  dateizeiger = fopen (dateiname.c_str(), "w");
-								fprintf(dateizeiger, "name;");
-								fprintf(dateizeiger, "maturationyear;");
-								fprintf(dateizeiger, "dyingyear;");
-								fprintf(dateizeiger, "NameM;");
-								//fprintf(dateizeiger, "NameP");
-								fprintf(dateizeiger, "xcoo;");
-								fprintf(dateizeiger, "ycoo;");
-								fprintf(dateizeiger, "art;");
-								fprintf(dateizeiger, "\n");
-
-								if (dateizeiger == NULL)
-								{
-									fprintf(stderr, "Error, could not open genealogy file\n");
-									exit(1);
-								}
-							}
-
-							// Die neuen Informationen werden ans Ende der Datei geschrieben
-							fseek(dateizeiger,0,SEEK_END);
-
-							// Datenaufbereiten und in die Datei schreiben
-							fprintf(dateizeiger, "%d;", pTree->name);
-							fprintf(dateizeiger, "%d;", jahr);
-							fprintf(dateizeiger, "%d;", 0);
-							fprintf(dateizeiger, "%d;", pTree->namem);
-							//fprintf(dateizeiger, "%d;", pTree->namep);//nee
-							fprintf(dateizeiger, "%4.5f;", pTree->xcoo);
-							fprintf(dateizeiger, "%4.5f;", pTree->ycoo);	
-							fprintf(dateizeiger, "%d;", pseed->species);
-							fprintf(dateizeiger, "\n");
-
-							fclose (dateizeiger);
-							}
-							*/
-							
+				{  							
 					/// Wenn ein Tree groeszer ist als diese Maturationshöhe, so bekommt er cone	
 					if (pTree->height >= pTree->coneheight)
 						pTree->cone=1;
@@ -202,7 +126,7 @@ void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list
 			///Tree trägt cone
 			else if (pTree->cone==1)
 			{ 
-				/// seedzaehlung
+				/// counting seeds
 				pTree->seedproduced+=pTree->seednewly_produced; 
 				pTree->seednewly_produced=0;
 

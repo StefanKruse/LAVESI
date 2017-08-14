@@ -1,5 +1,5 @@
 HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/funktionen.h
-CFLAGS= -c -O0 -g3 -g -ggdb3 -std=c++0x -Wno-parentheses -Wall -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
+CFLAGS= -c -O0 -g3 -g -ggdb3 -std=c++0x -Wextra -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
 CC=g++	#$(CXX)
 OBJS = $(./%.o)
 

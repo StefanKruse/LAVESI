@@ -1,11 +1,4 @@
-﻿
-
-
-
-
-
-
-/****************************************************************************************//**
+﻿/****************************************************************************************//**
  * \brief calculate tree mortality
  *
  * depends on abiotic factors (temperature and number of days with temperatures above 20 degrees)
@@ -212,119 +205,6 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 				if (((pTree->species==1) && (zufallsz<Treemortg)) || ((pTree->species==2) && (zufallsz<Treemorts))) 
 				{
-					//pTree->yr_of_dying=yearposition; Im Moment noch egal
-					//pTree->Dbasalliste.clear();
-					// http://www.cs.up.ac.za/cs/banguelov/blog/vectorMemLeak.cpp Dort hat jemand das Problem behandelt und eine Loesung vorgeschlagen. 
-					//Wenn nur clear aufgerufen wird, so wird der allozierte Speicher nicht!! freigegeben. Daher auch soviel Speicherverbrauch?! 
-					//Der Trick ist folgender. Der vector wird mit einem leeren vector geswapt (http://takinginitiative.net/2008/03/19/stl-vector-memory-deallocation-problems-memory-leak/)
-
-					
-					
-					/* to reduce computation load, delete the following printout section
-					//StefanC: Ausgabe der Infos des sterbenden Treees
-					double toteinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-					if ((pTree->age>10)&(toteinschreibzufall<0.0000001)) 
-					{//StefanC: Bei Tod eines Treees Ausgabe
-						FILE *dateizeiger;
-						string dateiname;
-
-							// Dateinamen zusammensetzen
-							char dateinamesuf[10];
-							sprintf(dateinamesuf, "%.4d", parameter[0].weatherchoice);
-							dateiname="output/datatrees_death" + string(dateinamesuf) + ".csv";
-					 
-							// Datei versuchen zum Lesen und Schreiben zu oeffnen
-							dateizeiger = fopen (dateiname.c_str(), "r+");
-							// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
-							if (dateizeiger == NULL)
-							{
-							  dateizeiger = fopen (dateiname.c_str(), "w");
-								fprintf(dateizeiger, "yearposition_help;");
-								fprintf(dateizeiger, "temp1monatmitteliso;");
-								fprintf(dateizeiger, "janisothermrestriktiong;");
-								fprintf(dateizeiger, "janisothermrestriktions;");								
-								fprintf(dateizeiger, "julisothermrestriktion;");
-								fprintf(dateizeiger, "nddrestriktion;");		
-								fprintf(dateizeiger, "weatherchoice;");
-								fprintf(dateizeiger, "agesmort;");
-								fprintf(dateizeiger, "wachstumrel;");
-								fprintf(dateizeiger, "growing;");
-								fprintf(dateizeiger, "heightnkugeleinfluss;");	
-								fprintf(dateizeiger, "height;");
-								fprintf(dateizeiger, "age;");
-								fprintf(dateizeiger, "species;");
-								fprintf(dateizeiger, "mortbg;");	
-								fprintf(dateizeiger, "weathermortadd;");	
-								fprintf(dateizeiger, "maxh;");	
-								fprintf(dateizeiger, "Treemort;");								
-								fprintf(dateizeiger, "sapl_mort;");
-								fprintf(dateizeiger, "weather_mort;");								
-								fprintf(dateizeiger, "age_mort;");
-								fprintf(dateizeiger, "growth_mort;");
-								fprintf(dateizeiger, "dens_mort;");
-								fprintf(dateizeiger, "dry_mort;");
-								fprintf(dateizeiger, "zufallsz;");
-								fprintf(dateizeiger, "\n");
-
-								if (dateizeiger == NULL)
-								{
-									fprintf(stderr, "Fehler: Todesfalldatei konnte nicht geoeffnet werden!\n");
-									exit(1);
-								}
-							}
-
-							// Die neuen Informationen werden ans Ende der Datei geschrieben
-							fseek(dateizeiger,0,SEEK_END);
-
-							// Datenaufbereiten und in die Datei schreiben
-							fprintf(dateizeiger, "%d;", yearposition_help);
-							fprintf(dateizeiger, "%4.5f", weather_list[yearposition_help]->temp1monatmitteliso);
-							fprintf(dateizeiger, "%4.5f;", weather_list[yearposition_help]->janisothermrestriktiong);
-							fprintf(dateizeiger, "%4.5f;", weather_list[yearposition_help]->janisothermrestriktions);
-							fprintf(dateizeiger, "%4.5f;", weather_list[yearposition_help]->julisothermrestriktion);
-							fprintf(dateizeiger, "%4.5f;", weather_list[yearposition_help]->nddrestriktion);
-							fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-							fprintf(dateizeiger, "%4.5f;", agesmort);
-							fprintf(dateizeiger, "%4.5f;", wachstumrel);
-							if (pTree->growing==true) 
-							{
-								fprintf(dateizeiger, "growing;");
-							}
-							else 
-							{
-								fprintf(dateizeiger, "static;");
-							}	
-							fprintf(dateizeiger, "%4.5f;", heightnkugeleinfluss);
-							fprintf(dateizeiger, "%4.5f;", pTree->height);
-							fprintf(dateizeiger, "%d;", pTree->age);
-							fprintf(dateizeiger, "%d;", pTree->species);
-							fprintf(dateizeiger, "%4.5f;", parameter[0].mortbg);
-							if(pTree->species==1)
-							{
-								fprintf(dateizeiger, "%4.5f;", weathermortaddg);
-								fprintf(dateizeiger, "%4.5f;", maxhg);			
-								fprintf(dateizeiger, "%4.5f;", Treemortg);							
-								fprintf(dateizeiger, "%4.5f;", sapl_mort_gmel);
-								fprintf(dateizeiger, "%4.5f;", weather_mort_gmel);
-							}
-							else
-							{
-								fprintf(dateizeiger, "%4.5f;", weathermortadds);
-								fprintf(dateizeiger, "%4.5f;", maxhs);			
-								fprintf(dateizeiger, "%4.5f;", Treemorts);							
-								fprintf(dateizeiger, "%4.5f;", sapl_mort_sib);
-								fprintf(dateizeiger, "%4.5f;", weather_mort_sib);							
-							}
-							fprintf(dateizeiger, "%4.5f;", age_mort);
-							fprintf(dateizeiger, "%4.5f;", growth_mort);
-							fprintf(dateizeiger, "%4.5f;", dens_mort);
-							fprintf(dateizeiger, "%4.5f;", dry_mort);
-							fprintf(dateizeiger, "%4.5f;", zufallsz);
-							fprintf(dateizeiger, "\n");
-
-							fclose (dateizeiger);
-					} //StefanC: Ende der Ausgabefunktion fuer tote Treee
-					*/
 					
 					delete pTree;//LEGT yr_of_dying FEST
 					pos=tree_list.erase(pos);
@@ -1283,6 +1163,10 @@ if(mcorevariant==1)
 		{ // START: parallel region
 			// declare a local seed list to be filled by each thread
 			list<seed*> newseed_list;
+			
+		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
+		I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+		
 				// timers
 				int n_trees=0;
 				double timer_eachtree_advance=0;
@@ -1477,6 +1361,8 @@ if(mcorevariant==2)
 		/// #####################################
 		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
+		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
+		I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 
 			// initialize the info for each of the thread
@@ -1738,6 +1624,11 @@ if(mcorevariant==3)
 				
 		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{// START: parallel region
+		
+		
+		
+		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+			    I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;
 
 			// initialize the info for each of the thread
 			int thread_count = omp_get_num_threads();
@@ -1857,28 +1748,11 @@ if(mcorevariant==3)
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
 								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
-								
-								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
-								//pseed->cpSNP[0]=cpSNP1[iran];
-								//pseed->cpSNP[1]=cpSNP2[iran];
-								
-								//pseed->descent=
-								//pseed->pollenfall=
-								//pseed->maxgrowth=
 							} else
 							{
 								pseed->namep=0;
 								pseed->thawing_depthinfluence=100;
 							}
-							//pseed->cpSNP[0]=0;
-							//pseed->cpSNP[1]=0;}
-							/*cout<<pseed->namep<<endl;
-							cout<<pseed->cpSNP[0]<<endl;
-							cout<<pseed->cpSNP[1]<<endl;*/
-							
-
-							//pseed->mtSNP[0]=pTree->mtSNP[0];
-							//pseed->mtSNP[1]=pTree->mtSNP[1];
 							
 							pseed->line=pTree->line;
 							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
@@ -1893,12 +1767,6 @@ if(mcorevariant==3)
 						}// END: create new seeds
 						double end_timer_createseeds=omp_get_wtime();	
 						timer_createseeds+=end_timer_createseeds-end_timer_tresedliv;
-
-						/*if(parameter[0].pollenvert==1)// maybe this is not needed because it is now locally constructed for each tree
-						{
-							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
-						}
-						*/
 					}// END: if seedlebend>0
 						double end_timer_seedsurv_seedadd=omp_get_wtime();
 						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
@@ -1928,9 +1796,6 @@ if(mcorevariant==3)
 					timer_createseeds_all+=timer_createseeds/n_trees;
 			}
 		} // END: parallel region
-
-		
-
 	
 }// OMP==3
 		
@@ -1951,7 +1816,8 @@ if(mcorevariant==3)
 						
 						fdir=fopen(output,"a+");
 						
-						if(fdir==NULL){
+						if(fdir==NULL)
+						{
 						fdir=fopen(output,"a+");
 						// fprintf(fdir,"IVORT \t distance \t rel_angle \t windspd \t winddir\n");
 						fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
@@ -1975,24 +1841,6 @@ if(mcorevariant==3)
 						fclose(fdir);
 
 		}// file output
-			
-			
-			
-		// write timers to file
-		// cout << endl;
-		// cout << timer_eachtree_advance_all << endl;
-		// cout << timer_eachtree_vectini_all << endl;
-		// cout << timer_eachtree_seedsurv_all << endl;
-		// cout << timer_eachtree_seedadd_all << endl;
-		// cout << timer_eachtree_total_all << endl;
-		// cout << endl;
-		// printf("%10.20f\n",timer_eachtree_advance_all);
-		// printf("%10.20f\n",timer_eachtree_vectini_all);
-		// printf("%10.20f\n",timer_eachtree_seedsurv_all);
-		// printf("%10.20f\n",timer_eachtree_seedadd_all);
-		// printf("%10.20f\n",timer_eachtree_total_all);
-	//}// end if omp choice
-		
 		
 			
 		double end_time_poll=omp_get_wtime();
@@ -2005,7 +1853,8 @@ if(mcorevariant==3)
 			openpoll:
 			FILE *fp4;
 			fp4=fopen("t_N_poll.txt","a+");
-			if(fp4==0){goto openpoll;}
+			if(fp4==0)
+			{goto openpoll;}
 			fprintf(fp4,"%d;%lu;%lu;%10.10f;%10.10f;%10.10f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
 					parameter[0].ivort, 
 					seed_list.size(),
@@ -2024,65 +1873,6 @@ if(mcorevariant==3)
 					timer_createseeds_all
 				);
 			fclose(fp4);
-			
-			/* script to analyse computation times in R
-			
-				# read output data of general computation times
-				dain=read.table(paste0("M:/Documents/Programmierung/git/LAVESI_wind/LAVESI/","/t_N_mort.txt"), header=FALSE, sep=";", dec=".")
-				names(dain)=c("N_tree", "time", "mort", "kartenup", "wachstum", "seeddisp", "seedprod", "treedistribu", "etablier", "fire", "output", "mortality", "ageing", "all")
-				str(dain)
-				
-				# read specifically mortality/pollination computation times
-				dain_p=read.table(paste0("M:/Documents/Programmierung/git/LAVESI_wind/LAVESI/","/t_N_poll.txt"), header=FALSE, sep=";", dec=".")
-				names(dain_p)=c("time", "N_seed","N_tree", "pollseedmort", "treemort", "seedmort", "advanc","vecti","seedsurv","seedadd","eachtree", "BefrW", "SeedCreate")
-				str(dain_p)
-				summary(dain_p)
-				#names(dain_p)=c("N_tree", "time", "pollseedmort", "treemort")
-				# .. redo and calc when all three output variables are included
-								dev.new();pie(apply(dain_p[,c("advanc","vecti","seedsurv","BefrW", "SeedCreate")], 2, function(x)sum(na.omit(x))))
-								
-				dain=merge(dain, dain_p, sort=FALSE)
-				str(dain)
-				
-				# subset/postprocess
-					damat=dain[c(4:11,13, 16:17)]
-					rm=apply(damat,1,function(x)sum(na.omit(x)))
-					for(rowi in 1:dim(damat)[1])
-					{
-						damat[rowi,]=damat[rowi,]/rm[rowi]
-					}
-					clbp=rainbow(s=0.5,n=dim(damat)[2])
-					# add nas for missing fill up to 100 yrs
-					if(dim(damat)[1]<100)
-					{
-						dfiad=as.data.frame(matrix(NA, nrow=100-dim(damat)[1], ncol=dim(damat)[2]))
-						names(dfiad)=names(damat)
-						damat=rbind(damat,dfiad)
-					}
-		
-		
-				# plot
-				dev.new(height=400*1,width=1000)
-				par(mar=c(4,0,1,0))
-				layout(matrix(c(1:(2*1)), ncol=2, nrow=1, byrow=TRUE), width=c(1,0.2), height=1)
-				layout.show(2)
-
-					par(mar=c(4,0,1,0))
-						barplot(t(as.matrix(damat)), main=paste0(" -> mean time for one year (sim years=", max(dain$time),"): ",round(mean(rm),0)," sec"), border=NA, yaxt="n", col=clbp, axes=FALSE)#, names.arg=rep(NA,100))
-							# overlay full time for computation
-							par(new=TRUE)
-							with(dain, plot(all~time, type="l", lwd=2, xaxt="n", yaxt="n", ylab="", xlab="", bty="n", xlim=c(0,100)))
-							# axis(2,line=-2)
-							# with(dain, points(rm~time, type="l", col="red", lty=2, lwd=2, xaxt="n", yaxt="n", ylab="", xlab="", bty="n"))
-
-					par(mar=c(8,0,1,3))
-						barplot(apply(damat[1:dim(dain[4:13])[1],],2,mean), border=NA, yaxt="n", las=2, col=clbp)
-						# pie(apply(damat,2,mean), border=NA, yaxt="n", las=2, col=clbp)
-						axis(side=4,las=1)
-				
-				
-				
-			*/
 		}
 	
 	

@@ -1,23 +1,6 @@
-// Kompilieren mit Hilfer einer Makefile mittels dem Befehl: make -f Makefile ...
-// ... oder manuell mit: g++ main.cpp -o wachstum -c -Wall
-
-
-
-// used headers
-//#include "./inc/libraries.h"
-//#include "./inc/structures.h"
-//#include "./inc/declarations.h"
-
-// Programmmodule
-
-
-
-
 using namespace std;
 
 int yearposition; //deletion
-
-
 
 /****************************************************************************************//**
  * \brief go through all functions for vegetation dynamics
@@ -29,12 +12,11 @@ int yearposition; //deletion
  *******************************************************************************************/
 void vegetationDynamics(int yearposition, int jahr, int t)
 {
-	// densityKARTE updaten
+	// density grid update
 	double start_time_kartenup = omp_get_wtime();
 			/*!::Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)*/
 			Kartenupdate(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
-
 	
 			// growth
 	double start_time_wachstum = omp_get_wtime();
@@ -42,7 +24,6 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			Wachstum(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_weather_list, world_plot_list);
 	double end_time_wachstum = omp_get_wtime();
 
-			
 			// seed dispersal
 	double start_time_seedausbreitung = omp_get_wtime();
 	
@@ -51,11 +32,16 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				int findyr1=0,findyr2=0,yr=0;
 				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 				{
-					if(parameter[0].windsource==1){
+					if(parameter[0].windsource==1)
+					{
 					findyr1=1947;findyr2=2012;
-					}else if(parameter[0].windsource==2){
+					}
+					else if(parameter[0].windsource==2)
+					{
 					findyr1=1979;findyr2=2012;
-					}else if(parameter[0].windsource==3){
+					}
+					else if(parameter[0].windsource==3)
+					{
 					findyr1=1959;findyr2=2002;
 					}
 				}
@@ -80,22 +66,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					}
 				}
 					
-				// cntr=2*wdir.size();
-			// }//else{cntr=0;}
-			// global end from seeddisp in distribution.cpp
-			
-// cout << endl << " alle tpars vor seedausbr ==> yr=" << yr << " + ivort=" <<  parameter[0].ivort << " + yearposition=" <<  yearposition << " + jahr=" <<  jahr << endl;
-
-			/*!::seedausbreitung(int treerows, int treecols, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)*/
+		
 			seedausbreitung(treerows, treecols, yr, yearposition, &parameter[0], world_seed_list);
 			
-			// global from seeddisp in distribution.cpp
-				// wdir.clear();
-				// wspd.clear();      
-			// global end from seeddisp in distribution.cpp
 	double end_time_seedausbreitung = omp_get_wtime();
-	
-	
 	
 			// seed production
 	double start_time_seedproduktion = omp_get_wtime();
@@ -120,7 +94,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			{
 				parameter[0].starter=true;
 				Treeverteilung(treerows, treecols, &parameter[0],  wortlaengemax, yearposition, world_tree_list, world_seed_list, vegetationtype);
-			}else if(parameter[0].defTreevert==1 && parameter[0].seedintro==true){
+			}
+			else if(parameter[0].defTreevert==1 && parameter[0].seedintro==true)
+			{
 				parameter[0].starter=true;//seed statt trees
 				Treeverteilung(treerows, treecols, &parameter[0],  wortlaengemax, yearposition, world_tree_list, world_seed_list, vegetationtype);
 			}
@@ -164,20 +140,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double end_time_Ageing = omp_get_wtime();
 
 	// print the computation time to the console and into a file
-	if(parameter[0].computationtime==1){
-		
-		/*
-		cout << endl << "plot update time: " << (((double) (end_time_kartenup - start_time_kartenup))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "growth time: " << (((double) (end_time_wachstum - start_time_wachstum))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "seed dispersal time: " << (((double) (end_time_seedausbreitung - start_time_seedausbreitung))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "seed production time: " << (((double) (end_time_seedproduktion - start_time_seedproduktion))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "tree distribution time: " << (((double) (end_time_Treeverteilung - start_time_Treeverteilung))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "establishment time: " << (((double) (end_time_etablierung - start_time_etablierung))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "fire time: " << (((double) (end_time_feuer - start_time_feuer))/ CLOCKS_PER_SEC) << endl;	
-		cout << endl << "data output time: " << (((double) (end_time_Data_output - start_time_Data_output))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "mortality time: " << (((double) (end_time_mortalitaet - start_time_mortalitaet))/ CLOCKS_PER_SEC) << endl;
-		cout << endl << "ageing time: " << (((double) (end_time_Ageing - start_time_Ageing))/ CLOCKS_PER_SEC) << endl;
-		*/
+	if(parameter[0].computationtime==1)
+	{
 		
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
 			printf("\n   - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
@@ -215,29 +179,11 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		list<Tree*>& tree_list = *world_positon_b;
 		// list<seed*>& seed_list = *world_position_s;
 
-		/*open:
-		FILE *fp2;
-		fp2 =fopen("t_N.txt","a+");
-		if(fp2==0){goto open;}
-			fprintf(fp2,"%lu \t %10.20f \n",tree_list.size(), 
-			((end_time_Ageing - start_time_Ageing)+
-			(end_time_mortalitaet - start_time_mortalitaet)+
-			(end_time_Data_output - start_time_Data_output)+
-			(end_time_feuer - start_time_feuer)+
-			(end_time_etablierung - start_time_etablierung)+
-			(end_time_Treeverteilung - start_time_Treeverteilung)+
-			(end_time_seedproduktion - start_time_seedproduktion)+
-			(end_time_seedausbreitung - start_time_seedausbreitung)+
-			(end_time_wachstum - start_time_wachstum)+
-			(end_time_kartenup - start_time_kartenup)
-			));
-		fclose(fp2);
-		*/
-
 		openmort:
 		FILE *fp3;
 		fp3 =fopen("t_N_mort.txt","a+");
-		if(fp3==0){goto openmort;}
+		if(fp3==0)
+			{goto openmort;}
 			fprintf(fp3,"%lu;%d;%f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
 			tree_list.size(),
 			parameter[0].ivort, 
@@ -580,11 +526,8 @@ void Jahresschritte()
 			// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 			int jahr=parameter[0].startjahr+t;
 			
-			// if(!(jahr%10 && parameter[0].pollenDistdensplot==1)){cout<<jahr<<endl; influx(treerows,treecols,&parameter[0] , jahr , world_tree_list , vegetationtype);}
-
-			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
-                        // yearposition=yearposition%80;
+            
 
 			if (parameter[0].jahranzeige ==true) 
 			{
@@ -1149,19 +1092,7 @@ int main()
 
 			/// Parametereinlesen()
 			Parametereinlesen();
-			
-			/*if(parameter[0].defTreevert==1){
-				VegeTypeIni();
-			
-			for(int j=0;j<treecols;j++){
-			for(int i=0;i<treerows;i++){
-			cout<<vegetationtype[j][i]<<" ";
-			}
-			cout<<endl;
-			}
-			
-			}*/
-			
+						
 			// Sicherheitsabfragen zu bestimmten Parameterkombinationen
 			// ... weather- und Treestartchoice
 			if (parameter[0].weatherchoice!=parameter[0].starttrees && parameter[0].starttrees!=0)
@@ -1273,7 +1204,8 @@ int main()
 	cout << endl << "Total time: " << (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC) << endl; //StefanC: Zeit fuer Gesamtlauf
 	
 	//print areal dependency of total simulation time:
-	if(parameter[0].computationtime==1){
+	if(parameter[0].computationtime==1)
+	{
 		FILE *fp;
 		fp=fopen("t_A.txt","a+");
 			fprintf(fp,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));

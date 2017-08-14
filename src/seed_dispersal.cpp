@@ -188,7 +188,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 									
 
-										if(seedeinschreibzufall<0.01){
+										if(seedeinschreibzufall<0.01)
+										{
 																	entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
 																	richtung=atan2(iquer,jquer);
 																	
@@ -655,7 +656,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 									
 
-										if(seedeinschreibzufall<0.01){
+										if(seedeinschreibzufall<0.01)
+										{
 																	entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
 																	richtung=atan2(iquer,jquer);
 																	
@@ -948,9 +950,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										
 
 
-											if(seedeinschreibzufall<0.01){
-																		entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
-																		richtung=atan2(iquer,jquer);
+											if(seedeinschreibzufall<0.01)
+											{
+												entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+												richtung=atan2(iquer,jquer);
 																		
 												//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
 												FILE *dateizeiger;

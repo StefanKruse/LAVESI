@@ -14,7 +14,8 @@
 
 
 
-void influx(int treerows, int treecols,  struct Parameter *parameter, int year, vector<list<Tree*> > &world_tree_list , vector<vector<double> > &vegetationtype){
+void influx(int treerows, int treecols,  struct Parameter *parameter, int year, vector<list<Tree*> > &world_tree_list , vector<vector<double> > &vegetationtype)
+{
 	int i, j;
 	int aktort=0;
 	//vector<double> influx;
@@ -48,7 +49,8 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 		aktort++;
   
   
-  for(j=0;j<10*treecols;j++){y[j]=j*0.1;p[j]=0.0;}
+  for(j=0;j<10*treecols;j++)
+  {y[j]=j*0.1;p[j]=0.0;}
   
 	char datname[20];
 	FILE *fp;
@@ -59,39 +61,58 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 				
 	wdir.clear();wspd.clear();
 	
-	 if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5){
+	 if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
+	 {
 		
-			if(parameter[0].windsource==1){
+			if(parameter[0].windsource==1)
+			{
 		    findyr1=1947;findyr2=2012;
-		    }else if(parameter[0].windsource==2){
+		    }
+			else if(parameter[0].windsource==2)
+			{
 		    findyr1=1979;findyr2=2012;
-		    }else if(parameter[0].windsource==3){
+		    }
+			else if(parameter[0].windsource==3)
+			{
 		    findyr1=1959;findyr2=2002;
 			}
 			
-		if((year<findyr1) or (year>findyr2)){pickyear=(findyr1+(int)(rand()/RAND_MAX*(findyr2-findyr1)));}else{pickyear=year;}
+		if((year<findyr1) or (year>findyr2))
+		{pickyear=(findyr1+(int)(rand()/RAND_MAX*(findyr2-findyr1)));
+		}
+		else
+		{pickyear=year;}
 		
-		for(unsigned int i=0;i<(unsigned int)globalyears.size();i++){
-		if(globalyears[i]==pickyear){
-		for(unsigned int pos=0;pos<(unsigned int)winddir[i].size();pos++)
-		{		 
-		 wdir.push_back(M_PI*winddir[i][pos]/180);
-		 wspd.push_back(windspd[i][pos]);
-		}}}
+		for(unsigned int i=0;i<(unsigned int)globalyears.size();i++)
+		{
+			if(globalyears[i]==pickyear)
+			{
+				for(unsigned int pos=0;pos<(unsigned int)winddir[i].size();pos++)
+				{		 
+				wdir.push_back(M_PI*winddir[i][pos]/180);
+				wspd.push_back(windspd[i][pos]);
+				}
+			}
+		}
 		cntr=2*wdir.size();
 		
-		}else if(parameter[0].windsource==4){
+		}
+		else if(parameter[0].windsource==4)
+		{
 		 richtung=M_PI/180 *270;
 // 		  kappa=pow(M_PI/(30*180),2);
-		}else if(parameter[0].windsource==5){
+		}else if(parameter[0].windsource==5)
+		{
 		  richtung=M_PI/180 *90;
 // 		   kappa=pow(M_PI/(30*180),2);
-		}else if(parameter[0].windsource==0){
+		}else if(parameter[0].windsource==0)
+		{
 		richtung=M_PI*(rand()/RAND_MAX); 
 		}
 		
 		
-		if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)){
+		if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3))
+		{
 		 ripm=((unsigned int)floor(0.25*cntr - 2* 0.0833333*cntr));//etwa Anfang Mai
 		 //Mittelwertberechnung
 		 for(unsigned int i=ripm;i<floor(ripm+0.5*0.58*cntr);i++){//bis etwa Ende August
@@ -107,14 +128,11 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 		 
 		 //cout<<"ripm and cntr2:  "<<ripm<<"\t"<<cntr2<<endl;
 			
-		 for(unsigned int i=ripm;i<(unsigned int)(ripm+cntr2);i++){
-// 		  if(wspd[i]>parameter[0].pollenthreshold){
+		 for(unsigned int i=ripm;i<(unsigned int)(ripm+cntr2);i++)
+		 {
 		   kappa+=((M_PI/180*wdir.at(i)-richtung)*(M_PI/180*wdir.at(i)-richtung));//
-// 		   lambda+=(wspd[i]-geschwindigkeit)*(wspd[i]-geschwindigkeit);
-// 		  }//pollenthreshold-> not tested
 		 }
 		 		 
-		 //pe=(parameter[0].pollenfall+parameter[0].pollenauftr)/geschwindigkeit; //??
 		 pe=0.126/geschwindigkeit;
 		 
 		 if(kappa==0.0){kappa=pow((parameter[0].pollenrichtungsvarianz*180/M_PI),2);cntr2=1;}
@@ -135,48 +153,39 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 	
 	
 	treecntr=0;
-	for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ){
-			//for(j=0;j<10*treecols;j++) {p[j]=0;}
-			
+	for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )
+	{
 			pTree= *posb;
 		
-		if(pTree->cone!=0){
+		if(pTree->cone!=0)
+		{
 		treecntr++;
 	//cout<<"iteriere über gesamte fläche\n";
 	
-	for(j=0;j<10*treecols;j++){
+		for(j=0;j<10*treecols;j++)
+		{
 		
-	//for(i=0;i<10*treerows;i++){
 		i=0;
 		x[0]=0.5*treerows;
-
-		
-		//if(((parameter[0].defTreevert==1)&&(vegetationtype[i][j]==0.0)) or ((parameter[0].defTreevert==0)&&(i==floor(0.5*treerows))&&(j==floor(0.5*treecols))) ){
-											//if no vegetationtype matrix is given (no lake)->  calc. pollen influx rates in center of plot
-											//i= rather than i==-> defining i and j rather than comparing-> speed up
-				//pollen productivity :=		distance weighted slope of the function: pollen percentages = slope*(plant abundance)+background pollen loading
-				//										=0.16 +- 0.05 for larix pollen in lakes of the khatanga region... 
-				//A+=pow(10,4);//seefläche in cm
-			//treecntr=0;
-	//cout<<"iteriere über alle trees\n";
- 	
-			//treecntr++;
-			
-			//cout<<pTree->name<<endl;
-			
-				//cout<<"cone==true\n";
 				
  			dx=(pTree->xcoo) -x[i]; 	//-0.5/+0.5
 			dy=(pTree->ycoo) -y[j];	//-0.5/+0.5
  			dr=sqrt(pow(dx,2)+pow(dy,2));
 			
- 			if((dx!=0)&&(dy!=0)){
+ 			if((dx!=0)&&(dy!=0))
+			{
  			  phi=atan(dx/dy);//
- 			}else if((dx==0)&&(dy!=0)){
+ 			}
+			else if((dx==0)&&(dy!=0))
+			{
  			  phi=0.0;
- 			}else if((dx!=0)&&(dy==0)){
+ 			}
+			else if((dx!=0)&&(dy==0))
+			{
  			  phi=M_PI*0.5;
- 			}else{phi=richtung;}
+ 			}
+			else
+			{phi=richtung;}
  			
 			//integrated spacial derivative of number of pollen in the air column above vegetationtype[i,j]==0
 			//= the decline of total pollen number from the borders of vegtype==0.
@@ -199,7 +208,9 @@ void influx(int treerows, int treecols,  struct Parameter *parameter, int year, 
 		
 		//}	
 		//if(parameter[0].defTreevert==0){break;} 
-	}else{++posb;}
+	}
+	else
+	{++posb;}
 	//if(parameter[0].defTreevert==0){break;} 
 	//now: ABSOLUTE pollen distribution function in x direction!
 }

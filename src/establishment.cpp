@@ -63,7 +63,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 					double maxbasalwachstum = 0;
 
 					if (parameter[0].lineartransekt==true)
-					{ //if(yearposition<80){
+					{ 
 						if(pseed->species==1)
 						{
 							maxbasalwachstum = exp(parameter[0].gdbasalconstgmel+parameter[0].gdbasalfacgmel*0+parameter[0].gdbasalfacqgmel*0*0)*
@@ -119,40 +119,46 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								//else mutationsrate: if rand()<= RAND_MAX*10^-4 for example
 								// pTree->cpSNP+= or -= 2^rand()/RAND_MAX*sizeof(int)
 								//
-								//int choice=rand();
 								
-								//if(pseed->generation==0){//only with seed distribution as initialisation status...
-								//pTree->cpSNP[0]=startcpSNP;
-								//pTree->cpSNP[1]=startcpSNP+rand();//TEST!
-								//pTree->mtSNP[0]=startmtSNP;
-								//pTree->mtSNP[1]=startmtSNP+rand();//TEST!
+								/*//int choice=rand();
+								
+								if(pseed->generation==0)
+								{//only with seed distribution as initialisation status...
+								pTree->cpSNP[0]=startcpSNP;
+								pTree->cpSNP[1]=startcpSNP+rand();//TEST!
+								pTree->mtSNP[0]=startmtSNP;
+								pTree->mtSNP[1]=startmtSNP+rand();//TEST!
 								
 								//loci=200 + SSRs=126 are test values, (different) parameters at some point
-								//for(int locus=0;locus<200;locus++) pTree->microsatellites.push_back(126);
+								for(int locus=0;locus<200;locus++) pTree->microsatellites.push_back(126);
 								
-								//}else if((pseed->generation!=0)&&(choice>RAND_MAX*parameter[0].SNPMutationrate)){
+								}
+								else if((pseed->generation!=0)&&(choice>RAND_MAX*parameter[0].SNPMutationrate))
+								{
 									
-								//pTree->cpSNP[0]=pseed->cpSNP[0];
-								//pTree->cpSNP[1]=pseed->cpSNP[1];
-								//pTree->mtSNP[0]=pseed->mtSNP[0];
-								//pTree->mtSNP[1]=pseed->mtSNP[1];
+								pTree->cpSNP[0]=pseed->cpSNP[0];
+								pTree->cpSNP[1]=pseed->cpSNP[1];
+								pTree->mtSNP[0]=pseed->mtSNP[0];
+								pTree->mtSNP[1]=pseed->mtSNP[1];
 								
-								//}else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].SNPMutationrate)){
+								}
+								else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].SNPMutationrate))
+								{
 									//produce integer random number in (0,+31)???
 									//int random_number=rand()%(CHAR_BIT*sizeof(int));
 									//cout<<"sizeof(int)="<<(CHAR_BIT*sizeof(int))<<endl;
 									//cout<<"mutation at locus=="<<random_number<<endl;
 									//int sign=(random_number% 2 ? 1 : -1);
-								//if((pseed->cpSNP[0]+sign*pow(2,random_number))<0){}
-								//pTree->cpSNP[0]=pseed->cpSNP[0]+sign*pow(2,random_number);
-								//pTree->cpSNP[1]=pseed->cpSNP[1]+sign*pow(2,random_number);
+								pTree->cpSNP[0]=pseed->cpSNP[0]+sign*pow(2,random_number);
+								pTree->cpSNP[1]=pseed->cpSNP[1]+sign*pow(2,random_number);
 								
 								//noch mutiert er beides:
-								//pTree->mtSNP[0]=pseed->mtSNP[0]+sign*pow(2,random_number);
-								//pTree->mtSNP[1]=pseed->mtSNP[1]+sign*pow(2,random_number);
-								//}//else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].microsatelliteMutationrate)){
-								//	pTree->microsatellites[rand()%200]--;								
-								//}
+								pTree->mtSNP[0]=pseed->mtSNP[0]+sign*pow(2,random_number);
+								pTree->mtSNP[1]=pseed->mtSNP[1]+sign*pow(2,random_number);
+								}//else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].microsatelliteMutationrate))
+								{
+									pTree->microsatellites[rand()%200]--;								
+								}*/
 								
 								pTree->yworldcoo=pseed->yworldcoo;
 								pTree->xworldcoo=pseed->xworldcoo;
@@ -185,8 +191,10 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
-								// if(rand()%1000){pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
-									pTree->thawing_depthinfluence=100;//NormverteilungRN(100, 0.10*100);
+								// if(rand()%1000)
+								//{
+									//pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
+									//pTree->thawing_depthinfluence=100;//NormverteilungRN(100, 0.10*100);
 								//cout<<"etablierung:"<<pTree->thawing_depthinfluence<<endl;
 								// }else{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
 								pTree->entfernung=pseed->entfernung;
@@ -229,30 +237,45 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								//else mutationsrate: if rand()<= RAND_MAX*10^-4 for example
 								// pTree->cpSNP+= or -= 2^rand()/RAND_MAX*sizeof(int)
 								//
-								//int choice=rand();
-								//if(pseed->generation==0){//only with seed distribution as initialisation status...
-								//pTree->cpSNP[0]=startcpSNP;
-								//pTree->cpSNP[1]=startcpSNP;
-								//pTree->mtSNP[0]=startmtSNP;
-								//pTree->mtSNP[1]=startmtSNP;
-								//}else if((pseed->generation!=0)&&(choice>RAND_MAX*parameter[0].SNPMutationrate)){
-								//pTree->cpSNP[0]=pseed->cpSNP[0];
-								//pTree->cpSNP[1]=pseed->cpSNP[1];
-								//pTree->mtSNP[0]=pseed->mtSNP[0];
-								//pTree->mtSNP[1]=pseed->mtSNP[1];
-								//}else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].SNPMutationrate)){
+								/*//int choice=rand();
+								
+								if(pseed->generation==0)
+								{//only with seed distribution as initialisation status...
+								pTree->cpSNP[0]=startcpSNP;
+								pTree->cpSNP[1]=startcpSNP+rand();//TEST!
+								pTree->mtSNP[0]=startmtSNP;
+								pTree->mtSNP[1]=startmtSNP+rand();//TEST!
+								
+								//loci=200 + SSRs=126 are test values, (different) parameters at some point
+								for(int locus=0;locus<200;locus++) pTree->microsatellites.push_back(126);
+								
+								}
+								else if((pseed->generation!=0)&&(choice>RAND_MAX*parameter[0].SNPMutationrate))
+								{
+									
+								pTree->cpSNP[0]=pseed->cpSNP[0];
+								pTree->cpSNP[1]=pseed->cpSNP[1];
+								pTree->mtSNP[0]=pseed->mtSNP[0];
+								pTree->mtSNP[1]=pseed->mtSNP[1];
+								
+								}
+								else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].SNPMutationrate))
+								{
 									//produce integer random number in (0,+31)???
 									//int random_number=rand()%(CHAR_BIT*sizeof(int));
 									//cout<<"sizeof(int)="<<(CHAR_BIT*sizeof(int))<<endl;
 									//cout<<"mutation at locus=="<<random_number<<endl;
 									//int sign=(random_number% 2 ? 1 : -1);
-								//pTree->cpSNP[0]=pseed->cpSNP[0]+sign*pow(2,random_number);
-								//pTree->cpSNP[1]=pseed->cpSNP[1]+sign*pow(2,random_number);
+								pTree->cpSNP[0]=pseed->cpSNP[0]+sign*pow(2,random_number);
+								pTree->cpSNP[1]=pseed->cpSNP[1]+sign*pow(2,random_number);
 								
 								//noch mutiert er beides:
-								//pTree->mtSNP[0]=pseed->mtSNP[0]+sign*pow(2,random_number);
-								//pTree->mtSNP[1]=pseed->mtSNP[1]+sign*pow(2,random_number);
-								//}
+								pTree->mtSNP[0]=pseed->mtSNP[0]+sign*pow(2,random_number);
+								pTree->mtSNP[1]=pseed->mtSNP[1]+sign*pow(2,random_number);
+								}//else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].microsatelliteMutationrate))
+								{
+									pTree->microsatellites[rand()%200]--;								
+								}*/
 								
 								
 								pTree->yworldcoo=pseed->yworldcoo;

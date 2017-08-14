@@ -19,13 +19,16 @@ void Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *
 	
 	FILE *dateizeiger;
 	string dateiname;
-	if(parameter[0].outputall==0){
+	if(parameter[0].outputall==0)
+	{
 	xminwindow=( (double) treecols/2.0)-10.0;
 	xmaxwindow=( (double) treecols/2.0)+10.0;
 	yminwindow=( (double) treerows/2.0)-10.0;
 	ymaxwindow=( (double) treerows/2.0)+10.0;
 	
-	}else if(parameter[0].outputall==1){
+	}
+	else if(parameter[0].outputall==1)
+	{
 	xminwindow=((double) 0.0);
 	xmaxwindow=((double) treecols);
 	yminwindow=((double) 0.0);

@@ -909,67 +909,66 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 			
 			jahr=parameter[0].startjahr+t;
 			
-			if(parameter[0].windsource==1){
+			if(parameter[0].windsource==1)
+			{
 			findyr1=1947;findyr2=2012;
-			}else if(parameter[0].windsource==2){
+			}
+			else if(parameter[0].windsource==2)
+			{
 			findyr1=1979;findyr2=2012;
-			}else if(parameter[0].windsource==3){
+			}
+			else if(parameter[0].windsource==3)
+			{
 			findyr1=1959;findyr2=2002;
-			}//else if(parameter[0].windsource==4){//north
-			//
-			//}else if(parameter[0].windsource==5){//south
-			//	
-			//}
+			}
 			
 			
 		ss.str("");
 		ss.clear();  	
 		
-		if((jahr<findyr2+1) && (jahr>findyr1-1)){
+		if((jahr<findyr2+1) && (jahr>findyr1-1))
+		{
 							
 		ss<<jahr;
 							
-		if(parameter[0].windsource==1){
+		if(parameter[0].windsource==1)
+		{
 		filename="input/winddaten/winddaten"+ss.str()+"_GSOD.dat";
-		}else if(parameter[0].windsource==2){
+		}
+		else if(parameter[0].windsource==2)
+		{
 		filename="input/winddaten/winddaten"+ss.str()+"_EraInterim.dat";
-		}else if(parameter[0].windsource==3){
+		}
+		else if(parameter[0].windsource==3)
+		{
 		filename="input/winddaten/winddaten"+ss.str()+"_Era40.dat";
 		}
 							
-						//cout<<jahr<<endl;
-// 						fstream fileinp;
-  						//cout<<"opening "<<filename<<endl;
- 						op:
 						ifstream fileinp(filename.c_str());
-  						if(!fileinp){goto op;}
 
-						while(fileinp>>item){
-// 						  itemvector.push_back(item);
+						while(fileinp>>item)
+						{
 						  cntr++;
-						  if(cntr%2){
-						    // if(stof(item)<270){
-						      // wdir.push_back(stof(item)+90);
-						    // }else if(stof(item)>270){
-						      // wdir.push_back(stof(item)-270);
-						    // }else{wdir.push_back(0);}
+						  if(cntr%2)
+						  {
 						    if(stof(item)>=0 && stof(item)<=360)
 							{
 								wdir.push_back(stof(item));
-						    }else
+						    }
+							else
 							{
 								wdir.push_back(0);
 							}
-						  }else{wspd.push_back(stof(item));}
+						  }
+						  else
+						  {wspd.push_back(stof(item));}
 						}
 						
-						if(cntr>0){
+						if(cntr>0)
+						{
 						windspd.push_back(wspd);
 						winddir.push_back(wdir);
 						globalyears.push_back(jahr);
-						
-						//cout<<"pushing_back "<<jahr<<endl;
-						//cout<<"Größe wspd="<<wspd.size()<<endl;
 				}
 				wspd.clear();wdir.clear();
 			}
@@ -1271,7 +1270,6 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 
 
 	// -- -- -- -- weathereinlesen ENDE -- -- -- -- //
-
 	passWeather();
 
 }

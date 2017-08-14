@@ -1075,7 +1075,10 @@ void Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int y
 			openupdate:
 			FILE *fp5;
 			fp5=fopen("t_N_plotupdate.txt","a+");
-			if(fp5==0){goto openupdate;}
+			if(fp5==0)
+				{
+				goto openupdate;
+				}
 			fprintf(fp5,"%d;%lu;%10.20f;%10.20f;%10.20f\n",
 					parameter[0].ivort, 
 					tree_list.size(),

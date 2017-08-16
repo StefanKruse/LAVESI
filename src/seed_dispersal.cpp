@@ -4,52 +4,6 @@
  * 0=zufaellig, 1=exp, 2=fat tailed, 3=gaussian und 4=gaussian+fat tailed combined
  *
  *******************************************************************************************/
-/*double getEntfernung(double ratiorn_help)	
-{
-
-	double entf_help;
-	if (parameter[0].dispersalmode==0)
-	{ // zufaellig in bestimmter Entfernung
-		entf_help= ((ratiorn_help-1)*100.0)/(0.05-1);
-	}
-	else if (parameter[0].dispersalmode==1)
-	{ // neg. exponential
-		entf_help= parameter[0].distanceratio * ((log(ratiorn_help)/(-0.2))/0.16);
-	}
-	else if (parameter[0].dispersalmode==2)
-	{ // fat tailed/power law
-		double fatalpha=0.5;
-		entf_help= parameter[0].distanceratio *  pow(ratiorn_help, (-1*(1+fatalpha)) );
-	}
-	else if (parameter[0].dispersalmode==3)
-	{ // gaussian
-		double gaussweite=40, gaussmaxh=1, gaussposcenter=0;
-		entf_help= parameter[0].distanceratio *  sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter;
-	}
-	else if (parameter[0].dispersalmode==4 || parameter[0].dispersalmode==5)
-	{ // gaussian combined with fat tailed
-		double gaussfatratio=0.5;
-		double gaussweite=20, gaussmaxh=1, gaussposcenter=0;	//gaussweite variieren??
-																//oder unten 4500m?
-		double fatalpha=0.5;
-		double fatalpha=0.5;
-		entf_help= parameter[0].distanceratio * 
-		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter) +
-		(1/gaussfatratio)*(pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );
-		
-		//
-	}
-	else 
-	{
-		printf("LaVeSi wurde beendet\n\n");
-		printf("... Grund: choice der Ausbreitung (= %d) ausserhalb der verfuegbaren Modi!\n", parameter[0].dispersalmode);
-		exit(1);
-	}
-
-	return(entf_help);
-
-
-}*/
 
 
 void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo) 
@@ -106,27 +60,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
  *******************************************************************************************/
 
 
-//#ifndef _distribution_H_
-//#define _distribution_H_
-// #include "distribution.cpp"
-//#endif
-
  void seedausbreitung(int treerows, int treecols,int jahr, int yearposition, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
 {
 		
 	int aktort=0;
-    // double iquer=0,jquer=0;
-
-	/*
-	list<seed*> LDDseed_list; // Liste zum Zwischenspeichern der LDD ausgebreiteten seed
-	*/
-			
-
-
-	
-	
-	
-
 			
 	///Loop around all Seed Lists
 	for(vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)

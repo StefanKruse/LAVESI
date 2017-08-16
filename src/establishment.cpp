@@ -1,18 +1,5 @@
 void Etablierung(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > & world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
 {
-	/*
-	signed int etababbruch;
-	// Abfrage ob das Programm beendet oder fortgesetzt werden soll
-	printf("\n Beginn der Etablierung. Weiter mit 1, beenden mit irgendeiner Eingabe\n");
-	scanf("%d", &etababbruch);
-
-	if (etababbruch!=1) 
-	{
-		printf("LaVeSi wurde beendet\n\n"); 
-		exit(0);
-	}
-	*/
-	
 	//int startcpSNP=RAND_MAX-rand();//TEST!
 	//int startmtSNP=RAND_MAX-rand();//TEST!
 
@@ -43,6 +30,12 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 				if (pseed->imcone==false)
 				{ 
 				
+					//Determine if the seed germinates, depending on the density around it and...
+					//
+					
+					
+					
+					//***german
 					/// Ermitteln ob der seed keimt je
 					/// nach der Auflagenstaerke am Ort und ...
 					int i=(int) floor(pseed->ycoo*parameter[0].sizemagnif);//sizemagnif zB= 5, density grid tile.
@@ -55,10 +48,14 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 
 					if (keimungauflageinfluence<0.01)
 					{
-						keimungauflageinfluence=0.01;	// Minimaler 
+						keimungauflageinfluence=0.01;	// minimal influence
 					}
 					
-					/// ... und weather.
+					/// ... and weather.
+					
+					
+					//If this is switched on, the latest growth performance is calculated
+					//***german
 					// Falls eingestellt, die aktuelle Zuwachsleistung nach dem Ort ermitteln
 					double maxbasalwachstum = 0;
 
@@ -99,6 +96,13 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 					double zufallsz= 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 					
 					///add new tree if seed germinates
+					
+					
+					// Minimal germination rate was roughly estimated
+					// keimungweathereinfluss= influence of current weather on germination (can be chosen between 0 and 1)
+					//
+					
+					//***german:
 					// Grundkeimungsrate nur geschätzt
 					//keimungweathereinfluss=Einfluss von weather (maxbasalwachstum/gdbasal) auf Keimung (von 0-1 wählbar)
 					
@@ -110,8 +114,13 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 
 							if (maxbasalwachstum>0.0) 
 							{
-								pTree= new Tree();						// Neuen Tree erzeugen
+								pTree= new Tree();						
 								
+								//***german:
+								// Neuen Tree erzeugen
+								
+								
+								//For SNP-assignment before it is inherited through the population:
 								//first step: define mt and cpSNPs as random numbers < RAND_MAX+1 in the initialisation phase!
 								//
 								//	32 bit numbers are easily transformed to bits in a R analysation function!!!
@@ -152,7 +161,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->cpSNP[0]=pseed->cpSNP[0]+sign*pow(2,random_number);
 								pTree->cpSNP[1]=pseed->cpSNP[1]+sign*pow(2,random_number);
 								
-								//noch mutiert er beides:
+								//both "SNPs" are mutated
 								pTree->mtSNP[0]=pseed->mtSNP[0]+sign*pow(2,random_number);
 								pTree->mtSNP[1]=pseed->mtSNP[1]+sign*pow(2,random_number);
 								}//else if((pseed->generation!=0)&&(choice<RAND_MAX*parameter[0].microsatelliteMutationrate))
@@ -191,21 +200,27 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->seedproduced=0; 
 								pTree->speicher=1;
 								pTree->densitywert=0;
+								
+								//First step for trait variation: the influence the thawing depth has on a tree
+								//Through root growth factors pollen dependent inheritance?
+								//This is just the establishment though
+								
 								// if(rand()%1000)
 								//{
 									//pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
 									//pTree->thawing_depthinfluence=100;//NormverteilungRN(100, 0.10*100);
 								//cout<<"etablierung:"<<pTree->thawing_depthinfluence<<endl;
 								// }else{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
+								
 								pTree->entfernung=pseed->entfernung;
 								pTree->growing=true;
 								pTree->species=pseed->species;
 								
 								//pTree->thawing_depthinfluence=100;
 								
-								tree_list.push_back(pTree);				// Tree in Liste einfuegen
+								tree_list.push_back(pTree);				// insert tree in the corresponding tree_list...
 
-								delete pseed;							// Und seed löschen
+								delete pseed;							// ...and delete the seed the tree grew from
 								pos=seed_list.erase(pos);
 	
 							}
@@ -228,7 +243,7 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 
 							if (maxbasalwachstum>0.0) 
 							{
-								pTree= new Tree();						// Neuen Tree erzeugen
+								pTree= new Tree();						//a new tree is established
 								
 								//first step: define mt and cpSNPs as random numbers < RAND_MAX+1 in the initialisation phase!
 								//
@@ -315,9 +330,9 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 								pTree->entfernung=pseed->entfernung;						
 								pTree->growing=true;
 								pTree->species=pseed->species;
-								tree_list.push_back(pTree);				// Tree in Liste einfuegen
+								tree_list.push_back(pTree);				// insert tree in the corresponding tree_list...
 
-								delete pseed;							// Und seed löschen
+								delete pseed;							// ...and delete the seed the tree grew from
 								pos=seed_list.erase(pos);
 								
 							}
@@ -334,16 +349,30 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 						}					
 					}
 					else 
-					{ // Sicherheitsabfrage Art-Variable gesetzt?
+					{ 
+						
+						//Safety routine: is the substructure species now defined?
+						
+						
+						
+						//***german:
+						// Sicherheitsabfrage Art-Variable gesetzt?
 						/* Abfrage ob das Programm beendet oder fortgesetzt werden soll */ 
 						signed int abbrechenetabfehler; 
-						printf("\n In der Etablierungsfunktion hat ein seed keinen Wert in der Variable pseed->species\n"); 
-						printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
+						
+						printf("\n In establishment.cpp a tree was not assigned a new species value.\n");
+						printf("\n continue typing 1, press any other key to exit\n");
+						
+						
+						//***german:
+						//printf("\n In der Etablierungsfunktion hat ein seed keinen Wert in der Variable pseed->species\n"); 
+						//printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
 						scanf("%d", &abbrechenetabfehler); 
 
 						if (abbrechenetabfehler!=1) 
 						{
-							printf("LaVeSi wurde nach einem Art-Fehler in der Etablierung beendet\n\n");
+							printf("LAVESI was exited after an error occuring in establishment.cpp\n");
+							//printf("LaVeSi wurde nach einem Art-Fehler in der Etablierung beendet\n\n");
 							exit(1);
 						}
 
@@ -359,4 +388,4 @@ void Etablierung(int treerows, int treecols, struct Parameter *parameter, int ye
 			} 
 	} 
 
-} // Funktion Etablierung Ende
+} // End of the function Etablierung

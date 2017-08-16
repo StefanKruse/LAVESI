@@ -13,6 +13,9 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				// cout << "tree_list.size() vor Mortalität = " << tree_list.size() << endl;
 		// }
 		
+		
+		
+		//***german:
 		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitaetsratenaufschlag darstellt
 		double anstiegweathermortg=160;
 		double anstiegweathermorts=160;
@@ -23,12 +26,15 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 		
 		// biotic influence:
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-		{
+		{//begin tree_list iteration
 			pTree=(*pos);
 	
 			
 			if(pTree->growing==true)
 			{
+				//If maximal age is exceeded an additional factor occurs
+				
+				//***german:
 				// Falls Hoechstage ueberschritten wird ein zusaetzlicher Wert aufgeschlagen
 				double agesmort=0.0;
 				if (pTree->age>parameter[0].maximalage) 
@@ -46,7 +52,15 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				{
 					wachstumrel=pTree->dbrustrel;
 				}
-
+				
+				//Competition effect:
+				//small 	    Tree => barely influenced by surrounding trees
+				//150cm tall    Tree => strongest influence
+				//height >300cm Tree => barely influenced by surrounding trees
+				//switched off at the moment
+				
+				
+				//***german:
 				// ==> hat was mit Konkurrenzeffekt zu tun. 
 				//     Kleiner Tree - kaum beeinflusst, 
 				//	   150 cm  - am stärksten beeinflusst, 
@@ -58,7 +72,10 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					heightnkugeleinfluss=heightnkugeleinfluss+(sqrt(pow(parameter[0].densitywertmaximumbeiheight,2)-pow(pTree->height-parameter[0].densitywertmaximumbeiheight, 2))/parameter[0].densitywertmaximumbeiheight);
 				}	
 				
-				// Verrechnung der Mortalitaet von treesn
+				//
+				
+				//***german:
+				// Verrechnung der Mortalitaet von Bäumen
 				// fuer die jugendmortalitaet
 				double maxhg;
 				double maxhs;
@@ -128,7 +145,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				double dry_mort		= parameter[0].mtrockenheit * weather_list[yearposition_help]->trockenheitsmort * pow((1.0 / pTree->height), 0.5); // Verrechnung der Trockenheit aus Trockenheitsindex
 
 				/// Calculating the mortality rate of the tree 
-				// considering the factors of each mortality rate
+				/// considering the factors of each mortality rate
 				double Treemortg = 0.0 
 								+ parameter[0].mortbg //Background Mortality 0.0005
 								+ sapl_mort_gmel
@@ -198,15 +215,19 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 						Treemorts);
 				}
 
-
+				// Determine if a tree dies (deletion of said tree in the corresponding list)
+				
+				//***german:
 				// Ermitteln ob der aktuelle Tree stirbt, wenn ja, so wird der entsprechende ...
 				// ... Eintrag in der tree_list geloescht
+				
+				
 				///if random number < probability, tree dies
 				double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 				if (((pTree->species==1) && (zufallsz<Treemortg)) || ((pTree->species==2) && (zufallsz<Treemorts))) 
 				{
 					
-					delete pTree;//LEGT yr_of_dying FEST
+					delete pTree;
 					pos=tree_list.erase(pos);
 				}
 				else
@@ -214,13 +235,13 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					++pos;
 				}
 
-			}//growing?
+			}//is the tree growing?
 			else
 			{
 				++pos;
 			}
 
-		} // Ende tree_list ablaufen
+		} // End tree_list iteration
 		
 		// Zusaetzliche Ausgabe in Konsole
 		// if (parameter[0].jahranzeige ==true)
@@ -242,12 +263,14 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
  *******************************************************************************************/
 void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
 {
-	// vector<int> Vname,cpSNP1,cpSNP2;//moved down into omp-parallel-for part
-	// int iran;
+
 	int aktort=0;
 	
 	for(vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 	{// START: world loop
+		//
+
+		//***german:
 		// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Referenz
 		// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 		// realisiert ist weiterverfahren werden

@@ -4,13 +4,6 @@
  * NAME:
  * distribution.cpp
  * 
- * USE:
- * integration into different functions of an individuum based model via:
- * #ifndef _distribution_H_
- * #define _distribution_H_
- * #include "distribution.cpp"
- * #endif
- * 
  * CONTENTS:
  * This .cpp file contains the three functions used by LaVeSi to realize wind driven
  * seed- and pollen dispersal:
@@ -38,7 +31,7 @@
  *     a globally defined std:vector<double> of wind speeds and wind directions and
  *     a set of parameters
  * 
- * OUTPUT DATA:
+ * POSSIBLE OUTPUT DATA:
  *  a) a vector of the names of the most probable trees to pollinate another tree,
  *     conceptual preparation for later use: cpSNPs-> genetic data
  *  b) the flight distance of a dispersed seed
@@ -46,12 +39,11 @@
  * 
  ************************************************************************************/
  
-//				(pTree->xcoo,pTree->ycoo,struct *parameter,world_positon_b,Jahr,Vname);
 void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, int yr, 
 				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
 			vector<int> &pName, vector<double>  &thdpthinfl,
 											int outputtreesiter
-		)//, vector<int> &cpSNPs1, vector<int> &cpSNPs2)
+		)
 {
   list<Tree*>& tree_list = *world_positon_b;
   richtung=0.0;
@@ -250,7 +242,8 @@ void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, doub
         richtung = M_PI * ( wdir.at(ripm) / 180 );
         geschwindigkeit=(wspd.at(ripm));
         cntr=1;//speed up
-    }else if((parameter[0].windsource==0)||(cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)))
+    }
+	else if((parameter[0].windsource==0)||(cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)))
 	{
         richtung=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
         geschwindigkeit=2.7777;
@@ -260,67 +253,27 @@ void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, doub
 	{
 
         maxentfernung = (geschwindigkeit*0.75*parhei*0.01/(parameter[0].SeedDescentg));
-//        maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescentg));
-		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
-		// cout << " - " << maxentfernung;
-    }else if (seedspec==2)
+
+    }
+	else if (seedspec==2)
 	{
         maxentfernung = (parameter[0].SeedTravelBreezes*0.75*parhei*0.01/(parameter[0].SeedDescents));     
-//    maxentfernung = (parameter[0].SeedTravelBreezes*0.75*pseed->elternheight*0.01/(parameter[0].SeedDescents));
-		//maxentfernung = (geschwindigkeit*0.75*pseed->elternheight*0.01/pSeed->descent)
+
     }                                        
 
     if(parameter[0].dispersalmode==5)
 	{
-//cout << " (( ph/pseed-elternh=" << parhei << "/" << pseed->elternheight << " + mentf=" << maxentfernung << " ))";
         entfernung= getEntfernung(maxentfernung,rn);                                       
     }
 	else if(parameter[0].dispersalmode!=5)
 	{
         entfernung=getEntfernung(maxentfernung,rn);
     }
-    // cout << " - " << richtung;
-	
-    // dy=sin(richtung)*entfernung;
-    // dx=cos(richtung)*entfernung;
+
     dy=cos(richtung)*entfernung;
     dx=sin(richtung)*entfernung;
-	/* RCODE
 	
-		wind in north direction
-			winddirrect=0
-			entfernungstest=10
-			###dy=sin(winddirrect)*entfernungstest
-			dy=cos(winddirrect)*entfernungstest
-			dy
-			###dx=cos(winddirrect)*entfernungstest
-			dx=sin(winddirrect)*entfernungstest
-			dx
-		wind in east direction
-			winddirrect=pi/2
-			entfernungstest=10
-			dy=cos(winddirrect)*entfernungstest
-			dy
-			dx=sin(winddirrect)*entfernungstest
-			dx
-		wind in south direction
-			winddirrect=pi
-			entfernungstest=10
-			dy=cos(winddirrect)*entfernungstest
-			dy
-			dx=sin(winddirrect)*entfernungstest
-			dx
-		wind in west direction
-			winddirrect=3*pi/2
-			entfernungstest=10
-			dy=cos(winddirrect)*entfernungstest
-			dy
-			dx=sin(winddirrect)*entfernungstest
-			dx
-		
-	
-	*/
-	// cout << " - " << dy << "/" << dx;
+
 	
 	windspeed=geschwindigkeit;
 	winddirection=richtung;    

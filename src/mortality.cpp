@@ -8,12 +8,7 @@
  *******************************************************************************************/
 void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)
 {
-		//console output:
-		// if (parameter[0].jahranzeige ==true) {
-				// cout << "tree_list.size() vor Mortalität = " << tree_list.size() << endl;
-		// }
-		
-		
+		//Calculation of the factors in a function, that adds a mortality rate impact
 		
 		//***german:
 		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitaetsratenaufschlag darstellt
@@ -363,8 +358,7 @@ void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jah
 		5.swap content of dummy_seed_list_globally to orig_seed_list "seed_list"
 	
 	
-		### ist so einfach nicht möglich
-		# im Moment ist es dadurch sehr langsam, vmtl. wegen des iterieren/advance!
+
 		
 	
 	SEED MORTALITY PARALLELIZATION NO_2

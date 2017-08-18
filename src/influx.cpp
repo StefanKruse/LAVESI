@@ -6,11 +6,6 @@
 	
 */
 
-/*
-#include "libraries.h"
-#include "strukturen.h"
-#include "deklarationen.h"
-*/
 
 
 

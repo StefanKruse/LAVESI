@@ -62,8 +62,8 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
   pe=0.01;
   C=parameter[0].GregoryC;
   m=parameter[0].Gregorym;
-		/// #####################################
-		/// #####################################
+		
+  
   pName.clear();
   thdpthinfl.clear();
   		

@@ -39,7 +39,7 @@
  * 
  ************************************************************************************/
  
-void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, int yr, 
+void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, 
 				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
 			vector<int> &pName, vector<double>  &thdpthinfl,
 											int outputtreesiter
@@ -63,7 +63,6 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
   C=parameter[0].GregoryC;
   m=parameter[0].Gregorym;
 		
-  
   pName.clear();
   thdpthinfl.clear();
   		
@@ -212,7 +211,7 @@ double getEntfernung(double D, double ratiorn_help)
 
 
 
-void seeddisp(double rn, int yr, double& dx, double& dy, double &windspeed, double &winddirection, double parhei, int seedspec)
+void seeddisp(double rn, double& dx, double& dy, double &windspeed, double &winddirection, double parhei, int seedspec)
 {
     int cntr=1,ripm=0;
 

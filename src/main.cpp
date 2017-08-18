@@ -21,7 +21,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// growth
 	double start_time_wachstum = omp_get_wtime();
 			/*!::Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
-			Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list, world_plot_list);
+			Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list);
 	double end_time_wachstum = omp_get_wtime();
 
 			// seed dispersal
@@ -67,7 +67,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				}
 					
 		
-			seedausbreitung( yr, yearposition, &parameter[0], world_seed_list);
+			seedausbreitung( yr, &parameter[0], world_seed_list);
 			
 	double end_time_seedausbreitung = omp_get_wtime();
 	
@@ -123,7 +123,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double start_time_mortalitaet = omp_get_wtime();
 			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
 // cout << endl << " Uebergabe and Mortalitaet -> yr=" << yr << " + ivort=" <<  parameter[0].ivort << endl;
-			Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+			Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
 			wdir.clear();
 			wspd.clear();    
 	double end_time_mortalitaet = omp_get_wtime();

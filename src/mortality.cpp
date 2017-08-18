@@ -256,7 +256,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
  *
  *
  *******************************************************************************************/
-void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
+void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list)
 {
 
 	int aktort=0;
@@ -502,7 +502,7 @@ if(mcorevariant==1)
 					{// START: if seedlebend>0
 						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);//;,cpSNP1,cpSNP2);
@@ -731,7 +731,7 @@ if(mcorevariant==2)
 					{// START: if seedlebend>0
 						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);//;,cpSNP1,cpSNP2);
@@ -988,7 +988,7 @@ if(mcorevariant==3)
 						// if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						if( (parameter[0].pollenvert==1 && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,Jahr,        
+							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);//;,cpSNP1,cpSNP2);

@@ -60,7 +60,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
  *******************************************************************************************/
 
 
- void seedausbreitung(int jahr, int yearposition, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
+ void seedausbreitung(int jahr, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
 {
 		
 	int aktort=0;
@@ -113,7 +113,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							double iquer=0;
 
 							double time_start_individual_seed_seeddisp=omp_get_wtime();
-							seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
+							seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 							cum_time_seeddisp+=omp_get_wtime()-time_start_individual_seed_seeddisp;
 
 							
@@ -581,7 +581,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								double jquer=0;
 								double iquer=0;
 
-								seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
+								seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 								
 								
 								// seed dispersal output:
@@ -868,7 +868,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 // cout << endl << " namem=" << pseed->namem << "=> seed ph=" << pseed->elternheight;
 
-									seeddisp(ratiorn, jahr, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
+									seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 									
 // cout << " - " << sqrt(pow(iquer,2)+pow(jquer,2)) << " " << entfernung;
 // cout << " - " << jquer << "/" << iquer;

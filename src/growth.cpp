@@ -7,7 +7,7 @@
  * (max basal growth at most southern transekt and tree position in north-south transekt
  *
  *******************************************************************************************/
-double getMaxbasalwachstum(int yearposition, list<Tree*> &tree_list, vector<weather*> &weather_list)
+double getMaxbasalwachstum(int yearposition, vector<weather*> &weather_list)
 { 
 	double maxbw_help = 0;
 	if (parameter[0].lineartransekt==true)
@@ -95,7 +95,7 @@ double getMaxbasalwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
  * and tree position in north-south transekt
  *
  *******************************************************************************************/
-double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weather*> &weather_list)
+double getMaxbrustwachstum(int yearposition,  vector<weather*> &weather_list)
 {	
 	double maxbrw_help = 0;
 	//If it is switched on, the latest growth performance is calculated in dependence of the coordinate.
@@ -187,7 +187,7 @@ double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
  * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
-void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
+void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)
 {
 	
 	int aktort=0;
@@ -206,7 +206,7 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 
 			double maxbasalwachstum = 0.0;
 
-			maxbasalwachstum = getMaxbasalwachstum(yearposition, tree_list, weather_list);
+			maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list);
 			
 			double basalwachstum = maxbasalwachstum
 									* ( (double) pTree->speicher/* GELOESCHT "/3" */ ) //==1
@@ -255,7 +255,7 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 
 			if (pTree->height>=130.0)
 			{ 
-				maxbrustwachstum = getMaxbrustwachstum(yearposition, tree_list, weather_list);
+				maxbrustwachstum = getMaxbrustwachstum(yearposition, weather_list);
 
 				brustwachstum = maxbrustwachstum
 										* ( (double) pTree->speicher/* GELOESCHT "/3" */ ) 

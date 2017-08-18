@@ -94,8 +94,14 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 			
 				// Populationsgroeszen nach Groeszenklassen
-				if (pTree->height <= 40) {nheight0b40++;}
-				else if ( (pTree->height > 40) && (pTree->height <= 200) ) {nheight41b200++;}
+				if (pTree->height <= 40)
+                                {
+                                    nheight0b40++;
+                                }
+				else if ( (pTree->height > 40) && (pTree->height <= 200) ) 
+                                {
+                                    nheight41b200++;
+                                }
 				else if (pTree->height > 200) 
 				{
 					nheight201b10000++;
@@ -586,11 +592,20 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						gesamtseedSUM+=pTree->seedproduced;
 						
 						//Artbestimmung
-						if (pTree->species==1) {spectree1++;}
-						else if (pTree->species==2) {spectree2++;}
+						if (pTree->species==1) 
+                                                {
+                                                    spectree1++;
+                                                }
+						else if (pTree->species==2) 
+                                                {
+                                                    spectree2++;
+                                                }
 						
 						// Maximale Y-Position ermitteln
-						if (pTree->ycoo>yposmax) {yposmax=pTree->ycoo;}
+						if (pTree->ycoo>yposmax) 
+                                                {
+                                                    yposmax=pTree->ycoo;
+                                                }
 					} // Ende Ausschnitt
 				
 					++pos;
@@ -607,8 +622,14 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					pseed=(*pos);
 					if ( (pseed->xcoo>=xminwindow) && (pseed->xcoo<=xmaxwindow) && (pseed->ycoo>=yminwindow) && (pseed->ycoo<=ymaxwindow) )
 					{ // Beginn Ausschnitt
-						if (pseed->imcone==true) {seedconezahl++;}
-						else {seedbodenzahl++;}
+						if (pseed->imcone==true) 
+                                                {
+                                                    seedconezahl++;
+                                                }
+						else 
+                                                {
+                                                    seedbodenzahl++;
+                                                }
 						// Artzugehoerigkeitszaehler zaehlt
 						if (pseed->species == 1)
 						{
@@ -846,7 +867,8 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					} // Ende tree_list ablaufen
 
 					fclose(dateizeiger);
-				} else
+				} 
+				else
 				{
 					// Datei versuchen zum Lesen und Schreiben zu oeffnen
 					dateizeiger = fopen (dateiname.c_str(), "r+");
@@ -1102,12 +1124,24 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 				else
 				{
-					if (listlength<100) {schreiben=true;}
+					if (listlength<100) 
+                                        {
+                                            schreiben=true;
+                                        }
 					else 
 					{
-						if (*posit<=30) {schreiben=true;}
-						else if (*posit>=(listlength-30) ) {schreiben=true;}
-						else if (*posit>(listlength/2)-15 && *posit<(listlength/2)+15) {schreiben=true;}
+						if (*posit<=30) 
+                                                {
+                                                    schreiben=true;
+                                                }
+						else if (*posit>=(listlength-30) ) 
+                                                {
+                                                    schreiben=true;
+                                                }
+						else if (*posit>(listlength/2)-15 && *posit<(listlength/2)+15) 
+                                                {
+                                                    schreiben=true;
+                                                }
 					}	
 				}
 
@@ -1229,7 +1263,10 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					/*for (vector<double>::iterator posdbas=pTree->Dbrustliste.begin(); posdbas<pTree->Dbrustliste.end(); )
 					{ // Dbasalliste Beginn
 						fprintf(dateizeiger, "%6d", (int) floor((*posdbas/2)*1000) );			// Weil der Dbrust der Durchmesser in cm ist, muss hier durch 2 geteilt und das Ergebnis
-						if ( (++zehnerzeilen % 10)==0) {fprintf(dateizeiger, "\n");}
+						if ( (++zehnerzeilen % 10)==0) 
+                                                {
+                                                fprintf(dateizeiger, "\n");
+                                                }
 						++posdbas;
 					} // Dbasalliste Ende
 					// Falls eine Zeile nicht mit 10 Werten aufgefüllt wurde, so werden fehlende Nullen ergaenzt

@@ -210,7 +210,9 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 									//pTree->thawing_depthinfluence=NormverteilungRN(100, 0.10*100);
 									//pTree->thawing_depthinfluence=100;//NormverteilungRN(100, 0.10*100);
 								//cout<<"etablierung:"<<pTree->thawing_depthinfluence<<endl;
-								// }else{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
+								// }
+                                                                //else
+                                                                //{pTree->thawing_depthinfluence=pseed->thawing_depthinfluence;}
 								
 								pTree->entfernung=pseed->entfernung;
 								pTree->growing=true;

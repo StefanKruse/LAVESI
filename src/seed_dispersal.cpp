@@ -381,14 +381,17 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										{ // Same erreicht nicht den n\E4chsten Plot 
 											if (pseed->xcoo> (double) (treerows-1)) 
 												rausgeflogenO++; 
-												 if(parameter[0].periodRB==1){
+												 if(parameter[0].periodRB==1)
+                                                                                                 {
 													 pseed->xcoo=fmod(pseed->xcoo,(double)(treecols-1));
 													 pseed->namem=0;//rename it to 0
 													 }
 											else if (pseed->xcoo<0.0) 
 												rausgeflogenW++;
-												if(parameter[0].periodRB==1){pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));}
-											if(parameter[0].periodRB==0){ delete pseed;
+												if(parameter[0].periodRB==1)
+                                                                                                {pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));}
+											if(parameter[0].periodRB==0)
+                                                                                        { delete pseed;
 															  pos=seed_list.erase(pos);}			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
 										} // seed bleibt im Feld Beginn
 									}
@@ -421,7 +424,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									 //  pseed->mtSNP[0]=rand();
 									 //  pseed->cpSNP[1]=rand();
 									 //  pseed->mtSNP[1]=rand();
-	// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+	// 								 }
+//                                                                       else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                            {//reduzierte periodic BC
 	// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 									} 
 									else 
@@ -441,7 +446,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									//   pseed->mtSNP[0]=rand();
 									//   pseed->cpSNP[1]=rand();
 									//   pseed->mtSNP[1]=rand();
-	// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+	// 								 }
+//                                                                            else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                            {//reduzierte periodic BC
 	// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 									} 
 									else 
@@ -463,7 +470,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//   pseed->mtSNP[0]=rand();
 										 //  pseed->cpSNP[1]=rand();
 										//   pseed->mtSNP[1]=rand();
-	// 									 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+	// 									 }
+//                                                                            else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                            {//reduzierte periodic BC
 	// 								   	pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 									} 
 									else
@@ -684,7 +693,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										 //  pseed->mtSNP[0]=rand();
 										 //  pseed->cpSNP[1]=rand();
 										 //  pseed->mtSNP[1]=rand();
-		// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+		// 								 }
+//                                                                                    else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                                    {//reduzierte periodic BC
 		// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 										} 
 										else 
@@ -704,7 +715,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//   pseed->mtSNP[0]=rand();
 										//   pseed->cpSNP[1]=rand();
 										//   pseed->mtSNP[1]=rand();
-		// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+		// 								 }
+//                                                                                    else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                                    {//reduzierte periodic BC
 		// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 										} 
 										else 
@@ -726,7 +739,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//   pseed->mtSNP[0]=rand();
 											 //  pseed->cpSNP[1]=rand();
 											//   pseed->mtSNP[1]=rand();
-		// 									 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+		// 									 }
+//                                                                                    else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                                    {//reduzierte periodic BC
 		// 								   	pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 										} 
 										else
@@ -973,7 +988,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											 //  pseed->mtSNP[0]=rand();
 											 //  pseed->cpSNP[1]=rand();
 											 //  pseed->mtSNP[1]=rand();
-			// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+			// 								 }
+//                                                                                            else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                                            {//reduzierte periodic BC
 			// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 											} 
 											else if((parameter[0].periodRB==3))
@@ -998,7 +1015,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//   pseed->mtSNP[0]=rand();
 											//   pseed->cpSNP[1]=rand();
 											//   pseed->mtSNP[1]=rand();
-			// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+			// 								 }
+//                                                                                            else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                                            {//reduzierte periodic BC
 			// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 											} 
 											else if((parameter[0].periodRB==3))
@@ -1025,7 +1044,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												//   pseed->mtSNP[0]=rand();
 												 //  pseed->cpSNP[1]=rand();
 												//   pseed->mtSNP[1]=rand();
-			// 									 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
+			// 									 }
+//                                                                                            else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+//                                                                                            {//reduzierte periodic BC
 			// 								   	pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 											} 
 											else

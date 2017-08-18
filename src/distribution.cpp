@@ -69,17 +69,20 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 		{
 			cntr=1;//floor(windspd[i].size()*2.5*0.1666)-windspd[i].at(floor(windspd[i].size()*4.5*0.1666));
-        }else if(parameter[0].windsource==4)
+                }
+                else if(parameter[0].windsource==4)
 		{
 			richtung=	M_PI * ( 0 / 180 );
 			geschwindigkeit=2.777;
  		  //kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
-		}else if(parameter[0].windsource==5)
+		}
+		else if(parameter[0].windsource==5)
 		{
 			richtung=	M_PI * ( 180 / 180 );
 			geschwindigkeit=2.777;
  		   //kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
-		}else if(parameter[0].windsource==0)
+		}
+		else if(parameter[0].windsource==0)
 		{
            richtung=2*M_PI*(rand()/RAND_MAX); 
 		   geschwindigkeit=2.777;
@@ -95,7 +98,8 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 			richtung=	M_PI * ( wdir.at(ripm) / 180 );
 			geschwindigkeit=wspd.at(ripm);
 		
-		}else if((cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)) || parameter[0].windsource==0)
+		}
+		else if((cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)) || parameter[0].windsource==0)
 		{
 		   richtung=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
 		   geschwindigkeit=2.777;//10 km/h
@@ -162,7 +166,8 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 					// outputstring.str("");
 					// outputstring.clear();
 				}
-			}else{++posb;}
+			}
+			else{++posb;}
 		}
 		// cntr=0;cntr2=0;
 }

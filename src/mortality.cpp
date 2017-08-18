@@ -309,7 +309,8 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 				{
 					delete pseed;
 					pos=seed_list.erase(pos);
-				}else
+				}
+				else
 				{
 					++pos;
 				}
@@ -335,7 +336,11 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 				signed int abbrechenmortalitaetfehler; 
 				printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
 				printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
-				scanf("%d", &abbrechenmortalitaetfehler); if (abbrechenmortalitaetfehler!=1) {printf("LaVeSi wurde nach einem Fehler in der Mortalitaetsfunktion beendet\n\n");exit(1);}
+				scanf("%d", &abbrechenmortalitaetfehler); 
+                                if (abbrechenmortalitaetfehler!=1) 
+                                {
+                                    printf("LaVeSi wurde nach einem Fehler in der Mortalitaetsfunktion beendet\n\n");exit(1);
+                                }
 		
 				delete pseed;
 				pos=seed_list.erase(pos);						
@@ -535,7 +540,8 @@ if(mcorevariant==1)
 								//pseed->descent=
 								//pseed->pollenfall=
 								//pseed->maxgrowth=
-							} else
+							} 
+							else
 							{
 								pseed->namep=0;
 								pseed->thawing_depthinfluence=100;
@@ -660,7 +666,8 @@ if(mcorevariant==2)
 			{
 				end = tree_list.end();
 				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
-			} else
+			} 
+			else
 			{
 				std::advance(end, chunk_size);
 				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
@@ -764,7 +771,8 @@ if(mcorevariant==2)
 								//pseed->descent=
 								//pseed->pollenfall=
 								//pseed->maxgrowth=
-							} else
+							} 
+							else
 							{
 								pseed->namep=0;
 								pseed->thawing_depthinfluence=100;
@@ -915,7 +923,8 @@ if(mcorevariant==3)
 				// end = tree_list.end();
 				end = lasttreewithseeds_iter;
 				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
-			} else
+			} 
+			else
 			{
 				std::advance(end, chunk_size);
 				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
@@ -1014,7 +1023,8 @@ if(mcorevariant==3)
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
 								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
-							} else
+							} 
+							else
 							{
 								pseed->namep=0;
 								pseed->thawing_depthinfluence=100;

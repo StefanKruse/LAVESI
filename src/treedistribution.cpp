@@ -112,7 +112,8 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
 					iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0))); //the southern 20% of the plot
 				
 				
-			}else 
+                                }
+                                else 
 				{
 					printf("\n\nLaVeSi wurde beendet\n");
 					printf("Aktueller Schritt => Treeverteilung.cpp\n");

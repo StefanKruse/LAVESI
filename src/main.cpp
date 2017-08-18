@@ -49,7 +49,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				if(jahr<findyr1 or jahr>findyr2)
 				{
 					yr=(findyr1+(int)(rand()/(RAND_MAX+1.0)*(findyr2-findyr1)));
-				}else
+				}
+				else
 				{
 					yr=jahr;
 				}
@@ -329,7 +330,8 @@ void Einschwingphase()
 				{
 					firstyear=2011;		// s.o.
 					lastyear=2071;
-				}else if ( parameter[0].weatherchoice==22 )
+				}
+				else if ( parameter[0].weatherchoice==22 )
 				{
 					firstyear=1934;
 					lastyear=2013; // simdauer auf 80

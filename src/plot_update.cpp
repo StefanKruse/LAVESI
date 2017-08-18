@@ -520,7 +520,8 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 			{
 				end = tree_list.end();
 				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
-			} else
+			} 
+			else
 			{
 				std::advance(end, chunk_size);
 				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;

@@ -7,7 +7,7 @@
 
 // Spezielle Funktionen
 	// Treeverteilung aus Datei einlesen oder seedeintrag bei gutem weather
- void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list,vector<vector<double>> &vegetationtype);
+ void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);
  void Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list);
  void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list);
 	// Jahresschritt
@@ -18,7 +18,6 @@
  void Mortalitaet(int treerows, int treecols, struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
  void Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);
 
- // void BefrWahrsch(double a , double b,struct Parameter *parameter, vector<list<Tree*> >::iterator f, int e, vector<int> &d,vector<double> &thawingdepthinher);
  void BefrWahrsch(	//double a , double b,struct Parameter *parameter, vector<list<Tree*> >::iterator f, int e, vector<int> &d,vector<double> &thawingdepthinher);
  
 					double x, double y,struct Parameter *parameter, vector<list<Tree*> >::iterator world_positon_b, int yr, 
@@ -35,5 +34,4 @@
  void ClearAllLists_copy(void);
  
  
- void influx(int treerows, int treecols, struct Parameter *parameter, int year, vector<list<Tree*> > &world_tree_list, vector<vector<double>> &vegtype);
-//void influx(int treerows, int treecols,  struct Parameter *parameter, int year, vector<list<Tree*> > &world_tree_list , vector<vector<double> > &vegetationtype)
+ void influx(int treerows, int treecols, struct Parameter *parameter, int year, vector<list<Tree*> > &world_tree_list);

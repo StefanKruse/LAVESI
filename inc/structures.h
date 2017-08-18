@@ -397,8 +397,6 @@
 		int periodRB;
 
 		int outputall;
-		
-		int defTreevert;
 
 		//double pollenthreshold;
 		
@@ -407,7 +405,6 @@
 		int pollenvert;//switch genealogy!
 		int pollenDistdensplot;
 		
-		int pollenpertree;
 		
 		double SNPMutationrate;
 		

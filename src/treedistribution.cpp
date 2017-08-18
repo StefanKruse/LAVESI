@@ -68,7 +68,7 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
 
 				/// seeddispmode = Art des seedeinbringens der Starterseed 
 				/// 1==auf jeder Site vom Sueden einbringen
-				if (parameter[0].defTreevert==0 && parameter[0].seeddispmode==1)//seeddispmode==1 =>randomly from the south border.
+				if (parameter[0].seeddispmode==1)//seeddispmode==1 =>randomly from the south border.
 				{ 
 					
 					// ziehe Zufallsposition und bringe x seed die im Feld landen von Sueden her ein 
@@ -111,27 +111,7 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
 					// iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *0.2*rand()/(RAND_MAX + 1.0))); //the southern 20% of the plot
 					iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0))); //the southern 20% of the plot
 				
-					seedeintragen=true;
-				 if (parameter[0].defTreevert==1)
-				 {
-									  
-				  iseed=(double) rand()/(RAND_MAX+1.0)*(double)(treerows-1);//*0.2;//maximum ist 0.2 mal länge
-				  jseed=0.0+(double) rand()/(RAND_MAX+1.0)*(double)(treecols-1);//so überall 
-				  
-				  if((rand()<vegetationtype[(int)(iseed)][(int)(jseed)]*RAND_MAX))
-				  {//"taiga" mit Probedensitywert 0.5
-																					 // oder"tundra" mit Probedensitywert 0.05
-				  seedeintragen=true;//iseed+jseed evtl vertauschen
-				  
-				  }
-				  else
-				  {seedeintragen=false;}//"lake"
-				  //
-				  
- 				  //n=seednobuffer;//entspricht weniger seed->schneller rechnen.
-				  
-				  //seedeintragen=true;
-				}
+				
 			}else 
 				{
 					printf("\n\nLaVeSi wurde beendet\n");
@@ -431,173 +411,7 @@ void TreesIni()
 
 
 
-void VegeTypeIni()
-{
-	//int aktort=0;??
-	
-	int rowtest=treecols-1,coltest=treerows-1;
-	int i,j,k,l,rowcntr=0,colcntr=0;
-	
-	vector<vector<double>> values;
-	vector<double> valueline ;
-	
-	string item;
-	
-	string filename="umweltdaten/test.txt";
-	
-	ifstream input(filename.c_str());
-	
-	
-	for(j=0;j<rowtest;j++)
-	{
-		for(i=0;i<coltest;i++)
-		{//initialization w dummy 66
-			vegetationtype[j][i]=66;
-		}
-	}
-	
-	for(string line;getline(input,line);)
-	{
-		istringstream input(line);
-		colcntr=0;
-		while(getline(input,item,';'))
-		{
-			valueline.push_back(atof(item.c_str()));
-			colcntr++;
-		}
-		values.push_back(valueline);
-		valueline.clear();
-		rowcntr++;
-	}
-	input.close();
-	
-	cout<<rowcntr<<"\t"<<colcntr<<endl;
-	
-	
-if(rowcntr<rowtest)
-{//kleine Umweltdatenmatrix auf große Datenmatrix (30*30  sieht richtig aus..)
-	//cout<<"kl auf gr\n";
-	for(k=0;k<rowcntr;k++)
-	{
-	for(l=0;l<colcntr;l++)
-		{
-		for(j=(int)k*(rowtest/rowcntr);j<ceil((k+1)*(rowtest/rowcntr));j++)
-			{
-			for(i=(int)l*(coltest/colcntr);i<ceil((l+1)*(coltest/colcntr));i++)
-				{
-				vegetationtype[j][i]=values[(rowcntr-1)-k][l];
-				}
-			}
-		}
-	}
-	
-	for(j=0;j<rowtest;j++)
-	{
-		for(i=0;i<coltest;i++)
-		{//replacement of dummy 66
-			if((vegetationtype[j][i]==66)&&(i!=0)&&(vegetationtype[j][i-1]!=66))
-			{
-				vegetationtype[j][i]=vegetationtype[j][i-1];
-			}
-			else if((i==0)&&(j!=0)&&(vegetationtype[j][i]==66)&&(vegetationtype[j-1][i]!=66))
-			{
-				vegetationtype[j][i]=vegetationtype[j-1][i];//naja
-			}
-		}
-	}
-				
-}
-else
-{//große Umweltdatenmatrix auf kleine Datenmatrix 
-	//cout<<"gr auf kl\n";
-	for(i=0;i<coltest;i++)
-	{
-		for(j=0;j<rowtest;j++)
-		{
-			vegetationtype[j][i]-=66;
-			for(l=(int)i*((colcntr)/(coltest));l<(int)(i+1)*((colcntr)/(coltest));l++)
-			{
-				for(k=(int)j*((rowcntr)/(rowtest));k<(int)(j+1)*((rowcntr)/(rowtest));k++)
-				{
-					vegetationtype[j][i]+=values[(rowcntr-1)-k][l];
-				}	
-			}
-			vegetationtype[j][i]/=(2*(colcntr*rowcntr)/(coltest*rowtest));
-		}	
-	}
-	
-		for(j=0;j<rowtest;j++)
-		{
-		for(i=0;i<coltest;i++)
-		{//replacement of dummy 66,
-			if((vegetationtype[j][i]==66)&&(i==0)&&(j!=0))
-			{
-				vegetationtype[j][i]=vegetationtype[j-1][i];
-			}
-			else if((vegetationtype[j][i]==66)&&(i!=0)&&(j==0))
-			{
-				vegetationtype[j][i]=vegetationtype[j][i-1];//naja
-			}
-			else if((vegetationtype[j][i]==66)&&(j!=0)&&(i!=0))
-			{vegetationtype[j][i]=vegetationtype[j][i-1];}
-		}
-	}
-}
 
-	//replace vegetationtypes with densities
-	for(j=0;j<rowtest;j++)
-	{
-		for(i=0;i<coltest;i++)
-		{
-			if(vegetationtype[j][i]<0.1)
-			{
-				vegetationtype[j][i]=0.0;
-			}
-			else if(vegetationtype[j][i]>1)
-			{
-				vegetationtype[j][i]=0.9;//testing: 0.9 trees per grid cell in forest env.
-			}
-			else if(vegetationtype[j][i]==1)
-			{
-				vegetationtype[j][i]=0.2;//testing: 0.4 trees per grid cell in tundra env.
-			}//else{vegetationtype[j][i]=rand()/RAND_MAX;}
-		}
-	}
-
-
-	//smoothing:
-for(j=0;j<rowtest;j++)
-{
-	for(i=0;i<coltest;i++)
-	{
-		if(vegetationtype[j][i]!=0)
-		{//do not smooth lakes
-		if((i==0)&&(j!=0)&&(vegetationtype[j][i]!=vegetationtype[j-1][i])&&(vegetationtype[j-1][i]!=0))
-		{
-			vegetationtype[j][i]*=3.0;
-			vegetationtype[j][i]+=vegetationtype[j-1][i];
-			vegetationtype[j][i]*=0.25;
-		}
-		else if((i!=0)&&(j==0)&&(vegetationtype[j][i]!=vegetationtype[j][i-1])&&(vegetationtype[j][i-1]!=0))
-		{
-			vegetationtype[j][i]*=3;
-			vegetationtype[j][i]+=vegetationtype[j][i-1];
-			vegetationtype[j][i]*=0.25;
-		}
-		else if((j!=0)&&(i!=0)&&(vegetationtype[j][i]!=vegetationtype[j-1][i-1])&&(vegetationtype[j][i]!=0)&&(vegetationtype[j-1][i-1]!=0))
-		{
-			vegetationtype[j][i]*=2;
-			vegetationtype[j][i]+=vegetationtype[j-1][i-1]+vegetationtype[j-1][i]+vegetationtype[j][i-1];
-			vegetationtype[j][i]*=0.2;}
-		}
-		else{continue;}
-	}
-}
-	values.clear();
-//	valueline.clear();
-	//if(parameter[0].)
-	cout<<"vegetypeini finished"<<endl;
-}
 
 
 
@@ -609,7 +423,7 @@ for(j=0;j<rowtest;j++)
  * 
  *
  *******************************************************************************************/
-void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list,  vector<vector<double>> &vegetationtype)
+void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)
 {
 	
 	///PROBLEM: SIEHE main.cpp/Vegetationdynamics()

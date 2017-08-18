@@ -636,11 +636,7 @@ void Parametereinlesen(void)
 	if (parameter[0].parameterlesenanzeige ==true)
 	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);}
 	
-	strcpy(uebergabestring,"defTreevert");
-	parameter[0].defTreevert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].defTreevert);}
-		
+	
 	
 	strcpy(uebergabestring,"pollenvert");
 	parameter[0].pollenvert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);

@@ -325,7 +325,3 @@ rel_trait_variance=0.05;
 //SNPMutationrate=0.0001;
 //microsatelliteMutationrate=0.0001;
 
-// 3.3.Ausgabemodus
-defTreevert=0;						//vordefinierte Treeverteilung... 1-an, 0-aus, auch für vegetationtypes
-
-

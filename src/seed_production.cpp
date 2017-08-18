@@ -4,7 +4,7 @@
 *
 * depends on seed production factor, tree size, actual growth
 *******************************************************************************************/
-void seedproduktion(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list,int yearposition)
+void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list,int yearposition)
 {
 
 	//int aktort=0;

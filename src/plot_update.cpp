@@ -1029,7 +1029,7 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
  *
  *
  *******************************************************************************************/
-void Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)
+void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)
 {
 
 	int aktort=0;

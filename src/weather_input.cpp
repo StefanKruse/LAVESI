@@ -152,7 +152,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
  *
  *
  *******************************************************************************************/
-void getPrec1(char dateinameprec[50],vector<weather*>& weather_list)
+void getPrec1(char dateinameprec[50],vector<weather*>& weather_list, int maximal_word_length)
 {
 			FILE *fp;
 			fp = fopen(dateinameprec,"r");
@@ -168,7 +168,7 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list)
 			double niederschlagssummebuf;
 			double prec1monatmittelbuf, prec2monatmittelbuf, prec3monatmittelbuf, prec4monatmittelbuf, prec5monatmittelbuf, prec6monatmittelbuf, prec7monatmittelbuf, prec8monatmittelbuf, prec9monatmittelbuf, prec10monatmittelbuf, prec11monatmittelbuf, prec12monatmittelbuf;
 
-			while( fgets(puffer,wortlaengemax,fp) !=NULL)
+			while( fgets(puffer,maximal_word_length,fp) !=NULL)
 			{
 				if (counter>=2)
 				{
@@ -218,7 +218,7 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list)
  *
  *
  *******************************************************************************************/
-void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
+void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,int maximal_word_length)
 {
 			// Berechnung des aktuellen Ortes
 			int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
@@ -265,7 +265,7 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 			double jahrbuf, tempjahrmittelbuf;
 
 			// Zeilenweise einlesen und entsprechende Spalteninhalte auslesen und teilweise verarbeiten
-			while( fgets(puffer,wortlaengemax,f) !=NULL)
+			while( fgets(puffer,maximal_word_length,f) !=NULL)
 			{
 				if (counter>=2)
 				{
@@ -384,7 +384,7 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
  *
  *
  *******************************************************************************************/
-void getPrec2(char dateinameprec[50],vector<weather*>& weather_list)
+void getPrec2(char dateinameprec[50],vector<weather*>& weather_list,int maximal_word_length)
 {
 
 			FILE *fp;
@@ -412,7 +412,7 @@ void getPrec2(char dateinameprec[50],vector<weather*>& weather_list)
 			double prec11monatmittelbuf;
 			double prec12monatmittelbuf;
 
-			while( fgets(puffer,wortlaengemax,fp) !=NULL)
+			while( fgets(puffer,maximal_word_length,fp) !=NULL)
 			{
 				if (counter>=2)
 				{
@@ -615,12 +615,9 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 			pweather->vegetationslaengemin=(int) round(ndegredaymin*0.88432);
 			pweather->degreday=(int) round(sumdegreday*0.87583);
 			weather_list.push_back(pweather);// 3. Jahr in Liste einfuegen
-
 		}
 		counter++;
-						
 	}
-	
 	fclose(f);
 }
 
@@ -718,7 +715,6 @@ void passWeather()
 					(parameter[0].weatherchoice==29) | (parameter[0].weatherchoice==30) | (parameter[0].weatherchoice==31) | (parameter[0].weatherchoice==32))
 					{
 						jantempsum+=weather_list[i]->janmorttemp;
-						//jantempsummin+=weather_list[i]->janmorttempmin;
 					}
 					else
 					{
@@ -845,18 +841,6 @@ void passWeather()
 			}
 				
 		
-			/*		
-			signed int wettabbruch;
-			// Abfrage ob das Programm beendet oder fortgesetzt werden soll
-			printf("\n Ende des Passweather. Weiter mit 1, beenden mit irgendeiner Eingabe\n");
-			scanf("%d", &wettabbruch);
-
-			if (wettabbruch!=1) 
-			{
-				printf("LaVeSi wurde beendet\n\n"); 
-				exit(0);
-			}					
-			*/	
 			
 		}// weather_list Ende
 		
@@ -887,7 +871,7 @@ void passWeather()
  *
  *
  *******************************************************************************************/
-extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)
+extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)
 {
 
 	// -- -- -- -- weathereinlesen BEGINN -- -- -- -- //
@@ -1134,7 +1118,7 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 		
 			getTemp1(aktort, dateinametemp,  weather_list);
 		
-			getPrec1(dateinameprec, weather_list);
+			getPrec1(dateinameprec, weather_list,wortlaengemax);
 		}
 		else if((parameter[0].weatherchoice==1) | (parameter[0].weatherchoice==9))
 		{
@@ -1154,9 +1138,9 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 			}
 			
 			
-			getTemp2(aktort, dateinametemp,  weather_list);
+			getTemp2(aktort, dateinametemp,  weather_list,wortlaengemax);
 
-			getPrec2(dateinameprec, weather_list);
+			getPrec2(dateinameprec, weather_list,wortlaengemax);
 		}
 		else
 		{
@@ -1252,7 +1236,7 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 				strcpy(dateinameprec, precbuf);
 			}			
 			getTemp3(aktort, dateinametemp,  weather_list);
-			getPrec1(dateinameprec, weather_list);
+			getPrec1(dateinameprec, weather_list,wortlaengemax);
 		}
 		
 		parameter[0].parameterlesenanzeige=true;
@@ -1273,33 +1257,3 @@ extern void weathereinlesen(int treerows, struct Parameter *parameter,  int wort
 	passWeather();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

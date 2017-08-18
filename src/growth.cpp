@@ -187,7 +187,7 @@ double getMaxbrustwachstum(int yearposition, list<Tree*> &tree_list, vector<weat
  * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
-void Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
+void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
 {
 	
 	int aktort=0;

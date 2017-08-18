@@ -60,7 +60,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
  *******************************************************************************************/
 
 
- void seedausbreitung(int treerows, int treecols,int jahr, int yearposition, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
+ void seedausbreitung(int jahr, int yearposition, struct Parameter *parameter, vector<list<seed*> > &world_seed_list)
 {
 		
 	int aktort=0;
@@ -423,12 +423,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									 //  pseed->mtSNP[1]=rand();
 	// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 	// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-									} else 
+									} 
+									else 
 									{
 										sameausserhalb=true;
 										rausgeflogenN++;
 									}
-								} else if(pseed->ycoo<0.0)
+								} 
+								else if(pseed->ycoo<0.0)
 								{
 									if((parameter[0].periodRB==1))
 									{
@@ -441,19 +443,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									//   pseed->mtSNP[1]=rand();
 	// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 	// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-									} else 
+									} 
+									else 
 									{
 										sameausserhalb=true;
 										rausgeflogenS++;
 									}
-								} else if((pseed->ycoo< (double) (treerows-1))&&(pseed->xcoo< (double) (treecols-1))&&(pseed->ycoo>0.0)&&(pseed->xcoo>0.0)&&(parameter[0].defTreevert==1)&&(vegetationtype[ceil(pseed->ycoo)][ceil(pseed->xcoo)]<0.09))
-								{
-										//delete pseed;
-										sameausserhalb=true;
-										//cout<<"seed in a lake\n";
-										//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
-										//pos=seed_list.erase(pos);
-								}
+								} 
 								 
 								if(pseed->xcoo<0.0)
 								{
@@ -469,12 +465,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//   pseed->mtSNP[1]=rand();
 	// 									 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 	// 								   	pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-									} else
+									} 
+									else
 									{
 										sameausserhalb=true;
 										rausgeflogenW++;
 									}
-								} else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
+								} 
+								else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
 								{
 									if(parameter[0].periodRB==1)
 									{
@@ -486,21 +484,16 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									//   pseed->cpSNP[1]=rand();
 									//   pseed->mtSNP[1]=rand();
 									   
-									} else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+									} 
+									else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
 									{ //Weniger Ausbreitung aus Osten nach Westen als andersherum
 										pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
-									} else
+									} 
+									else
 									{	
 										sameausserhalb=true;
 										rausgeflogenO++;
 									}
-								} else if((parameter[0].defTreevert==1)&&(vegetationtype[ceil(pseed->ycoo)][ceil(pseed->xcoo)]<0.09))
-								{
-										//delete pseed;
-										sameausserhalb=true;
-										//cout<<"seed in a lake\n";
-										//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
-										//pos=seed_list.erase(pos);
 								}
 		
 								if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
@@ -515,7 +508,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								{ // Loeschvorgang seed Beginn
 									delete pseed;
 									pos=seed_list.erase(pos);
-								} else
+								} 
+								else
 								{
 									++pos;
 								}
@@ -523,11 +517,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							// } // "normales" Verhalten mit seed Ende
 						} // RN Groeszer Null Ende
 
-					} else  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
+					} 
+					else  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
 					{
 						++pos;
 					}
-				} else //Imcone? Ende
+				} 
+				else //Imcone? Ende
 				{
 					++pos;
 				}
@@ -539,7 +535,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			
 			cout << endl << "All seeds:" << cum_time_individual_seed << " with seeddisp-function:" << cum_time_seeddisp << endl;
 				
-		} else
+		} 
+		else
 		{ // multi-core-processing
 
 			// manually chose the implementation of multi-core-processing
@@ -689,12 +686,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										 //  pseed->mtSNP[1]=rand();
 		// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 		// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-										} else 
+										} 
+										else 
 										{
 											sameausserhalb=true;
 											rausgeflogenN++;
 										}
-									} else if(pseed->ycoo<0.0)
+									} 
+									else if(pseed->ycoo<0.0)
 									{
 										if((parameter[0].periodRB==1))
 										{
@@ -707,18 +706,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//   pseed->mtSNP[1]=rand();
 		// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 		// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-										} else 
+										} 
+										else 
 										{
 											sameausserhalb=true;
 											rausgeflogenS++;
 										}
-									} else if((pseed->ycoo< (double) (treerows-1))&&(pseed->xcoo< (double) (treecols-1))&&(pseed->ycoo>0.0)&&(pseed->xcoo>0.0)&&(parameter[0].defTreevert==1)&&(vegetationtype[ceil(pseed->ycoo)][ceil(pseed->xcoo)]<0.09))
-									{
-											//delete pseed;
-											sameausserhalb=true;
-											//cout<<"seed in a lake\n";
-											//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
-											//pos=seed_list.erase(pos);
 									}
 									 
 									if(pseed->xcoo<0.0)
@@ -735,12 +728,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//   pseed->mtSNP[1]=rand();
 		// 									 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 		// 								   	pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-										} else
+										} 
+										else
 										{
 											sameausserhalb=true;
 											rausgeflogenW++;
 										}
-									} else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
+									} 
+									else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
 									{
 										if(parameter[0].periodRB==1)
 										{
@@ -752,22 +747,18 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										//   pseed->cpSNP[1]=rand();
 										//   pseed->mtSNP[1]=rand();
 										   
-										} else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+										} 
+										else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
 										{ //Weniger Ausbreitung aus Osten nach Westen als andersherum
 											pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
-										} else
+										} 
+										else
 										{	
 											sameausserhalb=true;
 											rausgeflogenO++;
 										}
-									} else if((parameter[0].defTreevert==1)&&(vegetationtype[ceil(pseed->ycoo)][ceil(pseed->xcoo)]<0.09))
-									{
-											//delete pseed;
-											sameausserhalb=true;
-											//cout<<"seed in a lake\n";
-											//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
-											//pos=seed_list.erase(pos);
-									}
+									} 
+									
 			
 									if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
 									{
@@ -782,18 +773,21 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										delete pseed;
 										pos=seed_list.erase(pos);
 										++pari;
-									} else
+									} 
+									else
 									{
 										++pari;
 									}
 
 							} // RN Groeszer Null Ende
 
-						} else  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
+						} 
+						else  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
 						{
 							++pari;
 						}
-					} else //Imcone? Ende
+					} 
+					else //Imcone? Ende
 					{
 						++pari;
 					}
@@ -823,7 +817,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					{
 						end = seed_list.end();
 						// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
-					} else
+					} 
+					else
 					{
 						std::advance(end, chunk_size);
 						// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
@@ -980,16 +975,19 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											 //  pseed->mtSNP[1]=rand();
 			// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 			// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-											} else if((parameter[0].periodRB==3))
+											} 
+											else if((parameter[0].periodRB==3))
 											{
 												sameausserhalb=true;
 												rausgeflogenS++;
-											} else 
+											} 
+											else 
 											{
 												sameausserhalb=true;
 												rausgeflogenN++;
 											}
-										} else if(pseed->ycoo<0.0)
+										} 
+										else if(pseed->ycoo<0.0)
 										{
 											if((parameter[0].periodRB==1))
 											{
@@ -1002,22 +1000,17 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//   pseed->mtSNP[1]=rand();
 			// 								 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 			// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-											} else if((parameter[0].periodRB==3))
+											} 
+											else if((parameter[0].periodRB==3))
 											{
 												sameausserhalb=true;
 												rausgeflogenS++;
-											} else 
+											} 
+											else 
 											{
 												sameausserhalb=true;
 												rausgeflogenS++;
 											}
-										} else if((pseed->ycoo< (double) (treerows-1))&&(pseed->xcoo< (double) (treecols-1))&&(pseed->ycoo>0.0)&&(pseed->xcoo>0.0)&&(parameter[0].defTreevert==1)&&(vegetationtype[ceil(pseed->ycoo)][ceil(pseed->xcoo)]<0.09))
-										{
-												//delete pseed;
-												sameausserhalb=true;
-												//cout<<"seed in a lake\n";
-												//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
-												//pos=seed_list.erase(pos);
 										}
 										 
 										if(pseed->xcoo<0.0)
@@ -1034,12 +1027,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												//   pseed->mtSNP[1]=rand();
 			// 									 }else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX)){//reduzierte periodic BC
 			// 								   	pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
-											} else
+											} 
+											else
 											{
 												sameausserhalb=true;
 												rausgeflogenW++;
 											}
-										} else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
+										} 
+										else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
 										{
 											if(parameter[0].periodRB==1 || parameter[0].periodRB==3)
 											{
@@ -1051,22 +1046,17 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											//   pseed->cpSNP[1]=rand();
 											//   pseed->mtSNP[1]=rand();
 											   
-											} else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+											} 
+											else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
 											{ //Weniger Ausbreitung aus Osten nach Westen als andersherum
 												pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
-											} else
+											} 
+											else
 											{	
 												sameausserhalb=true;
 												rausgeflogenO++;
 											}
-										} else if((parameter[0].defTreevert==1)&&(vegetationtype[ceil(pseed->ycoo)][ceil(pseed->xcoo)]<0.09))
-										{
-												//delete pseed;
-												sameausserhalb=true;
-												//cout<<"seed in a lake\n";
-												//IN SEEN LANDENDE seed WERDEN GEL\D6SCHT!
-												//pos=seed_list.erase(pos);
-										}
+										} 
 				
 										if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
 										{
@@ -1097,7 +1087,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					{ // Loeschvorgang seed Beginn
 						delete pseed;
 						pos=seed_list.erase(pos);
-					} else
+					} 
+					else
 					{
 						++pos;
 					}

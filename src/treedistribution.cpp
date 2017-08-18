@@ -203,7 +203,7 @@ void Seedin()//für die klassifizierung nach vegetationstypen arbeite ich wieder 
  *
  *
  *******************************************************************************************/
-void TreesIni()
+void TreesIni(int maximal_word_length)
 {
 		// Zuerst wird die Datei geoeffnet, aus der gelesen werden soll
 		FILE *f;
@@ -340,7 +340,7 @@ void TreesIni()
 
 				// dann wird Zeilenweise ab der 2. Zeile (1. Zeile sind Ueberschriften) verfahren
 				// und die jeweiligen Inhalte in das Treearray geschrieben
-				while(fgets(puffer,wortlaengemax,f) !=NULL)//Hier bestimmt fgets die Anzahl an treesn..
+				while(fgets(puffer,maximal_word_length,f) !=NULL)//Hier bestimmt fgets die Anzahl an treesn..
 				{
 					if (counter>=2)
 					{
@@ -423,7 +423,7 @@ void TreesIni()
  * 
  *
  *******************************************************************************************/
-void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)
+void Treeverteilung(struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)
 {
 	
 	///PROBLEM: SIEHE main.cpp/Vegetationdynamics()
@@ -434,7 +434,7 @@ void Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int
 			
 	// ... oder aus eine Dateien mit Treeverteilungen auf den Untersuchungsflaechen im Jahr 2011 einlesen
 	else
-		TreesIni();
+		TreesIni(wortlaengemax);
 
 }
 

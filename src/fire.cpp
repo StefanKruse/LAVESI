@@ -5,7 +5,7 @@
  * frequency approx. adapted from literature
  *
  *******************************************************************************************/
-void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list)
+void Fire( struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list)
 {
 
 	if (parameter[0].feuer==1 && parameter[0].einschwingen==false)
@@ -24,7 +24,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 			//1.5% of the tree bearing area is burnt, oriented on literature.
 			
 			
-			//***german:
+			// ***german:
 			// Abhaengig vom weather wird eine Feuerausbruchswahrscheinlichkeit berechnet und 
 			// da etwa 1.5 % der Flachen jaehrlich brennen wird die Chance von 0.015
 			// mit der Auflagenstaerke verrechnet
@@ -38,7 +38,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 				cout << "  +++FEUER!!! ";
 				//If a fire occurs, the vegetation cover is reduced, this is independent of tree density and the fire dependent mortality
 				
-				//***german:
+				// ***german:
 				// Wenn ein Feuer ausbricht wird die Vegetationsdecke vermindert (Nicht: in Abhaengigkeit von der Auflagenstaerke und der Feuermort)
 				for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 				{ 
@@ -47,7 +47,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 				}  
 				//If a fire occured, the mortality due to dryness is multiplied by a factor 3
 				
-				//***german:
+				// ***german:
 				// Falls ein Feuer ausbrach, dann wir die Trockenheitsmortalitaet dreifach so groß
 				weather_list[yearposition]->trockenheitsmort=weather_list[yearposition]->trockenheitsmort*3;
 				
@@ -56,13 +56,13 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 				/*
 				// choose random position on where the fire starts
 				
-				//***german:
+				// ***german:
 				// ziehe Zufallsposition im Feld an der das Feuer ausbricht
 				int j= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
 				int i= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
 				
 				cout << "Plot position of fire starting point y="<<j<<", x="<<i<<endl;
-				//***german:
+				// ***german:
 				//cout << "Flaeche auf der Feuer ausbricht y=" << j << " & x=" << i << endl;
 
 				plot_list[i*treecols*parameter[0].sizemagnif+j]->auflagenstaerke		// bei 200 ist Feuer sehr unwahrscheinlich
@@ -70,7 +70,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 				// 1 sqm is hit by lightning
 				//
 				
-				//***german:
+				// ***german:
 				// 1 Quadratmeter wird durch den Blitz getroffen und somit dort die Vegetation in Brand gesetzt. 
 				// Ausbreitung in Abhaengigkeit von Intensitaet die wiederum von der Biomasse auf dem Feld abhaengt
 				*/
@@ -85,7 +85,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 				cout << "  ++FEUER!!! ";
 				//If a fire occurs, the vegetation cover is reduced, this is independent of the tree density and the fire dependent mortality
 				
-				//***german:
+				// ***german:
 				// Wenn ein Feuer ausbricht wird die Vegetationsdecke vermindert (Nicht: in Abhaengigkeit von der Auflagenstaerke und der Feuermort)
 				for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 				{ 
@@ -100,7 +100,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 			
 			//A small fire rarely destroys the trees and does not increase the mortality depending on dryness
 			
-			//***german:
+			// ***german:
 			///schwaches Feuer zerstört kaum auflage und erhöht die "Trockenheitsmortalitaet" nicht
 			else if (zufallsz>=(weather_list[yearposition]->trockenheitsmort/5.0) && zufallsz<(weather_list[yearposition]->trockenheitsmort))
 			{
@@ -108,7 +108,7 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 				
 				//If a fire occurs, the vegetation cover is reduced, this is independent of the tree density and the fire dependent mortality
 				
-				//***german:
+				// ***german:
 				// Wenn ein Feuer ausbricht wird die Vegetationsdecke vermindert (Nicht: in Abhaengigkeit von der Auflagenstaerke und der Feuermort)
 				for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 				{ 
@@ -118,14 +118,11 @@ void Fire(int treerows, int treecols, struct Parameter *parameter, int yearposit
 
 				// If a fire starts the dryness dependent mortality stays constant
 				
-				//***german:
+				// ***german:
 				// Falls ein Feuer ausbrach, dann bleibt die Trockenheitsmortalitaet so groß wie sie ist
 				weather_list[yearposition]->trockenheitsmort=weather_list[yearposition]->trockenheitsmort;
 				parameter[0].feuerausgabe=1;
 			}
-
 		}
-
 	} 
-
 }

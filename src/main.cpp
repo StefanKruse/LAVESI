@@ -15,13 +15,13 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	// density grid update
 	double start_time_kartenup = omp_get_wtime();
 			/*!::Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)*/
-			Kartenupdate(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+			Kartenupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
 	
 			// growth
 	double start_time_wachstum = omp_get_wtime();
 			/*!::Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
-			Wachstum(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_weather_list, world_plot_list);
+			Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list, world_plot_list);
 	double end_time_wachstum = omp_get_wtime();
 
 			// seed dispersal
@@ -67,14 +67,14 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				}
 					
 		
-			seedausbreitung(treerows, treecols, yr, yearposition, &parameter[0], world_seed_list);
+			seedausbreitung( yr, yearposition, &parameter[0], world_seed_list);
 			
 	double end_time_seedausbreitung = omp_get_wtime();
 	
 			// seed production
 	double start_time_seedproduktion = omp_get_wtime();
 			/*!::seedproduktion(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-			seedproduktion(treerows, treecols, &parameter[0], world_tree_list, world_seed_list, world_weather_list,yearposition);
+			seedproduktion( &parameter[0], world_tree_list, world_seed_list, world_weather_list,yearposition);
 	double end_time_seedproduktion = omp_get_wtime();
 	
 	
@@ -86,14 +86,14 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				parameter[0].starter=true;
 				
 				/*!::Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-				Treeverteilung(treerows, treecols, &parameter[0], wortlaengemax, yearposition, world_tree_list, world_seed_list);
+				Treeverteilung(&parameter[0], wortlaengemax, yearposition, world_tree_list, world_seed_list);
 				
 				parameter[0].jahremitseedeintrag--;
 			}
 			else if ( parameter[0].seedintropermanent==true && parameter[0].jahremitseedeintrag<=0) 
 			{
 				parameter[0].starter=true;
-				Treeverteilung(treerows, treecols, &parameter[0],  wortlaengemax, yearposition, world_tree_list, world_seed_list);
+				Treeverteilung( &parameter[0],  wortlaengemax, yearposition, world_tree_list, world_seed_list);
 			}
 			
 	double end_time_Treeverteilung = omp_get_wtime();
@@ -102,7 +102,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// establishment
 	double start_time_etablierung = omp_get_wtime();
 			/*!::Etablierung(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/			
-			Etablierung(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+			Etablierung(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 			//printf("\n jahr=%d\n ", jahr+3998);
 	double end_time_etablierung = omp_get_wtime();
 	
@@ -110,20 +110,20 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// fire
 	double start_time_feuer = omp_get_wtime();
 			/*!::Fire(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list)*/
-			Fire(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_weather_list);
+			Fire( &parameter[0], yearposition, world_plot_list, world_weather_list);
 	double end_time_feuer = omp_get_wtime();
 		
 			// Data_output
 	double start_time_Data_output = omp_get_wtime();
 			/*!::Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)*/
- 			Data_output(treerows, treecols, t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+ 			Data_output(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
 	double end_time_Data_output = omp_get_wtime();
 						
 			// MORTALITÄT,
 	double start_time_mortalitaet = omp_get_wtime();
 			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
 // cout << endl << " Uebergabe and Mortalitaet -> yr=" << yr << " + ivort=" <<  parameter[0].ivort << endl;
-			Mortalitaet(treerows, treecols, &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+			Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 			wdir.clear();
 			wspd.clear();    
 	double end_time_mortalitaet = omp_get_wtime();
@@ -132,7 +132,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// Ageing
 	double start_time_Ageing = omp_get_wtime();
 			/*!::Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-			Ageing(treerows, treecols, &parameter[0], world_tree_list, world_seed_list);
+			Ageing(&parameter[0], world_tree_list, world_seed_list);
 	double end_time_Ageing = omp_get_wtime();
 
 	// print the computation time to the console and into a file
@@ -509,9 +509,6 @@ void Jahresschritte()
 	
 		for (int t=0;t<parameter[0].simdauer;t++)
 		{ // Jahresschrittschleife Beginn
-	
-	
-		
 			
 			parameter[0].ivort++;
 
@@ -585,7 +582,7 @@ void Jahresschritte()
 					} // Weltschleife Ende
 
 					//aus runSimulations()
-					weathereinlesen(treerows, &parameter[0],  wortlaengemax, world_weather_list);
+					weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
 
 				
 					// für verschiedene Parameter-Settings wiederholen am 18.11.2014 eingefügt
@@ -736,7 +733,6 @@ void createLists()
 					vector<Evaluation*> evaluation_list;			  //Neue evaluation_list erzeugen
 					world_evaluation_list_copy.push_back(evaluation_list); // Neue evaluation_list in die Weltliste eintragen
 				}
-				//INFLUX RATES
 			}
 		} // WeltListen Ende
 
@@ -754,7 +750,7 @@ void createLists()
  *
  *
  *******************************************************************************************/
-void initialiseMaps()//NICHT HIER EINLESEN?
+void initialiseMaps()
 {
 		int aktort=0;
 		for (vector<vector<Karten*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++)
@@ -805,11 +801,7 @@ void initialiseMaps()//NICHT HIER EINLESEN?
 
 				plot_list.push_back(pKarten);	
 				//Kartenelement in Liste einfuegen
-			} 
-
-
-			
-			
+			}
 			
 			
 			// Fuer die Evaluation fuer jeden Ort ein Evaluation-Element erschaffen
@@ -876,7 +868,7 @@ void runSimulation()
 
 		/// weather einlesen
 		/*! ::weathereinlesen(int treerows, struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)*/
-		weathereinlesen(treerows, &parameter[0],  wortlaengemax, world_weather_list);
+		weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
 		
 		
 		/// Karten und Evaluation Listen für jede Welt vorbereiten 
@@ -888,7 +880,7 @@ void runSimulation()
 
 		/// trees (Tree) wie auf CH17I einbringen oder seed verteilen
 		/*! ::Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-		Treeverteilung(treerows, treecols, &parameter[0], wortlaengemax, parameter[0].startjahr+3999, world_tree_list, world_seed_list);
+		Treeverteilung( &parameter[0], wortlaengemax, parameter[0].startjahr+3999, world_tree_list, world_seed_list);
 
 		parameter[0].ivort=0;		// Variable fuer den aktuellen Fortschritt über den gesamten Zeitraum, einschließlich Stabilisierungsphase
 

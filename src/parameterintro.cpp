@@ -94,8 +94,14 @@ void Parametereinlesen(void)
 		{printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].qualijahranzeige)?"true":"false");}
 	
 	strcpy(uebergabestring,"Data_output");
-	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) {parameter[0].Data_output=true;}
-	else {parameter[0].Data_output=false;};
+	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
+        {
+            parameter[0].Data_output=true;
+        }
+	else 
+        {
+            parameter[0].Data_output=false;
+        };
 	if (parameter[0].parameterlesenanzeige ==true) 
         {
             printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].Data_output)?"true":"false");
@@ -374,11 +380,16 @@ void Parametereinlesen(void)
                 }
 
 	strcpy(uebergabestring,"realseedconnect");
-	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) {parameter[0].realseedconnect=true;}
-	else {
+	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
+        {
+            parameter[0].realseedconnect=true;
+        }
+	else 
+        {
             parameter[0].realseedconnect=false;
-            };
-	if (parameter[0].parameterlesenanzeige ==true) 
+        };
+	
+        if (parameter[0].parameterlesenanzeige ==true) 
 		{
                     printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].realseedconnect)?"true":"false");
                 }
@@ -404,7 +415,10 @@ void Parametereinlesen(void)
                 }
 
 	strcpy(uebergabestring,"seedintropermanent");
-	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) {parameter[0].seedintropermanent=true;}
+	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
+        {
+            parameter[0].seedintropermanent=true;
+        }
 	else 
         {
             parameter[0].seedintropermanent=false;
@@ -444,309 +458,426 @@ void Parametereinlesen(void)
         {
             parameter[0].seedtravelbetween=false;
         };
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedtravelbetween)?"true":"false");}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedtravelbetween)?"true":"false");
+                }
 
 		// Wachstum
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("\n\n\t Wachstum\n\n");}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("\n\n\t Wachstum\n\n");
+                }
 
 	strcpy(uebergabestring,"gdbasalfacqgmel");
 	parameter[0].gdbasalfacqgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacqgmel);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacqgmel);
+                }
 		
 	strcpy(uebergabestring,"gdbasalfacgmel");
 	parameter[0].gdbasalfacgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacgmel);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacgmel);
+                }
 
 	strcpy(uebergabestring,"gdbasalconstgmel");
 	parameter[0].gdbasalconstgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalconstgmel);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalconstgmel);
+                }
 
 	strcpy(uebergabestring,"gdbrustfacqgmel");
 	parameter[0].gdbrustfacqgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].gdbrustfacqgmel);}		
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].gdbrustfacqgmel);
+                }		
 		
 	strcpy(uebergabestring,"gdbrustfacgmel");
 	parameter[0].gdbrustfacgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacgmel);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacgmel);
+                }
 
 	strcpy(uebergabestring,"gdbrustconstgmel");
 	parameter[0].gdbrustconstgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstgmel);}		
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstgmel);
+                }		
 		
 	strcpy(uebergabestring,"gdbasalfacqsib");
 	parameter[0].gdbasalfacqsib= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacqsib);}		
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacqsib);
+                }		
 		
 	strcpy(uebergabestring,"gdbasalfacsib");
 	parameter[0].gdbasalfacsib= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacsib);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalfacsib);  
+                }
 
 	strcpy(uebergabestring,"gdbasalconstsib");
 	parameter[0].gdbasalconstsib= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalconstsib);}		
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalconstsib);
+                }		
 
 	strcpy(uebergabestring,"gdbrustfacqsib");
 	parameter[0].gdbrustfacqsib= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacqsib);}		
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacqsib);
+                }		
 		
 	strcpy(uebergabestring,"gdbrustfacsib");
 	parameter[0].gdbrustfacsib= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacsib);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacsib);
+                }
 
 	strcpy(uebergabestring,"gdbrustconstsib");
 	parameter[0].gdbrustconstsib= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstsib);}	
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstsib);
+                }	
 		
 	strcpy(uebergabestring,"basaleinflussaltneu");
 	parameter[0].basaleinflussaltneu=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].basaleinflussaltneu);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].basaleinflussaltneu);
+                }
 
 	strcpy(uebergabestring,"relwachstumeinfluss");
 	parameter[0].relwachstumeinfluss=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].relwachstumeinfluss);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].relwachstumeinfluss);
+                }
 
-	/*strcpy(uebergabestring,"aatnddratio");
-	parameter[0].aatnddratio=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) {printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].aatnddratio);}
-	*/
 	strcpy(uebergabestring,"densityart");
 	parameter[0].densityart=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].densityart);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].densityart);
+                }
 
 	strcpy(uebergabestring,"incfac");
 	parameter[0].incfac=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].incfac);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].incfac);
+                }
 
 	strcpy(uebergabestring,"densitywertmanipulatorexp");
 	parameter[0].densitywertmanipulatorexp=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertmanipulatorexp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertmanipulatorexp);
+                }
 		
 	strcpy(uebergabestring,"calcinfarea");
 	parameter[0].calcinfarea=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].calcinfarea);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].calcinfarea);
+                }
 
 	strcpy(uebergabestring,"densitysmallweighing");
 	parameter[0].densitysmallweighing=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitysmallweighing);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitysmallweighing);
+                }
 
-		strcpy(uebergabestring,"densitytreetile");
+        strcpy(uebergabestring,"densitytreetile");
 	parameter[0].densitytreetile=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitytreetile);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitytreetile);
+                }
 
 	strcpy(uebergabestring,"densitytiletree");
 	parameter[0].densitytiletree=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].densitytiletree);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].densitytiletree);
+                }
 
-		strcpy(uebergabestring,"desitymaxreduction");
+        strcpy(uebergabestring,"desitymaxreduction");
 	parameter[0].desitymaxreduction=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].desitymaxreduction);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].desitymaxreduction);
+                }
 
-		strcpy(uebergabestring,"dichtheightrel");
+        strcpy(uebergabestring,"dichtheightrel");
 	parameter[0].dichtheightrel=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].dichtheightrel);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].dichtheightrel);
+                }
 
-		strcpy(uebergabestring,"densitywertdbasaleinfluss");
+        strcpy(uebergabestring,"densitywertdbasaleinfluss");
 	parameter[0].densitywertdbasaleinfluss=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertdbasaleinfluss);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertdbasaleinfluss);
+                }
 
 	strcpy(uebergabestring,"densitywertmaximumbeiheight");
 	parameter[0].densitywertmaximumbeiheight=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertmaximumbeiheight);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertmaximumbeiheight);
+                }
 
 			// Beziehungen zwischen height und Basaldurchmesser
 	strcpy(uebergabestring,"allometriefunktionstyp");
 	parameter[0].allometriefunktionstyp=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].allometriefunktionstyp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].allometriefunktionstyp);
+                }
 
 	strcpy(uebergabestring,"dbasalheightallosteig");
 	parameter[0].dbasalheightallosteig=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightallosteig);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightallosteig);
+                }
 	
 	strcpy(uebergabestring,"dbasalheightalloexp");
 	parameter[0].dbasalheightalloexp=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightalloexp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightalloexp);
+                }
 
 	strcpy(uebergabestring,"dbrustheightallosteig");
 	parameter[0].dbrustheightallosteig=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightallosteig);}
-	
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightallosteig);
+                }
+
 	strcpy(uebergabestring,"dbrustheightalloexp");
 	parameter[0].dbrustheightalloexp=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightalloexp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightalloexp);
+                }
 
 	strcpy(uebergabestring,"dbasalheightsteignonlin");
 	parameter[0].dbasalheightsteignonlin=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightsteignonlin);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightsteignonlin);
+                }
 	
 	strcpy(uebergabestring,"dbrustheightsteignonlin");
 	parameter[0].dbrustheightsteignonlin=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightsteignonlin);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightsteignonlin);
+                }
 
 		// Mortalitaet
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("\n\n\t Mortalitaet\n\n");}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("\n\n\t Mortalitaet\n\n");
+                }
 	strcpy(uebergabestring,"mortbg");
 	parameter[0].mortbg=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].mortbg);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].mortbg);
+                }
 
 	strcpy(uebergabestring,"maximalage");
 	parameter[0].maximalage=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].maximalage);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].maximalage);
+                }
 
 	strcpy(uebergabestring,"malt");
 	parameter[0].malt=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].malt);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].malt);
+                }
 
 	strcpy(uebergabestring,"mjung");
 	parameter[0].mjung=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mjung);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mjung);
+                }
 
 	strcpy(uebergabestring,"jugendmorteinflussexp");
 	parameter[0].jugendmorteinflussexp=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].jugendmorteinflussexp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].jugendmorteinflussexp);
+                }
 
 	strcpy(uebergabestring,"mgrowth");
 	parameter[0].mgrowth=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mgrowth);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mgrowth);
+                }
 
 	strcpy(uebergabestring,"relwachstummorteinflussexp");
 	parameter[0].relwachstummorteinflussexp=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].relwachstummorteinflussexp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].relwachstummorteinflussexp);
+                }
 
 	strcpy(uebergabestring,"mweather");
 	parameter[0].mweather=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mweather);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mweather);
+                }
 
 	strcpy(uebergabestring,"heightweathermorteinflussexp");
 	parameter[0].heightweathermorteinflussexp=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].heightweathermorteinflussexp);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].heightweathermorteinflussexp);
+                }
 
 	strcpy(uebergabestring,"mdensity");
 	parameter[0].mdensity=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mdensity);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mdensity);
+                }
 
 	strcpy(uebergabestring,"mtrockenheit");
 	parameter[0].mtrockenheit=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mtrockenheit);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mtrockenheit);
+                }
 
 	strcpy(uebergabestring,"seedTreemort");
 	parameter[0].seedTreemort=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedTreemort);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedTreemort);
+                }
 
 	strcpy(uebergabestring,"seedbodenmort");
 	parameter[0].seedbodenmort=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedbodenmort);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("Schreibe:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedbodenmort);
+                }
 
 	strcpy(uebergabestring,"gmel_seedtod");
 	parameter[0].gmel_seedtod=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true) {printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].gmel_seedtod);}
+                if (parameter[0].parameterlesenanzeige ==true) 
+                {
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].gmel_seedtod);
+                }
 
 	strcpy(uebergabestring,"jantodestempgmel");
 	parameter[0].jantodestempgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].jantodestempgmel);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].jantodestempgmel);
+                }
 
 	strcpy(uebergabestring,"weatherzahlgmela");
 	parameter[0].weatherzahlgmela= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmela);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmela);
+                }
 
 	strcpy(uebergabestring,"weatherzahlgmelb");
 	parameter[0].weatherzahlgmelb= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmelb);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmelb);
+                }
 
 	strcpy(uebergabestring,"weatherzahlgmelc");
 	parameter[0].weatherzahlgmelc= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmelc);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmelc);
+                }
 
 	strcpy(uebergabestring,"windsource");
 	parameter[0].windsource=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].windsource);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].windsource);
+                }
 	
 	strcpy(uebergabestring,"periodRB");
 	parameter[0].periodRB=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].periodRB);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].periodRB);
+                }
 	
 	strcpy(uebergabestring,"outputall");
 	parameter[0].outputall=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);
+                }
 	
 	
 	
 	strcpy(uebergabestring,"pollenvert");
 	parameter[0].pollenvert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenvert);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenvert);
+                }
 	
 	strcpy(uebergabestring,"pollenDistdensplot");
 	parameter[0].pollenDistdensplot=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenDistdensplot);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenDistdensplot);
+                }
 		
 	strcpy(uebergabestring,"pollenrichtungsvarianz");
 	parameter[0].pollenrichtungsvarianz=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollenrichtungsvarianz);}
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollenrichtungsvarianz);
+                }
 	
 		
 	
 	strcpy(uebergabestring,"rel_trait_variance");
 	parameter[0].rel_trait_variance=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].rel_trait_variance);}
-        	
+                if (parameter[0].parameterlesenanzeige ==true)
+                {
+                    printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].rel_trait_variance);
+                }
+
 	//parameter[0].pollenfall
 	strcpy(uebergabestring,"pollenfall");
 	parameter[0].pollenfall=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
@@ -760,8 +891,10 @@ void Parametereinlesen(void)
 	strcpy(uebergabestring, "computationtime");
 	parameter[0].computationtime=(bool) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("\n<----\t PARAMETEREINGABE\n");};
+                if (parameter[0].parameterlesenanzeige ==true) 
+		{
+                    printf("\n<----\t PARAMETEREINGABE\n");
+                };
 		
 	
 		

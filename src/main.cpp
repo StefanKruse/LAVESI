@@ -522,7 +522,9 @@ void Jahresschritte()
 
 			parameter[0].feuerausgabe=0;	// Variable um ein eventuelles Feuer in dem Jahr zu registrieren und auszugeben
 
-
+                        //  Calculate current year and print a summary of the year if this is wanted
+                        
+                        //***german:
 			// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 			int jahr=parameter[0].startjahr+t;
 			
@@ -533,15 +535,6 @@ void Jahresschritte()
 			{
 				printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
 			}
-			
-			/*else 
-			{
-				printf("t=%d", jahr);
-
-				if ((jahr%100)==0) 
-					printf("\n"); 
-			}
-			*/
 			
 			///vegetationDynamics(int yearposition, int jahr, int t);
 			///go through all functions for vegetation dynamics

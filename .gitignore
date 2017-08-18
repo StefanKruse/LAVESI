@@ -9,8 +9,9 @@
 # exclude temporary files
 *~
 
-# exclude output dir
-output/
+# exclude output files in output dir
+output/*.csv
+output/*.txt
 # exclude time usage output files
 t_*.txt
 # exclude pollen-dispersal output files

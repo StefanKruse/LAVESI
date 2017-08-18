@@ -641,8 +641,6 @@ void Parametereinlesen(void)
 	if (parameter[0].parameterlesenanzeige ==true)
 	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].defTreevert);}
 		
-	//strcpy(uebergabestring,"pollenthreshold");
-	//parameter[0].pollenthreshold=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	
 	strcpy(uebergabestring,"pollenvert");
 	parameter[0].pollenvert=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
@@ -659,27 +657,13 @@ void Parametereinlesen(void)
 	if (parameter[0].parameterlesenanzeige ==true)
 	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollenrichtungsvarianz);}
 	
-	
-	strcpy(uebergabestring,"pollenpertree");
-	parameter[0].pollenpertree=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterlesenanzeige ==true)
-	{printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenpertree);}
 		
 	
 	strcpy(uebergabestring,"rel_trait_variance");
 	parameter[0].rel_trait_variance=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true)
 	{printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].rel_trait_variance);}
-		
-	//strcpy(uebergabestring,"SNPMutationrate");
-	//parameter[0].SNPMutationrate=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	
-	//pollenzahl  ~500?  http://www.waldwissen.net/waldwirtschaft/waldbau/verjuengung/bfw_pollen_laerche/index_DE
-	
-	//strcpy(uebergabestring,"microsatelliteMutationrate");
-	//parameter[0].microsatelliteMutationrate=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-	//
-	
+        	
 	//parameter[0].pollenfall
 	strcpy(uebergabestring,"pollenfall");
 	parameter[0].pollenfall=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);

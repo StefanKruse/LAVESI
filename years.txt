@@ -1,0 +1,60 @@
+runsimulation:
+(...)
+Einschwingphase()
+Jahresschritte()
+
+
+//Einschwingphase:
+for each ivort step<parameter[0].ivortmax
+double         x = rand()/(RAND_MAX + 1.0);
+int         jahr = (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);
+int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1;
+
+//Jahresschritte:
+for each ivort step>parameter[0].ivortmax
+int         jahr = parameter[0].startjahr+t;
+int yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t
+
+
+//Then, in both cases:
+vegetationDynamics(int yearposition, int jahr, int t)
+
+
+//vegetationDynamics:
+
+Kartenupdate(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+Wachstum(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_weather_list, world_plot_list);
+
+//findyr-definition,
+if(jahr<findyr1 or jahr>findyr2){random year definition: yr within [findyr1,findyr2]}
+
+//winddir-definition depending on yr
+//yr is not needed anymore in seedausbreitung?
+seedausbreitung(treerows, treecols, yr, yearposition, &parameter[0], world_seed_list);
+
+seedproduktion(treerows, treecols, &parameter[0], world_tree_list, world_seed_list, world_weather_list,yearposition);
+
+Treeverteilung(treerows, treecols, &parameter[0], wortlaengemax, yearposition, world_tree_list, world_seed_list, vegetationtype);
+
+Etablierung(treerows, treecols, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+
+Fire(treerows, treecols, &parameter[0], yearposition, world_plot_list, world_weather_list);
+
+Data_output(treerows, treecols, t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+
+//SHOULD WDIR BE SHIFTED HERE?:
+//No, it uses the same winds as seedausbreitung, but happens before a new simulation step, a new year of seed dispersal, so this should be right...!
+Mortalitaet(treerows, treecols, &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+wdir.clear in here.
+
+Ageing(treerows, treecols, &parameter[0], world_tree_list, world_seed_list);
+
+
+
+//IDEA:
+
+
+
+
+
+

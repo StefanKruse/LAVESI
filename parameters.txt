@@ -313,9 +313,8 @@ pollenvert=1;						//1-allow pollen dispersal. 2-genealogy output in a list. 0-s
 									// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
 pollenDistdensplot=0// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten
 pollenrichtungsvarianz=10;			//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
-//pollenthreshold=2.5;				//threshold velocity for pollen (Grace Lu, "The effect of Wind on the Emission of Grass Pollen", 2004)///NOT IMPLEMENTED
 pollenfall=0.126;					//pollen fall velocity
-pollenpertree=1000;					//est. pollen number per tree..
+
 
 GregoryC=0.6; 						//*0.56234;			//pollen dispersal parameters
 Gregorym=1.25;

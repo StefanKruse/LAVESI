@@ -10,19 +10,7 @@
 		 double pollenfall;
 		 
 		 double descent;
-		//add pollen_terminal_velocity, seed_terminal_velocity and mean_age or:
-		//maxage, maxheight, (maxdbasalrel), maxbasalwachstum: push back into tree_list after calculation after the stabilization phase?
-		//				^ safe each of these traits individually ^
-		//
-		//double pollen_terminal_velocity;
-		//double seed_terminal_velocity;
-		//int mean_age;
-		//int max_age;
-		//double maxheight;
-		//double maxdbasalrel;
-		//possibility 1
-		//
-		
+
 		int		xworldcoo;						//!<
 		int		yworldcoo;						//!<
 		double	xcoo;							//!<
@@ -38,7 +26,7 @@
 		//vector<double> Dbasalliste;
 		double	dbasalrel;						//!< is \in (0,1), 
 		double	dbrust;							//!< Brustdurchmesser
-		//vector<double> Dbrustliste;//AUSKOMMENTIEREN?
+		//vector<double> Dbrustliste;
 		double	dbrustrel;						//!<
 		double	height;							//!< Treehöhe
 		int		age;							//!< Treeage
@@ -47,27 +35,13 @@
 		int		seednewly_produced;				//!<
 		int		seedproduced;					//!<
 		int		speicher;						//!< Energiespeicher aus guten Jahren
-		//^^redefine to double and maybe use this??
-		
+	
 		double	densitywert;						//!<
 		double thawing_depthinfluence;	//!< 100 meint normaler, also weder positiver noch negativer Einfluss
 		bool	longdispersed;					//!<
 		double	entfernung;						
 		bool    growing;						//!< eingesetzte Bäume sind statisch und wachsen nicht
 		int 	species;							//!< 1 = Larix gmelinii, 2 = Larix sibirica,
-		
-		
-		//
-		//
-		//
-		//
-		//^ alternative approach: use "int species" as an indicator which "externally" saved values for max/ or mean growth shall be used!!
-
-		// int cpSNP[2],mtSNP[2]; //constant length of 0...255? 
-		// or
-		// vector<int> SNPs;//variable size
-		// vector<int> microsatellites;
-		
 		
 		
 	};
@@ -84,16 +58,13 @@
 		int		line;							//!<
 		int		generation;						//!<
 		bool	imcone;						//!<
-		double	gewicht;						//!< seedgewicht
-		int		age;							//!< seedage
+		double	gewicht;						//!< seed weight
+		int		age;							//!< seed age
 		bool	longdispersed;					//!<
-		double 	entfernung;						// die Entfernung, die der Same zurückgelegt hat
+		double 	entfernung;						// distance travelled by a seed
 		int		species;						//!< Art: 1= L.gmelinii, 2=L.sibirica
-		double 	elternheight;					// dies schreibt die height des ElternTrees hinein, um die Ausbreitungsentfernung der seed einschätzen zu können
+		double 	elternheight;					// Height of the parent tree
 		
-		
-		 int mtSNP[2],cpSNP[2];//chloroplastensnps??
-		 
 		 double maxgrowth;
 		 
 		 double pollenfall;

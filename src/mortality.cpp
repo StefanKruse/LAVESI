@@ -434,7 +434,6 @@ if(mcorevariant==1)
 			  double  richtung=0.0;
 			  double  geschwindigkeit=0.0;
 			  unsigned int    ripm=0,cntr=0;
-			  // vector<int> SNP1,SNP2;
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
@@ -442,7 +441,7 @@ if(mcorevariant==1)
 			  double  m=parameter[0].Gregorym;
 			  
 ///
-			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+			  	vector<int> Vname; // moved here from the top of this file
 				vector<double> Vthdpth;
 ///
 		/// #####################################
@@ -531,31 +530,17 @@ if(mcorevariant==1)
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
-								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
+								pseed->thawing_depthinfluence=Vthdpth.at(iran);
 								
 								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
-								//pseed->cpSNP[0]=cpSNP1[iran];
-								//pseed->cpSNP[1]=cpSNP2[iran];
 								
-								//pseed->descent=
-								//pseed->pollenfall=
-								//pseed->maxgrowth=
 							} 
 							else
 							{
 								pseed->namep=0;
 								pseed->thawing_depthinfluence=100;
 							}
-							//pseed->cpSNP[0]=0;
-							//pseed->cpSNP[1]=0;}
-							/*cout<<pseed->namep<<endl;
-							cout<<pseed->cpSNP[0]<<endl;
-							cout<<pseed->cpSNP[1]<<endl;*/
-							
-
-							//pseed->mtSNP[0]=pTree->mtSNP[0];
-							//pseed->mtSNP[1]=pTree->mtSNP[1];
-							
+														
 							pseed->line=pTree->line;
 							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
 							pseed->imcone=true;
@@ -568,11 +553,6 @@ if(mcorevariant==1)
 							newseed_list.push_back(pseed);
 						}// END: create new seeds
 
-						/*if(parameter[0].pollenvert==1)// maybe this is not needed because it is now locally constructed for each tree
-						{
-							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
-						}
-						*/
 					}// END: if seedlebend>0
 						double end_timer_seedsurv_seedadd=omp_get_wtime();
 						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;

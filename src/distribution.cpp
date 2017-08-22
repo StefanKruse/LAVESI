@@ -136,18 +136,12 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 				if(rand()>p*RAND_MAX)
 				{
 				++posb;
-				//	pName.push_back(pTree_copy->name);
-				//	cpSNPs1.push_back(pTree_copy->cpSNP[0]);
-				//	cpSNPs2.push_back(pTree_copy->cpSNP[1]);
-				//	++posb; 
 				}
 				else
 				{
 					pName.push_back(pTree_copy->name);
-					// thdpthinfl.push_back(pTree->thawing_depthinfluence);
 					thdpthinfl.push_back(100);
-					//cpSNPs1.push_back(pTree_copy->cpSNP[0]);
-					//cpSNPs2.push_back(pTree_copy->cpSNP[1]);
+					
 					++posb; 
 				}
 				
@@ -163,13 +157,14 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 					fdir=fopen(output.c_str(),"a+");
 					fprintf(fdir,"%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name, pTree_copy->xcoo, pTree_copy->ycoo, x, y);
 					fclose(fdir);
-					// outputstring.str("");
-					// outputstring.clear();
+
 				}
 			}
-			else{++posb;}
+			else
+			{
+				++posb;
+			}
 		}
-		// cntr=0;cntr2=0;
 }
 
 
@@ -206,7 +201,7 @@ double getEntfernung(double D, double ratiorn_help)
 	}
 	else 
 	{
-		printf("LaVeSi wurde beendet\n\n");
+		printf("LaVeSi was stopped\n\n");
 		printf("... choice of dispersal mode (= %d) not available!\n", parameter[0].dispersalmode);
 		exit(1);
 	}

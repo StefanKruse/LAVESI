@@ -276,19 +276,16 @@ void Einschwingphase()
 					lastyear=2013; // simdauer auf 80
 				}
 				
+				//choose a random year for weather determination
 				
-				// Ziehen eines zufaelligen Jahres fuer das weather 
+				//german
+				// Ziehen eines zufaelligen Jahres fuer das wetter 
 				double x = rand()/(RAND_MAX + 1.0);
 				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
 			
 			
 				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; // calculate actual year position in list, according to first year in the Weather-List and the random year
-				//yearposition=yearposition%80;
-				//cout<<world_weather_list[0][0]->jahr<<endl;
-	
-				// Fortschrittsanzeige
-				//printf("\n%d/%d\t=>\tzJahr=%d\t", parameter[0].ivort, parameter[0].ivortmax, jahr);	
-
+				
 				
 				///go through all functions for vegetation dynamics
 				///vegetationDynamics(int yearposition, int jahr, int t);
@@ -300,6 +297,12 @@ void Einschwingphase()
 		else if (parameter[0].ivortmax>0 && parameter[0].stabilperiod==true)
 		{
 			printf("\nStabilization period:\n");
+			//
+			//
+			//
+			
+			
+			
 			// So lange zufaellige Jahre aus den eingelesenen weatherjahren ziehen bis ...
 			// ... entweder	ein gewisser Prozentwert an Abweichung von festgelegten Waehrungen von Calibrationsites unterschritten wird
 			// ... oder falls dies nicht moeglich ist nach 1000 Jahren 

@@ -102,7 +102,7 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 						//calculate random position in the array of maturation heights defined earlier
 						int anteil= 0 + (int) floor( ( (mat_age_length-1) * rand()/(RAND_MAX + 1.0)) );
 						
-						// Chance fuer kleiner 2 m zu maturieren
+						//Possibility for a tree <2m to maturate
 						if (anteil==0)
 						{ 
 							pTree->coneheight= 100 +( (double) 100*rand()/(RAND_MAX + 1.0));

@@ -57,7 +57,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				
 				//***german:
 				// ==> hat was mit Konkurrenzeffekt zu tun. 
-				//     Kleiner Tree - kaum beeinflusst, 
+				//     Kleiner Baum - kaum beeinflusst, 
 				//	   150 cm  - am stärksten beeinflusst, 
 				//	   300 cm und größer - kaum beeinflusst 
 				//	   im Moment ausgeschaltet
@@ -158,11 +158,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 								+ dens_mort
 								+ weather_mort_sib
 								+ dry_mort;
-								
-				 //cout << endl << " Wachsenmort=" << growth_mort << " &density=" << dens_mort << " &Trocken=" << dry_mort << endl;
-				 //cout << "Jung_gmel=" << sapl_mort_gmel << " &Jung_sib=" << sapl_mort_sib << " &weather_gmel=" << weather_mort_gmel << " &weather_sib=" << weather_mort_sib << endl;
-						
-				
+
 				
 				if (Treemortg>1.0)
 				{
@@ -237,14 +233,6 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 			}
 
 		} // End tree_list iteration
-		
-		// Zusaetzliche Ausgabe in Konsole
-		// if (parameter[0].jahranzeige ==true)
-		// {
-				// cout << "tree_list.size() nach Mortalität = " << tree_list.size() << endl;
-		// }
-
-
 }
 
 
@@ -263,8 +251,11 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 	
 	for(vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 	{// START: world loop
+		//To access the weather_list content, a referential weather list has to be created, to represent the structure of it.
 		//
-
+		//To access a certain element a corresponding iterator has to be adjusted to fit the current element and creation of a referential tree list
+		//
+		
 		//***german:
 		// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Referenz
 		// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
@@ -278,8 +269,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
 		list<Tree*>& tree_list = *world_positon_b;
 		
-		
-		//world_positon_b_copy-dekl.??
+
 
 		vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 		list<seed*>& seed_list = *world_positon_s;
@@ -332,14 +322,20 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 			}
 			
 			else
-			{	// Sicherheitsabfrage imcone-Variable gesetzt? 
+			{	
+				//safety procedure: has the variable imcone been set?
+		
+				// Sicherheitsabfrage imcone-Variable gesetzt? 
 				signed int abbrechenmortalitaetfehler; 
-				printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
-				printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
+				printf("\n In the mortality determining function a seed has no value applied to the variable imcone\n"); 
+				printf("\n To continue the simulation, press 1, stop it with any other key\n"); 
+				
+				//printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
+				//printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
 				scanf("%d", &abbrechenmortalitaetfehler); 
                                 if (abbrechenmortalitaetfehler!=1) 
                                 {
-                                    printf("LaVeSi wurde nach einem Fehler in der Mortalitaetsfunktion beendet\n\n");exit(1);
+                                    printf("LaVeSi has been stopped after a failure in mortality.cpp\n\n");exit(1);
                                 }
 		
 				delete pseed;
@@ -380,7 +376,9 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 		
 	double end_time_seedsuviving=omp_get_wtime();
 
+		//Calculation of the current location in coordinates
 		
+		//***german:
 		// Berechnung des aktuellen Ortes in Koordinaten
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
@@ -671,15 +669,10 @@ if(mcorevariant==2)
 			for(auto it = begin; it != end; ++it)
 			{// START: main tree loop
 			
-			// #pragma omp for nowait schedule(guided) 
-			// for(unsigned int pari=0; pari<tree_list.size(); ++pari)
-			// {// START: main tree loop
+			
 					double start_timer_eachtree=omp_get_wtime();
-					++n_trees;//for later calculating mean of computation times
-				
-				// list<Tree*>::iterator posb=tree_list.begin();
-				// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
-				// advance(posb, pari);
+					++n_trees;
+					
 					double end_timer_eachtree_advance=omp_get_wtime();
 					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
 
@@ -690,8 +683,6 @@ if(mcorevariant==2)
 					double end_timer_eachtree_vecini=omp_get_wtime();
 					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
 
-				// if((parameter[0].ivort==1) & (pari==0))// check the number of used threads
-					// cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
 				
 				if(pTree->seednewly_produced>0)
 				{//START: tree produces seeds
@@ -951,8 +942,7 @@ if(mcorevariant==3)
 					if(seedlebend>0)
 					{// START: if seedlebend>0
 						double start_timer_tresedliv=omp_get_wtime();	
-// cout << endl << " -> Jahr=" << Jahr << " + ivort=" <<  parameter[0].ivort << endl;
-						// if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+
 						if( (parameter[0].pollenvert==1 && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        

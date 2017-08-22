@@ -82,7 +82,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// Tree distribution	
 	double start_time_Treeverteilung = omp_get_wtime();	
 			if (parameter[0].seedintro==true && parameter[0].jahremitseedeintrag>0)
-			{// seedeinbringen Beginn
+			{// begin seed introduction
 				
 				parameter[0].starter=true;
 				
@@ -230,7 +230,9 @@ void Einschwingphase()
 {
 		
 		int t = -1;					//dummy for Data_output()
-
+		
+		/// spin-up-phase
+		
 		/// Einschwingphase
 		if (parameter[0].ivortmax>0 && parameter[0].stabilperiod==false)
 		{ 
@@ -245,6 +247,11 @@ void Einschwingphase()
 				int firstyear =0;
 				int lastyear=0;
 				int startlag=5; // How many years should be left out in the beginning of the series
+								// 
+								// 
+								// 
+								
+								
 								// ... vielleicht eher gleich dem Wert machen, der die Länge der berechneten langjährigen Mittelwerte der weatherdaten bestimmt!
 								// ... vielleicht diese Daten auch über Parameterdatei einlesen bzw. eine eigene Parameterdatei für die weatherdaten erstellen
 				// Achtung: wenn Zeitspanne geaendert wird, auch Simdauer in Parameter ansehen, ob diese nicht analog geaendert werden muss! Sonst segfault!
@@ -278,13 +285,14 @@ void Einschwingphase()
 				
 				//choose a random year for weather determination
 				
-				//german
+				//***german
 				// Ziehen eines zufaelligen Jahres fuer das wetter 
 				double x = rand()/(RAND_MAX + 1.0);
 				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
 			
-			
-				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; // calculate actual year position in list, according to first year in the Weather-List and the random year
+				// calculate actual year position in list, according to first year in the Weather-List and the random year
+				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; 
+				
 				
 				
 				///go through all functions for vegetation dynamics
@@ -356,7 +364,7 @@ void Einschwingphase()
 				///vegetationDynamics(int yearposition, int jahr, int t);
 				vegetationDynamics(yearposition, jahr,t);
 				
-				
+				// Calculation of the deviation from reference values
 				
 				// Berechnung der Abweichung von Referenzwerten
 				double meanpercentchange=0;
@@ -373,7 +381,9 @@ void Einschwingphase()
 						pEvaluation=(*posauswakt);
 		
 						aktort++;
-										
+							
+						// Testing with the basal area	
+						
 						// Zum Test mit der Basalarea
 						if (pEvaluation->BArunmeanliste.size()>1)
 						{
@@ -400,15 +410,11 @@ void Einschwingphase()
 						{
 							cout << "N_40-200" << endl << pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size()-1] << endl;
 							
-							//if (pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size()-1]>0)
-							//{
 							meanpercentchange+=fabs(
 								(pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size()-2]-pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size()-1])
 								/
 								(pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size()-1]));
-							//}
-							//else
-							//	printf("WARNING: Basalarea runmean ==0 \n");
+
 						}
 						cout << "Kumulierte %Change = " << meanpercentchange << endl;
 						//StefanC: + N_200+
@@ -416,61 +422,25 @@ void Einschwingphase()
 						{
 							cout << "N_200-10000" << endl << pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-1] << endl;
 							
-							//if (pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-1]>0)
-							//{
+							
 							meanpercentchange+=fabs(
 								(pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-2]-pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-1])
 								/
 								(pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-1]));
-							//}
-							//else
-							//	printf("WARNING: Basalarea runmean ==0 \n");
 						}						
 						cout << "Kumulierte %Change = " << meanpercentchange << endl;
 						
-					}	 // Weltschleife Ende
+					}	 // world plot list iteration end
 					cout << "\t==> STAB%CHANGE = " << meanpercentchange << "\t" << "Stabilization runs = " << parameter[0].ivort << endl << endl;
 				
 				}
-				else if (stabilizationtype==2)
-				{// Ermittlung der Abweichung von Referenzwerten
-					/*
-					int aktort=0;
-					for (vector<vector<Evaluation*> >::iterator posausw = world_evaluation_list.begin(); posausw != world_evaluation_list.end(); ++posausw)
-					{ // Weltschleife Beginn
-						vector<Evaluation*>& evaluation_list = *posausw;
-						vector<Evaluation*>::iterator posauswakt = evaluation_list.begin();
-						pEvaluation=(*posauswakt);
-		
-						aktort++;
-						
-						//cout << "\nYCOO=" << pEvaluation->yworldcoo << "\tN>200=" << pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-1] << endl;
-						
-						//StefanC: Zum Test mit der Basalarea
-						if (pEvaluation->BArunmeanliste.size()>1)
-						{
-							cout << endl << pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1] << endl;
-							
-							if (pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1]>0)
-							{
-							meanpercentchange+=fabs(
-								(pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-2]-pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1])
-								/
-								(pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1])
-								);
-							}
-							else
-								printf("WARNING: Basalarea runmean ==0 \n");
-						}
-						cout << "Kumulierte %Change = " << meanpercentchange << endl;
-						
-					}	 // Weltschleife Ende
-					cout << "\t==> STAB%CHANGE = " << meanpercentchange << "\t" << "Stabilization runs = " << parameter[0].ivort << endl << endl;
+				/*else if (stabilizationtype==2)
+				{
+					//This does nothing
+				}*/
 				
-					cout << "\t==> STABERROR = " << stabilerror << "\t" << "Stabilization runs = " << parameter[0].ivort << endl << endl;
-					*/
-				}
 				
+				// Assign the condition on when the year iteration should be stopped at random year position == stabilization period
 				// Bedingung festlegen wann die Jahresschritte an Zufallsyearposition == Stabilisierungsphase beendet werden sollen
 				if ((parameter[0].ivort>parameter[0].stabilmovingwindow && meanpercentchange<parameter[0].stabilpercentchangethreshold) || stabilerror<=stabilerrorthreshold || parameter[0].ivort>parameter[0].ivortmax)
 				{	
@@ -481,14 +451,7 @@ void Einschwingphase()
 			
 		}
 		
-		//DIVERSIFY THE TRAITS HERE, eg:
-		//for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();)
-		//{
-		//	pTree=(*pos);
-		//	pTree->thawing_depthinfluence=NormverteilungRN(pTree->thawing_depthinfluence,0.05*pTree->thawing_depthinfluence);
-		//	cout<<pTree->thawing_depthinfluence<<endl;
-		//}
-		
+	
 		parameter[0].einschwingen=false;
 
 }
@@ -508,22 +471,24 @@ void Einschwingphase()
 void Jahresschritte()
 {
 
-		printf("\n\nJahresschritte beginnen ...\n");
+		printf("\n\n starting year step iteration...\n");
 		
 		
 	
 		for (int t=0;t<parameter[0].simdauer;t++)
-		{ // Jahresschrittschleife Beginn
+		{ // year step loop 
 			
 			parameter[0].ivort++;
 
 
-			parameter[0].feuerausgabe=0;	// Variable um ein eventuelles Feuer in dem Jahr zu registrieren und auszugeben
+			// Variable to record a fire in the current year and print it
+
+			parameter[0].feuerausgabe=0;	
 
                         //  Calculate current year and print a summary of the year if this is wanted
                         
                         //***german:
-			// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
+						// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 			int jahr=parameter[0].startjahr+t;
 			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
@@ -538,6 +503,7 @@ void Jahresschritte()
 			///go through all functions for vegetation dynamics
 			vegetationDynamics(yearposition, jahr,t);
 
+			
 			
 			/// Wenn das Jahr, auf das später die ganze Simulation zurückgesetzt werden soll, erreicht ist, dann speichere alle Daten!
 			if (jahr==parameter[0].resetyear)
@@ -1095,19 +1061,6 @@ int main()
 			if ( parameter[0].weathercalcgradient==true && (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999 || parameter[0].weatherchoice==1111 ) )
 				printf("\n\n\tWARNING:\tWeather gradient (weathercalcgradient) will be calculated along latitudinal position of plots AND all 4 Sites will be simulated (weatherchoice==999 || 111)! This makes no sense; Adjust parameter settings!");
 			
-// 			signed int abbruch;
-			// Abfrage ob das Programm beendet oder fortgesetzt werden soll*/
-// 			printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n");
-// 			scanf("%d", &abbruch);
-
-// 			if (abbruch!=1) 
-// 			{
-// 				printf("LaVeSi wurde beendet\n\n"); 
-// 				exit(0);
-// 			}
-			
-			
-			
 			
 			
 			/// Parameter und Variablen auf Startwerte setzen
@@ -1172,7 +1125,10 @@ int main()
 				// Variablen auf Startwerte setzen
 				// Variable für die Treenamen im Modelllauf
 				parameter[0].nameakt=0;
-				// Variable für die linen im Modelllauf
+				
+				
+				
+				// Variable für die Linien im Modelllauf
 				parameter[0].lineakt=0;	
 
 				// Zuruecksetzen der Jahre mit seedeintrag auf den Startwert
@@ -1192,10 +1148,10 @@ int main()
 	//print areal dependency of total simulation time:
 	if(parameter[0].computationtime==1)
 	{
-		FILE *fp;
-		fp=fopen("t_A.txt","a+");
-			fprintf(fp,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));
-		fclose(fp);
+		FILE *fptA;
+		fptA=fopen("t_A.txt","a+");
+			fprintf(fptA,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));
+		fclose(fptA);
 	}
 
 	return 0;

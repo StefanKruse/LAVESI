@@ -7,13 +7,13 @@
 
 // Spezielle Funktionen
 	// Treeverteilung aus Datei einlesen oder seedeintrag bei gutem weather
- void Treeverteilung( struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);
+ void Treeverteilung( struct Parameter *parameter, int wortlaengemax);
  void Kartenupdate( struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list);
  void Fire( struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list);
 	// Jahresschritt
  void Wachstum( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list);
  void seedausbreitung(int Jahr, struct Parameter *parameter, vector<list<seed*> > &world_seed_list);
- void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list,vector<vector<weather*> > &world_weather_list, int yrpos);
+ void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list);
  void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
  void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list);
  void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list);

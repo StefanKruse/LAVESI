@@ -424,7 +424,7 @@ void TreesIni(int maximal_word_length)
  * 
  *
  *******************************************************************************************/
-void Treeverteilung(struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)
+void Treeverteilung(struct Parameter *parameter, int wortlaengemax)
 {
 	
 	///PROBLEM: SIEHE main.cpp/Vegetationdynamics()

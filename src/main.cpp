@@ -75,7 +75,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			// seed production
 	double start_time_seedproduktion = omp_get_wtime();
 			/*!::seedproduktion(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-			seedproduktion( &parameter[0], world_tree_list, world_seed_list, world_weather_list,yearposition);
+			seedproduktion( &parameter[0], world_tree_list);
 	double end_time_seedproduktion = omp_get_wtime();
 	
 	
@@ -87,14 +87,14 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				parameter[0].starter=true;
 				
 				/*!::Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-				Treeverteilung(&parameter[0], wortlaengemax, yearposition, world_tree_list, world_seed_list);
+				Treeverteilung(&parameter[0], wortlaengemax);
 				
 				parameter[0].jahremitseedeintrag--;
 			}
 			else if ( parameter[0].seedintropermanent==true && parameter[0].jahremitseedeintrag<=0) 
 			{
 				parameter[0].starter=true;
-				Treeverteilung( &parameter[0],  wortlaengemax, yearposition, world_tree_list, world_seed_list);
+				Treeverteilung( &parameter[0],  wortlaengemax);
 			}
 			
 	double end_time_Treeverteilung = omp_get_wtime();
@@ -885,7 +885,7 @@ void runSimulation()
 
 		/// trees (Tree) wie auf CH17I einbringen oder seed verteilen
 		/*! ::Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
-		Treeverteilung( &parameter[0], wortlaengemax, parameter[0].startjahr+3999, world_tree_list, world_seed_list);
+		Treeverteilung( &parameter[0], wortlaengemax);
 
 		parameter[0].ivort=0;		// Variable fuer den aktuellen Fortschritt über den gesamten Zeitraum, einschließlich Stabilisierungsphase
 

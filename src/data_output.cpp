@@ -1017,11 +1017,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				fprintf(dateizeiger, "densitywert;");
 				fprintf(dateizeiger, "Entfernung;");
 				fprintf(dateizeiger, "thawing_depth_infl;");	
-				//fprintf(dateizeiger, "cpSNP;");
-				//fprintf(dateizeiger, "cpSNP;");
 				
-				//fprintf(dateizeiger, "mtSNP;");
-				//fprintf(dateizeiger, "mtSNP;");
 				// Ende
 				fprintf(dateizeiger, "\n");
 
@@ -1068,12 +1064,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
 				fprintf(dateizeiger, "%4.5f;", pTree->entfernung);
 				fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
-				
-				//fprintf(dateizeiger, "%d;",pTree->cpSNP[0]);
-				//fprintf(dateizeiger, "%d;",pTree->cpSNP[1]);
-				
-				//fprintf(dateizeiger, "%d;",pTree->mtSNP[0]);
-				//fprintf(dateizeiger, "%d;",pTree->mtSNP[1]);
 				// Ende
 				fprintf(dateizeiger, "\n");
 

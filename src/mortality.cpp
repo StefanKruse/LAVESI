@@ -476,8 +476,6 @@ if(mcorevariant==1)
 
 				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 				pTree=(*posb);			
-				// vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-				// vector<double> Vthdpth;
 				
 					double end_timer_eachtree_vecini=omp_get_wtime();
 					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
@@ -509,7 +507,7 @@ if(mcorevariant==1)
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
-											n_trees);//;,cpSNP1,cpSNP2);
+											n_trees);
 						}
 				
 						// get the characteristics for each surviving seed and push these back new to seed_list
@@ -623,7 +621,7 @@ if(mcorevariant==2)
 			  double  m=parameter[0].Gregorym;
 			  
 ///
-			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+			  	vector<int> Vname;// moved here from the top of this file
 				vector<double> Vthdpth;
 ///
 		/// #####################################
@@ -688,8 +686,6 @@ if(mcorevariant==2)
 				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
 				// pTree=(*posb);			
 				pTree=(*it);			
-				// vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
-				// vector<double> Vthdpth;
 				
 					double end_timer_eachtree_vecini=omp_get_wtime();
 					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
@@ -721,7 +717,7 @@ if(mcorevariant==2)
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
-											n_trees);//;,cpSNP1,cpSNP2);
+											n_trees);//;
 						}
 				
 						// get the characteristics for each surviving seed and push these back new to seed_list
@@ -745,27 +741,13 @@ if(mcorevariant==2)
 								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
 								
 								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
-								//pseed->cpSNP[0]=cpSNP1[iran];
-								//pseed->cpSNP[1]=cpSNP2[iran];
-								
-								//pseed->descent=
-								//pseed->pollenfall=
-								//pseed->maxgrowth=
 							} 
 							else
 							{
 								pseed->namep=0;
 								pseed->thawing_depthinfluence=100;
 							}
-							//pseed->cpSNP[0]=0;
-							//pseed->cpSNP[1]=0;}
-							/*cout<<pseed->namep<<endl;
-							cout<<pseed->cpSNP[0]<<endl;
-							cout<<pseed->cpSNP[1]<<endl;*/
 							
-
-							//pseed->mtSNP[0]=pTree->mtSNP[0];
-							//pseed->mtSNP[1]=pTree->mtSNP[1];
 							
 							pseed->line=pTree->line;
 							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
@@ -779,11 +761,7 @@ if(mcorevariant==2)
 							newseed_list.push_back(pseed);
 						}// END: create new seeds
 
-						/*if(parameter[0].pollenvert==1)// maybe this is not needed because it is now locally constructed for each tree
-						{
-							Vname.clear();//cpSNP1.clear();cpSNP2.clear(); //  is this of use? in BefrWahrsch it is cleaned anyway!?
-						}
-						*/
+					
 					}// END: if seedlebend>0
 						double end_timer_seedsurv_seedadd=omp_get_wtime();
 						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
@@ -857,7 +835,7 @@ if(mcorevariant==3)
 			  double  m=parameter[0].Gregorym;
 			  
 ///
-			  	vector<int> Vname;//,cpSNP1,cpSNP2; // moved here from the top of this file
+			  	vector<int> Vname;//// moved here from the top of this file
 				vector<double> Vthdpth;
 		
 						
@@ -980,7 +958,7 @@ if(mcorevariant==3)
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
-											n_trees);//;,cpSNP1,cpSNP2);
+											n_trees);
 						}
 						double end_timer_tresedliv=omp_get_wtime();	
 						timer_tresedliv+=end_timer_tresedliv-start_timer_tresedliv;

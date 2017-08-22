@@ -33,7 +33,7 @@
  * 
  * POSSIBLE OUTPUT DATA:
  *  a) a vector of the names of the most probable trees to pollinate another tree,
- *     conceptual preparation for later use: cpSNPs-> genetic data
+ *     earlier versions: conceptual preparation for later use: cpSNPs-> genetic data
  *  b) the flight distance of a dispersed seed
  *  c) the absolute position of a dispersed seed in x,y-coordinates
  * 

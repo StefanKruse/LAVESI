@@ -954,6 +954,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 						winddir.push_back(wdir);
 						globalyears.push_back(jahr);
 				}
+				
 				wspd.clear();wdir.clear();
 			}
 	

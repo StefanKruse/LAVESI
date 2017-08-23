@@ -855,8 +855,7 @@ void runSimulation()
 
 		parameter[0].ivort=0;		// Variable fuer den aktuellen Fortschritt über den gesamten Zeitraum, einschließlich Stabilisierungsphase
 
-// 		cout << parameter[0].ivort << endl;
-// 		exit(1);
+
 		//Einschwingphase - get stable state before starting the real simulation
 		///Einschwingphase()
 		Einschwingphase();
@@ -881,11 +880,11 @@ void runSimulation()
  *
  *
  *******************************************************************************************/
-void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK AT THE END OF EACH SIMULATION
+void finishSimulation()
 {
-		printf("\n\nEndausgabe\n");
+			
+		//printf("\n\nEndausgabe\n");
 		int aktort=0;
-		
 		
 		
 
@@ -932,10 +931,13 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 			
 			if(parameter[0].jahranzeige ==true)
 			{
-				printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
+				//printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, 
+				//weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
 				printf("seed number Z= %d\n", number_of_seeds_in_cone);
 			}
 				
+		
+		
 		
 				
 			// weather_listn loeschen
@@ -944,31 +946,36 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 				 pweather=weather_list[iweather];
 				delete pweather;
 			}// weather_list Ende
-			weather_list.clear();
+			//weather_list.clear();
 
 		} // Weltschleife Ende
 		
 	
 		// Nach jeder Wiederholung werden die WeltListen gelöscht
+		
+		// Calling the function to delete all lists
+		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
+
+		
+		
+		
+		cout<<"clearing world lists\n";
 		world_tree_list.clear();
 		world_seed_list.clear();
 		world_weather_list.clear();
 		world_plot_list.clear();
 		world_evaluation_list.clear();
 		
-		// Aufruf der Funktion zum Listenloeschen
-		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
-
 		
-		//cout<<"clearing wind directions\n";
+		
+		cout<<"clearing wind lists\n";
+	
 		winddir.clear();
-	//cout<<"clearing wind speeds\n";
+	
 		windspd.clear();
-	//cout<<"clearing years\n";
+	
 		globalyears.clear();
-	//cout<<"clearing vegetypes\n";
-		//vegetationtype.clear();
-		
+	
 		////delete[] winddir;
 		
 		
@@ -1011,15 +1018,25 @@ void finishSimulation(int yearposition)//TODO: DEBUG THIS, THERES A MEMORY LEAK 
 int main()
 {
 	
+	mtrace();
+	
 	//system("mkdir output");
-	clock_t start_time_main = clock(); //StefanC: Zeitaufnahme fuer Gesamtlauf
+	
+	//time registration for the whole simulation run
+	
+	 //StefanC: Zeitaufnahme fuer Gesamtlauf
+	clock_t start_time_main = clock();
 						
 			//---------Just some Initialisation stuff---------
 			
 
+			
+			// random number initialization
 			// Zufallszahlen "mischen"
 			srand((unsigned) time(NULL));
 
+			
+			// console output of the version
 			// Anzeigen der Ueberschrift und Programmversion
 			printf("\n---->\tLAVESI\n");
 			printf("\n You have started  LAVESI, " 
@@ -1139,7 +1156,7 @@ int main()
 				runSimulation();
 					
 				///finishSimulation()
-				finishSimulation(yearposition);
+				finishSimulation();
 			}
 		
 	clock_t end_time_main = clock();
@@ -1154,6 +1171,7 @@ int main()
 		fclose(fptA);
 	}
 
+	muntrace();
 	return 0;
 	
 }

@@ -91,6 +91,9 @@ weathercalcgradient=0;				// Correction of temp. and prec. values by approximate
 lineartransekt=0;					//mode of weather (constant or linear from southern to northern sites) on each plot (0,1)
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
+// 1.1.1 -----> Wind data
+windsource=2;						//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
+									//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
 
 
 								
@@ -106,7 +109,7 @@ simdauer=80;						//length of a simulation (1-(   1077   )-6099)
 										// ... ?? warum nicht bis 2013
 										// 6099==for assembled weather series (weatherchoice==9)
 runs=1;								// Anzahl an Simulationen == Wiederholungen (1-oo)
-ivortmax=1000;						// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
+ivortmax=100;						// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
 									//Example: Entweder 0 fuer keine Einschwingphase oder minimal 10 wegen Isothermberechnung
 										//   0==without
 										// >10==with
@@ -149,6 +152,23 @@ seeddispmode=2;						// Positions for seed introduction (1,2)
 										// 2==randomly into the plot
 seedtravelbetween=0;				// Seed travel between plots along a transect (0,1)
 
+periodRB=0;							//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2), or for N-S-transects meaning only seeds leaving east-or-westwards get newly introduced
+
+
+// 1.4.1 -----> Pollen dispersal
+pollenvert=0;						//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off. All other modes are not implemented!
+									// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
+pollenDistdensplot=0// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten
+pollenrichtungsvarianz=10;			//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
+pollenfall=0.126;					//pollen fall velocity
+
+
+GregoryC=0.6; 						//*0.56234;			//pollen dispersal parameters
+Gregorym=1.25;
+
+
+
+
 // 1.5 -----> Initial plot conditions - Trees
 starttrees=0;						// Type of initial tree set up (0, 10,11,12,13)
 										//   0==without initial trees
@@ -167,6 +187,8 @@ starttrees=0;						// Type of initial tree set up (0, 10,11,12,13)
 										// 120100 aka SSAAAATTT erste zwei Ziffern für Site (S), mittlere 4 ziffern für flaechengroesze BREITE (Area:A) 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 currently implemented in METERS, letzte 3 ziffern für Transektbesetzung mit Bäumen von Süden ausgehend (T) in KILOMeters
 										// ... miss the last numbers TTT when quadratic
 										// 12-0100-050 + 
+										
+										
 
 // -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;			// Basal diameter influence for year's basal diameter growth (0-+oo) 
@@ -304,24 +326,5 @@ weatherzahlgmelc=0.101;					// legt Kurvenverlauf des Julindex für gmel fest
 //3.0-> newly implemented since october 2015
 //everything that has to do with wind data driven pollen an seed dispersal
 
-// 3.1 -----> Wind data
-windsource=2;						//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
-									//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
+
 								
-periodRB=0;							//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2), or for N-S-transects meaning only seeds leaving east-or-westwards get newly introduced
-pollenvert=1;						//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off All other modes are not implemented!
-									// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
-pollenDistdensplot=0// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten
-pollenrichtungsvarianz=10;			//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
-pollenfall=0.126;					//pollen fall velocity
-
-
-GregoryC=0.6; 						//*0.56234;			//pollen dispersal parameters
-Gregorym=1.25;
-
-
-// 3.2 -----> genetic data
-rel_trait_variance=0.05;
-//SNPMutationrate=0.0001;
-//microsatelliteMutationrate=0.0001;
-

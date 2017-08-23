@@ -1381,20 +1381,20 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			// Aufruf der Funktion zum Listenloeschen
 				// tree_listn loeschen
 			for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos)
-			{ // Beginn tree_list ablaufen
+			{ // Begin tree_list iteration
 				pTree=(*pos);
 				//pTree->Dbasalliste.clear();
 				//pTree->Dbrustliste.clear();
 				delete pTree;
-			} // Ende tree_list ableufen
+			} // End tree_list iteration
 			tree_list.clear();
 	
 				// seed_listn loeschen
 			for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
-			{ // Beginnn seed_list ablaufen
+			{ // Begin seed_list iteration
 				pseed=(*pos);
 				delete pseed;
-			} // Ende seed_list ablaufen
+			} // End seed_list iteration
 			seed_list.clear();
 		}
 		

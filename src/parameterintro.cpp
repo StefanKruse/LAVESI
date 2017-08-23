@@ -924,12 +924,7 @@ void Parametereinlesen(void)
 	
 		
 	
-	strcpy(uebergabestring,"rel_trait_variance");
-	parameter[0].rel_trait_variance=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-                if (parameter[0].parameterlesenanzeige ==true)
-                {
-                    printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].rel_trait_variance);
-                }
+	
 
 	//parameter[0].pollenfall
 	strcpy(uebergabestring,"pollenfall");

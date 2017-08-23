@@ -67,7 +67,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					heightnkugeleinfluss=heightnkugeleinfluss+(sqrt(pow(parameter[0].densitywertmaximumbeiheight,2)-pow(pTree->height-parameter[0].densitywertmaximumbeiheight, 2))/parameter[0].densitywertmaximumbeiheight);
 				}	
 				
-				//
+				// Calculation of the young trees mortalities
 				
 				//***german:
 				// Verrechnung der Mortalitaet von Bäumen
@@ -284,7 +284,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 	
 	
 	
-	/*	// start: ORI CODE*/
+	/*	// start: ORI CODE  */
 		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
 		/// seedmortalität
 		for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )

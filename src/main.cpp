@@ -1,4 +1,3 @@
-using namespace std;
 
 int yearposition; //deletion
 
@@ -14,21 +13,17 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 {
 	// density grid update
 	double start_time_kartenup = omp_get_wtime();
-			/*!::Kartenupdate(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)*/
 			Kartenupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
 	
 			// growth
 	double start_time_wachstum = omp_get_wtime();
-			/*!::Wachstum(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
 			Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list);
 	double end_time_wachstum = omp_get_wtime();
 
 			// seed dispersal
 	double start_time_seedausbreitung = omp_get_wtime();
 	
-			// global from seeddisp in distribution.cpp
-
 				int findyr1=0,findyr2=0,yr=0;
 				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 				{
@@ -74,7 +69,6 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	
 			// seed production
 	double start_time_seedproduktion = omp_get_wtime();
-			/*!::seedproduktion(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
 			seedproduktion( &parameter[0], world_tree_list);
 	double end_time_seedproduktion = omp_get_wtime();
 	
@@ -86,7 +80,6 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				
 				parameter[0].starter=true;
 				
-				/*!::Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
 				Treeverteilung(&parameter[0], wortlaengemax);
 				
 				parameter[0].jahremitseedeintrag--;
@@ -102,7 +95,6 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	
 			// establishment
 	double start_time_etablierung = omp_get_wtime();
-			/*!::Etablierung(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/			
 			Etablierung(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 			//printf("\n jahr=%d\n ", jahr+3998);
 	double end_time_etablierung = omp_get_wtime();
@@ -110,20 +102,16 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	
 			// fire
 	double start_time_feuer = omp_get_wtime();
-			/*!::Fire(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list)*/
 			Fire( &parameter[0], yearposition, world_plot_list, world_weather_list);
 	double end_time_feuer = omp_get_wtime();
 		
 			// Data_output
 	double start_time_Data_output = omp_get_wtime();
-			/*!::Data_output(int treerows, int treecols, int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)*/
- 			Data_output(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+			Data_output(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
 	double end_time_Data_output = omp_get_wtime();
 						
 			// MORTALITÄT,
 	double start_time_mortalitaet = omp_get_wtime();
-			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
-// cout << endl << " Uebergabe and Mortalitaet -> yr=" << yr << " + ivort=" <<  parameter[0].ivort << endl;
 			Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
 				wspd.clear();
 				wdir.clear();
@@ -134,7 +122,6 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			
 			// Ageing
 	double start_time_Ageing = omp_get_wtime();
-			/*!::Ageing(int treerows, int treecols, struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
 			Ageing(&parameter[0], world_tree_list, world_seed_list);
 	double end_time_Ageing = omp_get_wtime();
 
@@ -170,13 +157,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				 );
 
 				 
-		 //vector<vector<Karten*> >::iterator posw = world_plot_list.begin();
-		//vector<Karten*>& plot_list = *posw;
+		
 		
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin());
-		// vector<list<seed*> >::iterator world_position_s = (world_seed_list.begin());
 		list<Tree*>& tree_list = *world_positon_b;
-		// list<seed*>& seed_list = *world_position_s;
 
 		openmort:
 		FILE *fp3;
@@ -235,6 +219,7 @@ void Einschwingphase()
 		
 		/// spin-up-phase
 		
+		//***german:
 		/// Einschwingphase
 		if (parameter[0].ivortmax>0 && parameter[0].stabilperiod==false)
 		{ 
@@ -248,7 +233,7 @@ void Einschwingphase()
 				
 				int firstyear =0;
 				int lastyear=0;
-				int startlag=5; // How many years should be left out in the beginning of the series
+				int startlag=5; // How many years should be left out in the beginning of the series?
 								// 
 								// 
 								// 
@@ -298,7 +283,6 @@ void Einschwingphase()
 				
 				
 				///go through all functions for vegetation dynamics
-				///vegetationDynamics(int yearposition, int jahr, int t);
 				vegetationDynamics(yearposition, jahr,t);
 	
 			} while (parameter[0].ivort<parameter[0].ivortmax);
@@ -307,12 +291,12 @@ void Einschwingphase()
 		else if (parameter[0].ivortmax>0 && parameter[0].stabilperiod==true)
 		{
 			printf("\nStabilization period:\n");
-			//
-			//
-			//
 			
+			// Choose random years from the weather files until...
+			// ... either a percentage of variance of certain observable is underestimated at certain sites
+			// ... or, if this is not possible, after 1000 years
 			
-			
+			//***german:
 			// So lange zufaellige Jahre aus den eingelesenen weatherjahren ziehen bis ...
 			// ... entweder	ein gewisser Prozentwert an Abweichung von festgelegten Waehrungen von Calibrationsites unterschritten wird
 			// ... oder falls dies nicht moeglich ist nach 1000 Jahren 
@@ -358,33 +342,33 @@ void Einschwingphase()
 				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; // calculate actual year position in list, according to first year in the Weather-List and the random year
 				cout<<world_weather_list[0][0]->jahr<<endl;
 	
-				// Fortschrittsanzeige
-				printf("==> N:%d/%d\t=>\tzJahr=%d\tjahrPos=%d\n", parameter[0].ivort, parameter[0].ivortmax, jahr, yearposition);	
+				// progress console output
+				printf("==> N:%d/%d\t=>\tzYear=%d\tyearPos=%d\n", parameter[0].ivort, parameter[0].ivortmax, jahr, yearposition);	
 
 				
 				///go through all functions for vegetation dynamics
-				///vegetationDynamics(int yearposition, int jahr, int t);
 				vegetationDynamics(yearposition, jahr,t);
 				
 				// Calculation of the deviation from reference values
 				
+				//***german:
 				// Berechnung der Abweichung von Referenzwerten
 				double meanpercentchange=0;
 				double stabilerror=1;
-				int stabilizationtype=1; // 1==quasiGG; 2==ErrorReferenz TODO-in Parameterdatei
+				int stabilizationtype=1; // 1==quasiequilibrim; 2==ErrorReferenz TODO-in Parameterdatei
 				if (stabilizationtype==1)
-				{// Ermittlung ob ein quasiGG erreicht wurde
+				{// is an equilibrium reached
 					
 					int aktort=0;
 					for (vector<vector<Evaluation*> >::iterator posausw = world_evaluation_list.begin(); posausw != world_evaluation_list.end(); ++posausw)
-					{ // Weltschleife Beginn
+					{ // world evaluation list begin
 						vector<Evaluation*>& evaluation_list = *posausw;
 						vector<Evaluation*>::iterator posauswakt = evaluation_list.begin();
 						pEvaluation=(*posauswakt);
 		
 						aktort++;
 							
-						// Testing with the basal area	
+						// observing the basal area	for testing reasons
 						
 						// Zum Test mit der Basalarea
 						if (pEvaluation->BArunmeanliste.size()>1)
@@ -432,17 +416,16 @@ void Einschwingphase()
 						}						
 						cout << "Kumulierte %Change = " << meanpercentchange << endl;
 						
-					}	 // world plot list iteration end
+					}	 // world evaluation list iteration end
 					cout << "\t==> STAB%CHANGE = " << meanpercentchange << "\t" << "Stabilization runs = " << parameter[0].ivort << endl << endl;
 				
 				}
-				/*else if (stabilizationtype==2)
-				{
-					//This does nothing
-				}*/
+				
 				
 				
 				// Assign the condition on when the year iteration should be stopped at random year position == stabilization period
+				
+				//***german:
 				// Bedingung festlegen wann die Jahresschritte an Zufallsyearposition == Stabilisierungsphase beendet werden sollen
 				if ((parameter[0].ivort>parameter[0].stabilmovingwindow && meanpercentchange<parameter[0].stabilpercentchangethreshold) || stabilerror<=stabilerrorthreshold || parameter[0].ivort>parameter[0].ivortmax)
 				{	
@@ -452,8 +435,7 @@ void Einschwingphase()
 			} while (stabilized!=true);
 			
 		}
-		
-	
+
 		parameter[0].einschwingen=false;
 
 }
@@ -483,7 +465,7 @@ void Jahresschritte()
 			parameter[0].ivort++;
 
 
-			// Variable to record a fire in the current year and print it
+			// Variable to record a fire in the current year and print it (console output)
 
 			parameter[0].feuerausgabe=0;	
 
@@ -498,24 +480,28 @@ void Jahresschritte()
 
 			if (parameter[0].jahranzeige ==true) 
 			{
-				printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
+				printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
+				//printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
 			}
 			
-			///vegetationDynamics(int yearposition, int jahr, int t);
+			
 			///go through all functions for vegetation dynamics
 			vegetationDynamics(yearposition, jahr,t);
 
 			
 			
+			
+			//if the year  towards which the whole simulation should be resetted is reached, save all data
 			/// Wenn das Jahr, auf das später die ganze Simulation zurückgesetzt werden soll, erreicht ist, dann speichere alle Daten!
 			if (jahr==parameter[0].resetyear)
 			{
 				SaveAllLists();
-				cout << "In Zeitschritt = " << jahr << " alles gespeichert!" << endl << endl;
+				cout << "In timestep = " << jahr << " everything was saved!" << endl << endl;
+				//cout << "In Zeitschritt = " << jahr << " alles gespeichert!" << endl << endl;
 			}
 
 			
-		} // Jahresschrittschleife Ende
+		} // year step loop end
 
 		if (parameter[0].resetyear>0)
 		{
@@ -525,24 +511,29 @@ void Jahresschritte()
 			if(SCHalterweilVergleichGUT==true)
 			{
 
+		
+				// Variation of parameters depends on experimental setting
+				// ... firstly save the value read in from the parameter file
+				
 				// Parametervariation je nach Expsetting
 				// ... erst Speicherung des mit der Parameterdatei eingelesenen Wertes
 				double incfac_buffer=parameter[0].incfac;
 				double densitywertmanipulatorexp_buffer=parameter[0].densitywertmanipulatorexp;
 				int etabbgpermanent_buffer=parameter[0].etabbgpermanent;
 
-				// parameter[0].tempdiffort=0.0;
 				double tempdiffort_buffer=parameter[0].tempdiffort;
-				// parameter[0].precdiffort=0.0;
-				// für verschiedene Temperaturvarianten wiederholen am 18.11.2014 eingefügt
+				
 				for(double tempdifforti=-0.5; tempdifforti<0.9; tempdifforti=tempdifforti+0.5)
 				{
 					parameter[0].tempdiffort=tempdifforti;
+					// read in weather data with new tempdiffort parameter
+					// (emptying the weather list before)
+					
 					// mit neuen tempdiffort muss das weather eingelesen werden
 					// ... dafür muss aber vorher die world_weather_list leer gemacht werden.
 					//aus finishSimulations()
 					for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
-					{	// Weltschleife Beginn
+					{	// world weather list loop begin
 							vector<weather*>& weather_list = *posw;
 
 							// weather_listn loeschen
@@ -552,15 +543,22 @@ void Jahresschritte()
 								delete pweather;
 							}// weather_list Ende
 							weather_list.clear();
-					} // Weltschleife Ende
+					} // world weather list loop end
 
 					//aus runSimulations()
 					weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
 
 				
+					// Repeat for different parameter settings
+					
+					//***german:
 					// für verschiedene Parameter-Settings wiederholen am 18.11.2014 eingefügt
 					for(int parameteri=0;parameteri<4;parameteri++)
 					{
+						//parameter variation depending on experimental setting
+						// ... and change towards desired value
+						
+						//***german:
 						// Parametervariation je nach Expsetting
 						// ... und Veränderung auf den gewünschsten Wert,
 						if(parameteri==0)
@@ -577,36 +575,41 @@ void Jahresschritte()
 						{
 							parameter[0].etabbgpermanent=1000; //Seedinput
 						}
+
+						
+						cout << " starting simulation runs " << endl;
+						//cout << " START der Simulationslaeufe " << endl;
 						
 						
+						// Reset of all lists and simulation  run:
 						
-						
-						
-						
-						cout << " START der Simulationslaeufe " << endl;
+						//***german:
 						// Reset der Listen und Simulationslauf
-							// Ausgabe kennzeichnen
+							
 								ClearAllLists();
-								cout << "           Listen geloescht!!" << endl;
+								cout << "           Lists deleted!!" << endl;
+								//cout << "           Listen geloescht!!" << endl;
 								RestoreAllLists();
-								cout << "           Listen wiederhergestellt!!" << endl;
+								cout << "           Lists restored!!" << endl;
+								//cout << "           Listen wiederhergestellt!!" << endl;
 								
-						printf("\n\nJahresschritte des Simulationslaufes beginnen ...\n");
-						cout << "     Laenge der Simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
+						printf("\n\n begin the simulation run time steps...\n");
+						//printf("\n\nJahresschritte des Simulationslaufes beginnen ...\n");
+						cout << "     Length of a simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
+						//cout << "     Laenge der Simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
 						
 
 						
 						for (int t=((parameter[0].simdauer-(2011-parameter[0].resetyear))+1);t<parameter[0].simdauer;t++)
-						{ // Jahresschrittschleife Beginn
+						{ // year step loop begin
 							
 							parameter[0].ivort++;
-
-
-							parameter[0].feuerausgabe=0;	// Variable um ein eventuelles Feuer in dem Jahr zu registrieren und auszugeben
-
 							
+							// Variable to record a fire in the current year and print it (console output)
 
+							parameter[0].feuerausgabe=0;	
 
+							//  Calculate current year and print a summary of the year if this is wanted
 							// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
 							int jahr=parameter[0].startjahr+t;
 							
@@ -624,7 +627,6 @@ void Jahresschritte()
 							}
 
 							
-							///vegetationDynamics(int yearposition, int jahr, int t);
 							///go through all functions for vegetation dynamics
 							vegetationDynamics(yearposition, jahr,t);
 
@@ -637,18 +639,25 @@ void Jahresschritte()
 							}
 
 							
-						} // Jahresschrittschleife Ende
-					
+						} // year step loop end
+						
+						
+						
+						
+						// Parameter variation depending on experimental setting,
+						// ... afterwards restore initial values
+						
+						//***german:
 						// Parametervariation je nach Expsetting
 						// ... dann nach wiederholter Simulation zurücksetzen auf Standardwert
 							parameter[0].incfac=incfac_buffer;
 							parameter[0].densitywertmanipulatorexp=densitywertmanipulatorexp_buffer;
 							parameter[0].etabbgpermanent=etabbgpermanent_buffer;
 							
-					}//parametersettings ENDE
+					}//parameter settings END
 				
 					parameter[0].tempdiffort=tempdiffort_buffer;
-				}//weathersettings ENDE
+				}//weather settings END
 			}
 
 		}
@@ -671,44 +680,43 @@ void Jahresschritte()
 void createLists()
 {	
 		for (int i=0;i< parameter[0].mapylength;i++)	
-		{// WeltListen Beginn
+		{// world list loop begin
 		
 			for (int j=0;j< parameter[0].mapxlength;j++)		
 			{
-				list<Tree*> tree_list;					// Neue tree_list erstellen 
-				world_tree_list.push_back(tree_list);		// Neue tree_list in die WeltListe eintragen 
+				list<Tree*> tree_list;							  // Creating new tree_list  
+				world_tree_list.push_back(tree_list);			  // include new tree_list in corresponding world list
 
-				list<seed*> seed_list;				// Neue seed_list erstellen
-				world_seed_list.push_back(seed_list);	// Neue seed_list in die WeltListe eintragen
+				list<seed*> seed_list;							  // Creating new seed_list 
+				world_seed_list.push_back(seed_list);			  // include new seed_list in corresponding world list
 
-				vector<weather*> weather_list;			// Neue weather_list erstellen
-				world_weather_list.push_back(weather_list);	// Neue weather_list in die WeltListe eintragen
+				vector<weather*> weather_list;				 	  // Creating new weather_list 
+				world_weather_list.push_back(weather_list);		  // include new weather_list in corresponding world list
 
-				vector<Karten*> plot_list;			// Neue plot_list erstellen
-				world_plot_list.push_back(plot_list);	// Neue plot_list in die WeltListe eintragen
+				vector<Karten*> plot_list;						  // Creating new plot_list 
+				world_plot_list.push_back(plot_list);			  // include new plot_list in corresponding world list
 
-				vector<Evaluation*> evaluation_list;			  //Neue evaluation_list erzeugen
-				world_evaluation_list.push_back(evaluation_list); // Neue evaluation_list in die Weltliste eintragen
+				vector<Evaluation*> evaluation_list;			  // Creating new evaluation_list 
+				world_evaluation_list.push_back(evaluation_list); // include new evaluation_list in corresponding world list
 				
 				
 				if (parameter[0].resetyear>0)
 				{
-					// Listen für das Resetten zu einem bestimmten Jahr anlegen
-					list<Tree*> tree_list;					// Neue tree_list erstellen 
-					world_tree_list_copy.push_back(tree_list);		// Neue tree_list in die WeltListe eintragen 
+					// Create lists for resetting to a certain year
+					list<Tree*> tree_list;								// Creating new tree_list  
+					world_tree_list_copy.push_back(tree_list);			// include new tree_list in corresponding world list
 
-					list<seed*> seed_list;				// Neue seed_list erstellen
-					world_seed_list_copy.push_back(seed_list);	// Neue seed_list in die WeltListe eintragen
+					list<seed*> seed_list;								// Creating new seed_list 
+					world_seed_list_copy.push_back(seed_list);			// include new seed_list in corresponding world list
 
-					vector<Karten*> plot_list;			// Neue plot_list erstellen
-					world_plot_list_copy.push_back(plot_list);	// Neue plot_list in die WeltListe eintragen
+					vector<Karten*> plot_list;							// Creating new plot_list 
+					world_plot_list_copy.push_back(plot_list);			// include new plot_list in corresponding world list
 
-					vector<Evaluation*> evaluation_list;			  //Neue evaluation_list erzeugen
-					world_evaluation_list_copy.push_back(evaluation_list); // Neue evaluation_list in die Weltliste eintragen
+					vector<Evaluation*> evaluation_list;			  	// Creating new evaluation_list 
+					world_evaluation_list_copy.push_back(evaluation_list); // include new evaluation_list in corresponding world list
 				}
 			}
-		} // WeltListen Ende
-
+		} // world list loop end
 }
 
 
@@ -723,6 +731,9 @@ void createLists()
  *
  *
  *******************************************************************************************/
+ 
+ 
+ //***german, didn't know how to translate:
 void initialiseMaps()
 {
 		int aktort=0;
@@ -849,36 +860,33 @@ void runSimulation()
 {
 		
 
-		// WeltListen erzeugen 
-		// Listen an jedem Koordinatenpunkt der Welt hinzufuegen
-		///createLists()
+		// Create world lists
+		// apply list to each simulated location on the transect
+		
 		createLists();
 		
 
-		/// weather einlesen
-		/*! ::weathereinlesen(int treerows, struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)*/
+		/// reading in weather
+		
 		weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
 
-		/// Karten und Evaluation Listen für jede Welt vorbereiten 
-		///initialiseMaps();
+		/// Plot and evaluation list preparation for each location on the transect 
 		initialiseMaps();
 		//Ende multiple Szenarien Header
 
 
 
-		/// trees (Tree) wie auf CH17I einbringen oder seed verteilen
-		/*! ::Treeverteilung(int treerows, int treecols, struct Parameter *parameter, int wortlaengemax, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)*/
+		/// trees input simular to CH17 or seed input
 		Treeverteilung( &parameter[0], wortlaengemax);
+		
+		// Variable for the whole progress, including the stabilization phase
+		parameter[0].ivort=0;		
 
-		parameter[0].ivort=0;		// Variable fuer den aktuellen Fortschritt über den gesamten Zeitraum, einschließlich Stabilisierungsphase
 
-
-		//Einschwingphase - get stable state before starting the real simulation
-		///Einschwingphase()
+		//Einschwingphase - get to a stable state before starting the real simulation
 		Einschwingphase();
 		
 		
-		///Jahresschritte()
 		Jahresschritte();
 
 
@@ -895,17 +903,15 @@ void runSimulation()
  * do something I don't understand \n
  * clear all lists
  *
- *
  *******************************************************************************************/
 void finishSimulation()
 {
-			
-		//printf("\n\nEndausgabe\n");
+		
 		int aktort=0;
 		
 			
 		for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
-		{	// Weltschleife Beginn
+		{	// World weather list loop begin
 			// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Referenz
 			// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 			// realisiert ist weiterverfahren werden
@@ -1053,13 +1059,11 @@ void finishSimulation()
 int main()
 {
 	
-	mtrace();
-	
-	//system("mkdir output");
 	
 	//time registration for the whole simulation run
 	
-	 //StefanC: Zeitaufnahme fuer Gesamtlauf
+	//***german:
+	//StefanC: Zeitaufnahme fuer Gesamtlauf
 	clock_t start_time_main = clock();
 						
 			//---------Just some Initialisation stuff---------
@@ -1067,6 +1071,7 @@ int main()
 
 			
 			// random number initialization
+			
 			// Zufallszahlen "mischen"
 			srand((unsigned) time(NULL));
 
@@ -1092,13 +1097,12 @@ int main()
 			
 			//---------Just some Initialisation stuff---------
 			
-
-
-			/// Parametereinlesen()
 			Parametereinlesen();
 						
 			// Sicherheitsabfragen zu bestimmten Parameterkombinationen
 			// ... weather- und Treestartchoice
+			
+			//TO-DO-LIST!!:
 			if (parameter[0].weatherchoice!=parameter[0].starttrees && parameter[0].starttrees!=0)
 				printf("\n\n\tWARNING:\tWeather series=%d & Initial trees=%d", parameter[0].weatherchoice, parameter[0].starttrees);
 			else if (parameter[0].seedintro==true && parameter[0].starttrees!=0)
@@ -1151,14 +1155,8 @@ int main()
 				//StefanC: Setze die Anzahl der Y-Tiles auf 4 um darueber die Simulation an Y-Orten zu ermoeglichen
 				parameter[0].mapylength=4;
 			}
-			//else if (parameter[0].weatherchoice==1111)
-			//{
-				//StefanC: Setze die Anzahl der Y-Tiles auf 11 um darueber die Simulation an Y-Orten auf einem NS-Transekt zu ermoeglichen
-				//parameter[0].mapylength=11;
-			//}
-			//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	
-
-			//cout << zaehler<<endl;
+			
+			
 			for (int nruns=0; nruns<parameter[0].runs; nruns++)
 			{
 
@@ -1174,23 +1172,28 @@ int main()
 				zaehler++;
 				printf("\n\tFortschritt: %d von %d\n", zaehler, parameter[0].runs); 
 
+				
+				
+				
 				// Variablen auf Startwerte setzen
 				// Variable für die Treenamen im Modelllauf
 				parameter[0].nameakt=0;
 				
 				
+				//Variable for lines in one simulation repeat
 				
 				// Variable für die Linien im Modelllauf
 				parameter[0].lineakt=0;	
+				
+				// Undo the changes of years with seed introduction
 
 				// Zuruecksetzen der Jahre mit seedeintrag auf den Startwert
 				parameter[0].jahremitseedeintrag=jahremitseedeintragpuffer;	
 
 				parameter[0].individuenzahl=1;
-				///runSimulation()
+				
 				runSimulation();
 					
-				///finishSimulation()
 				finishSimulation();
 			}
 		
@@ -1206,6 +1209,6 @@ int main()
 		fclose(fptA);
 	}
 
-	muntrace();
+	//muntrace();
 	return 0;
 }

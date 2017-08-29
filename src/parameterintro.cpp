@@ -34,7 +34,7 @@ double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzei
 		counter++;
 	}
 
-	// Gewuenschte Zahl in eine Double umwandeln		
+	// Type conversion from string to double
 	strtok(puffer_zahl, trennzeichen);
 	zahl= strtok(NULL, trennzeichen);
 	double zahldouble=strtod(zahl, NULL);
@@ -55,7 +55,6 @@ double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzei
 void Parametereinlesen(void)
 {
 	
-	
 	char uebergabestring[wortlaengemax];
 
 	// Schage fuer Funktionen und Anzeigen
@@ -69,10 +68,10 @@ void Parametereinlesen(void)
             parameter[0].parameterlesenanzeige=false;
         };
 	
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("\n---->\t PARAMETEREINGABE WIRD ANGEZEIGT\n\n\t Schage fuer Funktionen und Anzeigen\n\nSchreibe:	%s <= %s ==> Main \n", uebergabestring,		(parameter[0].parameterlesenanzeige)?"true":"false");
-                }
+			if (parameter[0].parameterlesenanzeige ==true) 
+			{
+                printf("\n---->\t PARAMETEREINGABE WIRD ANGEZEIGT\n\n\t Schage fuer Funktionen und Anzeigen\n\nSchreibe:	%s <= %s ==> Main \n", uebergabestring,		(parameter[0].parameterlesenanzeige)?"true":"false");
+            }
 
 	strcpy(uebergabestring,"jahranzeige");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
@@ -84,10 +83,10 @@ void Parametereinlesen(void)
             parameter[0].jahranzeige=false;
         };
 
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].jahranzeige)?"true":"false");
-                }
+			if (parameter[0].parameterlesenanzeige ==true) 
+			{
+                printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].jahranzeige)?"true":"false");
+            }
 
 	strcpy(uebergabestring,"qualijahranzeige");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
@@ -98,38 +97,45 @@ void Parametereinlesen(void)
         {
             parameter[0].qualijahranzeige=false;
         };
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].qualijahranzeige)?"true":"false");
-                }
+			if (parameter[0].parameterlesenanzeige ==true) 
+			{
+                printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].qualijahranzeige)?"true":"false");
+            }
 	
 	strcpy(uebergabestring,"Data_output");
-	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
+		if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
         {
             parameter[0].Data_output=true;
         }
-	else 
+		else 
         {
             parameter[0].Data_output=false;
         };
-	if (parameter[0].parameterlesenanzeige ==true) 
+			if (parameter[0].parameterlesenanzeige ==true) 
             {
                 printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].Data_output)?"true":"false");
             }
 
 	strcpy(uebergabestring,"ausgabemodus");
 	parameter[0].ausgabemodus=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
-	if (parameter[0].parameterlesenanzeige ==true) 
+			if (parameter[0].parameterlesenanzeige ==true) 
             {
                 printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].ausgabemodus);
             }
 
 	strcpy(uebergabestring,"seedausbranzeige");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
-		{parameter[0].seedausbranzeige=true;}
-	else {parameter[0].seedausbranzeige=false;};
-	if (parameter[0].parameterlesenanzeige ==true) 
-		{printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedausbranzeige)?"true":"false");}
+	{
+		parameter[0].seedausbranzeige=true;
+	}
+	else 
+	{
+		parameter[0].seedausbranzeige=false;
+	};
+			if (parameter[0].parameterlesenanzeige ==true) 
+			{
+				printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedausbranzeige)?"true":"false");
+			}
 
 	strcpy(uebergabestring,"mortanzeige");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
@@ -179,32 +185,32 @@ void Parametereinlesen(void)
         };
 
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth)?"true":"false");
-                }
+			{
+                printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth)?"true":"false");
+            }
 
 	strcpy(uebergabestring,"vegetation");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
 		{parameter[0].vegetation=true;}
 	else {parameter[0].vegetation=false;};
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].vegetation)?"true":"false");
-                }
+			{
+                printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].vegetation)?"true":"false");
+            }
 
 	strcpy(uebergabestring,"feuer");
 	parameter[0].feuer=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].feuer);
-                }
+			{
+                printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].feuer);
+            }
 
 	strcpy(uebergabestring,"omp_num_threads");
 	parameter[0].omp_num_threads=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].omp_num_threads);
-                }
+			{
+                printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].omp_num_threads);
+            }
 
 		
 		
@@ -212,21 +218,21 @@ void Parametereinlesen(void)
 	strcpy(uebergabestring,"weatherchoice");
 	parameter[0].weatherchoice=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].weatherchoice);
-                }
+			{
+                printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].weatherchoice);
+            }
 
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("\n\n\t Modellparameter\n\n");
-                }
+			{
+                printf("\n\n\t Modellparameter\n\n");
+            }
 	
 	strcpy(uebergabestring,"simdauer");
 	parameter[0].simdauer=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
-		{
-                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].simdauer);
-                }
+			{
+                printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].simdauer);
+            }
 
 	strcpy(uebergabestring,"runs");
 	parameter[0].runs=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
@@ -921,10 +927,7 @@ void Parametereinlesen(void)
                 {
                     printf("Schreibe:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollenrichtungsvarianz);
                 }
-	
-		
-	
-	
+
 
 	//parameter[0].pollenfall
 	strcpy(uebergabestring,"pollenfall");

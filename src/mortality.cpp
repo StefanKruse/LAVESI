@@ -8,7 +8,7 @@
  *******************************************************************************************/
 void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)
 {
-		//Calculation of the factors in a function, that adds a mortality rate impact
+		// Calculation of the factors in a function, that adds a mortality rate impact
 		
 		//***german:
 		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitaetsratenaufschlag darstellt
@@ -48,11 +48,11 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					wachstumrel=pTree->dbrustrel;
 				}
 				
-				//Competition effect:
-				//small 	    Tree => barely influenced by surrounding trees
-				//150cm tall    Tree => strongest influence
-				//height >300cm Tree => barely influenced by surrounding trees
-				//switched off at the moment
+				// Competition effect:
+				// small 	     Tree => barely influenced by surrounding trees
+				// 150cm tall    Tree => strongest influence
+				// height >300cm Tree => barely influenced by surrounding trees
+				// switched off at the moment
 				
 				
 				//***german:
@@ -138,7 +138,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				double weather_mort_gmel	= parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);
 				double weather_mort_sib	= parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);				
 				double dry_mort		= parameter[0].mtrockenheit * weather_list[yearposition_help]->trockenheitsmort * pow((1.0 / pTree->height), 0.5); // Verrechnung der Trockenheit aus Trockenheitsindex
-
+				
 				/// Calculating the mortality rate of the tree 
 				/// considering the factors of each mortality rate
 				double Treemortg = 0.0 
@@ -359,9 +359,6 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 		5.swap content of dummy_seed_list_globally to orig_seed_list "seed_list"
 	
 	
-
-		
-	
 	SEED MORTALITY PARALLELIZATION NO_2
 			++ by hand
 			https://stackoverflow.com/questions/8691459/how-do-i-parallelize-a-for-loop-through-a-c-stdlist-using-openmp
@@ -376,7 +373,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 		
 	double end_time_seedsuviving=omp_get_wtime();
 
-		//Calculation of the current location in coordinates
+		//Calculation of the current location in transect coordinates
 		
 		//***german:
 		// Berechnung des aktuellen Ortes in Koordinaten
@@ -456,9 +453,9 @@ if(mcorevariant==1)
 				int n_trees=0;
 				double timer_eachtree_advance=0;
 				double timer_eachtree_vectini=0;
-				double timer_eachtree_seedsurv=0;// from here only surviving seeds
-				double timer_eachtree_seedadd=0;// from here only surviving seeds
-				double timer_eachtree_total=0;// from here only surviving seeds
+				double timer_eachtree_seedsurv=0;	// from here on only surviving seeds
+				double timer_eachtree_seedadd=0;	// from here on only surviving seeds
+				double timer_eachtree_total=0;		// from here on only surviving seeds
 			
 			#pragma omp for nowait schedule(guided) 
 			for(unsigned int pari=0; pari<tree_list.size(); ++pari)
@@ -483,7 +480,6 @@ if(mcorevariant==1)
 				
 				if(pTree->seednewly_produced>0)
 				{//START: tree produces seeds
-						
 					// ramdomly determine the number of surving seeds
 					int seedlebend=0;
 					for(int sna=0; sna < pTree->seednewly_produced; sna++)
@@ -511,7 +507,7 @@ if(mcorevariant==1)
 						// get the characteristics for each surviving seed and push these back new to seed_list
 						for(int sl=0; sl<seedlebend; sl++)
 						{// START: create new seeds
-							// create a new seed
+						 // create a new seed
 							pseed= new seed();
 							
 							// add information
@@ -527,8 +523,6 @@ if(mcorevariant==1)
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
 								pseed->thawing_depthinfluence=Vthdpth.at(iran);
-								
-								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
 								
 							} 
 							else
@@ -791,7 +785,6 @@ if(mcorevariant==3)
 
 // more than one kernel specified by parameter[0].omp_num_threads
 	
-	
 		// loop around the loop for MULTI-CORE-PROCESSING
 		// before run a program parallel set the number of helpers by changing the environment variable
 		// ... ... export OMP_NUM_THREADS=4
@@ -880,10 +873,7 @@ if(mcorevariant==3)
 				std::advance(end, chunk_size);
 				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
 			}
-					
-					
-					
-					
+	
 			// declare a local seed list to be filled by each thread
 			list<seed*> newseed_list;
 				// timers

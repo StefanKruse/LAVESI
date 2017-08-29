@@ -38,6 +38,8 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 					int i=(int) floor(pseed->ycoo*parameter[0].sizemagnif);//sizemagnif zB= 5, density grid tile.
 					int j=(int) floor(pseed->xcoo*parameter[0].sizemagnif);
 					
+					
+					//??
 					// Formel aus PE Kapitel mit Feuer
 					double keimungauflageinfluence=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->auflagenstaerke )+1.495; 
 					// (1-0.01)/(200-600)==Steigung damit durch bei 6 cm => 0.01 und 1.0 bei 2 cm, wichtig dabei: +1.495cm!!
@@ -52,6 +54,7 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 					
 					
 					//If this is switched on, the latest growth performance is calculated
+					
 					//***german
 					// Falls eingestellt, die aktuelle Zuwachsleistung nach dem Ort ermitteln
 					double maxbasalwachstum = 0;

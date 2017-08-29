@@ -5,17 +5,25 @@
  *******************************************************************************************/
 void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 {				
+	//1.) Calculation of the current transect coordinate
 	
+	//***german:
 	// Berechnung des aktuellen Ortes
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
+	//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
+	
+	//***german:
 	// 2. N_inGrad aus den N_max und N_min und Ygesamt-werten berechnen
 	if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 	{
 		double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
 		double mapylengthdummy=parameter[0].mapylength;	// irgendwie funktioniert nicht die direkte Verwendung in der nachfolgenden Formel??
 		double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
+		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
+		
+		//***german:
 		// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
 		parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 		parameter[0].precdiffort=-5.3699 * (Nposakt-Nposcenter);
@@ -24,6 +32,10 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 
 	if (parameter[0].lineartransekt==true)
 	{
+		
+		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T~°latitude
+		
+		//***german:
 		// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
 		// Umrechnung von Grad in Meter  "1 Grad = 60 x 1852 m = 111120 m"
 		parameter[0].tempdiffortmin=-0.3508 * treerows/(111120);
@@ -31,13 +43,13 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	}
 
 
-
-	// Datei oeffnen
+	// opening temperature input file
 	FILE *f;
 	f = fopen(dateinametemp,"r"); 
 	if (f == NULL)
 	{
-		printf("Temperaturdatei nicht vorhanden!\n");
+		//printf("Temperaturdatei nicht vorhanden!\n");
+		printf("Temperature file not available!\n");
 		exit(1);
 	}
 	
@@ -45,12 +57,15 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	int counter=1;
 	double tempjahrmittelbuf, temp1monatmittelbuf, temp2monatmittelbuf, temp3monatmittelbuf, temp4monatmittelbuf, temp5monatmittelbuf, temp6monatmittelbuf, temp7monatmittelbuf, temp8monatmittelbuf, temp9monatmittelbuf, temp10monatmittelbuf, temp11monatmittelbuf, temp12monatmittelbuf;
 
+	//Read in line by line, partially preprocess data
+	
+	//***german:
 	// Zeilenweise einlesen und entsprechende Spalteninhalte auslesen und teilweise verarbeiten
 	while( fgets(puffer,255,f) !=NULL)
 	{
 
 	
-		if (counter>=2)	// Erste Spalte wird ausgelassen, da dort Beschriftungen liegen
+		if (counter>=2)	// ignore header
 		{
 			temp1monatmittelbuf= strtod(strtok(puffer, " "),NULL);
 			temp2monatmittelbuf= strtod(strtok(NULL, " "),NULL);
@@ -67,11 +82,13 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 
 			tempjahrmittelbuf=(temp1monatmittelbuf+temp2monatmittelbuf+temp3monatmittelbuf+temp4monatmittelbuf+temp5monatmittelbuf+temp6monatmittelbuf+temp7monatmittelbuf+temp8monatmittelbuf+temp9monatmittelbuf+temp10monatmittelbuf+temp11monatmittelbuf+temp12monatmittelbuf)/12;
 
-			// neues Jahr hinzufuegen
-			pweather= new weather();			// 1. Neues Jahr erzeugen
+			
+			
+			// add a new year
+			pweather= new weather();			// 1. generate new year
 			pweather->yworldcoo=aktortyworldcoo;
 			pweather->xworldcoo=aktortxworldcoo;
-			pweather->jahr=counter+parameter[0].startjahr-2;					// 2. Werte dem Jahr zuweisen
+			pweather->jahr=counter+parameter[0].startjahr-2;					// 2. apply the data to the new year
 			pweather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
 			pweather->temp1monatmittel=temp1monatmittelbuf+parameter[0].tempdiffort;
 			pweather->temp1monatmittelmin=temp1monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
@@ -88,12 +105,12 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 			pweather->temp11monatmittel=temp11monatmittelbuf+parameter[0].tempdiffort;
 			pweather->temp12monatmittel=temp12monatmittelbuf+parameter[0].tempdiffort;
 			
-			// Active Air Temperature AAT = Summe der Temperatur von Tagen die > 10°C liegen
-			// Number of days with temperatures above zero degrees = net degree days = NDD = Anzahl Tage > 0°C ("Vegetationslaenge")
+			// Active Air Temperature AAT = Sum of days warmer than 10°C
+			// Number of days with temperatures above zero degrees = net degree days = NDD ("Vegetationslaenge")
 			double sumacttemp=0, sumacttempmin=0, sumdegreday=0;
 			int ndegreday=0, ndegredaymin=0;
 
-			// Schätzung der Tagesmitteltemperatur aus der Julimitteltemperatur
+			// daily mean temperature estimation from mean july temperature:
 			double julitemp=pweather->temp7monatmittel;
 			double julitempmin=pweather->temp7monatmittelmin;
 			
@@ -135,7 +152,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 			pweather->activeairtempmin=sumacttempmin;
 			pweather->vegetationslaengemin=ndegredaymin;
 			pweather->degreday=sumdegreday;
-			weather_list.push_back(pweather);// 3. Jahr in Liste einfuegen
+			weather_list.push_back(pweather);// 3. push back the current year in weather_list
 
 		}
 		counter++;
@@ -159,7 +176,7 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list, int maximal
 
 			if (fp == NULL)
 			{
-				printf("Niederschlagsdatei nicht vorhanden!\n");
+				printf("Precipitation file not available!\n");
 				exit(1);
 			}
 
@@ -187,9 +204,9 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list, int maximal
 
 					niederschlagssummebuf=(prec1monatmittelbuf+prec2monatmittelbuf+prec3monatmittelbuf+prec4monatmittelbuf+prec5monatmittelbuf+prec6monatmittelbuf+prec7monatmittelbuf+prec8monatmittelbuf+prec9monatmittelbuf+prec10monatmittelbuf+prec11monatmittelbuf+prec12monatmittelbuf);
 
-					// Werte zu aktuellem Jahr hinzufuegen
-					pweather=weather_list[counter-2];			// 1. Zum aktuellen Jahr springen
-					pweather->prec1monatmittel=prec1monatmittelbuf+parameter[0].precdiffort/12;					// 2. Werte dem Jahr hinzufuegen
+					// append values to current year
+					pweather=weather_list[counter-2];			// 1. go to current year
+					pweather->prec1monatmittel=prec1monatmittelbuf+parameter[0].precdiffort/12;					// 2. append values to current year
 					pweather->prec2monatmittel=prec2monatmittelbuf+parameter[0].precdiffort/12;
 					pweather->prec3monatmittel=prec3monatmittelbuf+parameter[0].precdiffort/12;
 					pweather->prec4monatmittel=prec4monatmittelbuf+parameter[0].precdiffort/12;
@@ -202,7 +219,7 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list, int maximal
 					pweather->prec11monatmittel=prec11monatmittelbuf+parameter[0].precdiffort/12;
 					pweather->prec12monatmittel=prec12monatmittelbuf+parameter[0].precdiffort/12;
 					pweather->niederschlagssumme=niederschlagssummebuf+parameter[0].precdiffort;
-					pweather->niederschlagssummemin=niederschlagssummebuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	// Berechnung oben
+					pweather->niederschlagssummemin=niederschlagssummebuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	
 
 				}
 				counter++;
@@ -220,17 +237,26 @@ void getPrec1(char dateinameprec[50],vector<weather*>& weather_list, int maximal
  *******************************************************************************************/
 void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,int maximal_word_length)
 {
+			//1.) Calculation of the current transect coordinate
+	
+			//***german:
 			// Berechnung des aktuellen Ortes
 			int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 			int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
+			//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
+	
+			//***german:
 			// 2. N_inGrad aus den N_max und N_min und Ygesamt-werten berechnen
 			if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 			{
 				double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
 			
-				double mapylengthdummy=parameter[0].mapylength;	// irgendwie funktioniert nicht die direkte Verwendung in der nachfolgenden Formel??
+				double mapylengthdummy=parameter[0].mapylength;	
 				double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
+				//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
+		
+				//***german:
 				// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
 				parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 				parameter[0].precdiffort=-5.3699 * (Nposakt-Nposcenter);
@@ -244,6 +270,9 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 
 			if (parameter[0].lineartransekt==true)
 			{
+				//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
+		
+				//***german:
 				// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
 				// Umrechnung von Grad in Meter  "1 Grad = 60 x 1852 m = 111120 m"
 				parameter[0].tempdiffortmin=-0.3508 * treerows/(111120);
@@ -251,7 +280,7 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 			}
 
 
-			// Datei oeffnen
+			// opening file
 			FILE *f;
 			f = fopen(dateinametemp,"r"); 
 			if (f == NULL)
@@ -264,6 +293,9 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 			int counter=1;
 			double jahrbuf, tempjahrmittelbuf;
 
+			//Read in line by line, partially preprocess data
+	
+			//***german:
 			// Zeilenweise einlesen und entsprechende Spalteninhalte auslesen und teilweise verarbeiten
 			while( fgets(puffer,maximal_word_length,f) !=NULL)
 			{
@@ -272,46 +304,30 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 					jahrbuf= strtod(strtok(puffer, " "),NULL);
 					tempjahrmittelbuf= strtod(strtok(NULL, " "),NULL);
 
-					// neues Jahr hinzufuegen
-					pweather= new weather();			// 1. Neues Jahr erzeugen
+					// add a new year
+					pweather= new weather();			// 1. generate new year
 					pweather->yworldcoo=aktortyworldcoo;
 					pweather->xworldcoo=aktortxworldcoo;
-					pweather->jahr=(int) floor(jahrbuf);					// 2. Werte dem Jahr zuweisen
+					pweather->jahr=(int) floor(jahrbuf);					// 2. apply the data to the new year
 					pweather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
 					pweather->tempjahrmittelmin=tempjahrmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-					/*
-					pweather->temp1monatmittel=temp1monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp1monatmittelmin=temp1monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-					pweather->temp2monatmittel=temp2monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp3monatmittel=temp3monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp4monatmittel=temp4monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp5monatmittel=temp5monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp6monatmittel=temp6monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp7monatmittel=temp7monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp7monatmittelmin=temp7monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-					pweather->temp8monatmittel=temp8monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp9monatmittel=temp9monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp10monatmittel=temp10monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp11monatmittel=temp11monatmittelbuf+parameter[0].tempdiffort;
-					pweather->temp12monatmittel=temp12monatmittelbuf+parameter[0].tempdiffort;
-					*/
-
-					// Active Air Temperature AAT = Summe der Temperatur von Tagen die > 10°C liegen
-					// Number of Degree Days NDD = Anzahl Tage > 0°C (Vegetationslaenge)
+					
+					// Active Air Temperature AAT = Sum of days warmer than 10°C
+					// Number of days with temperatures above zero degrees = net degree days = NDD ("Vegetationslaenge")
 					double sumacttemp=0;
 					double sumacttempmin=0;
 					double sumdegreday=0;
 					int ndegreday=0;
 					int ndegredaymin=0;
 
-					// Schätzung der Tagesmitteltemperatur aus der Julimitteltemperatur
+					// daily mean temperature estimation from mean july temperature:
 
 					double tempjahrmittelbuf=pweather->tempjahrmittel;
 					double tempjahrmittelminbuf=pweather->tempjahrmittelmin;
 					double temp1monatmittelbuf=0, temp1monatmittelminbuf=0;
 					double temp7monatmittelbuf=0, temp7monatmittelminbuf=0;
 
-					// Sinusfunktionsparameterwerte
+					// Parameters of the sine function
 					double ausdehnung=0.567980348064239;
 					double verschiebung=4.03428152771763;
 					double amplianstieg=-0.585543287044634;
@@ -346,16 +362,16 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 						}
 
 						if ( (i>=1) & (i<=31) )
-						{ //Januarmittelwert bilden
+						{ //calculate january mean value
 							temp1monatmittelbuf=temp1monatmittelbuf+tagestemp;
 							temp1monatmittelminbuf=temp1monatmittelminbuf+tagestempmin;
-						} //Januarmittelwert bilden
+						} //calculate january mean value
 					
 						if ( (i>=182) & (i<=212) )
-						{ //Julimittelwert bilden
+						{ //calculate july mean value
 							temp7monatmittelbuf=temp7monatmittelbuf+tagestemp;
 							temp7monatmittelminbuf=temp7monatmittelminbuf+tagestempmin;
-						} //Julimittelwert bilden
+						} //calculate july mean value
 					}
 
 					pweather->activeairtemp=sumacttemp;
@@ -367,7 +383,7 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 					pweather->temp1monatmittelmin=temp1monatmittelminbuf/31;
 					pweather->temp7monatmittel=temp7monatmittelbuf/31;
 					pweather->temp7monatmittelmin=temp7monatmittelminbuf/31;
-					weather_list.push_back(pweather);// 3. Jahr in Liste einfuegen
+					weather_list.push_back(pweather);// 3. push back the current year in weather_list
 
 				}
 				counter++;
@@ -432,9 +448,9 @@ void getPrec2(char dateinameprec[50],vector<weather*>& weather_list,int maximal_
 
 					niederschlagssummebuf=(prec1monatmittelbuf+prec2monatmittelbuf+prec3monatmittelbuf+prec4monatmittelbuf+prec5monatmittelbuf+prec6monatmittelbuf+prec7monatmittelbuf+prec8monatmittelbuf+prec9monatmittelbuf+prec10monatmittelbuf+prec11monatmittelbuf+prec12monatmittelbuf);
 
-					// Werte zu aktuellem Jahr hinzufuegen
-					pweather=weather_list[counter-2];			// 1. Zum aktuellen Jahr springen
-					pweather->prec1monatmittel=prec1monatmittelbuf+parameter[0].precdiffort/12;					// 2. Werte dem Jahr hinzufuegen
+					// append values to current year
+					pweather=weather_list[counter-2];			// 1. go to current year
+					pweather->prec1monatmittel=prec1monatmittelbuf+parameter[0].precdiffort/12;					// 2. append values to current year
 					pweather->prec2monatmittel=prec2monatmittelbuf+parameter[0].precdiffort/12;
 					pweather->prec3monatmittel=prec3monatmittelbuf+parameter[0].precdiffort/12;
 					pweather->prec4monatmittel=prec4monatmittelbuf+parameter[0].precdiffort/12;
@@ -467,17 +483,30 @@ void getPrec2(char dateinameprec[50],vector<weather*>& weather_list,int maximal_
 void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 {				
 	
+	//1.) Calculation of the current transect coordinate
+	
+	//***german:
 	// Berechnung des aktuellen Ortes
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
+	//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
+	
+	//***german:
 	// 2. N_inGrad aus den N_max und N_min und Ygesamt-werten berechnen
 	if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 	{
 		double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
 		double mapylengthdummy=parameter[0].mapylength;	// irgendwie funktioniert nicht die direkte Verwendung in der nachfolgenden Formel??
 		double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
+		
+		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
+		
+		//***german:
 		// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
+		
+		
+		// Conversion degrees to metres  "1 degree = 60 x 1852 m = 111120 m"
 		parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 		parameter[0].precdiffort=-5.3699 * (Nposakt-Nposcenter);
 	}
@@ -485,15 +514,20 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 
 	if (parameter[0].lineartransekt==true)
 	{
+		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
+		
+		//***german:
 		// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
-		// Umrechnung von Grad in Meter  "1 Grad = 60 x 1852 m = 111120 m"
+		
+		
+		// Conversion degrees to metres  "1 degree = 60 x 1852 m = 111120 m"
 		parameter[0].tempdiffortmin=-0.3508 * treerows/(111120);
 		parameter[0].precdiffortmin=-5.3699 * treerows/(111120);
 	}
 
 
 
-	// Datei oeffnen
+	// opening file
 	FILE *f;
 	f = fopen(dateinametemp,"r"); 
 	if (f == NULL)
@@ -506,12 +540,15 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	int counter=1;
 	double tempjahrmittelbuf, temp1monatmittelbuf, temp2monatmittelbuf, temp3monatmittelbuf, temp4monatmittelbuf, temp5monatmittelbuf, temp6monatmittelbuf, temp7monatmittelbuf, temp8monatmittelbuf, temp9monatmittelbuf, temp10monatmittelbuf, temp11monatmittelbuf, temp12monatmittelbuf;
 
+	//Read in line by line, partially preprocess data
+	
+	//***german:
 	// Zeilenweise einlesen und entsprechende Spalteninhalte auslesen und teilweise verarbeiten
 	while( fgets(puffer,255,f) !=NULL)
 	{
 
 	
-		if (counter>=2)	// Erste Spalte wird ausgelassen, da dort Beschriftungen liegen
+		if (counter>=2)	// ignore header
 		{
 			temp1monatmittelbuf= strtod(strtok(puffer, " "),NULL);
 			temp2monatmittelbuf= strtod(strtok(NULL, " "),NULL);
@@ -528,11 +565,11 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 
 			tempjahrmittelbuf=(temp1monatmittelbuf+temp2monatmittelbuf+temp3monatmittelbuf+temp4monatmittelbuf+temp5monatmittelbuf+temp6monatmittelbuf+temp7monatmittelbuf+temp8monatmittelbuf+temp9monatmittelbuf+temp10monatmittelbuf+temp11monatmittelbuf+temp12monatmittelbuf)/12;
 
-			// neues Jahr hinzufuegen
-			pweather= new weather();			// 1. Neues Jahr erzeugen
+			// add a new year
+			pweather= new weather();			// 1. generate new year
 			pweather->yworldcoo=aktortyworldcoo;
 			pweather->xworldcoo=aktortxworldcoo;
-			pweather->jahr=counter+parameter[0].startjahr-2;					// 2. Werte dem Jahr zuweisen
+			pweather->jahr=counter+parameter[0].startjahr-2;					// 2. apply the data to the new year
 			pweather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
 			pweather->temp1monatmittel=temp1monatmittelbuf+parameter[0].tempdiffort;
 			pweather->temp1monatmittelmin=temp1monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
@@ -549,19 +586,22 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 			pweather->temp11monatmittel=temp11monatmittelbuf+parameter[0].tempdiffort;
 			pweather->temp12monatmittel=temp12monatmittelbuf+parameter[0].tempdiffort;
 			
-			// Active Air Temperature AAT = Summe der Temperatur von Tagen die > 10°C liegen
-			// Number of days with temperatures above zero degrees = net degree days = NDD = Anzahl Tage > 0°C ("Vegetationslaenge")
+			// Active Air Temperature AAT = Sum of days warmer than 10°C
+			// Number of days with temperatures above zero degrees = net degree days = NDD ("Vegetationslaenge")
 			double sumacttemp=0, sumacttempmin=0, sumdegreday=0;
 			int ndegreday=0, ndegredaymin=0;
 
-			// Schätzung der Tagesmitteltemperatur aus der Julimitteltemperatur
+			// daily mean temperature estimation from mean july temperature:
 			double julitemp=pweather->temp7monatmittel;
 			double julitempmin=pweather->temp7monatmittelmin;
 			double jantemp=pweather->temp1monatmittel;
-			//double jantempmin=pweather->temp1monatmittelmin;
 			
 			for (int i=1;i<=365;i++)
 			{
+				
+				// calculate each day once for each january or july temperature oriented function 
+				
+				//***german:
 				// für jede der zwei an Jan- bzw Jultemp. aufgehängten Fkt einmal den Tag berechnen (weatherfunktionsabschätzung.docx)
 				double tagestempjan=0.0;
 				double tagestempjul=0.0;
@@ -569,7 +609,10 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 
 				tagestempjan=((22.55131 *sin(0.49102*( (double) i/(365.0/12.0)) +4.62730))+22.04378+jantemp);	
 				tagestempjul=((22.55261 *sin(0.49063*( (double) i/(365.0/12.0)) +4.62760))-22.27861+julitemp);	
-
+				
+				// incorporate daily temperatures of january and july 
+				
+				//***german:
 				//tagestempjan und tagestempjul verrechnen (weatherfunktionsabschätzung.docx)
 				double gewicht=0.0;
 				if((i>=1) &( i<=15))
@@ -606,15 +649,14 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 					}
 				}
 			}
-			//hier noch Faktoren für Ort mit drin. Zahlen bisher für weatherchoice==41:44
 			
-			
+					
 			pweather->activeairtemp=(int) round(sumacttemp*0.84630);
 			pweather->vegetationslaenge=(int) round(ndegreday*0.88432);
 			pweather->activeairtempmin=(int) round(sumacttempmin*0.84630);
 			pweather->vegetationslaengemin=(int) round(ndegredaymin*0.88432);
 			pweather->degreday=(int) round(sumdegreday*0.87583);
-			weather_list.push_back(pweather);// 3. Jahr in Liste einfuegen
+			weather_list.push_back(pweather);// 3. push back the current year in weather_list
 		}
 		counter++;
 	}
@@ -633,21 +675,13 @@ void passWeather()
 {
 	
 	for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++)
-	{// Weltschleife Beginn
+	{// world weather list loop begin
 		vector<weather*>& weather_list = *posw;
 
 		for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
-		{// weather_list Beginn
+		{// weather list loop begin
 
-			// Werte fuer das jeweilige Jahr
-			// Einfluss der verschiedenen weatherfaktoren mittels Indices bestimmen
-
-			// Active Air Temperature: >600°C = Wälder (Osawa 2010, S. 53) & 300°C -> Nördliche Grenze (Osawa 2010, S. 47)
-			//double aatindex=(1.0/600.0)*weather_list[iweather]->activeairtemp;
-			//double aatindexmin=(1.0/600.0)*weather_list[iweather]->activeairtempmin;
-			//double julindexs = 0.0227*weather_list[iweather]->temp7monatmittel;
-			//double julindexg = 0.00934*weather_list[iweather]->temp7monatmittel;
-			// Julitemperaturindex julindex wegen R-Skript Yamal/trw_Bilder Plot "Julitemp_trw_Vergleich_Ch_Y_linear_log_einplot" im Ordner CRUTS gewichtet, zu beachten ist, dass sich auch einige Anpassungswerte verändern, da sich geringfügig andere Korrelationen ergeben mit neuen weatherdaten. weatherchoice != 21-32 --> sib (0.107/(1+exp(10.684-weather_list[iweather]->temp7monatmittelmin)))+0.198 und gmel (0.076/(1+exp(14.568-weather_list[iweather]->temp7monatmittel)))+0.101;
+			// Active Air Temperature: >600°C = Forest taiga (Osawa 2010, S. 53) & 300°C -> northern border (Osawa 2010, S. 47)
 			double julindexs = 0;
 			double julindexmins = 0;
 			double julindexg = 0;
@@ -656,10 +690,14 @@ void passWeather()
 			julindexmins = (0.163/(1+exp(12.319-weather_list[iweather]->temp7monatmittelmin)))+0.168;
 			julindexg = (0.078/(1+exp(14.825-weather_list[iweather]->temp7monatmittel)))+0.108;
 			julindexming = (0.078/(1+exp(14.825-weather_list[iweather]->temp7monatmittelmin)))+0.108;
-			// Growing Season length: 60 Tage -> Nördliche Grenze (Osawa 2010, S. 47)  Beachte: CRU_TS: ca. 120 Tage über 0 im Norden!!! 
-			// double gsindex=(weather_list[iweather]->vegetationslaenge/60.0)-1.0;
-			// double gsindexmin=(weather_list[iweather]->vegetationslaengemin/60.0)-1.0;
-	
+			// Growing Season length: 60 days -> northern border (Osawa 2010, S. 47)  
+			//CRU_TS data set: 120 days>0°C in the north!!
+			
+			//***german:
+			//Beachte: CRU_TS: ca. 120 Tage über 0 im Norden!!! 
+			
+			//***german:
+			//????
 			/* da Julindex aufgrund von Fkt Julitemp-realisiertes Max-Wachstum gefittet wurde, ist das reale Wachstum schon eingeflossen.
 			Da nur dimensionsloser Faktor gewünscht für spätere Berechnung des Wachstums hier prozentualer Wert ermittelt zwischen minimalem und maximalem Wachstum, indem von dem berechneten Wert (julindexg/s) 
 			min. Wachstum abgezogen wird und dann durch die Spanne max. - min. Wachstum geteilt wird. Daten sind aus Yamal-R-Datei mit gewichtetem CRUTS-Datensatz*/
@@ -671,13 +709,17 @@ void passWeather()
 			// Test wegen BasalDwachstum, bei Wachstum, Mort und Etab gucken, dass direkt das maxwaxchstumpro jahr einflieszt daher auch den rest ausgeblendet
 			// Langfristige Mittelwerte
 			// weatherkennwerte
-			// // -30°C Januar-Isotherm -> Grenze für Vorkommen (Osawa 2010, S. 48)
+			// 
+			// -30°C January isotherm -> borderline for plant abundance (Osawa 2010, S. 48)
 			double jantempsum=0;
 			double jantempsummin=0;
-			// // 10°C July-Isotherm -> Nördliche Grenze (Osawa 2010, S. 47)
+			// 
+			// 10°C July isotherm -> northern border (Osawa 2010, S. 47)
 			double jultempsum=0;
 			double jultempsummin=0;
-			// // Growing Season length = 60 Tage -> Nördliche Grenze (Osawa 2010, S. 47)  CRU_TS: ca. 120 Tage über 0 im Norden!!!  = = jetzt egal
+			// // Growing Season length = 60 days -> northern border (Osawa 2010, S. 47) 
+			//CRU_TS data set: 120 days>0°C in the north!! (no influence by now?)
+			
 			double nddsum=0;
 			double nddsummin=0;
 			if (iweather>9)
@@ -688,7 +730,6 @@ void passWeather()
 					(parameter[0].weatherchoice==29) | (parameter[0].weatherchoice==30) | (parameter[0].weatherchoice==31) | (parameter[0].weatherchoice==32))
 					{
 						jantempsum+=weather_list[iweather+i-10]->janmorttemp;
-						//jantempsummin+=weather_list[iweather+i-10]->janmorttempmin;
 					}
 					else
 					{
@@ -739,7 +780,6 @@ void passWeather()
 					(parameter[0].weatherchoice==29) | (parameter[0].weatherchoice==30) | (parameter[0].weatherchoice==31) | (parameter[0].weatherchoice==32))
 				{
 					jantempsum=weather_list[iweather]->janmorttemp;
-					//jantempsummin=weather_list[iweather]->janmorttempmin;
 				}
 				else
 				{
@@ -758,7 +798,7 @@ void passWeather()
 			weather_list[iweather]->vegetationslaengeiso=(int) floor(nddsum);
 			weather_list[iweather]->vegetationslaengeisomin=(int) floor(nddsummin);
 
-			// Berechnung eines Trockenheitsindex
+			// Calculation of a dryness influence
 			// // "Evaporation rates of 1.5 mm/day mean growing season" (Dolmann, 2004)
 			double trockenheitsmortbuf=0.0;
 			double precgs=	weather_list[iweather]->prec5monatmittel
@@ -777,25 +817,27 @@ void passWeather()
 			weather_list[iweather]->trockenheitsmort=trockenheitsmortbuf;
 
 			if (parameter[0].qualijahranzeige==true)
-			{// Anzeige Beginn
+			{// console output begin
 				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \nFeuermortalitaet=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->trockenheitsmort);
 				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monatmitteliso, weather_list[iweather]->temp7monatmitteliso, weather_list[iweather]->vegetationslaengeiso);
-			}// Anzeige Ende
+			}// console output end
 
-			// Abiotische Einfluesse
-			// weatherabhaengige Mortalitaet aus 10 Jahresmittelwerten ermitteln
-			// -30°C Januar-Isotherm -> Grenze für Vorkommen (Osawa 2010, S. 48)
+			
+			// Abiotic influences:
+			// weather dependent mortality from 10 yearly mean values
+			// -30°C january isotherm -> borderline of plant abundance (Osawa 2010, S. 48)
+			
+			
 			weather_list[iweather]->janisothermrestriktiong=0.0;
 			weather_list[iweather]->janisothermrestriktions=0.0;
 			
-			//  10°C July-Isotherm -> Nördliche Grenze (Osawa 2010, S. 47)
+			//  10°C july isotherm -> northern border (Osawa 2010, S. 47)
 			weather_list[iweather]->julisothermrestriktion=0.0;
 			
-			// Growing Season length = 60 Tage -> Nördliche Grenze (Osawa 2010, S. 47)
+			// Growing Season length = 60 days -> northern border (Osawa 2010, S. 47)
 			weather_list[iweather]->nddrestriktion=0.0;
 
 			/// mean January temp < -40°C?
-			// temp1monatmitteliso = aus temp01monatmittel berechnet falls weather ungleich 25-32, bei diesen weatherchoiceen weather mit eingelesenem Janmorttemp berechnet
 			if (weather_list[iweather]->temp1monatmitteliso<(parameter[0].jantodestempgmel))
 			{
 				weather_list[iweather]->janisothermrestriktiong=1.0;
@@ -807,7 +849,6 @@ void passWeather()
 
 
 			/// mean January temp < -40°C?
-			// temp1monatmitteliso = aus temp01monatmittel berechnet falls weather ungleich 25-32, bei diesen weatherchoiceen weather mit eingelesenem Janmorttemp berechnet
 			if (weather_list[iweather]->temp1monatmitteliso<(-33.0))
 			{
 				weather_list[iweather]->janisothermrestriktions=1.0;
@@ -816,8 +857,6 @@ void passWeather()
 			{
 				weather_list[iweather]->janisothermrestriktions=1.0-fabs(6.6*(weather_list[iweather]->temp1monatmitteliso+33.0)/33.0);	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -33.0 °C
 			}		
-			
-			//printf("%d,TJanMort=%4.2f,TJanMortIso=%4.2f,Janresg=%4.2f\n", weather_list[iweather]->jahr, weather_list[iweather]->janmorttemp, weather_list[iweather]->temp1monatmitteliso,weather_list[iweather]->janisothermrestriktiong);
 			
 			/// mean July temp < 10°C?
 			if (weather_list[iweather]->temp7monatmitteliso<10.0) 
@@ -840,21 +879,8 @@ void passWeather()
 				weather_list[iweather]->nddrestriktion=1.0-fabs(( ((double) weather_list[iweather]->vegetationslaengeiso)-60.0)/60.0);	//hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen >= 60 d
 			}
 				
-		
-			
-		}// weather_list Ende
-		
-		// Ausgabe einer Uebersichtsanzeige nach Einlesen der weatherdaten
-		if (parameter[0].parameterlesenanzeige ==true) 
-		{
-			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
-			{
-				// printf("%d,Tmean=%4.2f,Precsum=%4.2f,AAT=%4.1f,GDD=%4.1f,NDD=%d,TJan=%4.2f\n", weather_list[iweather]->jahr, weather_list[iweather]->tempjahrmittel, weather_list[iweather]->niederschlagssumme, weather_list[iweather]->activeairtemp,weather_list[iweather]->degreday,weather_list[iweather]->vegetationslaenge,weather_list[iweather]->janmorttemp);
-				// printf("%d,TJanMort=%4.2f,TJanMortIso=%4.2f\n", weather_list[iweather]->jahr, weather_list[iweather]->janmorttemp, weather_list[iweather]->temp1monatmitteliso);
-			}
-		}		
-		
-	}//Weltschleife Ende
+		}// weather_list end
+	}//world weather list loop end
 }
 
 
@@ -874,11 +900,9 @@ void passWeather()
 extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)
 {
 
-	// -- -- -- -- weathereinlesen BEGINN -- -- -- -- //
+	// -- -- -- -- weathereinlesen START -- -- -- -- //
 	char dateinametemp[50];
 	char dateinameprec[50];
-	
-	
 	
 	int findyr1=0,findyr2=-100,jahr=0,cntr=0;
 	
@@ -887,7 +911,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 	string item;
 	
 	for (int t=0;t<parameter[0].simdauer;t++)
-		{ // Jahresschrittschleife Beginn
+		{ // year step iteration begin:
 			
 			cntr=0;
 			
@@ -968,7 +992,10 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 
 	int aktort=0;
 	for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++)
-	{	// Weltschleife Beginn
+	{	// world weather list loop start
+
+
+		//***german: ???
 		// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Refernenz
 		// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 		// realisiert ist weiterverfahren werden
@@ -976,7 +1003,9 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 		vector<weather*>& weather_list = *posw;
 		aktort++;
 
-		// Je nach choice werden unterschiedliche Dateien geoeffnet und dann Zeilenweise eingelesen
+		//Depending on the weather choice different files will be opened and read line by line
+		
+		//***german: Je nach Wahl werden unterschiedliche Dateien geoeffnet und dann Zeilenweise eingelesen
 		if ((parameter[0].weatherchoice==10) | (parameter[0].weatherchoice==11) | (parameter[0].weatherchoice==12) | (parameter[0].weatherchoice==13) |
 		(parameter[0].weatherchoice==111) | (parameter[0].weatherchoice==120) | (parameter[0].weatherchoice==121) | (parameter[0].weatherchoice==122) |
 		(parameter[0].weatherchoice==123) | (parameter[0].weatherchoice==222) | (parameter[0].weatherchoice==309) | (parameter[0].weatherchoice==999) |
@@ -1244,20 +1273,11 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 		}
 		
 		parameter[0].parameterlesenanzeige=true;
-		// Ausgabe einer Uebersichtsanzeige nach Einlesen der weatherdaten
-		if (parameter[0].parameterlesenanzeige ==true) 
-		{
-			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
-			{
-				// printf("%d,Tmean=%4.2f,Precsum=%4.2f,AAT=%4.1f,GDD=%4.1f,NDD=%d,TJan=%4.2f\n", weather_list[iweather]->jahr, weather_list[iweather]->tempjahrmittel, weather_list[iweather]->niederschlagssumme, weather_list[iweather]->activeairtemp,weather_list[iweather]->degreday,weather_list[iweather]->vegetationslaenge,weather_list[iweather]->janmorttemp);
-				//printf("%d,thdd=%d\n", weather_list[iweather]->jahr, weather_list[iweather]->thawdegreday);
-			}
-		}
-		// exit(0);
-	}//Weltschleife Ende
+		
+		
+	}//world weather list loop end
 
-
-	// -- -- -- -- weathereinlesen ENDE -- -- -- -- //
+	// -- -- -- -- weathereinlesen END -- -- -- -- //
 	passWeather();
 
 }

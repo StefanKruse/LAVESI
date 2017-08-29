@@ -93,10 +93,9 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 
 		if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3))
 		{
-			// ripm=(unsigned int)floor(winddir.size()*2.5*0.16666+rand()/(RAND_MAX+1.0)*winddir.size()*4.5*0.16666);//((unsigned int)floor(0.5*cntr - cntr*0.16666));//etwa Anfang Mai
+			
 			ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
 		
-			// richtung=180/M_PI * wdir.at(ripm);
 			richtung=	M_PI * ( wdir.at(ripm) / 180 );
 			geschwindigkeit=wspd.at(ripm);
 		
@@ -148,7 +147,6 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 				}
 				
 				//data output for pollen flight analysis:
-				// if( parameter[0].ivort==1057 && parameter[0].omp_num_threads==1) // ivort==1057 => 1990
 				if(parameter[0].pollenvert==1 && parameter[0].omp_num_threads==1 && outputtreesiter<=5 && parameter[0].ivort==1057) // ivort==1057 => 1990
 				{
 					//print data
@@ -174,7 +172,7 @@ double getEntfernung(double D, double ratiorn_help)
 {
 	double entf_help;
 	if (parameter[0].dispersalmode==0)
-	{ // zufaellig in bestimmter Entfernung
+	{ // randomly in certain distance
 		entf_help= ((ratiorn_help-1)*100.0)/(0.05-1);
 	}
 	else if (parameter[0].dispersalmode==1)
@@ -194,8 +192,7 @@ double getEntfernung(double D, double ratiorn_help)
 	else if (parameter[0].dispersalmode==4 || parameter[0].dispersalmode==5)
 	{       // gaussian combined with fat tailed:
 		double gaussfatratio=2.0;
-		double gaussweite=D, gaussmaxh=1, gaussposcenter=0;	//gaussweite variieren??
-																//oder unten 4500m?
+		double gaussweite=D, gaussmaxh=1, gaussposcenter=0;	
 		double fatalpha=0.5;
 		entf_help= 
 		( 0.5*( gaussfatratio*(sqrt( 2*pow(gaussweite,2)*(-1*log(ratiorn_help/gaussmaxh)) )+gaussposcenter)+(1/gaussfatratio)*parameter[0].distanceratio * (pow(ratiorn_help, (-1*(1+fatalpha)) )) ) );

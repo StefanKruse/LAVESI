@@ -1,17 +1,7 @@
 void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
 {
 
-	/*signed int databbruch;
-	// Abfrage ob das Programm beendet oder fortgesetzt werden soll
-	printf("\n Beginn der Data_output. Weiter mit 1, beenden mit irgendeiner Eingabe\n");
-	scanf("%d", &databbruch);
-
-	if (databbruch!=1) 
-	{
-		printf("LaVeSi wurde beendet\n\n"); 
-		exit(0);
-	}
-	*/
+	
 	double xminwindow=0.0;
 	double xmaxwindow=0.0;
 	double yminwindow=0.0;
@@ -34,17 +24,21 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 	yminwindow=((double) 0.0);
 	ymaxwindow=((double) treerows);
 	}
-	// Deklarationen fuer die Ausgabefestlegung
+	
+	
+	
+	// Declarations for the console output determination
 	bool ausgabecurrencies=false;
 	bool ausgabeposition=false;
 	bool ausgabeindividuen=false;
 	bool ausgabedendro=false;
 	bool ausgabedensity=false;
 
-	// Fuer jeden Ort die Daten aufbereiten und Dateien ausgeben
+	
+	// preprocession and output of the data for each plot
 	int aktort=0;
 	for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw)
-	{ // Weltschleife
+	{ // world tree list loop
 		list<Tree*>& tree_list = *posw;
 		
 		vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
@@ -81,19 +75,19 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		double meantreeheight=0.0, meantreeage=0.0;
 
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-		{ // Beginn tree_list ablaufen
+		{ // Begin tree_list loop
 			pTree=(*pos);
 			
 			if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
-			{ // Beginn Ausschnitt
-				// Basalflaeche als Populationsgroeszenidentifier
+			{ // Begin loop over reduced plot
+				// Basal area as population size identifier
 				if(pTree->height>=130)
 				{
 					basalarea += ( M_PI * pow((pTree->dbrust/2),2) );
 					stemcount++;
 				}
 			
-				// Populationsgroeszen nach Groeszenklassen
+				// Population sizes in height classes
 				if (pTree->height <= 40)
                                 {
                                     nheight0b40++;
@@ -115,12 +109,12 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					breastdiametercount++;
 				}
 
-			} // Ende Ausschnitt
+			} // Ende loop over reduced plot
 			
 			++pos;
-		} // Ende tree_list	
+		} // End tree_list loop
 		
-		// Werte in die AuswerteListe schreiben
+		// push back values in evaluation list
 		pEvaluation->BAliste.push_back(basalarea);
 		
 		pEvaluation->nheight0b40liste.push_back(nheight0b40);
@@ -145,8 +139,11 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			pEvaluation->meantreeageliste.push_back( 0.0 );
 		}
 
-		// Mittelwertberechnung
+		// mean value calculation
 		int basalareaanzahl=pEvaluation->BAliste.size();
+		
+		
+		//THERE IS NO LOOP OR IF!?
 		{ // Falls schon parameter[0].stabilmovingwindow Werte vorhanden Beginn
 			double meanbasalarea=0;
 			double meannheight0b40=0, meannheight41b200=0, meannheight201b10000=0;
@@ -1368,12 +1365,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		}//ausgabedensity
 
-		
-		
-		
-		
-		
-		
 		
 		
 		// Alles loeschen wenn nur SensitivityAnalysenAusgabe

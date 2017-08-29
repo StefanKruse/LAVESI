@@ -797,15 +797,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					
 					
 					///Loop around all Seeds
-					// for(unsigned int pari=0; pari<seed_list.size(); )//++pari)
-					// for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
-					// {
-						// double t0=omp_get_wtime();
-						// list<seed*>::iterator pos=seed_list.begin();
-						// advance(pos, pari);
-						// pseed=(*pos);
-
-						// cout << "t(advance)=" << omp_get_wtime()-t0 << endl;
+					
 						
 						///If Seed is in a cone
 						if (pseed->imcone==true)

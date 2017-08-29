@@ -12,7 +12,7 @@
 void SaveAllLists(void)
 {
 
-	/// Bäume kopieren
+	/// copy trees
 	int aktort=0;
 	for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw)
 	{ 
@@ -430,7 +430,7 @@ void ClearAllLists(void)
 		
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos)
 		{ // Begin tree_list ablaufen
-			 //pTree=(*pos);
+			 pTree=(*pos);
 			//pTree->Dbrustliste.clear();
 			//printf("ptree=%u",pos);
 			delete pTree;
@@ -443,7 +443,7 @@ void ClearAllLists(void)
 		// seed_listn loeschen
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{ // Begin seed_list ablaufen
-			 //pseed= (*pos);
+			 pseed= (*pos);
 			//printf("pseed=%u",pos);
 			delete pseed;
 		} // Ende seed_list ablaufen

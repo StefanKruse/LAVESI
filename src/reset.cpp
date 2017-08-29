@@ -430,23 +430,25 @@ void ClearAllLists(void)
 		
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos)
 		{ // Begin tree_list ablaufen
-			 pTree=(*pos);
+			 //pTree=(*pos);
 			//pTree->Dbrustliste.clear();
-			printf("ptree=%u",pos);
+			//printf("ptree=%u",pos);
 			delete pTree;
 		} // Ende tree_list ablaufen;
 		tree_list.clear();
+		//tree_list.shrink_to_fit();
 		cout << endl << "           !!! tree_list deleted!         " << endl;
 
 		
 		// seed_listn loeschen
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{ // Begin seed_list ablaufen
-			 pseed= (*pos);
+			 //pseed= (*pos);
 			//printf("pseed=%u",pos);
 			delete pseed;
 		} // Ende seed_list ablaufen
 		seed_list.clear();
+		//seed_list.shrink_to_fit();
 		cout << endl << "           !!! seed_list deleted!         " << endl;
 
 
@@ -454,11 +456,12 @@ void ClearAllLists(void)
 		// Alle Kartenelemente loeschen
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{ // Kartenschleife Beginn
-			 pKarten= plot_list[kartenpos];
+			 pKarten= plot_list.at(kartenpos);
 			//printf("pkarten=%d",kartenpos);
 			delete pKarten;
 		} // Kartenschleife Ende
 		plot_list.clear();
+		plot_list.shrink_to_fit();
 		cout << endl << "           !!! plot_list deleted!         " << endl;
 
 
@@ -466,28 +469,44 @@ void ClearAllLists(void)
 		{ // Beginn evaluation_list ablaufen
 			pEvaluation= (*pos);
 			pEvaluation->BAliste.clear();
+			pEvaluation->BAliste.shrink_to_fit();
 			pEvaluation->BArunmeanliste.clear();
+			pEvaluation->BArunmeanliste.shrink_to_fit();
 			pEvaluation->nheight0b40liste.clear();
+			pEvaluation->nheight0b40liste.shrink_to_fit();
 			pEvaluation->nheight0b40runmeanliste.clear();
+			pEvaluation->nheight0b40runmeanliste.shrink_to_fit();
 			pEvaluation->nheight41b200liste.clear();
+			pEvaluation->nheight41b200liste.shrink_to_fit();
 			pEvaluation->nheight41b200runmeanliste.clear();
+			pEvaluation->nheight41b200runmeanliste.shrink_to_fit();
 			pEvaluation->nheight201b10000liste.clear();
+			pEvaluation->nheight201b10000liste.shrink_to_fit();
 			pEvaluation->nheight201b10000runmeanliste.clear();
+			pEvaluation->nheight201b10000runmeanliste.shrink_to_fit();
 			pEvaluation->meanbreastdiameterliste.clear();
+			pEvaluation->meanbreastdiameterliste.shrink_to_fit();
 			pEvaluation->meanbreastdiameterrunmeanliste.clear();
+			pEvaluation->meanbreastdiameterrunmeanliste.shrink_to_fit();
 			pEvaluation->stemcountliste.clear();
+			pEvaluation->stemcountliste.shrink_to_fit();
 			pEvaluation->stemcountrunmeanliste.clear();
+			pEvaluation->stemcountrunmeanliste.shrink_to_fit();
 			pEvaluation->meantreeheightliste.clear();
+			pEvaluation->meantreeheightliste.shrink_to_fit();
 			pEvaluation->meantreeheightrunmeanliste.clear();
+			pEvaluation->meantreeheightrunmeanliste.shrink_to_fit();
 			pEvaluation->meantreeageliste.clear();
+			pEvaluation->meantreeageliste.shrink_to_fit();
 			pEvaluation->meantreeagerunmeanliste.clear();
+			pEvaluation->meantreeagerunmeanliste.shrink_to_fit();
 			
-			//printf("peval=%u",pos);
-
+	
 			delete pEvaluation;
 
 		} // Ende evaluation_list ablaufen
 		evaluation_list.clear();
+		evaluation_list.shrink_to_fit();
 		cout << endl << "           !!! evaluation_list //deleted!         " << endl;
 		
 	}	// Weltschleife Ende

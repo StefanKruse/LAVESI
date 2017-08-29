@@ -59,10 +59,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				{
 					if(globalyears[i]==yr)
 					{
-						for(int pos=0;pos<(signed)winddir[i].size();pos++)
+						for(int pos=0;pos<(signed)winddir.at(i).size();pos++)
 						{
-							wdir.push_back(winddir[i][pos]);
-							wspd.push_back(windspd[i][pos]);
+							wdir.push_back(winddir.at(i).at(pos));
+							wspd.push_back(windspd.at(i).at(pos));
 						} 
 					}
 				}
@@ -125,8 +125,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			/*!::Mortalitaet(int treerows, int treecols, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)*/
 // cout << endl << " Uebergabe and Mortalitaet -> yr=" << yr << " + ivort=" <<  parameter[0].ivort << endl;
 			Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
-			wdir.clear();
-			wspd.clear();    
+				wspd.clear();
+				wdir.clear();
+				wspd.shrink_to_fit();
+				wdir.shrink_to_fit();
 	double end_time_mortalitaet = omp_get_wtime();
 	
 			
@@ -780,7 +782,9 @@ void initialiseMaps()
 			pEvaluation->yworldcoo=aktortyworldcoo;
 			pEvaluation->xworldcoo=aktortxworldcoo;
 			pEvaluation->BAliste.clear();
+			pEvaluation->BAliste.shrink_to_fit();
 			pEvaluation->BArunmeanliste.clear();
+			pEvaluation->BArunmeanliste.shrink_to_fit();
 			//Start Wachstumsphasenermittlung
 			pEvaluation->maxsteigungbasalarea=0.0;
 			pEvaluation->countermaxsteigungbasalarea=0;
@@ -790,19 +794,33 @@ void initialiseMaps()
 			//Ende Wachstumsphasenermittlung
 			//Start Allgemeine Werte
 			pEvaluation->nheight0b40liste.clear();
+			pEvaluation->nheight0b40liste.shrink_to_fit();
 			pEvaluation->nheight0b40runmeanliste.clear();
+			pEvaluation->nheight0b40runmeanliste.shrink_to_fit();
 			pEvaluation->nheight41b200liste.clear();
+			pEvaluation->nheight41b200liste.shrink_to_fit();
 			pEvaluation->nheight41b200runmeanliste.clear();
+			pEvaluation->nheight41b200runmeanliste.shrink_to_fit();
 			pEvaluation->nheight201b10000liste.clear();
+			pEvaluation->nheight201b10000liste.shrink_to_fit();
 			pEvaluation->nheight201b10000runmeanliste.clear();
+			pEvaluation->nheight201b10000runmeanliste.shrink_to_fit();
 			pEvaluation->meanbreastdiameterliste.clear();
+			pEvaluation->meanbreastdiameterliste.shrink_to_fit();
 			pEvaluation->meanbreastdiameterrunmeanliste.clear();
+			pEvaluation->meanbreastdiameterrunmeanliste.shrink_to_fit();
 			pEvaluation->stemcountliste.clear();
+			pEvaluation->stemcountliste.shrink_to_fit();
 			pEvaluation->stemcountrunmeanliste.clear();
+			pEvaluation->stemcountrunmeanliste.shrink_to_fit();
 			pEvaluation->meantreeheightliste.clear();
+			pEvaluation->meantreeheightliste.shrink_to_fit();
 			pEvaluation->meantreeheightrunmeanliste.clear();
+			pEvaluation->meantreeheightrunmeanliste.shrink_to_fit();
 			pEvaluation->meantreeageliste.clear();
+			pEvaluation->meantreeageliste.shrink_to_fit();
 			pEvaluation->meantreeagerunmeanliste.clear();
+			pEvaluation->meantreeagerunmeanliste.shrink_to_fit();
 			//Ende Allgemeine Werte
 			evaluation_list.push_back(pEvaluation);
 			
@@ -840,8 +858,7 @@ void runSimulation()
 		/// weather einlesen
 		/*! ::weathereinlesen(int treerows, struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)*/
 		weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
-		
-		
+
 		/// Karten und Evaluation Listen für jede Welt vorbereiten 
 		///initialiseMaps();
 		initialiseMaps();
@@ -886,11 +903,10 @@ void finishSimulation()
 		//printf("\n\nEndausgabe\n");
 		int aktort=0;
 		
-		
-
+			
 		for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 		{	// Weltschleife Beginn
-			// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Refernenz
+			// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Referenz
 			// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 			// realisiert ist weiterverfahren werden
 			// Loesung brachte http://www.easy-coding.de/auf-listen-von-listen-zugreifen-t2529.html
@@ -903,7 +919,6 @@ void finishSimulation()
 			list<Tree*>& tree_list = *world_positon_b;
 
 			vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-			//vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 			list<seed*>& seed_list = *world_positon_s;
 
 			//vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
@@ -911,7 +926,8 @@ void finishSimulation()
 
 			//vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 			//vector<Evaluation*>& evaluation_list = *posiwelt;
-
+			
+			
 			aktort++;
 			// Berechnung des aktuellen Ortes in Koordinaten
 			int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
@@ -943,38 +959,57 @@ void finishSimulation()
 			// weather_listn loeschen
 			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
 			{// weather_list Beginn
-				 pweather=weather_list[iweather];
-				delete pweather;
+				 pweather=weather_list.at(iweather);
+				 delete pweather;
 			}// weather_list Ende
-			//weather_list.clear();
+			weather_list.clear();
+			weather_list.shrink_to_fit();
+			
 
 		} // Weltschleife Ende
 		
-	
-		// Nach jeder Wiederholung werden die WeltListen gelöscht
+	// Nach jeder Wiederholung werden die WeltListen gelöscht
 		
 		// Calling the function to delete all lists
-		ClearAllLists();	// Neue Funktion für Tree, seed, Karten und evaluation_list hinzugefügt am 10.11.2014 leert alle Listen in WeltListen
-
+		ClearAllLists();
 		
 		
 		
-		cout<<"clearing world lists\n";
+		
+		cout<<"\n clearing world lists\n";
 		world_tree_list.clear();
+		world_tree_list.shrink_to_fit();
 		world_seed_list.clear();
+		world_seed_list.shrink_to_fit();
 		world_weather_list.clear();
+		world_weather_list.shrink_to_fit();
 		world_plot_list.clear();
+		world_plot_list.shrink_to_fit();
 		world_evaluation_list.clear();
+		world_evaluation_list.shrink_to_fit();
 		
 		
 		
 		cout<<"clearing wind lists\n";
+		//cout<<globalyears.size()<<" "<<windspd.size()<<" "<<winddir.size()<<endl;
+		
+		for(int i=0; i<globalyears.size();i++){
+		winddir.at(i).clear();
+		winddir.at(i).shrink_to_fit();
 	
+		windspd.at(i).clear();
+		windspd.at(i).shrink_to_fit();
+		}
+		
 		winddir.clear();
+		winddir.shrink_to_fit();
 	
 		windspd.clear();
+		windspd.shrink_to_fit();
 	
 		globalyears.clear();
+		globalyears.shrink_to_fit();
+		//cout<<globalyears.size()<<" "<<windspd.size()<<" "<<winddir.size()<<endl;
 	
 		////delete[] winddir;
 		
@@ -1173,5 +1208,4 @@ int main()
 
 	muntrace();
 	return 0;
-	
 }

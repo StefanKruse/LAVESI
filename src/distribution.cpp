@@ -64,7 +64,9 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
   m=parameter[0].Gregorym;
 		
   pName.clear();
+  pName.shrink_to_fit();
   thdpthinfl.clear();
+  thdpthinfl.shrink_to_fit();
   		
 		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 		{

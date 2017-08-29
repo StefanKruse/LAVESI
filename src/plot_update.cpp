@@ -257,11 +257,6 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					else
 						pTree->thawing_depthinfluence=100;
 				}
-				
-
-				
-				
-				// ... wenn der Tree mehrere Zellen beeinflusst
 				else
 				{
 					// Ausmasze des abzulaufenden Rasters um den Tree bestimmen
@@ -506,7 +501,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 		// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			
-		#pragma omp parallel private(pTree)
+		//#pragma omp parallel private(pTree)
 		{
 			// initialize the info for each of the thread
 			int thread_count = omp_get_num_threads();
@@ -956,7 +951,7 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 		// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		
-		#pragma omp parallel for private(pKarten)
+		//#pragma omp parallel for private(pKarten)
 		for(int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
 			pKarten=plot_list[kartenpos];

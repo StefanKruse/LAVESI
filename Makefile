@@ -1,6 +1,6 @@
 HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/funktionen.h
 CFLAGS= -c -O0 -g3  -ggdb3 -fno-omit-frame-pointer -std=c++0x -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
-CC=g++	#$(CXX)
+CC=g++ -g #$(CXX)
 OBJS = $(./%.o)
 
 parallel: CC += -fopenmp
@@ -69,7 +69,7 @@ all: ageing.o data_output.o establishment.o distribution.o fire.o growth.o main.
 	
 executables: $(OBJS)
 	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./fire.o ./growth.o ./main.o ./mortality.o ./normdistributedrn.o ./parameterintro.o ./plot_update.o ./reset.o ./SA_parametervariation.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o  -lm -z muldefs -o LAVESIgen
-	rm -rf *.o
+	#rm -rf *.o
 	
 .PHONY : clean
 clean: 

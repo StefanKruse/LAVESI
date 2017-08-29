@@ -17,45 +17,35 @@
 	//*pTree=new Tree();
 	Tree *pTree_copy;		// Pointer auf einen Tree
 	
-	vector<list<seed*> >	 world_seed_list;
+	vector<list<seed*> >	 world_seed_list(0);
 	 seed *pseed;		// Pointer auf einen seed
 	seed *pseed_copy;		// Pointer auf einen seed
 	
-	vector<vector<weather*> > world_weather_list;
+	vector<vector<weather*> > world_weather_list(0);
 	 weather *pweather;	// Pointer auf ein weather eines Jahres
 	
 	// densitykarten
-	vector<vector<Karten*> > world_plot_list;
+	vector<vector<Karten*> > world_plot_list(0);
 	 Karten *pKarten;	// Pointer auf ein Kartenelement im Kartenarray
 	Karten *pKarten_copy;	// Pointer auf ein Kartenelement im Kartenarray
 	
 	// Evaluation/Ausgabe
-	vector<vector<Evaluation*> > world_evaluation_list;
+	vector<vector<Evaluation*> > world_evaluation_list(0);
 	 Evaluation *pEvaluation;	// Pointer auf ein Evaluationsobjekt
 	Evaluation *pEvaluation_copy;	// Pointer auf ein Evaluationsobjekt
 
 	
 		// Listen für resetyear Kopien
-		vector<list<Tree*> >	 world_tree_list_copy;
-		vector<list<seed*> >	 world_seed_list_copy;
-		vector<vector<Karten*> > world_plot_list_copy;
-		vector<vector<Evaluation*> > world_evaluation_list_copy;
+		vector<list<Tree*> >	 world_tree_list_copy(0);
+		vector<list<seed*> >	 world_seed_list_copy(0);
+		vector<vector<Karten*> > world_plot_list_copy(0);
+		vector<vector<Evaluation*> > world_evaluation_list_copy(0);
 		
-		// yearly pollen influx rate
-		//list<double> influx;
-		//lists are faster w push.back
+
 			
 		//wind data, associated years
-		 vector<int> globalyears;
-		 vector<vector<double> > windspd;
-		 vector<vector<double> > winddir;
-		 
-
-		// Umweltdaten/Vegetationstypen:
-		std::vector<std::vector<double> > vegetationtype;//( treecols , vector<double>( treerows ) );
-		//double vegetationtype[treecols][treerows];
-			//vectors are faster for iteration
-
-
-				int cntr;
-				vector<double> wdir,wspd;   
+		 vector<int> globalyears(0);
+		 vector<vector<double> > windspd(0);
+		 vector<vector<double> > winddir(0);
+		 int cntr;
+		 vector<double> wdir(0),wspd(0);   

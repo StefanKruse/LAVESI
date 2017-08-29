@@ -572,7 +572,8 @@ if(mcorevariant==1)
 			}
 		} // END: parallel region
 
-		
+		Vname.clear();Vname.shrink_to_fit();
+		Vthdpth.clear();Vthdpth.shrink_to_fit();
 		
 }// OMP==1
 if(mcorevariant==2)
@@ -779,7 +780,8 @@ if(mcorevariant==2)
 					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
 			}
 		} // END: parallel region
-
+		Vname.clear();Vname.shrink_to_fit();
+		Vthdpth.clear();Vthdpth.shrink_to_fit();
 		
 
 	
@@ -1020,7 +1022,8 @@ if(mcorevariant==3)
 					timer_createseeds_all+=timer_createseeds/n_trees;
 			}
 		} // END: parallel region
-	
+		Vname.clear();Vname.shrink_to_fit();
+		Vthdpth.clear();Vthdpth.shrink_to_fit();
 }// OMP==3
 		
 		

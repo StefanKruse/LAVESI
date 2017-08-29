@@ -3,14 +3,7 @@
 	
 	struct Tree 
 	{
-		
-		
-		 double maxgrowth;
-		 
-		 double pollenfall;
-		 
-		 double descent;
-
+		//No. of structs: 28
 		int		xworldcoo;						//!<
 		int		yworldcoo;						//!<
 		double	xcoo;							//!<
@@ -49,6 +42,7 @@
 
 	struct seed 
 	{
+		//No. of structs: 18
 		int		xworldcoo;						//!<
 		int		yworldcoo;						//!<
 		double	xcoo;							//!<
@@ -64,28 +58,24 @@
 		double 	entfernung;						// distance travelled by a seed
 		int		species;						//!< Art: 1= L.gmelinii, 2=L.sibirica
 		double 	elternheight;					// Height of the parent tree
-		
 		 double maxgrowth;
-		 
 		 double pollenfall;
-		 
-		 double descent;
-		 
+		 double descent; 
 		double thawing_depthinfluence;
-	
 	};
 	
 
 
 	struct Karten 
 	{
+		//No. of structs: 18
 		int		xworldcoo;						//!<
 		int		yworldcoo;						//!<
 		double	xcoo;							//!<
 		double	ycoo;							//!<
-		double	Treedensitywert;					//!<
+		double	Treedensitywert;				//!<
 		int		Treeanzahl;						//!<
-		unsigned short maxthawing_depth; 			//!< in mm demnach max 65.535 m
+		unsigned short maxthawing_depth; 		//!< in mm demnach max 65.535 m
 		unsigned short auflagenstaerke;			//!< in 0.1mm demnach max 6.5535 m
 		unsigned short auflagenstaerke0;		//!< in 0.1mm demnach max 6.5535 m
 		unsigned short auflagenstaerke1;		//!< in 0.1mm demnach max 6.5535 m
@@ -394,35 +384,30 @@
 
 	struct weather 
 	{
+		//No. of structs: 53
 		int		xworldcoo;		 				//!<
 		int		yworldcoo;		 				//!<
 		int		jahr; 		 					//!<
-
 		double	temp1monatmittel; 		 		//!<
 		double	temp1monatmitteliso; 		 	//!<
 		double	temp1monatmittelmin; 		 	//!<
 		double	temp1monatmittelisomin; 		//!<
-		
 		double	temp2monatmittel; 		 		//!<
 		double	temp3monatmittel; 		 		//!<
 		double	temp4monatmittel; 		 		//!<
 		double	temp5monatmittel; 		 		//!<
 		double	temp6monatmittel; 		 		//!<
-
 		double	temp7monatmittel; 		 		//!<
 		double	temp7monatmitteliso; 		 	//!<
 		double	temp7monatmittelmin; 		 	//!<
 		double	temp7monatmittelisomin; 		//!<
-		
 		double	temp8monatmittel; 		 		//!<
 		double	temp9monatmittel; 		 		//!<
 		double	temp10monatmittel; 		 		//!<
 		double	temp11monatmittel; 		 		//!<
 		double	temp12monatmittel; 		 		//!<
-		
 		double	tempjahrmittel; 		 		//!<
 		double	tempjahrmittelmin; 		 		//!<
-		
 		double	prec1monatmittel; 		 		//!<
 		double	prec2monatmittel; 		 		//!<
 		double	prec3monatmittel; 		 		//!<
@@ -434,29 +419,21 @@
 		double	prec9monatmittel; 		 		//!<
 		double	prec10monatmittel; 		 		//!<
 		double	prec11monatmittel; 		 		//!<
-		double	prec12monatmittel; 
-
+		double	prec12monatmittel;
 		int		vegetationslaenge; 		 		//!<
 		int		vegetationslaengeiso; 		 	//!<
 		int		vegetationslaengemin; 		 	//!<
 		int		vegetationslaengeisomin;		//!< 
-		
 		double	activeairtemp; 		 			//!<
 		double	activeairtempmin;		 		//!<
-		
 		double	degreday;		 				//!<
-		
 		double	niederschlagssumme; 		 	//!<
 		double	niederschlagssummemin;		 	//!<
-		
 		double	weatherfactorg; 		 			//!<
 		double	weatherfactorming;				//!<
 		double	weatherfactors; 		 			//!<
 		double	weatherfactormins;				//!<		
-		
 		double	trockenheitsmort;				//!<
-		
-		//double??
 		double janisothermrestriktions;
 		double julisothermrestriktion;
 		double nddrestriktion;
@@ -469,6 +446,7 @@
 
 	struct Evaluation
 	{
+		//No. of structs: 22
 		int		xworldcoo;						//!<
 		int		yworldcoo;						//!<
 		vector<double> BAliste;					//!<
@@ -478,20 +456,16 @@
 		int		wendejahr;						//!<
 		int		saettigungsjahr;				//!<
 		bool	nachwendejahr;					//!<	
-		
 		vector<int> nheight0b40liste;
 		vector<double> nheight0b40runmeanliste;
 		vector<int> nheight41b200liste;
 		vector<double> nheight41b200runmeanliste;
 		vector<int> nheight201b10000liste;
 		vector<double> nheight201b10000runmeanliste;
-		
 		vector<double> meanbreastdiameterliste;
 		vector<double> meanbreastdiameterrunmeanliste;
-		
 		vector<int> stemcountliste;
 		vector<int> stemcountrunmeanliste;
-		
 		vector<double> meantreeheightliste;
 		vector<double> meantreeheightrunmeanliste;
 		vector<double> meantreeageliste;

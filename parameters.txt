@@ -17,7 +17,7 @@ jahranzeige=0;						// ... 			-yearly steps (0,1) => year,basal area,seed inform
 qualijahranzeige=0;					// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
 seedausbranzeige=0;					// ... 			-seed dispersal (0,1)
 mortanzeige=0;						// ...			-mortality of trees >200 cm (0,1)
-computationtime=1;					// ...			-include visualisation and output of computation time a function of the plot size and number of trees (0,1)
+computationtime=0;					// ...			-include visualisation and output of computation time a function of the plot size and number of trees (0,1)
 
 // 0.2 -----> Output
 Data_output=1;						// file output (0,1)
@@ -39,7 +39,7 @@ feuer=0;							// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=2;					// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=1;					// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//

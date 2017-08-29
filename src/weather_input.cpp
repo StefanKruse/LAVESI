@@ -881,7 +881,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 	
 	
 	int findyr1=0,findyr2=-100,jahr=0,cntr=0;
-	vector<double> wdir,wspd;
+	
 	string filename;
 	std::ostringstream ss;
 	string item;
@@ -955,7 +955,10 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 						globalyears.push_back(jahr);
 				}
 				
-				wspd.clear();wdir.clear();
+				wspd.clear();
+				wdir.clear();
+				wspd.shrink_to_fit();
+				wdir.shrink_to_fit();
 			}
 	
 		}

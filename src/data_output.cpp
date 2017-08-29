@@ -411,7 +411,8 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 // 					sprintf(dateinamesufn, "_%.4d", parameter[0].weatherchoice);
 					s1<<parameter[0].weatherchoice;
 					dateiname="output/datatrees_currencies_" + s1.str() + ".csv";
-					s1.str("");s1.clear();s2.str("");s2.clear();
+					s1.str("");s1.clear();
+					s2.str("");s2.clear();
 				}
 		
 				// Datei versuchen zum Lesen und Schreiben zu oeffnen
@@ -1388,6 +1389,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				delete pTree;
 			} // End tree_list iteration
 			tree_list.clear();
+			
 	
 				// seed_listn loeschen
 			for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
@@ -1396,6 +1398,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				delete pseed;
 			} // End seed_list iteration
 			seed_list.clear();
+			
 		}
 		
 	} // Weltschleife Ende

@@ -907,6 +907,9 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 	char dateinametemp[50];
 	char dateinameprec[50];
 	
+	
+	if((parameter[0].windsource!=0)&&(parameter[0].windsource!=4)&&(parameter[0].windsource!=0))
+	{
 	int findyr1=0,findyr2=-100,jahr=0,cntr=0;
 	
 	string filename;
@@ -922,15 +925,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 			
 			if(parameter[0].windsource==1)
 			{
-			findyr1=1947;findyr2=2012;
-			}
-			else if(parameter[0].windsource==2)
-			{
-			findyr1=1979;findyr2=2012;
-			}
-			else if(parameter[0].windsource==3)
-			{
-			findyr1=1959;findyr2=2002;
+				findyr1=1979;findyr2=2012;
 			}
 			
 			
@@ -944,15 +939,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 							
 		if(parameter[0].windsource==1)
 		{
-		filename="input/winddaten/winddaten"+ss.str()+"_GSOD.dat";
-		}
-		else if(parameter[0].windsource==2)
-		{
-		filename="input/winddaten/winddaten"+ss.str()+"_EraInterim.dat";
-		}
-		else if(parameter[0].windsource==3)
-		{
-		filename="input/winddaten/winddaten"+ss.str()+"_Era40.dat";
+			filename="input/winddaten/winddaten"+ss.str()+"_EraInterim.dat";
 		}
 							
 						ifstream fileinp(filename.c_str());
@@ -972,7 +959,9 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 							}
 						  }
 						  else
-						  {wspd.push_back(stof(item));}
+						  {
+							  wspd.push_back(stof(item));
+						  }
 						}
 						
 						if(cntr>0)
@@ -990,7 +979,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 	
 		}
 		jahr=0;
-	
+	}
 	
 
 	int aktort=0;

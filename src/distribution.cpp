@@ -74,19 +74,17 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
   		
 		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 		{
-			cntr=1;//floor(windspd[i].size()*2.5*0.1666)-windspd[i].at(floor(windspd[i].size()*4.5*0.1666));
-                }
-                else if(parameter[0].windsource==4)
+			cntr=1;
+        }
+        else if(parameter[0].windsource==4)
 		{
 			richtung=	M_PI * ( 0 / 180 );
 			geschwindigkeit=2.777;
- 		  //kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
 		}
 		else if(parameter[0].windsource==5)
 		{
 			richtung=	M_PI * ( 180 / 180 );
 			geschwindigkeit=2.777;
- 		   //kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
 		}
 		else if(parameter[0].windsource==0)
 		{
@@ -95,7 +93,7 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 		}
 
 
-		if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3))
+		if(cntr!=0 && (parameter[0].windsource==1))
 		{
 			
 			ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
@@ -104,7 +102,7 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 			geschwindigkeit=wspd.at(ripm);
 		
 		}
-		else if((cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)) || parameter[0].windsource==0)
+		else if((cntr==0 && (parameter[0].windsource==1) || parameter[0].windsource==0))
 		{
 		   richtung=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
 		   geschwindigkeit=2.777;//10 km/h
@@ -236,7 +234,7 @@ void seeddisp(double rn, double& dx, double& dy, double &windspeed, double &wind
         cntr=0;//speed up
 		geschwindigkeit=2.7777;
     }
-	else if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3))
+	else if(cntr!=0 && (parameter[0].windsource==1))
 	{
 
         //choose a month between may and september:
@@ -245,7 +243,7 @@ void seeddisp(double rn, double& dx, double& dy, double &windspeed, double &wind
         geschwindigkeit=(wspd.at(ripm));
         cntr=1;//speed up
     }
-	else if((parameter[0].windsource==0)||(cntr==0 && (parameter[0].windsource==1 || parameter[0].windsource==2 || parameter[0].windsource==3)))
+	else if((parameter[0].windsource==0)||(cntr==0 && (parameter[0].windsource==1 )))
 	{
         richtung=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
         geschwindigkeit=2.7777;

@@ -102,12 +102,11 @@ void Seedin()
 					jseed= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));
 				
 					// y value
-					// iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *0.2*rand()/(RAND_MAX + 1.0))); //the southern 20% of the plot
-					iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0))); //the southern 20% of the plot
-				
-				
-                                }
-                                else 
+					iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0))); 
+					
+					seedeintragen=true;
+                }
+                 else 
 				{
 					printf("\n\nLaVeSi was stopped\n");
 					printf("=> Treeverteilung.cpp\n");

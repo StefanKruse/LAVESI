@@ -30,15 +30,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				{
 					if(parameter[0].windsource==1)
 					{
-					findyr1=1947;findyr2=2012;
-					}
-					else if(parameter[0].windsource==2)
-					{
 					findyr1=1979;findyr2=2012;
-					}
-					else if(parameter[0].windsource==3)
-					{
-					findyr1=1959;findyr2=2002;
 					}
 				}
 									

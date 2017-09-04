@@ -867,8 +867,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 													fprintf(dateizeiger, "name;");
 													fprintf(dateizeiger, "jahr;");
 													fprintf(dateizeiger, "parentheight;");
-													//fprintf(dateizeiger, "xentfernung;");
-													//fprintf(dateizeiger, "yentfernung;");
 													fprintf(dateizeiger, "distance;");
 													fprintf(dateizeiger, "direction;");
 													fprintf(dateizeiger, "xcoo;");
@@ -893,8 +891,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(dateizeiger, "%d;", pseed->namem);
 												fprintf(dateizeiger, "%d;", jahr);
 												fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
-												//fprintf(dateizeiger, "%f;", iquer);
-												//fprintf(dateizeiger, "%f;", jquer);
 												fprintf(dateizeiger, "%4.5f;",entfernung);
 												fprintf(dateizeiger, "%4.5f;", richtung);
 												fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
@@ -934,7 +930,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											else if((parameter[0].periodRB==3))
 											{
 												sameausserhalb=true;
-												rausgeflogenS++;
+												rausgeflogenN++;
 											} 
 											else 
 											{

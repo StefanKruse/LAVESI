@@ -39,7 +39,7 @@ feuer=0;							// fire module influencing organic layer and dry mortality (0,1)
 
 // 0.4 Computation environment
 // the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
-omp_num_threads=1;					// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=8;					// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -92,9 +92,8 @@ lineartransekt=0;					//mode of weather (constant or linear from southern to nor
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
 // 1.1.1 -----> Wind data
-windsource=2;						//source of wind data: 0=no wind- random no-approach, 1=GSOD, 2=EraInterim, 3=Era40, 4=North Wind, 5=South Wind
-									//windsource=1: weather station data from the city of Khatanga. I usually use the reanalysis data sets (windsource=2 or =3)
-
+windsource=1;						//source of wind data: 0=no wind- random no-approach, 1=EraInterim, 4=North Wind, 5=South Wind
+									
 
 								
 								
@@ -109,7 +108,7 @@ simdauer=80;						//length of a simulation (1-(   1077   )-6099)
 										// ... ?? warum nicht bis 2013
 										// 6099==for assembled weather series (weatherchoice==9)
 runs=1;								// Anzahl an Simulationen == Wiederholungen (1-oo)
-ivortmax=100;						// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
+ivortmax=1000;						// Einschwingdauer (0, 10-oo)  sowie maximale Simulationsdauer fuer das Erreichen des quasiGG falls stabilperiod==1/////////////
 									//Example: Entweder 0 fuer keine Einschwingphase oder minimal 10 wegen Isothermberechnung
 										//   0==without
 										// >10==with
@@ -139,26 +138,28 @@ sizemagnif=5;						// Resolution of density grid (>0-oo)
 	
 // 1.4 -----> Seed dispersal type and handling + seed introduction
 
-seedintro=1;						// Yearly seed input (0,1)
-seedintropermanent=0;				//1//was ist hier der Unterschied zu seedintro? Wie realisiert man eine einmalige seedintroduction?
-etabbg=100;					
-etabbgpermanent=0;					// Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot (0-+oo)
-jahremitseedeintrag=100;			// Years of seed introduction (0-+oo)
-realseedconnect=0;					// Plot position for seed introduction seedgrundetablierung logisch (0,1)
+seedintro=1;				// Yearly seed input (0,1)
+seedintropermanent=0;		//1//was ist hier der Unterschied zu seedintro? Wie realisiert man eine einmalige seedintroduction?
+etabbg=1000;					
+
+etabbgpermanent=10000;			// Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot (0-+oo)
+jahremitseedeintrag=10; 		// Years of seed introduction (0-+oo)
+realseedconnect=0;				// Plot position for seed introduction seedgrundetablierung logisch (0,1)
 										// 0==everywhere along a transect
 										// 1==only southermost site
-seeddispmode=2;						// Positions for seed introduction (1,2)
+seeddispmode=1;						// Positions for seed introduction (1,2)
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
 seedtravelbetween=0;				// Seed travel between plots along a transect (0,1)
 
-periodRB=0;							//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2), or for N-S-transects meaning only seeds leaving east-or-westwards get newly introduced
+periodRB=3;							//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
+									//, or for N-S-transects meaning only seeds leaving east-or-westwards get newly introduced
 
 
 // 1.4.1 -----> Pollen dispersal
 pollenvert=0;						//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off. All other modes are not implemented!
 									// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
-pollenDistdensplot=0// parameter[0].pollenDistdensplot==1 // neu eingeführt um die Ausgabe an/aus-zuschalten
+pollenDistdensplot=0				 // neu eingeführt um die Ausgabe an/aus-zuschalten
 pollenrichtungsvarianz=10;			//variance of the von-Mises distribution in degrees. Used only in the pollen distribution function and only if no wind data is available
 pollenfall=0.126;					//pollen fall velocity
 
@@ -323,8 +324,3 @@ weatherzahlgmelc=0.101;					// legt Kurvenverlauf des Julindex für gmel fest
 
 
 
-//3.0-> newly implemented since october 2015
-//everything that has to do with wind data driven pollen an seed dispersal
-
-
-								

@@ -1,3 +1,5 @@
+using namespace std;
+
 //! Arrays fuer die verschiedenen Bestandteile auf der simulierten Flaeche (trees und seed)
 //! sowie fuer die Parameter (Modellvariablen/-parameter und weather)
 	

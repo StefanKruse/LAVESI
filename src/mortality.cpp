@@ -1,4 +1,9 @@
-﻿/****************************************************************************************//**
+﻿using namespace std;
+
+
+
+
+/****************************************************************************************//**
  * \brief calculate tree mortality
  *
  * depends on abiotic factors (temperature and number of days with temperatures above 20 degrees)

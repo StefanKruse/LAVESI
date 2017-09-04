@@ -1,3 +1,7 @@
+using namespace std;
+
+
+
 //AUTOMATICALLY GENERATED USING R SKRIPT weathereingabe_matrix_R-Skript.r
 if (aktort==1)
 {

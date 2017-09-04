@@ -39,4 +39,3 @@
 
 #include <mcheck.h>
 
-using namespace std;

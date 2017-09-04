@@ -1,3 +1,7 @@
+using namespace std;
+
+
+
 /***********************************************************************************
  * AUTHORS: Gerdes, Alexander; Kath, Nadja; Kruse, Stefan
  * 

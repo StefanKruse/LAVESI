@@ -1,3 +1,5 @@
+using namespace std;
+
 
 /****************************************************************************************//**
 * \brief calculate  seed production
@@ -23,6 +25,7 @@ void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tr
 												* pTree->height/100					// ... the tree's  height...
 												* pTree->dbasalrel					// ... the tree's current growth...
 												* (1.0-(1.0/(pTree->height/50))) );	// ... height.
+				++pos;
 			} 
 			
 			else

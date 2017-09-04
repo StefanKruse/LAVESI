@@ -1,3 +1,6 @@
+using namespace std;
+
+
 double NormverteilungRN(float mean, float sdev)
 {
 // Normalverteilte Zahl ziehen und 

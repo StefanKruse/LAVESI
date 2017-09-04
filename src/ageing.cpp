@@ -1,3 +1,6 @@
+using namespace std;
+
+
 /****************************************************************************************//**
  * \brief ageing of seeds and trees
  *
@@ -15,7 +18,6 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 
 	for (vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 
-		
 		list<seed*>& seed_list = *posw;
 
 		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )

@@ -1,3 +1,6 @@
+using namespace std;
+
+
 double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzeichen, struct Parameter *parameter)
 {
 	// Parameterdatei oeffnen

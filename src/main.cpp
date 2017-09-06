@@ -270,7 +270,7 @@ void Einschwingphase()
 				double x = rand()/(RAND_MAX + 1.0);
 				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
 			
-				// calculate actual year position in list, according to first year in the Weather-List and the random year
+				// calculate current year position in list, according to first year in the Weather-List and the random year
 				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; 
 				
 				
@@ -304,16 +304,16 @@ void Einschwingphase()
 				if (parameter[0].weatherchoice==10 || parameter[0].weatherchoice==11 || parameter[0].weatherchoice==12 || parameter[0].weatherchoice==13 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999)
 				{
 					firstyear=1901;		//
-					lastyear=2011;		// Bereich bis 2002
+					lastyear=2011;		// until 2002
 				}
 				else if (parameter[0].weatherchoice==1 || parameter[0].weatherchoice==9)
 				{
-					firstyear=-3998;	// -3998 ist das "erste" Jahr
-					lastyear=5688;		// Bereich bis 1700
+					firstyear=-3998;	// -3998 is the "first" year
+					lastyear=5688;		// until 1700
 				}
 				else if (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==309 || parameter[0].weatherchoice==1111)
 				{
-					firstyear=944;		// minimal 934 maximal 2011  => 10 Jahre Puffer wegen 'running mean' calculation
+					firstyear=944;		// minimal 934 maximal 2011  => 10 years puffer because of 'running mean' calculation
 					lastyear=1044;
 				}
 				else if (parameter[0].weatherchoice==2221)
@@ -324,11 +324,11 @@ void Einschwingphase()
 				else if ( parameter[0].weatherchoice==22 )
 				{
 					firstyear=1934;
-					lastyear=2013; // simdauer auf 80
+					lastyear=2013; // sim length = 80
 				}
 				
 				
-				// take a random year for weather 
+				// take a random year for weather determination
 				double x = rand()/(RAND_MAX + 1.0);
 				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
 			
@@ -350,7 +350,7 @@ void Einschwingphase()
 				double stabilerror=1;
 				int stabilizationtype=1; // 1==quasiequilibrim; 2==ErrorReferenz TODO-in Parameterdatei
 				if (stabilizationtype==1)
-				{// is an equilibrium reached
+				{// is an equilibrium reached?
 					
 					int aktort=0;
 					for (vector<vector<Evaluation*> >::iterator posausw = world_evaluation_list.begin(); posausw != world_evaluation_list.end(); ++posausw)
@@ -508,7 +508,7 @@ void Jahresschritte()
 				// Variation of parameters depends on experimental setting
 				// ... firstly save the value read in from the parameter file
 				
-				// Parametervariation je nach Expsetting
+				//***german: Parametervariation je nach Expsetting
 				// ... erst Speicherung des mit der Parameterdatei eingelesenen Wertes
 				double incfac_buffer=parameter[0].incfac;
 				double densitywertmanipulatorexp_buffer=parameter[0].densitywertmanipulatorexp;
@@ -522,7 +522,7 @@ void Jahresschritte()
 					// read in weather data with new tempdiffort parameter
 					// (emptying the weather list before)
 					
-					// mit neuen tempdiffort muss das weather eingelesen werden
+					//***german: mit neuen tempdiffort muss das weather eingelesen werden
 					// ... dafür muss aber vorher die world_weather_list leer gemacht werden.
 					//aus finishSimulations()
 					for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
@@ -538,7 +538,7 @@ void Jahresschritte()
 							weather_list.clear();
 					} // world weather list loop end
 
-					//aus runSimulations()
+					//from runSimulations()
 					weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
 
 				
@@ -571,8 +571,6 @@ void Jahresschritte()
 
 						
 						cout << " starting simulation runs " << endl;
-						//cout << " START der Simulationslaeufe " << endl;
-						
 						
 						// Reset of all lists and simulation  run:
 						
@@ -581,10 +579,8 @@ void Jahresschritte()
 							
 								ClearAllLists();
 								cout << "           Lists deleted!!" << endl;
-								//cout << "           Listen geloescht!!" << endl;
 								RestoreAllLists();
 								cout << "           Lists restored!!" << endl;
-								//cout << "           Listen wiederhergestellt!!" << endl;
 								
 						printf("\n\n begin the simulation run time steps...\n");
 						//printf("\n\nJahresschritte des Simulationslaufes beginnen ...\n");
@@ -633,9 +629,6 @@ void Jahresschritte()
 
 							
 						} // year step loop end
-						
-						
-						
 						
 						// Parameter variation depending on experimental setting,
 						// ... afterwards restore initial values
@@ -731,7 +724,7 @@ void initialiseMaps()
 {
 		int aktort=0;
 		for (vector<vector<Karten*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++)
-		{ /// Weltschleife Beginn
+		{ /// World list loop BEGIN
 			vector<Karten*>& plot_list = *posw;
 		
 			vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
@@ -739,18 +732,20 @@ void initialiseMaps()
 	
 			aktort++;
 				
-			// Berechnung des aktuellen Ortes in Koordinaten 
-			//			xwelt=Wiederholung gleicher Ort
-			//			ywelt=anderer Ort entlang eines Transektes
-			//nötig für Weltlisten
+			
+			//Calculation of a different position in coordinates:
+			//		xwelt= repeating the same position
+			//		ywelt= different position along the transect
+			//necessary for the global lists
+				
 			int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength ); // floor = nächstniedriger Wert (2.3 => 2; -2.3 => -3)
 			int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 		
 
-			// Neue Kartenelemente hinzufuegen
+			// Append new plot list:
 			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++) 
 			{ 
-				pKarten= new Karten();	// Neues Kartenelement erzeugen
+				pKarten= new Karten();	// create new plot list element
 
 				pKarten->yworldcoo=aktortyworldcoo;
 				pKarten->xworldcoo=aktortxworldcoo;
@@ -762,26 +757,26 @@ void initialiseMaps()
 				pKarten->Treeanzahl=0;
 				pKarten->maxthawing_depth=1000;
 				
-				pKarten->auflagenstaerke=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke0=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke1=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke2=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke3=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke4=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke5=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke6=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke7=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke8=200;	// in 0.1mm demnach max 6.5535 m
-				pKarten->auflagenstaerke9=200;	// in 0.1mm demnach max 6.5535 m 
+				pKarten->auflagenstaerke=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke0=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke1=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke2=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke3=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke4=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke5=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke6=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke7=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke8=200;	// in 0.1mm -> max 6.5535 m
+				pKarten->auflagenstaerke9=200;	// in 0.1mm -> max 6.5535 m 
 				pKarten->auflagenstaerkemittel=200;
 				
 
 				plot_list.push_back(pKarten);	
-				//Kartenelement in Liste einfuegen
+				//push back new plot list element
 			}
 			
 			
-			// Fuer die Evaluation fuer jeden Ort ein Evaluation-Element erschaffen
+			// Create an evaluation element for each site
 			pEvaluation=new Evaluation();
 			pEvaluation->yworldcoo=aktortyworldcoo;
 			pEvaluation->xworldcoo=aktortxworldcoo;
@@ -789,14 +784,14 @@ void initialiseMaps()
 			pEvaluation->BAliste.shrink_to_fit();
 			pEvaluation->BArunmeanliste.clear();
 			pEvaluation->BArunmeanliste.shrink_to_fit();
-			//Start Wachstumsphasenermittlung
+			//Start growth stage calculation
 			pEvaluation->maxsteigungbasalarea=0.0;
 			pEvaluation->countermaxsteigungbasalarea=0;
 			pEvaluation->wendejahr=-9999;
 			pEvaluation->saettigungsjahr=-9999;
 			pEvaluation->nachwendejahr=false;
-			//Ende Wachstumsphasenermittlung
-			//Start Allgemeine Werte
+			//End growth stage calculation
+			//Start general values
 			pEvaluation->nheight0b40liste.clear();
 			pEvaluation->nheight0b40liste.shrink_to_fit();
 			pEvaluation->nheight0b40runmeanliste.clear();
@@ -825,13 +820,13 @@ void initialiseMaps()
 			pEvaluation->meantreeageliste.shrink_to_fit();
 			pEvaluation->meantreeagerunmeanliste.clear();
 			pEvaluation->meantreeagerunmeanliste.shrink_to_fit();
-			//Ende Allgemeine Werte
+			//Ende general values
 			evaluation_list.push_back(pEvaluation);
 			
 			cout << "evaluation_list.size()=" << evaluation_list.size() << endl;
 			
-		} /// Weltschleife Ende
-	cout<<"Weltschleife Ende\n";
+		} /// World list loop END
+	cout<<"World list loop END\n";
 }
 
 
@@ -851,30 +846,23 @@ void initialiseMaps()
  *******************************************************************************************/
 void runSimulation()
 {
-		
-
 		// Create world lists
 		// apply list to each simulated location on the transect
 		
 		createLists();
-		
 
 		/// reading in weather
-		
 		weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
 
 		/// Plot and evaluation list preparation for each location on the transect 
 		initialiseMaps();
 		//Ende multiple Szenarien Header
 
-
-
 		/// trees input simular to CH17 or seed input
 		Treeverteilung( &parameter[0], wortlaengemax);
 		
 		// Variable for the whole progress, including the stabilization phase
 		parameter[0].ivort=0;		
-
 
 		//Einschwingphase - get to a stable state before starting the real simulation
 		Einschwingphase();
@@ -905,6 +893,8 @@ void finishSimulation()
 			
 		for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 		{	// World weather list loop begin
+			
+			
 			// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Referenz
 			// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 			// realisiert ist weiterverfahren werden
@@ -928,12 +918,9 @@ void finishSimulation()
 			
 			
 			aktort++;
-			// Berechnung des aktuellen Ortes in Koordinaten
+			// Calculation of the current location in coordinates
 			int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 			int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
-			
-			
-			
 			
 			int number_of_seeds_in_cone=0;
 			for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
@@ -946,8 +933,6 @@ void finishSimulation()
 			
 			if(parameter[0].jahranzeige ==true)
 			{
-				//printf("Ort(Y,X)=(%d,%d) - JahreTmean(%d)=%4.2f - Treeanzahl=%zu - seedanzahlG=%zu - ", aktortyworldcoo, aktortxworldcoo, 
-				//weather_list[yearposition]->jahr, weather_list[yearposition]->tempjahrmittel, tree_list.size(), seed_list.size());
 				printf("seed number Z= %d\n", number_of_seeds_in_cone);
 			}
 				
@@ -955,19 +940,19 @@ void finishSimulation()
 		
 		
 				
-			// weather_listn loeschen
+			// weather_list deletion
 			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
-			{// weather_list Beginn
+			{// weather_list begin
 				 pweather=weather_list.at(iweather);
 				 delete pweather;
-			}// weather_list Ende
+			}// weather_list end
 			weather_list.clear();
 			weather_list.shrink_to_fit();
 			
 
-		} // Weltschleife Ende
+		} // World weather list loop end
 		
-	// Nach jeder Wiederholung werden die WeltListen gelöscht
+		// Delete all lists after each repeat:
 		
 		// Calling the function to delete all lists
 		ClearAllLists();
@@ -990,7 +975,6 @@ void finishSimulation()
 		
 		
 		cout<<"clearing wind lists\n";
-		//cout<<globalyears.size()<<" "<<windspd.size()<<" "<<winddir.size()<<endl;
 		
 		for(int i=0; i<globalyears.size();i++){
 		winddir.at(i).clear();
@@ -1008,10 +992,7 @@ void finishSimulation()
 	
 		globalyears.clear();
 		globalyears.shrink_to_fit();
-		//cout<<globalyears.size()<<" "<<windspd.size()<<" "<<winddir.size()<<endl;
 	
-		////delete[] winddir;
-		
 		
 		if (parameter[0].resetyear>0)
 		{
@@ -1064,13 +1045,10 @@ int main()
 
 			
 			// random number initialization
-			
-			// Zufallszahlen "mischen"
 			srand((unsigned) time(NULL));
 
 			
-			// console output of the version
-			// Anzeigen der Ueberschrift und Programmversion
+			// console output of the version and general information
 			printf("\n---->\tLAVESI\n");
 			printf("\n You have started  LAVESI, " 
 					"An individually-based and spatial explicit simulation model"
@@ -1091,9 +1069,7 @@ int main()
 			//---------Just some Initialisation stuff---------
 			
 			Parametereinlesen();
-						
-			// Sicherheitsabfragen zu bestimmten Parameterkombinationen
-			// ... weather- und Treestartchoice
+
 			
 			//TO-DO-LIST!!:
 			if (parameter[0].weatherchoice!=parameter[0].starttrees && parameter[0].starttrees!=0)
@@ -1112,36 +1088,32 @@ int main()
 			
 			
 			
-			/// Parameter und Variablen auf Startwerte setzen
-			/// Startjahr des Simulationslaufs berechnen (2011-Simdauer)
+			/// Set parameter and variables to starting values
+			/// calculation of the starting year of the simulation
 			
 			if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
 			{	
-				parameter[0].startjahr=2014-parameter[0].simdauer; // (lastyear+1)-simdauer
+				parameter[0].startjahr=2014-parameter[0].simdauer; 
 			}
 			else
 			{
 				parameter[0].startjahr=2011-parameter[0].simdauer;
 			}
 			
-			// Fuer die Data_output
-			parameter[0].ordnerda=false;	// Ordner fuer die Zuwachsleistungsausgabe im Heidelberg-Format ist zu Beginn nicht vorhanden, diese logische Variable wird beim Erstellen auf true gesetzt
+			// For Data_output
+			parameter[0].ordnerda=false;	
 			
+			int jahremitseedeintragpuffer=parameter[0].jahremitseedeintrag;	 
 			
-			int jahremitseedeintragpuffer=parameter[0].jahremitseedeintrag;	// Zuruecksetzen der Jahre mit seedeintrag auf den Startwert bei jeder Wiederholung
-
-
-			//Mitzaehlen und Ausgeben der Wiederholung
 			parameter[0].wiederholung=0;
 
-			
-			// Mitzaehlen der Laeufe
+			// Counting the runs
 			int zaehler=0;					
 
-			// Simdauer speichern, da in Ausgabe der Wert modifiziert wird
+			// save simulation lenght
 			int simdauerini=parameter[0].simdauer;
 
-			//StefanC: Hier kommt jetzt ein Bereich zur Initialisierung ueber alle vorhandenen Sites (10-13 bzw. 910-913)
+			//StefanC: This is for initializing all known sites (10-13, 910-913 resp.)
 			//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	
 			if (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999)
 			{
@@ -1152,35 +1124,27 @@ int main()
 			
 			for (int nruns=0; nruns<parameter[0].runs; nruns++)
 			{
-
 				// Fast R supported SA_levels
 				#include "SA_parametervariation.cpp"
 			
 				parameter[0].starter=false;
 
-				//Beginn Multiple szenarien header
+				//Beginn multiple scenarios
 				parameter[0].wiederholung++;
 				parameter[0].simdauer=simdauerini;
 
 				zaehler++;
 				printf("\n\tFortschritt: %d von %d\n", zaehler, parameter[0].runs); 
-
 				
-				
-				
-				// Variablen auf Startwerte setzen
-				// Variable für die Treenamen im Modelllauf
+				// Reset variables:
+				// variable for the tree names in one simulation run
 				parameter[0].nameakt=0;
 				
 				
 				//Variable for lines in one simulation repeat
-				
-				// Variable für die Linien im Modelllauf
 				parameter[0].lineakt=0;	
 				
-				// Undo the changes of years with seed introduction
-
-				// Zuruecksetzen der Jahre mit seedeintrag auf den Startwert
+				// Reset the changes of years with seed introduction
 				parameter[0].jahremitseedeintrag=jahremitseedeintragpuffer;	
 
 				parameter[0].individuenzahl=1;
@@ -1201,7 +1165,5 @@ int main()
 			fprintf(fptA,"%d \t %f \n",(treerows*treecols), (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC));
 		fclose(fptA);
 	}
-
-	//muntrace();
 	return 0;
 }

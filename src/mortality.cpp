@@ -288,7 +288,6 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 	// printf... with "%.16" for double ini
 	
 	
-	
 	/*	// start: ORI CODE  */
 		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
 		/// seedmortalität
@@ -329,14 +328,10 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 			else
 			{	
 				//safety procedure: has the variable imcone been set?
-		
-				// Sicherheitsabfrage imcone-Variable gesetzt? 
 				signed int abbrechenmortalitaetfehler; 
 				printf("\n In the mortality determining function a seed has no value applied to the variable imcone\n"); 
 				printf("\n To continue the simulation, press 1, stop it with any other key\n"); 
 				
-				//printf("\n In der Mortalitaetsfunktion hat ein seed keinen Wert in der Variable pseed->imcone\n"); 
-				//printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
 				scanf("%d", &abbrechenmortalitaetfehler); 
                                 if (abbrechenmortalitaetfehler!=1) 
                                 {
@@ -385,8 +380,6 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-
-		
 		// Loop for each seed that is to be produced for each tree
 		
 		// timers for parallel processing 
@@ -528,7 +521,6 @@ if(mcorevariant==1)
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
 								pseed->thawing_depthinfluence=Vthdpth.at(iran);
-								
 							} 
 							else
 							{
@@ -617,8 +609,6 @@ if(mcorevariant==2)
 			  double pe=0.01;
 			  double  C=parameter[0].GregoryC;
 			  double  m=parameter[0].Gregorym;
-			  
-///
 			  	vector<int> Vname;// moved here from the top of this file
 				vector<double> Vthdpth;
 ///
@@ -729,9 +719,7 @@ if(mcorevariant==2)
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
-								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
-								
-								//cout<<"samenproduktion:"<<pseed->thawing_depthinfluence<<endl;
+								pseed->thawing_depthinfluence=100;
 							} 
 							else
 							{
@@ -762,9 +750,7 @@ if(mcorevariant==2)
 
 			}//END: main tree loop on each core
 			
-			
-			
-			
+
 			
 			// append all newly created seed from each thread at once to the seed_list
 			#pragma omp critical
@@ -825,7 +811,6 @@ if(mcorevariant==3)
 			  double  C=parameter[0].GregoryC;
 			  double  m=parameter[0].Gregorym;
 			  
-///
 			  	vector<int> Vname;//// moved here from the top of this file
 				vector<double> Vthdpth;
 		
@@ -840,8 +825,6 @@ if(mcorevariant==3)
 					
 					treeiter=treeiter+1;
 					
-					// cout << treeiter << "/ ";
-					
 					if(pTree->seednewly_produced>0)
 					{
 						lasttreewithseeds_pos=treeiter;
@@ -852,8 +835,6 @@ if(mcorevariant==3)
 				
 		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{// START: parallel region
-		
-		
 		
 		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 			    I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;
@@ -967,7 +948,7 @@ if(mcorevariant==3)
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
-								pseed->thawing_depthinfluence=100;////Vthdpth.at(iran);
+								pseed->thawing_depthinfluence=100;
 							} 
 							else
 							{
@@ -1022,13 +1003,11 @@ if(mcorevariant==3)
 }// OMP==3
 		
 		
-		// neue Ausgabe um zu beschleunigen
+		// new output to speed up:
 		// ... seed list: only if age==0 &&namep!=0
 		// ... Ivort/X/Y/
-		//if( ( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9) ) && (parameter[0].ausgabemodus!=9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 		if(parameter[0].ivort>1045)
 		{
-// cout << endl << " -> Jahr=" << Jahr << " + ivort=" <<  parameter[0].ivort << endl;
 
 						//print data in the most probable cases:
 						char output[50];
@@ -1041,25 +1020,20 @@ if(mcorevariant==3)
 						if(fdir==NULL)
 						{
 						fdir=fopen(output,"a+");
-						// fprintf(fdir,"IVORT \t distance \t rel_angle \t windspd \t winddir\n");
 						fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
 						}
 						
-						// fseek(fdir,0,SEEK_END);
-
 						// # print data
 								for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 								{
 									pseed=(*pos);
 									
-									// if(pseed->age==0 && pseed->namep!=0)
 									if(pseed->age==0)
 									{
 										fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pseed->xcoo,pseed->ycoo,pseed->namep,pseed->namem);
 									}
 								}
-								
-								
+
 						fclose(fdir);
 
 		}// file output
@@ -1082,6 +1056,7 @@ if(mcorevariant==3)
 					(end_time_poll - end_time_seedsuviving), // pollination total
 					(end_time_mortpoll - end_time_poll), // only tree mortality
 					(end_time_seedsuviving - start_time_mortpoll), // seed mortality
+					
 					//timers each tree
 					timer_eachtree_advance_all,
 					timer_eachtree_vectini_all,

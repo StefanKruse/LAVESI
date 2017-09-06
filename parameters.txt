@@ -53,32 +53,17 @@ omp_num_threads=8;					// Number of cores used for computation, set internally o
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 // 1.1 -----> Weather
-weatherchoice=24;	//22;			// Type of weather forcing series (1,9,10,11,12,13, 111,222,999)
-										//  1==constant station data of the means 1947-1999, 
-										//  9==assembled weather series (ESM-6K + MilleniumRun + ice core + weather station) 
-										// 10==CRU Data CH06	"CH06CRUtemp.csv	CH06CRUprec.csv"
-										// 11==CRU Data CH02	"CH02CRUtemp.csv	CH02CRUprec.csv"
-										// 12==CRU Data CH1712	"CH1712CRUtemp.csv	CH1712CRUprec.csv"
-										// 13==CRU Data CH12N	"CH12NCRUtemp.csv	CH12NCRUprec.csv"
-								
-									// weather data CRUTS for Einspielen des weathers für zwei Arten, ohne Initialtrees
-										// 21 == CRUTS TY02 "TY02_CRUTS_temp.csv	"TY02_CRUTS_prec.csv"
-										// 22 == CRUTS CH12 "CH12_CRUTS_temp.csv	"CH12_CRUTS_prec.csv" -> "CH17_prcweighted_model"?
-										// 23 == CRUTS CH02 "CH02_CRUTS_temp.csv	"CH02_CRUTS_prec.csv"
-										// 24 == CRUTS CH06 "CH06_CRUTS_temp.csv	"CH06_CRUTS_prec.csv"
-								
+weatherchoice=24;											
+									// weather data CRUTS for the weather for two species, without initial trees
+										// 22		== CH17_tmpweighted_model.csv, CH17_prcweighted_model.csv
+										// 23 		== CH02_tmpweighted_model.csv, CH02_prcweighted_model.csv
+										// 24 		== CH06_tmpweighted_model.csv, CH06_prcweighted_model.csv
+										
 										// 309==CRU Data for Station Khatanga 934-2011 (934-1928 reconstructed; 1929-2011 station data)
-								
-										// 111==consecutively all 4 weather long series without initial trees
-										// ... 120== CH06 weather long series without initial trees
-										// ... 121== CH02 weather long series without initial trees
-										// ... 122== CH1712 weather long series without initial trees
-										// ... 123== CH12N weather long series without initial trees
-										// 222==consecutively all 4 weather series coupled to initial trees found 2011
-										// 999==consecutively all 4 weather series coupled to initial trees found 2011 warped to 1911
-
+										
 										// 1111==ClimateGradient
-										// 2221==TempeatureExperiment
+										// 2221==Temperature experiment
+										
 precweather=1;						// Influence of precipitation on maximum growth (0,1,2)
 										//  0==not at all
 										//  1==linearly if smaller than threshold

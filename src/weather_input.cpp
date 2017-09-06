@@ -998,102 +998,9 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 		//Depending on the weather choice different files will be opened and read line by line
 		
 		//***german: Je nach Wahl werden unterschiedliche Dateien geoeffnet und dann Zeilenweise eingelesen
-		if ((parameter[0].weatherchoice==10) | (parameter[0].weatherchoice==11) | (parameter[0].weatherchoice==12) | (parameter[0].weatherchoice==13) |
-		(parameter[0].weatherchoice==111) | (parameter[0].weatherchoice==120) | (parameter[0].weatherchoice==121) | (parameter[0].weatherchoice==122) |
-		(parameter[0].weatherchoice==123) | (parameter[0].weatherchoice==222) | (parameter[0].weatherchoice==309) | (parameter[0].weatherchoice==999) |
-		(parameter[0].weatherchoice==1111) | (parameter[0].weatherchoice==2221))
+		if ((parameter[0].weatherchoice==1111) | (parameter[0].weatherchoice==2221))
 		{
-			if (parameter[0].weatherchoice==111)
-			{
-				if (aktort==1)
-				{
-					char tempbuf[]="input/CH06CRUtemp_long.csv";
-					char precbuf[]="input/CH06CRUprec_long.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-				else if (aktort==2)
-				{
-					char tempbuf[]="input/CH02CRUtemp_long.csv";
-					char precbuf[]="input/CH02CRUprec_long.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-				else if (aktort==3)
-				{
-					char tempbuf[]="input/CH1712CRUtemp_long.csv";
-					char precbuf[]="input/CH1712CRUprec_long.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-				else if (aktort==4)
-				{
-					char tempbuf[]="input/CH12NCRUtemp_long.csv";
-					char precbuf[]="input/CH12NCRUprec_long.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-			}
-			else if (parameter[0].weatherchoice==120)
-			{
-				char tempbuf[]="input/CH06CRUtemp_long.csv";
-				char precbuf[]="input/CH06CRUprec_long.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==121)
-			{
-				char tempbuf[]="input/CH02CRUtemp_long.csv";
-				char precbuf[]="input/CH02CRUprec_long.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==122)
-			{
-				char tempbuf[]="input/CH1712CRUtemp_long.csv";
-				char precbuf[]="input/CH1712CRUprec_long.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==123)
-			{
-				char tempbuf[]="input/CH12NCRUtemp_long.csv";
-				char precbuf[]="input/CH12NCRUprec_long.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999)
-			{
-				if (aktort==1)
-				{
-					char tempbuf[]="input/CH06CRUtemp.csv";
-					char precbuf[]="input/CH06CRUprec.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-				else if (aktort==2)
-				{
-					char tempbuf[]="input/CH02CRUtemp.csv";
-					char precbuf[]="input/CH02CRUprec.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-				else if (aktort==3)
-				{
-					char tempbuf[]="input/CH1712CRUtemp.csv";
-					char precbuf[]="input/CH1712CRUprec.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-				else if (aktort==4)
-				{
-					char tempbuf[]="input/CH12NCRUtemp.csv";
-					char precbuf[]="input/CH12NCRUprec.csv";
-					strcpy(dateinametemp, tempbuf);
-					strcpy(dateinameprec, precbuf);
-				}
-			}
-			else if (parameter[0].weatherchoice==1111)
+			if (parameter[0].weatherchoice==1111)
 			{
 				// Fast R supported climate matrix design
 				#include "weathereingabe_matrix.cpp"
@@ -1104,79 +1011,14 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 				// Fast R supported climate matrix design
 				#include "weathereingabe_tempexp.cpp"
 				
-			}
-			else if (parameter[0].weatherchoice==10)
-			{
-				char tempbuf[]="input/CH06CRUtemp.csv";
-				char precbuf[]="input/CH06CRUprec.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==11)
-			{
-				char tempbuf[]="input/CH02CRUtemp.csv";
-				char precbuf[]="input/CH02CRUprec.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==12)
-			{
-				char tempbuf[]="input/CH1712CRUtemp.csv";
-				char precbuf[]="input/CH1712CRUprec.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==13)
-			{
-				char tempbuf[]="input/CH12NCRUtemp.csv";
-				char precbuf[]="input/CH12NCRUprec.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==309)
-			{
-				char tempbuf[]="input/CHATANGASTATtemp.csv";
-				char precbuf[]="input/CHATANGASTATprec.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-		
+			}		
 			getTemp1(aktort, dateinametemp,  weather_list);
 		
 			getPrec1(dateinameprec, weather_list,wortlaengemax);
 		}
-		else if((parameter[0].weatherchoice==1) | (parameter[0].weatherchoice==9))
-		{
-			if (parameter[0].weatherchoice==1)
-			{
-				char tempbuf[]="input/RS000020891_MONTHLY_Temp_const.csv";
-				char precbuf[]="input/RS000020891_MONTHLY_Prec_const.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==9)
-			{
-				char tempbuf[]="input/weather_synopse_temp.csv";
-				char precbuf[]="input/weather_synopse_prec.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			
-			
-			getTemp2(aktort, dateinametemp,  weather_list,wortlaengemax);
-
-			getPrec2(dateinameprec, weather_list,wortlaengemax);
-		}
 		else
 		{
-			if (parameter[0].weatherchoice==21)
-			{
-				char tempbuf[]="input/TY02_tmpweighted_model.csv";
-				char precbuf[]="input/TY02_prcweighted_model.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==22)
+			if (parameter[0].weatherchoice==22)
 			{
 				char tempbuf[]="input/CH17_tmpweighted_model.csv";
 				char precbuf[]="input/CH17_prcweighted_model.csv";
@@ -1197,48 +1039,6 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 				strcpy(dateinametemp, tempbuf);
 				strcpy(dateinameprec, precbuf);
 			}
-			else if ((parameter[0].weatherchoice==25) | (parameter[0].weatherchoice== 26) | (parameter[0].weatherchoice== 27) | (parameter[0].weatherchoice== 28) | (parameter[0].weatherchoice== 29) | (parameter[0].weatherchoice== 30) | (parameter[0].weatherchoice== 31) | (parameter[0].weatherchoice== 32))
-			{
-				char tempbuf[]="input/CH17_tmpweighted_model.csv";
-				char precbuf[]="input/CH17_prcweighted_model.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==41)
-			{
-				char tempbuf[]="input/Khatanga_exp_tmp.csv";
-				char precbuf[]="input/Khatanga_exp_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}	
-			else if (parameter[0].weatherchoice==42)
-			{
-				char tempbuf[]="input/Norilsk_exp_tmp.csv";
-				char precbuf[]="input/Norilsk_exp_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}	
-			else if (parameter[0].weatherchoice==43)
-			{
-				char tempbuf[]="input/Vorkuta_exp_tmp.csv";
-				char precbuf[]="input/Vorkuta_exp_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}	
-			else if (parameter[0].weatherchoice==44)
-			{
-				char tempbuf[]="input/Zhigansk_exp_tmp.csv";
-				char precbuf[]="input/Zhigansk_exp_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==51)
-			{
-				char tempbuf[]="input/Coredata_exp_tmp.csv";
-				char precbuf[]="input/Coredata_exp_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
 			else if (parameter[0].weatherchoice==52)
 			{
 				char tempbuf[]="input/Coredata_complete_LauraS_tmp.csv";
@@ -1252,14 +1052,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 				char precbuf[]="input/Coredata_complete_LauraN_prc.csv";
 				strcpy(dateinametemp, tempbuf);
 				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==54)
-			{
-				char tempbuf[]="input/Coredata_complete_Khan_tmp.csv";
-				char precbuf[]="input/Coredata_complete_Khan_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}			
+			}		
 			getTemp3(aktort, dateinametemp,  weather_list);
 			getPrec1(dateinameprec, weather_list,wortlaengemax);
 		}

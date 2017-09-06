@@ -18,12 +18,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 	FILE *dateizeiger;
 	string dateiname;
 
-		// Dateinamen zusammensetzen
+		// assemble file names
 		dateiname="output/dataseed_LDSD.csv";
  
-		// Datei versuchen zum Lesen und Schreiben zu oeffnen
+		// Trying to open file for reading
 		dateizeiger = fopen(dateiname.c_str(), "r+");
-			// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+			// if fopen fails create new data file + header
 			if (dateizeiger == NULL)
 			{
 			  dateizeiger = fopen(dateiname.c_str(), "w");
@@ -36,15 +36,15 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 				if (dateizeiger == NULL)
 				{
-					fprintf(stderr, "Fehler: LDSD-Datei konnte nicht geoeffnet werden!\n");
+					fprintf(stderr, "Error: long distance seed dispersal file could not be opened!\n");
 					exit(1);
 				}
 			}
 
-			// Die neuen Informationen werden ans Ende der Datei geschrieben
+			// else: append data to file
 			fseek(dateizeiger,0,SEEK_END);
 
-			// Datenaufbereiten und in die Datei schreiben
+			// data evaluation and output
 			fprintf(dateizeiger, "%d;", parameter[0].ivort);
 			fprintf(dateizeiger, "%d;", aktort);
 			fprintf(dateizeiger, "%4.5f;", entfernung);
@@ -75,15 +75,15 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 	{ 
 		list<seed*>& seed_list = *posw;
 		
-		// den aktuellen Ort feststellen damit bei LDD davon ausgehend der Zielort festgestellt werden kann
+		// determine the current location, so that in long distance dispersal the target can be determined
 		aktort++;
 
-		// Anzeige Rausfliegender
+		// displaying seeds crossing the borders
 		int rausgeflogenN=0, rausgeflogenO=0, rausgeflogenS=0, rausgeflogenW=0;
 
 		if(parameter[0].omp_num_threads==0)
 		{
-			double cum_time_individual_seed=0;//timer for indi seed 
+			double cum_time_individual_seed=0;//timer for individual seed 
 			double cum_time_seeddisp=0;
 				
 			///Loop around all Seeds
@@ -100,12 +100,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									
 					///and random number < rate of emerging seeds
 					if(flug <= parameter[0].seedflugrate)
-					{ // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Beginn
+					{ // If the seed crosses a border a coordinate is calculated
 						
 						double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 											
 						if(ratiorn>0.0)
-						{ // RN Groeszer Null Beginn
+						{ // RN >0 BEGIN
 							
 							pseed->imcone=false;
 							
@@ -132,21 +132,20 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 										if(seedeinschreibzufall<0.01)
 										{
-																	entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
-																	richtung=atan2(iquer,jquer);
+											entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+											richtung=atan2(iquer,jquer);
 																	
-											//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
 											FILE *dateizeiger;
 											string dateiname;
 
-											// Dateinamen zusammensetzen
+											// assembling file name
 											char dateinamesuf[12];
 											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
 											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 										
-											// Datei versuchen zum Lesen und Schreiben zu oeffnen
+											// Trying to open file for reading
 											dateizeiger = fopen (dateiname.c_str(), "r+");
-											// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+											// If fopen fails, open a new file adding a header
 											if (dateizeiger == NULL)
 											{
 											  dateizeiger = fopen (dateiname.c_str(), "w");
@@ -169,7 +168,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 												if (dateizeiger == NULL)
 												{
-													fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
+													fprintf(stderr, "Error: Seed distance file could not be opened!\n");
 													exit(1);
 												}
 											}
@@ -203,232 +202,23 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							pseed->entfernung=entfernung;	
 
 
-							
-							/****************************************************************************************//**
-							* \brief calculate Long Distance Dispersal between transekts
-							*
-							*
-							*******************************************************************************************/
-							// Entfernungen zwischen Einzelpatches ermitteln
-							// Umrechnung von Grad in Meter  "1 Grad = 60 x 1852 m = 111120 m"
-							/*
-							double abschnittslaenge=((parameter[0].Nposmax-parameter[0].Nposmin)*111120)/parameter[0].mapylength;
-							*/
-							
-							/// DEPRECEATED!!! not supported in this version
-							//SEEDTRAVELBETWEEN==TRUE-> mit periodischen RB verkn\FCpfen!!!!!!!!!!!!!!!!!!
-							/*
-							if ( (parameter[0].mapylength>1 || parameter[0].mapxlength>1) && parameter[0].seedtravelbetween==true && entfernung>(abschnittslaenge/2))
-							{  // Long Distance Dispersal in andere Flaechen Beginn
-
-								// Feststellen ob der seed in eine andere Flaeche fliegt ...
-								int richtungsfaktor=0;	// dieser Wert zeigt an in welche Richtung der LDDSeed fliegt: -1==S und +1==N
-								char richtungsname = 'l';
-								
-								
-								if ( (richtung > 0.8) && (richtung <= 2.35) )
-								{
-									richtungsname='N';
-									richtungsfaktor=-1; // nach Norden
-								}					
-								else if ( (richtung > 3.95) && (richtung <= 5.5) )
-								{	
-									richtungsname='S';
-									richtungsfaktor=1; // nach Sueden
-								}
-								else if ( (richtung > 2.35) && (richtung <= 3.95) )
-								{	
-									richtungsname='O';
-									richtungsfaktor=1; // nach Osten
-								}
-								else if ( (richtung > 5.5) || (richtung <= 0.8) )//Westen ist von 5.5  bis 0.8->entspricht 2pi
-								{	
-									richtungsname='W';
-									richtungsfaktor=-1; // nach Westen
-								}
-								cout << "aktort=" << aktort << " ... Richtung=" << richtungsname << " ... und Faktor =" << richtungsfaktor << " ... und Entfernung - halbe ABSCHNITT=" << (entfernung-(abschnittslaenge/2)) << " ... Abschnittlaenge=" << abschnittslaenge << endl;
-								
-								///if seed flies out of the plot direction
-								// Eintragsflaeche ermitteln Beginn
-									
-									// Wie weit fliegt der Same, nur in das angrenzende Feld oder noch weiter dar\FCber hinaus?
-									int neueweltcoo=0;
-
-									if ((entfernung-(abschnittslaenge/2))<abschnittslaenge)
-										++neueweltcoo;
-									else
-									{
-										bool eingetragen=false;
-										do
-										{
-											++neueweltcoo;
-											double teilentfernung=(entfernung-(abschnittslaenge/2))-neueweltcoo*abschnittslaenge;
-											
-											if (teilentfernung<abschnittslaenge) 
-												eingetragen=true;
-
-											if (neueweltcoo>=parameter[0].mapylength) 
-												eingetragen=true;
-										
-										} while (eingetragen==false);
-
-									}
-
-	//cout << neueweltcoo << endl;
-									
-									Seedoutput(aktort, entfernung, richtung, neueweltcoo);
-									
-									// Neue yworldcoo oder xworldcoo des seeds festlegen und vergleich ob er wirklich in ein neues Feld gekommen ist
-									int neueyworldcoo, neuexworldcoo;
-									if (richtungsname=='N' || richtungsname=='S')
-									{
-										neueyworldcoo=pseed->yworldcoo+richtungsfaktor*(neueweltcoo);
-	//cout << neueyworldcoo << endl;
-										if (neueyworldcoo!=pseed->yworldcoo)
-										{ // seed trifft anderes Feld 
-											pseed->yworldcoo=neueyworldcoo;
-										
-											if (pseed->yworldcoo>=(parameter[0].mapylength-1)) 
-												pseed->yworldcoo=(parameter[0].mapylength-1);
-											
-											if (pseed->yworldcoo<0) 
-												pseed->yworldcoo=0;
-											
-											if ( (pseed->yworldcoo<0) || (pseed->yworldcoo>=parameter[0].mapylength) )
-											{
-												printf("\n\nLaVeSi wurde beendet\n");
-												printf("Aktueller Schritt => seedausbreitung.cpp\n");
-												printf("... Grund: Bei LDSD ist die neue Flaeche (= %d) ausserhalb der verfuegbaren Flaechen (max = %d)!\n", pseed->yworldcoo, parameter[0].mapylength);
-												exit(1);
-											}
-
-
-											// ziehe Zufallsposition im neuem Feld
-											pseed->xcoo= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));
-											pseed->ycoo= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0)));
-			
-											// Sicherheitsabfrage 
-											if ((pseed->ycoo<0) || (pseed->ycoo> (double) (treerows-1)) || (pseed->xcoo<0) || (pseed->xcoo> (double) (treecols-1)))
-											{
-												printf("\n\nLaVeSi wurde beendet\n");
-												printf("Aktueller Schritt => seedausbreitung.cpp\n");
-												printf("... Grund: LDSD nach Nord-Sued ausgebreiteter seed ist ausserhalb der Flaeche gelandet (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
-												exit(1);
-											}
-	//cout << neueyworldcoo << endl;
-
-											// seed in die Ausbreiteliste schreiben und aus der seed_list loeschen
-											LDDseed_list.push_back(pseed);
-											
-											// delete pseed; // Dies wuerde den Speicher an der Position freigeben und somit weiteres Verwenden unmoeglich machen!!
-											
-											pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
-										} 
-										else
-										{ // Same erreicht nicht den n\E4chsten Plot 
-											if (pseed->ycoo> (double) (treerows-1)) 
-											{
-												rausgeflogenN++;
-											}
-											else if (pseed->ycoo<0.0) 
-											{
-												rausgeflogenS++;
-											}
-
-											delete pseed;
-											//RAUSFLIEGENDE WERDEN GEL\D6SCHT!
-											pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
-										} // seed bleibt im Feld Beginn	
-									}
-									else if (richtungsname=='O' || richtungsname=='W')
-									{
-										neuexworldcoo=pseed->xworldcoo+richtungsfaktor*(neueweltcoo);
-										
-										if (neuexworldcoo!=pseed->xworldcoo)
-										{ // seed trifft anderes Feld 
-											pseed->xworldcoo=neuexworldcoo;
-										
-											if (pseed->xworldcoo>=(parameter[0].mapxlength-1)) 
-												pseed->xworldcoo=(parameter[0].mapxlength-1);
-											
-											if (pseed->xworldcoo<0) 
-												pseed->xworldcoo=0;
-											
-											if ( (pseed->xworldcoo<0) || (pseed->xworldcoo>=parameter[0].mapxlength) )
-											{
-												printf("\n\nLaVeSi wurde beendet\n");
-												printf("Aktueller Schritt => seedausbreitung.cpp\n");
-												printf("... Grund: Bei LDSD ist die neue Flaeche (= %d) ausserhalb der verfuegbaren Flaechen (max = %d)!\n", pseed->xworldcoo, parameter[0].mapxlength);
-												exit(1);
-											}
-
-
-											pseed->xcoo= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));
-											pseed->ycoo= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0)));
-			
-											// Sicherheitsabfrage
-											if ((pseed->ycoo<0) || (pseed->ycoo> (double) (treerows-1)) || (pseed->xcoo<0) || (pseed->xcoo> (double) (treecols-1)))
-											{
-												printf("\n\nLaVeSi wurde beendet\n");
-												printf("Aktueller Schritt => seedausbreitung.cpp\n");
-												printf("... Grund: LDSD nach Ost-West ausgebreiteter seed ist ausserhalb der Flaeche gelandet (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
-												exit(1);
-											}
-
-											// seed in die Ausbreiteliste schreiben und aus der seed_list loeschen
-											LDDseed_list.push_back(pseed);
-											
-											// delete pseed; // Dies wuerde den Speicher an der Position an der noch die Infos des seeds stehen freigeben und somit weiteres Verwenden unmoeglich machen!!
-											
-											pos=seed_list.erase(pos);			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
-										}
-										else
-										{ // Same erreicht nicht den n\E4chsten Plot 
-											if (pseed->xcoo> (double) (treerows-1)) 
-												rausgeflogenO++; 
-												 if(parameter[0].periodRB==1)
-                                                                                                 {
-													 pseed->xcoo=fmod(pseed->xcoo,(double)(treecols-1));
-													 pseed->namem=0;//rename it to 0
-													 }
-											else if (pseed->xcoo<0.0) 
-												rausgeflogenW++;
-												if(parameter[0].periodRB==1)
-                                                                                                {pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));}
-											if(parameter[0].periodRB==0)
-                                                                                        { delete pseed;
-															  pos=seed_list.erase(pos);}			// ATTENTION!!!! now the loop is rewritten to iterate in the head  ----> this will lead here to false advances!!
-										} // seed bleibt im Feld Beginn
-									}
-
-
-							} // Long Distance Dispersal in andere Flaechen Ende
-							*/
-							
-
 
 							/****************************************************************************************//**
 							* \brief calculate  Dispersal within a plot
 							*
 							*
 							*******************************************************************************************/
-							// else
-							// { // "normales" Verhalten, also Same landet au\DFerhalb des Plots aber erreicht nicht den n\E4chsten Plot 
-								//(dazu m\FCsste er mind. die H\E4lfte der Strecke zur\FCcklegen), mit Same Beginn
+							
 								bool sameausserhalb=false;
 								
-								// Ueberpruefung ob im Feld sonst fliegt dieser aus dem Feld
-								if(pseed->ycoo > (double) (treerows-1)) //treerows bestimmt N-S-Ausbreitung des Areals
+								// Check if the seed is on the plot:
+								if(pseed->ycoo > (double) (treerows-1)) 
 								{
 									if((parameter[0].periodRB==1))
 									{
 									   pseed->ycoo=fmod(pseed->ycoo,(double)(treerows-1));
 									   pseed->namem=0;
 									   pseed->namep=0;
-	// 								 }
-//                                                                       else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
-//                                                                            {//reduzierte periodic BC
-	// 								   pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 									} 
 									else 
 									{
@@ -465,7 +255,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										rausgeflogenW++;
 									}
 								} 
-								else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
+								else if(pseed->xcoo > (double) (treecols-1)) 
 								{
 									if(parameter[0].periodRB==1)
 									{
@@ -474,7 +264,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										pseed->namep=0;
 																	} 
 									else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
-									{ //Weniger Ausbreitung aus Osten nach Westen als andersherum
+									{ //less reintroduction from the western border than from the eastern
 										pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 									} 
 									else
@@ -486,14 +276,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 		
 								if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
 								{
-									printf("\n\nLaVeSi wurde beendet\n");
-									printf("Aktueller Schritt => seedausbreitung.cpp\n");
-									printf("... Grund: Normal ausgebreiteter seed ist nach Loeschvorgang der zu weit geflogenen immernoch ausserhalb der Flaeche (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
+									printf("\n\nLaVeSi was exited ");
+									printf("in seedausbreitung.cpp\n");
+									printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
 									exit(1);
 								}
 
 								if(sameausserhalb==true)
-								{ // Loeschvorgang seed Beginn
+								{ // deleting seed Begin
 									delete pseed;
 									pos=seed_list.erase(pos);
 								} 
@@ -502,16 +292,15 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									++pos;
 								}
 
-							// } // "normales" Verhalten mit seed Ende
-						} // RN Groeszer Null Ende
+						} // RN >0 END
 
 					} 
-					else  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
+					else  // If the seed is dispersed, a coordinate is determined END
 					{
 						++pos;
 					}
 				} 
-				else //Imcone? Ende
+				else //Imcone? END
 				{
 					++pos;
 				}
@@ -519,14 +308,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 				cum_time_individual_seed+=omp_get_wtime()-time_start_individual_seed;
 				
 
-			} // Ende seed_list ablaufen
+			} // seed_list loop END
 			
 			cout << endl << "All seeds:" << cum_time_individual_seed << " with seeddisp-function:" << cum_time_seeddisp << endl;
 				
 		} 
 		else
 		{ // multi-core-processing
-
 			// manually chose the implementation of multi-core-processing
 			int mcorevariant=2;
 				// 1 == only advance
@@ -536,15 +324,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			{// OMP==1
 			// cout << endl << " OMP seed dispersal variant (1 was chosen)=" << mcorevariant << endl;
 				///Loop around all Seeds
-				for(unsigned int pari=0; pari<seed_list.size(); )//++pari)
-				// for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
+				for(unsigned int pari=0; pari<seed_list.size(); )
 				{
 					// double t0=omp_get_wtime();
 					list<seed*>::iterator pos=seed_list.begin();
 					advance(pos, pari);
 					pseed=(*pos);
 
-					// cout << "t(advance)=" << omp_get_wtime()-t0 << endl;
 					
 					///If Seed is in a cone
 					if (pseed->imcone==true)
@@ -580,21 +366,20 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 										if(seedeinschreibzufall<0.01)
 										{
-																	entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
-																	richtung=atan2(iquer,jquer);
+											entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+											richtung=atan2(iquer,jquer);
 																	
-											//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
 											FILE *dateizeiger;
 											string dateiname;
 
-											// Dateinamen zusammensetzen
+											// assembling file name
 											char dateinamesuf[12];
 											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
 											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 										
-											// Datei versuchen zum Lesen und Schreiben zu oeffnen
+											// Trying to open files for reading
 											dateizeiger = fopen (dateiname.c_str(), "r+");
-											// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+											// if fopen fails, create a new file and header
 											if (dateizeiger == NULL)
 											{
 											  dateizeiger = fopen (dateiname.c_str(), "w");
@@ -617,7 +402,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 												if (dateizeiger == NULL)
 												{
-													fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
+													fprintf(stderr, "Error: seed distance file could not be opened!\n");
 													exit(1);
 												}
 											}
@@ -660,8 +445,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								*******************************************************************************************/
 									bool sameausserhalb=false;
 									
-									// Ueberpruefung ob im Feld sonst fliegt dieser aus dem Feld
-									if(pseed->ycoo > (double) (treerows-1)) //treerows bestimmt N-S-Ausbreitung des Areals
+									// Check if the seed is on the plot:
+									if(pseed->ycoo > (double) (treerows-1)) 
 									{
 										if((parameter[0].periodRB==1))
 										{
@@ -696,11 +481,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									{
 										if((parameter[0].periodRB==1))
 										{
-										   //pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 										   pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1))+(double)(treecols-1);
 										   pseed->namem=0;
 										   pseed->namep=0;
-
 										} 
 										else
 										{
@@ -708,7 +491,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											rausgeflogenW++;
 										}
 									} 
-									else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
+									else if(pseed->xcoo > (double) (treecols-1)) 
 									{
 										if(parameter[0].periodRB==1)
 										{
@@ -718,7 +501,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										   
 										} 
 										else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
-										{ //Weniger Ausbreitung aus Osten nach Westen als andersherum
+										{ //less seed reintroduction on the western border
 											pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 										} 
 										else
@@ -731,14 +514,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			
 									if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
 									{
-										printf("\n\nLaVeSi wurde beendet\n");
-										printf("Aktueller Schritt => seedausbreitung.cpp\n");
-										printf("... Grund: Normal ausgebreiteter seed ist nach Loeschvorgang der zu weit geflogenen immernoch ausserhalb der Flaeche (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
+										printf("\n\nLaVeSi wurde beendet ");
+										printf("in seedausbreitung.cpp\n");
+										printf("... Reason: Normal ausgebreiteter seed ist nach Loeschvorgang der zu weit geflogenen immernoch ausserhalb der Flaeche (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
 										exit(1);
 									}
 
 									if(sameausserhalb==true)
-									{ // Loeschvorgang seed Beginn
+									{ // Seed deletion BEGIN
 										delete pseed;
 										pos=seed_list.erase(pos);
 										++pari;
@@ -764,11 +547,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			}// OMP==1
 			if(mcorevariant==2)
 			{// OMP==2
-			// cout << endl << " OMP seed dispersal variant (2 was chosen)=" << mcorevariant << endl;
-			
-				
-				//double time_start_seeddisp=omp_get_wtime();
-				
 				omp_set_dynamic(0); //disable dynamic teams
 				omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 					
@@ -827,17 +605,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									double jquer=0;
 									double iquer=0;
 
-// cout << endl << " namem=" << pseed->namem << "=> seed ph=" << pseed->elternheight;
-
 									seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 									
-// cout << " - " << sqrt(pow(iquer,2)+pow(jquer,2)) << " " << entfernung;
-// cout << " - " << jquer << "/" << iquer;
-
 									// seed dispersal output:
 									if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
-									// if(parameter[0].ivort==1057 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
-									// if(parameter[0].ivort>1 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
 									{
 											double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 										
@@ -919,7 +690,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										bool sameausserhalb=false;
 										
 										// Ueberpruefung ob im Feld sonst fliegt dieser aus dem Feld
-										if(pseed->ycoo > (double) (treerows-1)) //treerows bestimmt N-S-Ausbreitung des Areals
+										if(pseed->ycoo > (double) (treerows-1)) 
 										{
 											if((parameter[0].periodRB==1))
 											{
@@ -962,7 +733,6 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										{
 											if((parameter[0].periodRB==1 || parameter[0].periodRB==3))
 											{
-											   //pseed->xcoo=(double)(treecols-1)+fmod(pseed->xcoo,(double)(treecols-1));
 											   pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1))+(double)(treecols-1);
 											   pseed->namem=0;
 											   pseed->namep=0;
@@ -973,7 +743,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												rausgeflogenW++;
 											}
 										} 
-										else if(pseed->xcoo > (double) (treecols-1)) //treecols best. W-O-Ausbr. des Areals
+										else if(pseed->xcoo > (double) (treecols-1))
 										{
 											if(parameter[0].periodRB==1 || parameter[0].periodRB==3)
 											{
@@ -983,7 +753,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 				   
 											} 
 											else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
-											{ //Weniger Ausbreitung aus Osten nach Westen als andersherum
+											{ // Reducing seed introduction on the western border:
 												pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 											} 
 											else
@@ -1012,14 +782,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					} // Ende seed_list ablaufen
 				}//END: pragma for
 				
-				// cout << " seed_list.size (before)=" << seed_list.size() << endl;
-				// double time_start_delete=omp_get_wtime();
 				for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
 				{// START: delete seeds with sameausserhalb==true
 					pseed=(*pos);
 
 					if(pseed->ycoo==-99999.9)
-					{ // Loeschvorgang seed Beginn
+					{ //Seed deletion BEGIN
 						delete pseed;
 						pos=seed_list.erase(pos);
 					} 
@@ -1028,66 +796,15 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						++pos;
 					}
 				}// END: delete seeds
-				// cout << " seed_list.size (after)=" << seed_list.size() << endl;
-				// cout << " Time(seeddisp)=" << time_start_delete-time_start_seeddisp << endl;
-				// cout << " Time(deletion)=" << omp_get_wtime()-time_start_delete << endl;
 			}// OMP==2
 
 		}
 
 
-		// Anzeige Rausfliegender
+		// Display seeds leaving the plot:
 		if (parameter[0].seedausbranzeige==true) 
-			printf("\n   Rausflieger(N/O/S/W)=(%d/%d/%d/%d) ", rausgeflogenN, rausgeflogenO, rausgeflogenS, rausgeflogenW);
-	} // Weltschleife Ende
-
-
-
-
-	/****************************************************************************************//**
-	* \brief write dispersed seeds into the seedList of the respective site
-	*
-	*
-	*******************************************************************************************/
-	/*
-	// seed die weit ausgebreitet wurden werden in die entsprechend seed_listn am neuen Ort geschrieben
-	if ( (parameter[0].seedtravelbetween==true) & (LDDseed_list.size()>0) )
-	{ // Seeds in WeltListen schreiben Beginn 
-		
-		// Wenn seed in der LDSD-Liste enthalten sind, so werde diese in die entsprechenden world_seed_listn geschoben
-		for (list<seed*>::iterator pos = LDDseed_list.begin(); pos != LDDseed_list.end(); )
-		{ // seed_list ablaufen Beginn
-			pseed=(*pos);
-
-			if ( (pseed->ycoo<0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0) | (pseed->xcoo> (double) (treecols-1)) )
-			{
-				printf("\n\nLaVeSi wurde beendet\n");
-				printf("Aktueller Schritt => seedausbreitung.cpp\n");
-				printf("... Grund: LDSD Ausgebreiteter seed in der LDDseed_list hat Koordinaten die ausserhalb der Flaeche liegen (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
-				exit(1);
-			}
-
-			// Ermittle die neue Position der Liste in die der LDD-Same eingetragen werden soll
-			int aktortadvance=pseed->xworldcoo + (pseed->yworldcoo * parameter[0].mapxlength);// + 1;
-//cout << "Advancing=" << aktortadvance << " xworldcooseed=" << pseed->xworldcoo << "   yworldcooseed=" << pseed->yworldcoo << endl; 		
-			
-			// Setze einen Iterator fuer die world_seed_list und gleich in die entsprechende Region
-			vector<list<seed*> >::iterator posw=world_seed_list.begin();
-			advance(posw, aktortadvance);	//LDDCG
-
-			// Greife auf die an dem Ort befindende seed_list zu
-			list<seed*>& seed_list = *posw;
-
-			// Schreibe den seed in die seed_list und loesche ihn aus der urspruenglichen Liste
-			seed_list.push_back(pseed);
-			
-			//delete pseed; // Dieser Aufruf wuerde abermals den Speicher des seeds freigeben und dadurch Fehler verursachen wenn dieser wieder genutzt wird!!
-			
-			pos=LDDseed_list.erase(pos);
-		} // seed_list ablaufen Ende
-	} // Seeds in WeltListen schreiben Ende
-
-	*/
+			printf("\n   Leaving seeds (N/O/S/W)=(%d/%d/%d/%d) ", rausgeflogenN, rausgeflogenO, rausgeflogenS, rausgeflogenW);
+	} // World list END
 }
 
 

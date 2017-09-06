@@ -3,7 +3,7 @@ using namespace std;
 
 double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzeichen, struct Parameter *parameter)
 {
-	// Parameterdatei oeffnen
+	// Opening the parameter file
 	FILE *f;
 	f = fopen("parameters.txt","r");
 	if (f == NULL)
@@ -12,7 +12,7 @@ double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzei
 		exit(1);
 	}
 
-	// Nach Parameternamen welcher vom Hauptmodul uebergeben wurde in Datei suchen
+	// Look for the parameter name in said file
 	char searchstring[255];
 	strcpy(searchstring , uebergabestring);
 
@@ -27,7 +27,7 @@ double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzei
 		wort = strtok(puffer, trennzeichen);
 		while (wort != NULL)
 		{
-			// Ueberpruefung ob ein Wert in der Datei vorhanden ist, der gesucht wird, diesen einlesen 
+			// Check if the parameter is found, read in said parameter
 			if ( strcmp(wort, searchstring) == 0)
 			{
 				strcpy(puffer_zahl, puffer_bak);
@@ -60,7 +60,7 @@ void Parametereinlesen(void)
 	
 	char uebergabestring[wortlaengemax];
 
-	// Schage fuer Funktionen und Anzeigen
+	// Switch for functions and display
 	strcpy(uebergabestring,"parameterlesenanzeige");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
         {
@@ -154,7 +154,7 @@ void Parametereinlesen(void)
                 printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].mortanzeige)?"true":"false");
             }
 
-	// Allgemeine Parameter zur Funktion
+	// General parameters for the function
 	strcpy(uebergabestring,"evapod");
 	parameter[0].evapod=Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
@@ -162,7 +162,6 @@ void Parametereinlesen(void)
                 printf("Schreibe:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].evapod);
             }
 
-	// Schage fuer Anzeigen und Funktionen
 	strcpy(uebergabestring,"precweather");
 	parameter[0].precweather=(int) (Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]));
 	if (parameter[0].parameterlesenanzeige ==true) 
@@ -289,7 +288,7 @@ void Parametereinlesen(void)
             }	
 	
 	
-	// Fuer die Weltlisten
+	// For world lists
 	strcpy(uebergabestring,"mapxlength");
 	parameter[0].mapxlength=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
@@ -304,7 +303,7 @@ void Parametereinlesen(void)
                     printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].mapylength);
                 }
 	
-	// Fuer das weather
+	// For weather
 	strcpy(uebergabestring,"weathercalcgradient");
 	if (((int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]))==1) 
 		{parameter[0].weathercalcgradient=true;}
@@ -349,7 +348,7 @@ void Parametereinlesen(void)
                     printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].sizemagnif);
                 }
 			
-	// Fuer die Initialbedingungen
+	// For initial conditions
 	strcpy(uebergabestring,"starttrees");
 	parameter[0].starttrees=(int) Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterlesenanzeige ==true) 
@@ -357,8 +356,8 @@ void Parametereinlesen(void)
                     printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].starttrees);
                 }
 	
-	// Parameter fuer LARIX GMELINII (Rupr.) Kuzen.
-	// Fortpflanzung
+	// Parameters for LARIX GMELINII (Rupr.) Kuzen.
+	// Reproduction
 	if (parameter[0].parameterlesenanzeige ==true) 
 		{
                     printf("\n\n\t Parameter fuer LARIX GMELINII (RUPR.) KUZEN.\n\n\t Fortpflanzung\n");
@@ -525,11 +524,11 @@ void Parametereinlesen(void)
                     printf("Schreibe:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedtravelbetween)?"true":"false");
                 }
 
-		// Wachstum
+		// Growth
                 if (parameter[0].parameterlesenanzeige ==true) 
 		{
-                    printf("\n\n\t Wachstum\n\n");
-                }
+                printf("\n\n\t Wachstum\n\n");
+        }
 
 	strcpy(uebergabestring,"gdbasalfacqgmel");
 	parameter[0].gdbasalfacqgmel= Parametereingabe(&uebergabestring[0], wortlaengemax, &trennzeichen[0], &parameter[0]);
@@ -932,7 +931,6 @@ void Parametereinlesen(void)
                 }
 
 
-	//parameter[0].pollenfall
 	strcpy(uebergabestring,"pollenfall");
 	parameter[0].pollenfall=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
 	
@@ -947,8 +945,8 @@ void Parametereinlesen(void)
 	
                 if (parameter[0].parameterlesenanzeige ==true) 
 		{
-                    printf("\n<----\t PARAMETEREINGABE\n");
-                };
+            printf("\n<----\t PARAMETEREINGABE\n");
+        };
 		
 	
 		

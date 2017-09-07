@@ -12,16 +12,19 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 {
 
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-		{ // tree_list Beginn
+		{ // tree_list loop BEGIN
 			pTree=(*pos);
 			
 
 			int i=(int) floor(pTree->ycoo*parameter[0].sizemagnif);
 			int j=(int) floor(pTree->xcoo*parameter[0].sizemagnif);
 
-			// Raster um Tree in Abh. von Dbasal ablaufen ...
-			// ... und in Abh. von Entfernung der Flaecheneinheit einen densitywert eintragen
-			// Umrechnung des Radius in Meter
+			
+			
+			
+			// Loop over grid around tree in dependence of Dbasal
+			// and push back a density value in distance dependence
+			// radius conversion to metres
 			// = dbasal*parameter[0].incfac/100.0;
 			
 			double flaechengroesze=0.0;
@@ -38,7 +41,8 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 			else if (parameter[0].calcinfarea == 6) //logistic growth function with maximum at 8 m
 				flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.5*pTree->dbasal) ) ) )-1;
 			
-			//StefanC: Wenn der Tree nur eine densitykachel beeinflusst
+			
+			//StefanC: If the trees influences only one density grid cell
 			if ( flaechengroesze<(1.0/parameter[0].sizemagnif) )
 			{
 				plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert += 
@@ -55,13 +59,13 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 								parameter[0].densitywertmanipulatorexp);
 			}
 			
-			//StefanC: Wenn der Tree mehr als eine densitykachel beeinflusst
+			//StefanC: If the trees influences more than one density grid cell
 			else
-			//Treedichtwert nimmt Kegelförmig ab
+			//Tree density value decreases cone shaped
 			{
-				// Ausmasze des abzulaufenden Rasters um den Tree bestimmen
+				// Determine dimensions of the grid around the tree
 				int xyquerrastpos= (int) floor( flaechengroesze*parameter[0].sizemagnif );
-				// Versetzte Koordinaten ermitteln und Mitsummieren des densitywertes
+				// determine shifted coordinates and adding up the density value
 				double sumdensitywert=0;
 				
 				for (int rastposi=(i+xyquerrastpos); rastposi>(i-(xyquerrastpos+1)); rastposi--)
@@ -70,14 +74,16 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					{
 						if ( ( rastposi<=( (treerows-1)*parameter[0].sizemagnif) && rastposi>=0 ) && ( rastposj<=( (treecols-1)*parameter[0].sizemagnif) && rastposj>=0 ) )
 						{
-							// Entfernungsberechnung um Groesze des densitywertes in Raumeinheit zu bestimmen ...
-							// ... und eintragen des Wertes an jenen Ort
+							
+							// Distance calculation to determine the influence of the density value in spatial units ...
+							// ... and inserting the value at every position
+								
 							double entfrastpos=sqrt(pow(double(i-rastposi),2)+pow(double(j-rastposj),2));
-									// Überprüfungsausgabe:
+									// Check up output:
 									// // //cout << "Gesamtentf=" << xyquerrastpos << "  & akt. Entf=" << entfrastpos;
 									//cout.precision(2);
 									//cout.setf( ios::fixed, ios::floatfield );
-							// Nur wenn die aktuelle Kachel in den Einflussbereich faellt, wird ein Wert eingeschrieben
+							// Only if the current grid cell is part of the influence area, a value is assigned
 							if (entfrastpos<= (double) xyquerrastpos)
 							{
 								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensitywert 
@@ -91,26 +97,24 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 								sumdensitywert+=pow(
 													pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0),
 													parameter[0].densitywertmanipulatorexp);
-									// Überprüfungsausgabe:
+									// Check up output:
 									//cout << pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0) << "\t";
 							}
 							else
 							{
-								// Überprüfungsausgabe:
+								// Check up output:
 								//cout << 0.0 << "\t";
 							}
 						}
 					}
-								//cout << endl;
 				}
-								//cout << endl;
-								//cout << endl;
+								
 
 				pTree->densitywert=sumdensitywert;
 			}
 
 			++pos;
-		} // tree_list Ende
+		} // tree_list loop END
 }
 
 
@@ -142,9 +146,8 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
   
  
  
-// densitywert: beinhaltet Stärke der umgebenden Konkurrenz und den Raum den er theoretisch zum Wachsen benötigt 
-// Treedensitywert: beinhaltet wieviel Raum ihm in Ahängigkeit der umgebenden Vegetation und unter Berücksichtigung der  Entfernung der Konkurrenz zur Verfügung steht
-
+// densitywert: contains strenght of surrounding concurrence and the space theoretically needed for growth
+// Treedensitywert: contains how much space is available for the tree considering surrounding vegetation and the distance
 
 
 
@@ -172,12 +175,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 			}
 			else 
 			{	
-				//double density_help = pTree->densitywert;
+				// Loop over grid around tree in dependence of Dbasal
+				// and push back a density value in distance dependence
+				// radius conversion to metres
 				
-				// Raster um Tree in Abh. von Dbasal ablaufen
-				// und in Abh. von Entfernung der Flaecheneinheit einen densitywert eintragen
-				// Umrechnung des Radius in Meter
-
 				double flaechengroesze=0.0;
 				if (parameter[0].calcinfarea == 1) //linearly increasing
 					flaechengroesze = pTree->dbasal * parameter[0].incfac/100.0; 
@@ -192,7 +193,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 				else if (parameter[0].calcinfarea == 6) //logistic growth function with maximum at 8 m
 					flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.5*pTree->dbasal) ) ) )-1;
 
-				//wenn der Tree nur eine Zelle beeinflusst
+				//If the tree only influences one grid cell
 				if ( flaechengroesze < (1.0/parameter[0].sizemagnif) )
 				{
 					// DENSITY 2
@@ -200,24 +201,24 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					{
 						if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert > 0.0) 
 						{
-							if (parameter[0].densitytiletree==1)	// Summe der Werte
+							if (parameter[0].densitytiletree==1)	// Sum of values
 							{
 								pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert));
-								//                           density_soll(an position) / density_ist(an position)
+									//                           density_desired(at position) / density_currently(at position)
 							}
-							else if (parameter[0].densitytiletree==2)	// Multiplikation der Werte
+							else if (parameter[0].densitytiletree==2)	// Multiplication of values
 							{
 								pTree->densitywert =	(1.0 - (pTree->densitywert
 															/ 
 															(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert*pTree->densitywert) 
 															)
 													);
-							//                         density_soll(an position) / density_ist(an position)
+									//                           density_desired(at position) / density_currently(at position)
 							}
 						}
 						
 						else 
-							pTree->densitywert=0.0; // keine Konkurrenz
+							pTree->densitywert=0.0; // no concurrence
 					}
 					
 
@@ -225,19 +226,18 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					// DENSITY 3
 					else if (parameter[0].densityart == 3)
 					{
-						
-						// Ziehe zufaellige Position im Gitter und weise den Wert zu
+						// Determine random grid cell position and assign a value
 						int izuf= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 						int jzuf= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 						
 						if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert > 0.0) 
 						{
-							if (parameter[0].densitytiletree==1)	//StefanC: Summe der Werte
+							if (parameter[0].densitytiletree==1)	//StefanC: Sum of values
 							{
 								pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert));
-								//                           density_soll(an position) / density_ist(an position)
+									//                           density_desired(at position) / density_currently(at position)
 							}
-							else if (parameter[0].densitytiletree==2)	// Multiplikation der Werte
+							else if (parameter[0].densitytiletree==2)	// Multiplication of values
 							{
 								pTree->densitywert =	(1.0 - (pTree->densitywert
 															/ 
@@ -250,8 +250,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 							pTree->densitywert = 0.0;
 					}
 					
-					
-					// Berechne den Einfluss der thawing_depth auf das Wachstum des Treees
+					// Calculate the thawing depth influence on the tree growth
 					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)) 
 						pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 					
@@ -260,11 +259,11 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 				}
 				else
 				{
-					// Ausmasze des abzulaufenden Rasters um den Tree bestimmen
+					// Determine dimensions of the grid around the tree
 					int xyquerrastpos= (int) floor( flaechengroesze*parameter[0].sizemagnif );
 					double maxdist= sqrt(pow(double(xyquerrastpos),2)+pow(double(xyquerrastpos),2));
 
-					// Versetzte Koordinaten ermitteln und Mitsummieren des densitywertes
+					// determine shifted coordinates and adding up the density value
 					double sumdensitywert=0;
 					double sumthawing_depth=0;
 					
@@ -276,11 +275,11 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						{
 							if ((rastposi<=( (treerows-1)*parameter[0].sizemagnif) && rastposi>=0) && ( rastposj<=( (treecols-1)*parameter[0].sizemagnif) && rastposj>=0))
 							{
-								// Entfernungsberechnung um Einfluss des densitywertes in Raumeinheit zu bestimmen ...
-								// ... wie beim Eintragen
+								// Distance calculation to determine the influence of the density value in spatial unit ...
+								//Similar to value insertion above
 								double entfrastpos=sqrt(pow(double(i-rastposi),2)+pow(double(j-rastposj),2));
 								
-								// Nur wenn das aktuelle Kachel in den Einflussbereich faellt, wird ein Wert eingeschrieben
+								// Only if the current grid cell is a part of the influenced area, a value is assigned
 								if (entfrastpos<= (double) xyquerrastpos)
 								{
 									int icurr=rastposi;
@@ -289,24 +288,24 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 									// Change of i/j vals only if DENSITY 3
 									if (parameter[0].densityart==3)
 									{
-										// Zufaellig ermitteln der Position von der die densitywerte genommen werden
+										// Calculate the position from where the density values are taken randomly
 										icurr= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
 										jcurr= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
 									}
 									
-									if (parameter[0].densitytiletree==1)	// Summe der Werte
+									if (parameter[0].densitytiletree==1)	// Sum of values
 									{
 										sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
-														* (1-entfrastpos/maxdist);	// Hinzugefuegt damit die Werte an der Peripherie schwaecher wirken, sonst wuerde es zu sehr groszen unrealistischen Werten fuehren
+														* (1-entfrastpos/maxdist);	// Added so the values influence is weaker peripherically, otherwise the density value influence would be overestimated
 									}
-									else if (parameter[0].densitytiletree==2)	// Multiplikation der Werte
+									else if (parameter[0].densitytiletree==2)	// Multiplication of values
 									{
-										// Nach der Wichtung der zusaetzlichen Werte anhand der individuellen Einflusswerte wird das Grundniveau dazuaddiert
+										// after weighting the additional values by the individual influence values the offset is added
 										sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
-														-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Treeeinflusswert an der akt Position*/ )
-														* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Treeeinflusswert an der akt Position*/
+														-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/ )
+														* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/
 														
-														+ pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Treeeinflusswert an der akt Position*/;
+														+ pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/;
 									}
 
 									sumthawing_depth+=(double) plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxthawing_depth;
@@ -323,7 +322,8 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 					if (sumdensitywert > 0.0) 
 						pTree->densitywert = 1.0 - (pTree->densitywert/sumdensitywert);
-													//density_soll / density_ist
+					//                           density_desired(at position) / density_currently(at position)
+
 					else 
 						pTree->densitywert=0.0;
 
@@ -340,7 +340,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 				pTree->densitywert= pTree->densitywert
-										  *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	// Optional: Je groeszer der Tree, desto heightr der Einfluss
+										  *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	// Optional: increasing influence by increasing tree height
 				
 				if (parameter[0].dichtheightrel==1) 
 				{
@@ -384,10 +384,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					else if (pTree->height>=200)
 						pTree->densitywert=0.8;
 				}
-				else if (parameter[0].dichtheightrel==10) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==10) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
-					// ... linear
+					// density value decreases by increasing tree height
+					// ... linearly
 					double densitywertminimum=0.1;
 					double ageseinfluss=( -1*(1-densitywertminimum)/100.0* (double) pTree->age + 1.0 );
 					if(ageseinfluss<densitywertminimum)
@@ -396,10 +396,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					}
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 				}
-				else if (parameter[0].dichtheightrel==11) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==11) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
-					// ... linear
+					// density value decreases by increasing tree height
+					// ... linearly
 					double densitywertminimum=0.5;
 					double ageseinfluss=( -1*(1-densitywertminimum)/100.0* (double) pTree->age + 1.0 );
 					if(ageseinfluss<densitywertminimum)
@@ -408,10 +408,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					}
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 				}
-				else if (parameter[0].dichtheightrel==12) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==12) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
-					// ... linear
+					// density value decreases by increasing tree height
+					// ... linearly
 					double densitywertminimum=0.1;
 					double ageseinfluss=( -1*(1-densitywertminimum)/50.0* (double) pTree->age + 1.0 );
 					if(ageseinfluss<densitywertminimum)
@@ -420,10 +420,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					}
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 				}
-				else if (parameter[0].dichtheightrel==13) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==13) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
-					// ... linear
+					// density value decreases by increasing tree height
+					// ... linearly
 					double densitywertminimum=0.5;
 					double ageseinfluss=( -1*(1-densitywertminimum)/50.0* (double) pTree->age + 1.0 );
 					if(ageseinfluss<densitywertminimum)
@@ -432,9 +432,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					}
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 				}
-				else if (parameter[0].dichtheightrel==20) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==20) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
+					// density value decreases by increasing tree height
 					double densitywertminimum=0.1;
 					double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.5));
 					if(ageseinfluss<densitywertminimum)
@@ -444,9 +444,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 
 				}
-				else if (parameter[0].dichtheightrel==21) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==21) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
+					// density value decreases by increasing tree height
 					double densitywertminimum=0.5;
 					double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.15));
 					if(ageseinfluss<densitywertminimum)
@@ -456,9 +456,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 
 				}
-				else if (parameter[0].dichtheightrel==22) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==22) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
+					// density value decreases by increasing tree height
 					double densitywertminimum=0.1;
 					double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.6));
 					if(ageseinfluss<densitywertminimum)
@@ -468,9 +468,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					pTree->densitywert= pTree->densitywert*ageseinfluss;
 
 				}
-				else if (parameter[0].dichtheightrel==23) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+				else if (parameter[0].dichtheightrel==23) // added to fit the height classes distribution properly
 				{
-					// densitywert wird kleiner je großer der Tree ist
+					// density value decreases by increasing tree height
 					double densitywertminimum=0.5;
 					double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.175));
 					if(ageseinfluss<densitywertminimum)
@@ -546,11 +546,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 				}
 				else 
 				{
-					//double density_help = pTree->densitywert;
 					
-					// Raster um Tree in Abh. von Dbasal ablaufen
-					// und in Abh. von Entfernung der Flaecheneinheit einen densitywert eintragen
-					// Umrechnung des Radius in Meter
+					// Loop over grid around tree in dependence of Dbasal
+					// and push back a density value in distance dependence
+					// radius conversion to metres
 
 					double flaechengroesze=0.0;
 					if (parameter[0].calcinfarea == 1) //linearly increasing
@@ -566,7 +565,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					else if (parameter[0].calcinfarea == 6) //logistic growth function with maximum at 8 m
 						flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.5*pTree->dbasal) ) ) )-1;
 
-					//wenn der Tree nur eine Zelle beeinflusst
+					//If the tree only influences one grid cell
 					if ( flaechengroesze < (1.0/parameter[0].sizemagnif) )
 					{
 						// DENSITY 2
@@ -574,24 +573,24 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						{
 							if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert > 0.0) 
 							{
-								if (parameter[0].densitytiletree==1)	// Summe der Werte
+								if (parameter[0].densitytiletree==1)	// Sum of values
 								{
 									pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert));
-									//                           density_soll(an position) / density_ist(an position)
+									//                           density_desired(at position) / density_currently(at position)
 								}
-								else if (parameter[0].densitytiletree==2)	// Multiplikation der Werte
+								else if (parameter[0].densitytiletree==2)	// Multiplication of values
 								{
 									pTree->densitywert =	(1.0 - (pTree->densitywert
 																/ 
 																(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert*pTree->densitywert) 
 																)
 														);
-								//                         density_soll(an position) / density_ist(an position)
+								//                         density_desired(at position) / density_currently(at position)
 								}
 							}
 							
 							else 
-								pTree->densitywert=0.0; // keine Konkurrenz
+								pTree->densitywert=0.0; // No concurrence effect
 						}
 						
 
@@ -600,18 +599,18 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						else if (parameter[0].densityart == 3)
 						{
 							
-							// Ziehe zufaellige Position im Gitter und weise den Wert zu
+							// determine the grid position randomly
 							int izuf= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 							int jzuf= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 							
 							if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert > 0.0) 
 							{
-								if (parameter[0].densitytiletree==1)	//StefanC: Summe der Werte
+								if (parameter[0].densitytiletree==1)	//StefanC: Sum of values
 								{
 									pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert));
-									//                           density_soll(an position) / density_ist(an position)
+									//                           density_desired(at position) / density_currently(at position)
 								}
-								else if (parameter[0].densitytiletree==2)	// Multiplikation der Werte
+								else if (parameter[0].densitytiletree==2)	// Multiplication of values
 								{
 									pTree->densitywert =	(1.0 - (pTree->densitywert
 																/ 
@@ -624,22 +623,21 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 								pTree->densitywert = 0.0;
 						}
 						
-						
-						// Berechne den Einfluss der thawing_depth auf das Wachstum des Treees
+						// Calculate the influence of the thawing depth on the tree growth
 						if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)) 
 							pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 						
 						else
 							pTree->thawing_depthinfluence=100;
 					}
-					// ... wenn der Tree mehrere Zellen beeinflusst
+					// ... if the tree influences more than one section
 					else
 					{
-						// Ausmasze des abzulaufenden Rasters um den Tree bestimmen
+						// Determine dimensions of the considered grid around a tree
 						int xyquerrastpos= (int) floor( flaechengroesze*parameter[0].sizemagnif );
 						double maxdist= sqrt(pow(double(xyquerrastpos),2)+pow(double(xyquerrastpos),2));
 
-						// Versetzte Koordinaten ermitteln und Mitsummieren des densitywertes
+						// Determine rescaled coordinates and summation of the density value
 						double sumdensitywert=0;
 						double sumthawing_depth=0;
 						
@@ -664,7 +662,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 										// Change of i/j vals only if DENSITY 3
 										if (parameter[0].densityart==3)
 										{
-											// Zufaellig ermitteln der Position von der die densitywerte genommen werden
+											// determine the position of density values randomly
 											icurr= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
 											jcurr= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
 										}
@@ -672,16 +670,17 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 										if (parameter[0].densitytiletree==1)	// Summe der Werte
 										{
 											sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
-															* (1-entfrastpos/maxdist);	// Hinzugefuegt damit die Werte an der Peripherie schwaecher wirken, sonst wuerde es zu sehr groszen unrealistischen Werten fuehren
+															* (1-entfrastpos/maxdist);	
+															// Added so the values influence is weaker peripherically, otherwise the density value influence would be overestimated
 										}
-										else if (parameter[0].densitytiletree==2)	// Multiplikation der Werte
+										else if (parameter[0].densitytiletree==2)	// Multiplication of values
 										{
-											// Nach der Wichtung der zusaetzlichen Werte anhand der individuellen Einflusswerte wird das Grundniveau dazuaddiert
+											// after weighting the additional values by the individual influence values the offset is added
 											sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
-															-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Treeeinflusswert an der akt Position*/ )
-															* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Treeeinflusswert an der akt Position*/
+															-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/ )
+															* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/
 															
-															+ pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Treeeinflusswert an der akt Position*/;
+															+ pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/;
 										}
 
 										sumthawing_depth+=(double) plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxthawing_depth;
@@ -715,7 +714,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 					pTree->densitywert= pTree->densitywert
-											  *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	// Optional: Je groeszer der Tree, desto heightr der Einfluss
+					*pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	// Optional: increasing influence by increasing tree height
 					
 					if (parameter[0].dichtheightrel==1) 
 					{
@@ -759,10 +758,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						else if (pTree->height>=200)
 							pTree->densitywert=0.8;
 					}
-					else if (parameter[0].dichtheightrel==10) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==10) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
-						// ... linear
+						// density value decreases by increasing tree height
+						// ... linearly
 						double densitywertminimum=0.1;
 						double ageseinfluss=( -1*(1-densitywertminimum)/100.0* (double) pTree->age + 1.0 );
 						if(ageseinfluss<densitywertminimum)
@@ -771,10 +770,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						}
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 					}
-					else if (parameter[0].dichtheightrel==11) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==11) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
-						// ... linear
+						// density value decreases by increasing tree height
+						// ... linearly
 						double densitywertminimum=0.5;
 						double ageseinfluss=( -1*(1-densitywertminimum)/100.0* (double) pTree->age + 1.0 );
 						if(ageseinfluss<densitywertminimum)
@@ -783,10 +782,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						}
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 					}
-					else if (parameter[0].dichtheightrel==12) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==12) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
-						// ... linear
+						// density value decreases by increasing tree height
+						// ... linearly
 						double densitywertminimum=0.1;
 						double ageseinfluss=( -1*(1-densitywertminimum)/50.0* (double) pTree->age + 1.0 );
 						if(ageseinfluss<densitywertminimum)
@@ -795,10 +794,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						}
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 					}
-					else if (parameter[0].dichtheightrel==13) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==13) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
-						// ... linear
+						// density value decreases by increasing tree height
+						// ... linearly
 						double densitywertminimum=0.5;
 						double ageseinfluss=( -1*(1-densitywertminimum)/50.0* (double) pTree->age + 1.0 );
 						if(ageseinfluss<densitywertminimum)
@@ -807,9 +806,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						}
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 					}
-					else if (parameter[0].dichtheightrel==20) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==20) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
+						// density value decreases by increasing tree height
 						double densitywertminimum=0.1;
 						double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.5));
 						if(ageseinfluss<densitywertminimum)
@@ -819,9 +818,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 
 					}
-					else if (parameter[0].dichtheightrel==21) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==21) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
+						// density value decreases by increasing tree height
 						double densitywertminimum=0.5;
 						double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.15));
 						if(ageseinfluss<densitywertminimum)
@@ -831,9 +830,9 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 
 					}
-					else if (parameter[0].dichtheightrel==22) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==22) // added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
+						// density value decreases by increasing tree height
 						double densitywertminimum=0.1;
 						double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.6));
 						if(ageseinfluss<densitywertminimum)
@@ -843,9 +842,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						pTree->densitywert= pTree->densitywert*ageseinfluss;
 
 					}
-					else if (parameter[0].dichtheightrel==23) // Hinzugefügt am 13.11. um die Größenklassenverteilung besser zu fitten
+					else if (parameter[0].dichtheightrel==23) 
+						// added to fit the height classes distribution properly
 					{
-						// densitywert wird kleiner je großer der Tree ist
+						// density value decreases by increasing tree height
 						double densitywertminimum=0.5;
 						double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.175));
 						if(ageseinfluss<densitywertminimum)
@@ -857,12 +857,10 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					}
 
 					
-					
-					
 					if (pTree->densitywert<0) 
 						pTree->densitywert=0.0;
 
-					// auf einstellbaren Maximalwert setzen falls sehr grosz
+					// set to maximal value if density value is greater than it (rescaling)
 					if (pTree->densitywert>parameter[0].desitymaxreduction) 
 						pTree->densitywert=parameter[0].desitymaxreduction;
 						
@@ -903,9 +901,11 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
 													  *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
-													  +(1/0.95)) ); // Logistisches Wachstum Kapazitaet=0.95; N0=0.01; r=(1/200); Verschiebung auf mind. 0.05 bis 1.0
+													  +(1/0.95)) ); 
+													   // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
 				
-				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	// in 0.1mm Schritten; 6mm Zuwachs jaehrlich aus 30 cm Aufwachs in 50 jahren (Aus Literatur)
+				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);
+				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
 				pKarten->auflagenstaerkemittel = (unsigned short) ( (double) 
 												 (pKarten->auflagenstaerke8
@@ -918,7 +918,11 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 												 +pKarten->auflagenstaerke1
 												 +pKarten->auflagenstaerke0
 												 +pKarten->auflagenstaerke)
-												 /10.0); //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
+												 /10.0); 
+												 // thawing_depth reacts with a time lag of 10 years to a changing number of trees
+												 
+												 //***german:
+												 //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
 				pKarten->auflagenstaerke8 = pKarten->auflagenstaerke7;
 				pKarten->auflagenstaerke7 = pKarten->auflagenstaerke6;
@@ -934,8 +938,8 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
-				// Berechnung der Daempfung die durch die organische Auflage entsteht (Dämpfung vermindert thawing_depth, Formel aus Lit)
-				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 ist Steigung um bei etwa 4000 den Maximalwert zu erreichen
+				// Calculation of the damping through organic material (damping reduces thawing_depth, formula taken from literature)
+				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
@@ -965,9 +969,11 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
 													  *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
-													  +(1/0.95)) ); // Logistisches Wachstum Kapazitaet=0.95; N0=0.01; r=(1/200); Verschiebung auf mind. 0.05 bis 1.0
+													  +(1/0.95)) ); 
+													  // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
 				
-				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	// in 0.1mm Schritten; 6mm Zuwachs jaehrlich aus 30 cm Aufwachs in 50 jahren (Aus Literatur)
+				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	
+				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
 				pKarten->auflagenstaerkemittel = (unsigned short) ( (double) 
 												 (pKarten->auflagenstaerke8
@@ -980,7 +986,11 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 												 +pKarten->auflagenstaerke1
 												 +pKarten->auflagenstaerke0
 												 +pKarten->auflagenstaerke)
-												 /10.0); //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
+												 /10.0); 
+												 // thawing_depth reacts with a time lag of 10 years to a changing number of trees
+												 
+												 //***german:
+												 //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
 				pKarten->auflagenstaerke8 = pKarten->auflagenstaerke7;
 				pKarten->auflagenstaerke7 = pKarten->auflagenstaerke6;
@@ -996,20 +1006,19 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
-				// Berechnung der Daempfung die durch die organische Auflage entsteht (Dämpfung vermindert thawing_depth, Formel aus Lit)
-				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 ist Steigung um bei etwa 4000 den Maximalwert zu erreichen
+				// Calculation of the damping through organic material
+				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
 				
-				// Berechnung der SAL
-				pKarten->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+				// Calculation of SAL
+				pKarten->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));
+				// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 			}
-		} // Kartenschleife Ende
+		} // plot list loop END
 
 	}// more than one core
-	
-	
 	
 }
 
@@ -1021,7 +1030,6 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
 /****************************************************************************************//**
  * \brief update density maps and active layer depth
  *
- * Karten-Element ändert exakte Position in Gridzellen um
  * 
  *
  *
@@ -1032,7 +1040,7 @@ void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<K
 	int aktort=0;
 	
 	for (vector<vector<Karten*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
-	{ // Weltschleife Beginn
+	{ // World plot list loop BEGIN
 		vector<Karten*>& plot_list = *posw;
 
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
@@ -1045,38 +1053,31 @@ void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<K
 
 		double time_start_0=omp_get_wtime();
 				
-		// Kartenelemente Reset und Update
-		/*!ResetMaps(int yearposition, vector<Karten*>& plot_list, vector<weather*>& weather_list)*/
+		// Reset and update plot list elements
 		ResetMaps(yearposition, plot_list, weather_list);
 
 		double time_ResetMaps=omp_get_wtime();
 
 		
-		// Treedensity eintragen
-		/*!AddTreeDensity(list<Tree*>& tree_list, vector<Karten*>& plot_list)*/
+		// push back treedensity 
 		AddTreeDensity(tree_list, plot_list);
 		
 		double time_AddTreeDensity=omp_get_wtime();
 
 
-		// Weitere Verarbeitung der densitywerte
-		/*!IndividualTreeDensity(list<Tree*>& tree_list, vector<Karten*>& plot_list)*/
+		// Further evaluation of density values
 		IndividualTreeDensity(tree_list, plot_list);
 		
-		// cout << endl << " TIME: ResetMaps=" << time_ResetMaps-time_start_0 << endl;
-		// cout << endl << " TIME: AddTreeDensity=" << time_AddTreeDensity-time_ResetMaps << endl;
-		// cout << endl << " TIME: IndividualTreeDensity=" << omp_get_wtime()-time_AddTreeDensity << endl;
-
 		if(parameter[0].computationtime==1)
 		{
 			openupdate:
 			FILE *fp5;
 			fp5=fopen("t_N_plotupdate.txt","a+");
-			if(fp5==0)
+				if(fp5==0)
 				{
 				goto openupdate;
 				}
-			fprintf(fp5,"%d;%lu;%10.20f;%10.20f;%10.20f\n",
+				fprintf(fp5,"%d;%lu;%10.20f;%10.20f;%10.20f\n",
 					parameter[0].ivort, 
 					tree_list.size(),
 					time_ResetMaps-time_start_0,
@@ -1086,7 +1087,7 @@ void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<K
 			fclose(fp5);
 		}
 		
-	} // Weltschleife Ende
+	} // world plot list loop END
 
 }
 

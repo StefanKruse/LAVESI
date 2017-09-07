@@ -916,13 +916,7 @@ void Parametereinlesen(void)
                     printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenvert);
                 }
 	
-	strcpy(uebergabestring,"pollenDistdensplot");
-	parameter[0].pollenDistdensplot=(int) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
-                if (parameter[0].parameterlesenanzeige ==true)
-                {
-                    printf("Schreibe:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenDistdensplot);
-                }
-		
+			
 	strcpy(uebergabestring,"pollenrichtungsvarianz");
 	parameter[0].pollenrichtungsvarianz=(double) Parametereingabe(&uebergabestring[0],wortlaengemax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterlesenanzeige ==true)

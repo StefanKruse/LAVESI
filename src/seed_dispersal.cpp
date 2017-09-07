@@ -100,7 +100,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									
 					///and random number < rate of emerging seeds
 					if(flug <= parameter[0].seedflugrate)
-					{ // If the seed crosses a border a coordinate is calculated
+					{ // If the seed disperses a coordinate is calculated
 						
 						double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 											
@@ -151,7 +151,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											  dateizeiger = fopen (dateiname.c_str(), "w");
 												fprintf(dateizeiger,"IVORT;");
 												fprintf(dateizeiger, "name;");
-												fprintf(dateizeiger, "jahr;");
+												fprintf(dateizeiger, "year;" );
 												fprintf(dateizeiger, "parentheight;");
 												//fprintf(dateizeiger, "xentfernung;");
 												//fprintf(dateizeiger, "yentfernung;");
@@ -159,7 +159,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(dateizeiger, "direction;");
 												fprintf(dateizeiger, "xcoo;");
 												fprintf(dateizeiger, "ycoo;");
-												fprintf(dateizeiger, "art;");
+												fprintf(dateizeiger, "species;" );
 												fprintf(dateizeiger, "weatherchoice;");
 												fprintf(dateizeiger, "thawing_depth;");	
 												fprintf(dateizeiger, "windspd;");
@@ -339,12 +339,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										
 						///and random number < rate of emerging seeds
 						if(flug <= parameter[0].seedflugrate)
-						{ // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Beginn
+						{ // If the seed disperses a coordinate is calculated
 							
 							double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 												
 							if(ratiorn>0.0)
-							{ // RN Groeszer Null Beginn
+							{ // RN > 0 BEGIN
 								
 								pseed->imcone=false;
 								
@@ -385,7 +385,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											  dateizeiger = fopen (dateiname.c_str(), "w");
 												fprintf(dateizeiger,"IVORT;");
 												fprintf(dateizeiger, "name;");
-												fprintf(dateizeiger, "jahr;");
+												fprintf(dateizeiger, "year;" );
 												fprintf(dateizeiger, "parentheight;");
 												//fprintf(dateizeiger, "xentfernung;");
 												//fprintf(dateizeiger, "yentfernung;");
@@ -393,7 +393,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(dateizeiger, "direction;");
 												fprintf(dateizeiger, "xcoo;");
 												fprintf(dateizeiger, "ycoo;");
-												fprintf(dateizeiger, "art;");
+												fprintf(dateizeiger, "species;" );
 												fprintf(dateizeiger, "weatherchoice;");
 												fprintf(dateizeiger, "thawing_depth;");	
 												fprintf(dateizeiger, "windspd;");
@@ -514,9 +514,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			
 									if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
 									{
-										printf("\n\nLaVeSi wurde beendet ");
+										printf("\n\nLaVeSi was exited ");
 										printf("in seedausbreitung.cpp\n");
-										printf("... Reason: Normal ausgebreiteter seed ist nach Loeschvorgang der zu weit geflogenen immernoch ausserhalb der Flaeche (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
+										printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
 										exit(1);
 									}
 
@@ -531,7 +531,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										++pari;
 									}
 
-							} // RN Groeszer Null Ende
+							} // RN > 0 END
 
 						} 
 						else  // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
@@ -579,9 +579,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						pseed=(*it);
 					
 					
-					///Loop around all Seeds
-					
-						
+						///Loop around all Seeds
 						///If Seed is in a cone
 						if (pseed->imcone==true)
 						{
@@ -589,12 +587,12 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											
 							///and random number < rate of emerging seeds
 							if(flug <= parameter[0].seedflugrate)
-							{ // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Beginn
+							{ // If the seed disperses a coordinate is calculated
 								
 								double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 													
 								if(ratiorn>0.0)
-								{ // RN Groeszer Null Beginn
+								{ // RN >0 BEGIN
 									
 									pseed->imcone=false;
 									
@@ -619,30 +617,30 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
 												richtung=atan2(iquer,jquer);
 																		
-												//Nadja: seed geben ihre Entf-Daten aus - Ausgabe Anfang
+												//distance output begin
 												FILE *dateizeiger;
 												string dateiname;
 
-												// Dateinamen zusammensetzen
+												// assemble file name
 												char dateinamesuf[12];
 												sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
 												dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 											
-												// Datei versuchen zum Lesen und Schreiben zu oeffnen
+												// trying to open file for reading
 												dateizeiger = fopen (dateiname.c_str(), "r+");
-												// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+												// if fopen fails create a new file and header
 												if (dateizeiger == NULL)
 												{
 												  dateizeiger = fopen (dateiname.c_str(), "w");
 													fprintf(dateizeiger,"IVORT;");
 													fprintf(dateizeiger, "name;");
-													fprintf(dateizeiger, "jahr;");
+													fprintf(dateizeiger, "year;" );
 													fprintf(dateizeiger, "parentheight;");
 													fprintf(dateizeiger, "distance;");
 													fprintf(dateizeiger, "direction;");
 													fprintf(dateizeiger, "xcoo;");
 													fprintf(dateizeiger, "ycoo;");
-													fprintf(dateizeiger, "art;");
+													fprintf(dateizeiger, "species;" );
 													fprintf(dateizeiger, "weatherchoice;");
 													fprintf(dateizeiger, "thawing_depth;");	
 													fprintf(dateizeiger, "windspd;");
@@ -651,7 +649,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 													if (dateizeiger == NULL)
 													{
-														fprintf(stderr, "Fehler: seedentfernungsdatei konnte nicht geoeffnet werden!\n");
+														fprintf(stderr, "Fehler: seed distance file could not be opened!\n");
 														exit(1);
 													}
 												}
@@ -689,7 +687,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									*******************************************************************************************/
 										bool sameausserhalb=false;
 										
-										// Ueberpruefung ob im Feld sonst fliegt dieser aus dem Feld
+										// Check if the seed is on the plot:
 										if(pseed->ycoo > (double) (treerows-1)) 
 										{
 											if((parameter[0].periodRB==1))
@@ -765,9 +763,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 				
 										if( (sameausserhalb==false) && ( (pseed->ycoo<0.0) | (pseed->ycoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) ) )
 										{
-											printf("\n\nLaVeSi wurde beendet\n");
-											printf("Aktueller Schritt => seedausbreitung.cpp\n");
-											printf("... Grund: Normal ausgebreiteter seed ist nach Loeschvorgang der zu weit geflogenen immernoch ausserhalb der Flaeche (mit Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
+											printf("\n\nLaVeSi was exited ");
+											printf("in seedausbreitung.cpp\n");
+											printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n", pseed->ycoo, pseed->xcoo);
 											exit(1);
 										}
 
@@ -776,10 +774,10 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											pseed->ycoo=-99999.9;
 											// pseed->xcoo=-99999.9;
 										}
-								} // RN Groeszer Null Ende
-							}   // Falls der seed ausfliegt, so wird eine Koordinate ermittelt Ende
-						} //Imcone? Ende
-					} // Ende seed_list ablaufen
+								} // RN > 0 END
+							}   // If the seed disperses a coordinate is calculated END
+						} //Imcone? END
+					} // seed_list loop END
 				}//END: pragma for
 				
 				for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)

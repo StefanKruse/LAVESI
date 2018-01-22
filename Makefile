@@ -68,12 +68,12 @@ weather_input.o: src/weather_input.cpp $(HEADER)
 all: ageing.o data_output.o establishment.o distribution.o fire.o growth.o main.o mortality.o normdistributedrn.o parameterintro.o plot_update.o reset.o SA_parametervariation.o seed_dispersal.o seed_production.o treedistribution.o weather_input.o executables
 	
 executables: $(OBJS)
-	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./fire.o ./growth.o ./main.o ./mortality.o ./normdistributedrn.o ./parameterintro.o ./plot_update.o ./reset.o ./SA_parametervariation.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o  -lm -z muldefs -o LAVESIgen
+	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./fire.o ./growth.o ./main.o ./mortality.o ./normdistributedrn.o ./parameterintro.o ./plot_update.o ./reset.o ./SA_parametervariation.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o  -lm -z muldefs -o LAVESI_WIND
 	rm -rf *.o
 	
 .PHONY : clean
 clean: 
-	rm -rf data*.csv nohup.out output/data*.csv pollDist* output/windgen*.txt t_*.txt *o LAVESIgen
+	rm -rf data*.csv nohup.out output/data*.csv pollDist* output/windgen*.txt t_*.txt *o LAVESI_WIND
 
 cleanoutput:
 	rm -rf data*.csv output/data*.csv t_*.txt

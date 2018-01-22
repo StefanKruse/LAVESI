@@ -1035,12 +1035,9 @@ int main()
 	
 	
 	//time registration for the whole simulation run
-	
-	//***german:
-	//StefanC: Zeitaufnahme fuer Gesamtlauf
 	clock_t start_time_main = clock();
 						
-			//---------Just some Initialisation stuff---------
+			//---------Initialisation ---------
 			
 
 			
@@ -1050,23 +1047,24 @@ int main()
 			
 			// console output of the version and general information
 			printf("\n---->\tLAVESI\n");
-			printf("\n You have started  LAVESI, " 
+			printf("\n You have started  LAVESI-WIND, " 
 					"An individually-based and spatial explicit simulation model"
-					" for the vegetation dynamics of LARIX GMELINII (RUPR.) KUZEN."
-					" - driven by weather data."
-					"\n\n Version:\t 2.07 (Multiprocessing)"
-					"\n Date:\t\t 10.04.2017" 
+					" for the vegetation dynamics of LARIX (L.)"
+					" - driven by temperature, precipitation and wind data."
+					"\n\n Version:\t 2.0 (Multiprocessing)"
+					"\n Date:\t\t 22.01.2018" 
 					"\n authors:"
 					"\n\t Stefan Kruse\tstefan.kruse@awi.de"
 					"\n\t Alexander Gerdes\talexander.gerdes@awi.de"
 					"\n\t Nadja Kath\tnadja.kath@awi.de"
+					"\n\t of prior versions:"
 					"\n\t Mareike Wieczorek\tmareike.wieczorek@awi.de"
 					"\n");
 			printf("\n<----\n");
 
 
 			
-			//---------Just some Initialisation stuff---------
+			//---------Initialisation ---------
 			
 			Parametereinlesen();
 
@@ -1078,7 +1076,7 @@ int main()
 				printf("\n\n\tWARNING:\tSimulation with initial trees and seed input");
 			else if (parameter[0].seedintro==false && parameter[0].starttrees==0)
 				printf("\n\n\tWARNING:\tSimulation without initial trees and without seed input");
-			// ... Laufparameter
+			// ... run parameter check
 			if ( parameter[0].mapylength!=4 && (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999) )
 				printf("\n\n\tWARNING:\tLatitudinal length >1 AND all 4 Sites will be simulated ==> mapylenght was set to 4");
 			if ( (parameter[0].mapylength!=11 || (parameter[0].mapylength*parameter[0].mapylength)!=121) && (parameter[0].weatherchoice==1111) )
@@ -1157,7 +1155,7 @@ int main()
 	clock_t end_time_main = clock();
 	cout << endl << "Total time: " << (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC) << endl; //StefanC: Zeit fuer Gesamtlauf
 	
-	//print areal dependency of total simulation time:
+	//export areal dependency of total simulation time:
 	if(parameter[0].computationtime==1)
 	{
 		FILE *fptA;

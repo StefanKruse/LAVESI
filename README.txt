@@ -13,6 +13,7 @@ Code available at https://doi.org/10.5281/zenodo.1155486
 Authors:
 - Stefan Kruse - stefan.kruse@awi.de
 - Alexander Gerdes - alexander.gerdes@awi.de
+- Nadja Kath - nkath@uni-potsdam.de
 
 /* ------------------------------------ */
 

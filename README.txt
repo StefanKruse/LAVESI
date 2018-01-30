@@ -1,19 +1,17 @@
 /* ------------------------------------ Date: 22.01.2018 */
 
-LAVESI-WIND 2.0
+LAVESI-WIND 1.0
 
 This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, updated by wind-dependent seed dispersal and parallelisation computationally intense parts of the code. This program simulates the vegetation dynamics of the larch tree species <i>Larix gmelinii</i> (RUPR.) RUPR. which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug).
 
 Version history:
- - The version of this code is LAVESI-WIND 2.0 and is SUBMITTED/ACCEPTED for review in Geoscientific Model Development - LINK
- - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 
-Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584
-Code available at https://doi.org/10.5281/zenodo.1155486
+ - The version of this code is LAVESI-WIND 1.0 and is SUBMITTED for review in Geoscientific Model Development.
+ - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
 
 Authors:
 - Stefan Kruse - stefan.kruse@awi.de
 - Alexander Gerdes - alexander.gerdes@awi.de
-- Nadja Kath - nkath@uni-potsdam.de
+- Nadja J. Kath - nkath@uni-potsdam.de
 
 /* ------------------------------------ */
 

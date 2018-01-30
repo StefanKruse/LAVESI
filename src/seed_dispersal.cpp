@@ -125,7 +125,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							
 													
 							// seed dispersal output:
-								if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9)
+								if(parameter[0].ivort>1045 && parameter[0].outputmode!=9)
 								{							
 										double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 									
@@ -359,7 +359,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								
 								
 								// seed dispersal output:
-								if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+								if(parameter[0].ivort>1045 && parameter[0].outputmode!=9 && parameter[0].omp_num_threads==1)
 								{							
 										double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 									
@@ -606,7 +606,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pseed->elternheight, pseed->species);
 									
 									// seed dispersal output:
-									if(parameter[0].ivort>1045 && parameter[0].ausgabemodus!=9 && parameter[0].omp_num_threads==1)
+									if(parameter[0].ivort>1045 && parameter[0].outputmode!=9 && parameter[0].omp_num_threads==1)
 									{
 											double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 										
@@ -800,7 +800,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 
 		// Display seeds leaving the plot:
-		if (parameter[0].seedausbranzeige==true) 
+		if (parameter[0].seeddispvis==true) 
 			printf("\n   Leaving seeds (N/O/S/W)=(%d/%d/%d/%d) ", rausgeflogenN, rausgeflogenO, rausgeflogenS, rausgeflogenW);
 	} // World list END
 }

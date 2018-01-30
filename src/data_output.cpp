@@ -1,6 +1,5 @@
 using namespace std;
 
-
 void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
 {
 	double xminwindow=0.0;
@@ -271,9 +270,9 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		if (parameter[0].Data_output==true)
+		if (parameter[0].dataoutput==true)
 		{//Data output depending on the corresponding parameter BEGIN
-			if (parameter[0].ausgabemodus==0) // "normally"
+			if (parameter[0].outputmode==0) // "normally"
 			{
 				if (parameter[0].einschwingen==true)
 				{
@@ -293,7 +292,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					}
 				}
 			}
-			else if (parameter[0].ausgabemodus==1) // "SensitivityAnalysis"
+			else if (parameter[0].outputmode==1) // "SensitivityAnalysis"
 			{
 				if (parameter[0].einschwingen==true)
 				{
@@ -313,7 +312,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					}
 				}
 			}
-			else if (parameter[0].ausgabemodus==2) // "SA_2"
+			else if (parameter[0].outputmode==2) // "SA_2"
 			{
 				ausgabecurrencies=true;
 
@@ -325,7 +324,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					ausgabedensity=true;
 				}
 			}
-			else if (parameter[0].ausgabemodus==3) // "ClimGrad"
+			else if (parameter[0].outputmode==3) // "ClimGrad"
 			{
 				ausgabecurrencies=true;
 
@@ -337,7 +336,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					ausgabedensity=true;
 				}
 			}
-			else if (parameter[0].ausgabemodus==4) // "TemperatureExperiment"
+			else if (parameter[0].outputmode==4) // "TemperatureExperiment"
 			{
 				ausgabecurrencies=true;
 				
@@ -355,7 +354,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 
 			}
-			else if (parameter[0].ausgabemodus==5) // "TemperatureExperiment"
+			else if (parameter[0].outputmode==5) // "TemperatureExperiment"
 			{
 				ausgabecurrencies=true;
 				
@@ -365,7 +364,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 
 			}
-			else if (parameter[0].ausgabemodus==9) // "OMP"
+			else if (parameter[0].outputmode==9) // "OMP"
 			{
 				ausgabecurrencies=true;
 			}
@@ -721,7 +720,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				fclose(dateizeiger);
 
 				//StefanC: Additional console output
-				if (parameter[0].jahranzeige ==true)
+				if (parameter[0].yearlyvis ==true)
 				{
 					cout << endl << "\tBasalarea = " << pEvaluation->BAliste[pEvaluation->BAliste.size()-1] << endl;
 					cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
@@ -764,11 +763,11 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					s3<<parameter[0].ivort;
 					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
 					
-					if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
+					if (parameter[0].outputmode==0 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
 					{
 						dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
 					}
-					else if (parameter[0].ausgabemodus==1) // hier weatherchoice nicht berücksichtigt! 	
+					else if (parameter[0].outputmode==1) // hier weatherchoice nicht berücksichtigt! 	
 					{
 						if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
 						{
@@ -939,7 +938,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			// -- -- -- -- -- BEGIN  individual    trees -- -- -- -- -- -- //
 
 			// assemble file name
-			if (parameter[0].ausgabemodus!=1)
+			if (parameter[0].outputmode!=1)
 			{
 					s1<<parameter[0].wiederholung;
 					s2<<parameter[0].weatherchoice;
@@ -949,7 +948,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					s2.str("");s2.clear();
 					s3.str("");s3.clear();
 			}
-			else if (parameter[0].ausgabemodus==1)
+			else if (parameter[0].outputmode==1)
 			{
 				if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
 				{
@@ -1123,7 +1122,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					pTree=(*pos);
 
 					// assemble file name
-					if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==2 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
+					if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
 					{
 						s1<<jahr;s2<<pTree->xworldcoo;s3<<pTree->yworldcoo;s4<<parameter[0].wiederholung;
 						s5<<pTree->species;s6<<parameter[0].weatherchoice;s7<<parameter[0].thawing_depth;
@@ -1138,7 +1137,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						s6.str("");s6.clear();
 						s7.str("");s7.clear();
 					}
-					else if (parameter[0].ausgabemodus==1)
+					else if (parameter[0].outputmode==1)
 					{
 						if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
 						{
@@ -1157,12 +1156,12 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 
 					if (parameter[0].ordnerda==false)
 					{
-						if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==2 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
+						if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
 						{
 							system("mkdir datatrees_Zuwachs");
 							parameter[0].ordnerda=true;
 						}
-						else if (parameter[0].ausgabemodus==1)
+						else if (parameter[0].outputmode==1)
 						{
 							system("mkdir datatrees_Zuwachs_WENDEJAHR");
 							system("mkdir datatrees_Zuwachs_SAETTIGUNGSJAHR");
@@ -1225,13 +1224,13 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			// -- -- -- -- -- -- -- --Tree density -- -- -- -- -- -- -- -- //
 
 			// assemble file name:
-			if (parameter[0].ausgabemodus==0 || parameter[0].ausgabemodus==2 || parameter[0].ausgabemodus==3 || parameter[0].ausgabemodus==4)
+			if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
 			{
 				s1<<jahr;s2<<parameter[0].weatherchoice;
 				dateiname="output/datatrees_Treedensity" +s1.str()+"_"+s2.str()+ ".csv";
 				s1.str("");s1.clear();s2.str("");s2.clear();
 			}
-			else if (parameter[0].ausgabemodus==1) //hier weatherchoice nicht berücksichtigt
+			else if (parameter[0].outputmode==1) //hier weatherchoice nicht berücksichtigt
 			{
 				if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
 				{
@@ -1305,7 +1304,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		
 		
 		//delete everything if just sensitivity analysis output is set
-		if ( (parameter[0].ausgabemodus==1) && (pEvaluation->saettigungsjahr!=-9999) )
+		if ( (parameter[0].outputmode==1) && (pEvaluation->saettigungsjahr!=-9999) )
 		{
 			//Calling the function to delete lists
 				// tree_listn loeschen

@@ -21,12 +21,12 @@ using namespace std;
 		double	dbrustrel;
 		double	height;
 		int		age;
-		int		cone;		
-		double	coneheight; 
+		int		cone;
+		double	coneheight;
 		int		seednewly_produced;
-		int		seedproduced;					
+		int		seedproduced;
 		int		speicher;
-		double	densitywert;						
+		double	densitywert;
 		double thawing_depthinfluence;
 		bool	longdispersed;					
 		double	entfernung;						
@@ -84,18 +84,18 @@ using namespace std;
 	{
 		// general parameters
 		// ... output
-		bool	parameterlesenanzeige;
-		bool	jahranzeige;
-		bool	qualijahranzeige;
-		bool	seedausbranzeige;
-		bool	mortanzeige;
-		bool	Data_output;
+		bool	parameterinputvis;
+		bool	yearlyvis;
+		bool	qualiyearlyvis;
+		bool	seeddispvis;
+		bool	mortvis;
+		bool	dataoutput;
 		bool 	ordnerda;
-		int 	ausgabemodus;
+		int 	outputmode;
 		int 	parameteri;
 		int		feuerausgabe;
 		int 	outputall;
-		bool 	computationtime;
+		bool 	computationtimevis;
 
 		// ... time steps and repeats
 		int		simdauer;	

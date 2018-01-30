@@ -183,7 +183,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					Treemorts = 0.0;
 				}				
 
-				if (parameter[0].mortanzeige==true && pTree->height>200.0 && pTree->species==1) 
+				if (parameter[0].mortvis==true && pTree->height>200.0 && pTree->species==1) 
 				{
 						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +FEUER=%4.4f =>%4.2f", 
 						pTree->height, 
@@ -197,7 +197,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 						Treemortg);
 				}
 
-				if (parameter[0].mortanzeige==true && pTree->height>200.0 && pTree->species==2) 
+				if (parameter[0].mortvis==true && pTree->height>200.0 && pTree->species==2) 
 				{
 						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +FEUER=%4.4f =>%4.2f", 
 						pTree->height, 
@@ -586,13 +586,7 @@ if(mcorevariant==2)
 		// omp_set_num_threads(1); //set the number of helpers
 		// directly modified as the parralelization is slowing the computations
 		
-		
-				if((parameter[0].ivort==1))// check the number of used threads
-				{
-					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
-				}
-				
-				
+
 		/// #####################################
 		/// #####################################
 		/// new paralellisierung for BefrWarh!!
@@ -616,8 +610,13 @@ if(mcorevariant==2)
 		/// #####################################
 		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
-		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
-		I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+			if((parameter[0].ivort==1))// check the number of used threads
+			{
+				cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+			}
+
+			richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
+			I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 
 			// initialize the info for each of the thread
@@ -787,13 +786,10 @@ if(mcorevariant==3)
 		omp_set_dynamic(0); //disable dynamic teams
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		// omp_set_num_threads(1); //set the number of helpers
-		// directly modified as the parralelization is slowing the computations
+		// directly modified as the parallelisation is slowing the computations
 		
 		
-				if((parameter[0].ivort==1))// check the number of used threads
-				{
-					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
-				}
+
 				
 				
 		/// new paralellisierung for BefrWarh!!
@@ -836,6 +832,8 @@ if(mcorevariant==3)
 		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{// START: parallel region
 		
+
+				
 		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 			    I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;
 
@@ -850,18 +848,21 @@ if(mcorevariant==3)
 			
 			if(thread_num == (thread_count - 1)) // last thread iterates the remaining sequence
 			{
-				// end = tree_list.end();
+				if((parameter[0].ivort==1))// check the number of used threads
+				{
+					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
+				}
+			
 				end = lasttreewithseeds_iter;
-				// cout << thread_num << " -> thread_num == (thread_count - 1)" << endl;
 			} 
 			else
 			{
 				std::advance(end, chunk_size);
-				// cout << thread_num << " -> thread_num != (thread_count - 1)" << endl;
 			}
 	
 			// declare a local seed list to be filled by each thread
 			list<seed*> newseed_list;
+			
 				// timers
 				int n_trees=0;
 				double timer_eachtree_advance=0;
@@ -1042,7 +1043,7 @@ if(mcorevariant==3)
 		TreeMort(yearposition, weather_list, tree_list);
 		double end_time_mortpoll=omp_get_wtime();
 		
-		if(parameter[0].computationtime==1)
+		if(parameter[0].computationtimevis==1)
 		{
 			openpoll:
 			FILE *fp4;

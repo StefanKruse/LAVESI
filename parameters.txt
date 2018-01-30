@@ -9,16 +9,16 @@
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 // 0.1 -----> Display in console
-parameterlesenanzeige=0;			// (int 0,1) show read-in of parameters
-jahranzeige=0;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
-qualijahranzeige=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
-seedausbranzeige=0;					// (int 0,1) seed dispersal
-mortanzeige=0;						// (int 0,1) mortality of trees >200 cm
-computationtime=0;					// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
+parameterinputvis=0;				// (int 0,1) show read-in of parameters
+yearlyvis=0;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
+qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
+seeddispvis=0;						// (int 0,1) seed dispersal
+mortvis=0;							// (int 0,1) mortality of trees >200 cm
+computationtimevis=0;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
 
 // 0.2 -----> Output
-Data_output=1;						// (int 0,1) write data to files 
-ausgabemodus=5;  					// (int) choice of data output files 
+dataoutput=1;						// (int 0,1) write data to files 
+outputmode=5;  						// (int) choice of data output files 
 										// 0=="normal"
 										// 1=="SensitivityAnalysis", 2x output at log+capacity
 										// 2=="SA_2", once after the population reached a stable state using random weather
@@ -30,14 +30,14 @@ outputall=1;						// (int 0,1) output of all tree data on the plot
 parameteri=0;						// (int) Start values for parameter set output
 	
 // 0.3 -----> Submodules
-thawing_depth=1;					// Active layer calculation (0,1)
-vegetation=0;						// Representation of an organic layer (0,1)
-feuer=0;							// Fire module influencing organic layer and dry mortality (0,1)
+thawing_depth=1;					// (int 0,1) Active layer calculation
+vegetation=0;						// (int 0,1) Representation of an organic layer
+feuer=0;							// (int 0,1) Fire module influencing organic layer and dry mortality
 
 
 // 0.4 Computation environment
-// the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
-omp_num_threads=8;					// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
+omp_num_threads=8;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//

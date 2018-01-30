@@ -1068,7 +1068,7 @@ void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<K
 		// Further evaluation of density values
 		IndividualTreeDensity(tree_list, plot_list);
 		
-		if(parameter[0].computationtime==1)
+		if(parameter[0].computationtimevis==1)
 		{
 			openupdate:
 			FILE *fp5;

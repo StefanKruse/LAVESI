@@ -119,7 +119,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double end_time_Ageing = omp_get_wtime();
 
 	// print the computation time to the console and into a file
-	if(parameter[0].computationtime==1)
+	if(parameter[0].computationtimevis==1)
 	{
 		
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
@@ -448,7 +448,7 @@ void Einschwingphase()
 void Jahresschritte()
 {
 
-		printf("\n\n starting year step iteration...\n");
+		printf("\n\nstarting yearly time steps...\n");
 		
 		
 	
@@ -471,7 +471,7 @@ void Jahresschritte()
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
             
 
-			if (parameter[0].jahranzeige ==true) 
+			if (parameter[0].yearlyvis ==true) 
 			{
 				printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
 				//printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
@@ -604,7 +604,7 @@ void Jahresschritte()
 							
 							yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
 
-							if (parameter[0].jahranzeige ==true) 
+							if (parameter[0].yearlyvis ==true) 
 								printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
 							
 							else 
@@ -931,7 +931,7 @@ void finishSimulation()
 					}
 			}
 			
-			if(parameter[0].jahranzeige ==true)
+			if(parameter[0].yearlyvis ==true)
 			{
 				printf("seed number Z= %d\n", number_of_seeds_in_cone);
 			}
@@ -960,7 +960,7 @@ void finishSimulation()
 		
 		
 		
-		cout<<"\n clearing world lists\n";
+		cout<<"\nclearing world lists\n";
 		world_tree_list.clear();
 		world_tree_list.shrink_to_fit();
 		world_seed_list.clear();
@@ -1156,7 +1156,7 @@ int main()
 	cout << endl << "Total time: " << (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC) << endl; //StefanC: Zeit fuer Gesamtlauf
 	
 	//export areal dependency of total simulation time:
-	if(parameter[0].computationtime==1)
+	if(parameter[0].computationtimevis==1)
 	{
 		FILE *fptA;
 		fptA=fopen("t_A.txt","a+");

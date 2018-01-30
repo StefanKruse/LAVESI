@@ -8,9 +8,6 @@
 // 0.4 Computation environment
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
-//Start values for parameters
-parameteri=0;
-
 // 0.1 -----> Display in console
 parameterlesenanzeige=0;			// (int 0,1) show read-in of parameters
 jahranzeige=0;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
@@ -30,7 +27,8 @@ ausgabemodus=5;  					// (int) choice of data output files
 										// 5=="?????????????????"
 										// 9=="OMP only => currencies + computation time"
 outputall=1;						// (int 0,1) output of all tree data on the plot		
-		
+parameteri=0;						// (int) Start values for parameter set output
+	
 // 0.3 -----> Submodules
 thawing_depth=1;					// Active layer calculation (0,1)
 vegetation=0;						// Representation of an organic layer (0,1)

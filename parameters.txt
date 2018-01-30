@@ -1,44 +1,44 @@
 ﻿//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
-// 0. General functionality: Display, output and submodel switches
+// 0. General functionality: Display, output and submodule switches
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 // 0.1 Display
 // 0.2 Output
-// 0.3 Submodels
+// 0.3 Submodules
 // 0.4 Computation environment
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 //Start values for parameters
 parameteri=0;
 
-// 0.1 -----> Display
-parameterlesenanzeige=0;			// Display: 	-show read-in parameters (0,1)
-jahranzeige=0;						// ... 			-yearly steps (0,1) => year,basal area,seed information, HeightClassesDistr
-qualijahranzeige=0;					// ... 			-year characteristics (0,1) => Weatherinfo: AAT,Growth,...
-seedausbranzeige=0;					// ... 			-seed dispersal (0,1)
-mortanzeige=0;						// ...			-mortality of trees >200 cm (0,1)
-computationtime=0;					// ...			-include visualisation and output of computation time a function of the plot size and number of trees (0,1)
+// 0.1 -----> Display in console
+parameterlesenanzeige=0;			// (int 0,1) show read-in of parameters
+jahranzeige=0;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
+qualijahranzeige=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
+seedausbranzeige=0;					// (int 0,1) seed dispersal
+mortanzeige=0;						// (int 0,1) mortality of trees >200 cm
+computationtime=0;					// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
 
 // 0.2 -----> Output
-Data_output=1;						// file output (0,1)
-ausgabemodus=5;  					// mode of file output (0,4)
-										// 0=="normal" -> 3 times 1010&2010, 
-										// 1==	"SensitivityAnalysis -> 2fach Phasenausgabe log und Capacity" 			?
-										// 		hier(einige) Ausgabedateien nicht für versch. weather choices programmiert
-										// 2=="SA_2" -> once after the population reached a stable state using random weather
-										// 3=="ClimateGradient with TimeSlices"
-										// 4=="Temperature experiment with TimeSlices"
-										// 9== OMP only currencies + computationtime
-outputall=1;						//allow (=1) or deny (=0) output of all tree data on the plot		
+Data_output=1;						// (int 0,1) write data to files 
+ausgabemodus=5;  					// (int) choice of data output files 
+										// 0=="normal"
+										// 1=="SensitivityAnalysis", 2x output at log+capacity
+										// 2=="SA_2", once after the population reached a stable state using random weather
+										// 3=="ClimateGradient with time slices"
+										// 4=="Temperature experiment with time slices"
+										// 5=="?????????????????"
+										// 9=="OMP only => currencies + computation time"
+outputall=1;						// (int 0,1) output of all tree data on the plot		
 		
-// 0.3 -----> Submodels
+// 0.3 -----> Submodules
 thawing_depth=1;					// Active layer calculation (0,1)
-vegetation=0;						// representation of an organic layer (0,1)
-feuer=0;							// fire module influencing organic layer and dry mortality (0,1)
+vegetation=0;						// Representation of an organic layer (0,1)
+feuer=0;							// Fire module influencing organic layer and dry mortality (0,1)
 
 
 // 0.4 Computation environment
-// the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)"
+// the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 omp_num_threads=8;					// Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)" (1,system specific maximum)
 
 
@@ -46,44 +46,52 @@ omp_num_threads=8;					// Number of cores used for computation, set internally o
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 // 1. Simulation set up												//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
-// 1.1 Weather														//					
-// 1.2 Operation characteristics									//
-// 1.3 Plot position and number										//
-// 1.4 Seed dispersal type and handling + seed introduction 		//
+// 1.1 Weather data													//					
+// 1.1.1 Temperature and precipitation								//
+// 1.1.1 Wind 														//
+// 1.2 Simulation run characteristics								//
+// 1.3 Plot number													//
+// 1.4 Dispersal 													//
+// 1.4.1 Seed dispersal type and handling + seed introduction 		//
+// 1.4.2 Pollen dispersal											//
+// 1.5 Growth function parameters and influences					//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
-// 1.1 -----> Weather
-weatherchoice=24;											
-									// weather data CRUTS for the weather for two species, without initial trees
-										// 22		== CH17_tmpweighted_model.csv, CH17_prcweighted_model.csv
-										// 23 		== CH02_tmpweighted_model.csv, CH02_prcweighted_model.csv
-										// 24 		== CH06_tmpweighted_model.csv, CH06_prcweighted_model.csv
-										
+// 1.1 -----> Weather data
+// 1.1.1 -----> Temperature and precipitation
+weatherchoice=24;					// (int) Type of weather forcing series 
+										//  22==CH17_tmpweighted_model.csv, CH17_prcweighted_model.csv
+										//  23==CH02_tmpweighted_model.csv, CH02_prcweighted_model.csv
+										//  24==CH06_tmpweighted_model.csv, CH06_prcweighted_model.csv
+										// 	    ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
 										// 309==CRU Data for Station Khatanga 934-2011 (934-1928 reconstructed; 1929-2011 station data)
-										
 										// 1111==ClimateGradient
 										// 2221==Temperature experiment
-										
-precweather=1;						// Influence of precipitation on maximum growth (0,1,2)
-										//  0==not at all
-										//  1==linearly if smaller than threshold
-										//  2==parabola function with a global maximum at the optimum
+precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
+										// 0==not at all
+										// 1==linearly if smaller than threshold
+										// 2==parabola function with a global maximum at the optimum
 
-evapod=1.5;							// Evapotranspiration (0-+oo) "Evaporation rates of 1.5 mm/day mean growing season" (Dolmann, 2004)
-weathercalcgradient=0;				// Correction of temp. and prec. values by approximate values depending on their latidudinal position (int 1,0)
+evapod=1.5;							// (double) Evapotranspiration based on Dolmann, 2004) 
+weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipitation values on a gradient depending on their latidudinal position
 										// 0==without a gradient
 										// 1==calculation of a linear gradient
-lineartransekt=0;					//mode of weather (constant or linear from southern to northern sites) on each plot (0,1)
+Nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northermost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
+Nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southermost plot's position
+										// 111 km == 1 decimal degree
+lineartransekt=0;					// (int 0,1) Approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
-// 1.1.1 -----> Wind data
-windsource=1;						//source of wind data: 0=no wind- random no-approach, 1=EraInterim, 4=North Wind, 5=South Wind
-									
 
-								
-								
-// 1.2 -----> Operation characteristics
-simdauer=80;							//length of a simulation (1-(   1077   )-6099)
+// 1.1.1 -----> Wind
+windsource=1;						// (int) Source of wind data
+										// 0==no wind- random no-approach
+										// 1=EraInterim
+										// 4=North Wind
+										// 5=South Wind
+									
+// 1.2 -----> Simulation run characteristics
+simdauer=80;						//  (int) Duration of the simulation period depending on the available weather data series
 										//Example: 10 =>  2090 Endjahr 2100 ingesamt von -3998 bis 2100 definiert fuer das weather 9 =>6099 Jahre
 										//  110==for CRU Data
 										// StefanC: changed to append CRUdata+9 years by Khatanga weather station data
@@ -91,69 +99,44 @@ simdauer=80;							//length of a simulation (1-(   1077   )-6099)
 										// ... in case 111 and derivates with CHXXlong-TimeSeries
 										// ... in case 120-123 
 										// 6099==for assembled weather series (weatherchoice==9)
-runs=1;								// Number of simulation repeats (1-oo)
-ivortmax=1000;						// Spin up phase length and maximal simulation length to reach a stable state if stabilperiod==1
+runs=1;								// (int) Number of repeated simulations
+ivortmax=1000;						// (int) Spin up phase befor the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
-stabilperiod=0;						// switch for stabilization period before simulation runs (int 0,1)
-stabilmovingwindow=10;				// length of the  for the mean value calculation for evaluating the state of the system
-			// Fensterweite zur Berechnung der Mittelwerte fuer die Evaluierung des Zustands des Systems (int 1-oo)
-stabilpercentchangethreshold=0.005;	// Schwellenwert der bei Unterschreitung anzeigt ob ein System Stabil ist (double 0-1)
-resetyear=0;						// Year to save all Container for later resume from this time point (on-the-fly)
+stabilperiod=0;						// (int 0,1) Simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
+stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
+stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
+resetyear=0;						// (int) Year to save all container for a later resume from this time point
+specpres=1;							// (int) Which larch species should be present in the model
+										// 0==both Larix gmelinii and L. sibirica 
+										// 1==only Larix gmelinii
+										// 2==only Larix sibirica
 
-specpres=1;							// either 0 (both species, Larix gmelinii and L.sibirica in model), 
-										// 1 (only Larix gmelinii in model) or 2 (only Larix sibirica in model)
-
-
-
-
-
-
-
-// 1.3 -----> Plot position and number
-Nposmax=72.267;						// The northermost plot's position, if more than 1 plot is to be simulated along a transect (CH17I==72.2625)
-Nposmin=72.2625; 					// The southermost plot's position, ...
-										// 111 km == 1 decimal degree
-mapxlength=1;						// Number of repeats == Parallel plots (EXPERIMENTAL!)
-mapylength=1;						// Number of plots on the transect
-
-sizemagnif=5;						// Resolution of density grid (>0-oo)
-										//Example: 1/value is resolution => 5==20 cm densitygridtile-edge length
+// 1.3 -----> Plot number
+mapxlength=1;						// (int) Number of parralel executed plots for each climate
+mapylength=1;						// (int) Number of plots along a south-north transect
+sizemagnif=5;						// (int) Resolution of the density grid; a value of 5 determines a 20 cm sub grid
 	
-// 1.4 -----> Seed dispersal type and handling + seed introduction
-
-seedintro=1;				// Yearly seed input (0,1)
-seedintropermanent=0;		//1
-etabbg=1000;					
-
-etabbgpermanent=10000;			// Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot (0-+oo)
-jahremitseedeintrag=10; 		// Years of seed introduction (0-+oo)
-realseedconnect=0;				// Plot position for seed introduction seedgrundetablierung logical bool (0,1)
-										// 0==everywhere along a transect
-										// 1==only southermost site
-seeddispmode=1;						// Positions for seed introduction (1,2)
+// 1.4 -----> Dispersal
+// 1.4.1 -----> Seed dispersal type and handling + seed introduction
+seedintro=1;						// (int 0,1) Seed input to simulated plot(s)
+jahremitseedeintrag=10; 			// ... (int) Years of seed introduction at the beginning of each simulation
+etabbg=1000;						// ... (int) Number of seeds introduced per year (FOR EACH jahremitseedeintrag) and plot
+seedintropermanent=0;				// (int) Should seeds permanently introduced 
+etabbgpermanent=10000;				// ... (int) if seedintropermanent==1 Number of seeds introduced per year and plot 
+realseedconnect=0;					// (int 0,1) Plot position for the initial seed introduction
+										// 0==into all plots along a transect
+										// 1==only southernmost plot
+seeddispmode=1;						// (int 1,2) Positions for seed introduction
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
-seedtravelbetween=0;				// Seed travel between plots along a transect (0,1)
-
-periodRB=3;							//periodic boundary conditions for seeds crossing the western/eastern border turned on (1) or off (0), or reduced on the western border (2)
-									//, or for N-S-transects meaning only seeds leaving east-or-westwards get newly introduced
-
-
-// 1.4.1 -----> Pollen dispersal
-pollenvert=0;						//1-allow pollen dispersal. 2-genealogy output in a list. 0-switch off. All other modes are not implemented!
-									// it is strongly recommended to allow for at least 4 multiple cores or better 8 (best ratio)
-pollenrichtungsvarianz=10;			//variance of the von-Mises distribution in degrees. Used in the pollen distribution function
-pollenfall=0.126;					//pollen fall velocity
-
-GregoryC=0.6; 						//pollen dispersal parameters
-Gregorym=1.25;
-
-
-
-
-// 1.5 -----> Initial plot conditions - Trees
-starttrees=0;						// Type of initial tree set up (0, 10,11,12,13)
+seedtravelbetween=0;				// (int 0,1) Seed travel between plots along a transect
+periodRB=3;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
+										// 0==seeds passing the borders are removed
+										// 1==the western/eastern and northern/southern border turned in both directions 
+										// 2==dispersal connection only on the western to eastern border
+										// 3==only seeds leaving east-or-westwards get newly introduced
+starttrees=0;						// (int)Type of initial tree set up
 										//   0==without initial trees
 										//  10==CH06		"CH06III_Treevert2011.csv"
 										//  11==CH02		"CH02II_Treevert2011.csv"
@@ -163,66 +146,62 @@ starttrees=0;						// Type of initial tree set up (0, 10,11,12,13)
 										// 911==CH02 Trees warped in time to 1911
 										// 912==CH17 Trees warped in time to 1911
 										// 913==CH12 Trees warped in time to 1911
-										// !!! be careful: if the tree data set is not from Chatanga, please notice that the tree species is set to Larix gmelinii automatically by now if specpres is set to
-										//0 (both species) or 1 (L.gmelinii)
+										// !!! be careful: if the tree data set is not from Chatanga, please notice that the tree species is set to Larix gmelinii automatically by now if specpres is set to 0 (both species) or 1 (L.gmelinii)
 										//
 										// PLANNED:::new 1000=> means that a density of 1000 old trees is the starting point - later to be transferred to a read function from a desired density based on earlier simulations that were saved -- needs to be implemented!
 										// 120100 aka SSAAAATTT erste zwei Ziffern für Site (S), mittlere 4 ziffern für flaechengroesze BREITE (Area:A) 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 currently implemented in METERS, letzte 3 ziffern für Transektbesetzung mit Bäumen von Süden ausgehend (T) in KILOMeters
 										// ... miss the last numbers TTT when quadratic
 										// 12-0100-050 + 
 										
-										
+// 1.4.2 -----> Pollen dispersal
+pollenvert=0;						// (int 0,1,2) allow pollen dispersal
+										// 0==without pollination
+										// 1==pollination is computed
+										// 2==output of living trees during simulation for post-computation of genealogy
+										// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
+pollenrichtungsvarianz=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
+pollenfall=0.126;					// (double) pollen fall velocity
 
-// -----> Growth function parameters and influences
-basaleinflussaltneu=0.0;			// Basal diameter influence for year's basal diameter growth (0-+oo) 
-relwachstumeinfluss=1;				// Influence of current growth (reduced by density depending processes) on seed production and mortality estimation (0,1)
+GregoryC=0.6; 						// (double) pollen dispersal parameter
+Gregorym=1.25;						// (double) pollen dispersal parameter
 
-incfac=10;							// Factor for calculating area influenced by individual trees
-calcinfarea=1;						// Calculation mode for area size determination (1,2)
+// 1.5 -----> Growth function parameters and influences
+basaleinflussaltneu=0.0;			// (double) Basal diameter influence for year's basal diameter growth
+relwachstumeinfluss=1;				// (int 0,1) Influence of current growth (reduced by density depending processes) on seed production and mortality estimation
+incfac=10;							// (int) Factor for calculating area influenced by individual trees
+calcinfarea=1;						// (int) Calculation mode for area size determination
 										// 1==linearly increasing (8 m at basal diameter of 80 cm)
 										// 2==logistically increasing with maximum value of 8 m (reaching at c. 35 cm basal diameter)
-										//! Achtung hier sind noch mehr Modi und erst 4 ist es logistisch/exponentiell
-										
-densitywertmanipulatorexp=1;			// 1== normal
+densitywertmanipulatorexp=1;		// (double) Exponent to scale the influence of a tree to the density tile
+										// 1== normal
 										// 2== parabolically i.e. smaller values reached faster
-densitysmallweighing=0;				// Mode for implementing an increasing influence of individuals influencing only 1 tile (double: 0,1)
+densitysmallweighing=0;				// (double) Exponent to scale the influence of individuals on the denstity tiles which are only influencing one tile
 										// 1==density is affected linearly with increasing basal diameter 
 										// 0==without weighing
-densitytreetile=0.5;				// Mode for density value input from each tree to density grid (double: 0,1)
+densitytreetile=0.5;				// (double) Exponent to change the density value input from each tree into the density grid
 										// 1==value equals basal diameter decreasing with distance from centre
 										// 0==value ranges from 1 to 0 with increasing distance
-densityart=2;						// Mode of density calculation (1,2,3) 
-										// 1==without (densitywert der trees=0)
+densityart=2;						// (int 1,2,3) Mode of density calculation
+										// 1==without (densitywert of trees=0)
 										// 2==ZOI-kind of density calculation
 										// 3==random determination of surrounding fields
-								
-densitytilecalc=1;					//NA Mode for density value integrating of all trees for each tile
-									// Nicht verfügbar, weil ich nicht weiß wie Mittelwert umgesetzt werden kann!!!!!!!!!
-									//NA 1==sum within each tile
-									//NA 2==multiplication of all influencing values
-									//NA 3==mean of influencing values
-									
-densitytiletree=2;					// Mode for calculating the influence of density values within tiles for each tree
+densitytilecalc=1;					// (int 1) Mode for density value integrating of all trees for each tile as the sum within each tile
+densitytiletree=2;					// (int 1,2) Mode for calculating the influence of density values within tiles for each tree
 										// 1==sum of all values weighed by distance
 										// 2==multiplied by the current values of the trees influence on each tile (as in densitytreetile=0)
-desitymaxreduction=0.9;				// Maximum value the desity value can be (double 0-1)
-										//Example: A value of 0.9 means the growth of the bearing tree is reduced by 90 % and the mortality increased by this value as well
-densitywertdbasaleinfluss=0;		// influence of the basal diameter on the density value (0-100) => tall trees have stronger concurrence among each other than with smaller trees. 
-									// f_Einfluss(Basaldurchmesser)=(1.0-0.01/Basaldurchmesser)^EinflussBasaldurchmesserdensitywert
-									// a value set to 0 means no influence, a value of approx. 100 ->35% ...?
-									
-									//***german:
-									// Ein Wert von 0 bedeutet kein Einfluss, Ein Wert von 100 laesst die trees bis etwa 1 nur 35 %, 2cm nur 60% und ab ca. 
-									// Einfluss des Basaldurchmessers auf den densitywert (0-100) => grosze trees haben staerkere Konkurrenz untereinander als mit kleinen treesn; f_Einfluss(Basaldurchmesser)=(1.0-0.01/Basaldurchmesser)^EinflussBasaldurchmesserdensitywert; Ein Wert von 0 bedeutet kein Einfluss, Ein Wert von 100 laesst die trees bis etwa 1 nur 35 %, 2cm nur 60% und ab ca. 
+desitymaxreduction=0.9;				// (double 0-1) Maximum value the density value can reach
+densitywertdbasaleinfluss=0;		// (double) Exponent to scale the influence of the tree's diameter to its influencing density value 
+dichtheightrel=12;					// (int) Interaction modification mode of tree height and density influence strength
+										// 1==three different constant values for the three height classes
+										// 2==linearly decreasing from centre of the tree and influenced by the tree's age and additionally a minimum of value 0.1 is set
+										// 3==....
+precgrenzwert=371.717745;			// (double) Precipitation optimum
+jantodestempgmel=-45;				// (double) Number for January isotherm restriction
+weatherzahlgmela=0.076;				// (double) Determines curvature of the July index for L.gmelinii 
+weatherzahlgmelb=14.568;			// (double) Determines curvature of the July index for L.gmelinii 
+weatherzahlgmelc=0.101;				// (double) Determines curvature of the July index for L.gmelinii 
 
-dichtheightrel=12;					//0-6: No height influence on the density value
-		//***german:
-		//0-6: 0 kein Einfluss der height auf densitywert, 1 bis 130 auf 0, ...3 mit Grundlevel, 4...6 mit Stufen
-
-
-
-	
-//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
+	//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 // 2. Larix gmelinii (Rupr.) Kuzen. or Larix sibirica specific parameter
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -232,86 +211,73 @@ dichtheightrel=12;					//0-6: No height influence on the density value
 // 2.4 Mortality estimation
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
-
 // 2.1 -----> Reproduction
-coneage=15;							// Minimum age trees begin to bear cones (1-+oo)
-seedflugrate=0.63931;				// Chance for seeds to get released from producing tree (>0-1)
-dispersalmode=5;					// dispersal mode (95% of all seeds in distance=100m) (0,1,2,3,4,5) 	
-										// 0==zufaellig
-										// 1==exp
+coneage=15;							// (int) Minimum age trees begin to bear cones
+seedflugrate=0.63931;				// (double 0-1) Chance a seed is released from the producing tree
+dispersalmode=5;					// (int 0,1,2,3,4) dispersal mode for seeds (95% of seeds distributed within 100 m)
+										// 0==randomly
+										// 1==negaive exponentially
 										// 2==fat tailed
 										// 3==gaussian
-										// 4==gaussian+fat tailed combined
-										// 5==gaussian+fat tailed combined plus maximum after Matlack
-
-SeedTravelBreezeg=60.1;				// Maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
-SeedTravelBreezes=45.0;				// Maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
-SeedDescentg=0.86;					// Descent speed for L.gmelinii seeds (estimation: Matlack 1987)
-SeedDescents=0.93;					// Descent speed for L.sibirica seeds (estimation: Matlack 1987)
-											
-distanceratio=0.16;					// distance ratio for natural seed distribution (<0-+oo)
-seedprodfaktor=8;					// seed production factor
-keimungsrate=0.01;					// germination rate
-keimungweathereinfluss=0.447975;	// Weather influence on germination: (0,+oo) no influence, or 1: +(WERT*(maxbasawachstum/basaldurchmesserwachstumsrate)) (standard was set to 0.1)
+										// 4==gaussian and fat tailed combined
+										// 5==gaussian and fat tailed combined plus maximum after Matlack
+SeedTravelBreezeg=60.1;				// (double) Maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
+SeedTravelBreezes=45.0;				// (double) Maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
+SeedDescentg=0.86;					// (double) Descent speed for L.gmelinii seeds (estimation: Matlack 1987)
+SeedDescents=0.93;					// (double) Descent speed for L.sibirica seeds (estimation: Matlack 1987)
+distanceratio=0.16;					// (double) Dispersal distance factor
+seedprodfaktor=8;					// (double) Seed production factor
+keimungsrate=0.01;					// (double 0-1) Germination rate
+keimungweathereinfluss=0.447975;	// (double) Influence of the climate to germination
+gmel_seedtod=2.0;					// (int) years of seed fertility for Larix gmelinii
 
 // 2.2 -----> Diameter growth
-gdbasalfacqgmel=-0.003;				// Basal diameter growth rates of trees for L.gmelinii in cm:
-gdbasalfacgmel=0.030;				
-gdbasalconstgmel=-1.98;				
-gdbrustfacqgmel=-0.003				
-gdbrustfacgmel=0.030;				
-gdbrustconstgmel=-1.98;				
-
-gdbasalfacqsib=-0.0009;				// Basal diameter growth rates of trees for L.sibirica in cm:
-gdbasalfacsib=0.0056;				
-gdbasalconstsib=-1.01;				
-gdbrustfacqsib=-0.0009;				
-gdbrustfacsib=0.0056;				
-gdbrustconstsib=-1.01;				
-
-precgrenzwert=371.717745;			// Precipitation optimum (0-+oo)
-
+gdbasalfacqgmel=-0.003;				// (double) Factor for basal diameter growth rate of L. gmelinii trees
+gdbasalfacgmel=0.030;				// (double) Factor for basal diameter growth rate of L. gmelinii trees
+gdbasalconstgmel=-1.98;				// (double) Basal diameter growth rate of L. gmelinii trees
+gdbrustfacqgmel=-0.003				// (double) Factor for diameter growth rate at breast height of L. gmelinii trees
+gdbrustfacgmel=0.030;				// (double) Factor for diameter growth rate at breast height of L. gmelinii trees
+gdbrustconstgmel=-1.98;				// (double) Diameter growth rate at breast height of L. gmelinii trees
+gdbasalfacqsib=-0.0009;				// (double) Factor for basal diameter growth rate of L. sibirica trees
+gdbasalfacsib=0.0056;				// (double) Factor for basal diameter growth rate of L. sibirica trees
+gdbasalconstsib=-1.01;				// (double) Basal diameter growth rate of L. sibirica trees
+gdbrustfacqsib=-0.0009;				// (double) Factor for diameter growth rate at breast height of L. sibirica trees
+gdbrustfacsib=0.0056;				// (double) Factor for diameter growth rate at breast height of L. sibirica trees
+gdbrustconstsib=-1.01;				// (double) Diameter growth rate at breast height of L. sibirica trees
 
 // 2.3 -----> Height estimation
-allometriefunktionstyp=2;			//allometry function mode (1,2)
-									// 1==linear (H=m*Dhochexp+0 bzw. 130)
-									// 2==non linear (H=m*DBAS+0 sowie Hhoch0.5=m*DBRuhoch0.5+130)
-dbasalheightallosteig=42.88;		//Basal height slope (IF allometriefunktionstyp == 1)
-dbasalheightalloexp=1.0;			//Basal height exponent (IF allometriefunktionstyp == 1)
-dbrustheightallosteig=42.88;		//Breast height slope (IF allometriefunktionstyp == 1)
-dbrustheightalloexp=1.0;			//Breast height exponent (IF allometriefunktionstyp == 1)
-dbasalheightsteignonlin=44.43163;	//Basal height slope nonlinear  (IF allometriefunktionstyp == 2)
-dbrustheightsteignonlin=7.02;		//Brust height slope nonlinear  (IF allometriefunktionstyp == 2)
-
+allometriefunktionstyp=2;			// (int 1,2) Allometric function mode
+										// 1==linear (H=m*Dhochexp+0 bzw. 130)
+										// 2==non linear (H=m*DBAS+0 sowie Hhoch0.5=m*DBRuhoch0.5+130)
+dbasalheightallosteig=42.88;		// (double) (IF allometriefunktionstyp == 1) slope for height estimation from basal diameter
+dbasalheightalloexp=1.0;			// (double) (IF allometriefunktionstyp == 1) exponent for height estimation from basal diameter
+dbrustheightallosteig=42.88;		// (double) (IF allometriefunktionstyp == 1) slope for height estimation from breast height diameter
+dbrustheightalloexp=1.0;			// (double) (IF allometriefunktionstyp == 1) exponent for height estimation from breast height diameter
+dbasalheightsteignonlin=44.43163;	// (double) (IF allometriefunktionstyp == 2) slope for height estimation from basal diameter
+dbrustheightsteignonlin=7.02;		// (double) (IF allometriefunktionstyp == 2) slope for height estimation from breast height diameter
 
 // 2.4 -----> Mortality estimation
-mortbg=0.0001;						// background mortality (0-1) => para=0.02382
-maximalage=609;						// maximal age (0-+oo)
-malt=8.18785;						// Mortality factor for trees older than "maximalage" (0-+oo) (standard=10.0)
-mjung=0.762855;						// Mortality factor for younger trees (standard=0.95)
-jugendmorteinflussexp=0.79295;		// Exponent determining duration time of youth mortality (0-+oo) (standard=0.5)
-									//  <1==longer
-									//  >1==shorter
-mgrowth=0.0;						// Factor for adjusting the influence of current tree growth on mortality (0-+oo), 
-									// literature suggests 0.1, but set to zero as density determines the mortality
-relwachstummorteinflussexp=1.0;		// Influence exponent of current tree growth on mortality (0-+oo)
-									//  1==linear influence of the relative growth on mortality
-									// >1==stronger
-									// <1==weaker
-									//  0==no influence of relative growth on mortality
-mdensity=0.5;						// mortality due to tree density (0-+oo) (standard=0.1)
-densitywertmaximumbeiheight=0.0;	// IF >0 the density influence is modified depending on the tree's height by using a circle-function
-									// 300==trees up to 300 cm were more affected by high density values (maximum at 1/2 this value = 150 cm)
+mortbg=0.0001;						// (double 0-1) Background mortality
+maximalage=609;						// (int) Maximum tree age
+malt=8.18785;						// (double) Mortality factor if a tree exceeds the maximum age
+mjung=0.762855;						// (double) Mortality factor for young individuals
+jugendmorteinflussexp=0.79295;		// (double) Exponent determining duration time of youth mortality
+										//  <1==longer
+										//  >1==shorter
+mgrowth=0.0;						// (double) Factor for adjusting the influence of current tree growth on mortality
+relwachstummorteinflussexp=1.0;		// (double) Influence exponent of current tree growth on mortality
+										//  0==no influence of relative growth on mortality
+										//  1==linear influence of the relative growth on mortality
+										// >1==stronger
+										// <1==weaker
+mdensity=0.5;						// (double) Mortality factor for density
+densitywertmaximumbeiheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
 mweather=0.1;						// Mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
-heightweathermorteinflussexp=0.2;	//Einflussheightweathermort: Bei 0=1 bei 0.1 = 0.5 bei 10m oder 0.5 0.03 bei 10m height
-mtrockenheit=0.237805;				// Mortalitaetsfaktor_Trockenheit (0-+oo)
-seedTreemort=0.44724;				// seedamTreemortalitaetsrate (0-1)
-seedbodenmort=0.55803;				// seedamBodenmortalitaetsrate (0-1)
+heightweathermorteinflussexp=0.2;	// (double) Exponent for determining an influence of the tree height on the climate mortality
+mtrockenheit=0.237805;				// (double) Mortalitaetsfaktor_Trockenheit (0-+oo)
+seedTreemort=0.44724;				// (double 0-1) Mortality rate of seeds in cones on the trees
+seedbodenmort=0.55803;				// (double 0-1) Mortality rate of seeds at the ground
 
-gmel_seedtod=2.0;						// years of seed fertility (?) for Larix gmelinii
-jantodestempgmel=-45;					// Number for January isotherm restriction
-weatherzahlgmela=0.076;					// Determines curvature of the july index for L.gmelinii 
-weatherzahlgmelb=14.568;				// Determines curvature of the july index for L.gmelinii 
-weatherzahlgmelc=0.101;					// Determines curvature of the july index for L.gmelinii 
+
 
 

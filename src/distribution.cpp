@@ -148,13 +148,12 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 					++posb; 
 				}
 				
-				//data output for pollen flight analysis:
+				// data output for pollen flight analysis:
 				if(parameter[0].pollenvert==1 && parameter[0].omp_num_threads==1 && outputtreesiter<=5 && parameter[0].ivort==1057) // ivort==1057 => 1990
 				{
-					//print data
 					FILE *fdir;
 					char filenamechar[25];
-					sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].wiederholung);
+					sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
 					string output="output/windgen_pollination_total_" + string(filenamechar) + ".txt";
 					fdir=fopen(output.c_str(),"a+");
 					fprintf(fdir,"%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name, pTree_copy->xcoo, pTree_copy->ycoo, x, y);

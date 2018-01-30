@@ -397,7 +397,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				// assemble file name
 				if (parameter[0].einschwingen==true)
 				{
-					s1<<parameter[0].wiederholung;
+					s1<<parameter[0].repeati;
 					s2<<parameter[0].weatherchoice;
 					dateiname="output/dataentwicklung_currencies_" + s1.str()+"_"+s2.str() + ".csv";
 					s1.str("");s1.clear();
@@ -417,19 +417,19 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				if (dateizeiger == NULL)
 				{
 					dateizeiger = fopen (dateiname.c_str(), "w+");
-					fprintf(dateizeiger, "Wiederholung;");
+					fprintf(dateizeiger, "Repeat;");
 					fprintf(dateizeiger, "YPLOTPOS;");
 					fprintf(dateizeiger, "XPLOTPOS;");
-					fprintf(dateizeiger, "Fortschritt;");
-					fprintf(dateizeiger, "Einschwingphase;");
+					fprintf(dateizeiger, "Progress;");
+					fprintf(dateizeiger, "Spinup;");
 				
 					if (parameter[0].einschwingen==true)
 					{
-						fprintf(dateizeiger, "Zufallsjahr;");
+						fprintf(dateizeiger, "Randomyear;");
 					}
 					else
 					{
-						fprintf(dateizeiger, "Jahr;");
+						fprintf(dateizeiger, "Year;");
 					}
 
 					fprintf(dateizeiger, "meanbas;");
@@ -517,7 +517,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				// else: append data files
 				fseek(dateizeiger,0,SEEK_END);
 							
-				fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+				fprintf(dateizeiger, "%d;", parameter[0].repeati);
 				fprintf(dateizeiger, "%d;", aktortyworldcoo);
 				fprintf(dateizeiger, "%d;", aktortxworldcoo);
 				fprintf(dateizeiger, "%d;", parameter[0].ivort);
@@ -748,7 +748,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				// assemble file name
 				if (parameter[0].einschwingen==true)
 				{
-					s1<<parameter[0].wiederholung;
+					s1<<parameter[0].repeati;
 					s2<<parameter[0].weatherchoice;
 					s3<<parameter[0].ivort;
 					dateiname="output/dataentwicklung_positionsanalyse_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
@@ -758,7 +758,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 				else 
 				{	
-					s1<<parameter[0].wiederholung;
+					s1<<parameter[0].repeati;
 					s2<<parameter[0].weatherchoice;
 					s3<<parameter[0].ivort;
 					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
@@ -824,7 +824,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						
 						// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
 						// { // Sector BEGIN
-							// fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+							// fprintf(dateizeiger, "%d;", parameter[0].repeati);
 							// fprintf(dateizeiger, "%d;", pTree->yworldcoo);
 							// fprintf(dateizeiger, "%d;", pTree->xworldcoo);
 							// fprintf(dateizeiger, "%d;", parameter[0].ivort);
@@ -860,7 +860,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					if (dateizeiger == NULL)
 					{
 					  dateizeiger = fopen (dateiname.c_str(), "w+");
-						fprintf(dateizeiger, "Wiederholung;");
+						fprintf(dateizeiger, "Repeat;");
 						fprintf(dateizeiger, "YPLOTPOS;");
 						fprintf(dateizeiger, "XPLOTPOS;");
 						fprintf(dateizeiger, "Jahr;");
@@ -897,7 +897,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						
 						// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
 						// { // Sector BEGIN
-							fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+							fprintf(dateizeiger, "%d;", parameter[0].repeati);
 							fprintf(dateizeiger, "%d;", pTree->yworldcoo);
 							fprintf(dateizeiger, "%d;", pTree->xworldcoo);
 							fprintf(dateizeiger, "%d;", parameter[0].ivort);
@@ -940,7 +940,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			// assemble file name
 			if (parameter[0].outputmode!=1)
 			{
-					s1<<parameter[0].wiederholung;
+					s1<<parameter[0].repeati;
 					s2<<parameter[0].weatherchoice;
 					s3<<parameter[0].ivort;
 					dateiname="output/datatrees_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
@@ -968,7 +968,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				dateizeiger = fopen (dateiname.c_str(), "w+");
 		
 				// parameters
-				fprintf(dateizeiger, "Wiederholung;");
+				fprintf(dateizeiger, "Repeat;");
 				fprintf(dateizeiger, "YPLOTPOS;");
 				fprintf(dateizeiger, "XPLOTPOS;");
 				fprintf(dateizeiger, "weatherchoice;");
@@ -1015,7 +1015,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			{ // tree_list loop BEGIN
 				pTree=(*pos);
 				// parameters
-				fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+				fprintf(dateizeiger, "%d;", parameter[0].repeati);
 				fprintf(dateizeiger, "%d;", pTree->yworldcoo);
 				fprintf(dateizeiger, "%d;", pTree->xworldcoo);
 				fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
@@ -1124,7 +1124,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					// assemble file name
 					if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
 					{
-						s1<<jahr;s2<<pTree->xworldcoo;s3<<pTree->yworldcoo;s4<<parameter[0].wiederholung;
+						s1<<jahr;s2<<pTree->xworldcoo;s3<<pTree->yworldcoo;s4<<parameter[0].repeati;
 						s5<<pTree->species;s6<<parameter[0].weatherchoice;s7<<parameter[0].thawing_depth;
 						
 						dateiname="output/datatrees_Zuwachs/datatrees_Jahr" +s1.str()+"_X"+s2.str()+"_Y"+s3.str()+"_WDH"+s4.str()+"_SP"+s5.str()+"_weather"+s6.str()+"_thawing_depth"+s7.str()+ ".fh";
@@ -1141,13 +1141,13 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					{
 						if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
 						{
-							s1<<parameter[0].wiederholung;s2<<pTree->species;s3<<parameter[0].weatherchoice;
+							s1<<parameter[0].repeati;s2<<pTree->species;s3<<parameter[0].weatherchoice;
 							dateiname="output/datatrees_Zuwachs_WENDEJAHR/datatrees_WDH" + s1.str()+"_SP"+s2.str()+"_weather"+s3.str() + ".fh";
 							s1.str("");s1.clear();s2.str("");s2.clear();s3.str("");s3.clear();
 						}
 						else if (pEvaluation->saettigungsjahr!=-9999)
 						{
-							s1<<parameter[0].wiederholung;s2<<pTree->species;s3<<parameter[0].weatherchoice;
+							s1<<parameter[0].repeati;s2<<pTree->species;s3<<parameter[0].weatherchoice;
 							dateiname="output/datatrees_Zuwachs_SAETTIGUNGSJAHR/datatrees_WDH" + s1.str()+"_SP"+s2.str()+"_weather"+s3.str() + ".fh";
 							s1.str("");s1.clear();s2.str("");s2.clear();s3.str("");s3.clear();
 						}
@@ -1248,7 +1248,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			if (dateizeiger == NULL)
 			{
 			  dateizeiger = fopen (dateiname.c_str(), "w+");
-				fprintf(dateizeiger, "Wiederholung;");
+				fprintf(dateizeiger, "Repeat;");
 				fprintf(dateizeiger, "YPLOTPOS;");
 				fprintf(dateizeiger, "XPLOTPOS;");
 				fprintf(dateizeiger, "X;");
@@ -1278,7 +1278,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				pKarten=plot_list[kartenpos];
 				if ( (pKarten->Treeanzahl>0) && ( (pKarten->xcoo>=xminwindow*parameter[0].sizemagnif) && (pKarten->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pKarten->ycoo>=yminwindow*parameter[0].sizemagnif) && (pKarten->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
 				{ // perform output only if tree density values >0 in the evaluation sector BEGIN
-					fprintf(dateizeiger, "%d;", parameter[0].wiederholung);
+					fprintf(dateizeiger, "%d;", parameter[0].repeati);
 					fprintf(dateizeiger, "%d;", pKarten->yworldcoo);
 					fprintf(dateizeiger, "%d;", pKarten->xworldcoo);
 					fprintf(dateizeiger, "%4.4f;", pKarten->xcoo);

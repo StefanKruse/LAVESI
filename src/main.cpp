@@ -67,29 +67,28 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	
 	
 			// Tree distribution	
-	double start_time_Treeverteilung = omp_get_wtime();	
+	double start_time_Treedistribution = omp_get_wtime();	
 			if (parameter[0].seedintro==true && parameter[0].jahremitseedeintrag>0)
 			{// begin seed introduction
 				
 				parameter[0].starter=true;
 				
-				Treeverteilung(&parameter[0], wortlaengemax);
+				Treedistribution(&parameter[0], stringlengthmax);
 				
 				parameter[0].jahremitseedeintrag--;
 			}
 			else if ( parameter[0].seedintropermanent==true && parameter[0].jahremitseedeintrag<=0) 
 			{
 				parameter[0].starter=true;
-				Treeverteilung( &parameter[0],  wortlaengemax);
+				Treedistribution(&parameter[0],  stringlengthmax);
 			}
 			
-	double end_time_Treeverteilung = omp_get_wtime();
+	double end_time_Treedistribution = omp_get_wtime();
 	
 	
 			// establishment
 	double start_time_etablierung = omp_get_wtime();
 			Etablierung(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
-			//printf("\n jahr=%d\n ", jahr+3998);
 	double end_time_etablierung = omp_get_wtime();
 	
 	
@@ -130,7 +129,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				end_time_wachstum - start_time_wachstum ,
 				end_time_seedausbreitung - start_time_seedausbreitung,
 				end_time_seedproduktion - start_time_seedproduktion,
-				end_time_Treeverteilung - start_time_Treeverteilung,
+				end_time_Treedistribution - start_time_Treedistribution,
 				end_time_etablierung - start_time_etablierung,
 				end_time_feuer - start_time_feuer,
 				end_time_Data_output - start_time_Data_output ,
@@ -141,7 +140,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					(end_time_Data_output - start_time_Data_output)+
 					(end_time_feuer - start_time_feuer)+
 					(end_time_etablierung - start_time_etablierung)+
-					(end_time_Treeverteilung - start_time_Treeverteilung)+
+					(end_time_Treedistribution - start_time_Treedistribution)+
 					(end_time_seedproduktion - start_time_seedproduktion)+
 					(end_time_seedausbreitung - start_time_seedausbreitung)+
 					(end_time_wachstum - start_time_wachstum)+
@@ -168,7 +167,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				end_time_wachstum - start_time_wachstum ,
 				end_time_seedausbreitung - start_time_seedausbreitung,
 				end_time_seedproduktion - start_time_seedproduktion,
-				end_time_Treeverteilung - start_time_Treeverteilung,
+				end_time_Treedistribution - start_time_Treedistribution,
 				end_time_etablierung - start_time_etablierung,
 				end_time_feuer - start_time_feuer,
 				end_time_Data_output - start_time_Data_output ,
@@ -179,7 +178,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 					(end_time_Data_output - start_time_Data_output)+
 					(end_time_feuer - start_time_feuer)+
 					(end_time_etablierung - start_time_etablierung)+
-					(end_time_Treeverteilung - start_time_Treeverteilung)+
+					(end_time_Treedistribution - start_time_Treedistribution)+
 					(end_time_seedproduktion - start_time_seedproduktion)+
 					(end_time_seedausbreitung - start_time_seedausbreitung)+
 					(end_time_wachstum - start_time_wachstum)+
@@ -198,84 +197,66 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 
 
 /****************************************************************************************//**
- * \brief Einschwingphase - get stable state before starting the real simulation
+ * \brief Spinupphase - get stable state before starting the real simulation
  *
  * initialise "Einschwingung" to reach a stable state before starting the normal routine
  * and call vegetationDynamics
  *
  *
  *******************************************************************************************/
-void Einschwingphase()
+void Spinupphase()
 {
 		
-		int t = -1;					//dummy for Data_output()
+		int t = -1;
 		
-		/// spin-up-phase
-		
-		//***german:
-		/// Einschwingphase
+		// spin-up-phase
 		if (parameter[0].ivortmax>0 && parameter[0].stabilperiod==false)
 		{ 
 			parameter[0].einschwingen=true;
 	
-			printf("\nEinschwingphase:");
+			printf("\nSpin up phase:");
 			do
 			{
-
 				parameter[0].ivort++;
-				
+
 				int firstyear =0;
 				int lastyear=0;
-				int startlag=5; // How many years should be left out in the beginning of the series?
-								// 
-								// 
-								// 
-								
-								
-								// ... vielleicht eher gleich dem Wert machen, der die Länge der berechneten langjährigen Mittelwerte der weatherdaten bestimmt!
-								// ... vielleicht diese Daten auch über Parameterdatei einlesen bzw. eine eigene Parameterdatei für die weatherdaten erstellen
-				// Achtung: wenn Zeitspanne geaendert wird, auch Simdauer in Parameter ansehen, ob diese nicht analog geaendert werden muss! Sonst segfault!
-				// Ebenso muss beachtet werden, ob das Startjahr in main noch richtig berechnet wird.
+				int startlag=5;
 				
 				if (parameter[0].weatherchoice==10 || parameter[0].weatherchoice==11 || parameter[0].weatherchoice==12 || parameter[0].weatherchoice==13 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999)
 				{
-					firstyear=1901;		//
-					lastyear=2011;		//Bereich bis 2002
+					firstyear=1901;
+					lastyear=2011;
 				}
 				else if (parameter[0].weatherchoice==1 || parameter[0].weatherchoice==9)
 				{
-					firstyear=-3998;	// -3998 ist das "erste" Jahr 
-					lastyear=5688;		// Bereich bis 1700
+					firstyear=-3998;
+					lastyear=5688;
 				}
 				else if (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==309 || parameter[0].weatherchoice==1111 || parameter[0].weatherchoice==120 || parameter[0].weatherchoice==121 || parameter[0].weatherchoice==122 || parameter[0].weatherchoice==123)
 				{
-					firstyear=1921;		// minimal 934 maximal 2011  => 10 Jahre Puffer wegen 'running mean' calculation
+					firstyear=1921;
 					lastyear=2021;		
 				}
 				else if (parameter[0].weatherchoice==2221)
 				{
-					firstyear=2011;		// beginnt bei 1911 bis 2071
+					firstyear=2011;
 					lastyear=2071;
 				}
 				else if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
 				{
 					firstyear=1934;
-					lastyear=2013; // simdauer auf 80
+					lastyear=2013;
 				}
 				
-				//choose a random year for weather determination
-				
-				//***german
-				// Ziehen eines zufaelligen Jahres fuer das wetter 
+				// choose a random year for weather determination
 				double x = rand()/(RAND_MAX + 1.0);
 				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
 			
 				// calculate current year position in list, according to first year in the Weather-List and the random year
 				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; 
 				
-				
-				
-				///go through all functions for vegetation dynamics
+				// go through all functions for vegetation dynamics
 				vegetationDynamics(yearposition, jahr,t);
 	
 			} while (parameter[0].ivort<parameter[0].ivortmax);
@@ -288,12 +269,7 @@ void Einschwingphase()
 			// Choose random years from the weather files until...
 			// ... either a percentage of variance of certain observable is underestimated at certain sites
 			// ... or, if this is not possible, after 1000 years
-			
-			//***german:
-			// So lange zufaellige Jahre aus den eingelesenen weatherjahren ziehen bis ...
-			// ... entweder	ein gewisser Prozentwert an Abweichung von festgelegten Waehrungen von Calibrationsites unterschritten wird
-			// ... oder falls dies nicht moeglich ist nach 1000 Jahren 
-			double stabilerrorthreshold=0.1;// TODO in Parameterfile einlesen
+			double stabilerrorthreshold=0.1;
 			bool stabilized=false;
 			do
 			{
@@ -303,30 +279,29 @@ void Einschwingphase()
 				int startlag=5; // How many years should left out in the beginning of the series
 				if (parameter[0].weatherchoice==10 || parameter[0].weatherchoice==11 || parameter[0].weatherchoice==12 || parameter[0].weatherchoice==13 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999)
 				{
-					firstyear=1901;		//
-					lastyear=2011;		// until 2002
+					firstyear=1901;
+					lastyear=2011;
 				}
 				else if (parameter[0].weatherchoice==1 || parameter[0].weatherchoice==9)
 				{
-					firstyear=-3998;	// -3998 is the "first" year
-					lastyear=5688;		// until 1700
+					firstyear=-3998;
+					lastyear=5688;
 				}
 				else if (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==309 || parameter[0].weatherchoice==1111)
 				{
-					firstyear=944;		// minimal 934 maximal 2011  => 10 years puffer because of 'running mean' calculation
+					firstyear=944;	
 					lastyear=1044;
 				}
 				else if (parameter[0].weatherchoice==2221)
 				{
-					firstyear=2011;		// s.o.
+					firstyear=2011;	
 					lastyear=2071;
 				}
 				else if ( parameter[0].weatherchoice==22 )
 				{
 					firstyear=1934;
-					lastyear=2013; // sim length = 80
+					lastyear=2013;
 				}
-				
 				
 				// take a random year for weather determination
 				double x = rand()/(RAND_MAX + 1.0);
@@ -338,17 +313,13 @@ void Einschwingphase()
 				// progress console output
 				printf("==> N:%d/%d\t=>\tzYear=%d\tyearPos=%d\n", parameter[0].ivort, parameter[0].ivortmax, jahr, yearposition);	
 
-				
-				///go through all functions for vegetation dynamics
+				// go through all functions for vegetation dynamics
 				vegetationDynamics(yearposition, jahr,t);
 				
 				// Calculation of the deviation from reference values
-				
-				//***german:
-				// Berechnung der Abweichung von Referenzwerten
 				double meanpercentchange=0;
 				double stabilerror=1;
-				int stabilizationtype=1; // 1==quasiequilibrim; 2==ErrorReferenz TODO-in Parameterdatei
+				int stabilizationtype=1;
 				if (stabilizationtype==1)
 				{// is an equilibrium reached?
 					
@@ -362,8 +333,6 @@ void Einschwingphase()
 						aktort++;
 							
 						// observing the basal area	for testing reasons
-						
-						// Zum Test mit der Basalarea
 						if (pEvaluation->BArunmeanliste.size()>1)
 						{
 							cout << "BA" << endl << pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1] << endl;
@@ -372,7 +341,7 @@ void Einschwingphase()
 								/
 								(pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1]));
 						}
-						cout << "Kumulierte %Change = " << meanpercentchange << endl;
+						cout << "Cumulative %Change = " << meanpercentchange << endl;
 						// + N_0-40
 						if (pEvaluation->nheight0b40runmeanliste.size()>1)
 						{
@@ -383,7 +352,7 @@ void Einschwingphase()
 								/
 								(pEvaluation->nheight0b40runmeanliste[pEvaluation->nheight0b40runmeanliste.size()-1]));
 						}
-						cout << "Kumulierte %Change = " << meanpercentchange << endl;
+						cout << "Cumulative %Change = " << meanpercentchange << endl;
 						// + N_40-200
 						if (pEvaluation->nheight41b200runmeanliste.size()>1)
 						{
@@ -395,7 +364,7 @@ void Einschwingphase()
 								(pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size()-1]));
 
 						}
-						cout << "Kumulierte %Change = " << meanpercentchange << endl;
+						cout << "Cumulative %Change = " << meanpercentchange << endl;
 						//StefanC: + N_200+
 						if (pEvaluation->nheight201b10000runmeanliste.size()>1)
 						{
@@ -407,7 +376,7 @@ void Einschwingphase()
 								/
 								(pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size()-1]));
 						}						
-						cout << "Kumulierte %Change = " << meanpercentchange << endl;
+						cout << "Cumulative %Change = " << meanpercentchange << endl;
 						
 					}	 // world evaluation list iteration end
 					cout << "\t==> STAB%CHANGE = " << meanpercentchange << "\t" << "Stabilization runs = " << parameter[0].ivort << endl << endl;
@@ -417,20 +386,14 @@ void Einschwingphase()
 				
 				
 				// Assign the condition on when the year iteration should be stopped at random year position == stabilization period
-				
-				//***german:
-				// Bedingung festlegen wann die Jahresschritte an Zufallsyearposition == Stabilisierungsphase beendet werden sollen
 				if ((parameter[0].ivort>parameter[0].stabilmovingwindow && meanpercentchange<parameter[0].stabilpercentchangethreshold) || stabilerror<=stabilerrorthreshold || parameter[0].ivort>parameter[0].ivortmax)
 				{	
 					stabilized=true;
 				}
-				
 			} while (stabilized!=true);
-			
 		}
 
 		parameter[0].einschwingen=false;
-
 }
 
 
@@ -438,14 +401,14 @@ void Einschwingphase()
 
 
 /****************************************************************************************//**
- * \brief Jahresschritte - run through the simulation for all years (simdauer)
+ * \brief Yearsteps - run through the simulation for all years (simdauer)
  *
  * 
  * initialise yearly steps and call vegetationDynamics
  *
  *
  *******************************************************************************************/
-void Jahresschritte()
+void Yearsteps()
 {
 
 		printf("\n\nstarting yearly time steps...\n");
@@ -539,7 +502,7 @@ void Jahresschritte()
 					} // world weather list loop end
 
 					//from runSimulations()
-					weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
+					weathereinlesen( &parameter[0],  stringlengthmax, world_weather_list);
 
 				
 					// Repeat for different parameter settings
@@ -583,9 +546,7 @@ void Jahresschritte()
 								cout << "           Lists restored!!" << endl;
 								
 						printf("\n\n begin the simulation run time steps...\n");
-						//printf("\n\nJahresschritte des Simulationslaufes beginnen ...\n");
 						cout << "     Length of a simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
-						//cout << "     Laenge der Simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
 						
 
 						
@@ -847,29 +808,24 @@ void initialiseMaps()
 void runSimulation()
 {
 		// Create world lists
-		// apply list to each simulated location on the transect
-		
 		createLists();
 
-		/// reading in weather
-		weathereinlesen( &parameter[0],  wortlaengemax, world_weather_list);
+		// reading in weather
+		weathereinlesen( &parameter[0],  stringlengthmax, world_weather_list);
 
-		/// Plot and evaluation list preparation for each location on the transect 
+		// Plot and evaluation list preparation for each location on the transect 
 		initialiseMaps();
-		//Ende multiple Szenarien Header
 
-		/// trees input simular to CH17 or seed input
-		Treeverteilung( &parameter[0], wortlaengemax);
+		// tree input similar to CH17 or seed input
+		Treedistribution(&parameter[0], stringlengthmax);
 		
 		// Variable for the whole progress, including the stabilization phase
 		parameter[0].ivort=0;		
 
-		//Einschwingphase - get to a stable state before starting the real simulation
-		Einschwingphase();
+		// get to a stable state before starting the real simulation
+		Spinupphase();
 		
-		
-		Jahresschritte();
-
+		Yearsteps();
 
 }
 
@@ -1032,130 +988,87 @@ void finishSimulation()
  *******************************************************************************************/
 int main()
 {
+	//---------Initialisation ---------
 	
-	
-	//time registration for the whole simulation run
-	clock_t start_time_main = clock();
+		//time registration for the whole simulation run
+		clock_t start_time_main = clock();
 						
-			//---------Initialisation ---------
-			
 
-			
-			// random number initialization
-			srand((unsigned) time(NULL));
+		// random number initialization
+		srand((unsigned) time(NULL));
 
-			
-			// console output of the version and general information
-			printf("\n---->\tLAVESI\n");
-			printf("\n You have started  LAVESI-WIND, " 
-					"An individually-based and spatial explicit simulation model"
-					" for the vegetation dynamics of LARIX (L.)"
-					" - driven by temperature, precipitation and wind data."
-					"\n\n Version:\t 2.0 (Multiprocessing)"
-					"\n Date:\t\t 22.01.2018" 
-					"\n authors:"
-					"\n\t Stefan Kruse\tstefan.kruse@awi.de"
-					"\n\t Alexander Gerdes\talexander.gerdes@awi.de"
-					"\n\t Nadja Kath\tnadja.kath@awi.de"
-					"\n\t of prior versions:"
-					"\n\t Mareike Wieczorek\tmareike.wieczorek@awi.de"
-					"\n");
-			printf("\n<----\n");
+		
+		// console output of the version and general information
+		printf("\n---->\tLAVESI\n");
+		printf("\n You have started  LAVESI-WIND, " 
+				"An individually-based and spatial explicit simulation model"
+				" for the vegetation dynamics of LARIX (L.)"
+				" - driven by temperature, precipitation and wind data."
+				"\n\n Version:\t 2.0 (Multiprocessing)"
+				"\n Date:\t\t 22.01.2018" 
+				"\n authors:"
+				"\n\t Stefan Kruse\tstefan.kruse@awi.de"
+				"\n\t Alexander Gerdes\talexander.gerdes@awi.de"
+				"\n\t Nadja Kath\tnadja.kath@awi.de"
+				"\n\t of prior versions:"
+				"\n\t Mareike Wieczorek\tmareike.wieczorek@awi.de"
+				"\n");
+		printf("\n<----\n");
 
+		Parametereinlesen();
 
-			
-			//---------Initialisation ---------
-			
-			Parametereinlesen();
+		/// Set parameter and variables to starting values
+		/// calculation of the starting year of the simulation
+		if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
+		{	
+			parameter[0].startjahr=2014-parameter[0].simdauer; 
+		}
+		else
+		{
+			parameter[0].startjahr=2011-parameter[0].simdauer;
+		}
+		
+		// For data output
+		parameter[0].ordnerda=false;	
+		
+		int jahremitseedeintragpuffer=parameter[0].jahremitseedeintrag;	 
+		
+		parameter[0].repeati=0;
 
-			
-			//TO-DO-LIST!!:
-			if (parameter[0].weatherchoice!=parameter[0].starttrees && parameter[0].starttrees!=0)
-				printf("\n\n\tWARNING:\tWeather series=%d & Initial trees=%d", parameter[0].weatherchoice, parameter[0].starttrees);
-			else if (parameter[0].seedintro==true && parameter[0].starttrees!=0)
-				printf("\n\n\tWARNING:\tSimulation with initial trees and seed input");
-			else if (parameter[0].seedintro==false && parameter[0].starttrees==0)
-				printf("\n\n\tWARNING:\tSimulation without initial trees and without seed input");
-			// ... run parameter check
-			if ( parameter[0].mapylength!=4 && (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999) )
-				printf("\n\n\tWARNING:\tLatitudinal length >1 AND all 4 Sites will be simulated ==> mapylenght was set to 4");
-			if ( (parameter[0].mapylength!=11 || (parameter[0].mapylength*parameter[0].mapylength)!=121) && (parameter[0].weatherchoice==1111) )
-				printf("\n\n\tWARNING:\tLatitudinal length differs CHECK");
-			if ( parameter[0].weathercalcgradient==true && (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999 || parameter[0].weatherchoice==1111 ) )
-				printf("\n\n\tWARNING:\tWeather gradient (weathercalcgradient) will be calculated along latitudinal position of plots AND all 4 Sites will be simulated (weatherchoice==999 || 111)! This makes no sense; Adjust parameter settings!");
-			
-			
-			
-			/// Set parameter and variables to starting values
-			/// calculation of the starting year of the simulation
-			
-			if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
-			{	
-				parameter[0].startjahr=2014-parameter[0].simdauer; 
-			}
-			else
-			{
-				parameter[0].startjahr=2011-parameter[0].simdauer;
-			}
-			
-			// For Data_output
-			parameter[0].ordnerda=false;	
-			
-			int jahremitseedeintragpuffer=parameter[0].jahremitseedeintrag;	 
-			
-			parameter[0].wiederholung=0;
+		int zaehler=0;					
 
-			// Counting the runs
-			int zaehler=0;					
+		// buffer simulation length
+		int simdauerini=parameter[0].simdauer;
+		
+		for (int nruns=0; nruns<parameter[0].runs; nruns++)
+		{
+			// Fast R supported SA_levels
+			#include "SA_parametervariation.cpp"
+		
+			parameter[0].starter=false;
 
-			// save simulation lenght
-			int simdauerini=parameter[0].simdauer;
+			// Begin multiple scenarios
+			parameter[0].repeati++;
+			parameter[0].simdauer=simdauerini;
 
-			//StefanC: This is for initializing all known sites (10-13, 910-913 resp.)
-			//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	//	
-			if (parameter[0].weatherchoice==111 || parameter[0].weatherchoice==222 || parameter[0].weatherchoice==999)
-			{
-				//StefanC: Setze die Anzahl der Y-Tiles auf 4 um darueber die Simulation an Y-Orten zu ermoeglichen
-				parameter[0].mapylength=4;
-			}
+			zaehler++;
+			printf("\n\tProgress: %d of %d\n", zaehler, parameter[0].runs); 
 			
-			
-			for (int nruns=0; nruns<parameter[0].runs; nruns++)
-			{
-				// Fast R supported SA_levels
-				#include "SA_parametervariation.cpp"
-			
-				parameter[0].starter=false;
-
-				//Beginn multiple scenarios
-				parameter[0].wiederholung++;
-				parameter[0].simdauer=simdauerini;
-
-				zaehler++;
-				printf("\n\tFortschritt: %d von %d\n", zaehler, parameter[0].runs); 
-				
-				// Reset variables:
-				// variable for the tree names in one simulation run
+			// Reset variables:
 				parameter[0].nameakt=0;
-				
-				
-				//Variable for lines in one simulation repeat
 				parameter[0].lineakt=0;	
-				
-				// Reset the changes of years with seed introduction
 				parameter[0].jahremitseedeintrag=jahremitseedeintragpuffer;	
-
 				parameter[0].individuenzahl=1;
 				
-				runSimulation();
-					
-				finishSimulation();
-			}
-		
-	clock_t end_time_main = clock();
-	cout << endl << "Total time: " << (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC) << endl; //StefanC: Zeit fuer Gesamtlauf
+			runSimulation();
+				
+			finishSimulation();
+		}
 	
-	//export areal dependency of total simulation time:
+	clock_t end_time_main = clock();
+	cout << endl << "... ending simulation.\nTotal time: " << (((double) (end_time_main - start_time_main))/ CLOCKS_PER_SEC) << endl;
+	
+	// export total simulation time for the current simulation area
 	if(parameter[0].computationtimevis==1)
 	{
 		FILE *fptA;

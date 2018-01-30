@@ -1014,7 +1014,7 @@ if(mcorevariant==3)
 						char output[50];
 
 						FILE *fdir;
-						sprintf(output,"output/windgen_IVORT%.4d_REP%.3d.txt",parameter[0].ivort,parameter[0].wiederholung);
+						sprintf(output,"output/windgen_IVORT%.4d_REP%.3d.txt",parameter[0].ivort,parameter[0].repeati);
 						
 						fdir=fopen(output,"a+");
 						

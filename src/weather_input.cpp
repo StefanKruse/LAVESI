@@ -900,7 +900,7 @@ void passWeather()
  *
  *
  *******************************************************************************************/
-extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list)
+extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, vector<vector<weather*> > &world_weather_list)
 {
 
 	// -- -- -- -- weathereinlesen START -- -- -- -- //
@@ -1014,7 +1014,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 			}		
 			getTemp1(aktort, dateinametemp,  weather_list);
 		
-			getPrec1(dateinameprec, weather_list,wortlaengemax);
+			getPrec1(dateinameprec, weather_list,stringlengthmax);
 		}
 		else
 		{
@@ -1054,7 +1054,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, ve
 				strcpy(dateinameprec, precbuf);
 			}		
 			getTemp3(aktort, dateinametemp,  weather_list);
-			getPrec1(dateinameprec, weather_list,wortlaengemax);
+			getPrec1(dateinameprec, weather_list,stringlengthmax);
 		}
 		
 		parameter[0].parameterinputvis=true;

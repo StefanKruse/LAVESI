@@ -140,7 +140,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 											// assembling file name
 											char dateinamesuf[12];
-											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].repeati);
 											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 										
 											// Trying to open file for reading
@@ -374,7 +374,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 											// assembling file name
 											char dateinamesuf[12];
-											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+											sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].repeati);
 											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 										
 											// Trying to open files for reading
@@ -623,7 +623,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 												// assemble file name
 												char dateinamesuf[12];
-												sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].wiederholung);
+												sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice,parameter[0].repeati);
 												dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 											
 												// trying to open file for reading

@@ -8,7 +8,7 @@
 
 	// Parameter fuer den Startzustand deklarieren und initialisieren
 		// Zum Einlesen von Parametern
- 	const int wortlaengemax=255;
+ 	const int stringlengthmax=255;
  	char trennzeichen[] = "=;";
  	struct Parameter parameter[1];
 		// Zum Einlesen der weatherdaten

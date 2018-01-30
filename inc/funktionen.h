@@ -1,13 +1,12 @@
 // Grundfunktionen
  double NormverteilungRN(float mean, float sdev);
- double Parametereingabe(char *uebergabestring, int wortlaengemax, char *trennzeichen, struct Parameter *parameter);
- void weathereinlesen( struct Parameter *parameter,  int wortlaengemax, vector<vector<weather*> > &world_weather_list);
+ double Parametereingabe(char *uebergabestring, int stringlengthmax, char *trennzeichen, struct Parameter *parameter);
+ void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, vector<vector<weather*> > &world_weather_list);
  void Anzeige( vector<Tree*> &tree_list, vector<seed*> &seed_list);
  void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list);
 
 // Spezielle Funktionen
-	// Treeverteilung aus Datei einlesen oder seedeintrag bei gutem weather
- void Treeverteilung( struct Parameter *parameter, int wortlaengemax);
+ void Treedistribution( struct Parameter *parameter, int stringlengthmax);
  void Kartenupdate( struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list);
  void Fire( struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<vector<weather*> > &world_weather_list);
 	// Jahresschritt

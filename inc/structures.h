@@ -101,7 +101,7 @@ using namespace std;
 		int		simdauer;	
 		int		startjahr;
 		int		runs;
-		int		wiederholung;
+		int		repeati;
 		unsigned int ivortmax;
 		unsigned int ivort;
 		bool 	stabilperiod;

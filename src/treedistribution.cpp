@@ -109,7 +109,7 @@ void Seedin()
                  else 
 				{
 					printf("\n\nLaVeSi was stopped\n");
-					printf("=> Treeverteilung.cpp\n");
+					printf("=> Treedistribution.cpp\n");
 					printf("... reason: no choice of a seed dispersal mode");
 					exit(1);
 				}
@@ -166,7 +166,7 @@ void Seedin()
 					if ( (pseed->yworldcoo<0.0) | (pseed->yworldcoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) )
 					{
 						printf("\n\nLaVeSi was stopped\n");
-						printf("=> Treeverteilung.cpp\n");
+						printf("=> Treedistribution.cpp\n");
 						printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", iseed, jseed);
 						exit(1);
 					}
@@ -416,7 +416,7 @@ void TreesIni(int maximal_word_length)
  * 
  *
  *******************************************************************************************/
-void Treeverteilung(struct Parameter *parameter, int wortlaengemax)
+void Treedistribution(struct Parameter *parameter, int stringlengthmax)
 {
 	
 	// Either seed introduction...
@@ -425,7 +425,7 @@ void Treeverteilung(struct Parameter *parameter, int wortlaengemax)
 			
 	// ... or use initial tree input data files
 	else
-		TreesIni(wortlaengemax);
+		TreesIni(stringlengthmax);
 
 }
 

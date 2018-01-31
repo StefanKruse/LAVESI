@@ -86,30 +86,20 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 				if (pTree->coneheight==99999)
 				{  
 		
-					//trees reaching the maturation age are assigned a minimum height value for them to bear cones
-					//coneheight = this minimal height
-					//coneage = 15 (from PE) //???
-
-					///check if tree is old enough to get cones
+					// trees reaching the maturation age are assigned a minimum height value for them to bear cones
+					// check if tree is old enough to get cones
 					if (pTree->age>parameter[0].coneage)
 					{
-						/////**********************THIS IS SOMEWHAT DIFFERENT IN THE NEWEST VERSION:
-						//calculate random position in array maturationheight 
-						//in this there are ratios between 0 and 182 (corresp. to (0,1) )
-						
-						//***german:
-						// berechne zufällige Position in maturationshöhe[]-array
-						//im Array maturationsheight sind fuer Anteilswerte 0 bis 182 (entspr. (0,1) ) Werte vorhanden
-						
-						//calculate random position in the array of maturation heights defined earlier
+					
+						// calculate random position in the array of maturation heights defined earlier
+						// ... in this there are values between 0 and 182 (corresp. to (0,1) )
 						int anteil= 0 + (int) floor( ( (mat_age_length-1) * rand()/(RAND_MAX + 1.0)) );
 						
-						//Possibility for a tree <2m to maturate
+						// possibility for a tree <2m to maturate
 						if (anteil==0)
 						{ 
 							pTree->coneheight= 100 +( (double) 100*rand()/(RAND_MAX + 1.0));
 						}
-						///teile Tree zufällig die Höhe mit, ab der er cone trägt
 						else
 						{
 							pTree->coneheight=maturationheight[anteil]; 
@@ -117,21 +107,14 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 					}
 				}
 				
-				//Tree already has a height of maturation assigned to it
-				
-				//***german:
-				//Tree hat bereits Maturierationsheight zugewiesen bekommen
+				// Tree already has a height of maturation assigned to it
+				// ... if a tree is taller than this maturation height, he grows cones
 				else if (pTree->coneheight!=99999)
 				{  							
-					//If a tree is taller than this maturation height, he grows cones
-					
-					//***german:
-					/// Wenn ein Tree groeszer ist als diese Maturationshöhe, so bekommt er cone	
-					
-					
 					if (pTree->height >= pTree->coneheight)
+					{
 						pTree->cone=1;
-					//cout<<"cone established \n";
+					}
 				} 
 
 				++pos;
@@ -141,7 +124,7 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 			//Tree bears cones
 			else if (pTree->cone==1)
 			{ 
-				/// counting seeds
+				// counting seeds
 				pTree->seedproduced+=pTree->seednewly_produced; 
 				pTree->seednewly_produced=0;
 
@@ -152,29 +135,17 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 			{	
 				//Check if the substructe cone was set
 				//otherwise it is asked if the program should be interrupted
-				//
-				
-				//***german:
-				// Sicherheitsabfrage cone-Variable gesetzt? 
-				/* Abfrage ob das Programm beendet oder fortgesetzt werden soll */ 
 				signed int abbrechenAgeingfehler; 
 				
 				printf("\n A tree has no value in the substructure cone in function ageing \n"); 
 				printf("\n Continue the simulation with 1, stop it with any other key\n"); 
-				
-				//***german:
-				//printf("\n In der agesfunktion hat ein Tree keinen Wert in der Variable pTree->cone\n"); 
-				//printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
+
 				scanf("%d", &abbrechenAgeingfehler); 
 				
 				if (abbrechenAgeingfehler!=1) 
 				{
 					printf("LAVESI was stopped after a failure in ageing.cpp\n\n");
 					exit(1);
-					
-					//***german:
-					//printf("LaVeSi wurde nach einem Fehler in der agesfunktion beendet\n\n");
-					//exit(1);
 				}
 		
 				delete pTree;

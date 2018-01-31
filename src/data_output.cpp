@@ -143,11 +143,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		int basalareaanzahl=pEvaluation->BAliste.size();
 		
 		
-		//THERE IS NO LOOP OR IF STATEMENT!?
-			// If parameter[0].stabilmovingwindow values are set begin:
-			
-			//***german:
-		{ 	// Falls schon parameter[0].stabilmovingwindow Werte vorhanden Beginn
 			double meanbasalarea=0;
 			double meannheight0b40=0, meannheight41b200=0, meannheight201b10000=0;
 			double meanbreastdiameter=0;
@@ -260,7 +255,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 				
 			} // more than 2 parameter[0].stabilmovingwindow yearly mean values END			
-		} // If 50 basal area values are set END
 		
 		// -- --			 evaluation_list update				 -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

@@ -305,18 +305,18 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].weathercalcgradient)?"true":"false");
                 }
 	
-	strcpy(uebergabestring,"lineartransekt");
+	strcpy(uebergabestring,"lineartransect");
 	if (((int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]))==1) 
         {
-              parameter[0].lineartransekt=true;
+              parameter[0].lineartransect=true;
         }
 	else 
         {
-            parameter[0].lineartransekt=false;
+            parameter[0].lineartransect=false;
         };
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].lineartransekt)?"true":"false");
+                    printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].lineartransect)?"true":"false");
                 }
 
 	strcpy(uebergabestring,"Nposmax");

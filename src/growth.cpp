@@ -14,7 +14,7 @@ using namespace std;
 double getMaxbasalwachstum(int yearposition, vector<weather*> &weather_list)
 { 
 	double maxbw_help = 0;
-	if (parameter[0].lineartransekt==true)
+	if (parameter[0].lineartransect==true)
 	{
 		if(parameter[0].thawing_depth==true)
 		{
@@ -107,7 +107,7 @@ double getMaxbrustwachstum(int yearposition,  vector<weather*> &weather_list)
 	//***german:
 	// Falls eingestellt, die aktuelle Zuwachsleistung nach dem Ort ermitteln
 	
-	if (parameter[0].lineartransekt==true)
+	if (parameter[0].lineartransect==true)
 	{	
 		if(parameter[0].thawing_depth==true)
 		{

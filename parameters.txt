@@ -73,7 +73,7 @@ weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipit
 Nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northermost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
 Nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southermost plot's position
 										// 111 km == 1 decimal degree
-lineartransekt=0;					// (int 0,1) Approximation of temperature and precipitation values on a south-north gradient on each simulated plot
+lineartransect=0;					// (int 0,1) Approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
 

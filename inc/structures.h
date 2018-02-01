@@ -120,7 +120,7 @@ using namespace std;
 		int		mapxlength;
 		int		mapylength;	
 		bool	weathercalcgradient;
-		bool	lineartransekt;
+		bool	lineartransect;
 		double	Nposmax;
 		double	Nposmin;
 		

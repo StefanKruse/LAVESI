@@ -43,7 +43,7 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 					// calculate the latest growth performance
 					double maxbasalwachstum = 0;
 
-					if (parameter[0].lineartransekt==true)
+					if (parameter[0].lineartransect==true)
 					{ 
 						if(pseed->species==1)
 						{

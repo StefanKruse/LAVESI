@@ -1,5 +1,5 @@
-HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/funktionen.h
-CFLAGS= -c -O0 -g3  -ggdb3 -fno-omit-frame-pointer -std=c++0x -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/funktionen.h
+HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/functions.h
+CFLAGS= -c -O0 -g3  -ggdb3 -fno-omit-frame-pointer -std=c++0x -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/functions.h
 CC=g++ -g #$(CXX)
 OBJS = $(./%.o)
 
@@ -12,8 +12,8 @@ main.o: src/main.cpp $(HEADER)
 ageing.o: src/ageing.cpp $(HEADER)
 	$(CC) -c src/ageing.cpp $(CFLAGS)
 	
-data_output.o: src/data_output.cpp $(HEADER)
-	$(CC) -c src/data_output.cpp  $(CFLAGS)
+dataoutput.o: src/dataoutput.cpp $(HEADER)
+	$(CC) -c src/dataoutput.cpp  $(CFLAGS)
 	
 distribution.o: src/distribution.cpp $(HEADER)
 	$(CC) -c src/distribution.cpp  $(CFLAGS)
@@ -30,30 +30,30 @@ mortality.o: src/mortality.cpp $(HEADER)
 parameterintro.o: src/parameterintro.cpp $(HEADER)
 	$(CC) -c src/parameterintro.cpp $(CFLAGS)
 	
-plot_update.o: src/plot_update.cpp $(HEADER)
-	$(CC) -c src/plot_update.cpp $(CFLAGS)
+plotupdate.o: src/plotupdate.cpp $(HEADER)
+	$(CC) -c src/plotupdate.cpp $(CFLAGS)
 	
 reset.o: src/reset.cpp $(HEADER)
 	$(CC) -c src/reset.cpp $(CFLAGS)
 	
-seed_dispersal.o: src/seed_dispersal.cpp $(HEADER)
-	$(CC)  -c src/seed_dispersal.cpp $(CFLAGS)
+seeddispersal.o: src/seeddispersal.cpp $(HEADER)
+	$(CC)  -c src/seeddispersal.cpp $(CFLAGS)
 
-seed_production.o: src/seed_production.cpp $(HEADER)
-	$(CC)  -c src/seed_production.cpp $(CFLAGS)
+seedproduction.o: src/seedproduction.cpp $(HEADER)
+	$(CC)  -c src/seedproduction.cpp $(CFLAGS)
 	
 treedistribution.o: src/treedistribution.cpp $(HEADER)
 	$(CC) -c src/treedistribution.cpp $(CFLAGS)
 	
-weather_input.o: src/weather_input.cpp $(HEADER)
-	$(CC) -c src/weather_input.cpp $(CFLAGS)
+weatherinput.o: src/weatherinput.cpp $(HEADER)
+	$(CC) -c src/weatherinput.cpp $(CFLAGS)
 	
 .PHONY : all
 	
-all: ageing.o data_output.o establishment.o distribution.o growth.o main.o mortality.o parameterintro.o plot_update.o reset.o seed_dispersal.o seed_production.o treedistribution.o weather_input.o executables
+all: ageing.o dataoutput.o establishment.o distribution.o growth.o main.o mortality.o parameterintro.o plotupdate.o reset.o seeddispersal.o seedproduction.o treedistribution.o weatherinput.o executables
 	
 executables: $(OBJS)
-	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./growth.o ./main.o ./mortality.o ./parameterintro.o ./plot_update.o ./reset.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o  -lm -z muldefs -o LAVESI_WIND
+	$(CC) ./ageing.o ./dataoutput.o ./establishment.o ./distribution.o ./growth.o ./main.o ./mortality.o ./parameterintro.o ./plotupdate.o ./reset.o ./seeddispersal.o ./seedproduction.o ./treedistribution.o ./weatherinput.o  -lm -z muldefs -o LAVESI_WIND
 	rm -rf *.o
 	
 .PHONY : clean

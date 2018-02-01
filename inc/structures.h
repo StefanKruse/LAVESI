@@ -90,7 +90,6 @@ using namespace std;
 		bool	seeddispvis;
 		bool	mortvis;
 		bool	dataoutput;
-		bool 	ordnerda;
 		int 	outputmode;
 		int 	parameteri;
 		int		feuerausgabe;

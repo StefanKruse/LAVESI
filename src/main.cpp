@@ -1028,9 +1028,6 @@ int main()
 			parameter[0].startjahr=2011-parameter[0].simdauer;
 		}
 		
-		// For data output
-		parameter[0].ordnerda=false;	
-		
 		int jahremitseedeintragpuffer=parameter[0].jahremitseedeintrag;	 
 		
 		parameter[0].repeati=0;

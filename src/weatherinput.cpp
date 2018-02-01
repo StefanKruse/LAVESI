@@ -1,33 +1,18 @@
 using namespace std;
 
 
-/****************************************************************************************//**
- * \brief  
- *
- *
- *******************************************************************************************/
 void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 {				
-	//1.) Calculation of the current transect coordinate
-	
-	//***german:
-	// Berechnung des aktuellen Ortes
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 	//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
-	
-	//***german:
-	// 2. N_inGrad aus den N_max und N_min und Ygesamt-werten berechnen
 	if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 	{
 		double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
 		double mapylengthdummy=parameter[0].mapylength;	// irgendwie funktioniert nicht die direkte Verwendung in der nachfolgenden Formel??
 		double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
 		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
-		
-		//***german:
-		// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
 		parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 		parameter[0].precdiffort=-5.3699 * (Nposakt-Nposcenter);
 	}
@@ -37,10 +22,6 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	{
 		
 		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T~°latitude
-		
-		//***german:
-		// 3. Differenzwerte berechnen mit Prec=-5.3699 pro Grad und Temp=-0.3508 pro Grad
-		// Umrechnung von Grad in Meter  "1 Grad = 60 x 1852 m = 111120 m"
 		parameter[0].tempdiffortmin=-0.3508 * treerows/(111120);
 		parameter[0].precdiffortmin=-5.3699 * treerows/(111120);
 	}
@@ -51,7 +32,6 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	f = fopen(dateinametemp,"r"); 
 	if (f == NULL)
 	{
-		//printf("Temperaturdatei nicht vorhanden!\n");
 		printf("Temperature file not available!\n");
 		exit(1);
 	}
@@ -988,7 +968,14 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 		vector<weather*>& weather_list = *posw;
 		aktort++;
 
-		//Depending on the weather choice different files will be opened and read line by line
+		// depending on the weather choice different files will be opened and read line by line
+		if (parameter[0].weatherchoice==21)
+		{
+			char tempbuf[]="input/TY02_tmpweighted_model.csv";
+			char precbuf[]="input/TY02_prcweighted_model.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}
 		if (parameter[0].weatherchoice==22)
 		{
 			char tempbuf[]="input/CH17_tmpweighted_model.csv";
@@ -1009,27 +996,11 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 			char precbuf[]="input/CH06_prcweighted_model.csv";
 			strcpy(dateinametemp, tempbuf);
 			strcpy(dateinameprec, precbuf);
-		}
-		else if (parameter[0].weatherchoice==52)
-		{
-			char tempbuf[]="input/Coredata_complete_LauraS_tmp.csv";
-			char precbuf[]="input/Coredata_complete_LauraS_prc.csv";
-			strcpy(dateinametemp, tempbuf);
-			strcpy(dateinameprec, precbuf);
-		}
-		else if (parameter[0].weatherchoice==53)
-		{
-			char tempbuf[]="input/Coredata_complete_LauraN_tmp.csv";
-			char precbuf[]="input/Coredata_complete_LauraN_prc.csv";
-			strcpy(dateinametemp, tempbuf);
-			strcpy(dateinameprec, precbuf);
-		}		
+		}	
 		getTemp3(aktort, dateinametemp,  weather_list);
 		getPrec1(dateinameprec, weather_list,stringlengthmax);
 		
 		parameter[0].parameterinputvis=true;
-		
-		
 	}
 
 	// -- -- -- -- weathereinlesen END -- -- -- -- //

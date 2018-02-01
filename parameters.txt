@@ -54,13 +54,11 @@ omp_num_threads=8;					// (int 1,system specific maximum) Number of cores used f
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
 weatherchoice=24;					// (int) Type of weather forcing series 
-										//  22==CH17_tmpweighted_model.csv, CH17_prcweighted_model.csv
-										//  23==CH02_tmpweighted_model.csv, CH02_prcweighted_model.csv
-										//  24==CH06_tmpweighted_model.csv, CH06_prcweighted_model.csv
+										//  22==TY02
+										//  22==CH17
+										//  23==CH02
+										//  24==CH06
 										// 	    ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
-										// 309==CRU Data for Station Khatanga 934-2011 (934-1928 reconstructed; 1929-2011 station data)
-										// 1111==ClimateGradient
-										// 2221==Temperature experiment
 precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
 										// 0==not at all
 										// 1==linearly if smaller than threshold
@@ -73,7 +71,7 @@ weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipit
 Nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northermost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
 Nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southermost plot's position
 										// 111 km == 1 decimal degree
-lineartransect=0;					// (int 0,1) Approximation of temperature and precipitation values on a south-north gradient on each simulated plot
+lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
 
@@ -85,31 +83,24 @@ windsource=1;						// (int) Source of wind data
 										// 5==South Wind
 									
 // 1.2 -----> Simulation run characteristics
-simdauer=80;						//  (int) Duration of the simulation period depending on the available weather data series
-										//Example: 10 =>  2090 Endjahr 2100 ingesamt von -3998 bis 2100 definiert fuer das weather 9 =>6099 Jahre
-										//  110==for CRU Data
-										// StefanC: changed to append CRUdata+9 years by Khatanga weather station data
-										// MAXIMUM 1077: in that case from 934AD to 2011AD!
-										// ... in case 111 and derivates with CHXXlong-TimeSeries
-										// ... in case 120-123 
-										// 6099==for assembled weather series (weatherchoice==9)
-runs=1;								// (int) Number of repeated simulations
-ivortmax=1000;						// (int) Spin up phase befor the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+simdauer=80;						// (int) duration of the simulation period depending on the available weather data series
+runs=1;								// (int) number of repeated simulations
+ivortmax=100;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
-stabilperiod=0;						// (int 0,1) Simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
+stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
-resetyear=0;						// (int) Year to save all container for a later resume from this time point
-specpres=1;							// (int) Which larch species should be present in the model
+resetyear=0;						// (int) year to save all container for a later resume from this time point
+specpres=1;							// (int) which larch species should be present in the model
 										// 0==both Larix gmelinii and L. sibirica 
 										// 1==only Larix gmelinii
 										// 2==only Larix sibirica
 
 // 1.3 -----> Plot number
-mapxlength=1;						// (int) Number of parralel executed plots for each climate
-mapylength=1;						// (int) Number of plots along a south-north transect
-sizemagnif=5;						// (int) Resolution of the density grid; a value of 5 determines a 20 cm sub grid
+mapxlength=1;						// (int) number of parralel executed plots for each climate
+mapylength=1;						// (int) number of plots along a south-north transect
+sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction

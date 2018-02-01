@@ -68,16 +68,16 @@ evapod=1.5;							// (double) Evapotranspiration based on Dolmann, 2004)
 weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipitation values on a gradient depending on their latidudinal position
 										// 0==without a gradient
 										// 1==calculation of a linear gradient
-Nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northermost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
-Nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southermost plot's position
+Nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northernmost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
+Nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmost plot's position
 										// 111 km == 1 decimal degree
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
 
 // 1.1.1 -----> Wind
-windsource=1;						// (int) Source of wind data
-										// 0==no wind- random no-approach
+windsource=1;						// (int) source of wind data
+										// 0==random dispersal direction and not depending on wind speed
 										// 1==EraInterim
 										// 4==North Wind
 										// 5==South Wind
@@ -121,22 +121,11 @@ periodRB=3;							// (int 0,1,2) periodic boundary conditions for seeds crossing
 										// 1==the western/eastern and northern/southern border turned in both directions 
 										// 2==dispersal connection only on the western to eastern border
 										// 3==only seeds leaving east-or-westwards get newly introduced
-starttrees=0;						// (int)Type of initial tree set up
-										//   0==without initial trees
-										//  10==CH06		"CH06III_Treevert2011.csv"
-										//  11==CH02		"CH02II_Treevert2011.csv"
-										//  12==CH17		"CH17I_Treevert2011.csv"
-										//  13==CH12		"CH12II_Treevert2011.csv"
-										// 910==CH06 Trees warped in time to 1911
-										// 911==CH02 Trees warped in time to 1911
-										// 912==CH17 Trees warped in time to 1911
-										// 913==CH12 Trees warped in time to 1911
-										// !!! be careful: if the tree data set is not from Chatanga, please notice that the tree species is set to Larix gmelinii automatically by now if specpres is set to 0 (both species) or 1 (L.gmelinii)
-										//
-										// PLANNED:::new 1000=> means that a density of 1000 old trees is the starting point - later to be transferred to a read function from a desired density based on earlier simulations that were saved -- needs to be implemented!
-										// 120100 aka SSAAAATTT erste zwei Ziffern für Site (S), mittlere 4 ziffern für flaechengroesze BREITE (Area:A) 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 currently implemented in METERS, letzte 3 ziffern für Transektbesetzung mit Bäumen von Süden ausgehend (T) in KILOMeters
-										// ... miss the last numbers TTT when quadratic
-										// 12-0100-050 + 
+starttrees=0;						// (int) type of initial tree set up
+										//  0==without initial trees
+										// 12==CH17
+										// and SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 meters) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
+										// ... don't use the last numbers TTT when quadratic (e.g. 120100)
 										
 // 1.4.2 -----> Pollen dispersal
 pollenvert=0;						// (int 0,1,2) allow pollen dispersal

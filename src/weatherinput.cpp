@@ -888,15 +888,15 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 	char dateinameprec[50];
 	
 	
-	if((parameter[0].windsource!=0)&&(parameter[0].windsource!=4)&&(parameter[0].windsource!=0))
+	if((parameter[0].windsource!=0)&&(parameter[0].windsource!=4)&&(parameter[0].windsource!=5))
 	{
-	int findyr1=0,findyr2=-100,jahr=0,cntr=0;
-	
-	string filename;
-	std::ostringstream ss;
-	string item;
-	
-	for (int t=0;t<parameter[0].simdauer;t++)
+		int findyr1=0,findyr2=-100,jahr=0,cntr=0;
+		
+		string filename;
+		std::ostringstream ss;
+		string item;
+		
+		for (int t=0;t<parameter[0].simdauer;t++)
 		{ // year step iteration begin:
 			
 			cntr=0;
@@ -914,41 +914,40 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 		
 		if((jahr<findyr2+1) && (jahr>findyr1-1))
 		{
-							
-		ss<<jahr;
-							
-		if(parameter[0].windsource==1)
-		{
-			filename="input/winddaten/winddaten"+ss.str()+"_EraInterim.dat";
-		}
-							
-						ifstream fileinp(filename.c_str());
+			ss<<jahr;
+								
+			if(parameter[0].windsource==1)
+			{
+				filename="input/winddata/winddata"+ss.str()+"_EraInterim.dat";
+			}
+					
+				ifstream fileinp(filename.c_str());
 
-						while(fileinp>>item)
-						{
-						  cntr++;
-						  if(cntr%2)
-						  {
-						    if(stof(item)>=0 && stof(item)<=360)
-							{
-								wdir.push_back(stof(item));
-						    }
-							else
-							{
-								wdir.push_back(0);
-							}
-						  }
-						  else
-						  {
-							  wspd.push_back(stof(item));
-						  }
-						}
-						
-						if(cntr>0)
-						{
-						windspd.push_back(wspd);
-						winddir.push_back(wdir);
-						globalyears.push_back(jahr);
+				while(fileinp>>item)
+				{
+				  cntr++;
+				  if(cntr%2)
+				  {
+					if(stof(item)>=0 && stof(item)<=360)
+					{
+						wdir.push_back(stof(item));
+					}
+					else
+					{
+						wdir.push_back(0);
+					}
+				  }
+				  else
+				  {
+					  wspd.push_back(stof(item));
+				  }
+				}
+				
+				if(cntr>0)
+				{
+					windspd.push_back(wspd);
+					winddir.push_back(wdir);
+					globalyears.push_back(jahr);
 				}
 				
 				wspd.clear();

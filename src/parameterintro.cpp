@@ -199,13 +199,6 @@ void Parametereinlesen(void)
                 printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].vegetation)?"true":"false");
             }
 
-	strcpy(uebergabestring,"feuer");
-	parameter[0].feuer=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
-	if (parameter[0].parameterinputvis ==true) 
-			{
-                printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].feuer);
-            }
-
 	strcpy(uebergabestring,"omp_num_threads");
 	parameter[0].omp_num_threads=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 

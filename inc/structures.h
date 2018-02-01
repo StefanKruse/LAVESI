@@ -92,7 +92,6 @@ using namespace std;
 		bool	dataoutput;
 		int 	outputmode;
 		int 	parameteri;
-		int		feuerausgabe;
 		int 	outputall;
 		bool 	computationtimevis;
 
@@ -112,7 +111,6 @@ using namespace std;
 		// submodules
 		bool	thawing_depth;
 		bool	vegetation;	
-		int		feuer;
 		int		specpres;
 
 		// mulit-core processing with omp

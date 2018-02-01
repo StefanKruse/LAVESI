@@ -821,7 +821,7 @@ void passWeather()
 
 			if (parameter[0].qualiyearlyvis==true)
 			{// console output begin
-				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \nFeuermortalitaet=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->trockenheitsmort);
+				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->trockenheitsmort);
 				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monatmitteliso, weather_list[iweather]->temp7monatmitteliso, weather_list[iweather]->vegetationslaengeiso);
 			}// console output end
 

@@ -428,7 +428,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "Prec;");
 					fprintf(filepointer, "weatherfaktor_gmel;");				
 					fprintf(filepointer, "weatherfaktor_sib;");							
-					fprintf(filepointer, "AuftretenFeuer;");
 					fprintf(filepointer, "thawing_depth_infl;");
 					fprintf(filepointer, "\n");
 				
@@ -633,7 +632,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%4.2f;", weather_list[yearposition]->niederschlagssumme);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactorg);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactors);		
-				fprintf(filepointer, "%d;", parameter[0].feuerausgabe);
 				fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 			
 				// End

@@ -22,14 +22,12 @@ t_N_mort=read.table(paste0("./",foldi,"/","t_N_mort.txt"), sep=";")
 				# end_time_seedproduktion - start_time_seedproduktion,
 				# end_time_Treeverteilung - start_time_Treeverteilung,
 				# end_time_etablierung - start_time_etablierung,
-				# end_time_feuer - start_time_feuer,
 				# end_time_Dataoutput - start_time_Dataoutput ,
 				# end_time_mortalitaet - start_time_mortalitaet,
 				# end_time_Ageing - start_time_Ageing ,
 				# (end_time_Ageing - start_time_Ageing)+
 					# (end_time_mortalitaet - start_time_mortalitaet)+
 					# (end_time_Dataoutput - start_time_Dataoutput)+
-					# (end_time_feuer - start_time_feuer)+
 					# (end_time_etablierung - start_time_etablierung)+
 					# (end_time_Treeverteilung - start_time_Treeverteilung)+
 					# (end_time_seedproduktion - start_time_seedproduktion)+
@@ -37,7 +35,7 @@ t_N_mort=read.table(paste0("./",foldi,"/","t_N_mort.txt"), sep=";")
 					# (end_time_wachstum - start_time_wachstum)+
 					# (end_time_kartenup - start_time_kartenup)
 			# );
-names(t_N_mort)=c("N_tree", "time", "mort", "kartenup", "wachstum", "seedausbreit", "seedprod", "treeverteilung", "etablierung", "feuer", "dataoutput", "mortality", "ageing", "all")
+names(t_N_mort)=c("N_tree", "time", "mort", "kartenup", "wachstum", "seedausbreit", "seedprod", "treeverteilung", "etablierung", "dataoutput", "mortality", "ageing", "all")
 # str(t_N_mort)
 
 

@@ -185,7 +185,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 
 				if (parameter[0].mortvis==true && pTree->height>200.0 && pTree->species==1) 
 				{
-						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +FEUER=%4.4f =>%4.2f", 
+						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f", 
 						pTree->height, 
 						pTree->dbasalrel,pTree->dbrustrel,
 						parameter[0].mjung*pow(exp((-1.0*pTree->height)+maxhg),parameter[0].jugendmorteinflussexp),
@@ -199,7 +199,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 
 				if (parameter[0].mortvis==true && pTree->height>200.0 && pTree->species==2) 
 				{
-						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +FEUER=%4.4f =>%4.2f", 
+						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f", 
 						pTree->height, 
 						pTree->dbasalrel,pTree->dbrustrel,
 						parameter[0].mjung*pow(exp((-1.0*pTree->height)+maxhs),parameter[0].jugendmorteinflussexp),

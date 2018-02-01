@@ -12,145 +12,135 @@ int yearposition; //deletion
  *******************************************************************************************/
 void vegetationDynamics(int yearposition, int jahr, int t)
 {
-	// density grid update
+	// Kartenupdate
 	double start_time_kartenup = omp_get_wtime();
-			Kartenupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+	Kartenupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
-	
-			// growth
+
+	// Wachstum
 	double start_time_wachstum = omp_get_wtime();
-			Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list);
+	Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list);
 	double end_time_wachstum = omp_get_wtime();
 
-			// seed dispersal
+	// seedausbreitung
 	double start_time_seedausbreitung = omp_get_wtime();
-	
-				int findyr1=0,findyr2=0,yr=0;
-				if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
-				{
-					if(parameter[0].windsource==1)
-					{
-					findyr1=1979;findyr2=2012;
-					}
-				}
-									
-				if(jahr<findyr1 or jahr>findyr2)
-				{
-					yr=(findyr1+(int)(rand()/(RAND_MAX+1.0)*(findyr2-findyr1)));
-				}
-				else
-				{
-					yr=jahr;
-				}
-								
-				for(int i=0;i<(signed)globalyears.size();i++)
-				{
-					if(globalyears[i]==yr)
-					{
-						for(int pos=0;pos<(signed)winddir.at(i).size();pos++)
-						{
-							wdir.push_back(winddir.at(i).at(pos));
-							wspd.push_back(windspd.at(i).at(pos));
-						} 
-					}
-				}
-					
-		
-			seedausbreitung( yr, &parameter[0], world_seed_list);
-			
-	double end_time_seedausbreitung = omp_get_wtime();
-	
-			// seed production
-	double start_time_seedproduktion = omp_get_wtime();
-			seedproduktion( &parameter[0], world_tree_list);
-	double end_time_seedproduktion = omp_get_wtime();
-	
-	
-			// Tree distribution	
-	double start_time_Treedistribution = omp_get_wtime();	
-			if (parameter[0].seedintro==true && parameter[0].jahremitseedeintrag>0)
-			{// begin seed introduction
-				
-				parameter[0].starter=true;
-				
-				Treedistribution(&parameter[0], stringlengthmax);
-				
-				parameter[0].jahremitseedeintrag--;
-			}
-			else if ( parameter[0].seedintropermanent==true && parameter[0].jahremitseedeintrag<=0) 
+
+		int findyr1=0,findyr2=0,yr=0;
+		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
+		{
+			if(parameter[0].windsource==1)
 			{
-				parameter[0].starter=true;
-				Treedistribution(&parameter[0],  stringlengthmax);
+				findyr1=1979;findyr2=2012;
 			}
-			
-	double end_time_Treedistribution = omp_get_wtime();
-	
-	
-			// establishment
-	double start_time_etablierung = omp_get_wtime();
-			Etablierung(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
-	double end_time_etablierung = omp_get_wtime();
-	
-	
-			// fire
-	double start_time_feuer = omp_get_wtime();
-			Fire( &parameter[0], yearposition, world_plot_list, world_weather_list);
-	double end_time_feuer = omp_get_wtime();
-		
-			// Dataoutput
-	double start_time_Dataoutput = omp_get_wtime();
-			Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
-	double end_time_Dataoutput = omp_get_wtime();
+		}
+							
+		if(jahr<findyr1 or jahr>findyr2)
+		{
+			yr=(findyr1+(int)(rand()/(RAND_MAX+1.0)*(findyr2-findyr1)));
+		}
+		else
+		{
+			yr=jahr;
+		}
 						
-			// MORTALITÄT,
-	double start_time_mortalitaet = omp_get_wtime();
-			Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
-				wspd.clear();
-				wdir.clear();
-				wspd.shrink_to_fit();
-				wdir.shrink_to_fit();
-	double end_time_mortalitaet = omp_get_wtime();
-	
+		for(int i=0;i<(signed)globalyears.size();i++)
+		{
+			if(globalyears[i]==yr)
+			{
+				for(int pos=0;pos<(signed)winddir.at(i).size();pos++)
+				{
+					wdir.push_back(winddir.at(i).at(pos));
+					wspd.push_back(windspd.at(i).at(pos));
+				} 
+			}
+		}
 			
-			// Ageing
+
+	seedausbreitung( yr, &parameter[0], world_seed_list);
+	double end_time_seedausbreitung = omp_get_wtime();
+
+	// seedproduktion
+	double start_time_seedproduktion = omp_get_wtime();
+	seedproduktion( &parameter[0], world_tree_list);
+	double end_time_seedproduktion = omp_get_wtime();
+
+
+	// Treedistribution	
+	double start_time_Treedistribution = omp_get_wtime();	
+	if (parameter[0].seedintro==true && parameter[0].jahremitseedeintrag>0)
+	{
+		
+		parameter[0].starter=true;
+		
+		Treedistribution(&parameter[0], stringlengthmax);
+		
+		parameter[0].jahremitseedeintrag--;
+	}
+	else if ( parameter[0].seedintropermanent==true && parameter[0].jahremitseedeintrag<=0) 
+	{
+		parameter[0].starter=true;
+		Treedistribution(&parameter[0],  stringlengthmax);
+	}
+	double end_time_Treedistribution = omp_get_wtime();
+
+
+	// Etablierung
+	double start_time_etablierung = omp_get_wtime();
+	Etablierung(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+	double end_time_etablierung = omp_get_wtime();
+
+	// Dataoutput
+	double start_time_Dataoutput = omp_get_wtime();
+	Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+	double end_time_Dataoutput = omp_get_wtime();
+				
+	// Mortalitaet
+	double start_time_mortalitaet = omp_get_wtime();
+	Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
+		wspd.clear();
+		wdir.clear();
+		wspd.shrink_to_fit();
+		wdir.shrink_to_fit();
+	double end_time_mortalitaet = omp_get_wtime();
+
+	
+	// Ageing
 	double start_time_Ageing = omp_get_wtime();
-			Ageing(&parameter[0], world_tree_list, world_seed_list);
+	Ageing(&parameter[0], world_tree_list, world_seed_list);
 	double end_time_Ageing = omp_get_wtime();
 
 	// print the computation time to the console and into a file
 	if(parameter[0].computationtimevis==1)
 	{
-		
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
-			printf("\n   - plotupdategrowth    seeddisp  seedprod  treedistr treeestab fire      output    mortality ageing    TOTAL     ");
-		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
-				parameter[0].ivort,
-				end_time_kartenup - start_time_kartenup ,
-				end_time_wachstum - start_time_wachstum ,
-				end_time_seedausbreitung - start_time_seedausbreitung,
-				end_time_seedproduktion - start_time_seedproduktion,
-				end_time_Treedistribution - start_time_Treedistribution,
-				end_time_etablierung - start_time_etablierung,
-				end_time_feuer - start_time_feuer,
-				end_time_Dataoutput - start_time_Dataoutput ,
-				end_time_mortalitaet - start_time_mortalitaet,
-				end_time_Ageing - start_time_Ageing ,
-				((end_time_Ageing - start_time_Ageing)+
-					(end_time_mortalitaet - start_time_mortalitaet)+
-					(end_time_Dataoutput - start_time_Dataoutput)+
-					(end_time_feuer - start_time_feuer)+
-					(end_time_etablierung - start_time_etablierung)+
-					(end_time_Treedistribution - start_time_Treedistribution)+
-					(end_time_seedproduktion - start_time_seedproduktion)+
-					(end_time_seedausbreitung - start_time_seedausbreitung)+
-					(end_time_wachstum - start_time_wachstum)+
-					(end_time_kartenup - start_time_kartenup)
-					)
-				 );
+		{
+			printf("\n   - plotupdategrowth    seeddisp  seedprod  treedistr treeestab  output    mortality ageing    TOTAL     ");
+		}
+		
+		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
+			parameter[0].ivort,
+			end_time_kartenup - start_time_kartenup ,
+			end_time_wachstum - start_time_wachstum ,
+			end_time_seedausbreitung - start_time_seedausbreitung,
+			end_time_seedproduktion - start_time_seedproduktion,
+			end_time_Treedistribution - start_time_Treedistribution,
+			end_time_etablierung - start_time_etablierung,
+			end_time_Dataoutput - start_time_Dataoutput ,
+			end_time_mortalitaet - start_time_mortalitaet,
+			end_time_Ageing - start_time_Ageing ,
+			((end_time_Ageing - start_time_Ageing)+
+				(end_time_mortalitaet - start_time_mortalitaet)+
+				(end_time_Dataoutput - start_time_Dataoutput)+
+				(end_time_etablierung - start_time_etablierung)+
+				(end_time_Treedistribution - start_time_Treedistribution)+
+				(end_time_seedproduktion - start_time_seedproduktion)+
+				(end_time_seedausbreitung - start_time_seedausbreitung)+
+				(end_time_wachstum - start_time_wachstum)+
+				(end_time_kartenup - start_time_kartenup)
+				)
+			 );
 
-				 
-		
-		
+		// output to file
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin());
 		list<Tree*>& tree_list = *world_positon_b;
 
@@ -158,34 +148,36 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		FILE *fp3;
 		fp3 =fopen("t_N_mort.txt","a+");
 		if(fp3==0)
-			{goto openmort;}
-			fprintf(fp3,"%lu;%d;%f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
+		{
+			goto openmort;
+		}
+		
+		fprintf(fp3,"%lu;%d;%f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n",
 			tree_list.size(),
 			parameter[0].ivort, 
 			end_time_mortalitaet - start_time_mortalitaet,
-			end_time_kartenup - start_time_kartenup ,// from here newly introduced to record all
-				end_time_wachstum - start_time_wachstum ,
-				end_time_seedausbreitung - start_time_seedausbreitung,
-				end_time_seedproduktion - start_time_seedproduktion,
-				end_time_Treedistribution - start_time_Treedistribution,
-				end_time_etablierung - start_time_etablierung,
-				end_time_feuer - start_time_feuer,
-				end_time_Dataoutput - start_time_Dataoutput ,
-				end_time_mortalitaet - start_time_mortalitaet,
-				end_time_Ageing - start_time_Ageing ,
-				(end_time_Ageing - start_time_Ageing)+
-					(end_time_mortalitaet - start_time_mortalitaet)+
-					(end_time_Dataoutput - start_time_Dataoutput)+
-					(end_time_feuer - start_time_feuer)+
-					(end_time_etablierung - start_time_etablierung)+
-					(end_time_Treedistribution - start_time_Treedistribution)+
-					(end_time_seedproduktion - start_time_seedproduktion)+
-					(end_time_seedausbreitung - start_time_seedausbreitung)+
-					(end_time_wachstum - start_time_wachstum)+
-					(end_time_kartenup - start_time_kartenup)
+			end_time_kartenup - start_time_kartenup,
+			end_time_wachstum - start_time_wachstum,
+			end_time_seedausbreitung - start_time_seedausbreitung,
+			end_time_seedproduktion - start_time_seedproduktion,
+			end_time_Treedistribution - start_time_Treedistribution,
+			end_time_etablierung - start_time_etablierung,
+			end_time_Dataoutput - start_time_Dataoutput ,
+			end_time_mortalitaet - start_time_mortalitaet,
+			end_time_Ageing - start_time_Ageing ,
+			(end_time_Ageing - start_time_Ageing)+
+				(end_time_mortalitaet - start_time_mortalitaet)+
+				(end_time_Dataoutput - start_time_Dataoutput)+
+				(end_time_etablierung - start_time_etablierung)+
+				(end_time_Treedistribution - start_time_Treedistribution)+
+				(end_time_seedproduktion - start_time_seedproduktion)+
+				(end_time_seedausbreitung - start_time_seedausbreitung)+
+				(end_time_wachstum - start_time_wachstum)+
+				(end_time_kartenup - start_time_kartenup)
 			);
+			
 		fclose(fp3);
-	}//END: computation time output
+	}// computation time output
 	
  }
 
@@ -416,10 +408,7 @@ void Yearsteps()
 		{ 
 			parameter[0].ivort++;
 
-			// variable to record a fire in the current year and print it (console output)
-			parameter[0].feuerausgabe=0;	
-
-			//  Calculate current year and print a summary of the year if this is wanted
+			// calculate current year and print a summary of the year
 			int jahr=parameter[0].startjahr+t;
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
 
@@ -503,10 +492,7 @@ void Yearsteps()
 						
 						parameter[0].ivort++;
 						
-						// variable to record a fire in the current year and print it (console output)
-						parameter[0].feuerausgabe=0;	
-
-						//  calculate current year and print a summary of the year if this is wanted
+						// calculate current year and print a summary of the year if this is wanted
 						int jahr=parameter[0].startjahr+t;
 						
 						yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the startjahr

@@ -984,83 +984,53 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 
 	int aktort=0;
 	for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++)
-	{	// world weather list loop start
-
-
-		//***german: ???
-		// Um auf die Inhalte in den weather_listn zuzugreifen muss eine weather_listn als Refernenz
-		// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
-		// realisiert ist weiterverfahren werden
-		// Loesung brachte http://www.easy-coding.de/auf-listen-von-listen-zugreifen-t2529.html
+	{
 		vector<weather*>& weather_list = *posw;
 		aktort++;
 
 		//Depending on the weather choice different files will be opened and read line by line
-		
-		//***german: Je nach Wahl werden unterschiedliche Dateien geoeffnet und dann Zeilenweise eingelesen
-		if ((parameter[0].weatherchoice==1111) | (parameter[0].weatherchoice==2221))
+		if (parameter[0].weatherchoice==22)
 		{
-			if (parameter[0].weatherchoice==1111)
-			{
-				// Fast R supported climate matrix design
-				#include "weathereingabe_matrix.cpp"
-				
-			}
-			else if (parameter[0].weatherchoice==2221)
-			{
-				// Fast R supported climate matrix design
-				#include "weathereingabe_tempexp.cpp"
-				
-			}		
-			getTemp1(aktort, dateinametemp,  weather_list);
-		
-			getPrec1(dateinameprec, weather_list,stringlengthmax);
+			char tempbuf[]="input/CH17_tmpweighted_model.csv";
+			char precbuf[]="input/CH17_prcweighted_model.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
 		}
-		else
+		else if (parameter[0].weatherchoice==23)
 		{
-			if (parameter[0].weatherchoice==22)
-			{
-				char tempbuf[]="input/CH17_tmpweighted_model.csv";
-				char precbuf[]="input/CH17_prcweighted_model.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==23)
-			{
-				char tempbuf[]="input/CH02_tmpweighted_model.csv";
-				char precbuf[]="input/CH02_prcweighted_model.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==24)
-			{
-				char tempbuf[]="input/CH06_tmpweighted_model.csv";
-				char precbuf[]="input/CH06_prcweighted_model.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==52)
-			{
-				char tempbuf[]="input/Coredata_complete_LauraS_tmp.csv";
-				char precbuf[]="input/Coredata_complete_LauraS_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}
-			else if (parameter[0].weatherchoice==53)
-			{
-				char tempbuf[]="input/Coredata_complete_LauraN_tmp.csv";
-				char precbuf[]="input/Coredata_complete_LauraN_prc.csv";
-				strcpy(dateinametemp, tempbuf);
-				strcpy(dateinameprec, precbuf);
-			}		
-			getTemp3(aktort, dateinametemp,  weather_list);
-			getPrec1(dateinameprec, weather_list,stringlengthmax);
+			char tempbuf[]="input/CH02_tmpweighted_model.csv";
+			char precbuf[]="input/CH02_prcweighted_model.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
 		}
+		else if (parameter[0].weatherchoice==24)
+		{
+			char tempbuf[]="input/CH06_tmpweighted_model.csv";
+			char precbuf[]="input/CH06_prcweighted_model.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}
+		else if (parameter[0].weatherchoice==52)
+		{
+			char tempbuf[]="input/Coredata_complete_LauraS_tmp.csv";
+			char precbuf[]="input/Coredata_complete_LauraS_prc.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}
+		else if (parameter[0].weatherchoice==53)
+		{
+			char tempbuf[]="input/Coredata_complete_LauraN_tmp.csv";
+			char precbuf[]="input/Coredata_complete_LauraN_prc.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}		
+		getTemp3(aktort, dateinametemp,  weather_list);
+		getPrec1(dateinameprec, weather_list,stringlengthmax);
 		
 		parameter[0].parameterinputvis=true;
 		
 		
-	}//world weather list loop end
+	}
 
 	// -- -- -- -- weathereinlesen END -- -- -- -- //
 	passWeather();

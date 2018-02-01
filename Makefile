@@ -27,9 +27,6 @@ growth.o: src/growth.cpp $(HEADER)
 mortality.o: src/mortality.cpp $(HEADER)
 	$(CC) -c src/mortality.cpp $(CFLAGS)
 	
-normdistributedrn.o: src/normdistributedrn.cpp $(HEADER)
-	$(CC) -c src/normdistributedrn.cpp $(CFLAGS)
-	
 parameterintro.o: src/parameterintro.cpp $(HEADER)
 	$(CC) -c src/parameterintro.cpp $(CFLAGS)
 	
@@ -53,10 +50,10 @@ weather_input.o: src/weather_input.cpp $(HEADER)
 	
 .PHONY : all
 	
-all: ageing.o data_output.o establishment.o distribution.o growth.o main.o mortality.o normdistributedrn.o parameterintro.o plot_update.o reset.o seed_dispersal.o seed_production.o treedistribution.o weather_input.o executables
+all: ageing.o data_output.o establishment.o distribution.o growth.o main.o mortality.o parameterintro.o plot_update.o reset.o seed_dispersal.o seed_production.o treedistribution.o weather_input.o executables
 	
 executables: $(OBJS)
-	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./growth.o ./main.o ./mortality.o ./normdistributedrn.o ./parameterintro.o ./plot_update.o ./reset.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o  -lm -z muldefs -o LAVESI_WIND
+	$(CC) ./ageing.o ./data_output.o ./establishment.o ./distribution.o ./growth.o ./main.o ./mortality.o ./parameterintro.o ./plot_update.o ./reset.o ./seed_dispersal.o ./seed_production.o ./treedistribution.o ./weather_input.o  -lm -z muldefs -o LAVESI_WIND
 	rm -rf *.o
 	
 .PHONY : clean

@@ -962,9 +962,6 @@ int main()
 		
 		for (int nruns=0; nruns<parameter[0].runs; nruns++)
 		{
-			// Fast R supported SA_levels
-			#include "SA_parametervariation.cpp"
-		
 			parameter[0].starter=false;
 
 			// Begin multiple scenarios

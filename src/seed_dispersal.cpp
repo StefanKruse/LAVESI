@@ -15,26 +15,26 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 {
 	//StefanC: Ausgabe der LDSD-seed
 	// Code-Bsp. hier http://www2.informatik.uni-halle.de/lehre/c/c_fopen.html
-	FILE *dateizeiger;
+	FILE *filepointer;
 	string dateiname;
 
 		// assemble file names
 		dateiname="output/dataseed_LDSD.csv";
  
 		// Trying to open file for reading
-		dateizeiger = fopen(dateiname.c_str(), "r+");
+		filepointer = fopen(dateiname.c_str(), "r+");
 			// if fopen fails create new data file + header
-			if (dateizeiger == NULL)
+			if (filepointer == NULL)
 			{
-			  dateizeiger = fopen(dateiname.c_str(), "w");
-				fprintf(dateizeiger, "ivort;");
-				fprintf(dateizeiger, "aktort;");
-				fprintf(dateizeiger, "entfernung;");
-				fprintf(dateizeiger, "richtung;");
-				fprintf(dateizeiger, "neueweltcoo;");			
-				fprintf(dateizeiger, "\n");
+			  filepointer = fopen(dateiname.c_str(), "w");
+				fprintf(filepointer, "ivort;");
+				fprintf(filepointer, "aktort;");
+				fprintf(filepointer, "entfernung;");
+				fprintf(filepointer, "richtung;");
+				fprintf(filepointer, "neueweltcoo;");			
+				fprintf(filepointer, "\n");
 
-				if (dateizeiger == NULL)
+				if (filepointer == NULL)
 				{
 					fprintf(stderr, "Error: long distance seed dispersal file could not be opened!\n");
 					exit(1);
@@ -42,17 +42,17 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			}
 
 			// else: append data to file
-			fseek(dateizeiger,0,SEEK_END);
+			fseek(filepointer,0,SEEK_END);
 
 			// data evaluation and output
-			fprintf(dateizeiger, "%d;", parameter[0].ivort);
-			fprintf(dateizeiger, "%d;", aktort);
-			fprintf(dateizeiger, "%4.5f;", entfernung);
-			fprintf(dateizeiger, "%4.5f;", richtung);
-			fprintf(dateizeiger, "%d;", neueweltcoo);		
-			fprintf(dateizeiger, "\n");
+			fprintf(filepointer, "%d;", parameter[0].ivort);
+			fprintf(filepointer, "%d;", aktort);
+			fprintf(filepointer, "%4.5f;", entfernung);
+			fprintf(filepointer, "%4.5f;", richtung);
+			fprintf(filepointer, "%d;", neueweltcoo);		
+			fprintf(filepointer, "\n");
 
-		fclose(dateizeiger);
+		fclose(filepointer);
 }
 
 
@@ -135,7 +135,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
 											richtung=atan2(iquer,jquer);
 																	
-											FILE *dateizeiger;
+											FILE *filepointer;
 											string dateiname;
 
 											// assembling file name
@@ -144,55 +144,55 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 										
 											// Trying to open file for reading
-											dateizeiger = fopen (dateiname.c_str(), "r+");
+											filepointer = fopen (dateiname.c_str(), "r+");
 											// If fopen fails, open a new file adding a header
-											if (dateizeiger == NULL)
+											if (filepointer == NULL)
 											{
-											  dateizeiger = fopen (dateiname.c_str(), "w");
-												fprintf(dateizeiger,"IVORT;");
-												fprintf(dateizeiger, "name;");
-												fprintf(dateizeiger, "year;" );
-												fprintf(dateizeiger, "parentheight;");
-												//fprintf(dateizeiger, "xentfernung;");
-												//fprintf(dateizeiger, "yentfernung;");
-												fprintf(dateizeiger, "distance;");
-												fprintf(dateizeiger, "direction;");
-												fprintf(dateizeiger, "xcoo;");
-												fprintf(dateizeiger, "ycoo;");
-												fprintf(dateizeiger, "species;" );
-												fprintf(dateizeiger, "weatherchoice;");
-												fprintf(dateizeiger, "thawing_depth;");	
-												fprintf(dateizeiger, "windspd;");
-												fprintf(dateizeiger, "winddir;");
-												fprintf(dateizeiger, "\n");
+											  filepointer = fopen (dateiname.c_str(), "w");
+												fprintf(filepointer,"IVORT;");
+												fprintf(filepointer, "name;");
+												fprintf(filepointer, "year;" );
+												fprintf(filepointer, "parentheight;");
+												//fprintf(filepointer, "xentfernung;");
+												//fprintf(filepointer, "yentfernung;");
+												fprintf(filepointer, "distance;");
+												fprintf(filepointer, "direction;");
+												fprintf(filepointer, "xcoo;");
+												fprintf(filepointer, "ycoo;");
+												fprintf(filepointer, "species;" );
+												fprintf(filepointer, "weatherchoice;");
+												fprintf(filepointer, "thawing_depth;");	
+												fprintf(filepointer, "windspd;");
+												fprintf(filepointer, "winddir;");
+												fprintf(filepointer, "\n");
 
-												if (dateizeiger == NULL)
+												if (filepointer == NULL)
 												{
 													fprintf(stderr, "Error: Seed distance file could not be opened!\n");
 													exit(1);
 												}
 											}
 
-											fseek(dateizeiger,0,SEEK_END);
+											fseek(filepointer,0,SEEK_END);
 
-											fprintf(dateizeiger, "%d;",parameter[0].ivort);
-											fprintf(dateizeiger, "%d;", pseed->namem);
-											fprintf(dateizeiger, "%d;", jahr);
-											fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
-											//fprintf(dateizeiger, "%f;", iquer);
-											//fprintf(dateizeiger, "%f;", jquer);
-											fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
-											fprintf(dateizeiger, "%4.5f;", richtung);
-											fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
-											fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
-											fprintf(dateizeiger, "%d;", pseed->species);
-											fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-											fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
-											fprintf(dateizeiger, "%lf;",geschwindigkeit);
-											fprintf(dateizeiger, "%lf;", wrichtung);
-											fprintf(dateizeiger, "\n");
+											fprintf(filepointer, "%d;",parameter[0].ivort);
+											fprintf(filepointer, "%d;", pseed->namem);
+											fprintf(filepointer, "%d;", jahr);
+											fprintf(filepointer, "%4.3f;", pseed->elternheight);
+											//fprintf(filepointer, "%f;", iquer);
+											//fprintf(filepointer, "%f;", jquer);
+											fprintf(filepointer, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
+											fprintf(filepointer, "%4.5f;", richtung);
+											fprintf(filepointer, "%4.5f;", pseed->xcoo);
+											fprintf(filepointer, "%4.5f;", pseed->ycoo);	
+											fprintf(filepointer, "%d;", pseed->species);
+											fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+											fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+											fprintf(filepointer, "%lf;",geschwindigkeit);
+											fprintf(filepointer, "%lf;", wrichtung);
+											fprintf(filepointer, "\n");
 
-											fclose(dateizeiger);
+											fclose(filepointer);
 										}
 								}//output end if
 							
@@ -369,7 +369,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
 											richtung=atan2(iquer,jquer);
 																	
-											FILE *dateizeiger;
+											FILE *filepointer;
 											string dateiname;
 
 											// assembling file name
@@ -378,55 +378,55 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 											dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 										
 											// Trying to open files for reading
-											dateizeiger = fopen (dateiname.c_str(), "r+");
+											filepointer = fopen (dateiname.c_str(), "r+");
 											// if fopen fails, create a new file and header
-											if (dateizeiger == NULL)
+											if (filepointer == NULL)
 											{
-											  dateizeiger = fopen (dateiname.c_str(), "w");
-												fprintf(dateizeiger,"IVORT;");
-												fprintf(dateizeiger, "name;");
-												fprintf(dateizeiger, "year;" );
-												fprintf(dateizeiger, "parentheight;");
-												//fprintf(dateizeiger, "xentfernung;");
-												//fprintf(dateizeiger, "yentfernung;");
-												fprintf(dateizeiger, "distance;");
-												fprintf(dateizeiger, "direction;");
-												fprintf(dateizeiger, "xcoo;");
-												fprintf(dateizeiger, "ycoo;");
-												fprintf(dateizeiger, "species;" );
-												fprintf(dateizeiger, "weatherchoice;");
-												fprintf(dateizeiger, "thawing_depth;");	
-												fprintf(dateizeiger, "windspd;");
-												fprintf(dateizeiger, "winddir;");
-												fprintf(dateizeiger, "\n");
+											  filepointer = fopen (dateiname.c_str(), "w");
+												fprintf(filepointer,"IVORT;");
+												fprintf(filepointer, "name;");
+												fprintf(filepointer, "year;" );
+												fprintf(filepointer, "parentheight;");
+												//fprintf(filepointer, "xentfernung;");
+												//fprintf(filepointer, "yentfernung;");
+												fprintf(filepointer, "distance;");
+												fprintf(filepointer, "direction;");
+												fprintf(filepointer, "xcoo;");
+												fprintf(filepointer, "ycoo;");
+												fprintf(filepointer, "species;" );
+												fprintf(filepointer, "weatherchoice;");
+												fprintf(filepointer, "thawing_depth;");	
+												fprintf(filepointer, "windspd;");
+												fprintf(filepointer, "winddir;");
+												fprintf(filepointer, "\n");
 
-												if (dateizeiger == NULL)
+												if (filepointer == NULL)
 												{
 													fprintf(stderr, "Error: seed distance file could not be opened!\n");
 													exit(1);
 												}
 											}
 
-											fseek(dateizeiger,0,SEEK_END);
+											fseek(filepointer,0,SEEK_END);
 
-											fprintf(dateizeiger, "%d;",parameter[0].ivort);
-											fprintf(dateizeiger, "%d;", pseed->namem);
-											fprintf(dateizeiger, "%d;", jahr);
-											fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
-											//fprintf(dateizeiger, "%f;", iquer);
-											//fprintf(dateizeiger, "%f;", jquer);
-											fprintf(dateizeiger, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
-											fprintf(dateizeiger, "%4.5f;", richtung);
-											fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
-											fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
-											fprintf(dateizeiger, "%d;", pseed->species);
-											fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-											fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
-											fprintf(dateizeiger, "%lf;",geschwindigkeit);
-											fprintf(dateizeiger, "%lf;", wrichtung);
-											fprintf(dateizeiger, "\n");
+											fprintf(filepointer, "%d;",parameter[0].ivort);
+											fprintf(filepointer, "%d;", pseed->namem);
+											fprintf(filepointer, "%d;", jahr);
+											fprintf(filepointer, "%4.3f;", pseed->elternheight);
+											//fprintf(filepointer, "%f;", iquer);
+											//fprintf(filepointer, "%f;", jquer);
+											fprintf(filepointer, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
+											fprintf(filepointer, "%4.5f;", richtung);
+											fprintf(filepointer, "%4.5f;", pseed->xcoo);
+											fprintf(filepointer, "%4.5f;", pseed->ycoo);	
+											fprintf(filepointer, "%d;", pseed->species);
+											fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+											fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+											fprintf(filepointer, "%lf;",geschwindigkeit);
+											fprintf(filepointer, "%lf;", wrichtung);
+											fprintf(filepointer, "\n");
 
-											fclose(dateizeiger);
+											fclose(filepointer);
 										}
 								}//output end if
 								
@@ -618,7 +618,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												richtung=atan2(iquer,jquer);
 																		
 												//distance output begin
-												FILE *dateizeiger;
+												FILE *filepointer;
 												string dateiname;
 
 												// assemble file name
@@ -627,51 +627,51 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												dateiname="output/dataseed_distance" + string(dateinamesuf) + ".csv";
 											
 												// trying to open file for reading
-												dateizeiger = fopen (dateiname.c_str(), "r+");
+												filepointer = fopen (dateiname.c_str(), "r+");
 												// if fopen fails create a new file and header
-												if (dateizeiger == NULL)
+												if (filepointer == NULL)
 												{
-												  dateizeiger = fopen (dateiname.c_str(), "w");
-													fprintf(dateizeiger,"IVORT;");
-													fprintf(dateizeiger, "name;");
-													fprintf(dateizeiger, "year;" );
-													fprintf(dateizeiger, "parentheight;");
-													fprintf(dateizeiger, "distance;");
-													fprintf(dateizeiger, "direction;");
-													fprintf(dateizeiger, "xcoo;");
-													fprintf(dateizeiger, "ycoo;");
-													fprintf(dateizeiger, "species;" );
-													fprintf(dateizeiger, "weatherchoice;");
-													fprintf(dateizeiger, "thawing_depth;");	
-													fprintf(dateizeiger, "windspd;");
-													fprintf(dateizeiger, "winddir;");
-													fprintf(dateizeiger, "\n");
+												  filepointer = fopen (dateiname.c_str(), "w");
+													fprintf(filepointer,"IVORT;");
+													fprintf(filepointer, "name;");
+													fprintf(filepointer, "year;" );
+													fprintf(filepointer, "parentheight;");
+													fprintf(filepointer, "distance;");
+													fprintf(filepointer, "direction;");
+													fprintf(filepointer, "xcoo;");
+													fprintf(filepointer, "ycoo;");
+													fprintf(filepointer, "species;" );
+													fprintf(filepointer, "weatherchoice;");
+													fprintf(filepointer, "thawing_depth;");	
+													fprintf(filepointer, "windspd;");
+													fprintf(filepointer, "winddir;");
+													fprintf(filepointer, "\n");
 
-													if (dateizeiger == NULL)
+													if (filepointer == NULL)
 													{
 														fprintf(stderr, "Fehler: seed distance file could not be opened!\n");
 														exit(1);
 													}
 												}
 
-												fseek(dateizeiger,0,SEEK_END);
+												fseek(filepointer,0,SEEK_END);
 
-												fprintf(dateizeiger, "%d;",parameter[0].ivort);
-												fprintf(dateizeiger, "%d;", pseed->namem);
-												fprintf(dateizeiger, "%d;", jahr);
-												fprintf(dateizeiger, "%4.3f;", pseed->elternheight);
-												fprintf(dateizeiger, "%4.5f;",entfernung);
-												fprintf(dateizeiger, "%4.5f;", richtung);
-												fprintf(dateizeiger, "%4.5f;", pseed->xcoo);
-												fprintf(dateizeiger, "%4.5f;", pseed->ycoo);	
-												fprintf(dateizeiger, "%d;", pseed->species);
-												fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-												fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
-												fprintf(dateizeiger, "%lf;",geschwindigkeit);
-												fprintf(dateizeiger, "%lf;", wrichtung);
-												fprintf(dateizeiger, "\n");
+												fprintf(filepointer, "%d;",parameter[0].ivort);
+												fprintf(filepointer, "%d;", pseed->namem);
+												fprintf(filepointer, "%d;", jahr);
+												fprintf(filepointer, "%4.3f;", pseed->elternheight);
+												fprintf(filepointer, "%4.5f;",entfernung);
+												fprintf(filepointer, "%4.5f;", richtung);
+												fprintf(filepointer, "%4.5f;", pseed->xcoo);
+												fprintf(filepointer, "%4.5f;", pseed->ycoo);	
+												fprintf(filepointer, "%d;", pseed->species);
+												fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+												fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+												fprintf(filepointer, "%lf;",geschwindigkeit);
+												fprintf(filepointer, "%lf;", wrichtung);
+												fprintf(filepointer, "\n");
 
-												fclose(dateizeiger);
+												fclose(filepointer);
 											}
 									}//output end if
 									

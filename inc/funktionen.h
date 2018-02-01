@@ -3,7 +3,7 @@
  double Parametereingabe(char *uebergabestring, int stringlengthmax, char *trennzeichen, struct Parameter *parameter);
  void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, vector<vector<weather*> > &world_weather_list);
  void Anzeige( vector<Tree*> &tree_list, vector<seed*> &seed_list);
- void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list);
+ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list);
 
 // Spezielle Funktionen
  void Treedistribution( struct Parameter *parameter, int stringlengthmax);

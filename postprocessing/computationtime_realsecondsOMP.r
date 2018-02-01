@@ -14,12 +14,12 @@ t_N_mort=read.table("t_N_mort.txt", sep=";")
 				# end_time_Treeverteilung - start_time_Treeverteilung,
 				# end_time_etablierung - start_time_etablierung,
 				# end_time_feuer - start_time_feuer,
-				# end_time_Data_output - start_time_Data_output ,
+				# end_time_Dataoutput - start_time_Dataoutput ,
 				# end_time_mortalitaet - start_time_mortalitaet,
 				# end_time_Ageing - start_time_Ageing ,
 				# (end_time_Ageing - start_time_Ageing)+
 					# (end_time_mortalitaet - start_time_mortalitaet)+
-					# (end_time_Data_output - start_time_Data_output)+
+					# (end_time_Dataoutput - start_time_Dataoutput)+
 					# (end_time_feuer - start_time_feuer)+
 					# (end_time_etablierung - start_time_etablierung)+
 					# (end_time_Treeverteilung - start_time_Treeverteilung)+

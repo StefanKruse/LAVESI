@@ -97,10 +97,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			Fire( &parameter[0], yearposition, world_plot_list, world_weather_list);
 	double end_time_feuer = omp_get_wtime();
 		
-			// Data_output
-	double start_time_Data_output = omp_get_wtime();
-			Data_output(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
-	double end_time_Data_output = omp_get_wtime();
+			// Dataoutput
+	double start_time_Dataoutput = omp_get_wtime();
+			Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+	double end_time_Dataoutput = omp_get_wtime();
 						
 			// MORTALITÄT,
 	double start_time_mortalitaet = omp_get_wtime();
@@ -132,12 +132,12 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				end_time_Treedistribution - start_time_Treedistribution,
 				end_time_etablierung - start_time_etablierung,
 				end_time_feuer - start_time_feuer,
-				end_time_Data_output - start_time_Data_output ,
+				end_time_Dataoutput - start_time_Dataoutput ,
 				end_time_mortalitaet - start_time_mortalitaet,
 				end_time_Ageing - start_time_Ageing ,
 				((end_time_Ageing - start_time_Ageing)+
 					(end_time_mortalitaet - start_time_mortalitaet)+
-					(end_time_Data_output - start_time_Data_output)+
+					(end_time_Dataoutput - start_time_Dataoutput)+
 					(end_time_feuer - start_time_feuer)+
 					(end_time_etablierung - start_time_etablierung)+
 					(end_time_Treedistribution - start_time_Treedistribution)+
@@ -170,12 +170,12 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				end_time_Treedistribution - start_time_Treedistribution,
 				end_time_etablierung - start_time_etablierung,
 				end_time_feuer - start_time_feuer,
-				end_time_Data_output - start_time_Data_output ,
+				end_time_Dataoutput - start_time_Dataoutput ,
 				end_time_mortalitaet - start_time_mortalitaet,
 				end_time_Ageing - start_time_Ageing ,
 				(end_time_Ageing - start_time_Ageing)+
 					(end_time_mortalitaet - start_time_mortalitaet)+
-					(end_time_Data_output - start_time_Data_output)+
+					(end_time_Dataoutput - start_time_Dataoutput)+
 					(end_time_feuer - start_time_feuer)+
 					(end_time_etablierung - start_time_etablierung)+
 					(end_time_Treedistribution - start_time_Treedistribution)+

@@ -18,15 +18,13 @@ computationtimevis=0;				// (int 0,1) include visualisation and output of comput
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=5;  						// (int) choice of data output files 
-										// 0=="normal"
-										// 1=="SensitivityAnalysis", 2x output at log+capacity
-										// 2=="SA_2", once after the population reached a stable state using random weather
-										// 3=="ClimateGradient with time slices"
-										// 4=="Temperature experiment with time slices"
-										// 5=="?????????????????"
-										// 9=="OMP only => currencies + computation time"
-outputall=1;						// (int 0,1) output of all tree data on the plot		
+outputmode=1;  						// (int) choice of data output files 
+										// 0=="full"
+										// 1=="normal"
+										// 2=="OMP only => currencies + computation time"
+outputall=1;						// (int 0,1) sampling area determination
+										// 0==only central 20x20 m area 
+										// 1==output of all tree data on the plot
 parameteri=0;						// (int) Start values for parameter set output
 	
 // 0.3 -----> Submodules

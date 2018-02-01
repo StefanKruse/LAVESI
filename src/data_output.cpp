@@ -9,25 +9,24 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 	
 	FILE *dateizeiger;
 	string dateiname;
+	
 	if(parameter[0].outputall==0)
 	{
-	xminwindow=( (double) treecols/2.0)-10.0;
-	xmaxwindow=( (double) treecols/2.0)+10.0;
-	yminwindow=( (double) treerows/2.0)-10.0;
-	ymaxwindow=( (double) treerows/2.0)+10.0;
+		xminwindow=( (double) treecols/2.0)-10.0;
+		xmaxwindow=( (double) treecols/2.0)+10.0;
+		yminwindow=( (double) treerows/2.0)-10.0;
+		ymaxwindow=( (double) treerows/2.0)+10.0;
 	
 	}
 	else if(parameter[0].outputall==1)
 	{
-	xminwindow=((double) 0.0);
-	xmaxwindow=((double) treecols);
-	yminwindow=((double) 0.0);
-	ymaxwindow=((double) treerows);
+		xminwindow=((double) 0.0);
+		xmaxwindow=((double) treecols);
+		yminwindow=((double) 0.0);
+		ymaxwindow=((double) treerows);
 	}
 	
-	
-	
-	// Declarations for the console output determination
+	// declarations of switches for output
 	bool ausgabecurrencies=false;
 	bool ausgabeposition=false;
 	bool ausgabeindividuen=false;
@@ -35,7 +34,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 	bool ausgabedensity=false;
 
 	
-	// preprocession and output of the data for each plot
+	// preprocessing and output of data for each plot
 	int aktort=0;
 	for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw)
 	{ // world tree list loop
@@ -57,7 +56,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		
 		aktort++;
 		
-		// calculation of the current location
+		// calculation of the current location in a world grid
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -122,9 +121,13 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		pEvaluation->nheight201b10000liste.push_back(nheight201b10000);
 		
 		if (breastdiametercount>0)
+		{
 			pEvaluation->meanbreastdiameterliste.push_back( (breastdiameter/ ( (double) breastdiametercount)) );
+		}
 		else
+		{
 			pEvaluation->meanbreastdiameterliste.push_back( 0.0 );
+		}
 			
 		pEvaluation->stemcountliste.push_back(stemcount);
 
@@ -142,7 +145,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		// mean value calculation
 		int basalareaanzahl=pEvaluation->BAliste.size();
 		
-		
 			double meanbasalarea=0;
 			double meannheight0b40=0, meannheight41b200=0, meannheight201b10000=0;
 			double meanbreastdiameter=0;
@@ -150,7 +152,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 			double meanmeantreeheigth=0;
 			double meanmeantreeage=0;
 			if(basalareaanzahl==(int) parameter[0].stabilmovingwindow) 
-			{ // if exactly parameter[0].stabilmovingwindow values are set BEGIN
+			{// if exactly parameter[0].stabilmovingwindow values are set
 				for (int position=basalareaanzahl-(int) parameter[0].stabilmovingwindow;position<basalareaanzahl;++position)
 				{
 					meanbasalarea+=pEvaluation->BAliste[position]/parameter[0].stabilmovingwindow;
@@ -173,7 +175,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 
 			} // if exactly parameter[0].stabilmovingwindow values are set END
 			else if (basalareaanzahl> (int) parameter[0].stabilmovingwindow) 
-			{// if more than parameter[0].stabilmovingwindow values are set BEGIN
+			{// if more than parameter[0].stabilmovingwindow values are set
 				meanbasalarea=pEvaluation->BArunmeanliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]		// Mittelwert des Vorjahres
 							-(pEvaluation->BAliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]/parameter[0].stabilmovingwindow)		// minus den ersten Wert aus Bereich zur Berechnung des Mittelwertes des Vorjahres
 							+(pEvaluation->BAliste[basalareaanzahl-1]/parameter[0].stabilmovingwindow);		// plus den neuen Wert aus diesem Jahr
@@ -219,17 +221,17 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 
 
 
-			// Verarbeitung der BA-Mittelwerte
+			// processing basal area mean values
 			int runmeanbasalareaanzahl=pEvaluation->BArunmeanliste.size();
 			if (runmeanbasalareaanzahl>1)
-			{ // If more than 2 parameter[0].stabilmovingwindow yearly mean values BEGIN
+			{// if more than 2 parameter[0].stabilmovingwindow yearly mean values
 				
-				// Calculation of the slope
+				// calculation of the slope
 				double steigdiff=pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-1]-pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-2];
 				if (pEvaluation->nachwendejahr!=true)
 				{	
 			
-					// If a maximal slope is not surpassed in 50 years, the point of inflection of growth is reached
+					// If a maximal slope is not surpassed in 50 years, the turning point of growth is reached
 					if (steigdiff>=pEvaluation->maxsteigungbasalarea) 
 					{
 						pEvaluation->maxsteigungbasalarea=steigdiff;
@@ -245,7 +247,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						pEvaluation->nachwendejahr=true;
 					}
 				}
-				// After the point of inflection is met, the saturation of the system is reached as soon as the slope becomes negative
+				// after the turning point is reached, the saturation of the system is reached as soon as the slope becomes negative
 				else 
 				{
 					if ( (steigdiff<0.0) && (pEvaluation->saettigungsjahr==-9999) )
@@ -254,7 +256,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					}
 				}
 				
-			} // more than 2 parameter[0].stabilmovingwindow yearly mean values END			
+			}		
 		
 		// -- --			 evaluation_list update				 -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -265,8 +267,8 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		if (parameter[0].dataoutput==true)
-		{//Data output depending on the corresponding parameter BEGIN
-			if (parameter[0].outputmode==0) // "normally"
+		{
+			if (parameter[0].outputmode==0) // "full"
 			{
 				if (parameter[0].einschwingen==true)
 				{
@@ -276,79 +278,12 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				else 
 				{
 					ausgabecurrencies=true;
-					
-					if ( (jahr==1010) || (jahr==1510) || (jahr==2010) )
-					{
-						ausgabeposition=true;
-						ausgabeindividuen=true;
-						//ausgabedendro=true;
-						ausgabedensity=true;
-					}
-				}
-			}
-			else if (parameter[0].outputmode==1) // "SensitivityAnalysis"
-			{
-				if (parameter[0].einschwingen==true)
-				{
-					ausgabecurrencies=true;
-					ausgabeposition=true;
-				}
-				else 
-				{
-					ausgabecurrencies=true;
-					
-					if ( (pEvaluation->saettigungsjahr==jahr) || (pEvaluation->wendejahr==jahr) )
-					{
-						ausgabeposition=true;
-						ausgabeindividuen=true;
-						//ausgabedendro=true;
-						ausgabedensity=true;
-					}
-				}
-			}
-			else if (parameter[0].outputmode==2) // "SA_2"
-			{
-				ausgabecurrencies=true;
-
-				if ((parameter[0].einschwingen==false) && ((t==0) || (jahr==2010)) )
-				{
 					ausgabeposition=true;
 					ausgabeindividuen=true;
-					//ausgabedendro=true;
 					ausgabedensity=true;
 				}
 			}
-			else if (parameter[0].outputmode==3) // "ClimGrad"
-			{
-				ausgabecurrencies=true;
-
-				if ((parameter[0].einschwingen==false) && ((t==0) 	|| (jahr==1100) || (jahr==1110) || (jahr==1120) || (jahr==1130) || (jahr==1140) || (jahr==1150) || (jahr==1160)  			|| (jahr==1500) || (jahr==1510) || (jahr==1520) || (jahr==1530) || (jahr==1540) || (jahr==1550) || (jahr==1560) 						|| (jahr==1770) || (jahr==1780) || (jahr==1790) || (jahr==1800) || (jahr==1810) || (jahr==1820) || (jahr==1830) 			|| (jahr==1950) || (jahr==1960) || (jahr==1970) || (jahr==1980) || (jahr==1990) || (jahr==2000) || (jahr==2010)) )
-				{
-					ausgabeposition=true;
-					ausgabeindividuen=true;
-					//ausgabedendro=true;
-					ausgabedensity=true;
-				}
-			}
-			else if (parameter[0].outputmode==4) // "TemperatureExperiment"
-			{
-				ausgabecurrencies=true;
-				
-				if (parameter[0].einschwingen==true)
-				{
-					ausgabeposition=true;
-				}
-				
-				if ((parameter[0].einschwingen==false) && ((jahr==1911) || (jahr==1900) || (jahr==1920) || (jahr==1930) || (jahr==1940) || (jahr==1950) || (jahr==1960) || (jahr==1970) || (jahr==1980) || (jahr==1990) || (jahr==2000) || (jahr==2010) || (jahr==2011)))
-				{
-					ausgabeposition=true;
-					// ausgabeindividuen=true;
-					//ausgabedendro=true;
-					ausgabedensity=true;
-				}
-
-			}
-			else if (parameter[0].outputmode==5) // "TemperatureExperiment"
+			else if (parameter[0].outputmode==1) // "normal"
 			{
 				ausgabecurrencies=true;
 				
@@ -358,35 +293,30 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 
 			}
-			else if (parameter[0].outputmode==9) // "OMP"
+			else if (parameter[0].outputmode==2) // "OMP"
 			{
 				ausgabecurrencies=true;
 			}
-		}//Data output depending on the corresponding parameter END
-		
+		}
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		
 		ostringstream s1,s2,s3,s4,s5,s6,s7,s8;
 	
 		if (ausgabecurrencies==true)
-		{	//ausgabecurrencies
+		{// currencies output
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-			// -- -- -- -- -- -- -- trees Currencies -- -- -- -- -- -- -- //
+			// -- -- -- -- -- -- -- trees currencies -- -- -- -- -- -- -- //
 	
-			if ( parameter[0].einschwingen==true || parameter[0].einschwingen==false )
-			{	
-
-				// Deklarationen
+				// declarations
 				int ageg0=0, ageg1=0, ageg2=0, ageg3=0, ageg4=0, ageg5=0, ageg6b10=0, ageg11b20=0, ageg21b50=0, ageg51b100=0, ageg101b150=0, ageg151b200=0, ageg201b300=0, ageg301b400=0, ageg401b500=0, ageg501b600=0, ageg601b700=0, ageg701plus=0;
 				int ages0=0, ages1=0, ages2=0, ages3=0, ages4=0, ages5=0, ages6b10=0, ages11b20=0, ages21b50=0, ages51b100=0, ages101b150=0, ages151b200=0, ages201b300=0, ages301b400=0, ages401b500=0, ages501b600=0, ages601b700=0, ages701plus=0;
 				int gesamtseedAKT=0, gesamtseedSUM=0;
 				int spectree1=0, spectree2=0;
 				double yposmax=0.0;
 				double meanbas=0.0;
-				int h= 0;
-				
+				int h=0;
 	
 				// assemble file name
 				if (parameter[0].einschwingen==true)
@@ -405,8 +335,8 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					s2.str("");s2.clear();
 				}
 		
-				// Trying to open the data file for reading
-				dateizeiger = fopen (dateiname.c_str(), "r+");
+				// trying to open the data file for reading
+				dateizeiger = fopen(dateiname.c_str(), "r+");
 				// if fopen fails, open a new data file:
 				if (dateizeiger == NULL)
 				{
@@ -417,6 +347,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					fprintf(dateizeiger, "Progress;");
 					fprintf(dateizeiger, "Spinup;");
 				
+					// add column names to the file
 					if (parameter[0].einschwingen==true)
 					{
 						fprintf(dateizeiger, "Randomyear;");
@@ -429,7 +360,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					fprintf(dateizeiger, "meanbas;");
 					fprintf(dateizeiger, "meanbr;");
 
-					// Tree specifics
+					// tree stand
 					fprintf(dateizeiger, "Ausschnittsgroesze;");
 					fprintf(dateizeiger, "NderH0bis40;");
 					fprintf(dateizeiger, "NderH40bis200;");
@@ -485,7 +416,7 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					fprintf(dateizeiger, "Seeds_gmel;");
 					fprintf(dateizeiger, "Seeds_sib;");
 					fprintf(dateizeiger, "Y_Pos_Max;");
-					// weatherspezifika
+					// weather
 					fprintf(dateizeiger, "weathertyp;");
 					fprintf(dateizeiger, "Starttrees;");
 					fprintf(dateizeiger, "Jahrestemp;");
@@ -503,12 +434,12 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				
 					if (dateizeiger == NULL)
 					{
-						fprintf(stderr, "Fehler: Datei konnte nicht geoeffnet werden!\n");
+						fprintf(stderr, "Error: output file is missing!\n");
 						exit(1);
 					}
 				}
 			
-				// else: append data files
+				// fill file with output
 				fseek(dateizeiger,0,SEEK_END);
 							
 				fprintf(dateizeiger, "%d;", parameter[0].repeati);
@@ -518,18 +449,16 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				fprintf(dateizeiger, "%d;", t);
 				fprintf(dateizeiger, "%d;", jahr);
 
-		
-		
 				for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-				{ // tree_list loop BEGIN
+				{
 					pTree=(*pos);
 				
 					if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
-					{ // sector BEGIN
+					{
 					
 						if(pTree->species == 1)
 						{
-							// grouping ages
+							// bin trees by age
 							if (pTree->age == 0)	{ageg0++;}
 							else if (pTree->age == 1)	{ageg1++;}
 							else if (pTree->age == 2)	{ageg2++;}
@@ -551,7 +480,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						}
 						else if(pTree->species == 2)
 						{
-							// grouping ages
 							if (pTree->age == 0)	{ages0++;}
 							else if (pTree->age == 1)	{ages1++;}
 							else if (pTree->age == 2)	{ages2++;}
@@ -582,24 +510,24 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						gesamtseedAKT+=pTree->seednewly_produced;
 						gesamtseedSUM+=pTree->seedproduced;
 						
-						//counting species
+						// counting species
 						if (pTree->species==1) 
-                                                {
-                                                    spectree1++;
-                                                }
+						{
+							spectree1++;
+						}
 						else if (pTree->species==2) 
-                                                {
-                                                    spectree2++;
-                                                }
+						{
+							spectree2++;
+						}
 						
 						if (pTree->ycoo>yposmax) 
-                                                {
-                                                    yposmax=pTree->ycoo;
-                                                }
-					} // sector END
+						{
+							yposmax=pTree->ycoo;
+						}
+					}
 				
 					++pos;
-				} // tree_list loop END
+				}
 			
 
 
@@ -722,8 +650,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;
 				}
 				
-			}//spin up phase data output END
-			
 			// -- -- -- -- -- -- -- trees Currencies -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -731,14 +657,13 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 		
 		
 		if (ausgabeposition==true)
-		{//position output
+		{// tree position output
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
 
 			if ( parameter[0].ivort==1 || (parameter[0].einschwingen==true && (parameter[0].ivort%10)==0) || (parameter[0].einschwingen==false) )
 			{	
-
 				// assemble file name
 				if (parameter[0].einschwingen==true)
 				{
@@ -757,35 +682,23 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					s3<<parameter[0].ivort;
 					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
 					
-					if (parameter[0].outputmode==0 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
-					{
-						dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
-					}
-					else if (parameter[0].outputmode==1) // hier weatherchoice nicht berücksichtigt! 	
-					{
-						if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
-						{
-							dateiname="output/datatrees_positionsanalyse_WENDEJAHR.csv";
-						}
-						else if (pEvaluation->saettigungsjahr!=-9999)
-						{
-							dateiname="output/datatrees_positionsanalyse_SAETTIGUNGSJAHR.csv";
-						}
-					}
+					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
 					
 					s1.str("");s1.clear();
 					s2.str("");s2.clear();
 					s3.str("");s3.clear();
 				}
 
-				if(parameter[0].periodRB==3)//Transect
+				if(parameter[0].periodRB==3)
 				{
-					// Trying to open the file for reading
+					// trying to open the file for reading
 					dateizeiger = fopen (dateiname.c_str(), "r+");
 					// if fopen fails, open a new file + header output
 					if (dateizeiger == NULL)
 					{
-					  dateizeiger = fopen (dateiname.c_str(), "w+");
+						dateizeiger = fopen (dateiname.c_str(), "w+");
+						
+						// column names
 						fprintf(dateizeiger, "Name;");
 						fprintf(dateizeiger, "NameM;");
 						fprintf(dateizeiger, "DBasal;");
@@ -796,10 +709,8 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						fprintf(dateizeiger, "Y;");
 						fprintf(dateizeiger, "densitywert;");
 						fprintf(dateizeiger, "Generation;");
-						// fprintf(dateizeiger, "coneheight;");
 						fprintf(dateizeiger, "seedprodAKT;");
 						fprintf(dateizeiger, "seedprodSUM;");
-						// fprintf(dateizeiger, "thawing_depth_infl;");
 						fprintf(dateizeiger, "\n");
 
 						if (dateizeiger == NULL)
@@ -809,51 +720,40 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						}
 					}
 
-					// else: append new data to the file
 					fseek(dateizeiger,0,SEEK_END);
 
 					for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-					{ // tree_list loop BEGIN
+					{
 						pTree=(*pos);
 						
-						// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
-						// { // Sector BEGIN
-							// fprintf(dateizeiger, "%d;", parameter[0].repeati);
-							// fprintf(dateizeiger, "%d;", pTree->yworldcoo);
-							// fprintf(dateizeiger, "%d;", pTree->xworldcoo);
-							// fprintf(dateizeiger, "%d;", parameter[0].ivort);
-							// fprintf(dateizeiger, "%d;", jahr);
-							// fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-							fprintf(dateizeiger, "%d;", pTree->name);
-							fprintf(dateizeiger, "%d;", pTree->namem);
-							fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
-							fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
-							fprintf(dateizeiger, "%4.4f;", pTree->height);
-							fprintf(dateizeiger, "%d;", pTree->age);
-							fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
-							fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
-							fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
-							fprintf(dateizeiger, "%d;", pTree->generation);
-							// fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
-							fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
-							fprintf(dateizeiger, "%d;", pTree->seedproduced);
-							// fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
-							fprintf(dateizeiger, "\n");
-						// } // Sector END
+						fprintf(dateizeiger, "%d;", pTree->name);
+						fprintf(dateizeiger, "%d;", pTree->namem);
+						fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
+						fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
+						fprintf(dateizeiger, "%4.4f;", pTree->height);
+						fprintf(dateizeiger, "%d;", pTree->age);
+						fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
+						fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
+						fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
+						fprintf(dateizeiger, "%d;", pTree->generation);
+						fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
+						fprintf(dateizeiger, "%d;", pTree->seedproduced);
+						fprintf(dateizeiger, "\n");
 
 						++pos;
-					} // tree_list loop END
+					}
 
 					fclose(dateizeiger);
-				} 
+				}
 				else
 				{
-					// Trying to open the file for reading
+					// trying to open the file for reading
 					dateizeiger = fopen (dateiname.c_str(), "r+");
 					// if fopen fails, open a new file + header output
 					if (dateizeiger == NULL)
 					{
-					  dateizeiger = fopen (dateiname.c_str(), "w+");
+						dateizeiger = fopen (dateiname.c_str(), "w+");
+						
 						fprintf(dateizeiger, "Repeat;");
 						fprintf(dateizeiger, "YPLOTPOS;");
 						fprintf(dateizeiger, "XPLOTPOS;");
@@ -874,87 +774,70 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 						fprintf(dateizeiger, "thawing_depth_infl;");
 						fprintf(dateizeiger, "\n");
 
-
 						if (dateizeiger == NULL)
 						{
-							fprintf(stderr, "Fehler: Datei konnte nicht geoeffnet werden!\n");
+							fprintf(stderr, "Error: output file is missing!\n");
 							exit(1);
 						}
 					}
 
-					// else: append new data to the file
 					fseek(dateizeiger,0,SEEK_END);
 
 					for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-					{ // tree_list loop BEGIN
+					{
 						pTree=(*pos);
 						
-						// if ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) && (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) )
-						// { // Sector BEGIN
-							fprintf(dateizeiger, "%d;", parameter[0].repeati);
-							fprintf(dateizeiger, "%d;", pTree->yworldcoo);
-							fprintf(dateizeiger, "%d;", pTree->xworldcoo);
-							fprintf(dateizeiger, "%d;", parameter[0].ivort);
-							fprintf(dateizeiger, "%d;", jahr);
-							fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
-							fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
-							fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
-							fprintf(dateizeiger, "%4.4f;", pTree->height);
-							fprintf(dateizeiger, "%d;", pTree->age);
-							fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
-							fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
-							fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
-							fprintf(dateizeiger, "%d;", pTree->generation);
-							fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
-							fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
-							fprintf(dateizeiger, "%d;", pTree->seedproduced);
-							fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
-							fprintf(dateizeiger, "\n");
-						// } // Sector END
+						fprintf(dateizeiger, "%d;", parameter[0].repeati);
+						fprintf(dateizeiger, "%d;", pTree->yworldcoo);
+						fprintf(dateizeiger, "%d;", pTree->xworldcoo);
+						fprintf(dateizeiger, "%d;", parameter[0].ivort);
+						fprintf(dateizeiger, "%d;", jahr);
+						fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
+						fprintf(dateizeiger, "%4.4f;", pTree->dbasal);
+						fprintf(dateizeiger, "%4.4f;", pTree->dbrust);
+						fprintf(dateizeiger, "%4.4f;", pTree->height);
+						fprintf(dateizeiger, "%d;", pTree->age);
+						fprintf(dateizeiger, "%4.4f;", pTree->xcoo);
+						fprintf(dateizeiger, "%4.4f;", pTree->ycoo);
+						fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
+						fprintf(dateizeiger, "%d;", pTree->generation);
+						fprintf(dateizeiger, "%4.4f;", pTree->coneheight);
+						fprintf(dateizeiger, "%d;", pTree->seednewly_produced);
+						fprintf(dateizeiger, "%d;", pTree->seedproduced);
+						fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
+						fprintf(dateizeiger, "\n");
 
 						++pos;
-					} // tree_list loop END
+					}
 
 					fclose(dateizeiger);
 				}
 				
-			}//modulo
+			}
 			
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		}//position output
+		} // tree position output
 
 		if (ausgabeindividuen==true)
-		{//ausgabeindividuen
+		{// individual tree output
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- BEGIN  individual    trees -- -- -- -- -- -- //
 
 			// assemble file name
-			if (parameter[0].outputmode!=1)
-			{
-					s1<<parameter[0].repeati;
-					s2<<parameter[0].weatherchoice;
-					s3<<parameter[0].ivort;
-					dateiname="output/datatrees_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
-					s1.str("");s1.clear();
-					s2.str("");s2.clear();
-					s3.str("");s3.clear();
-			}
-			else if (parameter[0].outputmode==1)
-			{
-				if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
-				{
-					dateiname="output/datatrees_WENDEJAHR.csv";
-				}
-				else if (pEvaluation->saettigungsjahr!=-9999)
-				{
-					dateiname="output/datatrees_SAETTIGUNGSJAHR.csv";
-				}
-			}
+			s1<<parameter[0].repeati;
+			s2<<parameter[0].weatherchoice;
+			s3<<parameter[0].ivort;
+			
+			dateiname="output/datatrees_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
+			
+			s1.str("");s1.clear();
+			s2.str("");s2.clear();
+			s3.str("");s3.clear();
 
-			// Trying to open the file for reading
+			// trying to open the file for reading
 			dateizeiger = fopen (dateiname.c_str(), "r+");
 			// if fopen fails, open a new file + header output
 			if (dateizeiger == NULL)
@@ -990,8 +873,6 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				fprintf(dateizeiger, "densitywert;");
 				fprintf(dateizeiger, "Entfernung;");
 				fprintf(dateizeiger, "thawing_depth_infl;");	
-				
-				// End
 				fprintf(dateizeiger, "\n");
 
 				if (dateizeiger == NULL)
@@ -1001,12 +882,11 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				}
 			}
 
-			// else: append new data to the file
 			fseek(dateizeiger,0,SEEK_END);
 
-			// Data output for each tree
+			// data output for each tree
 			for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-			{ // tree_list loop BEGIN
+			{
 				pTree=(*pos);
 				// parameters
 				fprintf(dateizeiger, "%d;", parameter[0].repeati);
@@ -1037,211 +917,38 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 				fprintf(dateizeiger, "%4.5f;", pTree->densitywert);
 				fprintf(dateizeiger, "%4.5f;", pTree->entfernung);
 				fprintf(dateizeiger, "%lf;", pTree->thawing_depthinfluence);
-				// End
 				fprintf(dateizeiger, "\n");
 
 				++pos;
-			} // tree_list loop End
+			}
 
 			fclose (dateizeiger);
 
 			// -- -- -- -- --  END  individual  trees    -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		}//individual output
+		}// individual tree output
 		
 
-		if (ausgabedendro==true)
-		{//ausgabedendro
-			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-			// -- -- - BEGIN  dendrochronology growth data     -- -- -- -- //
-			
-			bool alletreesausgeben=false;
-
-			// read in tree_list and remember the positions of certain trees
-			vector<int> Gueltigetrees;
-			int aktposTree=0;
-			for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
-			{ // tree_list loop BEGIN
-				pTree=(*pos);
-
-				if ( (pTree->height >= 200) && ( (pTree->xcoo>=xminwindow) && (pTree->xcoo<=xmaxwindow) ) && ( (pTree->ycoo>=yminwindow) && (pTree->ycoo<=ymaxwindow) ) ) 
-				{
-					Gueltigetrees.push_back(aktposTree);
-				}
-			
-				++aktposTree;
-				++pos;
-			} // tree_list loop END
-
-			// Determine the number of the remaining trees
-			int listlength=Gueltigetrees.size();
-			for (vector<int>::iterator posit=Gueltigetrees.begin(); posit<Gueltigetrees.end(); )
-			{ // Gueltigetrees loop BEGIN
-
-				bool schreiben=false;
-				if (alletreesausgeben==true)
-				{
-					schreiben=true;
-				}
-				else
-				{
-					if (listlength<100) 
-                    {
-                        schreiben=true;
-                    }
-					else 
-					{
-						if (*posit<=30) 
-                        {
-                            schreiben=true;
-                        }
-						else if (*posit>=(listlength-30) ) 
-                        {
-                            schreiben=true;
-                        }
-						else if (*posit>(listlength/2)-15 && *posit<(listlength/2)+15) 
-                        {
-                            schreiben=true;
-                        }
-					}	
-				}
-
-				// Schreibe die Jahreszuwachsleistungen
-				if (schreiben==true)
-				{ // Data output BEGIN
-					list<Tree*>::iterator pos = tree_list.begin();
-					advance(pos, (int) *posit);
-					pTree=(*pos);
-
-					// assemble file name
-					if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
-					{
-						s1<<jahr;s2<<pTree->xworldcoo;s3<<pTree->yworldcoo;s4<<parameter[0].repeati;
-						s5<<pTree->species;s6<<parameter[0].weatherchoice;s7<<parameter[0].thawing_depth;
-						
-						dateiname="output/datatrees_Zuwachs/datatrees_Jahr" +s1.str()+"_X"+s2.str()+"_Y"+s3.str()+"_WDH"+s4.str()+"_SP"+s5.str()+"_weather"+s6.str()+"_thawing_depth"+s7.str()+ ".fh";
-						
-						s1.str("");s1.clear();
-						s2.str("");s2.clear();
-						s3.str("");s3.clear();
-						s4.str("");s4.clear();
-						s5.str("");s5.clear();
-						s6.str("");s6.clear();
-						s7.str("");s7.clear();
-					}
-					else if (parameter[0].outputmode==1)
-					{
-						if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
-						{
-							s1<<parameter[0].repeati;s2<<pTree->species;s3<<parameter[0].weatherchoice;
-							dateiname="output/datatrees_Zuwachs_WENDEJAHR/datatrees_WDH" + s1.str()+"_SP"+s2.str()+"_weather"+s3.str() + ".fh";
-							s1.str("");s1.clear();s2.str("");s2.clear();s3.str("");s3.clear();
-						}
-						else if (pEvaluation->saettigungsjahr!=-9999)
-						{
-							s1<<parameter[0].repeati;s2<<pTree->species;s3<<parameter[0].weatherchoice;
-							dateiname="output/datatrees_Zuwachs_SAETTIGUNGSJAHR/datatrees_WDH" + s1.str()+"_SP"+s2.str()+"_weather"+s3.str() + ".fh";
-							s1.str("");s1.clear();s2.str("");s2.clear();s3.str("");s3.clear();
-						}
-					}
-			
-
-					if (parameter[0].ordnerda==false)
-					{
-						if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
-						{
-							system("mkdir datatrees_Zuwachs");
-							parameter[0].ordnerda=true;
-						}
-						else if (parameter[0].outputmode==1)
-						{
-							system("mkdir datatrees_Zuwachs_WENDEJAHR");
-							system("mkdir datatrees_Zuwachs_SAETTIGUNGSJAHR");
-							parameter[0].ordnerda=true;
-						}
-					}
-
-					// Trying to open the file for reading
-					dateizeiger = fopen (dateiname.c_str(), "r+");
-					// if fopen fails, open a new file + header output
-					if (dateizeiger == NULL)
-					{
-						dateizeiger = fopen (dateiname.c_str(), "w+");
-
-						if (dateizeiger == NULL)
-						{
-							fprintf(stderr, "Error: File could not be opened!\n");
-							exit(1);
-						}
-					}
-					// the new data gets appended to the file
-					fseek(dateizeiger,0,SEEK_END);
-
-					fprintf(dateizeiger, "HEADER:\n");
-					fprintf(dateizeiger, "DataFormat=Tree\n");
-										fprintf(dateizeiger, "DateEnd=%d\n", jahr);		//2011	
-					fprintf(dateizeiger, "KeyCode=%d\n", pTree->name);		//TreeA 1_2	
-					fprintf(dateizeiger, "Location=X%d-Y%d\n", pTree->xworldcoo, pTree->yworldcoo);	//11-CH-02/II	
-					fprintf(dateizeiger, "GlobalMathCommentCount=0\n");
-					fprintf(dateizeiger, "ImageCount=0\n");
-					fprintf(dateizeiger, "CommentCount=0\n");
-					fprintf(dateizeiger, "BibliographyCount=0\n");
-					fprintf(dateizeiger, "Unit=1/100 mm\n");
-					fprintf(dateizeiger, "Dated=Dated\n");
-					fprintf(dateizeiger, "DATA:Single\n");
-
-					if (dateizeiger == NULL)
-					{
-						fprintf(stderr, "Error: File could not be opened!\n");
-						exit(1);
-					}
-
-					// the new data gets appended to the file
-					fseek(dateizeiger,0,SEEK_END);
-					fclose(dateizeiger);
-				} // Data output END
-
-				++posit;
-			} // // Gueltigetrees loop END
-
-			// -- -- --  END dendrochronology growth rates     -- -- -- -- //
-			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		}//ausgabedendro
-
 		if (ausgabedensity==true)
-		{//ausgabedensity
+		{// tree density map output
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- --Tree density -- -- -- -- -- -- -- -- //
 
 			// assemble file name:
-			if (parameter[0].outputmode==0 || parameter[0].outputmode==2 || parameter[0].outputmode==3 || parameter[0].outputmode==4)
-			{
-				s1<<jahr;s2<<parameter[0].weatherchoice;
-				dateiname="output/datatrees_Treedensity" +s1.str()+"_"+s2.str()+ ".csv";
-				s1.str("");s1.clear();s2.str("");s2.clear();
-			}
-			else if (parameter[0].outputmode==1) //hier weatherchoice nicht berücksichtigt
-			{
-				if ( (pEvaluation->nachwendejahr==true) && (pEvaluation->saettigungsjahr==-9999) )
-				{
-					dateiname="output/datatrees_Treedensity_WENDEJAHR.csv";
-				}
-				else if (pEvaluation->saettigungsjahr!=-9999)
-				{
-					dateiname="output/datatrees_Treedensity_SAETTIGUNGSJAHR.csv";
-				}
-			}
+			s1<<jahr;s2<<parameter[0].weatherchoice;
+			dateiname="output/datatrees_Treedensity" +s1.str()+"_"+s2.str()+ ".csv";
+			s1.str("");s1.clear();s2.str("");s2.clear();
+
 				
-			// Trying to open the file for reading
+			// trying to open the file for reading
 			dateizeiger = fopen (dateiname.c_str(), "r+");
 			// if fopen fails, open a new file + header output
 			if (dateizeiger == NULL)
 			{
-			  dateizeiger = fopen (dateiname.c_str(), "w+");
+				dateizeiger = fopen (dateiname.c_str(), "w+");
+				
 				fprintf(dateizeiger, "Repeat;");
 				fprintf(dateizeiger, "YPLOTPOS;");
 				fprintf(dateizeiger, "XPLOTPOS;");
@@ -1258,20 +965,19 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 
 				if (dateizeiger == NULL)
 				{
-					fprintf(stderr, "Fehler: Datei konnte nicht geoeffnet werden!\n");
+					fprintf(stderr, "Error: output file is missing!\n");
 					exit(1);
 				}
 			}
 
-			// the new data gets appended to the file
 			fseek(dateizeiger,0,SEEK_END);
 
-			// Data evaluation and output
+			// data evaluation and output
 			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
-			{ //plot list loop BEGIN
+			{
 				pKarten=plot_list[kartenpos];
 				if ( (pKarten->Treeanzahl>0) && ( (pKarten->xcoo>=xminwindow*parameter[0].sizemagnif) && (pKarten->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pKarten->ycoo>=yminwindow*parameter[0].sizemagnif) && (pKarten->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
-				{ // perform output only if tree density values >0 in the evaluation sector BEGIN
+				{// output only if tree density values >0 
 					fprintf(dateizeiger, "%d;", parameter[0].repeati);
 					fprintf(dateizeiger, "%d;", pKarten->yworldcoo);
 					fprintf(dateizeiger, "%d;", pKarten->xworldcoo);
@@ -1285,43 +991,15 @@ void Data_output( int t, int jahr, struct Parameter *parameter, int yearposition
 					fprintf(dateizeiger, "%d;", parameter[0].weatherchoice);
 					fprintf(dateizeiger, "%d;", parameter[0].thawing_depth);
 					fprintf(dateizeiger, "\n");
-				} // perform output only if tree density values >0 in the evaluation sector END
-			} // plot list loop END
+				}
+			}
 
 			fclose(dateizeiger);
 
 			// -- -- -- -- -- -- -- --Tree density -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		}//ausgabedensity
+		}// tree density map output
 
-		
-		
-		//delete everything if just sensitivity analysis output is set
-		if ( (parameter[0].outputmode==1) && (pEvaluation->saettigungsjahr!=-9999) )
-		{
-			//Calling the function to delete lists
-				// tree_listn loeschen
-			for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos)
-			{ // Begin tree_list iteration
-				pTree=(*pos);
-				//pTree->Dbasalliste.clear();
-				//pTree->Dbrustliste.clear();
-				delete pTree;
-			} // End tree_list iteration
-			tree_list.clear();
-			
-	
-				// seed_listn loeschen
-			for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
-			{ // Begin seed_list iteration
-				pseed=(*pos);
-				delete pseed;
-			} // End seed_list iteration
-			seed_list.clear();
-			
-		}
-		
-	} // world tree list loop END
-
+	} // world tree list loop
 }

@@ -25,8 +25,7 @@ outputmode=1;  						// (int) choice of data output files
 outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
 										// 1==output of all tree data on the plot
-parameteri=0;						// (int) Start values for parameter set output
-	
+
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation
 vegetation=0;						// (int 0,1) Representation of an organic layer
@@ -102,7 +101,8 @@ ivortmax=1000;						// (int) Spin up phase befor the simulation period and maxim
 stabilperiod=0;						// (int 0,1) Simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
-resetyear=0;						// (int) Year to save all container for a later resume from this time point
+resetyear=1990;						// (int) Year to save all container for a later resume from this time point
+parameteri=0;						// ... (int) (IF resetyear>0) start values for parameter sets
 specpres=1;							// (int) Which larch species should be present in the model
 										// 0==both Larix gmelinii and L. sibirica 
 										// 1==only Larix gmelinii

@@ -410,205 +410,142 @@ void Spinupphase()
  *******************************************************************************************/
 void Yearsteps()
 {
-
 		printf("\n\nstarting yearly time steps...\n");
-		
-		
 	
 		for (int t=0;t<parameter[0].simdauer;t++)
-		{ // year step loop 
-			
+		{ 
 			parameter[0].ivort++;
 
-
-			// Variable to record a fire in the current year and print it (console output)
-
+			// variable to record a fire in the current year and print it (console output)
 			parameter[0].feuerausgabe=0;	
 
-                        //  Calculate current year and print a summary of the year if this is wanted
-                        
-                        //***german:
-						// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
+			//  Calculate current year and print a summary of the year if this is wanted
 			int jahr=parameter[0].startjahr+t;
-			
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
-            
 
 			if (parameter[0].yearlyvis ==true) 
 			{
 				printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
-				//printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
 			}
 			
 			
-			///go through all functions for vegetation dynamics
+			// go through all functions for vegetation dynamics
 			vegetationDynamics(yearposition, jahr,t);
 
-			
-			
-			
-			//if the year  towards which the whole simulation should be resetted is reached, save all data
-			/// Wenn das Jahr, auf das später die ganze Simulation zurückgesetzt werden soll, erreicht ist, dann speichere alle Daten!
+			// if the year towards which the whole simulation should be resetted is reached, save all data
 			if (jahr==parameter[0].resetyear)
 			{
 				SaveAllLists();
-				cout << "In timestep = " << jahr << " everything was saved!" << endl << endl;
-				//cout << "In Zeitschritt = " << jahr << " alles gespeichert!" << endl << endl;
+				cout << "In year = " << jahr << " everything was saved!" << endl << endl;
 			}
 
 			
-		} // year step loop end
-
+		}// year step
+		
+		// variation of parameters depends on experimental setting beginning at resetyear
 		if (parameter[0].resetyear>0)
 		{
+			// save the value read in from the parameter file
+			double incfac_buffer=parameter[0].incfac;
+			double densitywertmanipulatorexp_buffer=parameter[0].densitywertmanipulatorexp;
+			int etabbgpermanent_buffer=parameter[0].etabbgpermanent;
 
-			bool SCHalterweilVergleichGUT=true;
+			double tempdiffort_buffer=parameter[0].tempdiffort;
 			
-			if(SCHalterweilVergleichGUT==true)
+			for(double tempdifforti=-0.5; tempdifforti<0.9; tempdifforti=tempdifforti+0.5)
 			{
-
-		
-				// Variation of parameters depends on experimental setting
-				// ... firstly save the value read in from the parameter file
-				
-				//***german: Parametervariation je nach Expsetting
-				// ... erst Speicherung des mit der Parameterdatei eingelesenen Wertes
-				double incfac_buffer=parameter[0].incfac;
-				double densitywertmanipulatorexp_buffer=parameter[0].densitywertmanipulatorexp;
-				int etabbgpermanent_buffer=parameter[0].etabbgpermanent;
-
-				double tempdiffort_buffer=parameter[0].tempdiffort;
-				
-				for(double tempdifforti=-0.5; tempdifforti<0.9; tempdifforti=tempdifforti+0.5)
+				parameter[0].tempdiffort=tempdifforti;
+				// read in weather data with new tempdiffort parameter
+				for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 				{
-					parameter[0].tempdiffort=tempdifforti;
-					// read in weather data with new tempdiffort parameter
-					// (emptying the weather list before)
-					
-					//***german: mit neuen tempdiffort muss das weather eingelesen werden
-					// ... dafür muss aber vorher die world_weather_list leer gemacht werden.
-					//aus finishSimulations()
-					for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
-					{	// world weather list loop begin
-							vector<weather*>& weather_list = *posw;
+					vector<weather*>& weather_list = *posw;
 
-							// weather_listn loeschen
-							for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
-							{// weather_list Beginn
-								pweather=weather_list[iweather];
-								delete pweather;
-							}// weather_list Ende
-							weather_list.clear();
-					} // world weather list loop end
-
-					//from runSimulations()
-					weathereinlesen( &parameter[0],  stringlengthmax, world_weather_list);
-
-				
-					// Repeat for different parameter settings
-					
-					//***german:
-					// für verschiedene Parameter-Settings wiederholen am 18.11.2014 eingefügt
-					for(int parameteri=0;parameteri<4;parameteri++)
+					// empty list
+					for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
 					{
-						//parameter variation depending on experimental setting
-						// ... and change towards desired value
+						pweather=weather_list[iweather];
+						delete pweather;
+					}
+					weather_list.clear();
+				}
+				weathereinlesen( &parameter[0],  stringlengthmax, world_weather_list);
+
+				// repeat simulation runs beginning at resetyear for different parameter settings
+				for(int parameteri=0;parameteri<4;parameteri++)
+				{
+					// manual parameter variation
+					if(parameteri==1)
+					{
+						parameter[0].incfac=5;
+					}
+					else if(parameteri==2)
+					{
+						parameter[0].densitywertmanipulatorexp=2;
+					}
+					else if(parameteri==3)
+					{
+						parameter[0].etabbgpermanent=1000;
+					}
+
+					cout << " starting simulation runs " << endl;
+					
+					// reset of the simulation run to resetyear
+					ClearAllLists();
+					cout << "           Lists deleted!!" << endl;
+					RestoreAllLists();
+					cout << "           Lists restored!!" << endl;
+							
+					printf("\n\n begin the simulation run time steps...\n");
+					cout << "     Length of a simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
+					
+					for (int t=((parameter[0].simdauer-(2011-parameter[0].resetyear))+1);t<parameter[0].simdauer;t++)
+					{
 						
-						//***german:
-						// Parametervariation je nach Expsetting
-						// ... und Veränderung auf den gewünschsten Wert,
-						if(parameteri==0)
-						{}
-						else if(parameteri==1)
+						parameter[0].ivort++;
+						
+						// variable to record a fire in the current year and print it (console output)
+						parameter[0].feuerausgabe=0;	
+
+						//  calculate current year and print a summary of the year if this is wanted
+						int jahr=parameter[0].startjahr+t;
+						
+						yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the startjahr
+
+						if (parameter[0].yearlyvis==true)
 						{
-							parameter[0].incfac=5; //Konk1
-						}
-						else if(parameteri==2)
+							printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
+						}						
+						else 
 						{
-							parameter[0].densitywertmanipulatorexp=2; //Konk2
-						}
-						else if(parameteri==3)
-						{
-							parameter[0].etabbgpermanent=1000; //Seedinput
-						}
+							printf("t=%d", jahr);
 
-						
-						cout << " starting simulation runs " << endl;
-						
-						// Reset of all lists and simulation  run:
-						
-						//***german:
-						// Reset der Listen und Simulationslauf
-							
-								ClearAllLists();
-								cout << "           Lists deleted!!" << endl;
-								RestoreAllLists();
-								cout << "           Lists restored!!" << endl;
-								
-						printf("\n\n begin the simulation run time steps...\n");
-						cout << "     Length of a simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
-						
-
-						
-						for (int t=((parameter[0].simdauer-(2011-parameter[0].resetyear))+1);t<parameter[0].simdauer;t++)
-						{ // year step loop begin
-							
-							parameter[0].ivort++;
-							
-							// Variable to record a fire in the current year and print it (console output)
-
-							parameter[0].feuerausgabe=0;	
-
-							//  Calculate current year and print a summary of the year if this is wanted
-							// Aktuelles Jahr berechnen und falls gewuenscht eine Uebersicht ueber das Jahr ausgeben
-							int jahr=parameter[0].startjahr+t;
-							
-							yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
-
-							if (parameter[0].yearlyvis ==true) 
-								printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
-							
-							else 
+							if ((jahr%100)==0)
 							{
-								printf("t=%d", jahr);
-
-								if ((jahr%100)==0) 
-									printf("\n"); 
+								printf("\n");
 							}
-
-							
-							///go through all functions for vegetation dynamics
-							vegetationDynamics(yearposition, jahr,t);
-
-							
-							/// Wenn das Jahr auf das später die ganze Simulation zurückgesetzt werden soll erreicht ist, dann speichere alle Daten!
-							if (jahr==parameter[0].resetyear)
-							{
-								SaveAllLists();
-								cout << "In Zeitschritt = " << jahr << " alles gespeichert!" << endl << endl;
-							}
-
-							
-						} // year step loop end
+						}
 						
-						// Parameter variation depending on experimental setting,
-						// ... afterwards restore initial values
+						// go through all functions for vegetation dynamics
+						vegetationDynamics(yearposition, jahr,t);
 						
-						//***german:
-						// Parametervariation je nach Expsetting
-						// ... dann nach wiederholter Simulation zurücksetzen auf Standardwert
-							parameter[0].incfac=incfac_buffer;
-							parameter[0].densitywertmanipulatorexp=densitywertmanipulatorexp_buffer;
-							parameter[0].etabbgpermanent=etabbgpermanent_buffer;
-							
-					}//parameter settings END
-				
-					parameter[0].tempdiffort=tempdiffort_buffer;
-				}//weather settings END
-			}
-
+						// save all data at resetyear 
+						if (jahr==parameter[0].resetyear)
+						{
+							SaveAllLists();
+							cout << "At year= " << jahr << " all saved!" << endl << endl;
+						}
+					} // year steps
+					
+					// restore initial values
+					parameter[0].incfac=incfac_buffer;
+					parameter[0].densitywertmanipulatorexp=densitywertmanipulatorexp_buffer;
+					parameter[0].etabbgpermanent=etabbgpermanent_buffer;
+						
+				}// parameter settings
+			
+				parameter[0].tempdiffort=tempdiffort_buffer;
+			}// weather settings
 		}
-		
 }
 
 

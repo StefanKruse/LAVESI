@@ -204,7 +204,7 @@ using namespace std;
 		double 	SeedDescents;
 		double	distanceratio; 
 		int 	windsource;
-		int 	periodRB;
+		int 	boundaryconditions;
 		double 	pollenrichtungsvarianz;
 		int 	pollenvert;
 		int 	pollenDistdensplot;

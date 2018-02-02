@@ -214,7 +214,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								// Check if the seed is on the plot:
 								if(pseed->ycoo > (double) (treerows-1)) 
 								{
-									if((parameter[0].periodRB==1))
+									if((parameter[0].boundaryconditions==1))
 									{
 									   pseed->ycoo=fmod(pseed->ycoo,(double)(treerows-1));
 									   pseed->namem=0;
@@ -228,7 +228,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								} 
 								else if(pseed->ycoo<0.0)
 								{
-									if((parameter[0].periodRB==1))
+									if((parameter[0].boundaryconditions==1))
 									{
 									   pseed->ycoo=(double)(treerows-1)+fmod(pseed->ycoo,(double)(treerows-1));
 									   pseed->namem=0;
@@ -243,7 +243,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								 
 								if(pseed->xcoo<0.0)
 								{
-									if((parameter[0].periodRB==1))
+									if((parameter[0].boundaryconditions==1))
 									{
 									   pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1))+(double)(treecols-1);
 									   pseed->namem=0;
@@ -257,13 +257,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								} 
 								else if(pseed->xcoo > (double) (treecols-1)) 
 								{
-									if(parameter[0].periodRB==1)
+									if(parameter[0].boundaryconditions==1)
 									{
 										pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 										pseed->namem=0;
 										pseed->namep=0;
 																	} 
-									else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+									else if((parameter[0].boundaryconditions==2) && (rand()<0.5*RAND_MAX))
 									{ //less reintroduction from the western border than from the eastern
 										pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 									} 
@@ -448,7 +448,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									// Check if the seed is on the plot:
 									if(pseed->ycoo > (double) (treerows-1)) 
 									{
-										if((parameter[0].periodRB==1))
+										if((parameter[0].boundaryconditions==1))
 										{
 										   pseed->ycoo=fmod(pseed->ycoo,(double)(treerows-1));
 										   pseed->namem=0;
@@ -463,7 +463,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									} 
 									else if(pseed->ycoo<0.0)
 									{
-										if((parameter[0].periodRB==1))
+										if((parameter[0].boundaryconditions==1))
 										{
 										   pseed->ycoo=(double)(treerows-1)+fmod(pseed->ycoo,(double)(treerows-1));
 										   pseed->namem=0;
@@ -479,7 +479,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									 
 									if(pseed->xcoo<0.0)
 									{
-										if((parameter[0].periodRB==1))
+										if((parameter[0].boundaryconditions==1))
 										{
 										   pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1))+(double)(treecols-1);
 										   pseed->namem=0;
@@ -493,14 +493,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									} 
 									else if(pseed->xcoo > (double) (treecols-1)) 
 									{
-										if(parameter[0].periodRB==1)
+										if(parameter[0].boundaryconditions==1)
 										{
 											pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 											pseed->namem=0;
 											pseed->namep=0;
 										   
 										} 
-										else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+										else if((parameter[0].boundaryconditions==2) && (rand()<0.5*RAND_MAX))
 										{ //less seed reintroduction on the western border
 											pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 										} 
@@ -690,13 +690,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										// Check if the seed is on the plot:
 										if(pseed->ycoo > (double) (treerows-1)) 
 										{
-											if((parameter[0].periodRB==1))
+											if((parameter[0].boundaryconditions==1))
 											{
 											   pseed->ycoo=fmod(pseed->ycoo,(double)(treerows-1));
 											   pseed->namem=0;
 											   pseed->namep=0;
 											} 
-											else if((parameter[0].periodRB==3))
+											else if((parameter[0].boundaryconditions==3))
 											{
 												sameausserhalb=true;
 												rausgeflogenN++;
@@ -709,13 +709,13 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										} 
 										else if(pseed->ycoo<0.0)
 										{
-											if((parameter[0].periodRB==1))
+											if((parameter[0].boundaryconditions==1))
 											{
 											   pseed->ycoo=(double)(treerows-1)+fmod(pseed->ycoo,(double)(treerows-1));
 											   pseed->namem=0;
 											   pseed->namep=0;
 											} 
-											else if((parameter[0].periodRB==3))
+											else if((parameter[0].boundaryconditions==3))
 											{
 												sameausserhalb=true;
 												rausgeflogenS++;
@@ -729,7 +729,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										 
 										if(pseed->xcoo<0.0)
 										{
-											if((parameter[0].periodRB==1 || parameter[0].periodRB==3))
+											if((parameter[0].boundaryconditions==1 || parameter[0].boundaryconditions==3))
 											{
 											   pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1))+(double)(treecols-1);
 											   pseed->namem=0;
@@ -743,14 +743,14 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										} 
 										else if(pseed->xcoo > (double) (treecols-1))
 										{
-											if(parameter[0].periodRB==1 || parameter[0].periodRB==3)
+											if(parameter[0].boundaryconditions==1 || parameter[0].boundaryconditions==3)
 											{
 												pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 												pseed->namem=0;
 												pseed->namep=0;
 				   
 											} 
-											else if((parameter[0].periodRB==2) && (rand()<0.5*RAND_MAX))
+											else if((parameter[0].boundaryconditions==2) && (rand()<0.5*RAND_MAX))
 											{ // Reducing seed introduction on the western border:
 												pseed->xcoo = fmod(pseed->xcoo,(double)(treecols-1));
 											} 

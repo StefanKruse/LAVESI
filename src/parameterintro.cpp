@@ -885,11 +885,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].windsource);
                 }
 	
-	strcpy(uebergabestring,"periodRB");
-	parameter[0].periodRB=(int) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"boundaryconditions");
+	parameter[0].boundaryconditions=(int) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].periodRB);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].boundaryconditions);
                 }
 	
 	strcpy(uebergabestring,"outputall");

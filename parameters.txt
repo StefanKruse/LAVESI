@@ -109,13 +109,13 @@ yearswithseedintro=10; 			// ... (int) years of seed introduction at the beginni
 seedintronumber=1000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=0;				// (int 0,1) should seeds permanently introduced 
 seedintronumberpermanent=10000;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
-realseedconnect=0;					// (int 0,1) Plot position for the initial seed introduction
+realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 										// 0==into all plots along a transect
 										// 1==only southernmost plot
-seeddispmode=1;						// (int 1,2) Positions for seed introduction
+seeddispmode=1;						// (int 1,2) positions for introduced seeds
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
-seedtravelbetween=0;				// (int 0,1) Seed travel between plots along a transect
+seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 periodRB=3;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 										// 0==seeds passing the borders are removed
 										// 1==the western/eastern and northern/southern border turned in both directions 

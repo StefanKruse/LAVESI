@@ -687,7 +687,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					s3.str("");s3.clear();
 				}
 
-				if(parameter[0].periodRB==3)
+				if(parameter[0].boundaryconditions==3)
 				{
 					// trying to open the file for reading
 					filepointer = fopen (dateiname.c_str(), "r+");

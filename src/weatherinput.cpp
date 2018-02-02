@@ -165,7 +165,7 @@ void getPrec1(char dateinameprec[50],vector<Weather*>& weather_list, int maximal
 
 			int counter=1;
 			char puffer[255];
-			double niederschlagssummebuf;
+			double precipitationsumbuf;
 			double prec1monthmeanbuf, prec2monthmeanbuf, prec3monthmeanbuf, prec4monthmeanbuf, prec5monthmeanbuf, prec6monthmeanbuf, prec7monthmeanbuf, prec8monthmeanbuf, prec9monthmeanbuf, prec10monthmeanbuf, prec11monthmeanbuf, prec12monthmeanbuf;
 
 			while( fgets(puffer,maximal_word_length,fp) !=NULL)
@@ -185,7 +185,7 @@ void getPrec1(char dateinameprec[50],vector<Weather*>& weather_list, int maximal
 					prec11monthmeanbuf= strtod(strtok(NULL, " "),NULL);
 					prec12monthmeanbuf= strtod(strtok(NULL, " "),NULL);
 
-					niederschlagssummebuf=(prec1monthmeanbuf+prec2monthmeanbuf+prec3monthmeanbuf+prec4monthmeanbuf+prec5monthmeanbuf+prec6monthmeanbuf+prec7monthmeanbuf+prec8monthmeanbuf+prec9monthmeanbuf+prec10monthmeanbuf+prec11monthmeanbuf+prec12monthmeanbuf);
+					precipitationsumbuf=(prec1monthmeanbuf+prec2monthmeanbuf+prec3monthmeanbuf+prec4monthmeanbuf+prec5monthmeanbuf+prec6monthmeanbuf+prec7monthmeanbuf+prec8monthmeanbuf+prec9monthmeanbuf+prec10monthmeanbuf+prec11monthmeanbuf+prec12monthmeanbuf);
 
 					// append values to current year
 					pWeather=weather_list[counter-2];			// 1. go to current year
@@ -201,8 +201,8 @@ void getPrec1(char dateinameprec[50],vector<Weather*>& weather_list, int maximal
 					pWeather->prec10monthmean=prec10monthmeanbuf+parameter[0].precdiffort/12;
 					pWeather->prec11monthmean=prec11monthmeanbuf+parameter[0].precdiffort/12;
 					pWeather->prec12monthmean=prec12monthmeanbuf+parameter[0].precdiffort/12;
-					pWeather->niederschlagssumme=niederschlagssummebuf+parameter[0].precdiffort;
-					pWeather->niederschlagssummemin=niederschlagssummebuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	
+					pWeather->precipitationsum=precipitationsumbuf+parameter[0].precdiffort;
+					pWeather->precipitationsummin=precipitationsumbuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	
 
 				}
 				counter++;
@@ -397,7 +397,7 @@ void getPrec2(char dateinameprec[50],vector<Weather*>& weather_list,int maximal_
 
 			int counter=1;
 			char puffer[255];
-			double niederschlagssummebuf;
+			double precipitationsumbuf;
 			double prec1monthmeanbuf;
 			double prec2monthmeanbuf;
 			double prec3monthmeanbuf;
@@ -429,7 +429,7 @@ void getPrec2(char dateinameprec[50],vector<Weather*>& weather_list,int maximal_
 					prec11monthmeanbuf= strtod(strtok(NULL, " "),NULL);
 					prec12monthmeanbuf= strtod(strtok(NULL, " "),NULL);
 
-					niederschlagssummebuf=(prec1monthmeanbuf+prec2monthmeanbuf+prec3monthmeanbuf+prec4monthmeanbuf+prec5monthmeanbuf+prec6monthmeanbuf+prec7monthmeanbuf+prec8monthmeanbuf+prec9monthmeanbuf+prec10monthmeanbuf+prec11monthmeanbuf+prec12monthmeanbuf);
+					precipitationsumbuf=(prec1monthmeanbuf+prec2monthmeanbuf+prec3monthmeanbuf+prec4monthmeanbuf+prec5monthmeanbuf+prec6monthmeanbuf+prec7monthmeanbuf+prec8monthmeanbuf+prec9monthmeanbuf+prec10monthmeanbuf+prec11monthmeanbuf+prec12monthmeanbuf);
 
 					// append values to current year
 					pWeather=weather_list[counter-2];			// 1. go to current year
@@ -445,8 +445,8 @@ void getPrec2(char dateinameprec[50],vector<Weather*>& weather_list,int maximal_
 					pWeather->prec10monthmean=prec10monthmeanbuf+parameter[0].precdiffort/12;
 					pWeather->prec11monthmean=prec11monthmeanbuf+parameter[0].precdiffort/12;
 					pWeather->prec12monthmean=prec12monthmeanbuf+parameter[0].precdiffort/12;
-					pWeather->niederschlagssumme=niederschlagssummebuf+parameter[0].precdiffort;
-					pWeather->niederschlagssummemin=niederschlagssummebuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	// Berechnung oben
+					pWeather->precipitationsum=precipitationsumbuf+parameter[0].precdiffort;
+					pWeather->precipitationsummin=precipitationsumbuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	// Berechnung oben
 
 				}
 				counter++;

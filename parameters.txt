@@ -178,7 +178,7 @@ weathervariablegmelc=0.101;				// (double) determines curvature of the July inde
 
 	//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
-// 2. Larix gmelinii (Rupr.) Kuzen. or Larix sibirica specific parameter
+// 2. Larix gmelinii (Rupr.) Rupr. and Larix sibirica Ledeb. specific parameter
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 // 2.1 Reproduction
 // 2.2 Diameter growth

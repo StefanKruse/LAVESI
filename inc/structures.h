@@ -188,7 +188,7 @@ using namespace std;
 		double	densityvaluedbasalinfluence;
 		double	densityvaluemaximumatheight; 
 		
-		// ... seed production, dispersal and pollination
+		// seed production, dispersal and pollination
 		int		coneage;
 		double	seedprodfactor; 
 		double	seedflightrate;
@@ -202,7 +202,6 @@ using namespace std;
 		int 	boundaryconditions;
 		double 	pollendirectionvariance;
 		int 	pollination;
-		int 	pollenDistdensplot;
 		double 	pollenfall;
 		double 	pollengregorym,pollengregoryc;
 		

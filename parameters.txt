@@ -207,29 +207,29 @@ germinatioweatherinfluence=0.447975;// (double) influence of the climate to germ
 gmelseedmaxage=2.0;					// (int) years of seed fertility for Larix gmelinii
 
 // 2.2 -----> Diameter growth
-gdbasalfacqgmel=-0.003;				// (double) Factor for basal diameter growth rate of L. gmelinii trees
-gdbasalfacgmel=0.030;				// (double) Factor for basal diameter growth rate of L. gmelinii trees
-gdbasalconstgmel=-1.98;				// (double) Basal diameter growth rate of L. gmelinii trees
-gdbrustfacqgmel=-0.003				// (double) Factor for diameter growth rate at breast height of L. gmelinii trees
-gdbrustfacgmel=0.030;				// (double) Factor for diameter growth rate at breast height of L. gmelinii trees
-gdbrustconstgmel=-1.98;				// (double) Diameter growth rate at breast height of L. gmelinii trees
-gdbasalfacqsib=-0.0009;				// (double) Factor for basal diameter growth rate of L. sibirica trees
-gdbasalfacsib=0.0056;				// (double) Factor for basal diameter growth rate of L. sibirica trees
-gdbasalconstsib=-1.01;				// (double) Basal diameter growth rate of L. sibirica trees
-gdbrustfacqsib=-0.0009;				// (double) Factor for diameter growth rate at breast height of L. sibirica trees
-gdbrustfacsib=0.0056;				// (double) Factor for diameter growth rate at breast height of L. sibirica trees
-gdbrustconstsib=-1.01;				// (double) Diameter growth rate at breast height of L. sibirica trees
+gdbasalfacqgmel=-0.003;				// (double) factor for basal diameter growth rate of L. gmelinii trees
+gdbasalfacgmel=0.030;				// (double) factor for basal diameter growth rate of L. gmelinii trees
+gdbasalconstgmel=-1.98;				// (double) basal diameter growth rate of L. gmelinii trees
+gdbrustfacqgmel=-0.003				// (double) factor for diameter growth rate at breast height of L. gmelinii trees
+gdbrustfacgmel=0.030;				// (double) factor for diameter growth rate at breast height of L. gmelinii trees
+gdbrustconstgmel=-1.98;				// (double) diameter growth rate at breast height of L. gmelinii trees
+gdbasalfacqsib=-0.0009;				// (double) factor for basal diameter growth rate of L. sibirica trees
+gdbasalfacsib=0.0056;				// (double) factor for basal diameter growth rate of L. sibirica trees
+gdbasalconstsib=-1.01;				// (double) basal diameter growth rate of L. sibirica trees
+gdbrustfacqsib=-0.0009;				// (double) factor for diameter growth rate at breast height of L. sibirica trees
+gdbrustfacsib=0.0056;				// (double) factor for diameter growth rate at breast height of L. sibirica trees
+gdbrustconstsib=-1.01;				// (double) diameter growth rate at breast height of L. sibirica trees
 
 // 2.3 -----> Height estimation
-allometriefunktionstyp=2;			// (int 1,2) Allometric function mode
+allometryfunctiontype=2;			// (int 1,2) allometric function mode
 										// 1==linear (H=m*Dhochexp+0 bzw. 130)
 										// 2==non linear (H=m*DBAS+0 sowie Hhoch0.5=m*DBRuhoch0.5+130)
-dbasalheightallosteig=42.88;		// (double) (IF allometriefunktionstyp == 1) slope for height estimation from basal diameter
-dbasalheightalloexp=1.0;			// (double) (IF allometriefunktionstyp == 1) exponent for height estimation from basal diameter
-dbrustheightallosteig=42.88;		// (double) (IF allometriefunktionstyp == 1) slope for height estimation from breast height diameter
-dbrustheightalloexp=1.0;			// (double) (IF allometriefunktionstyp == 1) exponent for height estimation from breast height diameter
-dbasalheightsteignonlin=44.43163;	// (double) (IF allometriefunktionstyp == 2) slope for height estimation from basal diameter
-dbrustheightsteignonlin=7.02;		// (double) (IF allometriefunktionstyp == 2) slope for height estimation from breast height diameter
+dbasalheightallosteig=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from basal diameter
+dbasalheightalloexp=1.0;			// (double) (IF allometryfunctiontype == 1) exponent for height estimation from basal diameter
+dbrustheightallosteig=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from breast height diameter
+dbrustheightalloexp=1.0;			// (double) (IF allometryfunctiontype == 1) exponent for height estimation from breast height diameter
+dbasalheightsteignonlin=44.43163;	// (double) (IF allometryfunctiontype == 2) slope for height estimation from basal diameter
+dbrustheightsteignonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slope for height estimation from breast height diameter
 
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;						// (double 0-1) Background mortality

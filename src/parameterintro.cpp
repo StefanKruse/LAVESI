@@ -698,11 +698,11 @@ void Parametereinlesen(void)
                 }
 
 			// Beziehungen zwischen height und Basaldurchmesser
-	strcpy(uebergabestring,"allometriefunktionstyp");
-	parameter[0].allometriefunktionstyp=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"allometryfunctiontype");
+	parameter[0].allometryfunctiontype=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].allometriefunktionstyp);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].allometryfunctiontype);
                 }
 
 	strcpy(uebergabestring,"dbasalheightallosteig");

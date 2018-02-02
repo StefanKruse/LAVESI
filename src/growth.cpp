@@ -289,7 +289,7 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 			// tree height update
 			if (pTree->height<130.0)
 			{
-				if (parameter[0].allometriefunktionstyp==1)
+				if (parameter[0].allometryfunctiontype==1)
 				{
 					pTree->height= parameter[0].dbasalheightallosteig * pow(pTree->dbasal, parameter[0].dbasalheightalloexp);
 					//height from basal diameter.
@@ -301,7 +301,7 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 			}
 			else if (pTree->height>=130.0)
 			{
-				if (parameter[0].allometriefunktionstyp==1)
+				if (parameter[0].allometryfunctiontype==1)
 				{
 					pTree->height= parameter[0].dbrustheightallosteig * pow(pTree->dbrust, parameter[0].dbrustheightalloexp) + 130.0;
 				}

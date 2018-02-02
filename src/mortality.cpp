@@ -85,7 +85,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				///if maxbasalwachstumjahr <= 0
 				if (maxhpufg<=0.0)
 				{
-					if (parameter[0].allometriefunktionstyp==1)
+					if (parameter[0].allometryfunctiontype==1)
 					{
 						maxhg= parameter[0].dbasalheightallosteig * pow(exp(parameter[0].gdbasalconstgmel+parameter[0].gdbasalfacgmel*pTree->dbasal+parameter[0].gdbasalfacqgmel*pTree->dbasal*pTree->dbasal), parameter[0].dbasalheightalloexp);
 					}
@@ -96,7 +96,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				}
 				else 
 				{
-					if (parameter[0].allometriefunktionstyp==1)
+					if (parameter[0].allometryfunctiontype==1)
 					{
 						maxhg= parameter[0].dbasalheightallosteig * pow(weather_list[yearposition_help]->weatherfactorg*exp(parameter[0].gdbasalconstgmel+parameter[0].gdbasalfacgmel*pTree->dbasal+parameter[0].gdbasalfacqgmel*pTree->dbasal*pTree->dbasal), parameter[0].dbasalheightalloexp);
 					}
@@ -108,7 +108,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				
 				if (maxhpufs<=0.0)
 				{
-					if (parameter[0].allometriefunktionstyp==1)
+					if (parameter[0].allometryfunctiontype==1)
 					{
 						maxhs= parameter[0].dbasalheightallosteig * pow(exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal), parameter[0].dbasalheightalloexp);
 					}
@@ -119,7 +119,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				}
 				else 
 				{
-					if (parameter[0].allometriefunktionstyp==1)
+					if (parameter[0].allometryfunctiontype==1)
 					{
 						maxhs= parameter[0].dbasalheightallosteig * pow(weather_list[yearposition_help]->weatherfactors*exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal), parameter[0].dbasalheightalloexp);
 					}

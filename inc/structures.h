@@ -171,7 +171,7 @@ using namespace std;
 		double 	gdbrustconstsib;			
 		double	basaleinflussaltneu;
 		int		relwachstumeinfluss;
-		int		allometriefunktionstyp;
+		int		allometryfunctiontype;
 		double	dbasalheightallosteig;
 		double	dbasalheightalloexp;
 		double	dbrustheightallosteig;

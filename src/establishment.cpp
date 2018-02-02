@@ -105,7 +105,7 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 								pTree->dbrust=0.0;
 								pTree->dbrustrel=1.0;
 								
-								if (parameter[0].allometriefunktionstyp==1) 
+								if (parameter[0].allometryfunctiontype==1) 
 								{
 									pTree->height= parameter[0].dbasalheightallosteig * pow(maxbasalwachstum, parameter[0].dbasalheightalloexp);
 								}
@@ -164,7 +164,7 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 								pTree->dbrust=0.0;
 								pTree->dbrustrel=1.0;
 								
-								if (parameter[0].allometriefunktionstyp==1) 
+								if (parameter[0].allometryfunctiontype==1) 
 								{
 									pTree->height= parameter[0].dbasalheightallosteig * pow(maxbasalwachstum, parameter[0].dbasalheightalloexp);
 								}

@@ -747,10 +747,10 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightslopenonlin);
                 }
 
-		// Mortalitaet
+		// Mortality
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("\n\n\t Mortalitaet\n\n");
+                    printf("\n\n\t Mortality\n\n");
                 }
 	strcpy(uebergabestring,"mortbg");
 	parameter[0].mortbg=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);

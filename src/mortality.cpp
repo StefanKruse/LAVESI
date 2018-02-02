@@ -16,7 +16,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 		// Calculation of the factors in a function, that adds a mortality rate impact
 		
 		//***german:
-		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitaetsratenaufschlag darstellt
+		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitysratenaufschlag darstellt
 		double anstiegweathermortg=160;
 		double anstiegweathermorts=160;
 		
@@ -75,7 +75,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 				// Calculation of the young trees mortalities
 				
 				//***german:
-				// Verrechnung der Mortalitaet von Bäumen
+				// Verrechnung der Mortality von Bäumen
 				// fuer die jugendmortalitaet
 				double maxhg;
 				double maxhs;
@@ -249,7 +249,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
  *
  *
  *******************************************************************************************/
-void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list)
+void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list)
 {
 
 	int aktort=0;

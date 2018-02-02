@@ -94,9 +94,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
 	double end_time_Dataoutput = omp_get_wtime();
 				
-	// Mortalitaet
+	// Mortality
 	double start_time_mortalitaet = omp_get_wtime();
-	Mortalitaet( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
+	Mortality( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
 		wspd.clear();
 		wdir.clear();
 		wspd.shrink_to_fit();

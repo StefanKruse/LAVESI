@@ -22,9 +22,9 @@
   	vector<vector<Weather*>> world_weather_list(0);
   	Weather *pWeather;
 	
-  	vector<vector<Karten*>> world_plot_list(0);
-  	Karten *pKarten;
-  	Karten *pKarten_copy;
+  	vector<vector<Envirgrid*>> world_plot_list(0);
+  	Envirgrid *pEnvirgrid;
+  	Envirgrid *pEnvirgrid_copy;
 	
   	vector<vector<Evaluation*> > world_evaluation_list(0);
   	Evaluation *pEvaluation;
@@ -33,7 +33,7 @@
 	// lists for resetyear copies
 	vector<list<Tree*>>	world_tree_list_copy(0);
 	vector<list<Seed*>> world_seed_list_copy(0);
-	vector<vector<Karten*>> world_plot_list_copy(0);
+	vector<vector<Envirgrid*>> world_plot_list_copy(0);
 	vector<vector<Evaluation*>> world_evaluation_list_copy(0);
 		
 	// wind data

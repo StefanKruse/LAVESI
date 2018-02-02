@@ -138,15 +138,15 @@ void Savealllists(void)
 	}
 
 		
-	// copy Karten
+	// copy Envirgrid
 	aktort=0;
-	for (vector<vector<Karten*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
+	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
 	{ 
-		vector<Karten*>& plot_list = *posw;
+		vector<Envirgrid*>& plot_list = *posw;
 
 		// opening the original plot list and the referring reset list ..._copy		
-		vector<vector<Karten*> >::iterator posiweltk = (world_plot_list_copy.begin()+aktort);
-		vector<Karten*>& plot_list_copy = *posiweltk;
+		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list_copy.begin()+aktort);
+		vector<Envirgrid*>& plot_list_copy = *posiweltk;
 		
 		
 		aktort++;
@@ -156,37 +156,37 @@ void Savealllists(void)
 		cout << "plot_list_copy.size() vor Kopieren=" << plot_list_copy.size() << endl;
 		
 		int counterkarten=1;	// for displaying the first plot
-		for (vector<Karten*>::iterator pos = plot_list.begin(); pos != plot_list.end(); )
+		for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end(); )
 		{ 
-			pKarten=(*pos);
+			pEnvirgrid=(*pos);
 
 			// Push back all data to a new object of the referring reset list "..._copy" 
-			pKarten_copy= new Karten();						// create new plot
-			pKarten_copy->xworldcoo=pKarten->xworldcoo;	
-			pKarten_copy->yworldcoo=pKarten->yworldcoo;	
-			pKarten_copy->xcoo=pKarten->xcoo;		
-			pKarten_copy->ycoo=pKarten->ycoo;		
-			pKarten_copy->Treedensitywert=pKarten->Treedensitywert;
-			pKarten_copy->Treeanzahl=pKarten->Treeanzahl;	
-			pKarten_copy->maxthawing_depth=pKarten->maxthawing_depth;
-			pKarten_copy->auflagenstaerke=pKarten->auflagenstaerke;	
-			pKarten_copy->auflagenstaerke0=pKarten->auflagenstaerke0;
-			pKarten_copy->auflagenstaerke1=pKarten->auflagenstaerke1;
-			pKarten_copy->auflagenstaerke2=pKarten->auflagenstaerke2;
-			pKarten_copy->auflagenstaerke3=pKarten->auflagenstaerke3;
-			pKarten_copy->auflagenstaerke4=pKarten->auflagenstaerke4;
-			pKarten_copy->auflagenstaerke5=pKarten->auflagenstaerke5;
-			pKarten_copy->auflagenstaerke6=pKarten->auflagenstaerke6;
-			pKarten_copy->auflagenstaerke7=pKarten->auflagenstaerke7;
-			pKarten_copy->auflagenstaerke8=pKarten->auflagenstaerke8;
-			pKarten_copy->auflagenstaerke9=pKarten->auflagenstaerke9;
-			pKarten_copy->auflagenstaerkemittel=pKarten->auflagenstaerkemittel;
-			plot_list_copy.push_back(pKarten_copy);
+			pEnvirgrid_copy= new Envirgrid();						// create new plot
+			pEnvirgrid_copy->xworldcoo=pEnvirgrid->xworldcoo;	
+			pEnvirgrid_copy->yworldcoo=pEnvirgrid->yworldcoo;	
+			pEnvirgrid_copy->xcoo=pEnvirgrid->xcoo;		
+			pEnvirgrid_copy->ycoo=pEnvirgrid->ycoo;		
+			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
+			pEnvirgrid_copy->Treeanzahl=pEnvirgrid->Treeanzahl;	
+			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
+			pEnvirgrid_copy->auflagenstaerke=pEnvirgrid->auflagenstaerke;	
+			pEnvirgrid_copy->auflagenstaerke0=pEnvirgrid->auflagenstaerke0;
+			pEnvirgrid_copy->auflagenstaerke1=pEnvirgrid->auflagenstaerke1;
+			pEnvirgrid_copy->auflagenstaerke2=pEnvirgrid->auflagenstaerke2;
+			pEnvirgrid_copy->auflagenstaerke3=pEnvirgrid->auflagenstaerke3;
+			pEnvirgrid_copy->auflagenstaerke4=pEnvirgrid->auflagenstaerke4;
+			pEnvirgrid_copy->auflagenstaerke5=pEnvirgrid->auflagenstaerke5;
+			pEnvirgrid_copy->auflagenstaerke6=pEnvirgrid->auflagenstaerke6;
+			pEnvirgrid_copy->auflagenstaerke7=pEnvirgrid->auflagenstaerke7;
+			pEnvirgrid_copy->auflagenstaerke8=pEnvirgrid->auflagenstaerke8;
+			pEnvirgrid_copy->auflagenstaerke9=pEnvirgrid->auflagenstaerke9;
+			pEnvirgrid_copy->auflagenstaerkemittel=pEnvirgrid->auflagenstaerkemittel;
+			plot_list_copy.push_back(pEnvirgrid_copy);
 
 			
 				if(counterkarten==1)
 				{
-					cout << pKarten->Treedensitywert << " <-pKarten ... KartenTreedensity ... pKarten_copy-> " << pKarten_copy->Treedensitywert << endl;
+					cout << pEnvirgrid->Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy-> " << pEnvirgrid_copy->Treedensityvalue << endl;
 				}
 
 			++pos;
@@ -358,8 +358,8 @@ void Clearalllists(void)
 		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 		list<Seed*>& seed_list = *world_positon_s;
 
-		vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
-		vector<Karten*>& plot_list = *posiweltk;
+		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
+		vector<Envirgrid*>& plot_list = *posiweltk;
 	
 		vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 		vector<Evaluation*>& evaluation_list = *posiwelt;
@@ -382,8 +382,8 @@ void Clearalllists(void)
 
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
-			 pKarten= plot_list.at(kartenpos);
-			delete pKarten;
+			 pEnvirgrid= plot_list.at(kartenpos);
+			delete pEnvirgrid;
 		}
 		plot_list.clear();
 		plot_list.shrink_to_fit();
@@ -570,15 +570,15 @@ void Restorealllists(void)
 	}
 
 		
-	// copying Karten
+	// copying Envirgrid
 	aktort=0;
-	for (vector<vector<Karten*> >::iterator posw = world_plot_list_copy.begin(); posw != world_plot_list_copy.end(); ++posw)
+	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list_copy.begin(); posw != world_plot_list_copy.end(); ++posw)
 	{ 
-		vector<Karten*>& plot_list = *posw;
+		vector<Envirgrid*>& plot_list = *posw;
 
 		// opening the original plot list and the referring reset list ..._copy		
-		vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
-		vector<Karten*>& plot_list_copy = *posiweltk;
+		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
+		vector<Envirgrid*>& plot_list_copy = *posiweltk;
 		
 		
 		aktort++;
@@ -588,37 +588,37 @@ void Restorealllists(void)
 		cout << "plot_list_copy.size() before copying =" << plot_list_copy.size() << endl;
 		
 		int counterkarten=1;	// for displaying the first plot list element
-		for (vector<Karten*>::iterator pos = plot_list.begin(); pos != plot_list.end(); )
+		for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end(); )
 		{ 
-			pKarten=(*pos);
+			pEnvirgrid=(*pos);
 
 			// Push back all data to a new object of the referring reset list "..._copy" 
-			pKarten_copy= new Karten();						// create new plot list element
-			pKarten_copy->xworldcoo=pKarten->xworldcoo;	
-			pKarten_copy->yworldcoo=pKarten->yworldcoo;	
-			pKarten_copy->xcoo=pKarten->xcoo;		
-			pKarten_copy->ycoo=pKarten->ycoo;		
-			pKarten_copy->Treedensitywert=pKarten->Treedensitywert;
-			pKarten_copy->Treeanzahl=pKarten->Treeanzahl;	
-			pKarten_copy->maxthawing_depth=pKarten->maxthawing_depth;
-			pKarten_copy->auflagenstaerke=pKarten->auflagenstaerke;
-			pKarten_copy->auflagenstaerke0=pKarten->auflagenstaerke0;
-			pKarten_copy->auflagenstaerke1=pKarten->auflagenstaerke1;
-			pKarten_copy->auflagenstaerke2=pKarten->auflagenstaerke2;
-			pKarten_copy->auflagenstaerke3=pKarten->auflagenstaerke3;
-			pKarten_copy->auflagenstaerke4=pKarten->auflagenstaerke4;
-			pKarten_copy->auflagenstaerke5=pKarten->auflagenstaerke5;
-			pKarten_copy->auflagenstaerke6=pKarten->auflagenstaerke6;
-			pKarten_copy->auflagenstaerke7=pKarten->auflagenstaerke7;
-			pKarten_copy->auflagenstaerke8=pKarten->auflagenstaerke8;
-			pKarten_copy->auflagenstaerke9=pKarten->auflagenstaerke9;
-			pKarten_copy->auflagenstaerkemittel=pKarten->auflagenstaerkemittel;
-			plot_list_copy.push_back(pKarten_copy);				// push back element to plot list 
+			pEnvirgrid_copy= new Envirgrid();						// create new plot list element
+			pEnvirgrid_copy->xworldcoo=pEnvirgrid->xworldcoo;	
+			pEnvirgrid_copy->yworldcoo=pEnvirgrid->yworldcoo;	
+			pEnvirgrid_copy->xcoo=pEnvirgrid->xcoo;		
+			pEnvirgrid_copy->ycoo=pEnvirgrid->ycoo;		
+			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
+			pEnvirgrid_copy->Treeanzahl=pEnvirgrid->Treeanzahl;	
+			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
+			pEnvirgrid_copy->auflagenstaerke=pEnvirgrid->auflagenstaerke;
+			pEnvirgrid_copy->auflagenstaerke0=pEnvirgrid->auflagenstaerke0;
+			pEnvirgrid_copy->auflagenstaerke1=pEnvirgrid->auflagenstaerke1;
+			pEnvirgrid_copy->auflagenstaerke2=pEnvirgrid->auflagenstaerke2;
+			pEnvirgrid_copy->auflagenstaerke3=pEnvirgrid->auflagenstaerke3;
+			pEnvirgrid_copy->auflagenstaerke4=pEnvirgrid->auflagenstaerke4;
+			pEnvirgrid_copy->auflagenstaerke5=pEnvirgrid->auflagenstaerke5;
+			pEnvirgrid_copy->auflagenstaerke6=pEnvirgrid->auflagenstaerke6;
+			pEnvirgrid_copy->auflagenstaerke7=pEnvirgrid->auflagenstaerke7;
+			pEnvirgrid_copy->auflagenstaerke8=pEnvirgrid->auflagenstaerke8;
+			pEnvirgrid_copy->auflagenstaerke9=pEnvirgrid->auflagenstaerke9;
+			pEnvirgrid_copy->auflagenstaerkemittel=pEnvirgrid->auflagenstaerkemittel;
+			plot_list_copy.push_back(pEnvirgrid_copy);				// push back element to plot list 
 
 			
 				if(counterkarten==1)
 				{
-					cout << pKarten->Treedensitywert << " <-pKarten ... KartenTreedensity ... pKarten_copy-> " << pKarten_copy->Treedensitywert << endl;
+					cout << pEnvirgrid->Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy-> " << pEnvirgrid_copy->Treedensityvalue << endl;
 				}
 
 			++pos;
@@ -791,8 +791,8 @@ void Clearalllists_copy(void)
 		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list_copy.begin()+aktort);
 		list<Seed*>& seed_list = *world_positon_s;
 
-		vector<vector<Karten*> >::iterator posiweltk = (world_plot_list_copy.begin()+aktort);
-		vector<Karten*>& plot_list = *posiweltk;
+		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list_copy.begin()+aktort);
+		vector<Envirgrid*>& plot_list = *posiweltk;
 	
 		vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list_copy.begin()+aktort);
 		vector<Evaluation*>& evaluation_list = *posiwelt;
@@ -818,8 +818,8 @@ void Clearalllists_copy(void)
 		// delete plot list elements
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{ 
-			pKarten=plot_list[kartenpos];
-			delete pKarten;
+			pEnvirgrid=plot_list[kartenpos];
+			delete pEnvirgrid;
 		} 
 		plot_list.clear();
 

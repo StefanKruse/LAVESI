@@ -8,7 +8,7 @@ using namespace std;
  *
  *
  *******************************************************************************************/
-void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
+void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 {
 
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
@@ -45,7 +45,7 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 			//StefanC: If the trees influences only one density grid cell
 			if ( flaechengroesze<(1.0/parameter[0].sizemagnif) )
 			{
-				plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert += 
+				plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue += 
 										pow(
 													pow(flaechengroesze/(1.0/parameter[0].sizemagnif),parameter[0].densitysmallweighing)
 													//weighing with diameter
@@ -86,7 +86,7 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 							// Only if the current grid cell is part of the influence area, a value is assigned
 							if (entfrastpos<= (double) xyquerrastpos)
 							{
-								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensitywert 
+								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensityvalue 
 									+= 
 									pow(
 										pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0),
@@ -130,13 +130,13 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
  * 3 kinds of density calculation are possible \n
  * 1: no density calculated and densitywert=0.0 \n
  *
- * 2: ZOI-kind of type and pTree->densitywert=1.0-(density_help/plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert) or \n
- *							sumdensitywert+=plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensitywert; \n
+ * 2: ZOI-kind of type and pTree->densitywert=1.0-(density_help/plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue) or \n
+ *							sumdensitywert+=plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensityvalue; \n
  *							pTree->densitywert=1.0-(density_help/sumdensitywert);	
  *							pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);	
  *
- * 3: random field of ZOI-Type and pTree->densitywert=1.0-(density_help/plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert) or \n
- *								   sumdensitywert+=plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert \n
+ * 3: random field of ZOI-Type and pTree->densitywert=1.0-(density_help/plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue) or \n
+ *								   sumdensitywert+=plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue \n
  *								   pTree->densitywert=1.0-(density_help/sumdensitywert);
  *								   pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
  *******************************************************************************************/
@@ -147,11 +147,11 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
  
  
 // densitywert: contains strenght of surrounding concurrence and the space theoretically needed for growth
-// Treedensitywert: contains how much space is available for the tree considering surrounding vegetation and the distance
+// Treedensityvalue: contains how much space is available for the tree considering surrounding vegetation and the distance
 
 
 
-void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
+void IndividualTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 {
 
 	if(parameter[0].omp_num_threads==1)
@@ -199,18 +199,18 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					// DENSITY 2
 					if (parameter[0].densitymode == 2)
 					{
-						if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert > 0.0) 
+						if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue > 0.0) 
 						{
 							if (parameter[0].densitytiletree==1)	// Sum of values
 							{
-								pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert));
+								pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue));
 									//                           density_desired(at position) / density_currently(at position)
 							}
 							else if (parameter[0].densitytiletree==2)	// Multiplication of values
 							{
 								pTree->densitywert =	(1.0 - (pTree->densitywert
 															/ 
-															(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert*pTree->densitywert) 
+															(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue*pTree->densitywert) 
 															)
 													);
 									//                           density_desired(at position) / density_currently(at position)
@@ -230,18 +230,18 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						int izuf= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 						int jzuf= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 						
-						if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert > 0.0) 
+						if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue > 0.0) 
 						{
 							if (parameter[0].densitytiletree==1)	//StefanC: Sum of values
 							{
-								pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert));
+								pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue));
 									//                           density_desired(at position) / density_currently(at position)
 							}
 							else if (parameter[0].densitytiletree==2)	// Multiplication of values
 							{
 								pTree->densitywert =	(1.0 - (pTree->densitywert
 															/ 
-															(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert*pTree->densitywert) 
+															(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue*pTree->densitywert) 
 															)
 													);
 							}
@@ -295,13 +295,13 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 									
 									if (parameter[0].densitytiletree==1)	// Sum of values
 									{
-										sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
+										sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensityvalue
 														* (1-entfrastpos/maxdist);	// Added so the values influence is weaker peripherically, otherwise the density value influence would be overestimated
 									}
 									else if (parameter[0].densitytiletree==2)	// Multiplication of values
 									{
 										// after weighting the additional values by the individual influence values the offset is added
-										sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
+										sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensityvalue
 														-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/ )
 														* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/
 														
@@ -571,18 +571,18 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 						// DENSITY 2
 						if (parameter[0].densitymode == 2)
 						{
-							if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert > 0.0) 
+							if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue > 0.0) 
 							{
 								if (parameter[0].densitytiletree==1)	// Sum of values
 								{
-									pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert));
+									pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue));
 									//                           density_desired(at position) / density_currently(at position)
 								}
 								else if (parameter[0].densitytiletree==2)	// Multiplication of values
 								{
 									pTree->densitywert =	(1.0 - (pTree->densitywert
 																/ 
-																(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert*pTree->densitywert) 
+																(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue*pTree->densitywert) 
 																)
 														);
 								//                         density_desired(at position) / density_currently(at position)
@@ -603,18 +603,18 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 							int izuf= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 							int jzuf= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
 							
-							if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert > 0.0) 
+							if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue > 0.0) 
 							{
 								if (parameter[0].densitytiletree==1)	//StefanC: Sum of values
 								{
-									pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert));
+									pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue));
 									//                           density_desired(at position) / density_currently(at position)
 								}
 								else if (parameter[0].densitytiletree==2)	// Multiplication of values
 								{
 									pTree->densitywert =	(1.0 - (pTree->densitywert
 																/ 
-																(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert*pTree->densitywert) 
+																(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue*pTree->densitywert) 
 																)
 														);
 								}
@@ -669,14 +669,14 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 										
 										if (parameter[0].densitytiletree==1)	// Summe der Werte
 										{
-											sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
+											sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensityvalue
 															* (1-entfrastpos/maxdist);	
 															// Added so the values influence is weaker peripherically, otherwise the density value influence would be overestimated
 										}
 										else if (parameter[0].densitytiletree==2)	// Multiplication of values
 										{
 											// after weighting the additional values by the individual influence values the offset is added
-											sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensitywert
+											sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensityvalue
 															-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/ )
 															* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)/*Tree influence value at the curr position*/
 															
@@ -876,7 +876,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 /****************************************************************************************//**
- * \brief reset Maps "Karten"
+ * \brief reset Maps "Envirgrid"
  *
  * reset Treedensity und Treeanzahl \n
  * calculate vegetation density (auflagenstärke) if vegetation==true \n
@@ -885,69 +885,69 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
  *
  *******************************************************************************************/
 
-void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<Weather*> &weather_list)
+void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*> &weather_list)
 {
 	if(parameter[0].omp_num_threads==1)
 	{// only one core
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
-			pKarten=plot_list[kartenpos];
-			pKarten->Treedensitywert=0;
-			pKarten->Treeanzahl=0;
-			// pKarten->Dbasalliste.clear();
+			pEnvirgrid=plot_list[kartenpos];
+			pEnvirgrid->Treedensityvalue=0;
+			pEnvirgrid->Treeanzahl=0;
+			// pEnvirgrid->Dbasalliste.clear();
 			
 			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)
 			{
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
-													  *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
+													  *exp(-(1.0/200.0)*(double) pEnvirgrid->maxthawing_depth) 
 													  +(1/0.95)) ); 
 													   // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
 				
-				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);
+				pEnvirgrid->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);
 				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
-				pKarten->auflagenstaerkemittel = (unsigned short) ( (double) 
-												 (pKarten->auflagenstaerke8
-												 +pKarten->auflagenstaerke7
-												 +pKarten->auflagenstaerke6
-												 +pKarten->auflagenstaerke5
-												 +pKarten->auflagenstaerke4
-												 +pKarten->auflagenstaerke3
-												 +pKarten->auflagenstaerke2
-												 +pKarten->auflagenstaerke1
-												 +pKarten->auflagenstaerke0
-												 +pKarten->auflagenstaerke)
+				pEnvirgrid->auflagenstaerkemittel = (unsigned short) ( (double) 
+												 (pEnvirgrid->auflagenstaerke8
+												 +pEnvirgrid->auflagenstaerke7
+												 +pEnvirgrid->auflagenstaerke6
+												 +pEnvirgrid->auflagenstaerke5
+												 +pEnvirgrid->auflagenstaerke4
+												 +pEnvirgrid->auflagenstaerke3
+												 +pEnvirgrid->auflagenstaerke2
+												 +pEnvirgrid->auflagenstaerke1
+												 +pEnvirgrid->auflagenstaerke0
+												 +pEnvirgrid->auflagenstaerke)
 												 /10.0); 
 												 // thawing_depth reacts with a time lag of 10 years to a changing number of trees
 												 
 												 //***german:
 												 //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
-				pKarten->auflagenstaerke8 = pKarten->auflagenstaerke7;
-				pKarten->auflagenstaerke7 = pKarten->auflagenstaerke6;
-				pKarten->auflagenstaerke6 = pKarten->auflagenstaerke5;
-				pKarten->auflagenstaerke5 = pKarten->auflagenstaerke4;
-				pKarten->auflagenstaerke4 = pKarten->auflagenstaerke3;
-				pKarten->auflagenstaerke3 = pKarten->auflagenstaerke2;
-				pKarten->auflagenstaerke2 = pKarten->auflagenstaerke1;
-				pKarten->auflagenstaerke1 = pKarten->auflagenstaerke0;
-				pKarten->auflagenstaerke0 = pKarten->auflagenstaerke;
+				pEnvirgrid->auflagenstaerke8 = pEnvirgrid->auflagenstaerke7;
+				pEnvirgrid->auflagenstaerke7 = pEnvirgrid->auflagenstaerke6;
+				pEnvirgrid->auflagenstaerke6 = pEnvirgrid->auflagenstaerke5;
+				pEnvirgrid->auflagenstaerke5 = pEnvirgrid->auflagenstaerke4;
+				pEnvirgrid->auflagenstaerke4 = pEnvirgrid->auflagenstaerke3;
+				pEnvirgrid->auflagenstaerke3 = pEnvirgrid->auflagenstaerke2;
+				pEnvirgrid->auflagenstaerke2 = pEnvirgrid->auflagenstaerke1;
+				pEnvirgrid->auflagenstaerke1 = pEnvirgrid->auflagenstaerke0;
+				pEnvirgrid->auflagenstaerke0 = pEnvirgrid->auflagenstaerke;
 			}
 			
 
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
 				// Calculation of the damping through organic material (damping reduces thawing_depth, formula taken from literature)
-				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
+				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
 				
 				// Berechnung der SAL
-				pKarten->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+				pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 			}
-		} // Kartenschleife Ende
+		} // Envirgridschleife Ende
 	}// only one core
 
 	if(parameter[0].omp_num_threads>1)
@@ -956,64 +956,64 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<Weather*> &w
 		// omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		
-		//#pragma omp parallel for private(pKarten)
+		//#pragma omp parallel for private(pEnvirgrid)
 		for(int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
-			pKarten=plot_list[kartenpos];
-			pKarten->Treedensitywert=0;
-			pKarten->Treeanzahl=0;
-			// pKarten->Dbasalliste.clear();
+			pEnvirgrid=plot_list[kartenpos];
+			pEnvirgrid->Treedensityvalue=0;
+			pEnvirgrid->Treeanzahl=0;
+			// pEnvirgrid->Dbasalliste.clear();
 			
 			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)
 			{
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
-													  *exp(-(1.0/200.0)*(double) pKarten->maxthawing_depth) 
+													  *exp(-(1.0/200.0)*(double) pEnvirgrid->maxthawing_depth) 
 													  +(1/0.95)) ); 
 													  // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
 				
-				pKarten->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	
+				pEnvirgrid->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	
 				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
-				pKarten->auflagenstaerkemittel = (unsigned short) ( (double) 
-												 (pKarten->auflagenstaerke8
-												 +pKarten->auflagenstaerke7
-												 +pKarten->auflagenstaerke6
-												 +pKarten->auflagenstaerke5
-												 +pKarten->auflagenstaerke4
-												 +pKarten->auflagenstaerke3
-												 +pKarten->auflagenstaerke2
-												 +pKarten->auflagenstaerke1
-												 +pKarten->auflagenstaerke0
-												 +pKarten->auflagenstaerke)
+				pEnvirgrid->auflagenstaerkemittel = (unsigned short) ( (double) 
+												 (pEnvirgrid->auflagenstaerke8
+												 +pEnvirgrid->auflagenstaerke7
+												 +pEnvirgrid->auflagenstaerke6
+												 +pEnvirgrid->auflagenstaerke5
+												 +pEnvirgrid->auflagenstaerke4
+												 +pEnvirgrid->auflagenstaerke3
+												 +pEnvirgrid->auflagenstaerke2
+												 +pEnvirgrid->auflagenstaerke1
+												 +pEnvirgrid->auflagenstaerke0
+												 +pEnvirgrid->auflagenstaerke)
 												 /10.0); 
 												 // thawing_depth reacts with a time lag of 10 years to a changing number of trees
 												 
 												 //***german:
 												 //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
-				pKarten->auflagenstaerke8 = pKarten->auflagenstaerke7;
-				pKarten->auflagenstaerke7 = pKarten->auflagenstaerke6;
-				pKarten->auflagenstaerke6 = pKarten->auflagenstaerke5;
-				pKarten->auflagenstaerke5 = pKarten->auflagenstaerke4;
-				pKarten->auflagenstaerke4 = pKarten->auflagenstaerke3;
-				pKarten->auflagenstaerke3 = pKarten->auflagenstaerke2;
-				pKarten->auflagenstaerke2 = pKarten->auflagenstaerke1;
-				pKarten->auflagenstaerke1 = pKarten->auflagenstaerke0;
-				pKarten->auflagenstaerke0 = pKarten->auflagenstaerke;
+				pEnvirgrid->auflagenstaerke8 = pEnvirgrid->auflagenstaerke7;
+				pEnvirgrid->auflagenstaerke7 = pEnvirgrid->auflagenstaerke6;
+				pEnvirgrid->auflagenstaerke6 = pEnvirgrid->auflagenstaerke5;
+				pEnvirgrid->auflagenstaerke5 = pEnvirgrid->auflagenstaerke4;
+				pEnvirgrid->auflagenstaerke4 = pEnvirgrid->auflagenstaerke3;
+				pEnvirgrid->auflagenstaerke3 = pEnvirgrid->auflagenstaerke2;
+				pEnvirgrid->auflagenstaerke2 = pEnvirgrid->auflagenstaerke1;
+				pEnvirgrid->auflagenstaerke1 = pEnvirgrid->auflagenstaerke0;
+				pEnvirgrid->auflagenstaerke0 = pEnvirgrid->auflagenstaerke;
 			}
 			
 
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
 				// Calculation of the damping through organic material
-				double daempfung = (1.0/4000.0) * (double) pKarten->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
+				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
 				
 				// Calculation of SAL
-				pKarten->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));
+				pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));
 				// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 			}
 		} // plot list loop END
@@ -1034,14 +1034,14 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<Weather*> &w
  *
  *
  *******************************************************************************************/
-void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
+void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vector<Envirgrid*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
 {
 
 	int aktort=0;
 	
-	for (vector<vector<Karten*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
+	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
 	{ // World plot list loop BEGIN
-		vector<Karten*>& plot_list = *posw;
+		vector<Envirgrid*>& plot_list = *posw;
 
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
 		list<Tree*>& tree_list = *world_positon_b;

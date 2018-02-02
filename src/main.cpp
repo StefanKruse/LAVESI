@@ -563,7 +563,7 @@ void createLists()
 				vector<Weather*> weather_list;				 	  // Creating new weather_list 
 				world_weather_list.push_back(weather_list);		  // include new weather_list in corresponding world list
 
-				vector<Karten*> plot_list;						  // Creating new plot_list 
+				vector<Envirgrid*> plot_list;						  // Creating new plot_list 
 				world_plot_list.push_back(plot_list);			  // include new plot_list in corresponding world list
 
 				vector<Evaluation*> evaluation_list;			  // Creating new evaluation_list 
@@ -579,7 +579,7 @@ void createLists()
 					list<Seed*> seed_list;								// Creating new seed_list 
 					world_seed_list_copy.push_back(seed_list);			// include new seed_list in corresponding world list
 
-					vector<Karten*> plot_list;							// Creating new plot_list 
+					vector<Envirgrid*> plot_list;							// Creating new plot_list 
 					world_plot_list_copy.push_back(plot_list);			// include new plot_list in corresponding world list
 
 					vector<Evaluation*> evaluation_list;			  	// Creating new evaluation_list 
@@ -594,7 +594,7 @@ void createLists()
 
 
 /****************************************************************************************//**
- * \brief initialise Karten Element and Evaluation
+ * \brief initialise Envirgrid Element and Evaluation
  *
  *
  *
@@ -607,9 +607,9 @@ void createLists()
 void initialiseMaps()
 {
 		int aktort=0;
-		for (vector<vector<Karten*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++)
+		for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++)
 		{ /// World list loop BEGIN
-			vector<Karten*>& plot_list = *posw;
+			vector<Envirgrid*>& plot_list = *posw;
 		
 			vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 			vector<Evaluation*>& evaluation_list = *posiwelt;
@@ -629,33 +629,33 @@ void initialiseMaps()
 			// Append new plot list:
 			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++) 
 			{ 
-				pKarten= new Karten();	// create new plot list element
+				pEnvirgrid= new Envirgrid();	// create new plot list element
 
-				pKarten->yworldcoo=aktortyworldcoo;
-				pKarten->xworldcoo=aktortxworldcoo;
+				pEnvirgrid->yworldcoo=aktortyworldcoo;
+				pEnvirgrid->xworldcoo=aktortxworldcoo;
 
-				pKarten->ycoo=floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
-				pKarten->xcoo=(double) kartenpos - (pKarten->ycoo * (treecols*parameter[0].sizemagnif));
+				pEnvirgrid->ycoo=floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
+				pEnvirgrid->xcoo=(double) kartenpos - (pEnvirgrid->ycoo * (treecols*parameter[0].sizemagnif));
 
-				pKarten->Treedensitywert=0;
-				pKarten->Treeanzahl=0;
-				pKarten->maxthawing_depth=1000;
+				pEnvirgrid->Treedensityvalue=0;
+				pEnvirgrid->Treeanzahl=0;
+				pEnvirgrid->maxthawing_depth=1000;
 				
-				pKarten->auflagenstaerke=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke0=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke1=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke2=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke3=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke4=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke5=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke6=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke7=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke8=200;	// in 0.1mm -> max 6.5535 m
-				pKarten->auflagenstaerke9=200;	// in 0.1mm -> max 6.5535 m 
-				pKarten->auflagenstaerkemittel=200;
+				pEnvirgrid->auflagenstaerke=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke0=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke1=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke2=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke3=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke4=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke5=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke6=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke7=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke8=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->auflagenstaerke9=200;	// in 0.1mm -> max 6.5535 m 
+				pEnvirgrid->auflagenstaerkemittel=200;
 				
 
-				plot_list.push_back(pKarten);	
+				plot_list.push_back(pEnvirgrid);	
 				//push back new plot list element
 			}
 			
@@ -789,8 +789,8 @@ void finishSimulation()
 			vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 			list<Seed*>& seed_list = *world_positon_s;
 
-			//vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
-			//vector<Karten*>& plot_list = *posiweltk;
+			//vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
+			//vector<Envirgrid*>& plot_list = *posiweltk;
 
 			//vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 			//vector<Evaluation*>& evaluation_list = *posiwelt;

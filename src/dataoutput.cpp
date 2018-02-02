@@ -1,6 +1,6 @@
 using namespace std;
 
-void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
+void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
 {
 	double xminwindow=0.0;
 	double xmaxwindow=0.0;
@@ -43,8 +43,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 		list<Seed*>& seed_list = *world_positon_s;
 		
-		vector<vector<Karten*> >::iterator poskarten = (world_plot_list.begin()+aktort);
-		vector<Karten*>& plot_list = *poskarten;
+		vector<vector<Envirgrid*> >::iterator poskarten = (world_plot_list.begin()+aktort);
+		vector<Envirgrid*>& plot_list = *poskarten;
 		
 		vector<vector<Weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
 		vector<Weather*>& weather_list = *posiwelt;
@@ -952,7 +952,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "XPLOTPOS;");
 				fprintf(filepointer, "X;");
 				fprintf(filepointer, "Y;");
-				fprintf(filepointer, "Treedensitywert;");
+				fprintf(filepointer, "Treedensityvalue;");
 				fprintf(filepointer, "Treeanzahl;");
 				fprintf(filepointer, "Auflagenstaerke;");
 				fprintf(filepointer, "AuflagenstaerkeMittel;");
@@ -973,19 +973,19 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// data evaluation and output
 			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 			{
-				pKarten=plot_list[kartenpos];
-				if ( (pKarten->Treeanzahl>0) && ( (pKarten->xcoo>=xminwindow*parameter[0].sizemagnif) && (pKarten->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pKarten->ycoo>=yminwindow*parameter[0].sizemagnif) && (pKarten->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
+				pEnvirgrid=plot_list[kartenpos];
+				if ( (pEnvirgrid->Treeanzahl>0) && ( (pEnvirgrid->xcoo>=xminwindow*parameter[0].sizemagnif) && (pEnvirgrid->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo>=yminwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
 				{// output only if tree density values >0 
 					fprintf(filepointer, "%d;", parameter[0].repeati);
-					fprintf(filepointer, "%d;", pKarten->yworldcoo);
-					fprintf(filepointer, "%d;", pKarten->xworldcoo);
-					fprintf(filepointer, "%4.4f;", pKarten->xcoo);
-					fprintf(filepointer, "%4.4f;", pKarten->ycoo);
-					fprintf(filepointer, "%4.5f;", pKarten->Treedensitywert);
-					fprintf(filepointer, "%d;", pKarten->Treeanzahl);
-					fprintf(filepointer, "%u;", pKarten->auflagenstaerke);
-					fprintf(filepointer, "%u;", pKarten->auflagenstaerkemittel);
-					fprintf(filepointer, "%u;", pKarten->maxthawing_depth);
+					fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
+					fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
+					fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
+					fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
+					fprintf(filepointer, "%4.5f;", pEnvirgrid->Treedensityvalue);
+					fprintf(filepointer, "%d;", pEnvirgrid->Treeanzahl);
+					fprintf(filepointer, "%u;", pEnvirgrid->auflagenstaerke);
+					fprintf(filepointer, "%u;", pEnvirgrid->auflagenstaerkemittel);
+					fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
 					fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 					fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 					fprintf(filepointer, "\n");

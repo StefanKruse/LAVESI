@@ -55,13 +55,13 @@ using namespace std;
 		double 	thawing_depthinfluence;
 	};
 	
-	struct Karten 
+	struct Envirgrid 
 	{
 		int		xworldcoo;
 		int		yworldcoo;
 		double	xcoo;
 		double	ycoo;
-		double	Treedensitywert;
+		double	Treedensityvalue;
 		int		Treeanzahl;
 		unsigned short maxthawing_depth;
 		unsigned short auflagenstaerke;	

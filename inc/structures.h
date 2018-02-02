@@ -239,7 +239,7 @@ using namespace std;
 		double rel_trait_variance;
 	};
 
-	struct weather 
+	struct Weather 
 	{
 		int		xworldcoo;		 			
 		int		yworldcoo;		 			

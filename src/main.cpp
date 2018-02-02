@@ -445,15 +445,15 @@ void Yearsteps()
 			{
 				parameter[0].tempdiffort=tempdifforti;
 				// read in weather data with new tempdiffort parameter
-				for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
+				for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 				{
-					vector<weather*>& weather_list = *posw;
+					vector<Weather*>& weather_list = *posw;
 
 					// empty list
 					for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
 					{
-						pweather=weather_list[iweather];
-						delete pweather;
+						pWeather=weather_list[iweather];
+						delete pWeather;
 					}
 					weather_list.clear();
 				}
@@ -560,7 +560,7 @@ void createLists()
 				list<Seed*> seed_list;							  // Creating new seed_list 
 				world_seed_list.push_back(seed_list);			  // include new seed_list in corresponding world list
 
-				vector<weather*> weather_list;				 	  // Creating new weather_list 
+				vector<Weather*> weather_list;				 	  // Creating new weather_list 
 				world_weather_list.push_back(weather_list);		  // include new weather_list in corresponding world list
 
 				vector<Karten*> plot_list;						  // Creating new plot_list 
@@ -770,7 +770,7 @@ void finishSimulation()
 		int aktort=0;
 		
 			
-		for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
+		for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 		{	// World weather list loop begin
 			
 			
@@ -778,7 +778,7 @@ void finishSimulation()
 			// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 			// realisiert ist weiterverfahren werden
 			// Loesung brachte http://www.easy-coding.de/auf-listen-von-listen-zugreifen-t2529.html
-			vector<weather*>& weather_list = *posw;
+			vector<Weather*>& weather_list = *posw;
 
 			// Um auf ein bestimmtes Element in der Welt zuzugreifen muss ein Iterator bis
 			// zum entsprechenden Element justiert werden und dann eine tree_list als Referenz
@@ -822,8 +822,8 @@ void finishSimulation()
 			// weather_list deletion
 			for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
 			{// weather_list begin
-				 pweather=weather_list.at(iweather);
-				 delete pweather;
+				 pWeather=weather_list.at(iweather);
+				 delete pWeather;
 			}// weather_list end
 			weather_list.clear();
 			weather_list.shrink_to_fit();

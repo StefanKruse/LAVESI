@@ -349,7 +349,7 @@ void SaveAllLists(void)
 void ClearAllLists(void)
 {
 	int aktort=0;
-	for (vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
+	for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 	{ // World weather list loop begin
 		
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);

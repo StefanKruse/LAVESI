@@ -1,6 +1,6 @@
 using namespace std;
 
-void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
+void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
 {
 	double xminwindow=0.0;
 	double xmaxwindow=0.0;
@@ -46,8 +46,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		vector<vector<Karten*> >::iterator poskarten = (world_plot_list.begin()+aktort);
 		vector<Karten*>& plot_list = *poskarten;
 		
-		vector<vector<weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
-		vector<weather*>& weather_list = *posiwelt;
+		vector<vector<Weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
+		vector<Weather*>& weather_list = *posiwelt;
 		
 		vector<vector<Evaluation*> >::iterator posiweltausw = (world_evaluation_list.begin()+aktort);
 		vector<Evaluation*>& evaluation_list = *posiweltausw;

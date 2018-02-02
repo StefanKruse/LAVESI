@@ -11,7 +11,7 @@ using namespace std;
  * (max basal growth at most southern transekt and tree position in north-south transekt
  *
  *******************************************************************************************/
-double getMaxbasalwachstum(int yearposition, vector<weather*> &weather_list)
+double getMaxbasalwachstum(int yearposition, vector<Weather*> &weather_list)
 { 
 	double maxbw_help = 0;
 	if (parameter[0].lineartransect==true)
@@ -99,7 +99,7 @@ double getMaxbasalwachstum(int yearposition, vector<weather*> &weather_list)
  * and tree position in north-south transekt
  *
  *******************************************************************************************/
-double getMaxbrustwachstum(int yearposition,  vector<weather*> &weather_list)
+double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 {	
 	double maxbrw_help = 0;
 	//If it is switched on, the latest growth performance is calculated in dependence of the coordinate.
@@ -191,7 +191,7 @@ double getMaxbrustwachstum(int yearposition,  vector<weather*> &weather_list)
  * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
-void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)
+void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
 {
 	
 	int aktort=0;
@@ -199,8 +199,8 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 	{ 
 		list<Tree*>& tree_list = *posw;
 	
-		vector<vector<weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
-		vector<weather*>& weather_list = *posiwelt;
+		vector<vector<Weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
+		vector<Weather*>& weather_list = *posiwelt;
 
 		aktort++;
 

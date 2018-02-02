@@ -11,7 +11,7 @@
  *
  *
  *******************************************************************************************/
-void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &tree_list)
+void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &tree_list)
 {
 		// Calculation of the factors in a function, that adds a mortality rate impact
 		
@@ -249,12 +249,12 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
  *
  *
  *******************************************************************************************/
-void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list)
+void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list)
 {
 
 	int aktort=0;
 	
-	for(vector<vector<weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
+	for(vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 	{// START: world loop
 		//To access the weather_list content, a referential weather list has to be created, to represent the structure of it.
 		//
@@ -266,7 +266,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 		// erstellt werden um die Struktur zu kennen und dann kann wie schon im Code
 		// realisiert ist weiterverfahren werden
 		// Loesung brachte http://www.easy-coding.de/auf-listen-von-listen-zugreifen-t2529.html
-		vector<weather*>& weather_list = *posw;
+		vector<Weather*>& weather_list = *posw;
 
 		// Um auf ein bestimmtes Element in der Welt zuzugreifen muss ein Iterator bis
 		// zum entsprechenden Element justiert werden und dann eine tree_list als Referenz

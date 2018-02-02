@@ -19,8 +19,8 @@
   	Seed *pSeed;
   	Seed *pSeed_copy;
 	
-  	vector<vector<weather*>> world_weather_list(0);
-  	weather *pweather;
+  	vector<vector<Weather*>> world_weather_list(0);
+  	Weather *pWeather;
 	
   	vector<vector<Karten*>> world_plot_list(0);
   	Karten *pKarten;

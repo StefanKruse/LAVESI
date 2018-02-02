@@ -885,7 +885,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
  *
  *******************************************************************************************/
 
-void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &weather_list)
+void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<Weather*> &weather_list)
 {
 	if(parameter[0].omp_num_threads==1)
 	{// only one core
@@ -1034,7 +1034,7 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<weather*> &w
  *
  *
  *******************************************************************************************/
-void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<weather*> > &world_weather_list)
+void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
 {
 
 	int aktort=0;
@@ -1046,8 +1046,8 @@ void Kartenupdate(struct Parameter *parameter, int yearposition, vector<vector<K
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
 		list<Tree*>& tree_list = *world_positon_b;
 
-		vector<vector<weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
-		vector<weather*>& weather_list = *posiwelt;
+		vector<vector<Weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
+		vector<Weather*>& weather_list = *posiwelt;
 
 		aktort++;
 

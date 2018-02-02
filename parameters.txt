@@ -116,7 +116,7 @@ seeddispmode=1;						// (int 1,2) positions for introduced seeds
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
-periodRB=3;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
+boundaryconditions=3;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 										// 0==seeds passing the borders are removed
 										// 1==the western/eastern and northern/southern border turned in both directions 
 										// 2==dispersal connection only on the western to eastern border

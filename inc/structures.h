@@ -165,7 +165,7 @@ using namespace std;
 		double 	gdbrustfacqsib;			
 		double 	gdbrustfacsib;			
 		double 	gdbrustconstsib;			
-		double	basaleinflussaltneu;
+		double	basalinfluenceoldyoung;
 		int		relgrowthinfluence;
 		int		allometryfunctiontype;
 		double	dbasalheightalloslope;

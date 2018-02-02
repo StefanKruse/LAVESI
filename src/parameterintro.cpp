@@ -606,11 +606,11 @@ void Parameterinput(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstsib);
                 }	
 		
-	strcpy(uebergabestring,"basaleinflussaltneu");
-	parameter[0].basaleinflussaltneu=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"basalinfluenceoldyoung");
+	parameter[0].basalinfluenceoldyoung=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].basaleinflussaltneu);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].basalinfluenceoldyoung);
                 }
 
 	strcpy(uebergabestring,"relgrowthinfluence");

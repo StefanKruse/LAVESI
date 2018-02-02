@@ -187,7 +187,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
  * \brief calculate basal and breast height growth of each tree in the simulation
  *
  * basalwachstum = maxbasalwachstum * densitywert * thawing_depthinfluence/100;	\n
- * basalwachstum = basalwachstum + basalwachstum * basaleinflussaltneu * dbasal; \n
+ * basalwachstum = basalwachstum + basalwachstum * basalinfluenceoldyoung * dbasal; \n
  * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
@@ -217,7 +217,7 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 									* (1.0-pTree->densitywert);
 									
 			basalwachstum  = basalwachstum
-							+basalwachstum*parameter[0].basaleinflussaltneu
+							+basalwachstum*parameter[0].basalinfluenceoldyoung
 							*pTree->dbasal;
 			if (basalwachstum<0.0)
 			{
@@ -250,7 +250,7 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 					pTree->dbasalrel = basalwachstum
 									/(maxbasalwachstum
 									  +(maxbasalwachstum
-									*parameter[0].basaleinflussaltneu
+									*parameter[0].basalinfluenceoldyoung
 									*pTree->dbasal));
 			}
 

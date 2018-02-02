@@ -238,9 +238,9 @@ void Savealllists(void)
 				} 
 			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;	
 			pEvaluation_copy->countermaxincrementbasalarea=pEvaluation->countermaxincrementbasalarea;
-			pEvaluation_copy->wendejahr=pEvaluation->wendejahr;	
+			pEvaluation_copy->yearofturningpoint=pEvaluation->yearofturningpoint;	
 			pEvaluation_copy->saettigungsjahr=pEvaluation->saettigungsjahr;	
-			pEvaluation_copy->nachwendejahr=pEvaluation->nachwendejahr;
+			pEvaluation_copy->nachyearofturningpoint=pEvaluation->nachyearofturningpoint;
 
 				for (vector<int>::iterator posval=pEvaluation->nheight0b40liste.begin(); posval<pEvaluation->nheight0b40liste.end(); )
 				{
@@ -671,9 +671,9 @@ void Restorealllists(void)
 				}
 			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;		
 			pEvaluation_copy->countermaxincrementbasalarea=pEvaluation->countermaxincrementbasalarea;
-			pEvaluation_copy->wendejahr=pEvaluation->wendejahr;	
+			pEvaluation_copy->yearofturningpoint=pEvaluation->yearofturningpoint;	
 			pEvaluation_copy->saettigungsjahr=pEvaluation->saettigungsjahr;			
-			pEvaluation_copy->nachwendejahr=pEvaluation->nachwendejahr;
+			pEvaluation_copy->nachyearofturningpoint=pEvaluation->nachyearofturningpoint;
 
 				for (vector<int>::iterator posval=pEvaluation->nheight0b40liste.begin(); posval<pEvaluation->nheight0b40liste.end(); )
 				{

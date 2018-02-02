@@ -228,7 +228,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				
 				// calculation of the slope
 				double slopediff=pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl-1]-pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl-2];
-				if (pEvaluation->nachwendejahr!=true)
+				if (pEvaluation->nachyearofturningpoint!=true)
 				{	
 			
 					// If a maximal slope is not surpassed in 50 years, the turning point of growth is reached
@@ -243,8 +243,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					}
 					if (pEvaluation->countermaxincrementbasalarea==0)
 					{
-						pEvaluation->wendejahr=jahr;
-						pEvaluation->nachwendejahr=true;
+						pEvaluation->yearofturningpoint=jahr;
+						pEvaluation->nachyearofturningpoint=true;
 					}
 				}
 				// after the turning point is reached, the saturation of the system is reached as soon as the slope becomes negative
@@ -573,7 +573,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", pEvaluation->stemcountliste[pEvaluation->stemcountliste.size()-1]);
 				fprintf(filepointer, "%6.4f;", pEvaluation->meantreeheightliste[pEvaluation->meantreeheightliste.size()-1]);
 				fprintf(filepointer, "%6.4f;", pEvaluation->meantreeageliste[pEvaluation->meantreeageliste.size()-1]);
-				fprintf(filepointer, "%d;", pEvaluation->wendejahr);
+				fprintf(filepointer, "%d;", pEvaluation->yearofturningpoint);
 				fprintf(filepointer, "%d;", pEvaluation->saettigungsjahr);
 				fprintf(filepointer, "%d;", ageg0);
 				fprintf(filepointer, "%d;", ages0);

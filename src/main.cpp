@@ -671,9 +671,9 @@ void initialiseMaps()
 			//Start growth stage calculation
 			pEvaluation->maxincrementbasalarea=0.0;
 			pEvaluation->countermaxincrementbasalarea=0;
-			pEvaluation->wendejahr=-9999;
+			pEvaluation->yearofturningpoint=-9999;
 			pEvaluation->saettigungsjahr=-9999;
-			pEvaluation->nachwendejahr=false;
+			pEvaluation->nachyearofturningpoint=false;
 			//End growth stage calculation
 			//Start general values
 			pEvaluation->nheight0b40liste.clear();

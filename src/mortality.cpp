@@ -37,7 +37,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				//***german:
 				// Falls Hoechstage ueberschritten wird ein zusaetzlicher Wert aufgeschlagen
 				double agesmort=0.0;
-				if (pTree->age>parameter[0].maximalage) 
+				if (pTree->age>parameter[0].maximumage) 
 				{
 					agesmort=1.0;
 				}

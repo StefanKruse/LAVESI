@@ -217,7 +217,7 @@ using namespace std;
 		
 		// ... mortality
 		double	mortbg;
-		int		maximalage;
+		int		maximumage;
 		double	mjung; 	
 		double	jugendmorteinflussexp;
 		double	mgrowth;

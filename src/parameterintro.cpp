@@ -759,11 +759,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].mortbg);
                 }
 
-	strcpy(uebergabestring,"maximalage");
-	parameter[0].maximalage=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"maximumage");
+	parameter[0].maximumage=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].maximalage);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].maximumage);
                 }
 
 	strcpy(uebergabestring,"malt");

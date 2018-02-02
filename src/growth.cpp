@@ -213,7 +213,7 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 			maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list);
 			
 			double basalwachstum = maxbasalwachstum
-									* ( (double) pTree->speicher/* GELOESCHT "/3" */ ) //==1
+									* ( (double) pTree->buffer/* GELOESCHT "/3" */ ) //==1
 									* (1.0-pTree->densitywert);
 									
 			basalwachstum  = basalwachstum
@@ -262,7 +262,7 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 				maxbrustwachstum = getMaxbrustwachstum(yearposition, weather_list);
 
 				brustwachstum = maxbrustwachstum
-										* ( (double) pTree->speicher/* GELOESCHT "/3" */ ) 
+										* ( (double) pTree->buffer/* GELOESCHT "/3" */ ) 
 										* (1.0-pTree->densitywert);
 										
 				if (brustwachstum<0.0)

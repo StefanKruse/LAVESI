@@ -304,7 +304,7 @@ void TreesIni(int maximal_word_length)
 						}
 						pTree->seednewly_produced=0; 
 						pTree->seedproduced=0; 	
-						pTree->speicher=1;	
+						pTree->buffer=1;	
 						pTree->densitywert=0;
 						pTree->thawing_depthinfluence=100;	
 						pTree->growing=true;		

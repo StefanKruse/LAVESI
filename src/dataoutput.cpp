@@ -911,7 +911,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%4.4f;", pTree->coneheight);
 				fprintf(filepointer, "%d;", pTree->seednewly_produced);
 				fprintf(filepointer, "%d;", pTree->seedproduced);
-				fprintf(filepointer, "%d;", pTree->speicher);
+				fprintf(filepointer, "%d;", pTree->buffer);
 				fprintf(filepointer, "%4.5f;", pTree->densitywert);
 				fprintf(filepointer, "%4.5f;", pTree->entfernung);
 				fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);

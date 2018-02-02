@@ -1,6 +1,4 @@
 using namespace std;
-
-// Container for the handled objects (seeds/trees/density grid/parameter/weather/output)
 	
 	struct Tree 
 	{
@@ -25,9 +23,9 @@ using namespace std;
 		double	coneheight;
 		int		seednewly_produced;
 		int		seedproduced;
-		int		speicher;
+		int		buffer;
 		double	densitywert;
-		double thawing_depthinfluence;
+		double 	thawing_depthinfluence;
 		bool	longdispersed;					
 		double	entfernung;						
 		bool    growing;

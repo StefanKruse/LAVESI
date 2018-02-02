@@ -59,7 +59,7 @@ void Savealllists(void)
 			pTree_copy->coneheight=pTree->coneheight;
 			pTree_copy->seednewly_produced=pTree->seednewly_produced;
 			pTree_copy->seedproduced=pTree->seedproduced;
-			pTree_copy->speicher=pTree->speicher;
+			pTree_copy->buffer=pTree->buffer;
 			pTree_copy->densitywert=pTree->densitywert;
 			pTree_copy->thawing_depthinfluence=pTree->thawing_depthinfluence;
 			pTree_copy->longdispersed=pTree->longdispersed;
@@ -490,7 +490,7 @@ void Restorealllists(void)
 			pTree_copy->coneheight=pTree->coneheight;
 			pTree_copy->seednewly_produced=pTree->seednewly_produced;
 			pTree_copy->seedproduced=pTree->seedproduced;
-			pTree_copy->speicher=pTree->speicher;
+			pTree_copy->buffer=pTree->buffer;
 			pTree_copy->densitywert=pTree->densitywert;
 			pTree_copy->thawing_depthinfluence=pTree->thawing_depthinfluence;
 			pTree_copy->longdispersed=pTree->longdispersed;

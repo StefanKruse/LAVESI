@@ -118,7 +118,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->coneheight=99999.0;
 								pTree->seednewly_produced=0; 
 								pTree->seedproduced=0; 
-								pTree->speicher=1;
+								pTree->buffer=1;
 								pTree->densitywert=0;
 								pTree->entfernung=pSeed->entfernung;
 								pTree->growing=true;
@@ -178,7 +178,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->coneheight=99999.0;
 								pTree->seednewly_produced=0; 
 								pTree->seedproduced=0; 
-								pTree->speicher=1;
+								pTree->buffer=1;
 								pTree->densitywert=0;
 								pTree->thawing_depthinfluence=100;
 								pTree->entfernung=pSeed->entfernung;						

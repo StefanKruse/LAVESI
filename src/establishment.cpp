@@ -1,12 +1,10 @@
 using namespace std;
 
-
 void Treeestablishment( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > & world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list)
 {
 	int aktort=0;
 	for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
 	{
-
 		vector<Weather*>& weather_list = *posw;
 
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
@@ -82,10 +80,8 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					// minimal germination rate is roughly estimated
 					if(pSeed->species==1)
 					{
-						
 						if (zufallsz< (parameter[0].germinationrate+(parameter[0].germinatioweatherinfluence*maxbasalwachstum/exp(parameter[0].gdbasalconstgmel))*keimungauflageinfluence) )
 						{  
-
 							if (maxbasalwachstum>0.0) 
 							{
 								pTree= new Tree();						
@@ -201,13 +197,13 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					}
 					else 
 					{ 
-						// safety routine: is the substructure species now defined?
-						signed int abbrechenetabfehler; 
+						// safety routine: is species defined?
+						signed int exiterrorestablish; 
 						printf("\n In establishment.cpp a tree was not assigned a new species value.\n");
 						printf("\n continue typing 1, press any other key to exit\n");
-						scanf("%d", &abbrechenetabfehler); 
+						scanf("%d", &exiterrorestablish); 
 
-						if (abbrechenetabfehler!=1) 
+						if (exiterrorestablish!=1) 
 						{
 							printf("LAVESI was exited after an error occurring in establishment.cpp\n");
 							exit(1);

@@ -229,7 +229,7 @@ using namespace std;
 		double	mtrockenheit;
 		double	seedTreemort;
 		double	seedbodenmort;
-		int 	gmel_seedtod;
+		int 	gmelseedmaxage;
 
 		// ... ancestry
 		int		nameakt;

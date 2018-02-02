@@ -26,7 +26,7 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 			pseed->age++;
 			
 			///seeds older than 2 years (L.gmelinii) and 10 years (L.sibirica) die
-			if ((pseed->species==1)&&(pseed->age>parameter[0].gmel_seedtod))
+			if ((pseed->species==1)&&(pseed->age>parameter[0].gmelseedmaxage))
 			{
 				delete pseed;
 				pos=seed_list.erase(pos);

@@ -203,8 +203,8 @@ seeddescents=0.93;					// (double) descent speed for L. sibirica seeds (estimati
 distanceratio=0.16;					// (double) dispersal distance factor
 seedprodfactor=8;					// (double) seed production factor
 germinationrate=0.01;				// (double 0-1) germination rate
-germinatioweatherinfluence=0.447975;	// (double) influence of the climate to germination
-gmel_seedtod=2.0;					// (int) years of seed fertility for Larix gmelinii
+germinatioweatherinfluence=0.447975;// (double) influence of the climate to germination
+gmelseedmaxage=2.0;					// (int) years of seed fertility for Larix gmelinii
 
 // 2.2 -----> Diameter growth
 gdbasalfacqgmel=-0.003;				// (double) Factor for basal diameter growth rate of L. gmelinii trees

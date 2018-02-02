@@ -19,5 +19,5 @@ void Seedwinddispersal(double ad, double& cd, double& dd, double &vv, double &vd
 void Parameterinput(void);
 void Savealllists(void);
 void Clearalllists(void);
-void RestoreAllLists(void);
+void Restorealllists(void);
 void Clearalllists_copy(void);

@@ -441,7 +441,7 @@ void Clearalllists(void)
  *
  *
  *******************************************************************************************/
-void RestoreAllLists(void)
+void Restorealllists(void)
 {
 
 	// copying trees

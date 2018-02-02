@@ -850,11 +850,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].gmel_seedtod);
                 }
 
-	strcpy(uebergabestring,"jantodestempgmel");
-	parameter[0].jantodestempgmel= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"janthresholdtempgmel");
+	parameter[0].janthresholdtempgmel= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].jantodestempgmel);
+                    printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].janthresholdtempgmel);
                 }
 
 	strcpy(uebergabestring,"weatherzahlgmela");

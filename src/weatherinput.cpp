@@ -821,13 +821,13 @@ void passWeather()
 			weather_list[iweather]->nddrestriktion=0.0;
 
 			/// mean January temp < -40°C?
-			if (weather_list[iweather]->temp1monatmitteliso<(parameter[0].jantodestempgmel))
+			if (weather_list[iweather]->temp1monatmitteliso<(parameter[0].janthresholdtempgmel))
 			{
 				weather_list[iweather]->janisothermrestriktiong=1.0;
 			}
 			else
 			{
-				weather_list[iweather]->janisothermrestriktiong=1.0-fabs(9.0*(weather_list[iweather]->temp1monatmitteliso-parameter[0].jantodestempgmel)/(-parameter[0].jantodestempgmel));	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -45.0 °C
+				weather_list[iweather]->janisothermrestriktiong=1.0-fabs(9.0*(weather_list[iweather]->temp1monatmitteliso-parameter[0].janthresholdtempgmel)/(-parameter[0].janthresholdtempgmel));	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -45.0 °C
 			}
 
 

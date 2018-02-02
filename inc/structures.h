@@ -147,7 +147,7 @@ using namespace std;
 		double	tempdiffortmin;
 		double	precdiffortmin;
 		double	evapod;
-		double 	jantodestempgmel;
+		double 	janthresholdtempgmel;
 		double 	weatherzahlgmela;
 		double 	weatherzahlgmelb;
 		double 	weatherzahlgmelc;

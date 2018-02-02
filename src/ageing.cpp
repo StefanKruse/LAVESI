@@ -95,9 +95,8 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 						}
 					}
 				}
-				
-				// Tree already has a height of maturation assigned to it
-				// ... if a tree is taller than this maturation height, he grows cones
+				// tree already has a height of maturation assigned to it
+				// ... if a tree is taller than this maturation height, he starts to produce seeds
 				else if (pTree->coneheight!=99999)
 				{  							
 					if (pTree->height >= pTree->coneheight)
@@ -107,31 +106,26 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 				} 
 
 				++pos;
-			} 
-			
-
-			//Tree bears cones
+			}
+			// tree bears cones
 			else if (pTree->cone==1)
 			{ 
-				// counting seeds
 				pTree->seedproduced+=pTree->seednewly_produced; 
 				pTree->seednewly_produced=0;
 
 				++pos;
 			}	
-			
 			else
 			{	
-				//Check if the substructe cone was set
-				//otherwise it is asked if the program should be interrupted
-				signed int abbrechenAgeingfehler; 
+				// check if cones were correctly assigned
+				signed int exitageingerror; 
 				
 				printf("\n A tree has no value in the substructure cone in function ageing \n"); 
 				printf("\n Continue the simulation with 1, stop it with any other key\n"); 
 
-				scanf("%d", &abbrechenAgeingfehler); 
+				scanf("%d", &exitageingerror); 
 				
-				if (abbrechenAgeingfehler!=1) 
+				if (exitageingerror!=1) 
 				{
 					printf("LAVESI was stopped after a failure in ageing.cpp\n\n");
 					exit(1);

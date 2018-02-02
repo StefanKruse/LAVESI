@@ -773,11 +773,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mortage);
                 }
 
-	strcpy(uebergabestring,"mjung");
-	parameter[0].mjung=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"mortyouth");
+	parameter[0].mortyouth=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mjung);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mortyouth);
                 }
 
 	strcpy(uebergabestring,"jugendmorteinflussexp");

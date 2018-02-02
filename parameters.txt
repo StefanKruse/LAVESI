@@ -235,7 +235,7 @@ dbrustheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slope
 mortbg=0.0001;						// (double 0-1) background mortality
 maximumage=609;						// (int) maximum tree age
 mortage=8.18785;						// (double) mortality factor if a tree exceeds the maximum age
-mjung=0.762855;						// (double) mortality factor for young individuals
+mortyouth=0.762855;						// (double) mortality factor for young individuals
 jugendmorteinflussexp=0.79295;		// (double) exponent determining duration time of youth mortality
 										//  <1==longer
 										//  >1==shorter

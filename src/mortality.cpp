@@ -129,8 +129,8 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 					}
 				}
 				
-				double sapl_mort_gmel	= parameter[0].mjung * pow(exp((-1.0 * pTree->height) + maxhg), parameter[0].jugendmorteinflussexp);
-				double sapl_mort_sib	= parameter[0].mjung * pow(exp((-1.0 * pTree->height) + maxhs), parameter[0].jugendmorteinflussexp);
+				double sapl_mort_gmel	= parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhg), parameter[0].jugendmorteinflussexp);
+				double sapl_mort_sib	= parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhs), parameter[0].jugendmorteinflussexp);
 				double age_mort		= parameter[0].mortage	* agesmort * (10.0 * parameter[0].mortbg);
 				double growth_mort	= parameter[0].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relwachstummorteinflussexp));
 				double dens_mort	= parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert; // Treedensity innerhalb eines Umkreises um den aktuellen Tree;
@@ -188,7 +188,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f", 
 						pTree->height, 
 						pTree->dbasalrel,pTree->dbrustrel,
-						parameter[0].mjung*pow(exp((-1.0*pTree->height)+maxhg),parameter[0].jugendmorteinflussexp),
+						parameter[0].mortyouth*pow(exp((-1.0*pTree->height)+maxhg),parameter[0].jugendmorteinflussexp),
 						parameter[0].mortage*(agesmort*(10.0*parameter[0].mortbg)), 
 						+ (1.0-pow(wachstumrel,parameter[0].relwachstummorteinflussexp)),
 						parameter[0].mdensity*heightnkugeleinfluss*pTree->densitywert, 
@@ -202,7 +202,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f", 
 						pTree->height, 
 						pTree->dbasalrel,pTree->dbrustrel,
-						parameter[0].mjung*pow(exp((-1.0*pTree->height)+maxhs),parameter[0].jugendmorteinflussexp),
+						parameter[0].mortyouth*pow(exp((-1.0*pTree->height)+maxhs),parameter[0].jugendmorteinflussexp),
 						parameter[0].mortage*(agesmort*(10.0*parameter[0].mortbg)), 
 						+ (1.0-pow(wachstumrel,parameter[0].relwachstummorteinflussexp)),
 						parameter[0].mdensity*heightnkugeleinfluss*pTree->densitywert, 

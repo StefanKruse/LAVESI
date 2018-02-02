@@ -21,7 +21,7 @@ void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tr
 
 			if (pTree->cone==1) // If a tree bears cones seeds will be produced.
 			{
-				pTree->seednewly_produced=(int) floor( parameter[0].seedprodfaktor	// seed production in dependence of a factor
+				pTree->seednewly_produced=(int) floor( parameter[0].seedprodfactor	// seed production in dependence of a factor
 												* pTree->height/100					// ... the tree's  height...
 												* pTree->dbasalrel					// ... the tree's current growth...
 												* (1.0-(1.0/(pTree->height/50))) );	// ... height.

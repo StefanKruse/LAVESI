@@ -195,7 +195,7 @@ using namespace std;
 		
 		// ... seed production, dispersal and pollination
 		int		coneage;
-		double	seedprodfaktor; 
+		double	seedprodfactor; 
 		double	seedflightrate;
 		int		dispersalmode; 
 		double 	seedtravelbreezeg;

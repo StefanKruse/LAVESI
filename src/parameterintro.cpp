@@ -410,11 +410,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].mortbg);
                 }
 
-	strcpy(uebergabestring,"seedprodfaktor");
-	parameter[0].seedprodfaktor=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seedprodfactor");
+	parameter[0].seedprodfactor=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].seedprodfaktor);
+                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].seedprodfactor);
                 }
 
 	strcpy(uebergabestring,"keimungsrate");

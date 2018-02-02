@@ -297,7 +297,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 			
 			///seed is on ground && random number < probability (0.8)
-			if (pSeed->imcone==false)
+			if (pSeed->incone==false)
 			{
 				if (zufallsz<parameter[0].seedfloormort) 
 				{
@@ -311,7 +311,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			}
 			
 			///seed in cone && random number < probability (0.8)
-			else if (pSeed->imcone==true)
+			else if (pSeed->incone==true)
 			{
 				if (zufallsz<parameter[0].seedconemort) 
 				{
@@ -327,9 +327,9 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			
 			else
 			{	
-				//safety procedure: has the variable imcone been set?
+				//safety procedure: has the variable incone been set?
 				signed int abbrechenmortalitaetfehler; 
-				printf("\n In the mortality determining function a seed has no value applied to the variable imcone\n"); 
+				printf("\n In the mortality determining function a seed has no value applied to the variable incone\n"); 
 				printf("\n To continue the simulation, press 1, stop it with any other key\n"); 
 				
 				scanf("%d", &abbrechenmortalitaetfehler); 
@@ -530,7 +530,7 @@ if(mcorevariant==1)
 														
 							pSeed->line=pTree->line;
 							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
-							pSeed->imcone=true;
+							pSeed->incone=true;
 							pSeed->gewicht=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
@@ -729,7 +729,7 @@ if(mcorevariant==2)
 							
 							pSeed->line=pTree->line;
 							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
-							pSeed->imcone=true;
+							pSeed->incone=true;
 							pSeed->gewicht=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
@@ -959,7 +959,7 @@ if(mcorevariant==3)
 							
 							pSeed->line=pTree->line;
 							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
-							pSeed->imcone=true;
+							pSeed->incone=true;
 							pSeed->gewicht=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source

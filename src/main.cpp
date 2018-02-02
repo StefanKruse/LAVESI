@@ -804,7 +804,7 @@ void finishSimulation()
 			int number_of_seeds_in_cone=0;
 			for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
 			{
-					if ((*pos)->imcone==true)
+					if ((*pos)->incone==true)
 					{
 						number_of_seeds_in_cone++;
 					}

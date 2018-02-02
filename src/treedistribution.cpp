@@ -150,7 +150,7 @@ void Seedin()
 					pSeed->namep=0;
 					pSeed->line=++parameter[0].lineakt;
 					pSeed->generation=0;
-					pSeed->imcone=false;
+					pSeed->incone=false;
 					pSeed->gewicht=1;
 					pSeed->age=0;
 					pSeed->longdispersed=false;

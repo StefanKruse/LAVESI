@@ -42,7 +42,7 @@ using namespace std;
 		int		namep;
 		int		line;
 		int		generation;
-		bool	imcone;
+		bool	incone;
 		double	gewicht;
 		int		age;
 		bool	longdispersed;

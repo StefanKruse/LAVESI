@@ -94,7 +94,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 				pSeed=(*pos);
 
 				///If Seed is in a cone
-				if (pSeed->imcone==true)
+				if (pSeed->incone==true)
 				{
 					double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 									
@@ -107,7 +107,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 						if(ratiorn>0.0)
 						{ // RN >0 BEGIN
 							
-							pSeed->imcone=false;
+							pSeed->incone=false;
 							
 							double dispersaldistance = 0;
 							double richtung=0.0;
@@ -333,7 +333,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 
 					
 					///If Seed is in a cone
-					if (pSeed->imcone==true)
+					if (pSeed->incone==true)
 					{
 						double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 										
@@ -346,7 +346,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 							if(ratiorn>0.0)
 							{ // RN > 0 BEGIN
 								
-								pSeed->imcone=false;
+								pSeed->incone=false;
 								
 								double dispersaldistance = 0;
 								double richtung=0.0;
@@ -581,7 +581,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 					
 						///Loop around all Seeds
 						///If Seed is in a cone
-						if (pSeed->imcone==true)
+						if (pSeed->incone==true)
 						{
 							double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 											
@@ -594,7 +594,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 								if(ratiorn>0.0)
 								{ // RN >0 BEGIN
 									
-									pSeed->imcone=false;
+									pSeed->incone=false;
 									
 									double dispersaldistance=0.0;
 									double richtung=0.0;

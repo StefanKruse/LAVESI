@@ -25,7 +25,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 			{
 				pSeed=(*pos);
 
-				if (pSeed->imcone==false)
+				if (pSeed->incone==false)
 				{ 
 				
 					// determine if the seed germinates, depending on the density around it and the litter layer
@@ -218,7 +218,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					}
 				} 
 				
-				else if (pSeed->imcone==true)
+				else if (pSeed->incone==true)
 				{
 					++pos;
 				}

@@ -116,7 +116,7 @@ void Savealllists(void)
 			pSeed_copy->line=pSeed->line;			
 			pSeed_copy->generation=pSeed->generation;
 			pSeed_copy->species=pSeed->species;
-			pSeed_copy->imcone=pSeed->imcone;		
+			pSeed_copy->incone=pSeed->incone;		
 			pSeed_copy->gewicht=pSeed->gewicht;	
 			pSeed_copy->age=pSeed->age;			
 			pSeed_copy->longdispersed=pSeed->longdispersed;	
@@ -546,7 +546,7 @@ void Restorealllists(void)
 			pSeed_copy->line=pSeed->line;			
 			pSeed_copy->generation=pSeed->generation;	
 			pSeed_copy->species=pSeed->species;
-			pSeed_copy->imcone=pSeed->imcone;		
+			pSeed_copy->incone=pSeed->incone;		
 			pSeed_copy->gewicht=pSeed->gewicht;	
 			pSeed_copy->age=pSeed->age;			
 			pSeed_copy->longdispersed=pSeed->longdispersed;	

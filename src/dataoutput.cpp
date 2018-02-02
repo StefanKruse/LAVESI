@@ -539,7 +539,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					pSeed=(*pos);
 					if ( (pSeed->xcoo>=xminwindow) && (pSeed->xcoo<=xmaxwindow) && (pSeed->ycoo>=yminwindow) && (pSeed->ycoo<=ymaxwindow) )
 					{ // Sector BEGIN
-						if (pSeed->imcone==true) 
+						if (pSeed->incone==true) 
                                                 {
                                                     seedconezahl++;
                                                 }

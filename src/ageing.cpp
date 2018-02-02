@@ -122,7 +122,6 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 				
 				printf("\n A tree has no value in the substructure cone in function ageing \n"); 
 				printf("\n Continue the simulation with 1, stop it with any other key\n"); 
-
 				scanf("%d", &exitageingerror); 
 				
 				if (exitageingerror!=1) 

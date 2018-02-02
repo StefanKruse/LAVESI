@@ -50,15 +50,15 @@ void Seedin()
 			int seednobuffer; 
 			if (parameter[0].yearswithseedintro<=0)
 			{
-				seednobuffer=parameter[0].etabbgpermanent;
+				seednobuffer=parameter[0].seedintronumberpermanent;
 			}
 			else
 			{
-				seednobuffer=parameter[0].etabbg;
+				seednobuffer=parameter[0].seedintronumber;
 			}
 			
 						
-			for (int n=0;n<seednobuffer;n++)//seednobuffer determines number of seeds (zB etabbg=1000 per year on the whole plot.)
+			for (int n=0;n<seednobuffer;n++)//seednobuffer determines number of seeds (zB seedintronumber=1000 per year on the whole plot.)
 			{
 				// calculate the landing site for each seed
 				double jseed, iseed;

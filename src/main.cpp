@@ -437,7 +437,7 @@ void Yearsteps()
 			// save the value read in from the parameter file
 			double incfac_buffer=parameter[0].incfac;
 			double densitywertmanipulatorexp_buffer=parameter[0].densitywertmanipulatorexp;
-			int etabbgpermanent_buffer=parameter[0].etabbgpermanent;
+			int seedintronumberpermanent_buffer=parameter[0].seedintronumberpermanent;
 
 			double tempdiffort_buffer=parameter[0].tempdiffort;
 			
@@ -473,7 +473,7 @@ void Yearsteps()
 					}
 					else if(parameteri==3)
 					{
-						parameter[0].etabbgpermanent=1000;
+						parameter[0].seedintronumberpermanent=1000;
 					}
 
 					cout << " starting simulation runs " << endl;
@@ -525,7 +525,7 @@ void Yearsteps()
 					// restore initial values
 					parameter[0].incfac=incfac_buffer;
 					parameter[0].densitywertmanipulatorexp=densitywertmanipulatorexp_buffer;
-					parameter[0].etabbgpermanent=etabbgpermanent_buffer;
+					parameter[0].seedintronumberpermanent=seedintronumberpermanent_buffer;
 						
 				}// parameter settings
 			

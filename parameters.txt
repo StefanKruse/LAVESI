@@ -104,11 +104,11 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
-seedintro=1;						// (int 0,1) Seed input to simulated plot(s)
-yearswithseedintro=10; 			// ... (int) Years of seed introduction at the beginning of each simulation
-etabbg=1000;						// ... (int) Number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
-seedintropermanent=0;				// (int) Should seeds permanently introduced 
-etabbgpermanent=10000;				// ... (int) if seedintropermanent==1 Number of seeds introduced per year and plot 
+seedintro=1;						// (int 0,1) seed input to simulated plot(s)
+yearswithseedintro=10; 			// ... (int) years of seed introduction at the beginning of each simulation
+seedintronumber=1000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+seedintropermanent=0;				// (int 0,1) should seeds permanently introduced 
+seedintronumberpermanent=10000;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) Plot position for the initial seed introduction
 										// 0==into all plots along a transect
 										// 1==only southernmost plot

@@ -481,18 +481,18 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedintropermanent)?"true":"false");
                 }
 		
-	strcpy(uebergabestring,"etabbg");
-	parameter[0].etabbg=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
+	strcpy(uebergabestring,"seedintronumber");
+	parameter[0].seedintronumber=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].etabbg);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumber);
                 }
 
-	strcpy(uebergabestring,"etabbgpermanent");
-	parameter[0].etabbgpermanent=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
+	strcpy(uebergabestring,"seedintronumberpermanent");
+	parameter[0].seedintronumberpermanent=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].etabbgpermanent);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
                 }
 	
 	strcpy(uebergabestring,"yearswithseedintro");

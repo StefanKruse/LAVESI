@@ -133,8 +133,8 @@ using namespace std;
 		int		yearswithseedintro;
 		bool	seedintropermanent;
 		int		seeddispmode;
-		int		etabbg;
-		int 	etabbgpermanent;
+		int		seedintronumber;
+		int 	seedintronumberpermanent;
 		bool	seedtravelbetween;
 		int		starttrees;	
 		

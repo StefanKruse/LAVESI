@@ -64,8 +64,8 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
   dy=0.0;
   I0kappa=0.0;
   pe=0.01;
-  C=parameter[0].GregoryC;
-  m=parameter[0].Gregorym;
+  C=parameter[0].pollengregoryc;
+  m=parameter[0].pollengregorym;
 		
   pName.clear();
   pName.shrink_to_fit();

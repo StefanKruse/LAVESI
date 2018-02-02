@@ -137,9 +137,8 @@ pollination=0;						// (int 0,1,2) allow pollen dispersal
 
 pollendirectionvariance=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
 pollenfall=0.126;					// (double) pollen fall velocity
-
-GregoryC=0.6; 						// (double) pollen dispersal parameter
-Gregorym=1.25;						// (double) pollen dispersal parameter
+pollengregoryc=0.6; 						// (double) pollen dispersal parameter
+pollengregorym=1.25;						// (double) pollen dispersal parameter
 
 // 1.5 -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;			// (double) Basal diameter influence for year's basal diameter growth

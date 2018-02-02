@@ -430,8 +430,8 @@ if(mcorevariant==1)
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
-			  double  C=parameter[0].GregoryC;
-			  double  m=parameter[0].Gregorym;
+			  double  C=parameter[0].pollengregoryc;
+			  double  m=parameter[0].pollengregorym;
 			  
 ///
 			  	vector<int> Vname; // moved here from the top of this file
@@ -445,7 +445,7 @@ if(mcorevariant==1)
 			list<seed*> newseed_list;
 			
 		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
-		I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+		I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 				// timers
 				int n_trees=0;
@@ -601,8 +601,8 @@ if(mcorevariant==2)
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
-			  double  C=parameter[0].GregoryC;
-			  double  m=parameter[0].Gregorym;
+			  double  C=parameter[0].pollengregoryc;
+			  double  m=parameter[0].pollengregorym;
 			  	vector<int> Vname;// moved here from the top of this file
 				vector<double> Vthdpth;
 ///
@@ -616,7 +616,7 @@ if(mcorevariant==2)
 			}
 
 			richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
-			I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+			I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 
 			// initialize the info for each of the thread
@@ -804,8 +804,8 @@ if(mcorevariant==3)
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
-			  double  C=parameter[0].GregoryC;
-			  double  m=parameter[0].Gregorym;
+			  double  C=parameter[0].pollengregoryc;
+			  double  m=parameter[0].pollengregorym;
 			  
 			  	vector<int> Vname;//// moved here from the top of this file
 				vector<double> Vthdpth;
@@ -835,7 +835,7 @@ if(mcorevariant==3)
 
 				
 		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
-			    I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;
+			    I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;
 
 			// initialize the info for each of the thread
 			int thread_count = omp_get_num_threads();

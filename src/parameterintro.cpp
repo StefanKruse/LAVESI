@@ -920,11 +920,11 @@ void Parametereinlesen(void)
 	strcpy(uebergabestring,"pollenfall");
 	parameter[0].pollenfall=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
 	
-	strcpy(uebergabestring,"GregoryC");
-	parameter[0].GregoryC=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"pollengregoryc");
+	parameter[0].pollengregoryc=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
 	
-	strcpy(uebergabestring,"Gregorym");
-	parameter[0].Gregorym=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"pollengregorym");
+	parameter[0].pollengregorym=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
 	
 	strcpy(uebergabestring, "computationtimevis");
 	parameter[0].computationtimevis=(bool) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);

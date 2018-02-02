@@ -209,7 +209,7 @@ using namespace std;
 		int 	pollination;
 		int 	pollenDistdensplot;
 		double 	pollenfall;
-		double 	Gregorym,GregoryC;
+		double 	pollengregorym,pollengregoryc;
 		
 		// ... germination		
 		double	keimungsrate; 

@@ -17,9 +17,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
 
-	// Wachstum
+	// Growth
 	double start_time_wachstum = omp_get_wtime();
-	Wachstum( &parameter[0], yearposition, world_tree_list, world_weather_list);
+	Growth( &parameter[0], yearposition, world_tree_list, world_weather_list);
 	double end_time_wachstum = omp_get_wtime();
 
 	// seedausbreitung

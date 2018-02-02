@@ -519,7 +519,7 @@ void Parametereinlesen(void)
 		// Growth
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                printf("\n\n\t Wachstum\n\n");
+                printf("\n\n\t Growth\n\n");
         }
 
 	strcpy(uebergabestring,"gdbasalfacqgmel");

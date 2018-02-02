@@ -681,15 +681,15 @@ void passWeather()
 			
 			//***german:
 			//????
-			/* da Julindex aufgrund von Fkt Julitemp-realisiertes Max-Wachstum gefittet wurde, ist das reale Wachstum schon eingeflossen.
-			Da nur dimensionsloser Faktor gewünscht für spätere Berechnung des Wachstums hier prozentualer Wert ermittelt zwischen minimalem und maximalem Wachstum, indem von dem berechneten Wert (julindexg/s) 
-			min. Wachstum abgezogen wird und dann durch die Spanne max. - min. Wachstum geteilt wird. Daten sind aus Yamal-R-Datei mit gewichtetem CRUTS-Datensatz*/
+			/* da Julindex aufgrund von Fkt Julitemp-realisiertes Max-Growth gefittet wurde, ist das reale Growth schon eingeflossen.
+			Da nur dimensionsloser Faktor gewünscht für spätere Berechnung des Growths hier prozentualer Wert ermittelt zwischen minimalem und maximalem Growth, indem von dem berechneten Wert (julindexg/s) 
+			min. Growth abgezogen wird und dann durch die Spanne max. - min. Growth geteilt wird. Daten sind aus Yamal-R-Datei mit gewichtetem CRUTS-Datensatz*/
 			weather_list[iweather]->weatherfactorg=(double) (julindexg-0.108)/(0.1771-0.108); 
 			weather_list[iweather]->weatherfactorming=(double) (julindexming-0.108)/(0.1771-0.108);  
 			weather_list[iweather]->weatherfactors=(double) (julindexs-0.168)/(0.305-0.168); 
 			weather_list[iweather]->weatherfactormins=(double) (julindexmins-0.168)/(0.305-0.168);  
 			
-			// Test wegen BasalDwachstum, bei Wachstum, Mort und Etab gucken, dass direkt das maxwaxchstumpro jahr einflieszt daher auch den rest ausgeblendet
+			// Test wegen BasalDwachstum, bei Growth, Mort und Etab gucken, dass direkt das maxwaxchstumpro jahr einflieszt daher auch den rest ausgeblendet
 			// Langfristige Mittelwerte
 			// weatherkennwerte
 			// 

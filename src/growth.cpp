@@ -34,7 +34,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*> &weather_list)
 									-weather_list[yearposition]->weatherfactormins)
 									/((double) treerows))*pTree->ycoo 
 								+weather_list[yearposition]->weatherfactormins)
-								* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);	// Angepasster thawing_depthinfluence für Lsibirica, damit analog zu Lgmelinii 20% des Wachstum bei 20% der minimal benötigten thawing_depth stattfinden
+								* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);	// Angepasster thawing_depthinfluence für Lsibirica, damit analog zu Lgmelinii 20% des Growth bei 20% der minimal benötigten thawing_depth stattfinden
 			}		
 		}
 		else
@@ -69,7 +69,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*> &weather_list)
 			else if(pTree->species==2)
 			{
 				maxbw_help = exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal)*
-							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);	// Angepasster thawing_depthinfluence für Lsibirica, damit analog zu Lgmelinii 20% des Wachstum bei 20% der minimal benötigten thawing_depth stattfinden
+							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);	// Angepasster thawing_depthinfluence für Lsibirica, damit analog zu Lgmelinii 20% des Growth bei 20% der minimal benötigten thawing_depth stattfinden
 			}
 		}
 		else
@@ -191,7 +191,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
  * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
-void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
+void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
 {
 	
 	int aktort=0;
@@ -239,7 +239,7 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 			//Formeln beruhen auf reinen Annahmen, bzw. Ableitung von Beobachtungen. 
 			//Hier wird das aktuelle Basalwachstum durch die Eigendimension nochmals verstärkt. 
 			//Dadurch soll Ausgleichswachstum representiert werden. 
-			//Es wirkt sich dann auch das relative Wachstum und darauf aufbauende Prozesse aus.
+			//Es wirkt sich dann auch das relative Growth und darauf aufbauende Prozesse aus.
 					
 			if (parameter[0].relwachstumeinfluss==0)
 			{
@@ -321,13 +321,13 @@ void Wachstum(struct Parameter *parameter, int yearposition, vector<list<Tree*> 
 				printf("\n In growth.cpp a tree was not assigned a new height value.\n");
 				printf("\n continue typing 1, press any other key to exit\n");
 				
-				//printf("\n In der Wachstumsfunktion hat ein Tree keinen Wert in der Variable pTree->height\n"); 
+				//printf("\n In der Growthsfunktion hat ein Tree keinen Wert in der Variable pTree->height\n"); 
 				//printf("\n Weiter mit 1, beenden mit irgendeiner Eingabe\n"); 
 				scanf("%d", &abbrechenwachstumfehler); 
 				if (abbrechenwachstumfehler!=1) 
 				{
 					printf("LAVESI was exited after an error occuring in growth.cccp\n");
-					//printf("LaVeSi wurde nach einem Fehler in der Wachstumsfunktion beendet\n\n");
+					//printf("LaVeSi wurde nach einem Fehler in der Growthsfunktion beendet\n\n");
 					exit(1);
 				}
 				delete pTree;

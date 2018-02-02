@@ -3,7 +3,7 @@ void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vector<vec
 void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list);
 void Treedistribution( struct Parameter *parameter, int stringlengthmax);
 void Environmentupdate( struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list);
-void Wachstum( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list);
+void Growth( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list);
 void seedausbreitung(int Jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list);
 void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list);
 void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);

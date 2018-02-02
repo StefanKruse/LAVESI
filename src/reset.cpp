@@ -51,8 +51,8 @@ void Savealllists(void)
 			pTree_copy->yr_of_dying=pTree->yr_of_dying;		
 			pTree_copy->dbasal=pTree->dbasal;				
 			pTree_copy->dbasalrel=pTree->dbasalrel;			
-			pTree_copy->dbrust=pTree->dbrust;
-			pTree_copy->dbrustrel=pTree->dbrustrel;		
+			pTree_copy->dbreast=pTree->dbreast;
+			pTree_copy->dbreastrel=pTree->dbreastrel;		
 			pTree_copy->height=pTree->height;
 			pTree_copy->age=pTree->age;
 			pTree_copy->cone=pTree->cone;
@@ -482,8 +482,8 @@ void Restorealllists(void)
 			pTree_copy->yr_of_dying=pTree->yr_of_dying;		
 			pTree_copy->dbasal=pTree->dbasal;				
 			pTree_copy->dbasalrel=pTree->dbasalrel;			
-			pTree_copy->dbrust=pTree->dbrust;
-			pTree_copy->dbrustrel=pTree->dbrustrel;		
+			pTree_copy->dbreast=pTree->dbreast;
+			pTree_copy->dbreastrel=pTree->dbreastrel;		
 			pTree_copy->height=pTree->height;
 			pTree_copy->age=pTree->age;
 			pTree_copy->cone=pTree->cone;

@@ -102,8 +102,8 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->generation=pSeed->generation;
 								pTree->dbasal=maxbasalwachstum;
 								pTree->dbasalrel=1.0;
-								pTree->dbrust=0.0;
-								pTree->dbrustrel=1.0;
+								pTree->dbreast=0.0;
+								pTree->dbreastrel=1.0;
 								
 								if (parameter[0].allometryfunctiontype==1) 
 								{
@@ -161,8 +161,8 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->generation=pSeed->generation;
 								pTree->dbasal=maxbasalwachstum;
 								pTree->dbasalrel=1.0;
-								pTree->dbrust=0.0;
-								pTree->dbrustrel=1.0;
+								pTree->dbreast=0.0;
+								pTree->dbreastrel=1.0;
 								
 								if (parameter[0].allometryfunctiontype==1) 
 								{

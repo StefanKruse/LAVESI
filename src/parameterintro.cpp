@@ -543,25 +543,25 @@ void Parameterinput(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalconstgmel);
                 }
 
-	strcpy(uebergabestring,"gdbrustfacqgmel");
-	parameter[0].gdbrustfacqgmel= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"gdbreastfacqgmel");
+	parameter[0].gdbreastfacqgmel= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].gdbrustfacqgmel);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].gdbreastfacqgmel);
                 }		
 		
-	strcpy(uebergabestring,"gdbrustfacgmel");
-	parameter[0].gdbrustfacgmel= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"gdbreastfacgmel");
+	parameter[0].gdbreastfacgmel= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacgmel);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbreastfacgmel);
                 }
 
-	strcpy(uebergabestring,"gdbrustconstgmel");
-	parameter[0].gdbrustconstgmel= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"gdbreastconstgmel");
+	parameter[0].gdbreastconstgmel= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstgmel);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbreastconstgmel);
                 }		
 		
 	strcpy(uebergabestring,"gdbasalfacqsib");
@@ -585,25 +585,25 @@ void Parameterinput(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbasalconstsib);
                 }		
 
-	strcpy(uebergabestring,"gdbrustfacqsib");
-	parameter[0].gdbrustfacqsib= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"gdbreastfacqsib");
+	parameter[0].gdbreastfacqsib= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacqsib);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbreastfacqsib);
                 }		
 		
-	strcpy(uebergabestring,"gdbrustfacsib");
-	parameter[0].gdbrustfacsib= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"gdbreastfacsib");
+	parameter[0].gdbreastfacsib= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustfacsib);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbreastfacsib);
                 }
 
-	strcpy(uebergabestring,"gdbrustconstsib");
-	parameter[0].gdbrustconstsib= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"gdbreastconstsib");
+	parameter[0].gdbreastconstsib= Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbrustconstsib);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].gdbreastconstsib);
                 }	
 		
 	strcpy(uebergabestring,"basalinfluenceoldyoung");
@@ -719,18 +719,18 @@ void Parameterinput(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightalloexp);
                 }
 
-	strcpy(uebergabestring,"dbrustheightalloslope");
-	parameter[0].dbrustheightalloslope=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"dbreastheightalloslope");
+	parameter[0].dbreastheightalloslope=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightalloslope);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbreastheightalloslope);
                 }
 
-	strcpy(uebergabestring,"dbrustheightalloexp");
-	parameter[0].dbrustheightalloexp=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"dbreastheightalloexp");
+	parameter[0].dbreastheightalloexp=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightalloexp);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbreastheightalloexp);
                 }
 
 	strcpy(uebergabestring,"dbasalheightslopenonlin");
@@ -740,11 +740,11 @@ void Parameterinput(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightslopenonlin);
                 }
 	
-	strcpy(uebergabestring,"dbrustheightslopenonlin");
-	parameter[0].dbrustheightslopenonlin=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	strcpy(uebergabestring,"dbreastheightslopenonlin");
+	parameter[0].dbreastheightslopenonlin=Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightslopenonlin);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbreastheightslopenonlin);
                 }
 
 		// Mortality

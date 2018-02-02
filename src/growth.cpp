@@ -94,12 +94,12 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*> &weather_list)
 /****************************************************************************************//**
  * \brief calculate min. possible basal growth
  *
- * either taken from just set to weather_list[yearposition]->maxbrustwachstumjahr \n
+ * either taken from just set to weather_list[yearposition]->maxbreastwachstumjahr \n
  * or if transekts are calculated calculated out of weather_list[yearposition]->maxbasalwachstumjahrmin 
  * and tree position in north-south transekt
  *
  *******************************************************************************************/
-double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
+double getMaxbreastwachstum(int yearposition,  vector<Weather*> &weather_list)
 {	
 	double maxbrw_help = 0;
 	//If it is switched on, the latest growth performance is calculated in dependence of the coordinate.
@@ -113,7 +113,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 		{
 			if(pTree->species==1)
 			{
-				maxbrw_help = exp(parameter[0].gdbrustconstgmel+parameter[0].gdbrustfacgmel*pTree->dbrust+parameter[0].gdbrustfacqgmel*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help = exp(parameter[0].gdbreastconstgmel+parameter[0].gdbreastfacgmel*pTree->dbreast+parameter[0].gdbreastfacqgmel*pTree->dbreast*pTree->dbreast)*
 								(((weather_list[yearposition]->weatherfactorg
 									-weather_list[yearposition]->weatherfactorming)
 									/((double) treerows))*pTree->ycoo 
@@ -122,7 +122,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 			}
 			else if(pTree->species==2)
 			{
-				maxbrw_help=exp(parameter[0].gdbrustconstsib+parameter[0].gdbrustfacsib*pTree->dbrust+parameter[0].gdbrustfacqsib*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help=exp(parameter[0].gdbreastconstsib+parameter[0].gdbreastfacsib*pTree->dbreast+parameter[0].gdbreastfacqsib*pTree->dbreast*pTree->dbreast)*
 								(((weather_list[yearposition]->weatherfactors
 									-weather_list[yearposition]->weatherfactormins)
 									/((double) treerows))*pTree->ycoo 
@@ -134,7 +134,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 		{
 			if(pTree->species==1)
 			{
-				maxbrw_help = exp(parameter[0].gdbrustconstgmel+parameter[0].gdbrustfacgmel*pTree->dbrust+parameter[0].gdbrustfacqgmel*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help = exp(parameter[0].gdbreastconstgmel+parameter[0].gdbreastfacgmel*pTree->dbreast+parameter[0].gdbreastfacqgmel*pTree->dbreast*pTree->dbreast)*
 								(((weather_list[yearposition]->weatherfactorg
 									-weather_list[yearposition]->weatherfactorming)
 									/((double) treerows))*pTree->ycoo 
@@ -142,7 +142,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 			}
 			else if(pTree->species==2)
 			{
-				maxbrw_help=exp(parameter[0].gdbrustconstsib+parameter[0].gdbrustfacsib*pTree->dbrust+parameter[0].gdbrustfacqsib*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help=exp(parameter[0].gdbreastconstsib+parameter[0].gdbreastfacsib*pTree->dbreast+parameter[0].gdbreastfacqsib*pTree->dbreast*pTree->dbreast)*
 								(((weather_list[yearposition]->weatherfactors
 									-weather_list[yearposition]->weatherfactormins)
 									/((double) treerows))*pTree->ycoo 
@@ -156,12 +156,12 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 		{
 			if(pTree->species==1)
 			{
-				maxbrw_help = exp(parameter[0].gdbrustconstgmel+parameter[0].gdbrustfacgmel*pTree->dbrust+parameter[0].gdbrustfacqgmel*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help = exp(parameter[0].gdbreastconstgmel+parameter[0].gdbreastfacgmel*pTree->dbreast+parameter[0].gdbreastfacqgmel*pTree->dbreast*pTree->dbreast)*
 							weather_list[yearposition]->weatherfactorg* (((double) pTree->thawing_depthinfluence)/100 );
 			}
 			else if(pTree->species==2)
 			{
-				maxbrw_help = exp(parameter[0].gdbrustconstsib+parameter[0].gdbrustfacsib*pTree->dbrust+parameter[0].gdbrustfacqsib*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help = exp(parameter[0].gdbreastconstsib+parameter[0].gdbreastfacsib*pTree->dbreast+parameter[0].gdbreastfacqsib*pTree->dbreast*pTree->dbreast)*
 							weather_list[yearposition]->weatherfactors* ((((double) pTree->thawing_depthinfluence*0.8)/100 )-0.6);
 			}
 		}
@@ -169,12 +169,12 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
 		{
 			if(pTree->species==1)
 			{
-				maxbrw_help = exp(parameter[0].gdbrustconstgmel+parameter[0].gdbrustfacgmel*pTree->dbrust+parameter[0].gdbrustfacqgmel*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help = exp(parameter[0].gdbreastconstgmel+parameter[0].gdbreastfacgmel*pTree->dbreast+parameter[0].gdbreastfacqgmel*pTree->dbreast*pTree->dbreast)*
 							weather_list[yearposition]->weatherfactorg;
 			}
 			else if(pTree->species==2)
 			{
-				maxbrw_help = exp(parameter[0].gdbrustconstsib+parameter[0].gdbrustfacsib*pTree->dbrust+parameter[0].gdbrustfacqsib*pTree->dbrust*pTree->dbrust)*
+				maxbrw_help = exp(parameter[0].gdbreastconstsib+parameter[0].gdbreastfacsib*pTree->dbreast+parameter[0].gdbreastfacqsib*pTree->dbreast*pTree->dbreast)*
 							weather_list[yearposition]->weatherfactors;
 			}	
 		}
@@ -188,7 +188,7 @@ double getMaxbrustwachstum(int yearposition,  vector<Weather*> &weather_list)
  *
  * basalwachstum = maxbasalwachstum * densitywert * thawing_depthinfluence/100;	\n
  * basalwachstum = basalwachstum + basalwachstum * basalinfluenceoldyoung * dbasal; \n
- * brustwachstum = maxbrustwachstum * densitywert * thawing_depthinfluence)/100;  \n
+ * breastwachstum = maxbreastwachstum * densitywert * thawing_depthinfluence)/100;  \n
  *
  *******************************************************************************************/
 void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
@@ -254,35 +254,35 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 									*pTree->dbasal));
 			}
 
-			double maxbrustwachstum=0;
-			double brustwachstum=0;
+			double maxbreastwachstum=0;
+			double breastwachstum=0;
 
 			if (pTree->height>=130.0)
 			{ 
-				maxbrustwachstum = getMaxbrustwachstum(yearposition, weather_list);
+				maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list);
 
-				brustwachstum = maxbrustwachstum
+				breastwachstum = maxbreastwachstum
 										* ( (double) pTree->buffer/* GELOESCHT "/3" */ ) 
 										* (1.0-pTree->densitywert);
 										
-				if (brustwachstum<0.0)
+				if (breastwachstum<0.0)
 				{
-					brustwachstum=0.0;
+					breastwachstum=0.0;
 				}
 				
 				if (pTree->growing==true)
 				{
-					pTree->dbrust+= brustwachstum;
-					//pTree->Dbrustliste.push_back(brustwachstum);
+					pTree->dbreast+= breastwachstum;
+					//pTree->Dbreastliste.push_back(breastwachstum);
 				}
 
 				if (parameter[0].relgrowthinfluence==0)
 				{
-					pTree->dbrustrel=1.0;
+					pTree->dbreastrel=1.0;
 				}		
 				else if (parameter[0].relgrowthinfluence==1)
 				{
-					pTree->dbrustrel=brustwachstum/maxbrustwachstum;
+					pTree->dbreastrel=breastwachstum/maxbreastwachstum;
 				}
 			} 
 			
@@ -303,11 +303,11 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 			{
 				if (parameter[0].allometryfunctiontype==1)
 				{
-					pTree->height= parameter[0].dbrustheightalloslope * pow(pTree->dbrust, parameter[0].dbrustheightalloexp) + 130.0;
+					pTree->height= parameter[0].dbreastheightalloslope * pow(pTree->dbreast, parameter[0].dbreastheightalloexp) + 130.0;
 				}
 				else 
 				{
-					pTree->height= pow( (parameter[0].dbrustheightslopenonlin*pow(pTree->dbrust,0.5)), 2)+130.0; 
+					pTree->height= pow( (parameter[0].dbreastheightslopenonlin*pow(pTree->dbreast,0.5)), 2)+130.0; 
 				}
 			}
 			else

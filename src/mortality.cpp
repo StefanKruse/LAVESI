@@ -50,7 +50,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 				}
 				else 
 				{
-					wachstumrel=pTree->dbrustrel;
+					wachstumrel=pTree->dbreastrel;
 				}
 				
 				// Competition effect:
@@ -187,7 +187,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 				{
 						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f", 
 						pTree->height, 
-						pTree->dbasalrel,pTree->dbrustrel,
+						pTree->dbasalrel,pTree->dbreastrel,
 						parameter[0].mortyouth*pow(exp((-1.0*pTree->height)+maxhg),parameter[0].mortyouthinfluenceexp),
 						parameter[0].mortage*(agesmort*(10.0*parameter[0].mortbg)), 
 						+ (1.0-pow(wachstumrel,parameter[0].relgrowthmortinfluenceexp)),
@@ -201,7 +201,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 				{
 						printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f", 
 						pTree->height, 
-						pTree->dbasalrel,pTree->dbrustrel,
+						pTree->dbasalrel,pTree->dbreastrel,
 						parameter[0].mortyouth*pow(exp((-1.0*pTree->height)+maxhs),parameter[0].mortyouthinfluenceexp),
 						parameter[0].mortage*(agesmort*(10.0*parameter[0].mortbg)), 
 						+ (1.0-pow(wachstumrel,parameter[0].relgrowthmortinfluenceexp)),

@@ -82,7 +82,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				// Basal area as population size identifier
 				if(pTree->height>=130)
 				{
-					basalarea += ( M_PI * pow((pTree->dbrust/2),2) );
+					basalarea += ( M_PI * pow((pTree->dbreast/2),2) );
 					stemcount++;
 				}
 			
@@ -102,9 +102,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					meantreeage+=(double) pTree->age;
 				}
 				
-				if (pTree->dbrust>0)
+				if (pTree->dbreast>0)
 				{
-					breastdiameter=breastdiameter+pTree->dbrust;
+					breastdiameter=breastdiameter+pTree->dbreast;
 					breastdiametercount++;
 				}
 
@@ -727,7 +727,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "%d;", pTree->name);
 						fprintf(filepointer, "%d;", pTree->namem);
 						fprintf(filepointer, "%4.4f;", pTree->dbasal);
-						fprintf(filepointer, "%4.4f;", pTree->dbrust);
+						fprintf(filepointer, "%4.4f;", pTree->dbreast);
 						fprintf(filepointer, "%4.4f;", pTree->height);
 						fprintf(filepointer, "%d;", pTree->age);
 						fprintf(filepointer, "%4.4f;", pTree->xcoo);
@@ -792,7 +792,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "%d;", jahr);
 						fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 						fprintf(filepointer, "%4.4f;", pTree->dbasal);
-						fprintf(filepointer, "%4.4f;", pTree->dbrust);
+						fprintf(filepointer, "%4.4f;", pTree->dbreast);
 						fprintf(filepointer, "%4.4f;", pTree->height);
 						fprintf(filepointer, "%d;", pTree->age);
 						fprintf(filepointer, "%4.4f;", pTree->xcoo);
@@ -861,7 +861,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "Art;");
 				fprintf(filepointer, "height;");
 				fprintf(filepointer, "Dbasal;");
-				fprintf(filepointer, "Dbrust;");
+				fprintf(filepointer, "Dbreast;");
 				fprintf(filepointer, "age;");
 				fprintf(filepointer, "cone;");
 				fprintf(filepointer, "coneheight;");
@@ -905,7 +905,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", pTree->species);
 				fprintf(filepointer, "%4.4f;", pTree->height);
 				fprintf(filepointer, "%4.4f;", pTree->dbasal);
-				fprintf(filepointer, "%4.4f;", pTree->dbrust);
+				fprintf(filepointer, "%4.4f;", pTree->dbreast);
 				fprintf(filepointer, "%d;", pTree->age);
 				fprintf(filepointer, "%d;", pTree->cone);
 				fprintf(filepointer, "%4.4f;", pTree->coneheight);

@@ -260,7 +260,7 @@ void TreesIni(int maximal_word_length)
 				
 				double ybuffer,ycoobuf, xbuffer,xcoobuf;
 				int conebuf, agebuf;
-				double heightbuf, dbasalbuf , dbrustbuf;
+				double heightbuf, dbasalbuf , dbreastbuf;
 				
 				// ignoring the header the contents are appended to the tree array line by line
 				while(fgets(puffer,maximal_word_length,f) !=NULL)
@@ -274,7 +274,7 @@ void TreesIni(int maximal_word_length)
 						xcoobuf=xbuffer;
 						heightbuf=strtod(strtok(NULL, ";"),NULL);
 						dbasalbuf=strtod(strtok(NULL, ";"),NULL);
-						dbrustbuf=strtod(strtok(NULL, ";"),NULL);
+						dbreastbuf=strtod(strtok(NULL, ";"),NULL);
 						sscanf(strtok(NULL, ";"), "%d", &conebuf);
 						sscanf(strtok(NULL, ";"), "%d", &agebuf);
 
@@ -293,8 +293,8 @@ void TreesIni(int maximal_word_length)
 						pTree->yr_of_establishment=0;
 						pTree->dbasal=dbasalbuf;
 						pTree->dbasalrel=1.0;
-						pTree->dbrust=dbrustbuf;
-						pTree->dbrustrel=1.0;
+						pTree->dbreast=dbreastbuf;
+						pTree->dbreastrel=1.0;
 						pTree->height=heightbuf;
 						pTree->age=agebuf; 
 						pTree->cone=conebuf;				

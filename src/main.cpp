@@ -672,7 +672,7 @@ void initialiseMaps()
 			pEvaluation->maxincrementbasalarea=0.0;
 			pEvaluation->countermaxincrementbasalarea=0;
 			pEvaluation->yearofturningpoint=-9999;
-			pEvaluation->saettigungsjahr=-9999;
+			pEvaluation->yearofequilibrium=-9999;
 			pEvaluation->nachyearofturningpoint=false;
 			//End growth stage calculation
 			//Start general values

@@ -297,7 +297,7 @@ using namespace std;
 		double	maxincrementbasalarea;		
 		int		countermaxincrementbasalarea;
 		int		yearofturningpoint;					
-		int		saettigungsjahr;			
+		int		yearofequilibrium;			
 		bool	nachyearofturningpoint;					
 		vector<int> nheight0b40liste;
 		vector<double> nheight0b40runmeanliste;

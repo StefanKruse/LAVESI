@@ -250,9 +250,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				// after the turning point is reached, the saturation of the system is reached as soon as the slope becomes negative
 				else 
 				{
-					if ( (slopediff<0.0) && (pEvaluation->saettigungsjahr==-9999) )
+					if ( (slopediff<0.0) && (pEvaluation->yearofequilibrium==-9999) )
 					{
-						pEvaluation->saettigungsjahr=jahr;
+						pEvaluation->yearofequilibrium=jahr;
 					}
 				}
 				
@@ -574,7 +574,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%6.4f;", pEvaluation->meantreeheightliste[pEvaluation->meantreeheightliste.size()-1]);
 				fprintf(filepointer, "%6.4f;", pEvaluation->meantreeageliste[pEvaluation->meantreeageliste.size()-1]);
 				fprintf(filepointer, "%d;", pEvaluation->yearofturningpoint);
-				fprintf(filepointer, "%d;", pEvaluation->saettigungsjahr);
+				fprintf(filepointer, "%d;", pEvaluation->yearofequilibrium);
 				fprintf(filepointer, "%d;", ageg0);
 				fprintf(filepointer, "%d;", ages0);
 				fprintf(filepointer, "%d;", ageg1);

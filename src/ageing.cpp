@@ -1,21 +1,18 @@
 using namespace std;
 
-
 /****************************************************************************************//**
  * \brief ageing of seeds and trees
  *
- * 1. seed ageing and mortality of seeds>3 years
+ * 1. seed ageing and mortality of seeds reach their maximum age
  * 2. ageing of trees
  * 3. calculate maturation height of trees, that don't have one yet
  * 4. if tree is taller than its maturation height it grows cones
  * 5. if tree has cones already
  *
  *******************************************************************************************/
-
  
 void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list)
 {
-
 	for (vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 
 		list<Seed*>& seed_list = *posw;
@@ -25,13 +22,13 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 			pSeed=(*pos);
 			pSeed->age++;
 			
-			///seeds older than 2 years (L.gmelinii) and 10 years (L.sibirica) die
-			if ((pSeed->species==1)&&(pSeed->age>parameter[0].gmelseedmaxage))
+			// seeds older than gmelseedmaxage years (L.gmelinii) and 10 years (L.sibirica) die
+			if ((pSeed->species==1) && (pSeed->age>parameter[0].gmelseedmaxage))
 			{
 				delete pSeed;
 				pos=seed_list.erase(pos);
 			}
-			else if ((pSeed->species==2)&&(pSeed->age>10)) 
+			else if ((pSeed->species==2) && (pSeed->age>10)) 
 			{
 				delete pSeed;
 				pos=seed_list.erase(pos);
@@ -44,7 +41,6 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 	}
 
 	int mat_age_length=183; // length of array maturationheight
-
 	// height values in percent (0-99) computed using R
 	double maturationheight[]={
 								200,		201,	202,	203,	204,	205,	206,	207,	208,	209,	210,	
@@ -66,9 +62,6 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 								2958,		3434,	4100,	5100,	6767,	10100,	20100	
 							};
 
-
-
-
 	for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw)
 	{ 
 		list<Tree*>& tree_list = *posw;
@@ -78,31 +71,27 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 			pTree=(*pos);
 			pTree->age++;
 
-			//If tree does not bear cones
 			if (pTree->cone==0)
 			{ 
-				
-				//...and does not have a maturation height assigned to it
 				if (pTree->coneheight==99999)
 				{  
 		
 					// trees reaching the maturation age are assigned a minimum height value for them to bear cones
-					// check if tree is old enough to get cones
 					if (pTree->age>parameter[0].coneage)
 					{
 					
 						// calculate random position in the array of maturation heights defined earlier
 						// ... in this there are values between 0 and 182 (corresp. to (0,1) )
-						int anteil= 0 + (int) floor( ( (mat_age_length-1) * rand()/(RAND_MAX + 1.0)) );
+						int fraction= 0 + (int) floor( ( (mat_age_length-1) * rand()/(RAND_MAX + 1.0)) );
 						
 						// possibility for a tree <2m to maturate
-						if (anteil==0)
+						if (fraction==0)
 						{ 
 							pTree->coneheight= 100 +( (double) 100*rand()/(RAND_MAX + 1.0));
 						}
 						else
 						{
-							pTree->coneheight=maturationheight[anteil]; 
+							pTree->coneheight=maturationheight[fraction]; 
 						}
 					}
 				}

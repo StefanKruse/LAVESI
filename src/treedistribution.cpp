@@ -78,14 +78,14 @@ void Seedin()
 			
 					do
 					{
-						double anteil;
+						double fraction;
 				
 						do
 						{
-							anteil= 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+							fraction= 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 
-						} while (anteil<=0.0);
-						dispersaldistance= (log(anteil)/(-0.2))/parameter[0].distanceratio;
+						} while (fraction<=0.0);
+						dispersaldistance= (log(fraction)/(-0.2))/parameter[0].distanceratio;
 
 					} while ( (dispersaldistance>= (double) (treerows-1)) || (dispersaldistance<0.0) );
 

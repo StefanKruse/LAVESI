@@ -896,7 +896,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 		std::ostringstream ss;
 		string item;
 		
-		for (int t=0;t<parameter[0].simdauer;t++)
+		for (int t=0;t<parameter[0].simduration;t++)
 		{ // year step iteration begin:
 			
 			cntr=0;

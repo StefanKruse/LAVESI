@@ -393,7 +393,7 @@ void Spinupphase()
 
 
 /****************************************************************************************//**
- * \brief Yearsteps - run through the simulation for all years (simdauer)
+ * \brief Yearsteps - run through the simulation for all years (simduration)
  *
  * 
  * initialise yearly steps and call vegetationDynamics
@@ -404,7 +404,7 @@ void Yearsteps()
 {
 		printf("\n\nstarting yearly time steps...\n");
 	
-		for (int t=0;t<parameter[0].simdauer;t++)
+		for (int t=0;t<parameter[0].simduration;t++)
 		{ 
 			parameter[0].ivort++;
 
@@ -414,7 +414,7 @@ void Yearsteps()
 
 			if (parameter[0].yearlyvis ==true) 
 			{
-				printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
+				printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simduration);
 			}
 			
 			
@@ -485,9 +485,9 @@ void Yearsteps()
 					cout << "           Lists restored!!" << endl;
 							
 					printf("\n\n begin the simulation run time steps...\n");
-					cout << "     Length of a simulation=" << ((parameter[0].simdauer-(2011-parameter[0].resetyear))+1) << endl;
+					cout << "     Length of a simulation=" << ((parameter[0].simduration-(2011-parameter[0].resetyear))+1) << endl;
 					
-					for (int t=((parameter[0].simdauer-(2011-parameter[0].resetyear))+1);t<parameter[0].simdauer;t++)
+					for (int t=((parameter[0].simduration-(2011-parameter[0].resetyear))+1);t<parameter[0].simduration;t++)
 					{
 						
 						parameter[0].ivort++;
@@ -499,7 +499,7 @@ void Yearsteps()
 
 						if (parameter[0].yearlyvis==true)
 						{
-							printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simdauer);
+							printf("\nSites pro Ort\tJahr\tZeitschritt\tSimulationsdauer\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simduration);
 						}						
 						else 
 						{
@@ -944,11 +944,11 @@ int main()
 		/// calculation of the starting year of the simulation
 		if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
 		{	
-			parameter[0].startjahr=2014-parameter[0].simdauer; 
+			parameter[0].startjahr=2014-parameter[0].simduration; 
 		}
 		else
 		{
-			parameter[0].startjahr=2011-parameter[0].simdauer;
+			parameter[0].startjahr=2011-parameter[0].simduration;
 		}
 		
 		int yearswithseedintropuffer=parameter[0].yearswithseedintro;	 
@@ -958,7 +958,7 @@ int main()
 		int zaehler=0;					
 
 		// buffer simulation length
-		int simdauerini=parameter[0].simdauer;
+		int simdurationini=parameter[0].simduration;
 		
 		for (int nruns=0; nruns<parameter[0].runs; nruns++)
 		{
@@ -966,7 +966,7 @@ int main()
 
 			// Begin multiple scenarios
 			parameter[0].repeati++;
-			parameter[0].simdauer=simdauerini;
+			parameter[0].simduration=simdurationini;
 
 			zaehler++;
 			printf("\n\tProgress: %d of %d\n", zaehler, parameter[0].runs); 

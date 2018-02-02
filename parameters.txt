@@ -83,7 +83,7 @@ windsource=1;						// (int) source of wind data
 										// 5==South Wind
 									
 // 1.2 -----> Simulation run characteristics
-simdauer=80;						// (int) duration of the simulation period depending on the available weather data series
+simduration=80;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
 ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
@@ -130,8 +130,8 @@ starttrees=0;						// (int) type of initial tree set up
 // 1.4.2 -----> Pollen dispersal
 pollination=0;						// (int 0,1,2) allow pollen dispersal
 										// 0==without pollination
-										// 1==pollination is computed during the simulation period (simdauer)
-										// ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simdauer==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
+										// 1==pollination is computed during the simulation period (simduration)
+										// ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simduration==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
 										// 9==each year computation of pollination
 										// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
 

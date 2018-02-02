@@ -221,11 +221,11 @@ void Parametereinlesen(void)
                 printf("\n\n\t Modellparameter\n\n");
             }
 	
-	strcpy(uebergabestring,"simdauer");
-	parameter[0].simdauer=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"simduration");
+	parameter[0].simduration=(int) Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 			{
-                printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].simdauer);
+                printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].simduration);
             }
 
 	strcpy(uebergabestring,"runs");

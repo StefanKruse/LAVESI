@@ -96,7 +96,7 @@ using namespace std;
 		bool 	computationtimevis;
 
 		// ... time steps and repeats
-		int		simdauer;	
+		int		simduration;	
 		int		startjahr;
 		int		runs;
 		int		repeati;

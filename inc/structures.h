@@ -75,17 +75,16 @@ using namespace std;
 		unsigned short litterheight7;
 		unsigned short litterheight8;
 		unsigned short litterheight9;
-		unsigned short litterheightmeam;
+		unsigned short litterheightmean;
 	};
 
 	struct Parameter
 	{
-		// general parameters
-		// ... output
+		// output
 		bool	parameterinputvis;
 		bool	yearlyvis;
 		bool	qualiyearlyvis;
-		bool	Seedwinddispersalvis;
+		bool	seedwinddispersalvis;
 		bool	mortvis;
 		bool	dataoutput;
 		int 	outputmode;
@@ -93,7 +92,7 @@ using namespace std;
 		int 	outputall;
 		bool 	computationtimevis;
 
-		// ... time steps and repeats
+		// time steps and repeats
 		int		simduration;	
 		int		startjahr;
 		int		runs;

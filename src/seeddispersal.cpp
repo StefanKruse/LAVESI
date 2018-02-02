@@ -800,7 +800,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 
 
 		// Display seeds leaving the plot:
-		if (parameter[0].Seedwinddispersalvis==true) 
+		if (parameter[0].seedwinddispersalvis==true) 
 			printf("\n   Leaving seeds (N/O/S/W)=(%d/%d/%d/%d) ", rausgeflogenN, rausgeflogenO, rausgeflogenS, rausgeflogenW);
 	} // World list END
 }

@@ -125,18 +125,18 @@ void Parameterinput(void)
                 printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputmode);
             }
 
-	strcpy(uebergabestring,"Seedwinddispersalvis");
+	strcpy(uebergabestring,"seedwinddispersalvis");
 	if (((int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]))==1) 
 	{
-		parameter[0].Seedwinddispersalvis=true;
+		parameter[0].seedwinddispersalvis=true;
 	}
 	else 
 	{
-		parameter[0].Seedwinddispersalvis=false;
+		parameter[0].seedwinddispersalvis=false;
 	};
 			if (parameter[0].parameterinputvis ==true) 
 			{
-				printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].Seedwinddispersalvis)?"true":"false");
+				printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seedwinddispersalvis)?"true":"false");
 			}
 
 	strcpy(uebergabestring,"mortvis");

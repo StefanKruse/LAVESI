@@ -683,11 +683,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].dichtheightrel);
                 }
 
-        strcpy(uebergabestring,"densitywertdbasaleinfluss");
-	parameter[0].densitywertdbasaleinfluss=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+        strcpy(uebergabestring,"densityvaluedbasalinfluence");
+	parameter[0].densityvaluedbasalinfluence=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertdbasaleinfluss);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densityvaluedbasalinfluence);
                 }
 
 	strcpy(uebergabestring,"densitywertmaximumbeiheight");

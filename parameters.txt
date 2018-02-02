@@ -85,7 +85,7 @@ windsource=1;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 simduration=80;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
-ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=100;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
@@ -153,28 +153,28 @@ densityvaluemanipulatorexp=1;		// (double) exponent to scale the influence of a 
 densitysmallweighing=0;				// (double) exponent to scale the influence of individuals on the denstity tiles which are only influencing one tile
 										// 1==density is affected linearly with increasing basal diameter 
 										// 0==without weighing
-densitytreetile=0.5;				// (double) Exponent to change the density value input from each tree into the density grid
+densitytreetile=0.5;				// (double) exponent to change the density value input from each tree into the density grid
 										// 1==value equals basal diameter decreasing with distance from centre
 										// 0==value ranges from 1 to 0 with increasing distance
-densitymode=2;						// (int 1,2,3) Mode of density calculation
+densitymode=2;						// (int 1,2,3) mode of density calculation
 										// 1==without (densitywert of trees=0)
 										// 2==ZOI-kind of density calculation
 										// 3==random determination of surrounding fields
-densitytilecalc=1;					// (int 1) Mode for density value integrating of all trees for each tile as the sum within each tile
-densitytiletree=2;					// (int 1,2) Mode for calculating the influence of density values within tiles for each tree
+densitytilecalc=1;					// (int 1) mode for density value integrating of all trees for each tile as the sum within each tile
+densitytiletree=2;					// (int 1,2) mode for calculating the influence of density values within tiles for each tree
 										// 1==sum of all values weighed by distance
 										// 2==multiplied by the current values of the trees influence on each tile (as in densitytreetile=0)
-desitymaxreduction=0.9;				// (double 0-1) Maximum value the density value can reach
-densitywertdbasaleinfluss=0;		// (double) Exponent to scale the influence of the tree's diameter to its influencing density value 
-dichtheightrel=12;					// (int) Interaction modification mode of tree height and density influence strength
+desitymaxreduction=0.9;				// (double 0-1) maximum value the density value can reach
+densityvaluedbasalinfluence=0;		// (double) exponent to scale the influence of the tree's diameter to its influencing density value 
+dichtheightrel=12;					// (int) interaction modification mode of tree height and density influence strength
 										// 1==three different constant values for the three height classes
 										// 2==linearly decreasing from centre of the tree and influenced by the tree's age and additionally a minimum of value 0.1 is set
 										// 3==....
-precgrenzwert=371.717745;			// (double) Precipitation optimum
-jantodestempgmel=-45;				// (double) Number for January isotherm restriction
-weatherzahlgmela=0.076;				// (double) Determines curvature of the July index for L.gmelinii 
-weatherzahlgmelb=14.568;			// (double) Determines curvature of the July index for L.gmelinii 
-weatherzahlgmelc=0.101;				// (double) Determines curvature of the July index for L.gmelinii 
+precgrenzwert=371.717745;			// (double) precipitation optimum
+jantodestempgmel=-45;				// (double) number for January isotherm restriction
+weatherzahlgmela=0.076;				// (double) determines curvature of the July index for L.gmelinii 
+weatherzahlgmelb=14.568;			// (double) determines curvature of the July index for L.gmelinii 
+weatherzahlgmelc=0.101;				// (double) determines curvature of the July index for L.gmelinii 
 
 	//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//

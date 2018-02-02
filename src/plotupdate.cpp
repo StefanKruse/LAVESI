@@ -133,12 +133,12 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
  * 2: ZOI-kind of type and pTree->densitywert=1.0-(density_help/plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert) or \n
  *							sumdensitywert+=plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensitywert; \n
  *							pTree->densitywert=1.0-(density_help/sumdensitywert);	
- *							pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	
+ *							pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);	
  *
  * 3: random field of ZOI-Type and pTree->densitywert=1.0-(density_help/plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert) or \n
  *								   sumdensitywert+=plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensitywert \n
  *								   pTree->densitywert=1.0-(density_help/sumdensitywert);
- *								   pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);
+ *								   pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
  *******************************************************************************************/
 
  
@@ -340,7 +340,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 				pTree->densitywert= pTree->densitywert
-										  *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	// Optional: increasing influence by increasing tree height
+										  *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);	// Optional: increasing influence by increasing tree height
 				
 				if (parameter[0].dichtheightrel==1) 
 				{
@@ -714,7 +714,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 					pTree->densitywert= pTree->densitywert
-					*pow((1.0-(0.01/pTree->dbasal)),parameter[0].densitywertdbasaleinfluss);	// Optional: increasing influence by increasing tree height
+					*pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);	// Optional: increasing influence by increasing tree height
 					
 					if (parameter[0].dichtheightrel==1) 
 					{

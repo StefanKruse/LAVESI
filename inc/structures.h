@@ -189,7 +189,7 @@ using namespace std;
 		int 	densitytiletree;
 		double 	desitymaxreduction;
 		int 	dichtheightrel;
-		double	densitywertdbasaleinfluss;
+		double	densityvaluedbasalinfluence;
 		double	densitywertmaximumbeiheight; 
 		int		individuenzahl;
 		

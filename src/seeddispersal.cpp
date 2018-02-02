@@ -118,7 +118,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 							double iquer=0;
 
 							double time_start_individual_seed_Seedwinddispersal=omp_get_wtime();
-							Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
+							Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->releaseheight, pSeed->species);
 							cum_time_Seedwinddispersal+=omp_get_wtime()-time_start_individual_seed_Seedwinddispersal;
 
 							
@@ -178,7 +178,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 											fprintf(filepointer, "%d;",parameter[0].ivort);
 											fprintf(filepointer, "%d;", pSeed->namem);
 											fprintf(filepointer, "%d;", jahr);
-											fprintf(filepointer, "%4.3f;", pSeed->elternheight);
+											fprintf(filepointer, "%4.3f;", pSeed->releaseheight);
 											//fprintf(filepointer, "%f;", iquer);
 											//fprintf(filepointer, "%f;", jquer);
 											fprintf(filepointer, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
@@ -355,7 +355,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 								double jquer=0;
 								double iquer=0;
 
-								Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
+								Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->releaseheight, pSeed->species);
 								
 								
 								// seed dispersal output:
@@ -412,7 +412,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 											fprintf(filepointer, "%d;",parameter[0].ivort);
 											fprintf(filepointer, "%d;", pSeed->namem);
 											fprintf(filepointer, "%d;", jahr);
-											fprintf(filepointer, "%4.3f;", pSeed->elternheight);
+											fprintf(filepointer, "%4.3f;", pSeed->releaseheight);
 											//fprintf(filepointer, "%f;", iquer);
 											//fprintf(filepointer, "%f;", jquer);
 											fprintf(filepointer, "%4.5f;",sqrt(iquer*iquer+jquer*jquer));
@@ -603,7 +603,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 									double jquer=0;
 									double iquer=0;
 
-									Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
+									Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->releaseheight, pSeed->species);
 									
 									// seed dispersal output:
 									if(parameter[0].ivort>1045 && parameter[0].outputmode!=9 && parameter[0].omp_num_threads==1)
@@ -659,7 +659,7 @@ void Seedoutput(int aktort, double dispersaldistance, float richtung, int neuewe
 												fprintf(filepointer, "%d;",parameter[0].ivort);
 												fprintf(filepointer, "%d;", pSeed->namem);
 												fprintf(filepointer, "%d;", jahr);
-												fprintf(filepointer, "%4.3f;", pSeed->elternheight);
+												fprintf(filepointer, "%4.3f;", pSeed->releaseheight);
 												fprintf(filepointer, "%4.5f;",dispersaldistance);
 												fprintf(filepointer, "%4.5f;", richtung);
 												fprintf(filepointer, "%4.5f;", pSeed->xcoo);

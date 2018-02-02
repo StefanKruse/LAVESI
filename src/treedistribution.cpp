@@ -155,7 +155,7 @@ void Seedin()
 					pSeed->age=0;
 					pSeed->longdispersed=false;
 					pSeed->species=specieszufall;
-					pSeed->elternheight=0;
+					pSeed->releaseheight=0;
 					
 					pSeed->thawing_depthinfluence=100;
 					

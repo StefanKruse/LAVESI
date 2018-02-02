@@ -534,7 +534,7 @@ if(mcorevariant==1)
 							pSeed->weight=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
-							pSeed->elternheight=pTree->height;
+							pSeed->releaseheight=pTree->height;
 
 							// add seed to seed_list
 							newseed_list.push_back(pSeed);
@@ -733,7 +733,7 @@ if(mcorevariant==2)
 							pSeed->weight=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
-							pSeed->elternheight=pTree->height;
+							pSeed->releaseheight=pTree->height;
 
 							// add seed to seed_list
 							newseed_list.push_back(pSeed);
@@ -963,7 +963,7 @@ if(mcorevariant==3)
 							pSeed->weight=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
-							pSeed->elternheight=pTree->height;
+							pSeed->releaseheight=pTree->height;
 
 							// add seed to seed_list
 							newseed_list.push_back(pSeed);

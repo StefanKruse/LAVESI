@@ -48,7 +48,7 @@ using namespace std;
 		bool	longdispersed;
 		double 	dispersaldistance;
 		int		species;
-		double 	elternheight;
+		double 	releaseheight;
 		double 	maxgrowth;
 		double 	pollenfall;
 		double 	descent; 

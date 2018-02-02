@@ -494,7 +494,7 @@ if(mcorevariant==1)
 					
 					if(seedlebend>0)
 					{// START: if seedlebend>0
-						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
@@ -516,7 +516,7 @@ if(mcorevariant==1)
 							pseed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
-							if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
+							if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
@@ -692,7 +692,7 @@ if(mcorevariant==2)
 					
 					if(seedlebend>0)
 					{// START: if seedlebend>0
-						if( (parameter[0].pollenvert==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
@@ -714,7 +714,7 @@ if(mcorevariant==2)
 							pseed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
-							if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
+							if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);
@@ -922,7 +922,7 @@ if(mcorevariant==3)
 					{// START: if seedlebend>0
 						double start_timer_tresedliv=omp_get_wtime();	
 
-						if( (parameter[0].pollenvert==1 && parameter[0].ivort>1045) || (parameter[0].pollenvert==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
+						if( (parameter[0].pollination==1 && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
@@ -945,7 +945,7 @@ if(mcorevariant==3)
 							pseed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
-							if((Vname.size()>0) && (parameter[0].pollenvert==1 || parameter[0].pollenvert==9))
+							if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 								pseed->namep=Vname.at(iran);

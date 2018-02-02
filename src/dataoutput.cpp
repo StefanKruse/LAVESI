@@ -644,7 +644,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				{
 					cout << endl << "\tBasalarea = " << pEvaluation->BAliste[pEvaluation->BAliste.size()-1] << endl;
 					cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
-					cout << "tree_list.size() bei Dataoutput = " << tree_list.size() << endl;
+					cout << "tree_list.size() at Dataoutput = " << tree_list.size() << endl;
 					cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;
 				}
 				

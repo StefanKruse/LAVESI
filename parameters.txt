@@ -14,7 +14,7 @@ yearlyvis=0;						// (int 0,1) yearly steps => year,basal area,seed information,
 qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seeddispvis=0;						// (int 0,1) seed dispersal
 mortvis=0;							// (int 0,1) mortality of trees >200 cm
-computationtimevis=0;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
+computationtimevis=1;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
@@ -32,7 +32,7 @@ vegetation=0;						// (int 0,1) Representation of an organic layer
 
 
 // 0.4 Computation environment
-omp_num_threads=8;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=4;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -85,7 +85,7 @@ windsource=1;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 simdauer=80;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
-ivortmax=100;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
@@ -125,14 +125,16 @@ starttrees=0;						// (int) type of initial tree set up
 										//  0==without initial trees
 										// 12==CH17
 										// and SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 meters) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
-										// ... don't use the last numbers TTT when quadratic (e.g. 120100)
+										// ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
 										
 // 1.4.2 -----> Pollen dispersal
-pollenvert=0;						// (int 0,1,2) allow pollen dispersal
+pollination=0;						// (int 0,1,2) allow pollen dispersal
 										// 0==without pollination
-										// 1==pollination is computed
-										// 2==output of living trees during simulation for post-computation of genealogy
+										// 1==pollination is computed during the simulation period (simdauer)
+										// ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simdauer==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
+										// 9==each year computation of pollination
 										// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
+
 pollenrichtungsvarianz=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
 pollenfall=0.126;					// (double) pollen fall velocity
 

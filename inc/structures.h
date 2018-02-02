@@ -206,7 +206,7 @@ using namespace std;
 		int 	windsource;
 		int 	boundaryconditions;
 		double 	pollenrichtungsvarianz;
-		int 	pollenvert;
+		int 	pollination;
 		int 	pollenDistdensplot;
 		double 	pollenfall;
 		double 	Gregorym,GregoryC;

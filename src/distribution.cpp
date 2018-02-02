@@ -149,7 +149,7 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 				}
 				
 				// data output for pollen flight analysis:
-				if(parameter[0].pollenvert==1 && parameter[0].omp_num_threads==1 && outputtreesiter<=5 && parameter[0].ivort==1057) // ivort==1057 => 1990
+				if(parameter[0].pollination==1 && parameter[0].omp_num_threads==1 && outputtreesiter<=5 && parameter[0].ivort>=1046)
 				{
 					FILE *fdir;
 					char filenamechar[25];
@@ -158,7 +158,6 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
 					fdir=fopen(output.c_str(),"a+");
 					fprintf(fdir,"%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name, pTree_copy->xcoo, pTree_copy->ycoo, x, y);
 					fclose(fdir);
-
 				}
 			}
 			else

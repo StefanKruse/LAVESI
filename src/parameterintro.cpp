@@ -901,11 +901,11 @@ void Parametereinlesen(void)
 	
 	
 	
-	strcpy(uebergabestring,"pollenvert");
-	parameter[0].pollenvert=(int) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"pollination");
+	parameter[0].pollination=(int) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollenvert);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollination);
                 }
 	
 			

@@ -22,8 +22,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	Growth( &parameter[0], yearposition, world_tree_list, world_weather_list);
 	double end_time_wachstum = omp_get_wtime();
 
-	// seedausbreitung
-	double start_time_seedausbreitung = omp_get_wtime();
+	// Seeddispersal
+	double start_time_Seeddispersal = omp_get_wtime();
 
 		int findyr1=0,findyr2=0,yr=0;
 		if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
@@ -56,13 +56,13 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 		}
 			
 
-	seedausbreitung( yr, &parameter[0], world_seed_list);
-	double end_time_seedausbreitung = omp_get_wtime();
+	Seeddispersal( yr, &parameter[0], world_seed_list);
+	double end_time_Seeddispersal = omp_get_wtime();
 
-	// seedproduktion
-	double start_time_seedproduktion = omp_get_wtime();
-	seedproduktion( &parameter[0], world_tree_list);
-	double end_time_seedproduktion = omp_get_wtime();
+	// Seedproduction
+	double start_time_Seedproduction = omp_get_wtime();
+	Seedproduction( &parameter[0], world_tree_list);
+	double end_time_Seedproduction = omp_get_wtime();
 
 
 	// Treedistribution	
@@ -121,8 +121,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			parameter[0].ivort,
 			end_time_kartenup - start_time_kartenup ,
 			end_time_wachstum - start_time_wachstum ,
-			end_time_seedausbreitung - start_time_seedausbreitung,
-			end_time_seedproduktion - start_time_seedproduktion,
+			end_time_Seeddispersal - start_time_Seeddispersal,
+			end_time_Seedproduction - start_time_Seedproduction,
 			end_time_Treedistribution - start_time_Treedistribution,
 			end_time_etablierung - start_time_etablierung,
 			end_time_Dataoutput - start_time_Dataoutput ,
@@ -133,8 +133,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				(end_time_Dataoutput - start_time_Dataoutput)+
 				(end_time_etablierung - start_time_etablierung)+
 				(end_time_Treedistribution - start_time_Treedistribution)+
-				(end_time_seedproduktion - start_time_seedproduktion)+
-				(end_time_seedausbreitung - start_time_seedausbreitung)+
+				(end_time_Seedproduction - start_time_Seedproduction)+
+				(end_time_Seeddispersal - start_time_Seeddispersal)+
 				(end_time_wachstum - start_time_wachstum)+
 				(end_time_kartenup - start_time_kartenup)
 				)
@@ -158,8 +158,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			end_time_mortalitaet - start_time_mortalitaet,
 			end_time_kartenup - start_time_kartenup,
 			end_time_wachstum - start_time_wachstum,
-			end_time_seedausbreitung - start_time_seedausbreitung,
-			end_time_seedproduktion - start_time_seedproduktion,
+			end_time_Seeddispersal - start_time_Seeddispersal,
+			end_time_Seedproduction - start_time_Seedproduction,
 			end_time_Treedistribution - start_time_Treedistribution,
 			end_time_etablierung - start_time_etablierung,
 			end_time_Dataoutput - start_time_Dataoutput ,
@@ -170,8 +170,8 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				(end_time_Dataoutput - start_time_Dataoutput)+
 				(end_time_etablierung - start_time_etablierung)+
 				(end_time_Treedistribution - start_time_Treedistribution)+
-				(end_time_seedproduktion - start_time_seedproduktion)+
-				(end_time_seedausbreitung - start_time_seedausbreitung)+
+				(end_time_Seedproduction - start_time_Seedproduction)+
+				(end_time_Seeddispersal - start_time_Seeddispersal)+
 				(end_time_wachstum - start_time_wachstum)+
 				(end_time_kartenup - start_time_kartenup)
 			);

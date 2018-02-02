@@ -65,7 +65,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
  *******************************************************************************************/
 
 
- void seedausbreitung(int jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list)
+ void Seeddispersal(int jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list)
 {
 		
 	int aktort=0;
@@ -277,7 +277,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								if( (sameausserhalb==false) && ( (pSeed->ycoo<0.0) | (pSeed->ycoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) ) )
 								{
 									printf("\n\nLaVeSi was exited ");
-									printf("in seedausbreitung.cpp\n");
+									printf("in Seeddispersal.cpp\n");
 									printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n", pSeed->ycoo, pSeed->xcoo);
 									exit(1);
 								}
@@ -515,7 +515,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									if( (sameausserhalb==false) && ( (pSeed->ycoo<0.0) | (pSeed->ycoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) ) )
 									{
 										printf("\n\nLaVeSi was exited ");
-										printf("in seedausbreitung.cpp\n");
+										printf("in Seeddispersal.cpp\n");
 										printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n", pSeed->ycoo, pSeed->xcoo);
 										exit(1);
 									}
@@ -764,7 +764,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 										if( (sameausserhalb==false) && ( (pSeed->ycoo<0.0) | (pSeed->ycoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) ) )
 										{
 											printf("\n\nLaVeSi was exited ");
-											printf("in seedausbreitung.cpp\n");
+											printf("in Seeddispersal.cpp\n");
 											printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n", pSeed->ycoo, pSeed->xcoo);
 											exit(1);
 										}

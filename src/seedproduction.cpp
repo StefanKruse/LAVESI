@@ -6,7 +6,7 @@ using namespace std;
 *
 * depends on seed production factor, tree size, actual growth
 *******************************************************************************************/
-void seedproduktion( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list)
+void Seedproduction( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list)
 {
 
 	//int aktort=0;

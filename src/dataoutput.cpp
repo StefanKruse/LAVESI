@@ -164,7 +164,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					meanmeantreeheigth+=pEvaluation->meantreeheightliste[position]/parameter[0].stabilmovingwindow;
 					meanmeantreeage+=pEvaluation->meantreeageliste[position]/parameter[0].stabilmovingwindow;
 				}
-				pEvaluation->BArunmeanliste.push_back(meanbasalarea);
+				pEvaluation->basalarearunmeanlist.push_back(meanbasalarea);
 				pEvaluation->nheight0b40runmeanliste.push_back(meannheight0b40);
 				pEvaluation->nheight41b200runmeanliste.push_back(meannheight41b200);
 				pEvaluation->nheight201b10000runmeanliste.push_back(meannheight201b10000);
@@ -176,10 +176,10 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			} // if exactly parameter[0].stabilmovingwindow values are set END
 			else if (basalareaanzahl> (int) parameter[0].stabilmovingwindow) 
 			{// if more than parameter[0].stabilmovingwindow values are set
-				meanbasalarea=pEvaluation->BArunmeanliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]		// Mittelwert des Vorjahres
+				meanbasalarea=pEvaluation->basalarearunmeanlist[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]		// Mittelwert des Vorjahres
 							-(pEvaluation->basalarealist[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]/parameter[0].stabilmovingwindow)		// minus den ersten Wert aus Bereich zur Berechnung des Mittelwertes des Vorjahres
 							+(pEvaluation->basalarealist[basalareaanzahl-1]/parameter[0].stabilmovingwindow);		// plus den neuen Wert aus diesem Jahr
-				pEvaluation->BArunmeanliste.push_back(meanbasalarea);
+				pEvaluation->basalarearunmeanlist.push_back(meanbasalarea);
 			
 				meannheight0b40=pEvaluation->nheight0b40runmeanliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]		// Mittelwert des Vorjahres
 							-(pEvaluation->nheight0b40liste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]/parameter[0].stabilmovingwindow)		// minus den ersten Wert aus Bereich zur Berechnung des Mittelwertes des Vorjahres
@@ -222,12 +222,12 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 
 
 			// processing basal area mean values
-			int runmeanbasalareaanzahl=pEvaluation->BArunmeanliste.size();
+			int runmeanbasalareaanzahl=pEvaluation->basalarearunmeanlist.size();
 			if (runmeanbasalareaanzahl>1)
 			{// if more than 2 parameter[0].stabilmovingwindow yearly mean values
 				
 				// calculation of the slope
-				double slopediff=pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-1]-pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-2];
+				double slopediff=pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl-1]-pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl-2];
 				if (pEvaluation->nachwendejahr!=true)
 				{	
 			

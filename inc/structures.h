@@ -293,7 +293,7 @@ using namespace std;
 		int		xworldcoo;					
 		int		yworldcoo;					
 		vector<double> basalarealist;				
-		vector<double> BArunmeanliste;		
+		vector<double> basalarearunmeanlist;		
 		double	maxincrementbasalarea;		
 		int		countermaxincrementbasalarea;
 		int		wendejahr;					

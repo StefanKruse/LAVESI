@@ -325,13 +325,13 @@ void Spinupphase()
 						aktort++;
 							
 						// observing the basal area	for testing reasons
-						if (pEvaluation->BArunmeanliste.size()>1)
+						if (pEvaluation->basalarearunmeanlist.size()>1)
 						{
-							cout << "BA" << endl << pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1] << endl;
+							cout << "BA" << endl << pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size()-1] << endl;
 
-							meanpercentchange+=fabs((pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-2]-pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1])
+							meanpercentchange+=fabs((pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size()-2]-pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size()-1])
 								/
-								(pEvaluation->BArunmeanliste[pEvaluation->BArunmeanliste.size()-1]));
+								(pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size()-1]));
 						}
 						cout << "Cumulative %Change = " << meanpercentchange << endl;
 						// + N_0-40
@@ -666,8 +666,8 @@ void initialiseMaps()
 			pEvaluation->xworldcoo=aktortxworldcoo;
 			pEvaluation->basalarealist.clear();
 			pEvaluation->basalarealist.shrink_to_fit();
-			pEvaluation->BArunmeanliste.clear();
-			pEvaluation->BArunmeanliste.shrink_to_fit();
+			pEvaluation->basalarearunmeanlist.clear();
+			pEvaluation->basalarearunmeanlist.shrink_to_fit();
 			//Start growth stage calculation
 			pEvaluation->maxincrementbasalarea=0.0;
 			pEvaluation->countermaxincrementbasalarea=0;

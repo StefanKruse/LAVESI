@@ -231,9 +231,9 @@ void Savealllists(void)
 					pEvaluation_copy->basalarealist.push_back((*posval));
 					++posval;
 				} 
-				for (vector<double>::iterator posval=pEvaluation->BArunmeanliste.begin(); posval<pEvaluation->BArunmeanliste.end(); )
+				for (vector<double>::iterator posval=pEvaluation->basalarearunmeanlist.begin(); posval<pEvaluation->basalarearunmeanlist.end(); )
 				{ 
-					pEvaluation_copy->BArunmeanliste.push_back((*posval));
+					pEvaluation_copy->basalarearunmeanlist.push_back((*posval));
 					++posval;
 				} 
 			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;	
@@ -393,8 +393,8 @@ void Clearalllists(void)
 			pEvaluation= (*pos);
 			pEvaluation->basalarealist.clear();
 			pEvaluation->basalarealist.shrink_to_fit();
-			pEvaluation->BArunmeanliste.clear();
-			pEvaluation->BArunmeanliste.shrink_to_fit();
+			pEvaluation->basalarearunmeanlist.clear();
+			pEvaluation->basalarearunmeanlist.shrink_to_fit();
 			pEvaluation->nheight0b40liste.clear();
 			pEvaluation->nheight0b40liste.shrink_to_fit();
 			pEvaluation->nheight0b40runmeanliste.clear();
@@ -664,9 +664,9 @@ void Restorealllists(void)
 					pEvaluation_copy->basalarealist.push_back((*posval));
 					++posval;
 				}
-				for (vector<double>::iterator posval=pEvaluation->BArunmeanliste.begin(); posval<pEvaluation->BArunmeanliste.end(); )
+				for (vector<double>::iterator posval=pEvaluation->basalarearunmeanlist.begin(); posval<pEvaluation->basalarearunmeanlist.end(); )
 				{
-					pEvaluation_copy->BArunmeanliste.push_back((*posval));
+					pEvaluation_copy->basalarearunmeanlist.push_back((*posval));
 					++posval;
 				}
 			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;		
@@ -827,7 +827,7 @@ void Clearalllists_copy(void)
 		{
 			pEvaluation=(*pos);
 			pEvaluation->basalarealist.clear();
-			pEvaluation->BArunmeanliste.clear();
+			pEvaluation->basalarearunmeanlist.clear();
 			pEvaluation->nheight0b40liste.clear();
 			pEvaluation->nheight0b40runmeanliste.clear();
 			pEvaluation->nheight41b200liste.clear();

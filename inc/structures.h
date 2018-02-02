@@ -130,7 +130,7 @@ using namespace std;
 		
 		// initialization 
 		bool	realseedconnect;
-		int		jahremitseedeintrag;
+		int		yearswithseedintro;
 		bool	seedintropermanent;
 		int		seeddispmode;
 		int		etabbg;

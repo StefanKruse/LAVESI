@@ -67,16 +67,16 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 
 	// Treedistribution	
 	double start_time_Treedistribution = omp_get_wtime();	
-	if (parameter[0].seedintro==true && parameter[0].jahremitseedeintrag>0)
+	if (parameter[0].seedintro==true && parameter[0].yearswithseedintro>0)
 	{
 		
 		parameter[0].starter=true;
 		
 		Treedistribution(&parameter[0], stringlengthmax);
 		
-		parameter[0].jahremitseedeintrag--;
+		parameter[0].yearswithseedintro--;
 	}
-	else if ( parameter[0].seedintropermanent==true && parameter[0].jahremitseedeintrag<=0) 
+	else if ( parameter[0].seedintropermanent==true && parameter[0].yearswithseedintro<=0) 
 	{
 		parameter[0].starter=true;
 		Treedistribution(&parameter[0],  stringlengthmax);
@@ -951,7 +951,7 @@ int main()
 			parameter[0].startjahr=2011-parameter[0].simdauer;
 		}
 		
-		int jahremitseedeintragpuffer=parameter[0].jahremitseedeintrag;	 
+		int yearswithseedintropuffer=parameter[0].yearswithseedintro;	 
 		
 		parameter[0].repeati=0;
 
@@ -974,7 +974,7 @@ int main()
 			// Reset variables:
 				parameter[0].nameakt=0;
 				parameter[0].lineakt=0;	
-				parameter[0].jahremitseedeintrag=jahremitseedeintragpuffer;	
+				parameter[0].yearswithseedintro=yearswithseedintropuffer;	
 				parameter[0].individuenzahl=1;
 				
 			runSimulation();

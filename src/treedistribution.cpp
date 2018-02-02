@@ -48,7 +48,7 @@ void Seedin()
 		if (seedinput==true)
 		{
 			int seednobuffer; 
-			if (parameter[0].jahremitseedeintrag<=0)
+			if (parameter[0].yearswithseedintro<=0)
 			{
 				seednobuffer=parameter[0].etabbgpermanent;
 			}

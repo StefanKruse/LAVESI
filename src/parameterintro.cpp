@@ -495,11 +495,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].etabbgpermanent);
                 }
 	
-	strcpy(uebergabestring,"jahremitseedeintrag");
-	parameter[0].jahremitseedeintrag=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
+	strcpy(uebergabestring,"yearswithseedintro");
+	parameter[0].yearswithseedintro=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].jahremitseedeintrag);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].yearswithseedintro);
                 }
 
 	strcpy(uebergabestring,"seedtravelbetween");

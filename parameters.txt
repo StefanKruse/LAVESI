@@ -222,8 +222,8 @@ gdbrustconstsib=-1.01;				// (double) diameter growth rate at breast height of L
 
 // 2.3 -----> Height estimation
 allometryfunctiontype=2;			// (int 1,2) allometric function mode
-										// 1==linear (H=m*Dhochexp+0 bzw. 130)
-										// 2==non linear (H=m*DBAS+0 sowie Hhoch0.5=m*DBRuhoch0.5+130)
+										// 1==linear
+										// 2==non linear
 dbasalheightalloslope=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from basal diameter
 dbasalheightalloexp=1.0;			// (double) (IF allometryfunctiontype == 1) exponent for height estimation from basal diameter
 dbrustheightalloslope=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from breast height diameter
@@ -232,26 +232,26 @@ dbasalheightslopenonlin=44.43163;	// (double) (IF allometryfunctiontype == 2) sl
 dbrustheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slope for height estimation from breast height diameter
 
 // 2.4 -----> Mortality estimation
-mortbg=0.0001;						// (double 0-1) Background mortality
-maximalage=609;						// (int) Maximum tree age
-malt=8.18785;						// (double) Mortality factor if a tree exceeds the maximum age
-mjung=0.762855;						// (double) Mortality factor for young individuals
-jugendmorteinflussexp=0.79295;		// (double) Exponent determining duration time of youth mortality
+mortbg=0.0001;						// (double 0-1) background mortality
+maximalage=609;						// (int) maximum tree age
+malt=8.18785;						// (double) mortality factor if a tree exceeds the maximum age
+mjung=0.762855;						// (double) mortality factor for young individuals
+jugendmorteinflussexp=0.79295;		// (double) exponent determining duration time of youth mortality
 										//  <1==longer
 										//  >1==shorter
-mgrowth=0.0;						// (double) Factor for adjusting the influence of current tree growth on mortality
-relwachstummorteinflussexp=1.0;		// (double) Influence exponent of current tree growth on mortality
+mgrowth=0.0;						// (double) factor for adjusting the influence of current tree growth on mortality
+relwachstummorteinflussexp=1.0;		// (double) influence exponent of current tree growth on mortality
 										//  0==no influence of relative growth on mortality
 										//  1==linear influence of the relative growth on mortality
 										// >1==stronger
 										// <1==weaker
-mdensity=0.5;						// (double) Mortality factor for density
+mdensity=0.5;						// (double) mortality factor for density
 densitywertmaximumbeiheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
-mweather=0.1;						// Mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
-heightweathermorteinflussexp=0.2;	// (double) Exponent for determining an influence of the tree height on the climate mortality
-mtrockenheit=0.237805;				// (double) Mortalitaetsfaktor_Trockenheit (0-+oo)
-seedTreemort=0.44724;				// (double 0-1) Mortality rate of seeds in cones on the trees
-seedbodenmort=0.55803;				// (double 0-1) Mortality rate of seeds at the ground
+mweather=0.1;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
+heightweathermorteinflussexp=0.2;	// (double) exponent for determining an influence of the tree height on the climate mortality
+mtrockenheit=0.237805;				// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
+seedTreemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees
+seedbodenmort=0.55803;				// (double 0-1) mortality rate of seeds at the ground
 
 
 

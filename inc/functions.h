@@ -11,7 +11,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list);
 void Pollinationprobability(
 				double x, double y,struct Parameter *parameter, vector<list<Tree*> >::iterator world_positon_b, 
-				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
+				double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
 				vector<int> &pName, vector<double>  &thdpthinfl,
 				int outputtreesiter
 			);

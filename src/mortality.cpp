@@ -424,8 +424,8 @@ if(mcorevariant==1)
 		// pTree_copy
 		///
 			  // list<Tree*>& tree_list = *world_positon_b;
-			  double  richtung=0.0;
-			  double  geschwindigkeit=0.0;
+			  double  direction=0.0;
+			  double  velocity=0.0;
 			  unsigned int    ripm=0,cntr=0;
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
@@ -439,12 +439,12 @@ if(mcorevariant==1)
 ///
 		/// #####################################
 		/// #####################################
-		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
 			// declare a local seed list to be filled by each thread
 			list<Seed*> newseed_list;
 			
-		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
+		direction=0.0;velocity=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
 		I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 				// timers
@@ -497,7 +497,7 @@ if(mcorevariant==1)
 						if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].spinupphase==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
-												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);
 						}
@@ -594,8 +594,8 @@ if(mcorevariant==2)
 		// pTree_copy
 		///
 			  // list<Tree*>& tree_list = *world_positon_b;
-			  double  richtung=0.0;
-			  double  geschwindigkeit=0.0;
+			  double  direction=0.0;
+			  double  velocity=0.0;
 			  unsigned int    ripm=0,cntr=0;
 			  // vector<int> SNP1,SNP2;
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
@@ -608,14 +608,14 @@ if(mcorevariant==2)
 ///
 		/// #####################################
 		/// #####################################
-		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
 			if((parameter[0].ivort==1))// check the number of used threads
 			{
 				cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
 			}
 
-			richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
+			direction=0.0;velocity=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
 			I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 
@@ -695,7 +695,7 @@ if(mcorevariant==2)
 						if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].spinupphase==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
-												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);//;
 						}
@@ -797,8 +797,8 @@ if(mcorevariant==3)
 		// pTree_copy
 		///
 			  // list<Tree*>& tree_list = *world_positon_b;
-			  double  richtung=0.0;
-			  double  geschwindigkeit=0.0;
+			  double  direction=0.0;
+			  double  velocity=0.0;
 			  unsigned int    ripm=0,cntr=0;
 			  // vector<int> SNP1,SNP2;
 			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
@@ -829,12 +829,12 @@ if(mcorevariant==3)
 				advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 			
 				
-		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{// START: parallel region
 		
 
 				
-		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+		  direction=0.0;velocity=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 			    I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;
 
 			// initialize the info for each of the thread
@@ -925,7 +925,7 @@ if(mcorevariant==3)
 						if( (parameter[0].pollination==1 && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
 							Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
-												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
+												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);
 						}

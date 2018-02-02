@@ -346,7 +346,7 @@ void Savealllists(void)
  *
  *
  *******************************************************************************************/
-void ClearAllLists(void)
+void Clearalllists(void)
 {
 	int aktort=0;
 	for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
@@ -780,7 +780,7 @@ void RestoreAllLists(void)
  *
  *
  *******************************************************************************************/
-void ClearAllLists_copy(void)
+void Clearalllists_copy(void)
 {
 
 	int aktort=0;

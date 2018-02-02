@@ -479,7 +479,7 @@ void Yearsteps()
 					cout << " starting simulation runs " << endl;
 					
 					// reset of the simulation run to resetyear
-					ClearAllLists();
+					Clearalllists();
 					cout << "           Lists deleted!!" << endl;
 					RestoreAllLists();
 					cout << "           Lists restored!!" << endl;
@@ -834,7 +834,7 @@ void finishSimulation()
 		// Delete all lists after each repeat:
 		
 		// Calling the function to delete all lists
-		ClearAllLists();
+		Clearalllists();
 		
 		
 		
@@ -875,7 +875,7 @@ void finishSimulation()
 		
 		if (parameter[0].resetyear>0)
 		{
-			ClearAllLists_copy();
+			Clearalllists_copy();
 			
 			world_tree_list_copy.clear();
 			world_seed_list_copy.clear();

@@ -131,9 +131,9 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 				}
 			}
 			pWeather->activeairtemp=sumacttemp;
-			pWeather->vegetationslaenge=ndegreday;
+			pWeather->vegetationperiodlength=ndegreday;
 			pWeather->activeairtempmin=sumacttempmin;
-			pWeather->vegetationslaengemin=ndegredaymin;
+			pWeather->vegetationperiodlengthmin=ndegredaymin;
 			pWeather->degreday=sumdegreday;
 			weather_list.push_back(pWeather);// 3. push back the current year in weather_list
 
@@ -359,9 +359,9 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 
 					pWeather->activeairtemp=sumacttemp;
 					pWeather->degreday=sumdegreday;
-					pWeather->vegetationslaenge=ndegreday;
+					pWeather->vegetationperiodlength=ndegreday;
 					pWeather->activeairtempmin=sumacttempmin;
-					pWeather->vegetationslaengemin=ndegredaymin;
+					pWeather->vegetationperiodlengthmin=ndegredaymin;
 					pWeather->temp1monthmean=temp1monthmeanbuf/31;
 					pWeather->temp1monthmeanmin=temp1monthmeanminbuf/31;
 					pWeather->temp7monthmean=temp7monthmeanbuf/31;
@@ -635,9 +635,9 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			
 					
 			pWeather->activeairtemp=(int) round(sumacttemp*0.84630);
-			pWeather->vegetationslaenge=(int) round(ndegreday*0.88432);
+			pWeather->vegetationperiodlength=(int) round(ndegreday*0.88432);
 			pWeather->activeairtempmin=(int) round(sumacttempmin*0.84630);
-			pWeather->vegetationslaengemin=(int) round(ndegredaymin*0.88432);
+			pWeather->vegetationperiodlengthmin=(int) round(ndegredaymin*0.88432);
 			pWeather->degreday=(int) round(sumdegreday*0.87583);
 			weather_list.push_back(pWeather);// 3. push back the current year in weather_list
 		}
@@ -721,8 +721,8 @@ void passWeather()
 					}
 					jultempsum+=weather_list[iweather+i-10]->temp7monthmean;
 					jultempsummin+=weather_list[iweather+i-10]->temp7monthmeanmin;
-					nddsum+=weather_list[iweather+i-10]->vegetationslaenge;
-					nddsummin+=weather_list[iweather+i-10]->vegetationslaengemin;
+					nddsum+=weather_list[iweather+i-10]->vegetationperiodlength;
+					nddsummin+=weather_list[iweather+i-10]->vegetationperiodlengthmin;
 				}
 				jantempsum=jantempsum/10;
 				jantempsummin=jantempsummin/10;
@@ -747,8 +747,8 @@ void passWeather()
 					}				
 					jultempsum+=weather_list[i]->temp7monthmean;
 					jultempsummin+=weather_list[i]->temp7monthmeanmin;
-					nddsum+=weather_list[i]->vegetationslaenge;
-					nddsummin+=weather_list[i]->vegetationslaengemin;
+					nddsum+=weather_list[i]->vegetationperiodlength;
+					nddsummin+=weather_list[i]->vegetationperiodlengthmin;
 				}
 				jantempsum=jantempsum/(iweather+1);
 				jantempsummin=jantempsummin/(iweather+1);
@@ -771,15 +771,15 @@ void passWeather()
 				}					
 				jultempsum=weather_list[iweather]->temp7monthmean;
 				jultempsummin=weather_list[iweather]->temp7monthmeanmin;
-				nddsum=weather_list[iweather]->vegetationslaenge;
-				nddsummin=weather_list[iweather]->vegetationslaengemin;
+				nddsum=weather_list[iweather]->vegetationperiodlength;
+				nddsummin=weather_list[iweather]->vegetationperiodlengthmin;
 			}
 			weather_list[iweather]->temp1monthmeaniso=jantempsum;
 			weather_list[iweather]->temp1monthmeanisomin=jantempsummin;
 			weather_list[iweather]->temp7monthmeaniso=jultempsum;
 			weather_list[iweather]->temp7monthmeanisomin=jultempsummin;
-			weather_list[iweather]->vegetationslaengeiso=(int) floor(nddsum);
-			weather_list[iweather]->vegetationslaengeisomin=(int) floor(nddsummin);
+			weather_list[iweather]->vegetationperiodlengthiso=(int) floor(nddsum);
+			weather_list[iweather]->vegetationperiodlengthisomin=(int) floor(nddsummin);
 
 			// Calculation of a dryness influence
 			// // "Evaporation rates of 1.5 mm/day mean growing season" (Dolmann, 2004)
@@ -788,7 +788,7 @@ void passWeather()
 								+ weather_list[iweather]->prec6monthmean
 								+ weather_list[iweather]->prec7monthmean
 								+ weather_list[iweather]->prec8monthmean;
-			double duerreindex=parameter[0].evapod*weather_list[iweather]->vegetationslaenge/precgs;
+			double duerreindex=parameter[0].evapod*weather_list[iweather]->vegetationperiodlength/precgs;
 			if (duerreindex>1) 
 			{
 				double aattrockenheit=(weather_list[iweather]->activeairtemp/300.0)-1.0;
@@ -802,7 +802,7 @@ void passWeather()
 			if (parameter[0].qualiyearlyvis==true)
 			{// console output begin
 				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->trockenheitsmort);
-				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monthmeaniso, weather_list[iweather]->temp7monthmeaniso, weather_list[iweather]->vegetationslaengeiso);
+				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monthmeaniso, weather_list[iweather]->temp7monthmeaniso, weather_list[iweather]->vegetationperiodlengthiso);
 			}// console output end
 
 			
@@ -853,13 +853,13 @@ void passWeather()
 
 
 			/// Vegetationslaenge <60 days
-			if (weather_list[iweather]->vegetationslaengeiso<60.0)
+			if (weather_list[iweather]->vegetationperiodlengthiso<60.0)
 			{
 				weather_list[iweather]->nddrestriktion=1.0; 
 			}
 			else 
 			{
-				weather_list[iweather]->nddrestriktion=1.0-fabs(( ((double) weather_list[iweather]->vegetationslaengeiso)-60.0)/60.0);	//hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen >= 60 d
+				weather_list[iweather]->nddrestriktion=1.0-fabs(( ((double) weather_list[iweather]->vegetationperiodlengthiso)-60.0)/60.0);	//hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen >= 60 d
 			}
 				
 		}// weather_list end

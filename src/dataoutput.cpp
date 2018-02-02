@@ -626,7 +626,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->tempyearmean);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp1monthmean);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp7monthmean);
-				fprintf(filepointer, "%d;", weather_list[yearposition]->vegetationslaenge);
+				fprintf(filepointer, "%d;", weather_list[yearposition]->vegetationperiodlength);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->activeairtemp);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->degreday);
 				fprintf(filepointer, "%4.2f;", weather_list[yearposition]->niederschlagssumme);

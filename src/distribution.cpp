@@ -18,7 +18,7 @@ using namespace std;
  * b) getEntfernung:
  *    A function calculating and returning the traveling distance for:
  * 
- * c) seeddisp:
+ * c) Seedwinddispersal:
  *    The function returning the new position of a seed after dispersal. 
  *    In this the wind direction and wind speed is chosen, using the wind direction
  *    for the seed flight direction and the wind velocity to determine the ballistic
@@ -210,7 +210,7 @@ double getEntfernung(double D, double ratiorn_help)
 
 
 
-void seeddisp(double rn, double& dx, double& dy, double &windspeed, double &winddirection, double parhei, int seedspec)
+void Seedwinddispersal(double rn, double& dx, double& dy, double &windspeed, double &winddirection, double parhei, int seedspec)
 {
     int cntr=1,ripm=0;
 

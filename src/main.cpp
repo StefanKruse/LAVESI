@@ -114,7 +114,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	{
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
 		{
-			printf("\n   - plotupdategrowth    seeddisp  seedprod  treedistr treeestab  output    mortality ageing    TOTAL     ");
+			printf("\n   - plotupdategrowth    Seedwinddispersal  seedprod  treedistr treeestab  output    mortality ageing    TOTAL     ");
 		}
 		
 		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 

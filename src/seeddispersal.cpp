@@ -84,7 +84,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 		if(parameter[0].omp_num_threads==0)
 		{
 			double cum_time_individual_seed=0;//timer for individual seed 
-			double cum_time_seeddisp=0;
+			double cum_time_Seedwinddispersal=0;
 				
 			///Loop around all Seeds
 			for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();)
@@ -117,9 +117,9 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							double jquer=0;
 							double iquer=0;
 
-							double time_start_individual_seed_seeddisp=omp_get_wtime();
-							seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
-							cum_time_seeddisp+=omp_get_wtime()-time_start_individual_seed_seeddisp;
+							double time_start_individual_seed_Seedwinddispersal=omp_get_wtime();
+							Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
+							cum_time_Seedwinddispersal+=omp_get_wtime()-time_start_individual_seed_Seedwinddispersal;
 
 							
 							
@@ -310,7 +310,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 			} // seed_list loop END
 			
-			cout << endl << "All seeds:" << cum_time_individual_seed << " with seeddisp-function:" << cum_time_seeddisp << endl;
+			cout << endl << "All seeds:" << cum_time_individual_seed << " with Seedwinddispersal-function:" << cum_time_Seedwinddispersal << endl;
 				
 		} 
 		else
@@ -355,7 +355,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								double jquer=0;
 								double iquer=0;
 
-								seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
+								Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
 								
 								
 								// seed dispersal output:
@@ -603,7 +603,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									double jquer=0;
 									double iquer=0;
 
-									seeddisp(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
+									Seedwinddispersal(ratiorn, jquer, iquer, geschwindigkeit, wrichtung, pSeed->elternheight, pSeed->species);
 									
 									// seed dispersal output:
 									if(parameter[0].ivort>1045 && parameter[0].outputmode!=9 && parameter[0].omp_num_threads==1)
@@ -800,7 +800,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 
 		// Display seeds leaving the plot:
-		if (parameter[0].seeddispvis==true) 
+		if (parameter[0].Seedwinddispersalvis==true) 
 			printf("\n   Leaving seeds (N/O/S/W)=(%d/%d/%d/%d) ", rausgeflogenN, rausgeflogenO, rausgeflogenS, rausgeflogenW);
 	} // World list END
 }

@@ -125,18 +125,18 @@ void Parametereinlesen(void)
                 printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputmode);
             }
 
-	strcpy(uebergabestring,"seeddispvis");
+	strcpy(uebergabestring,"Seedwinddispersalvis");
 	if (((int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]))==1) 
 	{
-		parameter[0].seeddispvis=true;
+		parameter[0].Seedwinddispersalvis=true;
 	}
 	else 
 	{
-		parameter[0].seeddispvis=false;
+		parameter[0].Seedwinddispersalvis=false;
 	};
 			if (parameter[0].parameterinputvis ==true) 
 			{
-				printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].seeddispvis)?"true":"false");
+				printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].Seedwinddispersalvis)?"true":"false");
 			}
 
 	strcpy(uebergabestring,"mortvis");
@@ -446,11 +446,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].realseedconnect)?"true":"false");
                 }
 
-	strcpy(uebergabestring,"seeddispmode");
-	parameter[0].seeddispmode=(int) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
+	strcpy(uebergabestring,"Seedwinddispersalmode");
+	parameter[0].Seedwinddispersalmode=(int) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seeddispmode);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].Seedwinddispersalmode);
                 }
 
 	strcpy(uebergabestring,"seedintro");

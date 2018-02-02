@@ -15,7 +15,7 @@ void Pollinationprobability(
 				vector<int> &pName, vector<double>  &thdpthinfl,
 				int outputtreesiter
 			);
-void seeddisp(double ad, double& cd, double& dd, double &vv, double &vd, double parhei, int seedspec);
+void Seedwinddispersal(double ad, double& cd, double& dd, double &vv, double &vd, double parhei, int seedspec);
 void Parametereinlesen(void);
 void SaveAllLists(void);
 void ClearAllLists(void);

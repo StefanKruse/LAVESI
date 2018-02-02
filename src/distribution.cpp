@@ -57,7 +57,7 @@ void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::lis
   cntr=0;
   // vector<int> SNP1,SNP2;
   p=0.0;
-  kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
+  kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
   phi=0.0;
   dr=0.0;
   dx=0.0;

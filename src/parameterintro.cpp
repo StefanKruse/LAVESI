@@ -909,11 +909,11 @@ void Parametereinlesen(void)
                 }
 	
 			
-	strcpy(uebergabestring,"pollenrichtungsvarianz");
-	parameter[0].pollenrichtungsvarianz=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"pollendirectionvariance");
+	parameter[0].pollendirectionvariance=(double) Parametereingabe(&uebergabestring[0],stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollenrichtungsvarianz);
+                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].pollendirectionvariance);
                 }
 
 

@@ -135,7 +135,7 @@ pollination=0;						// (int 0,1,2) allow pollen dispersal
 										// 9==each year computation of pollination
 										// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
 
-pollenrichtungsvarianz=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
+pollendirectionvariance=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
 pollenfall=0.126;					// (double) pollen fall velocity
 
 GregoryC=0.6; 						// (double) pollen dispersal parameter

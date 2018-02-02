@@ -427,7 +427,7 @@ if(mcorevariant==1)
 			  double  richtung=0.0;
 			  double  geschwindigkeit=0.0;
 			  unsigned int    ripm=0,cntr=0;
-			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
 			  double  C=parameter[0].GregoryC;
@@ -444,7 +444,7 @@ if(mcorevariant==1)
 			// declare a local seed list to be filled by each thread
 			list<seed*> newseed_list;
 			
-		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
+		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
 		I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 				// timers
@@ -598,7 +598,7 @@ if(mcorevariant==2)
 			  double  geschwindigkeit=0.0;
 			  unsigned int    ripm=0,cntr=0;
 			  // vector<int> SNP1,SNP2;
-			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
 			  double  C=parameter[0].GregoryC;
@@ -615,7 +615,7 @@ if(mcorevariant==2)
 				cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
 			}
 
-			richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);
+			richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
 			I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 		
 
@@ -801,7 +801,7 @@ if(mcorevariant==3)
 			  double  geschwindigkeit=0.0;
 			  unsigned int    ripm=0,cntr=0;
 			  // vector<int> SNP1,SNP2;
-			  double  p=0.0,kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
+			  double  p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
 			  double  I0kappa=0.0;
 			  double pe=0.01;
 			  double  C=parameter[0].GregoryC;
@@ -834,7 +834,7 @@ if(mcorevariant==3)
 		
 
 				
-		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollenrichtungsvarianz*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
+		  richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 			    I0kappa=0.0;pe=0.01;C=parameter[0].GregoryC;m=parameter[0].Gregorym;
 
 			// initialize the info for each of the thread

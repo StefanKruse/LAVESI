@@ -221,7 +221,7 @@ using namespace std;
 		double	mortyouth; 	
 		double	mortyouthinfluenceexp;
 		double	mgrowth;
-		double	relwachstummorteinflussexp;
+		double	relgrowthmortinfluenceexp;
 		double	mweather;
 		double	heightweathermorteinflussexp;
 		double	mdensity;

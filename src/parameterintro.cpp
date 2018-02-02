@@ -794,11 +794,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mgrowth);
                 }
 
-	strcpy(uebergabestring,"relwachstummorteinflussexp");
-	parameter[0].relwachstummorteinflussexp=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"relgrowthmortinfluenceexp");
+	parameter[0].relgrowthmortinfluenceexp=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].relwachstummorteinflussexp);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].relgrowthmortinfluenceexp);
                 }
 
 	strcpy(uebergabestring,"mweather");

@@ -240,7 +240,7 @@ mortyouthinfluenceexp=0.79295;		// (double) exponent determining duration time o
 										//  <1==longer
 										//  >1==shorter
 mgrowth=0.0;						// (double) factor for adjusting the influence of current tree growth on mortality
-relwachstummorteinflussexp=1.0;		// (double) influence exponent of current tree growth on mortality
+relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree growth on mortality
 										//  0==no influence of relative growth on mortality
 										//  1==linear influence of the relative growth on mortality
 										// >1==stronger

@@ -236,7 +236,7 @@ mortbg=0.0001;						// (double 0-1) background mortality
 maximumage=609;						// (int) maximum tree age
 mortage=8.18785;						// (double) mortality factor if a tree exceeds the maximum age
 mortyouth=0.762855;						// (double) mortality factor for young individuals
-jugendmorteinflussexp=0.79295;		// (double) exponent determining duration time of youth mortality
+mortyouthinfluenceexp=0.79295;		// (double) exponent determining duration time of youth mortality
 										//  <1==longer
 										//  >1==shorter
 mgrowth=0.0;						// (double) factor for adjusting the influence of current tree growth on mortality

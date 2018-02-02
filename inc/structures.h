@@ -219,7 +219,7 @@ using namespace std;
 		double	mortbg;
 		int		maximumage;
 		double	mortyouth; 	
-		double	jugendmorteinflussexp;
+		double	mortyouthinfluenceexp;
 		double	mgrowth;
 		double	relwachstummorteinflussexp;
 		double	mweather;

@@ -983,8 +983,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
 					fprintf(filepointer, "%4.5f;", pEnvirgrid->Treedensityvalue);
 					fprintf(filepointer, "%d;", pEnvirgrid->Treenumber);
-					fprintf(filepointer, "%u;", pEnvirgrid->auflagenstaerke);
-					fprintf(filepointer, "%u;", pEnvirgrid->auflagenstaerkemittel);
+					fprintf(filepointer, "%u;", pEnvirgrid->litterheight);
+					fprintf(filepointer, "%u;", pEnvirgrid->litterheightmittel);
 					fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
 					fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 					fprintf(filepointer, "%d;", parameter[0].thawing_depth);

@@ -32,7 +32,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					int i=(int) floor(pSeed->ycoo*parameter[0].sizemagnif);
 					int j=(int) floor(pSeed->xcoo*parameter[0].sizemagnif);
 					
-					double keimungauflageinfluence=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->auflagenstaerke )+1.495; 
+					double keimungauflageinfluence=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->litterheight )+1.495; 
 					
 					if (keimungauflageinfluence<0.01)
 					{

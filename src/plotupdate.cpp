@@ -904,42 +904,42 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 													  +(1/0.95)) ); 
 													   // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
 				
-				pEnvirgrid->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);
+				pEnvirgrid->litterheight+= (unsigned short) (auflagenwachstumsrate*60.0);
 				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
-				pEnvirgrid->auflagenstaerkemittel = (unsigned short) ( (double) 
-												 (pEnvirgrid->auflagenstaerke8
-												 +pEnvirgrid->auflagenstaerke7
-												 +pEnvirgrid->auflagenstaerke6
-												 +pEnvirgrid->auflagenstaerke5
-												 +pEnvirgrid->auflagenstaerke4
-												 +pEnvirgrid->auflagenstaerke3
-												 +pEnvirgrid->auflagenstaerke2
-												 +pEnvirgrid->auflagenstaerke1
-												 +pEnvirgrid->auflagenstaerke0
-												 +pEnvirgrid->auflagenstaerke)
+				pEnvirgrid->litterheightmittel = (unsigned short) ( (double) 
+												 (pEnvirgrid->litterheight8
+												 +pEnvirgrid->litterheight7
+												 +pEnvirgrid->litterheight6
+												 +pEnvirgrid->litterheight5
+												 +pEnvirgrid->litterheight4
+												 +pEnvirgrid->litterheight3
+												 +pEnvirgrid->litterheight2
+												 +pEnvirgrid->litterheight1
+												 +pEnvirgrid->litterheight0
+												 +pEnvirgrid->litterheight)
 												 /10.0); 
 												 // thawing_depth reacts with a time lag of 10 years to a changing number of trees
 												 
 												 //***german:
 												 //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
-				pEnvirgrid->auflagenstaerke8 = pEnvirgrid->auflagenstaerke7;
-				pEnvirgrid->auflagenstaerke7 = pEnvirgrid->auflagenstaerke6;
-				pEnvirgrid->auflagenstaerke6 = pEnvirgrid->auflagenstaerke5;
-				pEnvirgrid->auflagenstaerke5 = pEnvirgrid->auflagenstaerke4;
-				pEnvirgrid->auflagenstaerke4 = pEnvirgrid->auflagenstaerke3;
-				pEnvirgrid->auflagenstaerke3 = pEnvirgrid->auflagenstaerke2;
-				pEnvirgrid->auflagenstaerke2 = pEnvirgrid->auflagenstaerke1;
-				pEnvirgrid->auflagenstaerke1 = pEnvirgrid->auflagenstaerke0;
-				pEnvirgrid->auflagenstaerke0 = pEnvirgrid->auflagenstaerke;
+				pEnvirgrid->litterheight8 = pEnvirgrid->litterheight7;
+				pEnvirgrid->litterheight7 = pEnvirgrid->litterheight6;
+				pEnvirgrid->litterheight6 = pEnvirgrid->litterheight5;
+				pEnvirgrid->litterheight5 = pEnvirgrid->litterheight4;
+				pEnvirgrid->litterheight4 = pEnvirgrid->litterheight3;
+				pEnvirgrid->litterheight3 = pEnvirgrid->litterheight2;
+				pEnvirgrid->litterheight2 = pEnvirgrid->litterheight1;
+				pEnvirgrid->litterheight1 = pEnvirgrid->litterheight0;
+				pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
 			}
 			
 
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
 				// Calculation of the damping through organic material (damping reduces thawing_depth, formula taken from literature)
-				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
+				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmittel; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
@@ -972,42 +972,42 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 													  +(1/0.95)) ); 
 													  // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
 				
-				pEnvirgrid->auflagenstaerke+= (unsigned short) (auflagenwachstumsrate*60.0);	
+				pEnvirgrid->litterheight+= (unsigned short) (auflagenwachstumsrate*60.0);	
 				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
-				pEnvirgrid->auflagenstaerkemittel = (unsigned short) ( (double) 
-												 (pEnvirgrid->auflagenstaerke8
-												 +pEnvirgrid->auflagenstaerke7
-												 +pEnvirgrid->auflagenstaerke6
-												 +pEnvirgrid->auflagenstaerke5
-												 +pEnvirgrid->auflagenstaerke4
-												 +pEnvirgrid->auflagenstaerke3
-												 +pEnvirgrid->auflagenstaerke2
-												 +pEnvirgrid->auflagenstaerke1
-												 +pEnvirgrid->auflagenstaerke0
-												 +pEnvirgrid->auflagenstaerke)
+				pEnvirgrid->litterheightmittel = (unsigned short) ( (double) 
+												 (pEnvirgrid->litterheight8
+												 +pEnvirgrid->litterheight7
+												 +pEnvirgrid->litterheight6
+												 +pEnvirgrid->litterheight5
+												 +pEnvirgrid->litterheight4
+												 +pEnvirgrid->litterheight3
+												 +pEnvirgrid->litterheight2
+												 +pEnvirgrid->litterheight1
+												 +pEnvirgrid->litterheight0
+												 +pEnvirgrid->litterheight)
 												 /10.0); 
 												 // thawing_depth reacts with a time lag of 10 years to a changing number of trees
 												 
 												 //***german:
 												 //thawing_depth reagiert mit 10-jahres lag auf änderungen der auflagenstärke, daher 10-jahres mittel der zuwächse
 
-				pEnvirgrid->auflagenstaerke8 = pEnvirgrid->auflagenstaerke7;
-				pEnvirgrid->auflagenstaerke7 = pEnvirgrid->auflagenstaerke6;
-				pEnvirgrid->auflagenstaerke6 = pEnvirgrid->auflagenstaerke5;
-				pEnvirgrid->auflagenstaerke5 = pEnvirgrid->auflagenstaerke4;
-				pEnvirgrid->auflagenstaerke4 = pEnvirgrid->auflagenstaerke3;
-				pEnvirgrid->auflagenstaerke3 = pEnvirgrid->auflagenstaerke2;
-				pEnvirgrid->auflagenstaerke2 = pEnvirgrid->auflagenstaerke1;
-				pEnvirgrid->auflagenstaerke1 = pEnvirgrid->auflagenstaerke0;
-				pEnvirgrid->auflagenstaerke0 = pEnvirgrid->auflagenstaerke;
+				pEnvirgrid->litterheight8 = pEnvirgrid->litterheight7;
+				pEnvirgrid->litterheight7 = pEnvirgrid->litterheight6;
+				pEnvirgrid->litterheight6 = pEnvirgrid->litterheight5;
+				pEnvirgrid->litterheight5 = pEnvirgrid->litterheight4;
+				pEnvirgrid->litterheight4 = pEnvirgrid->litterheight3;
+				pEnvirgrid->litterheight3 = pEnvirgrid->litterheight2;
+				pEnvirgrid->litterheight2 = pEnvirgrid->litterheight1;
+				pEnvirgrid->litterheight1 = pEnvirgrid->litterheight0;
+				pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
 			}
 			
 
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
 				// Calculation of the damping through organic material
-				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->auflagenstaerkemittel; // 1/4000 =slope to reach the maximum value at appr. 4000
+				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmittel; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;

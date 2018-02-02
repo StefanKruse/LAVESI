@@ -641,18 +641,18 @@ void initialiseMaps()
 				pEnvirgrid->Treenumber=0;
 				pEnvirgrid->maxthawing_depth=1000;
 				
-				pEnvirgrid->auflagenstaerke=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke0=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke1=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke2=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke3=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke4=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke5=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke6=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke7=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke8=200;	// in 0.1mm -> max 6.5535 m
-				pEnvirgrid->auflagenstaerke9=200;	// in 0.1mm -> max 6.5535 m 
-				pEnvirgrid->auflagenstaerkemittel=200;
+				pEnvirgrid->litterheight=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight0=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight1=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight2=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight3=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight4=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight5=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight6=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight7=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight8=200;	// in 0.1mm -> max 6.5535 m
+				pEnvirgrid->litterheight9=200;	// in 0.1mm -> max 6.5535 m 
+				pEnvirgrid->litterheightmittel=200;
 				
 
 				plot_list.push_back(pEnvirgrid);	

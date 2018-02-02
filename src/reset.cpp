@@ -169,18 +169,18 @@ void Savealllists(void)
 			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
 			pEnvirgrid_copy->Treenumber=pEnvirgrid->Treenumber;	
 			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
-			pEnvirgrid_copy->auflagenstaerke=pEnvirgrid->auflagenstaerke;	
-			pEnvirgrid_copy->auflagenstaerke0=pEnvirgrid->auflagenstaerke0;
-			pEnvirgrid_copy->auflagenstaerke1=pEnvirgrid->auflagenstaerke1;
-			pEnvirgrid_copy->auflagenstaerke2=pEnvirgrid->auflagenstaerke2;
-			pEnvirgrid_copy->auflagenstaerke3=pEnvirgrid->auflagenstaerke3;
-			pEnvirgrid_copy->auflagenstaerke4=pEnvirgrid->auflagenstaerke4;
-			pEnvirgrid_copy->auflagenstaerke5=pEnvirgrid->auflagenstaerke5;
-			pEnvirgrid_copy->auflagenstaerke6=pEnvirgrid->auflagenstaerke6;
-			pEnvirgrid_copy->auflagenstaerke7=pEnvirgrid->auflagenstaerke7;
-			pEnvirgrid_copy->auflagenstaerke8=pEnvirgrid->auflagenstaerke8;
-			pEnvirgrid_copy->auflagenstaerke9=pEnvirgrid->auflagenstaerke9;
-			pEnvirgrid_copy->auflagenstaerkemittel=pEnvirgrid->auflagenstaerkemittel;
+			pEnvirgrid_copy->litterheight=pEnvirgrid->litterheight;	
+			pEnvirgrid_copy->litterheight0=pEnvirgrid->litterheight0;
+			pEnvirgrid_copy->litterheight1=pEnvirgrid->litterheight1;
+			pEnvirgrid_copy->litterheight2=pEnvirgrid->litterheight2;
+			pEnvirgrid_copy->litterheight3=pEnvirgrid->litterheight3;
+			pEnvirgrid_copy->litterheight4=pEnvirgrid->litterheight4;
+			pEnvirgrid_copy->litterheight5=pEnvirgrid->litterheight5;
+			pEnvirgrid_copy->litterheight6=pEnvirgrid->litterheight6;
+			pEnvirgrid_copy->litterheight7=pEnvirgrid->litterheight7;
+			pEnvirgrid_copy->litterheight8=pEnvirgrid->litterheight8;
+			pEnvirgrid_copy->litterheight9=pEnvirgrid->litterheight9;
+			pEnvirgrid_copy->litterheightmittel=pEnvirgrid->litterheightmittel;
 			plot_list_copy.push_back(pEnvirgrid_copy);
 
 			
@@ -601,18 +601,18 @@ void Restorealllists(void)
 			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
 			pEnvirgrid_copy->Treenumber=pEnvirgrid->Treenumber;	
 			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
-			pEnvirgrid_copy->auflagenstaerke=pEnvirgrid->auflagenstaerke;
-			pEnvirgrid_copy->auflagenstaerke0=pEnvirgrid->auflagenstaerke0;
-			pEnvirgrid_copy->auflagenstaerke1=pEnvirgrid->auflagenstaerke1;
-			pEnvirgrid_copy->auflagenstaerke2=pEnvirgrid->auflagenstaerke2;
-			pEnvirgrid_copy->auflagenstaerke3=pEnvirgrid->auflagenstaerke3;
-			pEnvirgrid_copy->auflagenstaerke4=pEnvirgrid->auflagenstaerke4;
-			pEnvirgrid_copy->auflagenstaerke5=pEnvirgrid->auflagenstaerke5;
-			pEnvirgrid_copy->auflagenstaerke6=pEnvirgrid->auflagenstaerke6;
-			pEnvirgrid_copy->auflagenstaerke7=pEnvirgrid->auflagenstaerke7;
-			pEnvirgrid_copy->auflagenstaerke8=pEnvirgrid->auflagenstaerke8;
-			pEnvirgrid_copy->auflagenstaerke9=pEnvirgrid->auflagenstaerke9;
-			pEnvirgrid_copy->auflagenstaerkemittel=pEnvirgrid->auflagenstaerkemittel;
+			pEnvirgrid_copy->litterheight=pEnvirgrid->litterheight;
+			pEnvirgrid_copy->litterheight0=pEnvirgrid->litterheight0;
+			pEnvirgrid_copy->litterheight1=pEnvirgrid->litterheight1;
+			pEnvirgrid_copy->litterheight2=pEnvirgrid->litterheight2;
+			pEnvirgrid_copy->litterheight3=pEnvirgrid->litterheight3;
+			pEnvirgrid_copy->litterheight4=pEnvirgrid->litterheight4;
+			pEnvirgrid_copy->litterheight5=pEnvirgrid->litterheight5;
+			pEnvirgrid_copy->litterheight6=pEnvirgrid->litterheight6;
+			pEnvirgrid_copy->litterheight7=pEnvirgrid->litterheight7;
+			pEnvirgrid_copy->litterheight8=pEnvirgrid->litterheight8;
+			pEnvirgrid_copy->litterheight9=pEnvirgrid->litterheight9;
+			pEnvirgrid_copy->litterheightmittel=pEnvirgrid->litterheightmittel;
 			plot_list_copy.push_back(pEnvirgrid_copy);				// push back element to plot list 
 
 			

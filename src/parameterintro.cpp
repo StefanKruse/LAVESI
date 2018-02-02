@@ -389,18 +389,18 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.1f ==> Main\n", uebergabestring, parameter[0].seedtravelbreezes);
                 }	
 
-	strcpy(uebergabestring,"SeedDescentg");
-	parameter[0].SeedDescentg=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seeddescentg");
+	parameter[0].seeddescentg=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].SeedDescentg);
+                    printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].seeddescentg);
                 }	
 
-	strcpy(uebergabestring,"SeedDescents");
-	parameter[0].SeedDescents=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seeddescents");
+	parameter[0].seeddescents=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].SeedDescents);
+                    printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].seeddescents);
                 }	
 		
 	strcpy(uebergabestring,"distanceratio");

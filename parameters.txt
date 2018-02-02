@@ -196,14 +196,14 @@ dispersalmode=5;					// (int 0,1,2,3,4) dispersal mode for seeds (95% of seeds d
 										// 3==gaussian
 										// 4==gaussian and fat tailed combined
 										// 5==gaussian and fat tailed combined plus maximum after Matlack
-seedtravelbreezeg=60.1;				// (double) Maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
-seedtravelbreezes=45.0;				// (double) Maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
-SeedDescentg=0.86;					// (double) Descent speed for L.gmelinii seeds (estimation: Matlack 1987)
-SeedDescents=0.93;					// (double) Descent speed for L.sibirica seeds (estimation: Matlack 1987)
-distanceratio=0.16;					// (double) Dispersal distance factor
-seedprodfaktor=8;					// (double) Seed production factor
-keimungsrate=0.01;					// (double 0-1) Germination rate
-keimungweathereinfluss=0.447975;	// (double) Influence of the climate to germination
+seedtravelbreezeg=60.1;				// (double) maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
+seedtravelbreezes=45.0;				// (double) maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
+seeddescentg=0.86;					// (double) escent speed for L.gmelinii seeds (estimation: Matlack 1987)
+seeddescents=0.93;					// (double) descent speed for L.sibirica seeds (estimation: Matlack 1987)
+distanceratio=0.16;					// (double) dispersal distance factor
+seedprodfaktor=8;					// (double) seed production factor
+keimungsrate=0.01;					// (double 0-1) germination rate
+keimungweathereinfluss=0.447975;	// (double) influence of the climate to germination
 gmel_seedtod=2.0;					// (int) years of seed fertility for Larix gmelinii
 
 // 2.2 -----> Diameter growth

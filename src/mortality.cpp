@@ -142,7 +142,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 												exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal)))));	
 				double weather_mort_gmel	= parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);
 				double weather_mort_sib	= parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);				
-				double dry_mort		= parameter[0].mdrought * weather_list[yearposition_help]->trockenheitsmort * pow((1.0 / pTree->height), 0.5); // Verrechnung der Trockenheit aus Trockenheitsindex
+				double dry_mort		= parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5); // Verrechnung der Trockenheit aus Trockenheitsindex
 				
 				/// Calculating the mortality rate of the tree 
 				/// considering the factors of each mortality rate
@@ -193,7 +193,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 						+ (1.0-pow(wachstumrel,parameter[0].relgrowthmortinfluenceexp)),
 						parameter[0].mdensity*heightnkugeleinfluss*pTree->densitywert, 
 						parameter[0].mweather*weathermortaddg*pow((1.0/pTree->height),0.5), 
-						parameter[0].mdrought*(weather_list[yearposition_help]->trockenheitsmort*pow((1.0/pTree->height),0.5)), 
+						parameter[0].mdrought*(weather_list[yearposition_help]->droughtmort*pow((1.0/pTree->height),0.5)), 
 						Treemortg);
 				}
 
@@ -207,7 +207,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 						+ (1.0-pow(wachstumrel,parameter[0].relgrowthmortinfluenceexp)),
 						parameter[0].mdensity*heightnkugeleinfluss*pTree->densitywert, 
 						parameter[0].mweather*weathermortadds*pow((1.0/pTree->height),0.5), 
-						parameter[0].mdrought*(weather_list[yearposition_help]->trockenheitsmort*pow((1.0/pTree->height),0.5)), 
+						parameter[0].mdrought*(weather_list[yearposition_help]->droughtmort*pow((1.0/pTree->height),0.5)), 
 						Treemorts);
 				}
 

@@ -280,7 +280,7 @@ using namespace std;
 		double	weatherfactorming;			
 		double	weatherfactors; 		 		
 		double	weatherfactormins;					
-		double	trockenheitsmort;			
+		double	droughtmort;			
 		double 	janisothermrestriktions;
 		double 	julisothermrestriktion;
 		double 	nddrestriktion;

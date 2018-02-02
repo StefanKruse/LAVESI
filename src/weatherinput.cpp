@@ -783,7 +783,7 @@ void passWeather()
 
 			// Calculation of a dryness influence
 			// // "Evaporation rates of 1.5 mm/day mean growing season" (Dolmann, 2004)
-			double trockenheitsmortbuf=0.0;
+			double droughtmortbuf=0.0;
 			double precgs=	weather_list[iweather]->prec5monthmean
 								+ weather_list[iweather]->prec6monthmean
 								+ weather_list[iweather]->prec7monthmean
@@ -794,14 +794,14 @@ void passWeather()
 				double aattrockenheit=(weather_list[iweather]->activeairtemp/300.0)-1.0;
 				if (aattrockenheit>1)
 				{
-					trockenheitsmortbuf=trockenheitsmortbuf+aattrockenheit*0.1;
+					droughtmortbuf=droughtmortbuf+aattrockenheit*0.1;
 				}
 			}
-			weather_list[iweather]->trockenheitsmort=trockenheitsmortbuf;
+			weather_list[iweather]->droughtmort=droughtmortbuf;
 
 			if (parameter[0].qualiyearlyvis==true)
 			{// console output begin
-				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->trockenheitsmort);
+				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->droughtmort);
 				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monthmeaniso, weather_list[iweather]->temp7monthmeaniso, weather_list[iweather]->vegetationperiodlengthiso);
 			}// console output end
 

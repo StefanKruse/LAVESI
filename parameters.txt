@@ -187,11 +187,11 @@ weathervariablegmelc=0.101;				// (double) determines curvature of the July inde
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
 // 2.1 -----> Reproduction
-coneage=15;							// (int) Minimum age trees begin to bear cones
-seedflugrate=0.63931;				// (double 0-1) Chance a seed is released from the producing tree
+coneage=15;							// (int) minimum age trees begin to bear cones
+seedflightrate=0.63931;				// (double 0-1) chance a seed is released from the producing tree
 dispersalmode=5;					// (int 0,1,2,3,4) dispersal mode for seeds (95% of seeds distributed within 100 m)
-										// 0==randomly
-										// 1==negaive exponentially
+										// 0==random
+										// 1==negative exponential
 										// 2==fat tailed
 										// 3==gaussian
 										// 4==gaussian and fat tailed combined

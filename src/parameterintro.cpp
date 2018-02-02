@@ -361,11 +361,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].coneage);
                 }
 
-	strcpy(uebergabestring,"seedflugrate");
-	parameter[0].seedflugrate=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seedflightrate");
+	parameter[0].seedflightrate=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].seedflugrate);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].seedflightrate);
                 }
 
 	strcpy(uebergabestring,"dispersalmode");

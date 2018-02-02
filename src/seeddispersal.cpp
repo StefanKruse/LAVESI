@@ -99,7 +99,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 					double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 									
 					///and random number < rate of emerging seeds
-					if(flug <= parameter[0].seedflugrate)
+					if(flug <= parameter[0].seedflightrate)
 					{ // If the seed disperses a coordinate is calculated
 						
 						double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -338,7 +338,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 						double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 										
 						///and random number < rate of emerging seeds
-						if(flug <= parameter[0].seedflugrate)
+						if(flug <= parameter[0].seedflightrate)
 						{ // If the seed disperses a coordinate is calculated
 							
 							double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -586,7 +586,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							double flug = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 											
 							///and random number < rate of emerging seeds
-							if(flug <= parameter[0].seedflugrate)
+							if(flug <= parameter[0].seedflightrate)
 							{ // If the seed disperses a coordinate is calculated
 								
 								double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));

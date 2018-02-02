@@ -446,11 +446,11 @@ void Parameterinput(void)
                     printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].realseedconnect)?"true":"false");
                 }
 
-	strcpy(uebergabestring,"Seedwinddispersalmode");
-	parameter[0].Seedwinddispersalmode=(int) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
+	strcpy(uebergabestring,"seedwinddispersalmode");
+	parameter[0].seedwinddispersalmode=(int) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].Seedwinddispersalmode);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedwinddispersalmode);
                 }
 
 	strcpy(uebergabestring,"seedintro");

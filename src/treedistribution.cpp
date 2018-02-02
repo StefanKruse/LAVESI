@@ -64,9 +64,9 @@ void Seedin()
 				double jseed, iseed;
 				bool seedeintragen=false;
 
-				/// Seedwinddispersalmode = kind of seed introduction of all starter seeds 
+				/// seedwinddispersalmode = kind of seed introduction of all starter seeds 
 				/// 1== exponentially from the southern border of each plot
-				if (parameter[0].Seedwinddispersalmode==1)//Seedwinddispersalmode==1 =>randomly from the south border.
+				if (parameter[0].seedwinddispersalmode==1)//seedwinddispersalmode==1 =>randomly from the south border.
 				{ 
 					
 					// random x position:
@@ -95,8 +95,8 @@ void Seedin()
 				} 
 						
 					
-				/// Seedwinddispersalmode==2=>randomly all over the plot
-				else if (parameter[0].Seedwinddispersalmode==2)
+				/// seedwinddispersalmode==2=>randomly all over the plot
+				else if (parameter[0].seedwinddispersalmode==2)
 				{ 
 					// x value
 					jseed= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));

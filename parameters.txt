@@ -112,7 +112,7 @@ seedintronumberpermanent=10000;				// ... (int) if seedintropermanent==1 number 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 										// 0==into all plots along a transect
 										// 1==only southernmost plot
-Seedwinddispersalmode=1;						// (int 1,2) positions for introduced seeds
+seedwinddispersalmode=1;						// (int 1,2) positions for introduced seeds
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect

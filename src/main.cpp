@@ -204,7 +204,7 @@ void Spinupphase()
 		// spin-up-phase
 		if (parameter[0].ivortmax>0 && parameter[0].stabilperiod==false)
 		{ 
-			parameter[0].einschwingen=true;
+			parameter[0].spinupphase=true;
 	
 			printf("\nSpin up phase:");
 			do
@@ -385,7 +385,7 @@ void Spinupphase()
 			} while (stabilized!=true);
 		}
 
-		parameter[0].einschwingen=false;
+		parameter[0].spinupphase=false;
 }
 
 

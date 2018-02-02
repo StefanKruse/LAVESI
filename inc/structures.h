@@ -103,14 +103,14 @@ using namespace std;
 		double 	stabilmovingwindow;	
 		double 	stabilpercentchangethreshold;
 		int 	resetyear;
-		bool	einschwingen;
+		bool	spinupphase;
 
 		// submodules
 		bool	thawing_depth;
 		bool	vegetation;	
 		int		specpres;
 
-		// mulit-core processing with omp
+		// multi-core processing with omp
 		int		omp_num_threads;
 		
 		// simulated plots
@@ -121,7 +121,7 @@ using namespace std;
 		double	nposmax;
 		double	nposmin;
 		
-		// ... stabilization period
+		// stabilization period
 		bool	starter;
 		bool	seedintro;	
 		
@@ -129,7 +129,7 @@ using namespace std;
 		bool	realseedconnect;
 		int		yearswithseedintro;
 		bool	seedintropermanent;
-		int		Seedwinddispersalmode;
+		int		seedwinddispersalmode;
 		int		seedintronumber;
 		int 	seedintronumberpermanent;
 		bool	seedtravelbetween;

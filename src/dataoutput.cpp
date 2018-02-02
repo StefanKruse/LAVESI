@@ -270,7 +270,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		{
 			if (parameter[0].outputmode==0) // "full"
 			{
-				if (parameter[0].einschwingen==true)
+				if (parameter[0].spinupphase==true)
 				{
 					outputcurrencies=true;
 					outputposition=true;
@@ -319,7 +319,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				int h=0;
 	
 				// assemble file name
-				if (parameter[0].einschwingen==true)
+				if (parameter[0].spinupphase==true)
 				{
 					s1<<parameter[0].repeati;
 					s2<<parameter[0].weatherchoice;
@@ -348,7 +348,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "Spinup;");
 				
 					// add column names to the file
-					if (parameter[0].einschwingen==true)
+					if (parameter[0].spinupphase==true)
 					{
 						fprintf(filepointer, "Randomyear;");
 					}
@@ -660,10 +660,10 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
 
-			if ( parameter[0].ivort==1 || (parameter[0].einschwingen==true && (parameter[0].ivort%10)==0) || (parameter[0].einschwingen==false) )
+			if ( parameter[0].ivort==1 || (parameter[0].spinupphase==true && (parameter[0].ivort%10)==0) || (parameter[0].spinupphase==false) )
 			{	
 				// assemble file name
-				if (parameter[0].einschwingen==true)
+				if (parameter[0].spinupphase==true)
 				{
 					s1<<parameter[0].repeati;
 					s2<<parameter[0].weatherchoice;

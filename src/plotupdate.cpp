@@ -251,7 +251,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list
 					}
 					
 					// Calculate the thawing depth influence on the tree growth
-					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)) 
+					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)) 
 						pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 					
 					else
@@ -624,7 +624,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list
 						}
 						
 						// Calculate the influence of the thawing depth on the tree growth
-						if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)) 
+						if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)) 
 							pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 						
 						else
@@ -896,7 +896,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			pEnvirgrid->Treenumber=0;
 			// pEnvirgrid->Dbasalliste.clear();
 			
-			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)
+			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
 			{
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
@@ -936,7 +936,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			}
 			
 
-			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
+			if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
 			{
 				// Calculation of the damping through organic material (damping reduces thawing_depth, formula taken from literature)
 				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmean; // 1/4000 =slope to reach the maximum value at appr. 4000
@@ -964,7 +964,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			pEnvirgrid->Treenumber=0;
 			// pEnvirgrid->Dbasalliste.clear();
 			
-			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)
+			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
 			{
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
@@ -1004,7 +1004,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			}
 			
 
-			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
+			if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
 			{
 				// Calculation of the damping through organic material
 				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmean; // 1/4000 =slope to reach the maximum value at appr. 4000

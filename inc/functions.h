@@ -1,5 +1,5 @@
  double NormverteilungRN(float mean, float sdev);
- double Parametereingabe(char *uebergabestring, int stringlengthmax, char *trennzeichen, struct Parameter *parameter);
+ double Parametereingabe(char *uebergabestring, int stringlengthmax, char *divisionsign, struct Parameter *parameter);
  void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, vector<vector<weather*> > &world_weather_list);
  void Anzeige( vector<Tree*> &tree_list, vector<Seed*> &seed_list);
  void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list);

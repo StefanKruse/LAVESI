@@ -7,7 +7,7 @@
 
 	// parameter input
  	const int stringlengthmax=255;
- 	char trennzeichen[] = "=;";
+ 	char divisionsign[] = "=;";
  	struct Parameter parameter[1];
 	
 	// lists and pointers

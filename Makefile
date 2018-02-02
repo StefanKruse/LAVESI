@@ -37,10 +37,10 @@ reset.o: src/reset.cpp $(HEADER)
 	$(CC) -c src/reset.cpp $(CFLAGS)
 	
 seeddispersal.o: src/seeddispersal.cpp $(HEADER)
-	$(CC)  -c src/seeddispersal.cpp $(CFLAGS)
+	$(CC) -c src/seeddispersal.cpp $(CFLAGS)
 
 seedproduction.o: src/seedproduction.cpp $(HEADER)
-	$(CC)  -c src/seedproduction.cpp $(CFLAGS)
+	$(CC) -c src/seedproduction.cpp $(CFLAGS)
 	
 treedistribution.o: src/treedistribution.cpp $(HEADER)
 	$(CC) -c src/treedistribution.cpp $(CFLAGS)

@@ -85,7 +85,7 @@ windsource=1;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 simduration=80;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
-ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=100;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)

@@ -72,7 +72,7 @@ void Parametereinlesen(void)
 	
 			if (parameter[0].parameterinputvis ==true) 
 			{
-                printf("\n---->\t PARAMETEREINGABE WIRD ANGEZEIGT\n\n\t Schage fuer Funktionen und Anzeigen\n\nread:	%s <= %s ==> Main \n", uebergabestring,		(parameter[0].parameterinputvis)?"true":"false");
+                printf("\n---->\t PARAMETERINPUT\n\nread:	%s <= %s ==> Main \n", uebergabestring,		(parameter[0].parameterinputvis)?"true":"false");
             }
 
 	strcpy(uebergabestring,"yearlyvis");

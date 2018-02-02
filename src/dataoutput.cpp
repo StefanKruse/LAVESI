@@ -624,8 +624,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 				fprintf(filepointer, "%d;", parameter[0].starttrees);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->tempjahrmittel);
-				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp1monatmittel);
-				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp7monatmittel);
+				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp1monthmean);
+				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp7monthmean);
 				fprintf(filepointer, "%d;", weather_list[yearposition]->vegetationslaenge);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->activeairtemp);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->degreday);

@@ -38,7 +38,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 	
 	char puffer[255];
 	int counter=1;
-	double tempjahrmittelbuf, temp1monatmittelbuf, temp2monatmittelbuf, temp3monatmittelbuf, temp4monatmittelbuf, temp5monatmittelbuf, temp6monatmittelbuf, temp7monatmittelbuf, temp8monatmittelbuf, temp9monatmittelbuf, temp10monatmittelbuf, temp11monatmittelbuf, temp12monatmittelbuf;
+	double tempjahrmittelbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf, temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
 
 	//Read in line by line, partially preprocess data
 	
@@ -50,20 +50,20 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 	
 		if (counter>=2)	// ignore header
 		{
-			temp1monatmittelbuf= strtod(strtok(puffer, " "),NULL);
-			temp2monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-			temp3monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp4monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-			temp5monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp6monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp7monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-			temp8monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp9monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp10monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp11monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp12monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp1monthmeanbuf= strtod(strtok(puffer, " "),NULL);
+			temp2monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+			temp3monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp4monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+			temp5monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp6monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp7monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+			temp8monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp9monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp10monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp11monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp12monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
 
-			tempjahrmittelbuf=(temp1monatmittelbuf+temp2monatmittelbuf+temp3monatmittelbuf+temp4monatmittelbuf+temp5monatmittelbuf+temp6monatmittelbuf+temp7monatmittelbuf+temp8monatmittelbuf+temp9monatmittelbuf+temp10monatmittelbuf+temp11monatmittelbuf+temp12monatmittelbuf)/12;
+			tempjahrmittelbuf=(temp1monthmeanbuf+temp2monthmeanbuf+temp3monthmeanbuf+temp4monthmeanbuf+temp5monthmeanbuf+temp6monthmeanbuf+temp7monthmeanbuf+temp8monthmeanbuf+temp9monthmeanbuf+temp10monthmeanbuf+temp11monthmeanbuf+temp12monthmeanbuf)/12;
 
 			
 			
@@ -73,20 +73,20 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			pWeather->xworldcoo=aktortxworldcoo;
 			pWeather->jahr=counter+parameter[0].startjahr-2;					// 2. apply the data to the new year
 			pWeather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp1monatmittel=temp1monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp1monatmittelmin=temp1monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-			pWeather->temp2monatmittel=temp2monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp3monatmittel=temp3monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp4monatmittel=temp4monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp5monatmittel=temp5monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp6monatmittel=temp6monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp7monatmittel=temp7monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp7monatmittelmin=temp7monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-			pWeather->temp8monatmittel=temp8monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp9monatmittel=temp9monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp10monatmittel=temp10monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp11monatmittel=temp11monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp12monatmittel=temp12monatmittelbuf+parameter[0].tempdiffort;
+			pWeather->temp1monthmean=temp1monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp1monthmeanmin=temp1monthmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
+			pWeather->temp2monthmean=temp2monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp3monthmean=temp3monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp4monthmean=temp4monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp5monthmean=temp5monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp6monthmean=temp6monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp7monthmean=temp7monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp7monthmeanmin=temp7monthmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
+			pWeather->temp8monthmean=temp8monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp9monthmean=temp9monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp10monthmean=temp10monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp11monthmean=temp11monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp12monthmean=temp12monthmeanbuf+parameter[0].tempdiffort;
 			
 			// Active Air Temperature AAT = Sum of days warmer than 10°C
 			// Number of days with temperatures above zero degrees = net degree days = NDD ("Vegetationslaenge")
@@ -94,8 +94,8 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			int ndegreday=0, ndegredaymin=0;
 
 			// daily mean temperature estimation from mean july temperature:
-			double julitemp=pWeather->temp7monatmittel;
-			double julitempmin=pWeather->temp7monatmittelmin;
+			double julitemp=pWeather->temp7monthmean;
+			double julitempmin=pWeather->temp7monthmeanmin;
 			
 			for (int i=1;i<=365;i++)
 			{
@@ -166,41 +166,41 @@ void getPrec1(char dateinameprec[50],vector<Weather*>& weather_list, int maximal
 			int counter=1;
 			char puffer[255];
 			double niederschlagssummebuf;
-			double prec1monatmittelbuf, prec2monatmittelbuf, prec3monatmittelbuf, prec4monatmittelbuf, prec5monatmittelbuf, prec6monatmittelbuf, prec7monatmittelbuf, prec8monatmittelbuf, prec9monatmittelbuf, prec10monatmittelbuf, prec11monatmittelbuf, prec12monatmittelbuf;
+			double prec1monthmeanbuf, prec2monthmeanbuf, prec3monthmeanbuf, prec4monthmeanbuf, prec5monthmeanbuf, prec6monthmeanbuf, prec7monthmeanbuf, prec8monthmeanbuf, prec9monthmeanbuf, prec10monthmeanbuf, prec11monthmeanbuf, prec12monthmeanbuf;
 
 			while( fgets(puffer,maximal_word_length,fp) !=NULL)
 			{
 				if (counter>=2)
 				{
-					prec1monatmittelbuf= strtod(strtok(puffer, " "),NULL);
-					prec2monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec3monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec4monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec5monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec6monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec7monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec8monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec9monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec10monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec11monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec12monatmittelbuf= strtod(strtok(NULL, " "),NULL);
+					prec1monthmeanbuf= strtod(strtok(puffer, " "),NULL);
+					prec2monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec3monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec4monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec5monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec6monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec7monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec8monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec9monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec10monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec11monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec12monthmeanbuf= strtod(strtok(NULL, " "),NULL);
 
-					niederschlagssummebuf=(prec1monatmittelbuf+prec2monatmittelbuf+prec3monatmittelbuf+prec4monatmittelbuf+prec5monatmittelbuf+prec6monatmittelbuf+prec7monatmittelbuf+prec8monatmittelbuf+prec9monatmittelbuf+prec10monatmittelbuf+prec11monatmittelbuf+prec12monatmittelbuf);
+					niederschlagssummebuf=(prec1monthmeanbuf+prec2monthmeanbuf+prec3monthmeanbuf+prec4monthmeanbuf+prec5monthmeanbuf+prec6monthmeanbuf+prec7monthmeanbuf+prec8monthmeanbuf+prec9monthmeanbuf+prec10monthmeanbuf+prec11monthmeanbuf+prec12monthmeanbuf);
 
 					// append values to current year
 					pWeather=weather_list[counter-2];			// 1. go to current year
-					pWeather->prec1monatmittel=prec1monatmittelbuf+parameter[0].precdiffort/12;					// 2. append values to current year
-					pWeather->prec2monatmittel=prec2monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec3monatmittel=prec3monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec4monatmittel=prec4monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec5monatmittel=prec5monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec6monatmittel=prec6monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec7monatmittel=prec7monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec8monatmittel=prec8monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec9monatmittel=prec9monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec10monatmittel=prec10monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec11monatmittel=prec11monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec12monatmittel=prec12monatmittelbuf+parameter[0].precdiffort/12;
+					pWeather->prec1monthmean=prec1monthmeanbuf+parameter[0].precdiffort/12;					// 2. append values to current year
+					pWeather->prec2monthmean=prec2monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec3monthmean=prec3monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec4monthmean=prec4monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec5monthmean=prec5monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec6monthmean=prec6monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec7monthmean=prec7monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec8monthmean=prec8monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec9monthmean=prec9monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec10monthmean=prec10monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec11monthmean=prec11monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec12monthmean=prec12monthmeanbuf+parameter[0].precdiffort/12;
 					pWeather->niederschlagssumme=niederschlagssummebuf+parameter[0].precdiffort;
 					pWeather->niederschlagssummemin=niederschlagssummebuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	
 
@@ -307,8 +307,8 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 
 					double tempjahrmittelbuf=pWeather->tempjahrmittel;
 					double tempjahrmittelminbuf=pWeather->tempjahrmittelmin;
-					double temp1monatmittelbuf=0, temp1monatmittelminbuf=0;
-					double temp7monatmittelbuf=0, temp7monatmittelminbuf=0;
+					double temp1monthmeanbuf=0, temp1monthmeanminbuf=0;
+					double temp7monthmeanbuf=0, temp7monthmeanminbuf=0;
 
 					// Parameters of the sine function
 					double ausdehnung=0.567980348064239;
@@ -346,14 +346,14 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 
 						if ( (i>=1) & (i<=31) )
 						{ //calculate january mean value
-							temp1monatmittelbuf=temp1monatmittelbuf+tagestemp;
-							temp1monatmittelminbuf=temp1monatmittelminbuf+tagestempmin;
+							temp1monthmeanbuf=temp1monthmeanbuf+tagestemp;
+							temp1monthmeanminbuf=temp1monthmeanminbuf+tagestempmin;
 						} //calculate january mean value
 					
 						if ( (i>=182) & (i<=212) )
 						{ //calculate july mean value
-							temp7monatmittelbuf=temp7monatmittelbuf+tagestemp;
-							temp7monatmittelminbuf=temp7monatmittelminbuf+tagestempmin;
+							temp7monthmeanbuf=temp7monthmeanbuf+tagestemp;
+							temp7monthmeanminbuf=temp7monthmeanminbuf+tagestempmin;
 						} //calculate july mean value
 					}
 
@@ -362,10 +362,10 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 					pWeather->vegetationslaenge=ndegreday;
 					pWeather->activeairtempmin=sumacttempmin;
 					pWeather->vegetationslaengemin=ndegredaymin;
-					pWeather->temp1monatmittel=temp1monatmittelbuf/31;
-					pWeather->temp1monatmittelmin=temp1monatmittelminbuf/31;
-					pWeather->temp7monatmittel=temp7monatmittelbuf/31;
-					pWeather->temp7monatmittelmin=temp7monatmittelminbuf/31;
+					pWeather->temp1monthmean=temp1monthmeanbuf/31;
+					pWeather->temp1monthmeanmin=temp1monthmeanminbuf/31;
+					pWeather->temp7monthmean=temp7monthmeanbuf/31;
+					pWeather->temp7monthmeanmin=temp7monthmeanminbuf/31;
 					weather_list.push_back(pWeather);// 3. push back the current year in weather_list
 
 				}
@@ -398,53 +398,53 @@ void getPrec2(char dateinameprec[50],vector<Weather*>& weather_list,int maximal_
 			int counter=1;
 			char puffer[255];
 			double niederschlagssummebuf;
-			double prec1monatmittelbuf;
-			double prec2monatmittelbuf;
-			double prec3monatmittelbuf;
-			double prec4monatmittelbuf;
-			double prec5monatmittelbuf;
-			double prec6monatmittelbuf;
-			double prec7monatmittelbuf;
-			double prec8monatmittelbuf;
-			double prec9monatmittelbuf;
-			double prec10monatmittelbuf;
-			double prec11monatmittelbuf;
-			double prec12monatmittelbuf;
+			double prec1monthmeanbuf;
+			double prec2monthmeanbuf;
+			double prec3monthmeanbuf;
+			double prec4monthmeanbuf;
+			double prec5monthmeanbuf;
+			double prec6monthmeanbuf;
+			double prec7monthmeanbuf;
+			double prec8monthmeanbuf;
+			double prec9monthmeanbuf;
+			double prec10monthmeanbuf;
+			double prec11monthmeanbuf;
+			double prec12monthmeanbuf;
 
 			while( fgets(puffer,maximal_word_length,fp) !=NULL)
 			{
 				if (counter>=2)
 				{
 					strtod(strtok(puffer, " "),NULL);
-					prec1monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec2monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec3monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec4monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec5monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec6monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec7monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec8monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec9monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec10monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec11monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-					prec12monatmittelbuf= strtod(strtok(NULL, " "),NULL);
+					prec1monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec2monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec3monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec4monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec5monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec6monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec7monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec8monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec9monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec10monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec11monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+					prec12monthmeanbuf= strtod(strtok(NULL, " "),NULL);
 
-					niederschlagssummebuf=(prec1monatmittelbuf+prec2monatmittelbuf+prec3monatmittelbuf+prec4monatmittelbuf+prec5monatmittelbuf+prec6monatmittelbuf+prec7monatmittelbuf+prec8monatmittelbuf+prec9monatmittelbuf+prec10monatmittelbuf+prec11monatmittelbuf+prec12monatmittelbuf);
+					niederschlagssummebuf=(prec1monthmeanbuf+prec2monthmeanbuf+prec3monthmeanbuf+prec4monthmeanbuf+prec5monthmeanbuf+prec6monthmeanbuf+prec7monthmeanbuf+prec8monthmeanbuf+prec9monthmeanbuf+prec10monthmeanbuf+prec11monthmeanbuf+prec12monthmeanbuf);
 
 					// append values to current year
 					pWeather=weather_list[counter-2];			// 1. go to current year
-					pWeather->prec1monatmittel=prec1monatmittelbuf+parameter[0].precdiffort/12;					// 2. append values to current year
-					pWeather->prec2monatmittel=prec2monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec3monatmittel=prec3monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec4monatmittel=prec4monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec5monatmittel=prec5monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec6monatmittel=prec6monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec7monatmittel=prec7monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec8monatmittel=prec8monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec9monatmittel=prec9monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec10monatmittel=prec10monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec11monatmittel=prec11monatmittelbuf+parameter[0].precdiffort/12;
-					pWeather->prec12monatmittel=prec12monatmittelbuf+parameter[0].precdiffort/12;
+					pWeather->prec1monthmean=prec1monthmeanbuf+parameter[0].precdiffort/12;					// 2. append values to current year
+					pWeather->prec2monthmean=prec2monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec3monthmean=prec3monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec4monthmean=prec4monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec5monthmean=prec5monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec6monthmean=prec6monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec7monthmean=prec7monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec8monthmean=prec8monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec9monthmean=prec9monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec10monthmean=prec10monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec11monthmean=prec11monthmeanbuf+parameter[0].precdiffort/12;
+					pWeather->prec12monthmean=prec12monthmeanbuf+parameter[0].precdiffort/12;
 					pWeather->niederschlagssumme=niederschlagssummebuf+parameter[0].precdiffort;
 					pWeather->niederschlagssummemin=niederschlagssummebuf+parameter[0].precdiffort+parameter[0].precdiffortmin;	// Berechnung oben
 
@@ -521,7 +521,7 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 	
 	char puffer[255];
 	int counter=1;
-	double tempjahrmittelbuf, temp1monatmittelbuf, temp2monatmittelbuf, temp3monatmittelbuf, temp4monatmittelbuf, temp5monatmittelbuf, temp6monatmittelbuf, temp7monatmittelbuf, temp8monatmittelbuf, temp9monatmittelbuf, temp10monatmittelbuf, temp11monatmittelbuf, temp12monatmittelbuf;
+	double tempjahrmittelbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf, temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
 
 	//Read in line by line, partially preprocess data
 	
@@ -533,20 +533,20 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 	
 		if (counter>=2)	// ignore header
 		{
-			temp1monatmittelbuf= strtod(strtok(puffer, " "),NULL);
-			temp2monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-			temp3monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp4monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-			temp5monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp6monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp7monatmittelbuf= strtod(strtok(NULL, " "),NULL);
-			temp8monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp9monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp10monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp11monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
-			temp12monatmittelbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp1monthmeanbuf= strtod(strtok(puffer, " "),NULL);
+			temp2monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+			temp3monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp4monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+			temp5monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp6monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp7monthmeanbuf= strtod(strtok(NULL, " "),NULL);
+			temp8monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp9monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp10monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp11monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
+			temp12monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
 
-			tempjahrmittelbuf=(temp1monatmittelbuf+temp2monatmittelbuf+temp3monatmittelbuf+temp4monatmittelbuf+temp5monatmittelbuf+temp6monatmittelbuf+temp7monatmittelbuf+temp8monatmittelbuf+temp9monatmittelbuf+temp10monatmittelbuf+temp11monatmittelbuf+temp12monatmittelbuf)/12;
+			tempjahrmittelbuf=(temp1monthmeanbuf+temp2monthmeanbuf+temp3monthmeanbuf+temp4monthmeanbuf+temp5monthmeanbuf+temp6monthmeanbuf+temp7monthmeanbuf+temp8monthmeanbuf+temp9monthmeanbuf+temp10monthmeanbuf+temp11monthmeanbuf+temp12monthmeanbuf)/12;
 
 			// add a new year
 			pWeather= new Weather();			// 1. generate new year
@@ -554,20 +554,20 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			pWeather->xworldcoo=aktortxworldcoo;
 			pWeather->jahr=counter+parameter[0].startjahr-2;					// 2. apply the data to the new year
 			pWeather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp1monatmittel=temp1monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp1monatmittelmin=temp1monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-			pWeather->temp2monatmittel=temp2monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp3monatmittel=temp3monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp4monatmittel=temp4monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp5monatmittel=temp5monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp6monatmittel=temp6monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp7monatmittel=temp7monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp7monatmittelmin=temp7monatmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
-			pWeather->temp8monatmittel=temp8monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp9monatmittel=temp9monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp10monatmittel=temp10monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp11monatmittel=temp11monatmittelbuf+parameter[0].tempdiffort;
-			pWeather->temp12monatmittel=temp12monatmittelbuf+parameter[0].tempdiffort;
+			pWeather->temp1monthmean=temp1monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp1monthmeanmin=temp1monthmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
+			pWeather->temp2monthmean=temp2monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp3monthmean=temp3monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp4monthmean=temp4monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp5monthmean=temp5monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp6monthmean=temp6monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp7monthmean=temp7monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp7monthmeanmin=temp7monthmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
+			pWeather->temp8monthmean=temp8monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp9monthmean=temp9monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp10monthmean=temp10monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp11monthmean=temp11monthmeanbuf+parameter[0].tempdiffort;
+			pWeather->temp12monthmean=temp12monthmeanbuf+parameter[0].tempdiffort;
 			
 			// Active Air Temperature AAT = Sum of days warmer than 10°C
 			// Number of days with temperatures above zero degrees = net degree days = NDD ("Vegetationslaenge")
@@ -575,9 +575,9 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			int ndegreday=0, ndegredaymin=0;
 
 			// daily mean temperature estimation from mean july temperature:
-			double julitemp=pWeather->temp7monatmittel;
-			double julitempmin=pWeather->temp7monatmittelmin;
-			double jantemp=pWeather->temp1monatmittel;
+			double julitemp=pWeather->temp7monthmean;
+			double julitempmin=pWeather->temp7monthmeanmin;
+			double jantemp=pWeather->temp1monthmean;
 			
 			for (int i=1;i<=365;i++)
 			{
@@ -669,10 +669,10 @@ void passWeather()
 			double julindexmins = 0;
 			double julindexg = 0;
 			double julindexming	= 0;
-			julindexs = (0.163/(1+exp(12.319-weather_list[iweather]->temp7monatmittel)))+0.168;
-			julindexmins = (0.163/(1+exp(12.319-weather_list[iweather]->temp7monatmittelmin)))+0.168;
-			julindexg = (0.078/(1+exp(14.825-weather_list[iweather]->temp7monatmittel)))+0.108;
-			julindexming = (0.078/(1+exp(14.825-weather_list[iweather]->temp7monatmittelmin)))+0.108;
+			julindexs = (0.163/(1+exp(12.319-weather_list[iweather]->temp7monthmean)))+0.168;
+			julindexmins = (0.163/(1+exp(12.319-weather_list[iweather]->temp7monthmeanmin)))+0.168;
+			julindexg = (0.078/(1+exp(14.825-weather_list[iweather]->temp7monthmean)))+0.108;
+			julindexming = (0.078/(1+exp(14.825-weather_list[iweather]->temp7monthmeanmin)))+0.108;
 			// Growing Season length: 60 days -> northern border (Osawa 2010, S. 47)  
 			//CRU_TS data set: 120 days>0°C in the north!!
 			
@@ -716,11 +716,11 @@ void passWeather()
 					}
 					else
 					{
-						jantempsum+=weather_list[iweather+i-10]->temp1monatmittel;
-						jantempsummin+=weather_list[iweather+i-10]->temp1monatmittelmin;
+						jantempsum+=weather_list[iweather+i-10]->temp1monthmean;
+						jantempsummin+=weather_list[iweather+i-10]->temp1monthmeanmin;
 					}
-					jultempsum+=weather_list[iweather+i-10]->temp7monatmittel;
-					jultempsummin+=weather_list[iweather+i-10]->temp7monatmittelmin;
+					jultempsum+=weather_list[iweather+i-10]->temp7monthmean;
+					jultempsummin+=weather_list[iweather+i-10]->temp7monthmeanmin;
 					nddsum+=weather_list[iweather+i-10]->vegetationslaenge;
 					nddsummin+=weather_list[iweather+i-10]->vegetationslaengemin;
 				}
@@ -742,11 +742,11 @@ void passWeather()
 					}
 					else
 					{
-						jantempsum+=weather_list[i]->temp1monatmittel;
-						jantempsummin+=weather_list[i]->temp1monatmittelmin;
+						jantempsum+=weather_list[i]->temp1monthmean;
+						jantempsummin+=weather_list[i]->temp1monthmeanmin;
 					}				
-					jultempsum+=weather_list[i]->temp7monatmittel;
-					jultempsummin+=weather_list[i]->temp7monatmittelmin;
+					jultempsum+=weather_list[i]->temp7monthmean;
+					jultempsummin+=weather_list[i]->temp7monthmeanmin;
 					nddsum+=weather_list[i]->vegetationslaenge;
 					nddsummin+=weather_list[i]->vegetationslaengemin;
 				}
@@ -766,28 +766,28 @@ void passWeather()
 				}
 				else
 				{
-					jantempsum=weather_list[iweather]->temp1monatmittel;
-					jantempsummin=weather_list[iweather]->temp1monatmittelmin;
+					jantempsum=weather_list[iweather]->temp1monthmean;
+					jantempsummin=weather_list[iweather]->temp1monthmeanmin;
 				}					
-				jultempsum=weather_list[iweather]->temp7monatmittel;
-				jultempsummin=weather_list[iweather]->temp7monatmittelmin;
+				jultempsum=weather_list[iweather]->temp7monthmean;
+				jultempsummin=weather_list[iweather]->temp7monthmeanmin;
 				nddsum=weather_list[iweather]->vegetationslaenge;
 				nddsummin=weather_list[iweather]->vegetationslaengemin;
 			}
-			weather_list[iweather]->temp1monatmitteliso=jantempsum;
-			weather_list[iweather]->temp1monatmittelisomin=jantempsummin;
-			weather_list[iweather]->temp7monatmitteliso=jultempsum;
-			weather_list[iweather]->temp7monatmittelisomin=jultempsummin;
+			weather_list[iweather]->temp1monthmeaniso=jantempsum;
+			weather_list[iweather]->temp1monthmeanisomin=jantempsummin;
+			weather_list[iweather]->temp7monthmeaniso=jultempsum;
+			weather_list[iweather]->temp7monthmeanisomin=jultempsummin;
 			weather_list[iweather]->vegetationslaengeiso=(int) floor(nddsum);
 			weather_list[iweather]->vegetationslaengeisomin=(int) floor(nddsummin);
 
 			// Calculation of a dryness influence
 			// // "Evaporation rates of 1.5 mm/day mean growing season" (Dolmann, 2004)
 			double trockenheitsmortbuf=0.0;
-			double precgs=	weather_list[iweather]->prec5monatmittel
-								+ weather_list[iweather]->prec6monatmittel
-								+ weather_list[iweather]->prec7monatmittel
-								+ weather_list[iweather]->prec8monatmittel;
+			double precgs=	weather_list[iweather]->prec5monthmean
+								+ weather_list[iweather]->prec6monthmean
+								+ weather_list[iweather]->prec7monthmean
+								+ weather_list[iweather]->prec8monthmean;
 			double duerreindex=parameter[0].evapod*weather_list[iweather]->vegetationslaenge/precgs;
 			if (duerreindex>1) 
 			{
@@ -802,7 +802,7 @@ void passWeather()
 			if (parameter[0].qualiyearlyvis==true)
 			{// console output begin
 				printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather]->jahr, iweather, weather_list[iweather]->weatherfactorg, weather_list[iweather]->weatherfactors, weather_list[iweather]->trockenheitsmort);
-				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monatmitteliso, weather_list[iweather]->temp7monatmitteliso, weather_list[iweather]->vegetationslaengeiso);
+				printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n",weather_list[iweather]->temp1monthmeaniso, weather_list[iweather]->temp7monthmeaniso, weather_list[iweather]->vegetationslaengeiso);
 			}// console output end
 
 			
@@ -821,34 +821,34 @@ void passWeather()
 			weather_list[iweather]->nddrestriktion=0.0;
 
 			/// mean January temp < -40°C?
-			if (weather_list[iweather]->temp1monatmitteliso<(parameter[0].janthresholdtempgmel))
+			if (weather_list[iweather]->temp1monthmeaniso<(parameter[0].janthresholdtempgmel))
 			{
 				weather_list[iweather]->janisothermrestriktiong=1.0;
 			}
 			else
 			{
-				weather_list[iweather]->janisothermrestriktiong=1.0-fabs(9.0*(weather_list[iweather]->temp1monatmitteliso-parameter[0].janthresholdtempgmel)/(-parameter[0].janthresholdtempgmel));	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -45.0 °C
+				weather_list[iweather]->janisothermrestriktiong=1.0-fabs(9.0*(weather_list[iweather]->temp1monthmeaniso-parameter[0].janthresholdtempgmel)/(-parameter[0].janthresholdtempgmel));	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -45.0 °C
 			}
 
 
 			/// mean January temp < -40°C?
-			if (weather_list[iweather]->temp1monatmitteliso<(-33.0))
+			if (weather_list[iweather]->temp1monthmeaniso<(-33.0))
 			{
 				weather_list[iweather]->janisothermrestriktions=1.0;
 			}
 			else
 			{
-				weather_list[iweather]->janisothermrestriktions=1.0-fabs(6.6*(weather_list[iweather]->temp1monatmitteliso+33.0)/33.0);	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -33.0 °C
+				weather_list[iweather]->janisothermrestriktions=1.0-fabs(6.6*(weather_list[iweather]->temp1monthmeaniso+33.0)/33.0);	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen <= -33.0 °C
 			}		
 			
 			/// mean July temp < 10°C?
-			if (weather_list[iweather]->temp7monatmitteliso<10.0) 
+			if (weather_list[iweather]->temp7monthmeaniso<10.0) 
 			{
 				weather_list[iweather]->julisothermrestriktion=1.0;
 			}
 			else 
 			{
-				weather_list[iweather]->julisothermrestriktion=1.0-fabs(2.0*(weather_list[iweather]->temp7monatmitteliso-10.0)/10.0);	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen >= 10.0 °C
+				weather_list[iweather]->julisothermrestriktion=1.0-fabs(2.0*(weather_list[iweather]->temp7monthmeaniso-10.0)/10.0);	// hier Betrag ueberfluessig da Zahl niemals negativ da nur Zahlen >= 10.0 °C
 			}
 
 

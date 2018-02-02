@@ -228,7 +228,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				
 				// calculation of the slope
 				double slopediff=pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl-1]-pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl-2];
-				if (pEvaluation->nachyearofturningpoint!=true)
+				if (pEvaluation->postyearofturningpoint!=true)
 				{	
 			
 					// If a maximal slope is not surpassed in 50 years, the turning point of growth is reached
@@ -244,7 +244,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					if (pEvaluation->countermaxincrementbasalarea==0)
 					{
 						pEvaluation->yearofturningpoint=jahr;
-						pEvaluation->nachyearofturningpoint=true;
+						pEvaluation->postyearofturningpoint=true;
 					}
 				}
 				// after the turning point is reached, the saturation of the system is reached as soon as the slope becomes negative

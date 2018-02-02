@@ -857,25 +857,25 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.2f ==> Main\n", uebergabestring, parameter[0].janthresholdtempgmel);
                 }
 
-	strcpy(uebergabestring,"weatherzahlgmela");
-	parameter[0].weatherzahlgmela= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"weathervariablegmela");
+	parameter[0].weathervariablegmela= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmela);
+                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weathervariablegmela);
                 }
 
-	strcpy(uebergabestring,"weatherzahlgmelb");
-	parameter[0].weatherzahlgmelb= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"weathervariablegmelb");
+	parameter[0].weathervariablegmelb= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmelb);
+                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weathervariablegmelb);
                 }
 
-	strcpy(uebergabestring,"weatherzahlgmelc");
-	parameter[0].weatherzahlgmelc= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"weathervariablegmelc");
+	parameter[0].weathervariablegmelc= Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true)
                 {
-                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weatherzahlgmelc);
+                    printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].weathervariablegmelc);
                 }
 
 	strcpy(uebergabestring,"windsource");

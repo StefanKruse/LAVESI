@@ -172,9 +172,9 @@ dichtheightrel=12;					// (int) interaction modification mode of tree height and
 										// 3==....
 precthreshold=371.717745;			// (double) precipitation optimum
 janthresholdtempgmel=-45;				// (double) number for January isotherm restriction
-weatherzahlgmela=0.076;				// (double) determines curvature of the July index for L.gmelinii 
-weatherzahlgmelb=14.568;			// (double) determines curvature of the July index for L.gmelinii 
-weatherzahlgmelc=0.101;				// (double) determines curvature of the July index for L.gmelinii 
+weathervariablegmela=0.076;				// (double) determines curvature of the July index for L.gmelinii 
+weathervariablegmelb=14.568;			// (double) determines curvature of the July index for L.gmelinii 
+weathervariablegmelc=0.101;				// (double) determines curvature of the July index for L.gmelinii 
 
 	//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//

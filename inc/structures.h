@@ -148,9 +148,9 @@ using namespace std;
 		double	precdiffortmin;
 		double	evapod;
 		double 	janthresholdtempgmel;
-		double 	weatherzahlgmela;
-		double 	weatherzahlgmelb;
-		double 	weatherzahlgmelc;
+		double 	weathervariablegmela;
+		double 	weathervariablegmelb;
+		double 	weathervariablegmelc;
 		
 		// ... density grid
 		int		sizemagnif;

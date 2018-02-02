@@ -292,7 +292,7 @@ using namespace std;
 	{
 		int		xworldcoo;					
 		int		yworldcoo;					
-		vector<double> BAliste;				
+		vector<double> basalarealist;				
 		vector<double> BArunmeanliste;		
 		double	maxincrementbasalarea;		
 		int		countermaxincrementbasalarea;

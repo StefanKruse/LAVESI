@@ -664,8 +664,8 @@ void initialiseMaps()
 			pEvaluation=new Evaluation();
 			pEvaluation->yworldcoo=aktortyworldcoo;
 			pEvaluation->xworldcoo=aktortxworldcoo;
-			pEvaluation->BAliste.clear();
-			pEvaluation->BAliste.shrink_to_fit();
+			pEvaluation->basalarealist.clear();
+			pEvaluation->basalarealist.shrink_to_fit();
 			pEvaluation->BArunmeanliste.clear();
 			pEvaluation->BArunmeanliste.shrink_to_fit();
 			//Start growth stage calculation

@@ -114,7 +114,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		} // End tree_list loop
 		
 		// push back values in evaluation list
-		pEvaluation->BAliste.push_back(basalarea);
+		pEvaluation->basalarealist.push_back(basalarea);
 		
 		pEvaluation->nheight0b40liste.push_back(nheight0b40);
 		pEvaluation->nheight41b200liste.push_back(nheight41b200);
@@ -143,7 +143,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		}
 
 		// mean value calculation
-		int basalareaanzahl=pEvaluation->BAliste.size();
+		int basalareaanzahl=pEvaluation->basalarealist.size();
 		
 			double meanbasalarea=0;
 			double meannheight0b40=0, meannheight41b200=0, meannheight201b10000=0;
@@ -155,7 +155,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{// if exactly parameter[0].stabilmovingwindow values are set
 				for (int position=basalareaanzahl-(int) parameter[0].stabilmovingwindow;position<basalareaanzahl;++position)
 				{
-					meanbasalarea+=pEvaluation->BAliste[position]/parameter[0].stabilmovingwindow;
+					meanbasalarea+=pEvaluation->basalarealist[position]/parameter[0].stabilmovingwindow;
 					meannheight0b40+=pEvaluation->nheight0b40liste[position]/parameter[0].stabilmovingwindow;
 					meannheight41b200+=pEvaluation->nheight41b200liste[position]/parameter[0].stabilmovingwindow;
 					meannheight201b10000+=pEvaluation->nheight201b10000liste[position]/parameter[0].stabilmovingwindow;
@@ -177,8 +177,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			else if (basalareaanzahl> (int) parameter[0].stabilmovingwindow) 
 			{// if more than parameter[0].stabilmovingwindow values are set
 				meanbasalarea=pEvaluation->BArunmeanliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]		// Mittelwert des Vorjahres
-							-(pEvaluation->BAliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]/parameter[0].stabilmovingwindow)		// minus den ersten Wert aus Bereich zur Berechnung des Mittelwertes des Vorjahres
-							+(pEvaluation->BAliste[basalareaanzahl-1]/parameter[0].stabilmovingwindow);		// plus den neuen Wert aus diesem Jahr
+							-(pEvaluation->basalarealist[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]/parameter[0].stabilmovingwindow)		// minus den ersten Wert aus Bereich zur Berechnung des Mittelwertes des Vorjahres
+							+(pEvaluation->basalarealist[basalareaanzahl-1]/parameter[0].stabilmovingwindow);		// plus den neuen Wert aus diesem Jahr
 				pEvaluation->BArunmeanliste.push_back(meanbasalarea);
 			
 				meannheight0b40=pEvaluation->nheight0b40runmeanliste[basalareaanzahl-((int) parameter[0].stabilmovingwindow+1)]		// Mittelwert des Vorjahres
@@ -569,7 +569,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", pEvaluation->nheight0b40liste[pEvaluation->nheight0b40liste.size()-1]);
 				fprintf(filepointer, "%d;", pEvaluation->nheight41b200liste[pEvaluation->nheight41b200liste.size()-1]);
 				fprintf(filepointer, "%d;", pEvaluation->nheight201b10000liste[pEvaluation->nheight201b10000liste.size()-1]);
-				fprintf(filepointer, "%6.4f;", pEvaluation->BAliste[pEvaluation->BAliste.size()-1]);
+				fprintf(filepointer, "%6.4f;", pEvaluation->basalarealist[pEvaluation->basalarealist.size()-1]);
 				fprintf(filepointer, "%d;", pEvaluation->stemcountliste[pEvaluation->stemcountliste.size()-1]);
 				fprintf(filepointer, "%6.4f;", pEvaluation->meantreeheightliste[pEvaluation->meantreeheightliste.size()-1]);
 				fprintf(filepointer, "%6.4f;", pEvaluation->meantreeageliste[pEvaluation->meantreeageliste.size()-1]);
@@ -642,7 +642,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				//StefanC: Additional console output
 				if (parameter[0].yearlyvis ==true)
 				{
-					cout << endl << "\tBasalarea = " << pEvaluation->BAliste[pEvaluation->BAliste.size()-1] << endl;
+					cout << endl << "\tBasalarea = " << pEvaluation->basalarealist[pEvaluation->basalarealist.size()-1] << endl;
 					cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
 					cout << "tree_list.size() at Dataoutput = " << tree_list.size() << endl;
 					cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;

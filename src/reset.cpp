@@ -226,9 +226,9 @@ void Savealllists(void)
 			pEvaluation_copy= new Evaluation();						// create new evaluation
 			pEvaluation_copy->xworldcoo=pEvaluation->xworldcoo;	
 			pEvaluation_copy->yworldcoo=pEvaluation->yworldcoo;	
-				for (vector<double>::iterator posval=pEvaluation->BAliste.begin(); posval<pEvaluation->BAliste.end(); )
+				for (vector<double>::iterator posval=pEvaluation->basalarealist.begin(); posval<pEvaluation->basalarealist.end(); )
 				{ 
-					pEvaluation_copy->BAliste.push_back((*posval));
+					pEvaluation_copy->basalarealist.push_back((*posval));
 					++posval;
 				} 
 				for (vector<double>::iterator posval=pEvaluation->BArunmeanliste.begin(); posval<pEvaluation->BArunmeanliste.end(); )
@@ -391,8 +391,8 @@ void Clearalllists(void)
 		for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos)
 		{
 			pEvaluation= (*pos);
-			pEvaluation->BAliste.clear();
-			pEvaluation->BAliste.shrink_to_fit();
+			pEvaluation->basalarealist.clear();
+			pEvaluation->basalarealist.shrink_to_fit();
 			pEvaluation->BArunmeanliste.clear();
 			pEvaluation->BArunmeanliste.shrink_to_fit();
 			pEvaluation->nheight0b40liste.clear();
@@ -659,9 +659,9 @@ void Restorealllists(void)
 			pEvaluation_copy= new Evaluation();						// create new evaluation list element
 			pEvaluation_copy->xworldcoo=pEvaluation->xworldcoo;	
 			pEvaluation_copy->yworldcoo=pEvaluation->yworldcoo;	
-				for (vector<double>::iterator posval=pEvaluation->BAliste.begin(); posval<pEvaluation->BAliste.end(); )
+				for (vector<double>::iterator posval=pEvaluation->basalarealist.begin(); posval<pEvaluation->basalarealist.end(); )
 				{
-					pEvaluation_copy->BAliste.push_back((*posval));
+					pEvaluation_copy->basalarealist.push_back((*posval));
 					++posval;
 				}
 				for (vector<double>::iterator posval=pEvaluation->BArunmeanliste.begin(); posval<pEvaluation->BArunmeanliste.end(); )
@@ -826,7 +826,7 @@ void Clearalllists_copy(void)
 		for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos)
 		{
 			pEvaluation=(*pos);
-			pEvaluation->BAliste.clear();
+			pEvaluation->basalarealist.clear();
 			pEvaluation->BArunmeanliste.clear();
 			pEvaluation->nheight0b40liste.clear();
 			pEvaluation->nheight0b40runmeanliste.clear();

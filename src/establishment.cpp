@@ -83,7 +83,7 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 					if(pseed->species==1)
 					{
 						
-						if (zufallsz< (parameter[0].keimungsrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstgmel))*keimungauflageinfluence) )
+						if (zufallsz< (parameter[0].germinationrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstgmel))*keimungauflageinfluence) )
 						{  
 
 							if (maxbasalwachstum>0.0) 
@@ -142,7 +142,7 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 					}
 					else if(pseed->species==2)
 					{
-						if (zufallsz< (parameter[0].keimungsrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstsib))*keimungauflageinfluence) )
+						if (zufallsz< (parameter[0].germinationrate+(parameter[0].keimungweathereinfluss*maxbasalwachstum/exp(parameter[0].gdbasalconstsib))*keimungauflageinfluence) )
 						{  
 
 							if (maxbasalwachstum>0.0) 

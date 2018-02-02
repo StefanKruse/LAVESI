@@ -212,7 +212,7 @@ using namespace std;
 		double 	pollengregorym,pollengregoryc;
 		
 		// ... germination		
-		double	keimungsrate; 
+		double	germinationrate; 
 		double	keimungweathereinfluss;
 		
 		// ... mortality

@@ -121,8 +121,8 @@ using namespace std;
 		int		mapylength;	
 		bool	weathercalcgradient;
 		bool	lineartransect;
-		double	Nposmax;
-		double	Nposmin;
+		double	nposmax;
+		double	nposmin;
 		
 		// ... stabilization period
 		bool	starter;

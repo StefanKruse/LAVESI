@@ -6,12 +6,12 @@ void getTemp1(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-	//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
+	//2.) Calculation of latitudinal position from parameter[0].nposmax and parameter[0].nposmin
 	if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 	{
-		double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
+		double Nposcenter=(parameter[0].nposmax+parameter[0].nposmin)/2;
 		double mapylengthdummy=parameter[0].mapylength;	// irgendwie funktioniert nicht die direkte Verwendung in der nachfolgenden Formel??
-		double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
+		double Nposakt=parameter[0].nposmax-( (parameter[0].nposmax-parameter[0].nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
 		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
 		parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 		parameter[0].precdiffort=-5.3699 * (Nposakt-Nposcenter);
@@ -227,16 +227,16 @@ void getTemp2(int aktort, char dateinametemp[50],vector<weather*>& weather_list,
 			int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 			int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-			//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
+			//2.) Calculation of latitudinal position from parameter[0].nposmax and parameter[0].nposmin
 	
 			//***german:
 			// 2. N_inGrad aus den N_max und N_min und Ygesamt-werten berechnen
 			if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 			{
-				double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
+				double Nposcenter=(parameter[0].nposmax+parameter[0].nposmin)/2;
 			
 				double mapylengthdummy=parameter[0].mapylength;	
-				double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
+				double Nposakt=parameter[0].nposmax-( (parameter[0].nposmax-parameter[0].nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
 				//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
 		
 				//***german:
@@ -473,15 +473,15 @@ void getTemp3(int aktort, char dateinametemp[50],vector<weather*>& weather_list)
 	int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 	int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-	//2.) Calculation of latitudinal position from parameter[0].Nposmax and parameter[0].Nposmin
+	//2.) Calculation of latitudinal position from parameter[0].nposmax and parameter[0].nposmin
 	
 	//***german:
 	// 2. N_inGrad aus den N_max und N_min und Ygesamt-werten berechnen
 	if (parameter[0].mapylength>1 && parameter[0].weathercalcgradient==true)
 	{
-		double Nposcenter=(parameter[0].Nposmax+parameter[0].Nposmin)/2;
+		double Nposcenter=(parameter[0].nposmax+parameter[0].nposmin)/2;
 		double mapylengthdummy=parameter[0].mapylength;	// irgendwie funktioniert nicht die direkte Verwendung in der nachfolgenden Formel??
-		double Nposakt=parameter[0].Nposmax-( (parameter[0].Nposmax-parameter[0].Nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
+		double Nposakt=parameter[0].nposmax-( (parameter[0].nposmax-parameter[0].nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
 		
 		//3.) Calculate precipitation and temperature difference for each simulated plot, assuming a linear correlation: T,Prec~°latitude
 		

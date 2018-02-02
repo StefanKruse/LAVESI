@@ -319,18 +319,18 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].lineartransect)?"true":"false");
                 }
 
-	strcpy(uebergabestring,"Nposmax");
-	parameter[0].Nposmax=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"nposmax");
+	parameter[0].nposmax=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].Nposmax);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].nposmax);
                 }
 
-	strcpy(uebergabestring,"Nposmin");
-	parameter[0].Nposmin=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"nposmin");
+	parameter[0].nposmin=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].Nposmin);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].nposmin);
                 }
 
 	strcpy(uebergabestring,"sizemagnif");

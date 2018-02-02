@@ -255,7 +255,7 @@ void seeddisp(double rn, double& dx, double& dy, double &windspeed, double &wind
     }
 	else if (seedspec==2)
 	{
-        maxentfernung = (parameter[0].SeedTravelBreezes*0.75*parhei*0.01/(parameter[0].SeedDescents));     
+        maxentfernung = (parameter[0].seedtravelbreezes*0.75*parhei*0.01/(parameter[0].SeedDescents));     
 
     }                                        
 

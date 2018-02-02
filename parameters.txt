@@ -196,8 +196,8 @@ dispersalmode=5;					// (int 0,1,2,3,4) dispersal mode for seeds (95% of seeds d
 										// 3==gaussian
 										// 4==gaussian and fat tailed combined
 										// 5==gaussian and fat tailed combined plus maximum after Matlack
-SeedTravelBreezeg=60.1;				// (double) Maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
-SeedTravelBreezes=45.0;				// (double) Maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
+seedtravelbreezeg=60.1;				// (double) Maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
+seedtravelbreezes=45.0;				// (double) Maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
 SeedDescentg=0.86;					// (double) Descent speed for L.gmelinii seeds (estimation: Matlack 1987)
 SeedDescents=0.93;					// (double) Descent speed for L.sibirica seeds (estimation: Matlack 1987)
 distanceratio=0.16;					// (double) Dispersal distance factor

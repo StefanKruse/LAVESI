@@ -375,18 +375,18 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].dispersalmode);
                 }
 		
-	strcpy(uebergabestring,"SeedTravelBreezeg");
-	parameter[0].SeedTravelBreezeg=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seedtravelbreezeg");
+	parameter[0].seedtravelbreezeg=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.1f ==> Main\n", uebergabestring, parameter[0].SeedTravelBreezeg);
+                    printf("read:	%s <= %4.1f ==> Main\n", uebergabestring, parameter[0].seedtravelbreezeg);
                 }	
 
-	strcpy(uebergabestring,"SeedTravelBreezes");
-	parameter[0].SeedTravelBreezes=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seedtravelbreezes");
+	parameter[0].seedtravelbreezes=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.1f ==> Main\n", uebergabestring, parameter[0].SeedTravelBreezes);
+                    printf("read:	%s <= %4.1f ==> Main\n", uebergabestring, parameter[0].seedtravelbreezes);
                 }	
 
 	strcpy(uebergabestring,"SeedDescentg");

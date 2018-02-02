@@ -880,10 +880,10 @@ void passWeather()
  *
  *
  *******************************************************************************************/
-extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, vector<vector<Weather*> > &world_weather_list)
+extern void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vector<vector<Weather*> > &world_weather_list)
 {
 
-	// -- -- -- -- weathereinlesen START -- -- -- -- //
+	// -- -- -- -- Weatherinput START -- -- -- -- //
 	char dateinametemp[50];
 	char dateinameprec[50];
 	
@@ -1002,7 +1002,7 @@ extern void weathereinlesen( struct Parameter *parameter,  int stringlengthmax, 
 		parameter[0].parameterinputvis=true;
 	}
 
-	// -- -- -- -- weathereinlesen END -- -- -- -- //
+	// -- -- -- -- Weatherinput END -- -- -- -- //
 	passWeather();
 
 }

@@ -457,7 +457,7 @@ void Yearsteps()
 					}
 					weather_list.clear();
 				}
-				weathereinlesen( &parameter[0],  stringlengthmax, world_weather_list);
+				Weatherinput( &parameter[0],  stringlengthmax, world_weather_list);
 
 				// repeat simulation runs beginning at resetyear for different parameter settings
 				for(int parameteri=0;parameteri<4;parameteri++)
@@ -734,7 +734,7 @@ void runSimulation()
 		createLists();
 
 		// reading in weather
-		weathereinlesen( &parameter[0],  stringlengthmax, world_weather_list);
+		Weatherinput( &parameter[0],  stringlengthmax, world_weather_list);
 
 		// Plot and evaluation list preparation for each location on the transect 
 		initialiseMaps();

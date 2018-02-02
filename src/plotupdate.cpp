@@ -1034,7 +1034,7 @@ void ResetMaps(int yearposition, vector<Karten*> &plot_list, vector<Weather*> &w
  *
  *
  *******************************************************************************************/
-void Environmenupdate(struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
+void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vector<Karten*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
 {
 
 	int aktort=0;

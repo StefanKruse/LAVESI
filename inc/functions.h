@@ -17,7 +17,7 @@ void Pollinationprobability(
 			);
 void Seedwinddispersal(double ad, double& cd, double& dd, double &vv, double &vd, double parhei, int seedspec);
 void Parameterinput(void);
-void SaveAllLists(void);
+void Savealllists(void);
 void ClearAllLists(void);
 void RestoreAllLists(void);
 void ClearAllLists_copy(void);

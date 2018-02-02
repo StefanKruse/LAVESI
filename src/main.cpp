@@ -424,7 +424,7 @@ void Yearsteps()
 			// if the year towards which the whole simulation should be resetted is reached, save all data
 			if (jahr==parameter[0].resetyear)
 			{
-				SaveAllLists();
+				Savealllists();
 				cout << "In year = " << jahr << " everything was saved!" << endl << endl;
 			}
 
@@ -517,7 +517,7 @@ void Yearsteps()
 						// save all data at resetyear 
 						if (jahr==parameter[0].resetyear)
 						{
-							SaveAllLists();
+							Savealllists();
 							cout << "At year= " << jahr << " all saved!" << endl << endl;
 						}
 					} // year steps

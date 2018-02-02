@@ -213,7 +213,7 @@ using namespace std;
 		
 		// ... germination		
 		double	germinationrate; 
-		double	keimungweathereinfluss;
+		double	germinatioweatherinfluence;
 		
 		// ... mortality
 		double	mortbg;

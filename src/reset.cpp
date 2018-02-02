@@ -167,7 +167,7 @@ void Savealllists(void)
 			pEnvirgrid_copy->xcoo=pEnvirgrid->xcoo;		
 			pEnvirgrid_copy->ycoo=pEnvirgrid->ycoo;		
 			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
-			pEnvirgrid_copy->Treeanzahl=pEnvirgrid->Treeanzahl;	
+			pEnvirgrid_copy->Treenumber=pEnvirgrid->Treenumber;	
 			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
 			pEnvirgrid_copy->auflagenstaerke=pEnvirgrid->auflagenstaerke;	
 			pEnvirgrid_copy->auflagenstaerke0=pEnvirgrid->auflagenstaerke0;
@@ -599,7 +599,7 @@ void Restorealllists(void)
 			pEnvirgrid_copy->xcoo=pEnvirgrid->xcoo;		
 			pEnvirgrid_copy->ycoo=pEnvirgrid->ycoo;		
 			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
-			pEnvirgrid_copy->Treeanzahl=pEnvirgrid->Treeanzahl;	
+			pEnvirgrid_copy->Treenumber=pEnvirgrid->Treenumber;	
 			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
 			pEnvirgrid_copy->auflagenstaerke=pEnvirgrid->auflagenstaerke;
 			pEnvirgrid_copy->auflagenstaerke0=pEnvirgrid->auflagenstaerke0;

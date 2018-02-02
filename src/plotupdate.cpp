@@ -52,7 +52,7 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 													*
 													pow(pTree->dbasal, parameter[0].densitytreetile),
 											parameter[0].densityvaluemanipulatorexp);
-				plot_list[i*treecols*parameter[0].sizemagnif+j]->Treeanzahl++;
+				plot_list[i*treecols*parameter[0].sizemagnif+j]->Treenumber++;
 				// pTree->densitywert=pow(pTree->dbasal, parameter[0].densitytreetile);
 				pTree->densitywert=pow(
 								pow(pTree->dbasal, parameter[0].densitytreetile)*pow(flaechengroesze/(1.0/parameter[0].sizemagnif),parameter[0].densitysmallweighing),
@@ -92,7 +92,7 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 										pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0),
 										parameter[0].densityvaluemanipulatorexp);
 									
-								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treeanzahl++;
+								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treenumber++;
 
 								sumdensitywert+=pow(
 													pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0),
@@ -878,7 +878,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list
 /****************************************************************************************//**
  * \brief reset Maps "Envirgrid"
  *
- * reset Treedensity und Treeanzahl \n
+ * reset Treedensity und Treenumber \n
  * calculate vegetation density (auflagenstärke) if vegetation==true \n
  * calculate max active layer depth
  *
@@ -893,7 +893,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treedensityvalue=0;
-			pEnvirgrid->Treeanzahl=0;
+			pEnvirgrid->Treenumber=0;
 			// pEnvirgrid->Dbasalliste.clear();
 			
 			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)
@@ -961,7 +961,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treedensityvalue=0;
-			pEnvirgrid->Treeanzahl=0;
+			pEnvirgrid->Treenumber=0;
 			// pEnvirgrid->Dbasalliste.clear();
 			
 			if (parameter[0].vegetation==true && parameter[0].einschwingen==false)

@@ -953,7 +953,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "X;");
 				fprintf(filepointer, "Y;");
 				fprintf(filepointer, "Treedensityvalue;");
-				fprintf(filepointer, "Treeanzahl;");
+				fprintf(filepointer, "Treenumber;");
 				fprintf(filepointer, "Auflagenstaerke;");
 				fprintf(filepointer, "AuflagenstaerkeMittel;");
 				fprintf(filepointer, "Maxthawing_depth;");
@@ -974,7 +974,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 			{
 				pEnvirgrid=plot_list[kartenpos];
-				if ( (pEnvirgrid->Treeanzahl>0) && ( (pEnvirgrid->xcoo>=xminwindow*parameter[0].sizemagnif) && (pEnvirgrid->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo>=yminwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
+				if ( (pEnvirgrid->Treenumber>0) && ( (pEnvirgrid->xcoo>=xminwindow*parameter[0].sizemagnif) && (pEnvirgrid->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo>=yminwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
 				{// output only if tree density values >0 
 					fprintf(filepointer, "%d;", parameter[0].repeati);
 					fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
@@ -982,7 +982,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
 					fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
 					fprintf(filepointer, "%4.5f;", pEnvirgrid->Treedensityvalue);
-					fprintf(filepointer, "%d;", pEnvirgrid->Treeanzahl);
+					fprintf(filepointer, "%d;", pEnvirgrid->Treenumber);
 					fprintf(filepointer, "%u;", pEnvirgrid->auflagenstaerke);
 					fprintf(filepointer, "%u;", pEnvirgrid->auflagenstaerkemittel);
 					fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);

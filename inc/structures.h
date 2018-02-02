@@ -62,7 +62,7 @@ using namespace std;
 		double	xcoo;
 		double	ycoo;
 		double	Treedensityvalue;
-		int		Treeanzahl;
+		int		Treenumber;
 		unsigned short maxthawing_depth;
 		unsigned short auflagenstaerke;	
 		unsigned short auflagenstaerke0;

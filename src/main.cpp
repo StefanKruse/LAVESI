@@ -638,7 +638,7 @@ void initialiseMaps()
 				pEnvirgrid->xcoo=(double) kartenpos - (pEnvirgrid->ycoo * (treecols*parameter[0].sizemagnif));
 
 				pEnvirgrid->Treedensityvalue=0;
-				pEnvirgrid->Treeanzahl=0;
+				pEnvirgrid->Treenumber=0;
 				pEnvirgrid->maxthawing_depth=1000;
 				
 				pEnvirgrid->auflagenstaerke=200;	// in 0.1mm -> max 6.5535 m

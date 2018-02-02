@@ -1,7 +1,7 @@
 using namespace std;
 
 
-void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > & world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
+void Treeestablishment( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > & world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list)
 {
 	int aktort=0;
 	for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)

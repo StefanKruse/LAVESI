@@ -6,7 +6,7 @@ void Environmentupdate( struct Parameter *parameter, int yearposition, vector<ve
 void Growth( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list);
 void Seeddispersal(int Jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list);
 void Seedproduction( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list);
-void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
+void Treeestablishment( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
 void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list);
 void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list);
 void BefrWahrsch(

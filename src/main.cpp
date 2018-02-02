@@ -84,9 +84,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double end_time_Treedistribution = omp_get_wtime();
 
 
-	// Etablierung
+	// Treeestablishment
 	double start_time_etablierung = omp_get_wtime();
-	Etablierung(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+	Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 	double end_time_etablierung = omp_get_wtime();
 
 	// Dataoutput

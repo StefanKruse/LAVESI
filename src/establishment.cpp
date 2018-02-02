@@ -107,11 +107,11 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 								
 								if (parameter[0].allometryfunctiontype==1) 
 								{
-									pTree->height= parameter[0].dbasalheightallosteig * pow(maxbasalwachstum, parameter[0].dbasalheightalloexp);
+									pTree->height= parameter[0].dbasalheightalloslope * pow(maxbasalwachstum, parameter[0].dbasalheightalloexp);
 								}
 								else 
 								{
-									pTree->height= parameter[0].dbasalheightsteignonlin*maxbasalwachstum;	
+									pTree->height= parameter[0].dbasalheightslopenonlin*maxbasalwachstum;	
 								}
 								pTree->age=0; 
 								pTree->cone=0; 
@@ -166,11 +166,11 @@ void Etablierung( struct Parameter *parameter, int yearposition, vector<list<Tre
 								
 								if (parameter[0].allometryfunctiontype==1) 
 								{
-									pTree->height= parameter[0].dbasalheightallosteig * pow(maxbasalwachstum, parameter[0].dbasalheightalloexp);
+									pTree->height= parameter[0].dbasalheightalloslope * pow(maxbasalwachstum, parameter[0].dbasalheightalloexp);
 								}
 								else 
 								{
-									pTree->height= parameter[0].dbasalheightsteignonlin*maxbasalwachstum;	
+									pTree->height= parameter[0].dbasalheightslopenonlin*maxbasalwachstum;	
 								}
 								
 								pTree->age=0; 

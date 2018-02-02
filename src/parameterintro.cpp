@@ -705,11 +705,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].allometryfunctiontype);
                 }
 
-	strcpy(uebergabestring,"dbasalheightallosteig");
-	parameter[0].dbasalheightallosteig=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"dbasalheightalloslope");
+	parameter[0].dbasalheightalloslope=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightallosteig);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightalloslope);
                 }
 	
 	strcpy(uebergabestring,"dbasalheightalloexp");
@@ -719,11 +719,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightalloexp);
                 }
 
-	strcpy(uebergabestring,"dbrustheightallosteig");
-	parameter[0].dbrustheightallosteig=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"dbrustheightalloslope");
+	parameter[0].dbrustheightalloslope=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightallosteig);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightalloslope);
                 }
 
 	strcpy(uebergabestring,"dbrustheightalloexp");
@@ -733,18 +733,18 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightalloexp);
                 }
 
-	strcpy(uebergabestring,"dbasalheightsteignonlin");
-	parameter[0].dbasalheightsteignonlin=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"dbasalheightslopenonlin");
+	parameter[0].dbasalheightslopenonlin=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightsteignonlin);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbasalheightslopenonlin);
                 }
 	
-	strcpy(uebergabestring,"dbrustheightsteignonlin");
-	parameter[0].dbrustheightsteignonlin=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"dbrustheightslopenonlin");
+	parameter[0].dbrustheightslopenonlin=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightsteignonlin);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].dbrustheightslopenonlin);
                 }
 
 		// Mortalitaet

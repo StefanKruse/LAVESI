@@ -224,12 +224,12 @@ gdbrustconstsib=-1.01;				// (double) diameter growth rate at breast height of L
 allometryfunctiontype=2;			// (int 1,2) allometric function mode
 										// 1==linear (H=m*Dhochexp+0 bzw. 130)
 										// 2==non linear (H=m*DBAS+0 sowie Hhoch0.5=m*DBRuhoch0.5+130)
-dbasalheightallosteig=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from basal diameter
+dbasalheightalloslope=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from basal diameter
 dbasalheightalloexp=1.0;			// (double) (IF allometryfunctiontype == 1) exponent for height estimation from basal diameter
-dbrustheightallosteig=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from breast height diameter
+dbrustheightalloslope=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from breast height diameter
 dbrustheightalloexp=1.0;			// (double) (IF allometryfunctiontype == 1) exponent for height estimation from breast height diameter
-dbasalheightsteignonlin=44.43163;	// (double) (IF allometryfunctiontype == 2) slope for height estimation from basal diameter
-dbrustheightsteignonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slope for height estimation from breast height diameter
+dbasalheightslopenonlin=44.43163;	// (double) (IF allometryfunctiontype == 2) slope for height estimation from basal diameter
+dbrustheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slope for height estimation from breast height diameter
 
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;						// (double 0-1) Background mortality

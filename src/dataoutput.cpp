@@ -227,14 +227,14 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{// if more than 2 parameter[0].stabilmovingwindow yearly mean values
 				
 				// calculation of the slope
-				double steigdiff=pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-1]-pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-2];
+				double slopediff=pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-1]-pEvaluation->BArunmeanliste[runmeanbasalareaanzahl-2];
 				if (pEvaluation->nachwendejahr!=true)
 				{	
 			
 					// If a maximal slope is not surpassed in 50 years, the turning point of growth is reached
-					if (steigdiff>=pEvaluation->maxincrementbasalarea) 
+					if (slopediff>=pEvaluation->maxincrementbasalarea) 
 					{
-						pEvaluation->maxincrementbasalarea=steigdiff;
+						pEvaluation->maxincrementbasalarea=slopediff;
 						pEvaluation->countermaxincrementbasalarea=50;
 					}
 					else 
@@ -250,7 +250,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				// after the turning point is reached, the saturation of the system is reached as soon as the slope becomes negative
 				else 
 				{
-					if ( (steigdiff<0.0) && (pEvaluation->saettigungsjahr==-9999) )
+					if ( (slopediff<0.0) && (pEvaluation->saettigungsjahr==-9999) )
 					{
 						pEvaluation->saettigungsjahr=jahr;
 					}

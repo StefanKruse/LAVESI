@@ -172,12 +172,12 @@ using namespace std;
 		double	basaleinflussaltneu;
 		int		relwachstumeinfluss;
 		int		allometryfunctiontype;
-		double	dbasalheightallosteig;
+		double	dbasalheightalloslope;
 		double	dbasalheightalloexp;
-		double	dbrustheightallosteig;
+		double	dbrustheightalloslope;
 		double	dbrustheightalloexp;
-		double	dbasalheightsteignonlin;
-		double	dbrustheightsteignonlin;
+		double	dbasalheightslopenonlin;
+		double	dbrustheightslopenonlin;
 		
 		// ... density evaluation
 		int		densitymode;

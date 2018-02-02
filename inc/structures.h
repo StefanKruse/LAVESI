@@ -75,7 +75,7 @@ using namespace std;
 		unsigned short litterheight7;
 		unsigned short litterheight8;
 		unsigned short litterheight9;
-		unsigned short litterheightmittel;
+		unsigned short litterheightmeam;
 	};
 
 	struct Parameter

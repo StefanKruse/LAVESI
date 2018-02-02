@@ -907,7 +907,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 				pEnvirgrid->litterheight+= (unsigned short) (auflagenwachstumsrate*60.0);
 				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
-				pEnvirgrid->litterheightmittel = (unsigned short) ( (double) 
+				pEnvirgrid->litterheightmeam = (unsigned short) ( (double) 
 												 (pEnvirgrid->litterheight8
 												 +pEnvirgrid->litterheight7
 												 +pEnvirgrid->litterheight6
@@ -939,7 +939,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
 				// Calculation of the damping through organic material (damping reduces thawing_depth, formula taken from literature)
-				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmittel; // 1/4000 =slope to reach the maximum value at appr. 4000
+				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmeam; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
@@ -975,7 +975,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 				pEnvirgrid->litterheight+= (unsigned short) (auflagenwachstumsrate*60.0);	
 				// in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
 
-				pEnvirgrid->litterheightmittel = (unsigned short) ( (double) 
+				pEnvirgrid->litterheightmeam = (unsigned short) ( (double) 
 												 (pEnvirgrid->litterheight8
 												 +pEnvirgrid->litterheight7
 												 +pEnvirgrid->litterheight6
@@ -1007,7 +1007,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			if (parameter[0].thawing_depth==true && parameter[0].einschwingen==false)
 			{
 				// Calculation of the damping through organic material
-				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmittel; // 1/4000 =slope to reach the maximum value at appr. 4000
+				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmeam; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;

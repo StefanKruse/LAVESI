@@ -180,7 +180,7 @@ void Savealllists(void)
 			pEnvirgrid_copy->litterheight7=pEnvirgrid->litterheight7;
 			pEnvirgrid_copy->litterheight8=pEnvirgrid->litterheight8;
 			pEnvirgrid_copy->litterheight9=pEnvirgrid->litterheight9;
-			pEnvirgrid_copy->litterheightmittel=pEnvirgrid->litterheightmittel;
+			pEnvirgrid_copy->litterheightmeam=pEnvirgrid->litterheightmeam;
 			plot_list_copy.push_back(pEnvirgrid_copy);
 
 			
@@ -612,7 +612,7 @@ void Restorealllists(void)
 			pEnvirgrid_copy->litterheight7=pEnvirgrid->litterheight7;
 			pEnvirgrid_copy->litterheight8=pEnvirgrid->litterheight8;
 			pEnvirgrid_copy->litterheight9=pEnvirgrid->litterheight9;
-			pEnvirgrid_copy->litterheightmittel=pEnvirgrid->litterheightmittel;
+			pEnvirgrid_copy->litterheightmeam=pEnvirgrid->litterheightmeam;
 			plot_list_copy.push_back(pEnvirgrid_copy);				// push back element to plot list 
 
 			

@@ -652,7 +652,7 @@ void initialiseMaps()
 				pEnvirgrid->litterheight7=200;	// in 0.1mm -> max 6.5535 m
 				pEnvirgrid->litterheight8=200;	// in 0.1mm -> max 6.5535 m
 				pEnvirgrid->litterheight9=200;	// in 0.1mm -> max 6.5535 m 
-				pEnvirgrid->litterheightmittel=200;
+				pEnvirgrid->litterheightmeam=200;
 				
 
 				plot_list.push_back(pEnvirgrid);	

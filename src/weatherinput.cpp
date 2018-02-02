@@ -38,7 +38,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 	
 	char puffer[255];
 	int counter=1;
-	double tempjahrmittelbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf, temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
+	double tempyearmeanbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf, temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
 
 	//Read in line by line, partially preprocess data
 	
@@ -63,7 +63,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			temp11monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
 			temp12monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
 
-			tempjahrmittelbuf=(temp1monthmeanbuf+temp2monthmeanbuf+temp3monthmeanbuf+temp4monthmeanbuf+temp5monthmeanbuf+temp6monthmeanbuf+temp7monthmeanbuf+temp8monthmeanbuf+temp9monthmeanbuf+temp10monthmeanbuf+temp11monthmeanbuf+temp12monthmeanbuf)/12;
+			tempyearmeanbuf=(temp1monthmeanbuf+temp2monthmeanbuf+temp3monthmeanbuf+temp4monthmeanbuf+temp5monthmeanbuf+temp6monthmeanbuf+temp7monthmeanbuf+temp8monthmeanbuf+temp9monthmeanbuf+temp10monthmeanbuf+temp11monthmeanbuf+temp12monthmeanbuf)/12;
 
 			
 			
@@ -72,7 +72,7 @@ void getTemp1(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			pWeather->yworldcoo=aktortyworldcoo;
 			pWeather->xworldcoo=aktortxworldcoo;
 			pWeather->jahr=counter+parameter[0].startjahr-2;					// 2. apply the data to the new year
-			pWeather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
+			pWeather->tempyearmean=tempyearmeanbuf+parameter[0].tempdiffort;
 			pWeather->temp1monthmean=temp1monthmeanbuf+parameter[0].tempdiffort;
 			pWeather->temp1monthmeanmin=temp1monthmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
 			pWeather->temp2monthmean=temp2monthmeanbuf+parameter[0].tempdiffort;
@@ -274,7 +274,7 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 
 			char puffer[255];
 			int counter=1;
-			double jahrbuf, tempjahrmittelbuf;
+			double jahrbuf, tempyearmeanbuf;
 
 			//Read in line by line, partially preprocess data
 	
@@ -285,15 +285,15 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 				if (counter>=2)
 				{
 					jahrbuf= strtod(strtok(puffer, " "),NULL);
-					tempjahrmittelbuf= strtod(strtok(NULL, " "),NULL);
+					tempyearmeanbuf= strtod(strtok(NULL, " "),NULL);
 
 					// add a new year
 					pWeather= new Weather();			// 1. generate new year
 					pWeather->yworldcoo=aktortyworldcoo;
 					pWeather->xworldcoo=aktortxworldcoo;
 					pWeather->jahr=(int) floor(jahrbuf);					// 2. apply the data to the new year
-					pWeather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
-					pWeather->tempjahrmittelmin=tempjahrmittelbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
+					pWeather->tempyearmean=tempyearmeanbuf+parameter[0].tempdiffort;
+					pWeather->tempyearmeanmin=tempyearmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
 					
 					// Active Air Temperature AAT = Sum of days warmer than 10°C
 					// Number of days with temperatures above zero degrees = net degree days = NDD ("Vegetationslaenge")
@@ -305,8 +305,8 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 
 					// daily mean temperature estimation from mean july temperature:
 
-					double tempjahrmittelbuf=pWeather->tempjahrmittel;
-					double tempjahrmittelminbuf=pWeather->tempjahrmittelmin;
+					double tempyearmeanbuf=pWeather->tempyearmean;
+					double tempyearmeanminbuf=pWeather->tempyearmeanmin;
 					double temp1monthmeanbuf=0, temp1monthmeanminbuf=0;
 					double temp7monthmeanbuf=0, temp7monthmeanminbuf=0;
 
@@ -317,10 +317,10 @@ void getTemp2(int aktort, char dateinametemp[50],vector<Weather*>& weather_list,
 					double ampliyschn=15.5976677143297;
 					double yabsanstieg=-0.881262021169085;
 					double yabsschn=-0.00908805024019213;
-					double ampli=1.05*(ampliyschn+amplianstieg*tempjahrmittelbuf);
-					double amplimin=1.05*(ampliyschn+amplianstieg*tempjahrmittelminbuf);
-					double yabs=yabsschn+yabsanstieg*tempjahrmittelbuf;
-					double yabsmin=yabsschn+yabsanstieg*tempjahrmittelminbuf;
+					double ampli=1.05*(ampliyschn+amplianstieg*tempyearmeanbuf);
+					double amplimin=1.05*(ampliyschn+amplianstieg*tempyearmeanminbuf);
+					double yabs=yabsschn+yabsanstieg*tempyearmeanbuf;
+					double yabsmin=yabsschn+yabsanstieg*tempyearmeanminbuf;
 
 					for (int i=1;i<=365;i++)
 					{
@@ -521,7 +521,7 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 	
 	char puffer[255];
 	int counter=1;
-	double tempjahrmittelbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf, temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
+	double tempyearmeanbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf, temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
 
 	//Read in line by line, partially preprocess data
 	
@@ -546,14 +546,14 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 			temp11monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
 			temp12monthmeanbuf= strtod(strtok(NULL, " "),NULL) ;
 
-			tempjahrmittelbuf=(temp1monthmeanbuf+temp2monthmeanbuf+temp3monthmeanbuf+temp4monthmeanbuf+temp5monthmeanbuf+temp6monthmeanbuf+temp7monthmeanbuf+temp8monthmeanbuf+temp9monthmeanbuf+temp10monthmeanbuf+temp11monthmeanbuf+temp12monthmeanbuf)/12;
+			tempyearmeanbuf=(temp1monthmeanbuf+temp2monthmeanbuf+temp3monthmeanbuf+temp4monthmeanbuf+temp5monthmeanbuf+temp6monthmeanbuf+temp7monthmeanbuf+temp8monthmeanbuf+temp9monthmeanbuf+temp10monthmeanbuf+temp11monthmeanbuf+temp12monthmeanbuf)/12;
 
 			// add a new year
 			pWeather= new Weather();			// 1. generate new year
 			pWeather->yworldcoo=aktortyworldcoo;
 			pWeather->xworldcoo=aktortxworldcoo;
 			pWeather->jahr=counter+parameter[0].startjahr-2;					// 2. apply the data to the new year
-			pWeather->tempjahrmittel=tempjahrmittelbuf+parameter[0].tempdiffort;
+			pWeather->tempyearmean=tempyearmeanbuf+parameter[0].tempdiffort;
 			pWeather->temp1monthmean=temp1monthmeanbuf+parameter[0].tempdiffort;
 			pWeather->temp1monthmeanmin=temp1monthmeanbuf+parameter[0].tempdiffort+parameter[0].tempdiffortmin;
 			pWeather->temp2monthmean=temp2monthmeanbuf+parameter[0].tempdiffort;

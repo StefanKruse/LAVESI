@@ -54,7 +54,7 @@ double Parameterinput(char *uebergabestring, int stringlengthmax, char *division
 
 
 
-void Parametereinlesen(void)
+void Parameterinput(void)
 {
 	
 	char uebergabestring[stringlengthmax];

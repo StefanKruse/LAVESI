@@ -938,7 +938,7 @@ int main()
 				"\n");
 		printf("\n<----\n");
 
-		Parametereinlesen();
+		Parameterinput();
 
 		/// Set parameter and variables to starting values
 		/// calculation of the starting year of the simulation

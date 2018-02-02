@@ -11,7 +11,7 @@ using namespace std;
  *******************************************************************************************/
 
 
-void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo) 
+void Seedoutput(int aktort, double dispersaldistance, float richtung, int neueweltcoo) 
 {
 	//StefanC: Ausgabe der LDSD-seed
 	// Code-Bsp. hier http://www2.informatik.uni-halle.de/lehre/c/c_fopen.html
@@ -29,7 +29,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			  filepointer = fopen(dateiname.c_str(), "w");
 				fprintf(filepointer, "ivort;");
 				fprintf(filepointer, "aktort;");
-				fprintf(filepointer, "entfernung;");
+				fprintf(filepointer, "dispersaldistance;");
 				fprintf(filepointer, "richtung;");
 				fprintf(filepointer, "neueweltcoo;");			
 				fprintf(filepointer, "\n");
@@ -47,7 +47,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 			// data evaluation and output
 			fprintf(filepointer, "%d;", parameter[0].ivort);
 			fprintf(filepointer, "%d;", aktort);
-			fprintf(filepointer, "%4.5f;", entfernung);
+			fprintf(filepointer, "%4.5f;", dispersaldistance);
 			fprintf(filepointer, "%4.5f;", richtung);
 			fprintf(filepointer, "%d;", neueweltcoo);		
 			fprintf(filepointer, "\n");
@@ -109,7 +109,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							
 							pSeed->imcone=false;
 							
-							double entfernung = 0;
+							double dispersaldistance = 0;
 							double richtung=0.0;
 							double geschwindigkeit=0;
 							double wrichtung=0.0;
@@ -132,7 +132,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 										if(seedeinschreibzufall<0.01)
 										{
-											entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+											dispersaldistance=sqrt(pow(iquer,2)+pow(jquer,2));
 											richtung=atan2(iquer,jquer);
 																	
 											FILE *filepointer;
@@ -153,8 +153,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(filepointer, "name;");
 												fprintf(filepointer, "year;" );
 												fprintf(filepointer, "parentheight;");
-												//fprintf(filepointer, "xentfernung;");
-												//fprintf(filepointer, "yentfernung;");
+												//fprintf(filepointer, "xdispersaldistance;");
+												//fprintf(filepointer, "ydispersaldistance;");
 												fprintf(filepointer, "distance;");
 												fprintf(filepointer, "direction;");
 												fprintf(filepointer, "xcoo;");
@@ -199,7 +199,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 							
 							pSeed->xcoo=pSeed->xcoo+jquer;
 							pSeed->ycoo=pSeed->ycoo+iquer;
-							pSeed->entfernung=entfernung;	
+							pSeed->dispersaldistance=dispersaldistance;	
 
 
 
@@ -348,7 +348,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								
 								pSeed->imcone=false;
 								
-								double entfernung = 0;
+								double dispersaldistance = 0;
 								double richtung=0.0;
 								double geschwindigkeit=0;
 								double wrichtung=0.0;
@@ -366,7 +366,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 										if(seedeinschreibzufall<0.01)
 										{
-											entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+											dispersaldistance=sqrt(pow(iquer,2)+pow(jquer,2));
 											richtung=atan2(iquer,jquer);
 																	
 											FILE *filepointer;
@@ -387,8 +387,8 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(filepointer, "name;");
 												fprintf(filepointer, "year;" );
 												fprintf(filepointer, "parentheight;");
-												//fprintf(filepointer, "xentfernung;");
-												//fprintf(filepointer, "yentfernung;");
+												//fprintf(filepointer, "xdispersaldistance;");
+												//fprintf(filepointer, "ydispersaldistance;");
 												fprintf(filepointer, "distance;");
 												fprintf(filepointer, "direction;");
 												fprintf(filepointer, "xcoo;");
@@ -434,7 +434,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 								
 								pSeed->xcoo=pSeed->xcoo+jquer;
 								pSeed->ycoo=pSeed->ycoo+iquer;
-								pSeed->entfernung=entfernung;	
+								pSeed->dispersaldistance=dispersaldistance;	
 
 
 							
@@ -596,7 +596,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									
 									pSeed->imcone=false;
 									
-									double entfernung=0.0;
+									double dispersaldistance=0.0;
 									double richtung=0.0;
 									double geschwindigkeit=0.0;
 									double wrichtung=0.0;
@@ -614,7 +614,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 
 											if(seedeinschreibzufall<0.01)
 											{
-												entfernung=sqrt(pow(iquer,2)+pow(jquer,2));
+												dispersaldistance=sqrt(pow(iquer,2)+pow(jquer,2));
 												richtung=atan2(iquer,jquer);
 																		
 												//distance output begin
@@ -660,7 +660,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 												fprintf(filepointer, "%d;", pSeed->namem);
 												fprintf(filepointer, "%d;", jahr);
 												fprintf(filepointer, "%4.3f;", pSeed->elternheight);
-												fprintf(filepointer, "%4.5f;",entfernung);
+												fprintf(filepointer, "%4.5f;",dispersaldistance);
 												fprintf(filepointer, "%4.5f;", richtung);
 												fprintf(filepointer, "%4.5f;", pSeed->xcoo);
 												fprintf(filepointer, "%4.5f;", pSeed->ycoo);	
@@ -677,7 +677,7 @@ void Seedoutput(int aktort, double entfernung, float richtung, int neueweltcoo)
 									
 									pSeed->xcoo=pSeed->xcoo+jquer;
 									pSeed->ycoo=pSeed->ycoo+iquer;
-									pSeed->entfernung=entfernung;	
+									pSeed->dispersaldistance=dispersaldistance;	
 
 								
 									/****************************************************************************************//**

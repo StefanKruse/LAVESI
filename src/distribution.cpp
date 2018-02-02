@@ -215,8 +215,8 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double &windspeed, dou
     int cntr=1,ripm=0;
 
 	// local
-    double entfernung = 0;
-    double maxentfernung = 0;
+    double dispersaldistance = 0;
+    double maxdispersaldistance = 0;
     double richtung=0.0;
     double geschwindigkeit=0.0;
 	
@@ -250,26 +250,26 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double &windspeed, dou
     if (seedspec==1)
 	{
 
-        maxentfernung = (geschwindigkeit*0.75*parhei*0.01/(parameter[0].seeddescentg));
+        maxdispersaldistance = (geschwindigkeit*0.75*parhei*0.01/(parameter[0].seeddescentg));
 
     }
 	else if (seedspec==2)
 	{
-        maxentfernung = (parameter[0].seedtravelbreezes*0.75*parhei*0.01/(parameter[0].seeddescents));     
+        maxdispersaldistance = (parameter[0].seedtravelbreezes*0.75*parhei*0.01/(parameter[0].seeddescents));     
 
     }                                        
 
     if(parameter[0].dispersalmode==5)
 	{
-        entfernung= getEntfernung(maxentfernung,rn);                                       
+        dispersaldistance= getEntfernung(maxdispersaldistance,rn);                                       
     }
 	else if(parameter[0].dispersalmode!=5)
 	{
-        entfernung=getEntfernung(maxentfernung,rn);
+        dispersaldistance=getEntfernung(maxdispersaldistance,rn);
     }
 
-    dy=cos(richtung)*entfernung;
-    dx=sin(richtung)*entfernung;
+    dy=cos(richtung)*dispersaldistance;
+    dx=sin(richtung)*dispersaldistance;
 	
 
 	

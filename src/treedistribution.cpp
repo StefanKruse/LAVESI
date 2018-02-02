@@ -74,7 +74,7 @@ void Seedin()
 					jseed= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));
 					
 					// y-value
-					double entfernung;
+					double dispersaldistance;
 			
 					do
 					{
@@ -85,12 +85,12 @@ void Seedin()
 							anteil= 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 
 						} while (anteil<=0.0);
-						entfernung= (log(anteil)/(-0.2))/parameter[0].distanceratio;
+						dispersaldistance= (log(anteil)/(-0.2))/parameter[0].distanceratio;
 
-					} while ( (entfernung>= (double) (treerows-1)) || (entfernung<0.0) );
+					} while ( (dispersaldistance>= (double) (treerows-1)) || (dispersaldistance<0.0) );
 
 					seedeintragen=true;
-					iseed=entfernung;
+					iseed=dispersaldistance;
 							
 				} 
 						

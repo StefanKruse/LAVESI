@@ -117,7 +117,7 @@ void Savealllists(void)
 			pSeed_copy->generation=pSeed->generation;
 			pSeed_copy->species=pSeed->species;
 			pSeed_copy->incone=pSeed->incone;		
-			pSeed_copy->gewicht=pSeed->gewicht;	
+			pSeed_copy->weight=pSeed->weight;	
 			pSeed_copy->age=pSeed->age;			
 			pSeed_copy->longdispersed=pSeed->longdispersed;	
 			seed_list_copy.push_back(pSeed_copy);				// push back seed to list
@@ -547,7 +547,7 @@ void Restorealllists(void)
 			pSeed_copy->generation=pSeed->generation;	
 			pSeed_copy->species=pSeed->species;
 			pSeed_copy->incone=pSeed->incone;		
-			pSeed_copy->gewicht=pSeed->gewicht;	
+			pSeed_copy->weight=pSeed->weight;	
 			pSeed_copy->age=pSeed->age;			
 			pSeed_copy->longdispersed=pSeed->longdispersed;	
 			seed_list_copy.push_back(pSeed_copy);				// push back seed to list

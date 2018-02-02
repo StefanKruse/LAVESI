@@ -43,7 +43,7 @@ using namespace std;
 		int		line;
 		int		generation;
 		bool	incone;
-		double	gewicht;
+		double	weight;
 		int		age;
 		bool	longdispersed;
 		double 	dispersaldistance;

@@ -531,7 +531,7 @@ if(mcorevariant==1)
 							pSeed->line=pTree->line;
 							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
 							pSeed->incone=true;
-							pSeed->gewicht=1;
+							pSeed->weight=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
 							pSeed->elternheight=pTree->height;
@@ -730,7 +730,7 @@ if(mcorevariant==2)
 							pSeed->line=pTree->line;
 							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
 							pSeed->incone=true;
-							pSeed->gewicht=1;
+							pSeed->weight=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
 							pSeed->elternheight=pTree->height;
@@ -960,7 +960,7 @@ if(mcorevariant==3)
 							pSeed->line=pTree->line;
 							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
 							pSeed->incone=true;
-							pSeed->gewicht=1;
+							pSeed->weight=1;
 							pSeed->age=0;
 							pSeed->species=pTree->species;// species is inherited from the seed source
 							pSeed->elternheight=pTree->height;

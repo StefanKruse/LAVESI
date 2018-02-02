@@ -597,21 +597,21 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 				
 				//***german:
 				//tagestempjan und tagestempjul verrechnen (weatherfunktionsabschätzung.docx)
-				double gewicht=0.0;
+				double weight=0.0;
 				if((i>=1) &( i<=15))
 				{
-					gewicht=((double) 1.0*((15.0-i)/184.0));
+					weight=((double) 1.0*((15.0-i)/184.0));
 				} 
 				if((i >=16) & (i<=196))
 				{
-					gewicht =((double) 1.0*((i-15.0)/181.0));
+					weight =((double) 1.0*((i-15.0)/181.0));
 				}
 				if((i>=197) & (i<=365))
 				{
-					gewicht =((double) 1.0*((365.0+15.0-i)/184.0));
+					weight =((double) 1.0*((365.0+15.0-i)/184.0));
 				}
 
-				tagestemp=tagestempjan*(1-gewicht)+tagestempjul*gewicht;
+				tagestemp=tagestempjan*(1-weight)+tagestempjul*weight;
 				
 				if (tagestemp>0)
 				{
@@ -683,7 +683,7 @@ void passWeather()
 			//????
 			/* da Julindex aufgrund von Fkt Julitemp-realisiertes Max-Growth gefittet wurde, ist das reale Growth schon eingeflossen.
 			Da nur dimensionsloser Faktor gewünscht für spätere Berechnung des Growths hier prozentualer Wert ermittelt zwischen minimalem und maximalem Growth, indem von dem berechneten Wert (julindexg/s) 
-			min. Growth abgezogen wird und dann durch die Spanne max. - min. Growth geteilt wird. Daten sind aus Yamal-R-Datei mit gewichtetem CRUTS-Datensatz*/
+			min. Growth abgezogen wird und dann durch die Spanne max. - min. Growth geteilt wird. Daten sind aus Yamal-R-Datei mit weightetem CRUTS-Datensatz*/
 			weather_list[iweather]->weatherfactorg=(double) (julindexg-0.108)/(0.1771-0.108); 
 			weather_list[iweather]->weatherfactorming=(double) (julindexming-0.108)/(0.1771-0.108);  
 			weather_list[iweather]->weatherfactors=(double) (julindexs-0.168)/(0.305-0.168); 

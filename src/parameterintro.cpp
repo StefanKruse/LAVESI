@@ -690,11 +690,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densityvaluedbasalinfluence);
                 }
 
-	strcpy(uebergabestring,"densitywertmaximumbeiheight");
-	parameter[0].densitywertmaximumbeiheight=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"densityvaluemaximumatheight");
+	parameter[0].densityvaluemaximumatheight=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertmaximumbeiheight);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densityvaluemaximumatheight);
                 }
 
 			// Beziehungen zwischen height und Basaldurchmesser

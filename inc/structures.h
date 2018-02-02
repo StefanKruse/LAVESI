@@ -190,7 +190,7 @@ using namespace std;
 		double 	desitymaxreduction;
 		int 	dichtheightrel;
 		double	densityvaluedbasalinfluence;
-		double	densitywertmaximumbeiheight; 
+		double	densityvaluemaximumatheight; 
 		int		individuenzahl;
 		
 		// ... seed production, dispersal and pollination

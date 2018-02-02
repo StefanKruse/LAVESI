@@ -67,9 +67,9 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				//	   300 cm und größer - kaum beeinflusst 
 				//	   im Moment ausgeschaltet
 				double heightnkugeleinfluss=1; //war bisher auf 0.  Dadurch wurde density in der Mortalität nicht berücksichtigt
-				if (pTree->height<(parameter[0].densitywertmaximumbeiheight*2)) 
+				if (pTree->height<(parameter[0].densityvaluemaximumatheight*2)) 
 				{	
-					heightnkugeleinfluss=heightnkugeleinfluss+(sqrt(pow(parameter[0].densitywertmaximumbeiheight,2)-pow(pTree->height-parameter[0].densitywertmaximumbeiheight, 2))/parameter[0].densitywertmaximumbeiheight);
+					heightnkugeleinfluss=heightnkugeleinfluss+(sqrt(pow(parameter[0].densityvaluemaximumatheight,2)-pow(pTree->height-parameter[0].densityvaluemaximumatheight, 2))/parameter[0].densityvaluemaximumatheight);
 				}	
 				
 				// Calculation of the young trees mortalities

@@ -34,7 +34,7 @@ using namespace std;
 		int 	species;
 	};
 
-	struct seed 
+	struct Seed 
 	{
 		int		xworldcoo;
 		int		yworldcoo;

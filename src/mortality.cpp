@@ -249,7 +249,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
  *
  *
  *******************************************************************************************/
-void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list)
+void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list)
 {
 
 	int aktort=0;
@@ -276,8 +276,8 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 		
 
 
-		vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-		list<seed*>& seed_list = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
+		list<Seed*>& seed_list = *world_positon_s;
 
 		aktort++;
 
@@ -291,17 +291,17 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 	/*	// start: ORI CODE  */
 		//cout << "seed_list.size() vor Mortalität = " << seed_list.size() << endl;
 		/// seedmortalität
-		for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
 		{
-			pseed=(*pos);
+			pSeed=(*pos);
 			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 			
 			///seed is on ground && random number < probability (0.8)
-			if (pseed->imcone==false)
+			if (pSeed->imcone==false)
 			{
 				if (zufallsz<parameter[0].seedfloormort) 
 				{
-					delete pseed;
+					delete pSeed;
 					pos=seed_list.erase(pos);
 				}
 				else
@@ -311,11 +311,11 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 			}
 			
 			///seed in cone && random number < probability (0.8)
-			else if (pseed->imcone==true)
+			else if (pSeed->imcone==true)
 			{
 				if (zufallsz<parameter[0].seedconemort) 
 				{
-					delete pseed;
+					delete pSeed;
 					pos=seed_list.erase(pos);
 				}
 				
@@ -338,7 +338,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
                                     printf("LaVeSi has been stopped after a failure in mortality.cpp\n\n");exit(1);
                                 }
 		
-				delete pseed;
+				delete pSeed;
 				pos=seed_list.erase(pos);						
 			}
 		}
@@ -439,10 +439,10 @@ if(mcorevariant==1)
 ///
 		/// #####################################
 		/// #####################################
-		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
 			// declare a local seed list to be filled by each thread
-			list<seed*> newseed_list;
+			list<Seed*> newseed_list;
 			
 		richtung=0.0;geschwindigkeit=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
 		I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
@@ -467,7 +467,7 @@ if(mcorevariant==1)
 					double end_timer_eachtree_advance=omp_get_wtime();
 					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
 
-				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
+				// to test the functionality of mutli-cores test to define only local pointers (pTree+pSeed) and container (Vname)
 				pTree=(*posb);			
 				
 					double end_timer_eachtree_vecini=omp_get_wtime();
@@ -506,38 +506,38 @@ if(mcorevariant==1)
 						for(int sl=0; sl<seedlebend; sl++)
 						{// START: create new seeds
 						 // create a new seed
-							pseed= new seed();
+							pSeed= new Seed();
 							
 							// add information
-							pseed->yworldcoo=aktortyworldcoo;
-							pseed->xworldcoo=aktortxworldcoo;
-							pseed->xcoo=pTree->xcoo;
-							pseed->ycoo=pTree->ycoo;
-							pseed->namem=pTree->name;
+							pSeed->yworldcoo=aktortyworldcoo;
+							pSeed->xworldcoo=aktortxworldcoo;
+							pSeed->xcoo=pTree->xcoo;
+							pSeed->ycoo=pTree->ycoo;
+							pSeed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
 							if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
-								pseed->namep=Vname.at(iran);
-								pseed->thawing_depthinfluence=Vthdpth.at(iran);
+								pSeed->namep=Vname.at(iran);
+								pSeed->thawing_depthinfluence=Vthdpth.at(iran);
 							} 
 							else
 							{
-								pseed->namep=0;
-								pseed->thawing_depthinfluence=100;
+								pSeed->namep=0;
+								pSeed->thawing_depthinfluence=100;
 							}
 														
-							pseed->line=pTree->line;
-							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
-							pseed->imcone=true;
-							pseed->gewicht=1;
-							pseed->age=0;
-							pseed->species=pTree->species;// species is inherited from the seed source
-							pseed->elternheight=pTree->height;
+							pSeed->line=pTree->line;
+							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
+							pSeed->imcone=true;
+							pSeed->gewicht=1;
+							pSeed->age=0;
+							pSeed->species=pTree->species;// species is inherited from the seed source
+							pSeed->elternheight=pTree->height;
 
 							// add seed to seed_list
-							newseed_list.push_back(pseed);
+							newseed_list.push_back(pSeed);
 						}// END: create new seeds
 
 					}// END: if seedlebend>0
@@ -608,7 +608,7 @@ if(mcorevariant==2)
 ///
 		/// #####################################
 		/// #####################################
-		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{ // START: parallel region
 			if((parameter[0].ivort==1))// check the number of used threads
 			{
@@ -642,7 +642,7 @@ if(mcorevariant==2)
 					
 					
 			// declare a local seed list to be filled by each thread
-			list<seed*> newseed_list;
+			list<Seed*> newseed_list;
 				// timers
 				int n_trees=0;
 				double timer_eachtree_advance=0;
@@ -665,7 +665,7 @@ if(mcorevariant==2)
 					double end_timer_eachtree_advance=omp_get_wtime();
 					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
 
-				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
+				// to test the functionality of mutli-cores test to define only local pointers (pTree+pSeed) and container (Vname)
 				// pTree=(*posb);			
 				pTree=(*it);			
 				
@@ -704,39 +704,39 @@ if(mcorevariant==2)
 						for(int sl=0; sl<seedlebend; sl++)
 						{// START: create new seeds
 							// create a new seed
-							pseed= new seed();
+							pSeed= new Seed();
 							
 							// add information
-							pseed->yworldcoo=aktortyworldcoo;
-							pseed->xworldcoo=aktortxworldcoo;
-							pseed->xcoo=pTree->xcoo;
-							pseed->ycoo=pTree->ycoo;
-							pseed->namem=pTree->name;
+							pSeed->yworldcoo=aktortyworldcoo;
+							pSeed->xworldcoo=aktortxworldcoo;
+							pSeed->xcoo=pTree->xcoo;
+							pSeed->ycoo=pTree->ycoo;
+							pSeed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
 							if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
-								pseed->namep=Vname.at(iran);
-								pseed->thawing_depthinfluence=100;
+								pSeed->namep=Vname.at(iran);
+								pSeed->thawing_depthinfluence=100;
 							} 
 							else
 							{
-								pseed->namep=0;
-								pseed->thawing_depthinfluence=100;
+								pSeed->namep=0;
+								pSeed->thawing_depthinfluence=100;
 							}
 							
 							
-							pseed->line=pTree->line;
-							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
-							pseed->imcone=true;
-							pseed->gewicht=1;
-							pseed->age=0;
-							pseed->species=pTree->species;// species is inherited from the seed source
-							pseed->elternheight=pTree->height;
+							pSeed->line=pTree->line;
+							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
+							pSeed->imcone=true;
+							pSeed->gewicht=1;
+							pSeed->age=0;
+							pSeed->species=pTree->species;// species is inherited from the seed source
+							pSeed->elternheight=pTree->height;
 
 							// add seed to seed_list
-							newseed_list.push_back(pseed);
+							newseed_list.push_back(pSeed);
 						}// END: create new seeds
 
 					
@@ -829,7 +829,7 @@ if(mcorevariant==3)
 				advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 			
 				
-		#pragma omp parallel default(shared) private(pTree,pseed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+		#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 		{// START: parallel region
 		
 
@@ -861,7 +861,7 @@ if(mcorevariant==3)
 			}
 	
 			// declare a local seed list to be filled by each thread
-			list<seed*> newseed_list;
+			list<Seed*> newseed_list;
 			
 				// timers
 				int n_trees=0;
@@ -892,7 +892,7 @@ if(mcorevariant==3)
 					double end_timer_eachtree_advance=omp_get_wtime();
 					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
 
-				// to test the functionality of mutli-cores test to define only local pointers (pTree+pseed) and container (Vname)
+				// to test the functionality of mutli-cores test to define only local pointers (pTree+pSeed) and container (Vname)
 		
 				pTree=(*it);			
 
@@ -935,38 +935,38 @@ if(mcorevariant==3)
 						for(int sl=0; sl<seedlebend; sl++)
 						{// START: create new seeds
 							// create a new seed
-							pseed= new seed();
+							pSeed= new Seed();
 							
 							// add information
-							pseed->yworldcoo=aktortyworldcoo;
-							pseed->xworldcoo=aktortxworldcoo;
-							pseed->xcoo=pTree->xcoo;
-							pseed->ycoo=pTree->ycoo;
-							pseed->namem=pTree->name;
+							pSeed->yworldcoo=aktortyworldcoo;
+							pSeed->xworldcoo=aktortxworldcoo;
+							pSeed->xcoo=pTree->xcoo;
+							pSeed->ycoo=pTree->ycoo;
+							pSeed->namem=pTree->name;
 							
 							// if chosen, determine the father by pollination out of available (matured) trees
 							if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 							{
 								int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
-								pseed->namep=Vname.at(iran);
-								pseed->thawing_depthinfluence=100;
+								pSeed->namep=Vname.at(iran);
+								pSeed->thawing_depthinfluence=100;
 							} 
 							else
 							{
-								pseed->namep=0;
-								pseed->thawing_depthinfluence=100;
+								pSeed->namep=0;
+								pSeed->thawing_depthinfluence=100;
 							}
 							
-							pseed->line=pTree->line;
-							pseed->generation=pTree->generation+1;	// generation==0 introduced from outside
-							pseed->imcone=true;
-							pseed->gewicht=1;
-							pseed->age=0;
-							pseed->species=pTree->species;// species is inherited from the seed source
-							pseed->elternheight=pTree->height;
+							pSeed->line=pTree->line;
+							pSeed->generation=pTree->generation+1;	// generation==0 introduced from outside
+							pSeed->imcone=true;
+							pSeed->gewicht=1;
+							pSeed->age=0;
+							pSeed->species=pTree->species;// species is inherited from the seed source
+							pSeed->elternheight=pTree->height;
 
 							// add seed to seed_list
-							newseed_list.push_back(pseed);
+							newseed_list.push_back(pSeed);
 						}// END: create new seeds
 						double end_timer_createseeds=omp_get_wtime();	
 						timer_createseeds+=end_timer_createseeds-end_timer_tresedliv;
@@ -1025,13 +1025,13 @@ if(mcorevariant==3)
 						}
 						
 						// # print data
-								for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
+								for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 								{
-									pseed=(*pos);
+									pSeed=(*pos);
 									
-									if(pseed->age==0)
+									if(pSeed->age==0)
 									{
-										fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pseed->xcoo,pseed->ycoo,pseed->namep,pseed->namem);
+										fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pSeed->xcoo,pSeed->ycoo,pSeed->namep,pSeed->namem);
 									}
 								}
 

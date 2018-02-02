@@ -13,9 +13,9 @@ void Seedin()
 {	
 
 	int aktort=0;
-	for (vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
+	for (vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ // world seed list loop start
-		list<seed*>& seed_list = *posw;
+		list<Seed*>& seed_list = *posw;
 
 		aktort++;
 		
@@ -141,29 +141,29 @@ void Seedin()
 				if (seedeintragen==true)
 				{  
 					// add new seed
-					pseed= new seed();					// 1. generate new seed
-					pseed->yworldcoo=aktortyworldcoo;
-					pseed->xworldcoo=aktortxworldcoo;
-					pseed->xcoo=jseed;					// 2. apply values to the seed
-					pseed->ycoo=iseed;
-					pseed->namem=0;
-					pseed->namep=0;
-					pseed->line=++parameter[0].lineakt;
-					pseed->generation=0;
-					pseed->imcone=false;
-					pseed->gewicht=1;
-					pseed->age=0;
-					pseed->longdispersed=false;
-					pseed->species=specieszufall;
-					pseed->elternheight=0;
+					pSeed= new Seed();					// 1. generate new seed
+					pSeed->yworldcoo=aktortyworldcoo;
+					pSeed->xworldcoo=aktortxworldcoo;
+					pSeed->xcoo=jseed;					// 2. apply values to the seed
+					pSeed->ycoo=iseed;
+					pSeed->namem=0;
+					pSeed->namep=0;
+					pSeed->line=++parameter[0].lineakt;
+					pSeed->generation=0;
+					pSeed->imcone=false;
+					pSeed->gewicht=1;
+					pSeed->age=0;
+					pSeed->longdispersed=false;
+					pSeed->species=specieszufall;
+					pSeed->elternheight=0;
 					
-					pseed->thawing_depthinfluence=100;
+					pSeed->thawing_depthinfluence=100;
 					
-					seed_list.push_back(pseed);			// 3. push back seed to the seed_list
+					seed_list.push_back(pSeed);			// 3. push back seed to the seed_list
 					
 					
 //hier drunter die Abfrage ist vermutlich fehlerhaft
-					if ( (pseed->yworldcoo<0.0) | (pseed->yworldcoo> (double) (treerows-1)) | (pseed->xcoo<0.0) | (pseed->xcoo> (double) (treecols-1)) )
+					if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )
 					{
 						printf("\n\nLaVeSi was stopped\n");
 						printf("=> Treedistribution.cpp\n");

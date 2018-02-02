@@ -1,6 +1,6 @@
 using namespace std;
 
-void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
+void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
 {
 	double xminwindow=0.0;
 	double xmaxwindow=0.0;
@@ -40,8 +40,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 	{ // world tree list loop
 		list<Tree*>& tree_list = *posw;
 		
-		vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-		list<seed*>& seed_list = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
+		list<Seed*>& seed_list = *world_positon_s;
 		
 		vector<vector<Karten*> >::iterator poskarten = (world_plot_list.begin()+aktort);
 		vector<Karten*>& plot_list = *poskarten;
@@ -534,12 +534,12 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				int seedconezahl=0, seedbodenzahl=0;
 				// for counting species:
 				int specseed1 = 0, specseed2 = 0;
-				for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
+				for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
 				{
-					pseed=(*pos);
-					if ( (pseed->xcoo>=xminwindow) && (pseed->xcoo<=xmaxwindow) && (pseed->ycoo>=yminwindow) && (pseed->ycoo<=ymaxwindow) )
+					pSeed=(*pos);
+					if ( (pSeed->xcoo>=xminwindow) && (pSeed->xcoo<=xmaxwindow) && (pSeed->ycoo>=yminwindow) && (pSeed->ycoo<=ymaxwindow) )
 					{ // Sector BEGIN
-						if (pseed->imcone==true) 
+						if (pSeed->imcone==true) 
                                                 {
                                                     seedconezahl++;
                                                 }
@@ -548,11 +548,11 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
                                                     seedbodenzahl++;
                                                 }
 						// counting species:
-						if (pseed->species == 1)
+						if (pSeed->species == 1)
 						{
 							specseed1=specseed1+1;
 						}
-						else if (pseed->species == 2)
+						else if (pSeed->species == 2)
 						{
 							specseed2=specseed2+1;
 						}						

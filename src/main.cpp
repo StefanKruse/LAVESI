@@ -557,7 +557,7 @@ void createLists()
 				list<Tree*> tree_list;							  // Creating new tree_list  
 				world_tree_list.push_back(tree_list);			  // include new tree_list in corresponding world list
 
-				list<seed*> seed_list;							  // Creating new seed_list 
+				list<Seed*> seed_list;							  // Creating new seed_list 
 				world_seed_list.push_back(seed_list);			  // include new seed_list in corresponding world list
 
 				vector<weather*> weather_list;				 	  // Creating new weather_list 
@@ -576,7 +576,7 @@ void createLists()
 					list<Tree*> tree_list;								// Creating new tree_list  
 					world_tree_list_copy.push_back(tree_list);			// include new tree_list in corresponding world list
 
-					list<seed*> seed_list;								// Creating new seed_list 
+					list<Seed*> seed_list;								// Creating new seed_list 
 					world_seed_list_copy.push_back(seed_list);			// include new seed_list in corresponding world list
 
 					vector<Karten*> plot_list;							// Creating new plot_list 
@@ -786,8 +786,8 @@ void finishSimulation()
 			vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
 			list<Tree*>& tree_list = *world_positon_b;
 
-			vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-			list<seed*>& seed_list = *world_positon_s;
+			vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
+			list<Seed*>& seed_list = *world_positon_s;
 
 			//vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
 			//vector<Karten*>& plot_list = *posiweltk;
@@ -802,7 +802,7 @@ void finishSimulation()
 			int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 			
 			int number_of_seeds_in_cone=0;
-			for(list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
+			for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) 
 			{
 					if ((*pos)->imcone==true)
 					{

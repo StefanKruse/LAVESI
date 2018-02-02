@@ -13,27 +13,27 @@ using namespace std;
  *******************************************************************************************/
 
  
-void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<seed*> > &world_seed_list)
+void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list)
 {
 
-	for (vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
+	for (vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 
-		list<seed*>& seed_list = *posw;
+		list<Seed*>& seed_list = *posw;
 
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
 		{ 
-			pseed=(*pos);
-			pseed->age++;
+			pSeed=(*pos);
+			pSeed->age++;
 			
 			///seeds older than 2 years (L.gmelinii) and 10 years (L.sibirica) die
-			if ((pseed->species==1)&&(pseed->age>parameter[0].gmelseedmaxage))
+			if ((pSeed->species==1)&&(pSeed->age>parameter[0].gmelseedmaxage))
 			{
-				delete pseed;
+				delete pSeed;
 				pos=seed_list.erase(pos);
 			}
-			else if ((pseed->species==2)&&(pseed->age>10)) 
+			else if ((pSeed->species==2)&&(pSeed->age>10)) 
 			{
-				delete pseed;
+				delete pSeed;
 				pos=seed_list.erase(pos);
 			}
 			else

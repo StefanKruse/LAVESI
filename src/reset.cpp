@@ -85,13 +85,13 @@ void SaveAllLists(void)
 	
 	// copy Seeds
 	aktort=0;
-	for (vector<list<seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
+	for (vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 
-		list<seed*>& seed_list = *posw;
+		list<Seed*>& seed_list = *posw;
 
 		// opening the original seed list and the referring reset list ..._copy		
-		vector<list<seed*> >::iterator world_positon_s = (world_seed_list_copy.begin()+aktort);
-		list<seed*>& seed_list_copy = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list_copy.begin()+aktort);
+		list<Seed*>& seed_list_copy = *world_positon_s;
 		
 		
 		aktort++;
@@ -101,30 +101,30 @@ void SaveAllLists(void)
 		cout << "seed_list_copy.size() before copying=" << seed_list_copy.size() << endl;
 		
 		int counterseed=1;	// For displaying the first seed
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
 		{ 
-			pseed=(*pos);
+			pSeed=(*pos);
 
 			/// Push back all data to a new object of the referring reset list "..._copy" 
-			pseed_copy= new seed();						// create new seed
-			pseed_copy->xworldcoo=pseed->xworldcoo;			
-			pseed_copy->yworldcoo=pseed->yworldcoo;	
-			pseed_copy->xcoo=pseed->xcoo;			
-			pseed_copy->ycoo=pseed->ycoo;		
-			pseed_copy->namem=pseed->namem;			
-			pseed_copy->namep=pseed->namep;		
-			pseed_copy->line=pseed->line;			
-			pseed_copy->generation=pseed->generation;
-			pseed_copy->species=pseed->species;
-			pseed_copy->imcone=pseed->imcone;		
-			pseed_copy->gewicht=pseed->gewicht;	
-			pseed_copy->age=pseed->age;			
-			pseed_copy->longdispersed=pseed->longdispersed;	
-			seed_list_copy.push_back(pseed_copy);				// push back seed to list
+			pSeed_copy= new Seed();						// create new seed
+			pSeed_copy->xworldcoo=pSeed->xworldcoo;			
+			pSeed_copy->yworldcoo=pSeed->yworldcoo;	
+			pSeed_copy->xcoo=pSeed->xcoo;			
+			pSeed_copy->ycoo=pSeed->ycoo;		
+			pSeed_copy->namem=pSeed->namem;			
+			pSeed_copy->namep=pSeed->namep;		
+			pSeed_copy->line=pSeed->line;			
+			pSeed_copy->generation=pSeed->generation;
+			pSeed_copy->species=pSeed->species;
+			pSeed_copy->imcone=pSeed->imcone;		
+			pSeed_copy->gewicht=pSeed->gewicht;	
+			pSeed_copy->age=pSeed->age;			
+			pSeed_copy->longdispersed=pSeed->longdispersed;	
+			seed_list_copy.push_back(pSeed_copy);				// push back seed to list
 
 				if(counterseed==1)
 				{
-					cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;
+					cout << pSeed->age << " <-pSeed ... seedage ... pSeed_copy-> " << pSeed_copy->age << endl;
 				}
 
 			++pos;
@@ -355,8 +355,8 @@ void ClearAllLists(void)
 		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
 		list<Tree*>& tree_list = *world_positon_b;
 
-		vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-		list<seed*>& seed_list = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
+		list<Seed*>& seed_list = *world_positon_s;
 
 		vector<vector<Karten*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
 		vector<Karten*>& plot_list = *posiweltk;
@@ -373,10 +373,10 @@ void ClearAllLists(void)
 		}
 		tree_list.clear();
 
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
+		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{
-			pseed= (*pos);
-			delete pseed;
+			pSeed= (*pos);
+			delete pSeed;
 		}
 		seed_list.clear();
 
@@ -515,13 +515,13 @@ void RestoreAllLists(void)
 	
 	// copying Seeds
 	aktort=0;
-	for (vector<list<seed*> >::iterator posw = world_seed_list_copy.begin(); posw != world_seed_list_copy.end(); ++posw)
+	for (vector<list<Seed*> >::iterator posw = world_seed_list_copy.begin(); posw != world_seed_list_copy.end(); ++posw)
 	{ 
-		list<seed*>& seed_list = *posw;
+		list<Seed*>& seed_list = *posw;
 
 		// opening the original seed list and the referring reset list ..._copy		
-		vector<list<seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-		list<seed*>& seed_list_copy = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
+		list<Seed*>& seed_list_copy = *world_positon_s;
 		
 		
 		aktort++;
@@ -531,31 +531,31 @@ void RestoreAllLists(void)
 		cout << "seed_list_copy.size() before copying =" << seed_list_copy.size() << endl;
 		
 		int counterseed=1;	// for displaying the first seed
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
 		{ 
-			pseed=(*pos);
+			pSeed=(*pos);
 
 			// Push back all data to a new object of the referring reset list "..._copy" 
-			pseed_copy= new seed();						// create new seed
-			pseed_copy->xworldcoo=pseed->xworldcoo;			
-			pseed_copy->yworldcoo=pseed->yworldcoo;	
-			pseed_copy->xcoo=pseed->xcoo;			
-			pseed_copy->ycoo=pseed->ycoo;		
-			pseed_copy->namem=pseed->namem;			
-			pseed_copy->namep=pseed->namep;		
-			pseed_copy->line=pseed->line;			
-			pseed_copy->generation=pseed->generation;	
-			pseed_copy->species=pseed->species;
-			pseed_copy->imcone=pseed->imcone;		
-			pseed_copy->gewicht=pseed->gewicht;	
-			pseed_copy->age=pseed->age;			
-			pseed_copy->longdispersed=pseed->longdispersed;	
-			seed_list_copy.push_back(pseed_copy);				// push back seed to list
+			pSeed_copy= new Seed();						// create new seed
+			pSeed_copy->xworldcoo=pSeed->xworldcoo;			
+			pSeed_copy->yworldcoo=pSeed->yworldcoo;	
+			pSeed_copy->xcoo=pSeed->xcoo;			
+			pSeed_copy->ycoo=pSeed->ycoo;		
+			pSeed_copy->namem=pSeed->namem;			
+			pSeed_copy->namep=pSeed->namep;		
+			pSeed_copy->line=pSeed->line;			
+			pSeed_copy->generation=pSeed->generation;	
+			pSeed_copy->species=pSeed->species;
+			pSeed_copy->imcone=pSeed->imcone;		
+			pSeed_copy->gewicht=pSeed->gewicht;	
+			pSeed_copy->age=pSeed->age;			
+			pSeed_copy->longdispersed=pSeed->longdispersed;	
+			seed_list_copy.push_back(pSeed_copy);				// push back seed to list
 
 			
 				if(counterseed==1)
 				{
-					cout << pseed->age << " <-pseed ... seedage ... pseed_copy-> " << pseed_copy->age << endl;
+					cout << pSeed->age << " <-pSeed ... seedage ... pSeed_copy-> " << pSeed_copy->age << endl;
 				}
 
 			++pos;
@@ -788,8 +788,8 @@ void ClearAllLists_copy(void)
 	{  // world tree copy list loop BEGIN
 		list<Tree*>& tree_list = *posw;
 
-		vector<list<seed*> >::iterator world_positon_s = (world_seed_list_copy.begin()+aktort);
-		list<seed*>& seed_list = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list_copy.begin()+aktort);
+		list<Seed*>& seed_list = *world_positon_s;
 
 		vector<vector<Karten*> >::iterator posiweltk = (world_plot_list_copy.begin()+aktort);
 		vector<Karten*>& plot_list = *posiweltk;
@@ -808,10 +808,10 @@ void ClearAllLists_copy(void)
 		tree_list.clear();
 
 		// deleting seed list elements
-		for (list<seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
+		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{
-			pseed=(*pos);
-			delete pseed;
+			pSeed=(*pos);
+			delete pSeed;
 		}
 		seed_list.clear();
 

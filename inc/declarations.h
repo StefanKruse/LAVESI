@@ -1,56 +1,46 @@
 #ifndef decinc
 #define decinc
 
-// Deklarationen globaler Variablen und Arrays wenn das Programm gestartet wird
-	// Raster in entsprechender Groesze deklarieren
- 	const int treerows=20;	// in metres
+	// plot dimensions rows==y, cols==x
+ 	const int treerows=20;
  	const int treecols=20;
 
-	// Parameter fuer den Startzustand deklarieren und initialisieren
-		// Zum Einlesen von Parametern
+	// parameter input
  	const int stringlengthmax=255;
  	char trennzeichen[] = "=;";
  	struct Parameter parameter[1];
-		// Zum Einlesen der weatherdaten
-
-	// Lists and pointers
-  	vector<list<Tree*> >	 world_tree_list;
-  	Tree *pTree;		// Pointer auf einen Tree
 	
-  	Tree *pTree_copy;		// Pointer auf einen Tree
+	// lists and pointers
+  	vector<list<Tree*>> world_tree_list;
+  	Tree *pTree;
+  	Tree *pTree_copy;
 	
-  	vector<list<seed*> >	 world_seed_list(0);
-  	seed *pseed;		// Pointer auf einen seed
-  	seed *pseed_copy;		// Pointer auf einen seed
+  	vector<list<Seed*>> world_seed_list(0);
+  	Seed *pSeed;
+  	Seed *pSeed_copy;
 	
-  	vector<vector<weather*> > world_weather_list(0);
-  	weather *pweather;	// Pointer auf ein weather eines Jahres
+  	vector<vector<weather*>> world_weather_list(0);
+  	weather *pweather;
 	
-	// densitykarten
-  	vector<vector<Karten*> > world_plot_list(0);
-  	Karten *pKarten;	// Pointer auf ein Kartenelement im Kartenarray
-  	Karten *pKarten_copy;	// Pointer auf ein Kartenelement im Kartenarray
+  	vector<vector<Karten*>> world_plot_list(0);
+  	Karten *pKarten;
+  	Karten *pKarten_copy;
 	
-	// Evaluation/Ausgabe
   	vector<vector<Evaluation*> > world_evaluation_list(0);
-  	Evaluation *pEvaluation;	// Pointer auf ein Evaluationsobjekt
-  	Evaluation *pEvaluation_copy;	// Pointer auf ein Evaluationsobjekt
+  	Evaluation *pEvaluation;
+  	Evaluation *pEvaluation_copy;
 
-	
-		// Listen für resetyear Kopien
-  		vector<list<Tree*> >	 world_tree_list_copy(0);
-  		vector<list<seed*> >	 world_seed_list_copy(0);
-  		vector<vector<Karten*> > world_plot_list_copy(0);
-  		vector<vector<Evaluation*> > world_evaluation_list_copy(0);
+	// lists for resetyear copies
+	vector<list<Tree*>>	world_tree_list_copy(0);
+	vector<list<Seed*>> world_seed_list_copy(0);
+	vector<vector<Karten*>> world_plot_list_copy(0);
+	vector<vector<Evaluation*>> world_evaluation_list_copy(0);
 		
+	// wind data
+	vector<int> globalyears(0);
+	vector<vector<double>> windspd(0);
+	vector<vector<double>> winddir(0);
+	int cntr;
+	vector<double> wdir(0),wspd(0);   
 
-			
-		//wind data, associated years
-  		 vector<int> globalyears(0);
-  		 vector<vector<double> > windspd(0);
-  		 vector<vector<double> > winddir(0);
-  		 int cntr;
-  		 vector<double> wdir(0),wspd(0);   
-		 
-		 
 #endif

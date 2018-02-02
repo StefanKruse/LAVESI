@@ -669,8 +669,8 @@ void initialiseMaps()
 			pEvaluation->BArunmeanliste.clear();
 			pEvaluation->BArunmeanliste.shrink_to_fit();
 			//Start growth stage calculation
-			pEvaluation->maxsteigungbasalarea=0.0;
-			pEvaluation->countermaxsteigungbasalarea=0;
+			pEvaluation->maxincrementbasalarea=0.0;
+			pEvaluation->countermaxincrementbasalarea=0;
 			pEvaluation->wendejahr=-9999;
 			pEvaluation->saettigungsjahr=-9999;
 			pEvaluation->nachwendejahr=false;

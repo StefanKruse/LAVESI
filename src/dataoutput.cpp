@@ -232,16 +232,16 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				{	
 			
 					// If a maximal slope is not surpassed in 50 years, the turning point of growth is reached
-					if (steigdiff>=pEvaluation->maxsteigungbasalarea) 
+					if (steigdiff>=pEvaluation->maxincrementbasalarea) 
 					{
-						pEvaluation->maxsteigungbasalarea=steigdiff;
-						pEvaluation->countermaxsteigungbasalarea=50;
+						pEvaluation->maxincrementbasalarea=steigdiff;
+						pEvaluation->countermaxincrementbasalarea=50;
 					}
 					else 
 					{
-						--pEvaluation->countermaxsteigungbasalarea;
+						--pEvaluation->countermaxincrementbasalarea;
 					}
-					if (pEvaluation->countermaxsteigungbasalarea==0)
+					if (pEvaluation->countermaxincrementbasalarea==0)
 					{
 						pEvaluation->wendejahr=jahr;
 						pEvaluation->nachwendejahr=true;

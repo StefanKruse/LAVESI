@@ -236,8 +236,8 @@ void SaveAllLists(void)
 					pEvaluation_copy->BArunmeanliste.push_back((*posval));
 					++posval;
 				} 
-			pEvaluation_copy->maxsteigungbasalarea=pEvaluation->maxsteigungbasalarea;	
-			pEvaluation_copy->countermaxsteigungbasalarea=pEvaluation->countermaxsteigungbasalarea;
+			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;	
+			pEvaluation_copy->countermaxincrementbasalarea=pEvaluation->countermaxincrementbasalarea;
 			pEvaluation_copy->wendejahr=pEvaluation->wendejahr;	
 			pEvaluation_copy->saettigungsjahr=pEvaluation->saettigungsjahr;	
 			pEvaluation_copy->nachwendejahr=pEvaluation->nachwendejahr;
@@ -320,7 +320,7 @@ void SaveAllLists(void)
 			
 				if(counterauswert==1)
 				{
-					cout << pEvaluation->maxsteigungbasalarea << " <-pEvaluation ... Evaluationmaxsteigungbasalarea ... pEvaluation_copy-> " << pEvaluation_copy->maxsteigungbasalarea << endl;
+					cout << pEvaluation->maxincrementbasalarea << " <-pEvaluation ... Evaluationmaxincrementbasalarea ... pEvaluation_copy-> " << pEvaluation_copy->maxincrementbasalarea << endl;
 				}
 
 			++pos;
@@ -669,8 +669,8 @@ void RestoreAllLists(void)
 					pEvaluation_copy->BArunmeanliste.push_back((*posval));
 					++posval;
 				}
-			pEvaluation_copy->maxsteigungbasalarea=pEvaluation->maxsteigungbasalarea;		
-			pEvaluation_copy->countermaxsteigungbasalarea=pEvaluation->countermaxsteigungbasalarea;
+			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;		
+			pEvaluation_copy->countermaxincrementbasalarea=pEvaluation->countermaxincrementbasalarea;
 			pEvaluation_copy->wendejahr=pEvaluation->wendejahr;	
 			pEvaluation_copy->saettigungsjahr=pEvaluation->saettigungsjahr;			
 			pEvaluation_copy->nachwendejahr=pEvaluation->nachwendejahr;
@@ -753,7 +753,7 @@ void RestoreAllLists(void)
 			
 				if(counterauswert==1)
 				{
-					cout << pEvaluation->maxsteigungbasalarea << " <-pEvaluation ... Evaluationmaxsteigungbasalarea ... pEvaluation_copy-> " << pEvaluation_copy->maxsteigungbasalarea << endl;
+					cout << pEvaluation->maxincrementbasalarea << " <-pEvaluation ... Evaluationmaxincrementbasalarea ... pEvaluation_copy-> " << pEvaluation_copy->maxincrementbasalarea << endl;
 				}
 
 			++pos;

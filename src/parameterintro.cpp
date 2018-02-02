@@ -168,11 +168,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].precweather);
                 }
 
-	strcpy(uebergabestring,"precgrenzwert");
-	parameter[0].precgrenzwert=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"precthreshold");
+	parameter[0].precthreshold=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].precgrenzwert);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].precthreshold);
                 }
 
 	strcpy(uebergabestring,"thawing_depth");

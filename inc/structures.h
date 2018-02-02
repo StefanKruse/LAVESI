@@ -141,7 +141,7 @@ using namespace std;
 		// ... climate processing
 		int		weatherchoice;
 		int		precweather;
-		double	precgrenzwert;
+		double	precthreshold;
 		double	tempdiffort;
 		double	precdiffort;
 		double	tempdiffortmin;

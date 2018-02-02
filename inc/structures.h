@@ -228,7 +228,7 @@ using namespace std;
 		double	mortage;
 		double	mdrought;
 		double	seedconemort;
-		double	seedbodenmort;
+		double	seedfloormort;
 		int 	gmelseedmaxage;
 
 		// ... ancestry

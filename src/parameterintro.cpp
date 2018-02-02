@@ -836,11 +836,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedconemort);
                 }
 
-	strcpy(uebergabestring,"seedbodenmort");
-	parameter[0].seedbodenmort=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seedfloormort");
+	parameter[0].seedfloormort=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedbodenmort);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedfloormort);
                 }
 
 	strcpy(uebergabestring,"gmelseedmaxage");

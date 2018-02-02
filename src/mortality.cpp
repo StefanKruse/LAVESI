@@ -299,7 +299,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 			///seed is on ground && random number < probability (0.8)
 			if (pseed->imcone==false)
 			{
-				if (zufallsz<parameter[0].seedbodenmort) 
+				if (zufallsz<parameter[0].seedfloormort) 
 				{
 					delete pseed;
 					pos=seed_list.erase(pos);

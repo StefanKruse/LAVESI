@@ -131,7 +131,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 				
 				double sapl_mort_gmel	= parameter[0].mjung * pow(exp((-1.0 * pTree->height) + maxhg), parameter[0].jugendmorteinflussexp);
 				double sapl_mort_sib	= parameter[0].mjung * pow(exp((-1.0 * pTree->height) + maxhs), parameter[0].jugendmorteinflussexp);
-				double age_mort		= parameter[0].malt	* agesmort * (10.0 * parameter[0].mortbg);
+				double age_mort		= parameter[0].mortage	* agesmort * (10.0 * parameter[0].mortbg);
 				double growth_mort	= parameter[0].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relwachstummorteinflussexp));
 				double dens_mort	= parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert; // Treedensity innerhalb eines Umkreises um den aktuellen Tree;
 				double weathermortaddg = 1.0  -(1.0 / (1.0 + (((1.0 - 0.5) / 0.5) * 
@@ -189,7 +189,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 						pTree->height, 
 						pTree->dbasalrel,pTree->dbrustrel,
 						parameter[0].mjung*pow(exp((-1.0*pTree->height)+maxhg),parameter[0].jugendmorteinflussexp),
-						parameter[0].malt*(agesmort*(10.0*parameter[0].mortbg)), 
+						parameter[0].mortage*(agesmort*(10.0*parameter[0].mortbg)), 
 						+ (1.0-pow(wachstumrel,parameter[0].relwachstummorteinflussexp)),
 						parameter[0].mdensity*heightnkugeleinfluss*pTree->densitywert, 
 						parameter[0].mweather*weathermortaddg*pow((1.0/pTree->height),0.5), 
@@ -203,7 +203,7 @@ void TreeMort(int yearposition_help,vector<weather*> &weather_list,list<Tree*> &
 						pTree->height, 
 						pTree->dbasalrel,pTree->dbrustrel,
 						parameter[0].mjung*pow(exp((-1.0*pTree->height)+maxhs),parameter[0].jugendmorteinflussexp),
-						parameter[0].malt*(agesmort*(10.0*parameter[0].mortbg)), 
+						parameter[0].mortage*(agesmort*(10.0*parameter[0].mortbg)), 
 						+ (1.0-pow(wachstumrel,parameter[0].relwachstummorteinflussexp)),
 						parameter[0].mdensity*heightnkugeleinfluss*pTree->densitywert, 
 						parameter[0].mweather*weathermortadds*pow((1.0/pTree->height),0.5), 

@@ -766,11 +766,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].maximumage);
                 }
 
-	strcpy(uebergabestring,"malt");
-	parameter[0].malt=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"mortage");
+	parameter[0].mortage=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].malt);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mortage);
                 }
 
 	strcpy(uebergabestring,"mjung");

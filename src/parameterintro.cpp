@@ -620,11 +620,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].relwachstumeinfluss);
                 }
 
-	strcpy(uebergabestring,"densityart");
-	parameter[0].densityart=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
+	strcpy(uebergabestring,"densitymode");
+	parameter[0].densitymode=(int) (Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]));
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].densityart);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].densitymode);
                 }
 
 	strcpy(uebergabestring,"incfac");
@@ -634,11 +634,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].incfac);
                 }
 
-	strcpy(uebergabestring,"densitywertmanipulatorexp");
-	parameter[0].densitywertmanipulatorexp=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"densityvaluemanipulatorexp");
+	parameter[0].densityvaluemanipulatorexp=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densitywertmanipulatorexp);
+                    printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].densityvaluemanipulatorexp);
                 }
 		
 	strcpy(uebergabestring,"calcinfarea");

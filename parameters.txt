@@ -147,16 +147,16 @@ incfac=10;							// (int) factor for calculating area influenced by individual t
 calcinfarea=1;						// (int) calculation mode for area size determination
 										// 1==linearly increasing (8 m at basal diameter of 80 cm)
 										// 2==logistically increasing with maximum value of 8 m (reaching at c. 35 cm basal diameter)
-densitywertmanipulatorexp=1;		// (double) exponent to scale the influence of a tree to the density tile
+densityvaluemanipulatorexp=1;		// (double) exponent to scale the influence of a tree to the density tile
 										// 1== normal
 										// 2== parabolically i.e. smaller values reached faster
-densitysmallweighing=0;				// (double) Exponent to scale the influence of individuals on the denstity tiles which are only influencing one tile
+densitysmallweighing=0;				// (double) exponent to scale the influence of individuals on the denstity tiles which are only influencing one tile
 										// 1==density is affected linearly with increasing basal diameter 
 										// 0==without weighing
 densitytreetile=0.5;				// (double) Exponent to change the density value input from each tree into the density grid
 										// 1==value equals basal diameter decreasing with distance from centre
 										// 0==value ranges from 1 to 0 with increasing distance
-densityart=2;						// (int 1,2,3) Mode of density calculation
+densitymode=2;						// (int 1,2,3) Mode of density calculation
 										// 1==without (densitywert of trees=0)
 										// 2==ZOI-kind of density calculation
 										// 3==random determination of surrounding fields

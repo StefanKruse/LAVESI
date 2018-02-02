@@ -51,12 +51,12 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 													//weighing with diameter
 													*
 													pow(pTree->dbasal, parameter[0].densitytreetile),
-											parameter[0].densitywertmanipulatorexp);
+											parameter[0].densityvaluemanipulatorexp);
 				plot_list[i*treecols*parameter[0].sizemagnif+j]->Treeanzahl++;
 				// pTree->densitywert=pow(pTree->dbasal, parameter[0].densitytreetile);
 				pTree->densitywert=pow(
 								pow(pTree->dbasal, parameter[0].densitytreetile)*pow(flaechengroesze/(1.0/parameter[0].sizemagnif),parameter[0].densitysmallweighing),
-								parameter[0].densitywertmanipulatorexp);
+								parameter[0].densityvaluemanipulatorexp);
 			}
 			
 			//StefanC: If the trees influences more than one density grid cell
@@ -90,13 +90,13 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 									+= 
 									pow(
 										pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0),
-										parameter[0].densitywertmanipulatorexp);
+										parameter[0].densityvaluemanipulatorexp);
 									
 								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treeanzahl++;
 
 								sumdensitywert+=pow(
 													pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0),
-													parameter[0].densitywertmanipulatorexp);
+													parameter[0].densityvaluemanipulatorexp);
 									// Check up output:
 									//cout << pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0) << "\t";
 							}
@@ -169,7 +169,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 			//DENSITY 1
-			if (parameter[0].densityart == 1)
+			if (parameter[0].densitymode == 1)
 			{
 				pTree->densitywert = 0.0;
 			}
@@ -197,7 +197,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 				if ( flaechengroesze < (1.0/parameter[0].sizemagnif) )
 				{
 					// DENSITY 2
-					if (parameter[0].densityart == 2)
+					if (parameter[0].densitymode == 2)
 					{
 						if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert > 0.0) 
 						{
@@ -224,7 +224,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 					// DENSITY 3
-					else if (parameter[0].densityart == 3)
+					else if (parameter[0].densitymode == 3)
 					{
 						// Determine random grid cell position and assign a value
 						int izuf= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
@@ -286,7 +286,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 									int jcurr=rastposj;
 
 									// Change of i/j vals only if DENSITY 3
-									if (parameter[0].densityart==3)
+									if (parameter[0].densitymode==3)
 									{
 										// Calculate the position from where the density values are taken randomly
 										icurr= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
@@ -540,7 +540,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 				//DENSITY 1
-				if (parameter[0].densityart == 1)
+				if (parameter[0].densitymode == 1)
 				{
 					pTree->densitywert = 0.0;
 				}
@@ -569,7 +569,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 					if ( flaechengroesze < (1.0/parameter[0].sizemagnif) )
 					{
 						// DENSITY 2
-						if (parameter[0].densityart == 2)
+						if (parameter[0].densitymode == 2)
 						{
 							if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensitywert > 0.0) 
 							{
@@ -596,7 +596,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 
 
 						// DENSITY 3
-						else if (parameter[0].densityart == 3)
+						else if (parameter[0].densitymode == 3)
 						{
 							
 							// determine the grid position randomly
@@ -660,7 +660,7 @@ void IndividualTreeDensity(list<Tree*> &tree_list, vector<Karten*> &plot_list)
 										int jcurr=rastposj;
 
 										// Change of i/j vals only if DENSITY 3
-										if (parameter[0].densityart==3)
+										if (parameter[0].densitymode==3)
 										{
 											// determine the position of density values randomly
 											icurr= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );

@@ -180,10 +180,10 @@ using namespace std;
 		double	dbrustheightsteignonlin;
 		
 		// ... density evaluation
-		int		densityart;
+		int		densitymode;
 		double	incfac;
 		int 	calcinfarea;
-		double 	densitywertmanipulatorexp;
+		double 	densityvaluemanipulatorexp;
 		double 	densitysmallweighing;
 		double 	densitytreetile;
 		int 	densitytiletree;

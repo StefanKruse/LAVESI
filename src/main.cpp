@@ -436,7 +436,7 @@ void Yearsteps()
 		{
 			// save the value read in from the parameter file
 			double incfac_buffer=parameter[0].incfac;
-			double densitywertmanipulatorexp_buffer=parameter[0].densitywertmanipulatorexp;
+			double densityvaluemanipulatorexp_buffer=parameter[0].densityvaluemanipulatorexp;
 			int seedintronumberpermanent_buffer=parameter[0].seedintronumberpermanent;
 
 			double tempdiffort_buffer=parameter[0].tempdiffort;
@@ -469,7 +469,7 @@ void Yearsteps()
 					}
 					else if(parameteri==2)
 					{
-						parameter[0].densitywertmanipulatorexp=2;
+						parameter[0].densityvaluemanipulatorexp=2;
 					}
 					else if(parameteri==3)
 					{
@@ -524,7 +524,7 @@ void Yearsteps()
 					
 					// restore initial values
 					parameter[0].incfac=incfac_buffer;
-					parameter[0].densitywertmanipulatorexp=densitywertmanipulatorexp_buffer;
+					parameter[0].densityvaluemanipulatorexp=densityvaluemanipulatorexp_buffer;
 					parameter[0].seedintronumberpermanent=seedintronumberpermanent_buffer;
 						
 				}// parameter settings

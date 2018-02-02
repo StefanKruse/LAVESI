@@ -925,7 +925,7 @@ int main()
 		printf("\n---->\tLAVESI\n");
 		printf("\n You have started  LAVESI-WIND, " 
 				"An individually-based and spatial explicit simulation model"
-				" for the vegetation dynamics of LARIX (L.)"
+				" for the vegetation dynamics of LARIX (Mill.)"
 				" - driven by temperature, precipitation and wind data."
 				"\n\n Version:\t 2.0 (Multiprocessing)"
 				"\n Date:\t\t 22.01.2018" 

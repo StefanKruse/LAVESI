@@ -1,8 +1,5 @@
 ﻿using namespace std;
 
-
-
-
 /****************************************************************************************//**
  * \brief calculate tree mortality
  *
@@ -13,10 +10,7 @@
  *******************************************************************************************/
 void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &tree_list)
 {
-		// Calculation of the factors in a function, that adds a mortality rate impact
-		
-		//***german:
-		/// Verrechnung der Faktoren in einer Funktion, die einen Mortalitysratenaufschlag darstellt
+		// calculation of the factors in a function, that adds a mortality rate impact
 		double anstiegweathermortg=160;
 		double anstiegweathermorts=160;
 		

@@ -128,7 +128,7 @@ starttrees=0;						// (int) type of initial tree set up
 										// ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
 										
 // 1.4.2 -----> Pollen dispersal
-pollination=9;						// (int 0,1,2) allow pollen dispersal
+pollination=0;						// (int 0,1,2) allow pollen dispersal
 										// 0==without pollination
 										// 1==pollination is computed during the simulation period (simduration)
 										// ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simduration==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978

@@ -975,7 +975,6 @@ int main()
 				parameter[0].nameakt=0;
 				parameter[0].lineakt=0;	
 				parameter[0].yearswithseedintro=yearswithseedintropuffer;	
-				parameter[0].individuenzahl=1;
 				
 			runSimulation();
 				

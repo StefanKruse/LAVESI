@@ -175,7 +175,7 @@ using namespace std;
 		double	dbasalheightslopenonlin;
 		double	dbreastheightslopenonlin;
 		
-		// ... density evaluation
+		// density evaluation
 		int		densitymode;
 		double	incfac;
 		int 	calcinfarea;
@@ -187,7 +187,6 @@ using namespace std;
 		int 	dichtheightrel;
 		double	densityvaluedbasalinfluence;
 		double	densityvaluemaximumatheight; 
-		int		individuenzahl;
 		
 		// ... seed production, dispersal and pollination
 		int		coneage;

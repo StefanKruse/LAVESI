@@ -313,7 +313,7 @@ void Mortalitaet( struct Parameter *parameter,int Jahr, int yearposition, vector
 			///seed in cone && random number < probability (0.8)
 			else if (pseed->imcone==true)
 			{
-				if (zufallsz<parameter[0].seedTreemort) 
+				if (zufallsz<parameter[0].seedconemort) 
 				{
 					delete pseed;
 					pos=seed_list.erase(pos);
@@ -483,7 +483,7 @@ if(mcorevariant==1)
 					for(int sna=0; sna < pTree->seednewly_produced; sna++)
 					{
 						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-						if(zufallsz>=parameter[0].seedTreemort) 
+						if(zufallsz>=parameter[0].seedconemort) 
 						{
 							++seedlebend;
 						}
@@ -681,7 +681,7 @@ if(mcorevariant==2)
 					for(int sna=0; sna < pTree->seednewly_produced; sna++)
 					{
 						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-						if(zufallsz>=parameter[0].seedTreemort) 
+						if(zufallsz>=parameter[0].seedconemort) 
 						{
 							++seedlebend;
 						}
@@ -909,7 +909,7 @@ if(mcorevariant==3)
 					for(int sna=0; sna < pTree->seednewly_produced; sna++)
 					{
 						double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-						if(zufallsz>=parameter[0].seedTreemort) 
+						if(zufallsz>=parameter[0].seedconemort) 
 						{
 							++seedlebend;
 						}

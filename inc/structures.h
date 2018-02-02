@@ -227,7 +227,7 @@ using namespace std;
 		double	mdensity;
 		double	mortage;
 		double	mdrought;
-		double	seedTreemort;
+		double	seedconemort;
 		double	seedbodenmort;
 		int 	gmelseedmaxage;
 

@@ -829,11 +829,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mdrought);
                 }
 
-	strcpy(uebergabestring,"seedTreemort");
-	parameter[0].seedTreemort=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"seedconemort");
+	parameter[0].seedconemort=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedTreemort);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].seedconemort);
                 }
 
 	strcpy(uebergabestring,"seedbodenmort");

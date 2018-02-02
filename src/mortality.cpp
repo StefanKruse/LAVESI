@@ -496,7 +496,7 @@ if(mcorevariant==1)
 					{// START: if seedlebend>0
 						if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
+							Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);
@@ -694,7 +694,7 @@ if(mcorevariant==2)
 					{// START: if seedlebend>0
 						if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].einschwingen==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
+							Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);//;
@@ -924,7 +924,7 @@ if(mcorevariant==3)
 
 						if( (parameter[0].pollination==1 && parameter[0].ivort>1045) || (parameter[0].pollination==9))//ivort 1045 bei 1000yrspinup and 80yrsim is 1979:2013
 						{
-							BefrWahrsch(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
+							Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
 												richtung,geschwindigkeit,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 											Vname,Vthdpth,
 											n_trees);

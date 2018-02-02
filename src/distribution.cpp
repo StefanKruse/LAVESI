@@ -11,7 +11,7 @@ using namespace std;
  * CONTENTS:
  * This .cpp file contains the three functions used by LaVeSi to realize wind driven
  * seed- and pollen dispersal:
- * a) BefrWahrsch:
+ * a) Pollinationprobability:
  *    A function returning a vector of the most probable trees to pollinate a tree 
  *    at the position x,y
  * 
@@ -43,7 +43,7 @@ using namespace std;
  * 
  ************************************************************************************/
  
-void BefrWahrsch(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, 
+void Pollinationprobability(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, 
 				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
 			vector<int> &pName, vector<double>  &thdpthinfl,
 											int outputtreesiter

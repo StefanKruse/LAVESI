@@ -9,7 +9,7 @@ void Seedproduction( struct Parameter *parameter, vector<list<Tree*> > &world_tr
 void Treeestablishment( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Karten*> > &world_plot_list);
 void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list);
 void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list);
-void BefrWahrsch(
+void Pollinationprobability(
 				double x, double y,struct Parameter *parameter, vector<list<Tree*> >::iterator world_positon_b, 
 				double richtung,double geschwindigkeit,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
 				vector<int> &pName, vector<double>  &thdpthinfl,

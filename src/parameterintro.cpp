@@ -613,11 +613,11 @@ void Parameterinput(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].basaleinflussaltneu);
                 }
 
-	strcpy(uebergabestring,"relwachstumeinfluss");
-	parameter[0].relwachstumeinfluss=(int) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
+	strcpy(uebergabestring,"relgrowthinfluence");
+	parameter[0].relgrowthinfluence=(int) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].relwachstumeinfluss);
+                    printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].relgrowthinfluence);
                 }
 
 	strcpy(uebergabestring,"densitymode");

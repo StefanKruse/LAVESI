@@ -142,7 +142,7 @@ pollengregorym=1.25;						// (double) pollen dispersal parameter
 
 // 1.5 -----> Growth function parameters and influences
 basaleinflussaltneu=0.0;			// (double) basal diameter influence for year's basal diameter growth
-relwachstumeinfluss=1;				// (int 0,1) influence of current growth (reduced by density depending processes) on seed production and mortality estimation
+relgrowthinfluence=1;				// (int 0,1) influence of current growth (reduced by density depending processes) on seed production and mortality estimation
 incfac=10;							// (int) factor for calculating area influenced by individual trees
 calcinfarea=1;						// (int) calculation mode for area size determination
 										// 1==linearly increasing (8 m at basal diameter of 80 cm)

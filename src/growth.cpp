@@ -241,11 +241,11 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 			//Dadurch soll Ausgleichswachstum representiert werden. 
 			//Es wirkt sich dann auch das relative Growth und darauf aufbauende Prozesse aus.
 					
-			if (parameter[0].relwachstumeinfluss==0)
+			if (parameter[0].relgrowthinfluence==0)
 			{
 				pTree->dbasalrel = 1.0;
 			}
-			else if (parameter[0].relwachstumeinfluss==1)
+			else if (parameter[0].relgrowthinfluence==1)
 			{
 					pTree->dbasalrel = basalwachstum
 									/(maxbasalwachstum
@@ -276,11 +276,11 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 					//pTree->Dbrustliste.push_back(brustwachstum);
 				}
 
-				if (parameter[0].relwachstumeinfluss==0)
+				if (parameter[0].relgrowthinfluence==0)
 				{
 					pTree->dbrustrel=1.0;
 				}		
-				else if (parameter[0].relwachstumeinfluss==1)
+				else if (parameter[0].relgrowthinfluence==1)
 				{
 					pTree->dbrustrel=brustwachstum/maxbrustwachstum;
 				}

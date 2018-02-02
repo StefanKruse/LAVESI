@@ -135,7 +135,7 @@ using namespace std;
 		bool	seedtravelbetween;
 		int		starttrees;	
 		
-		// ... climate processing
+		// climate processing
 		int		weatherchoice;
 		int		precweather;
 		double	precthreshold;
@@ -149,11 +149,10 @@ using namespace std;
 		double 	weathervariablegmelb;
 		double 	weathervariablegmelc;
 		
-		// ... density grid
+		// environmental grid
 		int		sizemagnif;
 
-		// specific parameters for the submodules
-		// ... tree growth
+		// tree growth
 		double 	gdbasalfacqgmel;	
 		double 	gdbasalfacgmel;			
 		double 	gdbasalconstgmel;
@@ -167,7 +166,7 @@ using namespace std;
 		double 	gdbrustfacsib;			
 		double 	gdbrustconstsib;			
 		double	basaleinflussaltneu;
-		int		relwachstumeinfluss;
+		int		relgrowthinfluence;
 		int		allometryfunctiontype;
 		double	dbasalheightalloslope;
 		double	dbasalheightalloexp;

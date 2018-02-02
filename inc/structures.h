@@ -205,11 +205,11 @@ using namespace std;
 		double 	pollenfall;
 		double 	pollengregorym,pollengregoryc;
 		
-		// ... germination		
+		// germination		
 		double	germinationrate; 
 		double	germinatioweatherinfluence;
 		
-		// ... mortality
+		// mortality
 		double	mortbg;
 		int		maximumage;
 		double	mortyouth; 	
@@ -225,12 +225,9 @@ using namespace std;
 		double	seedfloormort;
 		int 	gmelseedmaxage;
 
-		// ... ancestry
+		// ancestry
 		int		nameakt;
 		int		lineakt;
-		double SNPMutationrate;
-		double microsatelliteMutationrate;
-		double rel_trait_variance;
 	};
 
 	struct Weather 

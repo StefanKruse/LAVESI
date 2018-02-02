@@ -12,9 +12,9 @@ int yearposition; //deletion
  *******************************************************************************************/
 void vegetationDynamics(int yearposition, int jahr, int t)
 {
-	// Kartenupdate
+	// Environmenupdate
 	double start_time_kartenup = omp_get_wtime();
-	Kartenupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+	Environmenupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
 
 	// Wachstum

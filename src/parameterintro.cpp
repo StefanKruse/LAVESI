@@ -822,11 +822,11 @@ void Parametereinlesen(void)
                     printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mdensity);
                 }
 
-	strcpy(uebergabestring,"mtrockenheit");
-	parameter[0].mtrockenheit=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
+	strcpy(uebergabestring,"mdrought");
+	parameter[0].mdrought=Parametereingabe(&uebergabestring[0], stringlengthmax, &trennzeichen[0], &parameter[0]);
                 if (parameter[0].parameterinputvis ==true) 
 		{
-                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mtrockenheit);
+                    printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].mdrought);
                 }
 
 	strcpy(uebergabestring,"seedTreemort");

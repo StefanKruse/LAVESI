@@ -226,7 +226,7 @@ using namespace std;
 		double	heightweathermorteinflussexp;
 		double	mdensity;
 		double	mortage;
-		double	mtrockenheit;
+		double	mdrought;
 		double	seedTreemort;
 		double	seedbodenmort;
 		int 	gmelseedmaxage;

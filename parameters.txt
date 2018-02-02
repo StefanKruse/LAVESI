@@ -249,7 +249,7 @@ mdensity=0.5;						// (double) mortality factor for density
 densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
 mweather=0.1;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
 heightweathermorteinflussexp=0.2;	// (double) exponent for determining an influence of the tree height on the climate mortality
-mtrockenheit=0.237805;				// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
+mdrought=0.237805;				// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
 seedTreemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees
 seedbodenmort=0.55803;				// (double 0-1) mortality rate of seeds at the ground
 

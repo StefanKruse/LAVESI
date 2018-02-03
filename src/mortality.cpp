@@ -779,39 +779,31 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 		}// OMP==3
 				
 				
-		// new output to speed up:
-		// ... seed list: only if age==0 &&namep!=0
-		// ... Ivort/X/Y/
+		// output of seeds (position and parents)
 		if(parameter[0].ivort>1045)
 		{
+			char output[50];
 
-						//print data in the most probable cases:
-						char output[50];
+			FILE *fdir;
+			sprintf(output,"output/windgen_IVORT%.4d_REP%.3d.txt",parameter[0].ivort,parameter[0].repeati);
+			fdir=fopen(output,"a+");
+			if(fdir==NULL)
+			{
+				fdir=fopen(output,"a+");
+				fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
+			}
+			
+			for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
+			{
+				pSeed=(*pos);
+				
+				if(pSeed->age==0)
+				{
+					fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pSeed->xcoo,pSeed->ycoo,pSeed->namep,pSeed->namem);
+				}
+			}
 
-						FILE *fdir;
-						sprintf(output,"output/windgen_IVORT%.4d_REP%.3d.txt",parameter[0].ivort,parameter[0].repeati);
-						
-						fdir=fopen(output,"a+");
-						
-						if(fdir==NULL)
-						{
-						fdir=fopen(output,"a+");
-						fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
-						}
-						
-						// # print data
-								for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
-								{
-									pSeed=(*pos);
-									
-									if(pSeed->age==0)
-									{
-										fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pSeed->xcoo,pSeed->ycoo,pSeed->namep,pSeed->namem);
-									}
-								}
-
-						fclose(fdir);
-
+			fclose(fdir);
 		}// file output
 			
 		double end_time_poll=omp_get_wtime();
@@ -832,23 +824,18 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 					(end_time_poll - end_time_seedsuviving), // pollination total
 					(end_time_mortpoll - end_time_poll), // only tree mortality
 					(end_time_seedsuviving - start_time_mortpoll), // seed mortality
-					
-					//timers each tree
 					timer_eachtree_advance_all,
 					timer_eachtree_vectini_all,
 					timer_eachtree_seedsurv_all,
 					timer_eachtree_seedadd_all,
-					timer_eachtree_total_all,
-					
+					timer_eachtree_total_all,					
 					timer_tresedliv_all,
 					timer_createseeds_all
 				);
+			
 			fclose(fp4);
 		}
-	
-	
-	}// END: world loop
-
+	}
 }
 
 

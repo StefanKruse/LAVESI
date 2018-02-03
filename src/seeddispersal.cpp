@@ -1,20 +1,15 @@
 using namespace std;
 
-
-
-
 /****************************************************************************************//**
- * \brief calculate dispersal distance dependent on dispersal mode (0-4)
+ * \brief calculate dispersal distance dependent on dispersal mode (0-5)
  *
- * 0=zufaellig, 1=exp, 2=fat tailed, 3=gaussian und 4=gaussian+fat tailed combined
+ *
+ *
  *
  *******************************************************************************************/
 
-
 void Seedoutput(int aktort, double dispersaldistance, float direction, int neueweltcoo) 
 {
-	//StefanC: Ausgabe der LDSD-seed
-	// Code-Bsp. hier http://www2.informatik.uni-halle.de/lehre/c/c_fopen.html
 	FILE *filepointer;
 	string dateiname;
 
@@ -23,34 +18,34 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
  
 		// Trying to open file for reading
 		filepointer = fopen(dateiname.c_str(), "r+");
-			// if fopen fails create new data file + header
+		// if fopen fails create new data file + header
+		if (filepointer == NULL)
+		{
+		  filepointer = fopen(dateiname.c_str(), "w");
+			fprintf(filepointer, "ivort;");
+			fprintf(filepointer, "aktort;");
+			fprintf(filepointer, "dispersaldistance;");
+			fprintf(filepointer, "direction;");
+			fprintf(filepointer, "neueweltcoo;");			
+			fprintf(filepointer, "\n");
+
 			if (filepointer == NULL)
 			{
-			  filepointer = fopen(dateiname.c_str(), "w");
-				fprintf(filepointer, "ivort;");
-				fprintf(filepointer, "aktort;");
-				fprintf(filepointer, "dispersaldistance;");
-				fprintf(filepointer, "direction;");
-				fprintf(filepointer, "neueweltcoo;");			
-				fprintf(filepointer, "\n");
-
-				if (filepointer == NULL)
-				{
-					fprintf(stderr, "Error: long distance seed dispersal file could not be opened!\n");
-					exit(1);
-				}
+				fprintf(stderr, "Error: long distance seed dispersal file could not be opened!\n");
+				exit(1);
 			}
+		}
 
-			// else: append data to file
-			fseek(filepointer,0,SEEK_END);
+		// else: append data to file
+		fseek(filepointer,0,SEEK_END);
 
-			// data evaluation and output
-			fprintf(filepointer, "%d;", parameter[0].ivort);
-			fprintf(filepointer, "%d;", aktort);
-			fprintf(filepointer, "%4.5f;", dispersaldistance);
-			fprintf(filepointer, "%4.5f;", direction);
-			fprintf(filepointer, "%d;", neueweltcoo);		
-			fprintf(filepointer, "\n");
+		// data evaluation and output
+		fprintf(filepointer, "%d;", parameter[0].ivort);
+		fprintf(filepointer, "%d;", aktort);
+		fprintf(filepointer, "%4.5f;", dispersaldistance);
+		fprintf(filepointer, "%4.5f;", direction);
+		fprintf(filepointer, "%d;", neueweltcoo);		
+		fprintf(filepointer, "\n");
 
 		fclose(filepointer);
 }
@@ -60,17 +55,16 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 /****************************************************************************************//**
  * \brief calculate seed dispersal
  *
+ *
+ *
  * 
  *
  *******************************************************************************************/
 
-
- void Seeddispersal(int jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list)
+void Seeddispersal(int jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list)
 {
-		
 	int aktort=0;
 			
-	///Loop around all Seed Lists
 	for(vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{ 
 		list<Seed*>& seed_list = *posw;
@@ -797,41 +791,9 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 			}// OMP==2
 
 		}
-
-
-		// Display seeds leaving the plot:
+		// display seeds leaving the plot:
 		if (parameter[0].seedwinddispersalvis==true) 
 			printf("\n   Leaving seeds (N/O/S/W)=(%d/%d/%d/%d) ", rausgeflogenN, rausgeflogenO, rausgeflogenS, rausgeflogenW);
-	} // World list END
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

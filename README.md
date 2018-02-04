@@ -10,8 +10,6 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
 - Alexander Gerdes - alexander.gerdes@awi.de
 - Nadja J. Kath - nkath@uni-potsdam.de
 
-/* ------------------------------------ */
-
 ## Containing files:
 1. Source code and header files: "....cpp" in/src/ and "....h" in /inc/ , and the makefile "Makefile"
 2. Parameter file: "parameter.txt"
@@ -22,8 +20,8 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
 		"winddata..._EraInterim.dat" contain pairs of wind speed in m/s and wind direction in degrees [°]. The winds at 10 m above the surface, of the years 1979-2012 and in 6-hourly-resolution, were extracted only for the vegetation period (May-Aug) from the ERA-Interim reanalysis data set (Balsamo et al., 2015 [2]).
 
 ### References:
-	[1] Harris, I., Jones, P.D., Osborn, T.J., Lister, D.H., 2014. Updated high-resolution grids of monthly climatic observations - the CRU TS3.10 Dataset. Int. J. Climatol. 34, 623–642. https://doi.org/10.1002/joc.3711
-	[2] Balsamo, G., Albergel, C., Beljaars, A., Boussetta, S., Brun, E., Cloke, H., Dee, D., Dutra, E., Munõz-Sabater, J., Pappenberger, F., De Rosnay, P., Stockdale, T., Vitart, F., 2015. ERA-Interim/Land: A global land surface reanalysis data set. Hydrol. Earth Syst. Sci. 19, 389–407. https://doi.org/10.5194/hess-19-389-2015
+	 [1] Harris, I., Jones, P.D., Osborn, T.J., Lister, D.H., 2014. Updated high-resolution grids of monthly climatic observations - the CRU TS3.10 Dataset. Int. J. Climatol. 34, 623–642. https://doi.org/10.1002/joc.3711
+	 [2] Balsamo, G., Albergel, C., Beljaars, A., Boussetta, S., Brun, E., Cloke, H., Dee, D., Dutra, E., Munõz-Sabater, J., Pappenberger, F., De Rosnay, P., Stockdale, T., Vitart, F., 2015. ERA-Interim/Land: A global land surface reanalysis data set. Hydrol. Earth Syst. Sci. 19, 389–407. https://doi.org/10.5194/hess-19-389-2015
 			
 ## Start a simulation:
 1. compile the code with the help of the makefile: "make parallel"

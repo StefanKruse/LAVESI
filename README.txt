@@ -1,4 +1,4 @@
-/* ------------------------------------ Date: 30.01.2018 */
+/* ------------------------------------ Date: 04.02.2018 */
 
 LAVESI-WIND 1.0
 
@@ -20,9 +20,9 @@ Containing files:
 2. Parameter file: "parameter.txt"
 3. Forcing data in /input/
 3.1. temperature and precipitation series
-		"..._1919-2011.txt" contain the climate data, which is the monthly mean temperature and precipitation sum supplied for six locations. It is extracted from the CRU TS 3.22 gridded data of grid cells which cover visited field sites (Harris et al., 2014 [1]). See parameter.txt for more information.
-3.2. wind data in /input/winddaten/
-		"winddaten..._EraInterim.dat" contain pairs of wind speed in m/s and wind direction in degrees [°]. The winds at 10 m above the surface, of the years 1979-2012 and in 6-hourly-resolution, were extracted only for the vegetation period (May-Aug) from the ERA-Interim reanalysis data set (Balsamo et al., 2015 [2]).
+		"[tmp/prc]weighted.csv" contain the climate data, which is the monthly mean temperature and precipitation sum supplied for six locations. It is extracted from the CRU TS 3.22 gridded data of grid cells which cover visited field sites (Harris et al., 2014 [1]). See parameter.txt for more information.
+3.2. wind data in /input/winddata/
+		"winddata..._EraInterim.dat" contain pairs of wind speed in m/s and wind direction in degrees [°]. The winds at 10 m above the surface, of the years 1979-2012 and in 6-hourly-resolution, were extracted only for the vegetation period (May-Aug) from the ERA-Interim reanalysis data set (Balsamo et al., 2015 [2]).
 
 References:
 	[1] Harris, I., Jones, P.D., Osborn, T.J., Lister, D.H., 2014. Updated high-resolution grids of monthly climatic observations - the CRU TS3.10 Dataset. Int. J. Climatol. 34, 623–642. https://doi.org/10.1002/joc.3711
@@ -33,8 +33,8 @@ References:
 Start a simulation:
 1. compile the code with the help of the makefile: "make parallel"
 2. update the settings of the simulation run in the parameter file "parameter.txt"
-3. create the output folder "mkdir output"
-3. execute the program: "./LAVESI"
+3. create a output folder, e.g. by "mkdir output"
+3. execute the program with "./LAVESI"
 
 Prerequisites:
 - linux OS

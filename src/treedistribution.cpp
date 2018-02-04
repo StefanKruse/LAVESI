@@ -1,50 +1,43 @@
 using namespace std;
 
-
-
 /****************************************************************************************//**
- * \brief Seedinput in the beginnig 
+ * \brief Seedinput in the beginning 
  *
  * if seedinput==true, start simulation with seedinput \n
  * recall if sites are empty of trees 
  *
  *******************************************************************************************/
+ 
 void Seedin()
-{	
-
+{
 	int aktort=0;
 	for (vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
-	{ // world seed list loop start
+	{
 		list<Seed*>& seed_list = *posw;
 
 		aktort++;
 		
-		// Calculation of the transect coordinates
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 		bool seedinput;
 		
-
-		// realseedconnect is a bool (1/0) 
-		// if realseedconnect==1: seed introduction only on the most southern plot
-
-		//seedinput on all sites
-		if (parameter[0].realseedconnect==false) 
+		// seedinput on all sites
+		if (parameter[0].realseedconnect==false)
+		{
 			seedinput=true;
-
-
+		}
 		//seedinput on southern site only
-		else if (parameter[0].realseedconnect==true && aktortyworldcoo==(parameter[0].mapylength-1)) seedinput=true;
-
-
+		else if (parameter[0].realseedconnect==true && aktortyworldcoo==(parameter[0].mapylength-1))
+		{
+			seedinput=true;
+		}
 		// no seedinput
-		else seedinput=false;
-			
+		else
+		{
+			seedinput=false;
+		}
 
-
-
-		///start seedinput
 		if (seedinput==true)
 		{
 			int seednobuffer; 
@@ -58,22 +51,17 @@ void Seedin()
 			}
 			
 						
-			for (int n=0;n<seednobuffer;n++)//seednobuffer determines number of seeds (zB seedintronumber=1000 per year on the whole plot.)
+			for (int n=0;n<seednobuffer;n++)
 			{
-				// calculate the landing site for each seed
+				// calculate post-dispersal position
 				double jseed, iseed;
 				bool seedeintragen=false;
 
-				/// seedwinddispersalmode = kind of seed introduction of all starter seeds 
-				/// 1== exponentially from the southern border of each plot
-				if (parameter[0].seedwinddispersalmode==1)//seedwinddispersalmode==1 =>randomly from the south border.
+				// seedwinddispersalmode==1 => randomly from the south border.
+				if (parameter[0].seedwinddispersalmode==1)
 				{ 
-					
-					// random x position:
-					// x-value
 					jseed= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));
 					
-					// y-value
 					double dispersaldistance;
 			
 					do
@@ -91,22 +79,16 @@ void Seedin()
 
 					seedeintragen=true;
 					iseed=dispersaldistance;
-							
 				} 
-						
-					
-				/// seedwinddispersalmode==2=>randomly all over the plot
+				// seedwinddispersalmode==2 => randomly all over the plot
 				else if (parameter[0].seedwinddispersalmode==2)
 				{ 
-					// x value
 					jseed= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));
-				
-					// y value
 					iseed= 0.0 + ( (double)  ( ((double) (treerows-1)) *rand()/(RAND_MAX + 1.0))); 
 					
 					seedeintragen=true;
                 }
-                 else 
+                else 
 				{
 					printf("\n\nLaVeSi was stopped\n");
 					printf("=> Treedistribution.cpp\n");
@@ -114,11 +96,11 @@ void Seedin()
 					exit(1);
 				}
 				
-				double seedzufall = 0.0;
-				int specieszufall = 0;
+				double seedzufall=0.0;
+				int specieszufall=0;
 				if(parameter[0].specpres==0)
 				{
-					seedzufall = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+					seedzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 					if ((seedzufall >= 0.0) && (seedzufall <= 0.5))
 					{
 						specieszufall = 1;
@@ -137,14 +119,13 @@ void Seedin()
 					specieszufall = 2;
 				}
 				
-				///place new seed
 				if (seedeintragen==true)
 				{  
-					// add new seed
-					pSeed= new Seed();					// 1. generate new seed
+					pSeed= new Seed();
+					
 					pSeed->yworldcoo=aktortyworldcoo;
 					pSeed->xworldcoo=aktortxworldcoo;
-					pSeed->xcoo=jseed;					// 2. apply values to the seed
+					pSeed->xcoo=jseed;
 					pSeed->ycoo=iseed;
 					pSeed->namem=0;
 					pSeed->namep=0;
@@ -156,13 +137,10 @@ void Seedin()
 					pSeed->longdispersed=false;
 					pSeed->species=specieszufall;
 					pSeed->releaseheight=0;
-					
 					pSeed->thawing_depthinfluence=100;
 					
-					seed_list.push_back(pSeed);			// 3. push back seed to the seed_list
+					seed_list.push_back(pSeed);	
 					
-					
-//hier drunter die Abfrage ist vermutlich fehlerhaft
 					if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )
 					{
 						printf("\n\nLaVeSi was stopped\n");
@@ -170,19 +148,11 @@ void Seedin()
 						printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", iseed, jseed);
 						exit(1);
 					}
-				
 				} 
-
 			} 	
-		
 		}
-	
 	} 
-
 }
-
-
-
 
 
 
@@ -193,22 +163,22 @@ void Seedin()
  *
  *
  *******************************************************************************************/
+ 
 void TreesIni(int maximal_word_length)
 {
-		// open input file
 		FILE *f;
 		f=NULL;
 		
+		// set up of initial trees from different files
 		if (parameter[0].starttrees!=0)
-		{// set up of initial trees from different files
-			
+		{
 			int aktort=0;
 			for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); posw++)
 			{
 				list<Tree*>& tree_list = *posw;	
 
 				aktort++;
-				// calculation of the current transect coordinate
+
 				int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 				int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -247,9 +217,8 @@ void TreesIni(int maximal_word_length)
 					f = fopen("input/CH17I_Treevert2011_100_50000.csv","r");
 					printf("load: input/CH17I_Treevert2011_100_50000.csv");
 				}
-				
 					
-				if (f == NULL)
+				if (f==NULL)
 				{
 					printf("Tree input file not available!\n");
 					exit(1);
@@ -278,7 +247,6 @@ void TreesIni(int maximal_word_length)
 						sscanf(strtok(NULL, ";"), "%d", &conebuf);
 						sscanf(strtok(NULL, ";"), "%d", &agebuf);
 
-						// add new trees
 						pTree= new Tree();
 						
 						pTree->yworldcoo=aktortyworldcoo;
@@ -323,20 +291,9 @@ void TreesIni(int maximal_word_length)
 				}
 
 				fclose(f);
-			}// world tree list
-		}
-		else
-		{
-			// without initial trees
+			}
 		}
 }
-
-
-
-
-
-
-
 
 
 
@@ -346,16 +303,18 @@ void TreesIni(int maximal_word_length)
  * 
  *
  *******************************************************************************************/
+ 
 void Treedistribution(struct Parameter *parameter, int stringlengthmax)
 {
-	
-	// Either seed introduction...
+	// either seed introduction...
 	if ((parameter[0].starter==true))
+	{
 		Seedin();
-			
+	}			
 	// ... or use initial tree input data files
 	else
+	{
 		TreesIni(stringlengthmax);
-
+	}
 }
 

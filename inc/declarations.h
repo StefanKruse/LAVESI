@@ -2,8 +2,8 @@
 #define decinc
 
 	// plot dimensions rows==y, cols==x
- 	const int treerows=20;
- 	const int treecols=20;
+ 	const int treerows=100;
+ 	const int treecols=100;
 
 	// parameter input
  	const int stringlengthmax=255;

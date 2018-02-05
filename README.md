@@ -37,3 +37,6 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
 ## Further hints: 
 1. start in background not bound to your console session by "nohup ./LAVESI_WIND &"
 2. change the area size of simulation in /inc/declarations.h at "...treerows" and "...cols", values given in meters
+
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1165383.svg)](https://doi.org/10.5281/zenodo.1165383)

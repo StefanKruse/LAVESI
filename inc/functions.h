@@ -6,7 +6,7 @@ double Parameterinput(char *uebergabestring, int stringlengthmax, char *division
 void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vector<vector<Weather*> > &world_weather_list);
 void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list);
 void Treedistribution( struct Parameter *parameter, int stringlengthmax);
-// void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list);
+void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list);
 void Environmentupdate( struct Parameter *parameter, int yearposition, vector<vector<Envirgrid*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list);
 void Growth( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list);
 void Seeddispersal(int Jahr, struct Parameter *parameter, vector<list<Seed*> > &world_seed_list);

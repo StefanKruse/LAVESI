@@ -203,18 +203,6 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					}
 					else 
 					{ 
-						// safety routine: is species defined?
-						signed int exiterrorestablish; 
-						printf("\n In establishment.cpp a tree was not assigned a new species value.\n");
-						printf("\n continue typing 1, press any other key to exit\n");
-						scanf("%d", &exiterrorestablish); 
-
-						if (exiterrorestablish!=1) 
-						{
-							printf("LAVESI was exited after an error occurring in establishment.cpp\n");
-							exit(1);
-						}
-
 						delete pSeed;
 						pos=seed_list.erase(pos);	
 					}

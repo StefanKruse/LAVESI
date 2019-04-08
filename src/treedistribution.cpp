@@ -302,16 +302,12 @@ void Treedistribution(struct Parameter *parameter, int stringlengthmax)
 	// either seed introduction...
 	if ((parameter[0].starter==true))
 	{
-		cout << "pre seedin";
 		Seedin();
-		cout << " -> post seedin";
 	}			
 	// ... or use initial tree input data files
 	else
 	{
-		cout << " -> pre treesini";
 		TreesIni(stringlengthmax);
-		cout << " -> post treesini";
 	}
 }
 

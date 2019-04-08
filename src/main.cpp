@@ -23,9 +23,9 @@ int yearposition;
 void Hinterlandseedintro()
 {
 	
-	// general hinterlandpars
-	int hinterland_maxlength=100; // meters to the south
-		// ... cut into 20m pieces -> start at 10 by 20 thats the centre for each nuclei
+	// general hinterland parameter
+	int hinterland_maxlength=100; // maximum length in meters to the south
+		// ... cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
 	
 	// function parameters
 	double logmodel_seeds_Po=7.8997307;
@@ -36,9 +36,9 @@ void Hinterlandseedintro()
 	double logmodel_heights_r=-0.5932627;
 	double logmodel_heights_K=353.5688136;
 
-	// set "trees" directly as Seeds with the relevant information
-	// ... for each tree the mean number of seeds at the position
-	// jultemp based on position of seed start
+	// set "trees" directly as seeds with the relevant information
+	// ... for each tree the mean number of seeds and height at the position at the hinterland
+	// ... jultemp based on position
 	int aktort=0;
 	for (vector<list<Seed*> >::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw)
 	{
@@ -79,7 +79,7 @@ void Hinterlandseedintro()
 				
 				for (int n=0;n<hinterseedsi;n++)
 				{
-					// calculate post-dispersal position
+					// calculate post-dispersal position with the parameters set for the simulation run using the wind-dependent seed dispersal function
 					
 						// x y start random in field
 						double xseed, yseed;

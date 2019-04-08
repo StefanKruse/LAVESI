@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+
 using namespace std;
 
 /****************************************************************************************//**
@@ -21,7 +23,8 @@ void Seedin()
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 		bool seedinput;
-		
+cout << endl << "Seedin 1 done";
+
 		// seedinput on all sites
 		if (parameter[0].realseedconnect==false)
 		{
@@ -37,6 +40,8 @@ void Seedin()
 		{
 			seedinput=false;
 		}
+
+cout << endl << "Seedin 2 done";
 
 		if (seedinput==true)
 		{
@@ -150,8 +155,11 @@ void Seedin()
 					}
 				} 
 			} 	
+cout << endl << "Seedin 3 done";
 		}
-	} 
+cout << endl << "Seedin 4 done";
+	}
+cout << endl << "Seedin 5 done";
 }
 
 
@@ -293,18 +301,22 @@ void TreesIni(int maximal_word_length)
  * 
  *
  *******************************************************************************************/
- 
+
 void Treedistribution(struct Parameter *parameter, int stringlengthmax)
 {
 	// either seed introduction...
 	if ((parameter[0].starter==true))
 	{
+		cout << "pre seedin";
 		Seedin();
+		cout << " -> post seedin";
 	}			
 	// ... or use initial tree input data files
 	else
 	{
+		cout << " -> pre treesini";
 		TreesIni(stringlengthmax);
+		cout << " -> post treesini";
 	}
 }
 

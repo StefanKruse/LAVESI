@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+
 using namespace std;
 
 
@@ -403,14 +405,19 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 		double Nposakt=parameter[0].nposmax-( (parameter[0].nposmax-parameter[0].nposmin)*aktortyworldcoo/(mapylengthdummy-1.0) );
 		
 		// conversion degrees to metres "1 degree = 60 x 1852 m = 111120 m"
-		parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 		parameter[0].precdiffort=-5.3699 * (Nposakt-Nposcenter);
+		parameter[0].tempdiffort=-0.3508 * (Nposakt-Nposcenter);
 	}
 
 	if (parameter[0].lineartransect==true)
 	{
-		parameter[0].tempdiffortmin=-0.3508 * treerows/(111120);
-		parameter[0].precdiffortmin=-5.3699 * treerows/(111120);
+		// neu um die Grenze an eine stelle zu rücken. Mitte = eingeladene Serie
+		// ... 2° N nach norden verschoben
+		parameter[0].precdiffort=-5.3699 * (2.0);
+		parameter[0].tempdiffort=-0.3508 * (2.0);
+
+		parameter[0].tempdiffortmin=-0.3508 * -1*treerows/(111120);
+		parameter[0].precdiffortmin=-5.3699 * -1*treerows/(111120);
 	}
 
 	FILE *f;
@@ -775,7 +782,7 @@ extern void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vec
 			strcpy(dateinametemp, tempbuf);
 			strcpy(dateinameprec, precbuf);
 		}
-		if (parameter[0].weatherchoice==22)
+		else if (parameter[0].weatherchoice==22)
 		{
 			char tempbuf[]="input/CH17_tmpweighted_model.csv";
 			char precbuf[]="input/CH17_prcweighted_model.csv";
@@ -793,6 +800,13 @@ extern void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vec
 		{
 			char tempbuf[]="input/CH06_tmpweighted_model.csv";
 			char precbuf[]="input/CH06_prcweighted_model.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}
+		else if (parameter[0].weatherchoice==7001)
+		{
+			char tempbuf[]="input/Coredata_complete_tmp_forw_ens01.csv";
+			char precbuf[]="input/Coredata_complete_prc.csv";
 			strcpy(dateinametemp, tempbuf);
 			strcpy(dateinameprec, precbuf);
 		}	

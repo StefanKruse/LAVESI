@@ -1,3 +1,6 @@
+#include "LAVESI.h"
+#include <cassert>
+
 using namespace std;
 
 void Treeestablishment( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > & world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list)
@@ -24,11 +27,14 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 				pSeed=(*pos);
 
 				if (pSeed->incone==false)
-				{ 
+				{
+					// cout << pSeed->ycoo << " / ";
 				
 					// determine if the seed germinates, depending on the density around it and the litter layer
 					int i=(int) floor(pSeed->ycoo*parameter[0].sizemagnif);
 					int j=(int) floor(pSeed->xcoo*parameter[0].sizemagnif);
+					
+					assert(i*treecols*parameter[0].sizemagnif+j >= 0);
 					
 					double keimungauflageinfluence=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->litterheight )+1.495; 
 					

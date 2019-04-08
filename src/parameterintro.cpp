@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+
 using namespace std;
 
 double Parameterinput(char *uebergabestring, int stringlengthmax, char *divisionsign, struct Parameter *parameter)

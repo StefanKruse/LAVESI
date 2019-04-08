@@ -1,4 +1,6 @@
-﻿using namespace std;
+﻿#include "LAVESI.h"
+
+using namespace std;
 
 /****************************************************************************************//**
  * \brief calculate tree mortality
@@ -780,6 +782,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 				
 				
 		// output of seeds (position and parents)
+		/*
 		if(parameter[0].ivort>1045)
 		{
 			char output[50];
@@ -806,6 +809,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			fclose(fdir);
 		}// file output
 			
+		*/
 		double end_time_poll=omp_get_wtime();
 		TreeMort(yearposition, weather_list, tree_list);
 		double end_time_mortpoll=omp_get_wtime();

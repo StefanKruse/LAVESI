@@ -760,7 +760,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "coneheight;");
 						fprintf(filepointer, "seedprodAKT;");
 						fprintf(filepointer, "seedprodSUM;");
-						fprintf(filepointer, "thawing_depth_infl;");
+						fprintf(filepointer, "seedweight;");
 						fprintf(filepointer, "\n");
 
 						if (filepointer == NULL)
@@ -793,7 +793,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "%4.4f;", pTree->coneheight);
 						fprintf(filepointer, "%d;", pTree->seednewly_produced);
 						fprintf(filepointer, "%d;", pTree->seedproduced);
-						fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
+						fprintf(filepointer, "%lf;", pTree->seedweight);
 						fprintf(filepointer, "\n");
 
 						++pos;
@@ -860,7 +860,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "Speicher;");
 				fprintf(filepointer, "densitywert;");
 				fprintf(filepointer, "Entfernung;");
-				fprintf(filepointer, "thawing_depth_infl;");	
+				fprintf(filepointer, "seedweight;");	
 				fprintf(filepointer, "\n");
 
 				if (filepointer == NULL)
@@ -904,7 +904,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", pTree->buffer);
 				fprintf(filepointer, "%4.5f;", pTree->densitywert);
 				fprintf(filepointer, "%4.5f;", pTree->dispersaldistance);
-				fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
+				fprintf(filepointer, "%lf;", pTree->seedweight);
 				fprintf(filepointer, "\n");
 
 				++pos;

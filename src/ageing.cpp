@@ -61,10 +61,11 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 								1212,		1277,	1350,	1434,	1529,	1639,	1767,	1919,	2100,	2323,	2600,	
 								2958,		3434,	4100,	5100,	6767,	10100,	20100	
 							};
-
+int aktort=0;
 	for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw)
 	{ 
 		list<Tree*>& tree_list = *posw;
+		
 		
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
 		{ 
@@ -93,17 +94,23 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 						{
 							pTree->coneheight=maturationheight[fraction]; 
 						}
+					//cout<<pTree->coneheight<<endl;
 					}
+					
 				}
 				// tree already has a height of maturation assigned to it
 				// ... if a tree is taller than this maturation height, he starts to produce seeds
 				else if (pTree->coneheight!=99999)
-				{  							
+				{  		
+					//cout<<pTree->coneheight<<endl;			
 					if (pTree->height >= pTree->coneheight)
 					{
-						pTree->cone=1;
+						pTree->cone=1;	
+						
+
 					}
 				} 
+				
 
 				++pos;
 			}

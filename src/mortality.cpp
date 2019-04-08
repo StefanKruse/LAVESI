@@ -8,7 +8,7 @@
  *
  *
  *******************************************************************************************/
-void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &tree_list)
+void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &tree_list, vector<Pollengrid*> &pollen_list)
 {
 	// calculation of the factors in a function that adds a mortality rate impact
 	double anstiegweathermortg=160;
@@ -20,6 +20,9 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 	// biotic influence:
 	for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
 	{
+	
+		
+		//cout<<yearposition_help<<" seedweight  "<<pTree->seedweight<<endl;
 		pTree=(*pos);
 		
 		if(pTree->growing==true)
@@ -185,10 +188,15 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 			// Determine if a tree dies (deletion of said tree in the corresponding list)
 			double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 			if (((pTree->species==1) && (zufallsz<Treemortg)) || ((pTree->species==2) && (zufallsz<Treemorts))) 
-			{
+			{	
+				//cout<<pTree->subgridpos<<endl;
+				//if(pTree->subgridpos!=0){
+				//cout<<pTree->name<<"\t"<<pollen_list[pTree->subgridpos-1]->Treenames.at(pTree->subgridVECpos)<<endl;
+				//pollen_list[pTree->subgridpos-1]->Treenames.erase(pollen_list[pTree->subgridpos-1]->Treenames.begin()+pTree->subgridVECpos);//??
+				//}
 				delete pTree;
 				pos=tree_list.erase(pos);
-			}
+				}
 			else
 			{
 				++pos;
@@ -198,7 +206,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 		{
 			++pos;
 		}
-
+			
 	}
 }
 
@@ -224,6 +232,11 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 		
 		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
 		list<Seed*>& seed_list = *world_positon_s;
+		
+		vector<vector<Pollengrid*> >::iterator world_positon_p = (world_pollen_list.begin()+aktort);
+		vector<Pollengrid*>& pollen_list = *world_positon_p;
+		//
+		
 
 		aktort++;
 
@@ -249,6 +262,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			}
 			else if (pSeed->incone==true)
 			{
+				//pSeed->xcoo;pSeed->ycoo;pSeed->namem; 
 				if (zufallsz<parameter[0].seedconemort) 
 				{
 					delete pSeed;
@@ -376,7 +390,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 						{
 							if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].spinupphase==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))
 							{
-								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
+								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_p, //world_positon_p       
 													direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 													Vname,Vthdpth,
 													n_trees
@@ -399,12 +413,13 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
-									pSeed->thawing_depthinfluence=Vthdpth.at(iran);
+									pSeed->seedweight=
+								mixrand(Vthdpth.at(iran),0.5,pTree->seedweight,0.5);
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
+									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
 								}
 															
 								pSeed->line=pTree->line;
@@ -528,7 +543,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 						{
 							if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].spinupphase==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))
 							{
-								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
+								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_p,//world_positon_b        
 												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 												Vname,Vthdpth,
 												n_trees
@@ -551,12 +566,18 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
-									pSeed->thawing_depthinfluence=100;
+									//pSeed->seedweight=100;
+									pSeed->seedweight=
+									mixrand(pTree->seedweight,0.5,Vthdpth.at(iran),0.5);
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
+									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
+									//pSeed->seedweightvar=pTree->seedweightvar;
+									///AND THEN THE SEED GROWS TO A TREE WTH THE SAME PARAMETERS
+									///PROBLEMS: - NO negative values please
+									///			 - what if the new value in every generation leads to some sort of a DRIFT?   
 								}
 								
 								pSeed->line=pTree->line;
@@ -626,6 +647,40 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 				{
 					lasttreewithseeds_pos=treeiter;
 				}
+				
+				//vector<Pollengrid*>& pollen_list2=*(world_pollen_list.begin()+aktort);
+				//vector<Pollengrid*>& pollen_list2=*world_position_p;
+
+					if(pTree->cone!=0){
+							double lent=sqrt(parameter[0].pollengridpoints);
+							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							{
+							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lent >= pTree->xcoo)
+								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lent	>= pTree->ycoo)
+								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lent	<  pTree->ycoo)	
+								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lent	<  pTree->xcoo)
+								)
+								{
+									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
+									pTree->subgridVECpos=//pollen_list2[kartenpos]->Treenames.begin()+
+									(pollen_list[kartenpos]->Treenames.size()-1);
+									pollen_list[kartenpos]->seedweight+=pTree->seedweight;
+									
+									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
+
+									
+									pTree->subgridpos=kartenpos+1;
+								}
+								
+								for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+								{
+									if(pollen_list[kartenpos]->Treenames.size()>1) pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
+									//pollen_list2[kartenpos]->seedweightvar=sqrt((pTree->Seedweight-pollen_list2->seedweight)*(pTree->Seedweight-pollen_list2->seedweight));
+
+								}
+							}
+						}
+				//}
 			}
 			advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 					
@@ -703,7 +758,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 
 							if( (parameter[0].pollination==1 && parameter[0].ivort>1045) || (parameter[0].pollination==9))
 							{
-								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_b,        
+								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_p,        
 												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
 												Vname,Vthdpth,
 												n_trees
@@ -728,12 +783,13 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
-									pSeed->thawing_depthinfluence=100;
+									//pSeed->seedweight=Vthdpth.at(iran);
+									pSeed->seedweight=mixrand(Vthdpth.at(iran),0.5,pTree->seedweight,0.5);
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
+									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
 								}
 								
 								pSeed->line=pTree->line;
@@ -807,7 +863,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 		}// file output
 			
 		double end_time_poll=omp_get_wtime();
-		TreeMort(yearposition, weather_list, tree_list);
+		TreeMort(yearposition, weather_list, tree_list, pollen_list);
 		double end_time_mortpoll=omp_get_wtime();
 		
 		if(parameter[0].computationtimevis==1)

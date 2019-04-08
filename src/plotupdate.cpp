@@ -86,7 +86,7 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 							
 			pTree->densitywert=sumdensitywert;
 		}
-
+				//if(pTree->xcoo>Pollengrid->xcoo && pTree->ycoo)Pollengrid->Treenamen.push_back(pTree->Name)
 		++pos;
 	}
 }
@@ -855,7 +855,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		
 		#pragma omp parallel for private(pEnvirgrid)
-		for(int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
+		for(int kartenpos=0; kartenpos< (int)(treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treedensityvalue=0;

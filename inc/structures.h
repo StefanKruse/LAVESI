@@ -25,15 +25,22 @@ using namespace std;
 		int		seedproduced;
 		int		buffer;
 		double	densitywert;
-		double 	thawing_depthinfluence;
 		bool	longdispersed;					
 		double	dispersaldistance;						
 		bool    growing;
+		
+		double 	thawing_depthinfluence;
 		int 	species;
+		
+		int subgridpos;
+		int subgridVECpos;
+		
+		//SEEDWEIGHT IS A DIMENSIONLESS NUMBER IN REFERENCE TO A STANDARD SEED WEIGHT
+		double seedweight,seedweightvar;
 	};
 
 	struct Seed 
-	{
+	{ 
 		int		xworldcoo;
 		int		yworldcoo;
 		double	xcoo;
@@ -43,20 +50,24 @@ using namespace std;
 		int		line;
 		int		generation;
 		bool	incone;
-		double	weight;
 		int		age;
 		bool	longdispersed;
 		double 	dispersaldistance;
-		int		species;
 		double 	releaseheight;
-		double 	maxgrowth;
+		
+		double	weight;
+		int		species;
+		double 	maxgrowth;//->maxgrowth is not in use AND not in struct Tree
 		double 	pollenfall;
 		double 	descent; 
 		double 	thawing_depthinfluence;
+		double seedweight,seedweightvar;
 	};
-	
+
 	struct Envirgrid 
 	{
+		int Number;
+		
 		int		xworldcoo;
 		int		yworldcoo;
 		double	xcoo;
@@ -76,6 +87,17 @@ using namespace std;
 		unsigned short litterheight8;
 		unsigned short litterheight9;
 		unsigned short litterheightmean;
+	};
+	
+	
+	struct Pollengrid 
+	{
+		int Number;
+		double	xcoo;
+		double	ycoo;
+		vector<int> Treenames;
+		
+		double seedweight,seedweightvar;
 	};
 
 	struct Parameter
@@ -151,6 +173,7 @@ using namespace std;
 		
 		// environmental grid
 		int		sizemagnif;
+		int pollengridpoints;
 
 		// tree growth
 		double 	gdbasalfacqgmel;	

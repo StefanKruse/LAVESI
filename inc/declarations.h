@@ -2,8 +2,8 @@
 #define decinc
 
 	// plot dimensions rows==y, cols==x
- 	const int treerows=100;
- 	const int treecols=100;
+ 	const int treerows=500;
+ 	const int treecols=500;
 
 	// parameter input
  	const int stringlengthmax=255;
@@ -13,7 +13,7 @@
 	// lists and pointers
   	vector<list<Tree*>> world_tree_list;
   	Tree *pTree;
-  	Tree *pTree_copy;
+	Tree *pTree_copy;
 	
   	vector<list<Seed*>> world_seed_list(0);
   	Seed *pSeed;
@@ -25,7 +25,10 @@
   	vector<vector<Envirgrid*>> world_plot_list(0);
   	Envirgrid *pEnvirgrid;
   	Envirgrid *pEnvirgrid_copy;
-	
+
+	vector<vector<Pollengrid*>> world_pollen_list(0);	
+	Pollengrid *pPollengrid;
+		
   	vector<vector<Evaluation*> > world_evaluation_list(0);
   	Evaluation *pEvaluation;
   	Evaluation *pEvaluation_copy;
@@ -42,5 +45,5 @@
 	vector<vector<double>> winddir(0);
 	int cntr;
 	vector<double> wdir(0),wspd(0);   
-
+	
 #endif

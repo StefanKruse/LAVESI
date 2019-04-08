@@ -176,9 +176,9 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 								}
 							}
 						
-							pSeed->xcoo=pSeed->xcoo+jquer;
-							pSeed->ycoo=pSeed->ycoo+iquer;
-							pSeed->dispersaldistance=dispersaldistance;	
+							pSeed->xcoo=pSeed->xcoo+jquer/sqrt(pSeed->seedweight);
+							pSeed->ycoo=pSeed->ycoo+iquer/sqrt(pSeed->seedweight);
+							pSeed->dispersaldistance=dispersaldistance/sqrt(pSeed->seedweight);	
 
 
 							/****************************************************************************************//**

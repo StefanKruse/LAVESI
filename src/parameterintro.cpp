@@ -1,5 +1,5 @@
 using namespace std;
-
+//THERE IS A SIMILARLY NAMED VOID FUNCTION BELOW!?
 double Parameterinput(char *uebergabestring, int stringlengthmax, char *divisionsign, struct Parameter *parameter)
 {
 	FILE *f;
@@ -340,6 +340,13 @@ void Parameterinput(void)
 	if (parameter[0].parameterinputvis ==true) 
 	{
 		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].sizemagnif);
+	}
+	
+	strcpy(uebergabestring,"pollengridpoints");
+	parameter[0].pollengridpoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridpoints);
 	}
 
 	strcpy(uebergabestring,"starttrees");

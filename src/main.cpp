@@ -13,11 +13,11 @@ int yearposition;
 void vegetationDynamics(int yearposition, int jahr, int t)
 {
 	double start_time_kartenup = omp_get_wtime();
-	Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+		Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 	double end_time_kartenup = omp_get_wtime();
 
 	double start_time_wachstum = omp_get_wtime();
-	Growth( &parameter[0], yearposition, world_tree_list, world_weather_list);
+		Growth( &parameter[0], yearposition, world_tree_list, world_weather_list);
 	double end_time_wachstum = omp_get_wtime();
 
 	double start_time_Seeddispersal = omp_get_wtime();
@@ -50,11 +50,11 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 			} 
 		}
 	}
-	Seeddispersal( yr, &parameter[0], world_seed_list);
+		Seeddispersal( yr, &parameter[0], world_seed_list);
 	double end_time_Seeddispersal = omp_get_wtime();
 
 	double start_time_Seedproduction = omp_get_wtime();
-	Seedproduction( &parameter[0], world_tree_list);
+		Seedproduction( &parameter[0], world_tree_list);
 	double end_time_Seedproduction = omp_get_wtime();
 
 	double start_time_Treedistribution = omp_get_wtime();	
@@ -72,15 +72,15 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double end_time_Treedistribution = omp_get_wtime();
 
 	double start_time_etablierung = omp_get_wtime();
-	Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+		Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 	double end_time_etablierung = omp_get_wtime();
 
 	double start_time_Dataoutput = omp_get_wtime();
-	Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+		Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
 	double end_time_Dataoutput = omp_get_wtime();
 				
 	double start_time_mortalitaet = omp_get_wtime();
-	Mortality( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
+		Mortality( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
 		wspd.clear();
 		wdir.clear();
 		wspd.shrink_to_fit();
@@ -88,17 +88,17 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double end_time_mortalitaet = omp_get_wtime();
 
 	double start_time_Ageing = omp_get_wtime();
-	Ageing(&parameter[0], world_tree_list, world_seed_list);
+		Ageing(&parameter[0], world_tree_list, world_seed_list);
 	double end_time_Ageing = omp_get_wtime();
 
 	if(parameter[0].computationtimevis==1)
 	{
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
 		{
-			printf("\n   - plotupdategrowth    seedwinddispersal  seedprod  treedistr treeestab  output    mortality ageing    TOTAL     ");
+			printf("\n   - plotupdate\t growth\t dispersal\t seedprod\t treedistr\t treeestab\t output\t mortality\t ageing\t TOTAL     ");
 		}
 		
-		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
+		printf("\n %d  - %10.2f\t %10.2f\t %10.2f\t %10.2f\t %10.2f\t %10.2f\t %10.2f\t %10.2f\t %10.2f\t %10.2f", 
 			parameter[0].ivort,
 			end_time_kartenup - start_time_kartenup ,
 			end_time_wachstum - start_time_wachstum ,
@@ -492,6 +492,8 @@ void createLists()
 			vector<Evaluation*> evaluation_list;			  // Creating new evaluation_list 
 			world_evaluation_list.push_back(evaluation_list); // include new evaluation_list in corresponding world list
 			
+			vector<Pollengrid*> pollen_list;
+			world_pollen_list.push_back(pollen_list);
 			
 			if (parameter[0].resetyear>0)
 			{
@@ -531,6 +533,9 @@ void initialiseMaps()
 	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++)
 	{
 		vector<Envirgrid*>& plot_list = *posw;
+		
+		vector<vector<Pollengrid*>>::iterator posw2=(world_pollen_list.begin()+aktort);
+		vector<Pollengrid*>& pollen_list2 = *posw2;
 	
 		vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 		vector<Evaluation*>& evaluation_list = *posiwelt;
@@ -543,10 +548,26 @@ void initialiseMaps()
 		// necessary for the global lists
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
-
+			
+			double lent=(double) sqrt(parameter[0].pollengridpoints);
+		for(int kartenpos=0;kartenpos< (parameter[0].pollengridpoints); kartenpos++)
+		{
+		//cout<<kartenpos<<endl;
+			pPollengrid= new Pollengrid();
+			pPollengrid->Number=kartenpos+1;
+		
+			pPollengrid->xcoo=fmod((double)kartenpos,lent)/lent*treerows+0.5*treerows/lent;//floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
+			pPollengrid->ycoo=floor(kartenpos/lent)*treecols/lent+0.5*treecols/lent;//+fmod((double)kartenpos,4.0)/4.0*treecols+0.5*treecols/4.0;
+			
+			//cout<<kartenpos<<"\t"<<pPollengrid->xcoo<<"\t"<<pPollengrid->ycoo<<endl;
+			pollen_list2.push_back(pPollengrid);
+		}
+		
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++) 
 		{ 
 			pEnvirgrid= new Envirgrid();
+			
+			pEnvirgrid->Number=kartenpos;
 
 			pEnvirgrid->yworldcoo=aktortyworldcoo;
 			pEnvirgrid->xworldcoo=aktortxworldcoo;

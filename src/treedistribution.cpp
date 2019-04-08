@@ -139,6 +139,12 @@ void Seedin()
 					pSeed->releaseheight=0;
 					pSeed->thawing_depthinfluence=100;
 					
+					if((rand()%2)){
+						pSeed->seedweight=0.5;
+					}else{
+						pSeed->seedweight=0.5;
+						}
+					
 					seed_list.push_back(pSeed);	
 					
 					if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )
@@ -284,6 +290,13 @@ void TreesIni(int maximal_word_length)
 						{
 							pTree->species=2;
 						}	
+						
+						if((rand()%2)){
+						pTree->seedweight=1.5;
+						}else{
+						pTree->seedweight=0.5;
+						}
+						
 						
 						tree_list.push_back(pTree);
 					}

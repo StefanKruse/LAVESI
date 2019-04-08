@@ -41,9 +41,50 @@ using namespace std;
  * 
  ************************************************************************************/
  
-void Pollinationprobability(double x, double y,struct Parameter *parameter, vector<std::list<Tree*> >::iterator world_positon_b, double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m, vector<int> &pName, vector<double>  &thdpthinfl, int outputtreesiter)
+ 
+ 
+ 
+/*
+Mixrand yields random numbers that are distributed according to the mixed distribution of two gaussian. Also works for std*=0 
+*/
+double mixrand(double mu1,double mu2,double std1,double std2)
 {
-  list<Tree*>& tree_list = *world_positon_b;
+	double R1,R2,z1=-1,z2=-1;
+do{
+	R1=rand()/(1.0+RAND_MAX);
+	R2=rand()/(1.0+RAND_MAX);
+	z1=(sqrt(-2.0*log(R1))+cos(2.0*M_PI*R2))*std1+mu1;
+	z2=(sqrt(-2.0*log(R1))+sin(2.0*M_PI*R2))*std2+mu2;
+	R1=(rand()%2)? z1:z2;
+}
+while(R1<=(1.0/3.0) || R1>=(5.0/3.0));
+//cout<<z1<<" "<<z2<<endl;
+return R1;
+}
+
+
+
+double meanrand(double mu1,double mu2,double std1,double std2)
+{
+
+double R1,R2,z1=-1,z2=-1;
+do{
+	R1=rand()/(1.0+RAND_MAX);
+	R2=rand()/(1.0+RAND_MAX);
+	z1=(sqrt(-2.0*log(R1))+cos(2.0*M_PI*R2))*std1+mu1;
+	z2=(sqrt(-2.0*log(R1))+sin(2.0*M_PI*R2))*std2+mu2;
+	R1=0.5*(z1+z2);
+}while(R1<=(1.0/3.0) || R1>=(5.0/3.0));
+return R1;
+}
+ 
+void Pollinationprobability(double x, double y,struct Parameter *parameter,
+ //vector<std::list<Tree*> >::iterator world_positon_b,
+ vector<std::vector<Pollengrid*> >::iterator world_positon_p,
+ double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m, vector<int> &pName, vector<double>  &thdpthinfl, int outputtreesiter)
+{
+  //list<Tree*>& tree_list = *world_positon_b;
+  vector<Pollengrid*> pollen_list=*world_positon_p;
   direction=0.0;
   velocity=0.0;
   ripm=0;
@@ -98,20 +139,31 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter, vect
 	}
 	
 	pe=parameter[0].pollenfall/velocity;
-	 
+	
+	
 	// Simpson integration + elec424.wikia.com/wiki/Modified_Bessel_Functions:
 	I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa));
-			 
-	for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )
+	
+	
+	//for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )
+	//{
+for (vector<Pollengrid*>::iterator pos = pollen_list.begin(); pos != pollen_list.end(); )
 	{
-		pTree_copy= *posb;
-		
+//
+//		pTree_copy= *posb;
+		pPollengrid=*pos;
+		int tresize=pPollengrid->Treenames.size();
+		//cout<<pPollengrid->Number<<"\t"<<tresize<<endl;
 		// only if the pollinating tree has cones:
-		if(pTree_copy->cone!=0)
+		if((tresize)!=0)
 		{
+//if(pEnvirgrid_copy->Treenumber!=0)
+//		{
+					
 			
-			dx=(pTree_copy->xcoo)-x; 
-			dy=(pTree_copy->ycoo)-y; 
+			dx=(pPollengrid->xcoo)-x; 
+			dy=(pPollengrid->ycoo)-y; 
+//
 			dr=sqrt(dx*dx+dy*dy);
 			
 			if((dr!=0))
@@ -128,14 +180,22 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter, vect
 			
 			if(rand()>p*RAND_MAX)
 			{
-				++posb;
+				++pos;
 			}
 			else
 			{
-				pName.push_back(pTree_copy->name);
-				thdpthinfl.push_back(100);
 				
-				++posb; 
+				//pName.push_back(pPollengrid->Treenames[rand()%tresize]);
+				pName.push_back(pPollengrid->Number);
+				
+				//HAVE ONE PARTICULAR TRAIT VALUE FOR EVERY GRID CELL!
+				
+				//INHERITING THAWING DEPTH INFL 
+				thdpthinfl.push_back(pPollengrid->seedweight);
+				//thdpthinflvar.push_back(pPollengrid->seedweightvar);
+				
+				
+				++pos; 
 			}
 			
 			// data output for pollen flight analysis
@@ -152,7 +212,7 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter, vect
 		}
 		else
 		{
-			++posb;
+			++pos;
 		}
 	}
 }
@@ -245,7 +305,7 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double &windspeed, dou
 
     if(parameter[0].dispersalmode==5)
 	{
-        dispersaldistance= getEntfernung(maxdispersaldistance,rn);                                       
+        dispersaldistance= getEntfernung(maxdispersaldistance,rn);
     }
 	else if(parameter[0].dispersalmode!=5)
 	{

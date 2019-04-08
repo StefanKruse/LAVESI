@@ -1,6 +1,6 @@
 # set wd
-setwd("M:/Documents/Programmierung/git/LAVESI")
-setwd("N:/geonob1/BioIng/UserData/stkruse/Programming_LAVESI/")
+#setwd("M:/Documents/Programmierung/git/LAVESI")
+#setwd("N:/geonob1/BioIng/UserData/stkruse/Programming_LAVESI/")
 
 
 folders=c("omp_transect_first")			

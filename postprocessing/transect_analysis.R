@@ -1,6 +1,6 @@
 # set wd
-setwd("M:/Documents/Programmierung/git/LAVESI")
-setwd("N:/geonob1/BioIng/UserData/stkruse/Programming_LAVESI/omp_transect_first")
+#setwd("M:/Documents/Programmierung/git/LAVESI")
+#setwd("N:/geonob1/BioIng/UserData/stkruse/Programming_LAVESI/omp_transect_first")
 
 {# POSITIONS
 	for(fi in c(1,100,200,300,400))

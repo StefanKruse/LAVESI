@@ -363,6 +363,8 @@ void Clearalllists(void)
 			delete pTree;
 		}
 		tree_list.clear();
+		
+		//Pollen list
 
 		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
 		{

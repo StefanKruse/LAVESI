@@ -10,7 +10,8 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list);
 void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list);
 void Pollinationprobability(
-				double x, double y,struct Parameter *parameter, vector<list<Tree*> >::iterator world_positon_b, 
+				double x, double y,struct Parameter *parameter, //vector<list<Tree*>>::iterator world_positon_b, 
+				vector<vector<Pollengrid*>>::iterator world_positon_p, 
 				double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
 				vector<int> &pName, vector<double>  &thdpthinfl,
 				int outputtreesiter
@@ -21,3 +22,5 @@ void Savealllists(void);
 void Clearalllists(void);
 void Restorealllists(void);
 void Clearalllists_copy(void);
+
+double mixrand(double mu1,double mu2,double std1,double std2);

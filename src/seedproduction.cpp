@@ -20,10 +20,18 @@ void Seedproduction( struct Parameter *parameter, vector<list<Tree*> > &world_tr
 
 			if (pTree->cone==1)
 			{
-				pTree->seednewly_produced=(int) floor( parameter[0].seedprodfactor	// seed production in dependence of a factor
+				
+				int newseedsproduced=	(int) floor( parameter[0].seedprodfactor	// seed production in dependence of a factor
 												* pTree->height/100					// ... the tree's  height...
 												* pTree->dbasalrel					// ... the tree's current growth...
 												* (1.0-(1.0/(pTree->height/50))) );	// ... height.
+				if(newseedsproduced>0)
+				{
+					pTree->seednewly_produced=newseedsproduced;
+				} else
+				{
+					pTree->seednewly_produced=0;
+				}
 				++pos;
 			} 
 			else

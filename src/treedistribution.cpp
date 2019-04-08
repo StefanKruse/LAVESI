@@ -307,11 +307,10 @@ void TreesIni(int maximal_word_length)
  *******************************************************************************************/
  
 void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list)
-// void Hinterlandseedintro()
 {
 	
 	// general hinterland parameter
-	int hinterland_maxlength=100; // maximum length in meters to the south
+	int hinterland_maxlength=200000; // maximum length in meters to the south
 		// ... cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
 	
 	// function parameters

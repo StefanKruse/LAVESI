@@ -10,7 +10,7 @@ OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 all: LAVESI_WIND
 
 clean: 
-	rm -rf data*.csv nohup.out output/data*.csv pollDist* output/windgen*.txt t_*.txt build LAVESI_WIND
+	rm -rf data*.csv nohup.out output/data*.csv t_*.txt pollDist* output/windgen*.txt t_*.txt build LAVESI_WIND
 
 cleanoutput:
 	rm -rf data*.csv output/data*.csv t_*.txt

@@ -73,8 +73,9 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	}
 	double end_time_Treedistribution = omp_get_wtime();
 
+	double start_time_Hinterlandseedintro = omp_get_wtime();
 	Hinterlandseedintro( &parameter[0], yearposition, world_seed_list, world_weather_list );
-	// Hinterlandseedintro();
+	double end_time_Hinterlandseedintro = omp_get_wtime();
 
 	double start_time_etablierung = omp_get_wtime();
 	Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
@@ -100,16 +101,17 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	{
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
 		{
-			printf("\n   - plotupdategrowth    seedwinddispersal  seedprod  treedistr treeestab  output    mortality ageing    TOTAL     ");
+			printf("\n      - plotupdate    growth  seeddisp  seedprod treedistr hinterlnd treeestab   output   mortalty    ageing     TOTAL     ");
 		}
 		
-		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
+		printf("\n%6i- %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
 			parameter[0].ivort,
 			end_time_kartenup - start_time_kartenup ,
 			end_time_wachstum - start_time_wachstum ,
 			end_time_Seeddispersal - start_time_Seeddispersal,
 			end_time_Seedproduction - start_time_Seedproduction,
 			end_time_Treedistribution - start_time_Treedistribution,
+			end_time_Hinterlandseedintro - start_time_Hinterlandseedintro,
 			end_time_etablierung - start_time_etablierung,
 			end_time_Dataoutput - start_time_Dataoutput ,
 			end_time_mortalitaet - start_time_mortalitaet,
@@ -118,6 +120,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				(end_time_mortalitaet - start_time_mortalitaet)+
 				(end_time_Dataoutput - start_time_Dataoutput)+
 				(end_time_etablierung - start_time_etablierung)+
+				(end_time_Treedistribution - start_time_Treedistribution)+
 				(end_time_Treedistribution - start_time_Treedistribution)+
 				(end_time_Seedproduction - start_time_Seedproduction)+
 				(end_time_Seeddispersal - start_time_Seeddispersal)+

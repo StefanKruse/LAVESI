@@ -52,52 +52,43 @@ void Hinterlandseedintro()
 		
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
+		
 #ifdef DEBUG
 		cout << " ... seed_list.size=" << seed_list.size() << endl;
 #endif
-
 		
 		if (hinterland_maxlength>0)
 		{
 			int seednobuffer; 
-
+			
+#ifdef DEBUG
 			// debugging output
-				int eintegragen=0;
-				int rausgeflogenN=0;
-				int rausgeflogenO=0;
-				int rausgeflogenS=0;
-				int rausgeflogenW=0;
-				
+			int introduced=0;
+			int exceedstoN=0;
+			int exceedstoE=0;
+			int exceedstoS=0;
+			int exceedstoW=0;
+#endif
+
 			for(int yposhint=-10; yposhint>-1*hinterland_maxlength;yposhint=yposhint-20)
 			{
-				// weather_list[yearposition]->temp7monthmean // eventuell yearposition noch in Funktionsaufruf einbauen, da hier auf global zugrriff sonst per yearposition_help zugegriffen!!
-				// ... temp7monthmeanmin für Transektberechnung
-				// parameter[0].tempdiffortmin=-0.3508 * -1*treerows/(111120);
-				// (weather_list[yearposition]->temp7monthmean-weather_list[yearposition]->temp7monthmeanmin)
-									// /((double) treerows))*pTree->ycoo 
-									
-				double jultempi=weather_list[yearposition]->temp7monthmean + ( -0.3508 * yposhint/(111120) );//conversion to degree latitude ...weatherinput.cpp
+				double jultempi=weather_list[yearposition]->temp7monthmean + ( -0.3508 * yposhint/(111120) );//conversion to degree latitude see...weatherinput.cpp
 									
 				double hinterheightsi=logmodel_heights_K/(1+exp(logmodel_heights_Po+logmodel_heights_r*jultempi));
 				int hinterseedsi=(int) floor(parameter[0].seedflightrate * logmodel_seeds_K/(1+exp(logmodel_seeds_Po+logmodel_seeds_r*jultempi)));
 				
-				
-				
-				// cout << "ypos=" << yposhint << " ->  tjul= " << jultempi << " - heights= " << hinterheightsi << " - seeds per tree= " << hinterseedsi << endl;
-				
-
 				for (int n=0;n<hinterseedsi;n++)
 				{
-					// x y start random in field
-						// calculate post-dispersal position
+					// calculate post-dispersal position
+					
+						// x y start random in field
 						double xseed, yseed;
-						bool seedeintragen=true;
+						bool introduceseed=true;
 						
 						xseed= 0.0 + ( (double)  ( ((double) (treecols-1)) *rand()/(RAND_MAX + 1.0)));//x coo start
 						yseed= (yposhint-10) + ( (double)  ( ((double) (20)) *rand()/(RAND_MAX + 1.0)));// y coo start
-
 				
-					// define species
+						// define species
 						double seedzufall=0.0;
 						int specieszufall=0;
 						if(parameter[0].specpres==0)
@@ -123,101 +114,103 @@ void Hinterlandseedintro()
 
 						
 						
-					// xnew ynew estimation
-						// .....
-									double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+						// estimation of new positions
+						double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
+						double dispersaldistance=0.0;
+						double direction=0.0;
+						double velocity=0.0;
+						double wdirection=0.0;
+						double jquer=0;
+						double iquer=0;
+						
+						Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, specieszufall);
 
-									double dispersaldistance=0.0;
-									double direction=0.0;
-									double velocity=0.0;
-									double wdirection=0.0;
-									double jquer=0;
-									double iquer=0;
-					// cout << endl << " pre wind disp" << endl;
-									Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, specieszufall);
-					// cout << endl << " post wind disp" << endl;
-
-									xseed=xseed+jquer;
-									yseed=yseed+iquer;
+						xseed=xseed+jquer;
+						yseed=yseed+iquer;
 									
-					// manipulate position according to boundary conditions if lands in simulated plot add to seedlist
-									// code adapted from seeddispersal.cpp
-									// Check if the seed is on the plot:
-									if(yseed > (double) (treerows-1)) 
-									{
-										if((parameter[0].boundaryconditions==1))
-										{
-										   yseed=fmod(yseed,(double)(treerows-1));
-										} 
-										else if((parameter[0].boundaryconditions==3))
-										{
-											// sameausserhalb=true;
-											rausgeflogenN++;
-											seedeintragen=false;
-										} 
-										else 
-										{
-											// sameausserhalb=true;
-											rausgeflogenN++;
-											seedeintragen=false;
-										}
-									} 
-									else if(yseed<0.0)
-									{
-										if((parameter[0].boundaryconditions==1))
-										{
-										   yseed=(double)(treerows-1)+fmod(yseed,(double)(treerows-1));
-										} 
-										else if((parameter[0].boundaryconditions==3))
-										{
-											// sameausserhalb=true;
-											rausgeflogenS++;
-											seedeintragen=false;
-										} 
-										else 
-										{
-											// sameausserhalb=true;
-											rausgeflogenS++;
-											seedeintragen=false;
-										}
-									}
-									 
-									if(xseed<0.0)
-									{
-										if((parameter[0].boundaryconditions==1 || parameter[0].boundaryconditions==3))
-										{
-											xseed = fmod(xseed,(double)(treecols-1))+(double)(treecols-1);
-										} 
-										else
-										{
-											// sameausserhalb=true;
-											rausgeflogenW++;
-											seedeintragen=false;
-										}
-									} 
-									else if(xseed > (double) (treecols-1))
-									{
-										if(parameter[0].boundaryconditions==1 || parameter[0].boundaryconditions==3)
-										{
-											xseed = fmod(xseed,(double)(treecols-1));
-										} 
-										else if((parameter[0].boundaryconditions==2) && (rand()<0.5*RAND_MAX))
-										{ // Reducing seed introduction on the western border:
-											xseed = fmod(xseed,(double)(treecols-1));
-										} 
-										else
-										{	
-											// sameausserhalb=true;
-											rausgeflogenO++;
-											seedeintragen=false;
-										}
-									} 
+						// manipulate position according to boundary conditions if lands in simulated plot add to seedlist ...code adapted from seeddispersal.cpp
+						if(yseed > (double) (treerows-1)) 
+						{
+							if((parameter[0].boundaryconditions==1))
+							{
+							   yseed=fmod(yseed,(double)(treerows-1));
+							} 
+							else if((parameter[0].boundaryconditions==3))
+							{
+#ifdef DEBUG
+								exceedstoN++;
+#endif
+								introduceseed=false;
+							} 
+							else 
+							{
+#ifdef DEBUG
+								exceedstoN++;
+#endif
+								introduceseed=false;
+							}
+						} 
+						else if(yseed<0.0)
+						{
+							if((parameter[0].boundaryconditions==1))
+							{
+							   yseed=(double)(treerows-1)+fmod(yseed,(double)(treerows-1));
+							} 
+							else if((parameter[0].boundaryconditions==3))
+							{
+#ifdef DEBUG
+								exceedstoS++;
+#endif
+								introduceseed=false;
+							} 
+							else 
+							{
+#ifdef DEBUG
+								exceedstoS++;
+#endif
+								introduceseed=false;
+							}
+						}
+						 
+						if(xseed<0.0)
+						{
+							if((parameter[0].boundaryconditions==1 || parameter[0].boundaryconditions==3))
+							{
+								xseed = fmod(xseed,(double)(treecols-1))+(double)(treecols-1);
+							} 
+							else
+							{
+#ifdef DEBUG
+								exceedstoW++;
+#endif
+								introduceseed=false;
+							}
+						} 
+						else if(xseed > (double) (treecols-1))
+						{
+							if(parameter[0].boundaryconditions==1 || parameter[0].boundaryconditions==3)
+							{
+								xseed = fmod(xseed,(double)(treecols-1));
+							} 
+							else if((parameter[0].boundaryconditions==2) && (rand()<0.5*RAND_MAX))
+							{ // Reducing seed introduction on the western border:
+								xseed = fmod(xseed,(double)(treecols-1));
+							} 
+							else
+							{	
+#ifdef DEBUG
+								exceedstoE++;
+#endif
+								introduceseed=false;
+							}
+						} 
 									
-			// cout << "A: introduced seeds=" << eintegragen << " ----> N=" << rausgeflogenN << "  O=" << rausgeflogenO << "  S=" << rausgeflogenS << "  W=" << rausgeflogenW << endl;
-					// add to seedlist
-						if (seedeintragen==true)
+						// add new seed to seedlist
+						if (introduceseed==true)
 						{  
-							eintegragen++;
+#ifdef DEBUG
+							introduced++;
+#endif
 							
 							pSeed= new Seed();
 							
@@ -247,17 +240,14 @@ void Hinterlandseedintro()
 								printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", yseed, xseed);
 								exit(1);
 							}
-			// cout << "B: introduced seeds=" << eintegragen << " ----> N=" << rausgeflogenN << "  O=" << rausgeflogenO << "  S=" << rausgeflogenS << "  W=" << rausgeflogenW << endl;
 						}
 				}
 			
 			}
 			
-			cout << "C: introduced seeds=" << eintegragen << " ----> N=" << rausgeflogenN << "  O=" << rausgeflogenO << "  S=" << rausgeflogenS << "  W=" << rausgeflogenW << endl;
-			
-			// printf("\nTest hinterland exiting!\n");
-			// exit(1);
-			
+#ifdef DEBUG
+			cout << "C: introduced seeds=" << introduced << " ----> N=" << exceedstoN << "  E=" << exceedstoE << "  S=" << exceedstoS << "  W=" << exceedstoW << endl;
+#endif
 		}
 	}
 
@@ -319,45 +309,31 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	double start_time_Seedproduction = omp_get_wtime();
 	Seedproduction( &parameter[0], world_tree_list);
 	double end_time_Seedproduction = omp_get_wtime();
-cout << endl << "Seedproduction done";
 
 	double start_time_Treedistribution = omp_get_wtime();	
 	if (parameter[0].seedintro==true && parameter[0].yearswithseedintro>0)
 	{
 		parameter[0].starter=true;
 		Treedistribution(&parameter[0], stringlengthmax);
-cout << endl << " in if Treedistribution done";
-cout << parameter[0].yearswithseedintro << " ";
 		parameter[0].yearswithseedintro--;
-cout << parameter[0].yearswithseedintro << " ";
-cout << endl << " in if Treedistribution done";
 	}
 	else if ( parameter[0].seedintropermanent==true && parameter[0].yearswithseedintro<=0) 
 	{
-cout << endl << "in if Treedistribution permanent intro start";
 		parameter[0].starter=true;
 		Treedistribution(&parameter[0],  stringlengthmax);
-cout << endl << "in if Treedistribution permanent intro end";
 	}
 	double end_time_Treedistribution = omp_get_wtime();
-cout << endl << "Treedistribution done";
-
 
 	// Hinterlandseedintro( &parameter[0], yearposition, world_seed_list, world_weather_list );
 	Hinterlandseedintro();
-cout << endl << "Hinterlandseedintro done";
-
-
 
 	double start_time_etablierung = omp_get_wtime();
 	Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 	double end_time_etablierung = omp_get_wtime();
-cout << endl << "Treeestablishment done";
 
 	double start_time_Dataoutput = omp_get_wtime();
 	Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
 	double end_time_Dataoutput = omp_get_wtime();
-cout << endl << "Dataoutput done";
 				
 	double start_time_mortalitaet = omp_get_wtime();
 	Mortality( &parameter[0],yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
@@ -366,12 +342,10 @@ cout << endl << "Dataoutput done";
 		wspd.shrink_to_fit();
 		wdir.shrink_to_fit();
 	double end_time_mortalitaet = omp_get_wtime();
-cout << endl << "Mortality done";
 
 	double start_time_Ageing = omp_get_wtime();
 	Ageing(&parameter[0], world_tree_list, world_seed_list);
 	double end_time_Ageing = omp_get_wtime();
-cout << endl << "Ageing done";
 
 	if(parameter[0].computationtimevis==1)
 	{

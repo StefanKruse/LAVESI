@@ -23,7 +23,6 @@ void Seedin()
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 		bool seedinput;
-cout << endl << "Seedin 1 done";
 
 		// seedinput on all sites
 		if (parameter[0].realseedconnect==false)
@@ -41,7 +40,6 @@ cout << endl << "Seedin 1 done";
 			seedinput=false;
 		}
 
-cout << endl << "Seedin 2 done";
 
 		if (seedinput==true)
 		{
@@ -155,11 +153,8 @@ cout << endl << "Seedin 2 done";
 					}
 				} 
 			} 	
-cout << endl << "Seedin 3 done";
 		}
-cout << endl << "Seedin 4 done";
 	}
-cout << endl << "Seedin 5 done";
 }
 
 

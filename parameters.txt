@@ -101,7 +101,9 @@ specpres=1;							// (int) which larch species should be present in the model
 mapxlength=1;						// (int) number of parallel executed plots for each climate
 mapylength=1;						// (int) number of plots along a south-north transect
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
-pollengridpoints=16;
+pollengridpoints=16;//pollengridxpoints, pollengridypoints dynamisch...
+pollengridxpoints=16;
+pollengridypoints=16;
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction

@@ -73,6 +73,10 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 											weather_list[yearposition]->weatherfactors;
 						}
 					}
+					
+					//if(parameter[0].GerminationTradeOff==1) 
+						maxbasalwachstum*=1.0+0.12*(pSeed->seedweight-1.0);
+					//in "seed size and chilling affect..." the max impact is around 20%-> \pm 0.12
 
 					double zufallsz= 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 					

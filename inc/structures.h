@@ -174,6 +174,9 @@ using namespace std;
 		// environmental grid
 		int		sizemagnif;
 		int pollengridpoints;
+		
+		int pollengridxpoints;
+		int pollengridypoints;
 
 		// tree growth
 		double 	gdbasalfacqgmel;	

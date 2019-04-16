@@ -348,6 +348,20 @@ void Parameterinput(void)
 	{
 		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridpoints);
 	}
+	
+	strcpy(uebergabestring,"pollengridxpoints");
+	parameter[0].pollengridxpoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridxpoints);
+	}
+	
+	strcpy(uebergabestring,"pollengridypoints");
+	parameter[0].pollengridypoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridypoints);
+	}
 
 	strcpy(uebergabestring,"starttrees");
 	parameter[0].starttrees=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);

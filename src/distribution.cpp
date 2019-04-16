@@ -47,7 +47,7 @@ using namespace std;
 /*
 Mixrand yields random numbers that are distributed according to the mixed distribution of two gaussian. Also works for std*=0 
 */
-double mixrand(double mu1,double mu2,double std1,double std2)
+double mixrand(double mu1,double std1,double mu2,double std2)
 {
 	double R1,R2,z1=-1,z2=-1;
 do{
@@ -64,7 +64,7 @@ return R1;
 
 
 
-double meanrand(double mu1,double mu2,double std1,double std2)
+double meanrand(double mu1,double std1,double mu2,double std2)
 {
 
 double R1,R2,z1=-1,z2=-1;
@@ -81,7 +81,8 @@ return R1;
 void Pollinationprobability(double x, double y,struct Parameter *parameter,
  //vector<std::list<Tree*> >::iterator world_positon_b,
  vector<std::vector<Pollengrid*> >::iterator world_positon_p,
- double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m, vector<int> &pName, vector<double>  &thdpthinfl, int outputtreesiter)
+ double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
+ vector<int> &pName, vector<double>  &thdpthinfl, int outputtreesiter)
 {
   //list<Tree*>& tree_list = *world_positon_b;
   vector<Pollengrid*> pollen_list=*world_positon_p;
@@ -176,6 +177,7 @@ for (vector<Pollengrid*>::iterator pos = pollen_list.begin(); pos != pollen_list
 			}
 			
 			p=exp(kappa*(cos(phi-direction)*-1))/(2*I0kappa)*(exp(-2*pe*pow(dr,1-0.5*m)/(sqrt(M_PI)*C*(1-0.5*m))));
+			//p*=
 			// f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
 			
 			if(rand()>p*RAND_MAX)

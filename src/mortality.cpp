@@ -414,12 +414,12 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
 									pSeed->seedweight=
-								mixrand(Vthdpth.at(iran),0.5,pTree->seedweight,0.5);
+								mixrand(Vthdpth.at(iran),0.0,pTree->seedweight,0.0);
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
+									pSeed->seedweight=mixrand(pTree->seedweight,0.0,pTree->seedweight,0.0);
 								}
 															
 								pSeed->line=pTree->line;
@@ -568,12 +568,12 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									pSeed->namep=Vname.at(iran);
 									//pSeed->seedweight=100;
 									pSeed->seedweight=
-									mixrand(pTree->seedweight,0.5,Vthdpth.at(iran),0.5);
+									mixrand(pTree->seedweight,0.0,Vthdpth.at(iran),0.0);
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
+									pSeed->seedweight=mixrand(pTree->seedweight,0.0,pTree->seedweight,0.0);
 									//pSeed->seedweightvar=pTree->seedweightvar;
 									///AND THEN THE SEED GROWS TO A TREE WTH THE SAME PARAMETERS
 									///PROBLEMS: - NO negative values please
@@ -653,12 +653,14 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 
 					if(pTree->cone!=0){
 							double lent=sqrt(parameter[0].pollengridpoints);
+							double lentx=(parameter[0].pollengridxpoints);
+							double lenty=(parameter[0].pollengridypoints);
 							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
 							{
-							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lent >= pTree->xcoo)
-								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lent	>= pTree->ycoo)
-								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lent	<  pTree->ycoo)	
-								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lent	<  pTree->xcoo)
+							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lentx >= pTree->xcoo)
+								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lenty	>= pTree->ycoo)
+								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lentx	<  pTree->ycoo)	
+								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lenty	<  pTree->xcoo)
 								)
 								{
 									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
@@ -668,18 +670,19 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									
 									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
 
-									
 									pTree->subgridpos=kartenpos+1;
 								}
+							}	
 								
-								for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
-								{
-									if(pollen_list[kartenpos]->Treenames.size()>1) pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
-									//pollen_list2[kartenpos]->seedweightvar=sqrt((pTree->Seedweight-pollen_list2->seedweight)*(pTree->Seedweight-pollen_list2->seedweight));
-
+							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							{
+								if(pollen_list[kartenpos]->Treenames.size()>1){
+									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
+									pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
 								}
 							}
-						}
+								
+													}
 				//}
 			}
 			advance(lasttreewithseeds_iter, lasttreewithseeds_pos);

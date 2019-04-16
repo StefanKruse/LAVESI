@@ -549,15 +549,31 @@ void initialiseMaps()
 		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 			
-			double lent=(double) sqrt(parameter[0].pollengridpoints);
+		double lent=(double) sqrt(parameter[0].pollengridpoints);
+		
+		double lentx=(double) (parameter[0].pollengridxpoints);
+		double lenty=(double) (parameter[0].pollengridypoints);
+		
+		
 		for(int kartenpos=0;kartenpos< (parameter[0].pollengridpoints); kartenpos++)
 		{
 		//cout<<kartenpos<<endl;
 			pPollengrid= new Pollengrid();
 			pPollengrid->Number=kartenpos+1;
 		
-			pPollengrid->xcoo=fmod((double)kartenpos,lent)/lent*treerows+0.5*treerows/lent;//floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
-			pPollengrid->ycoo=floor(kartenpos/lent)*treecols/lent+0.5*treecols/lent;//+fmod((double)kartenpos,4.0)/4.0*treecols+0.5*treecols/4.0;
+			//pPollengrid->xcoo=fmod((double)kartenpos,lent)/lent*treerows
+			//								 +0.5*treerows/lent;
+											 
+			//pPollengrid->ycoo=floor(kartenpos/lent)*treecols/lent
+			//								   +0.5*treecols/lent;
+			
+			pPollengrid->xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
+											 +0.5*treerows/lentx;
+											 
+			pPollengrid->ycoo=floor(kartenpos/lenty)*treecols/lenty
+											   +0.5*treecols/lenty;
+			
+											   
 			
 			//cout<<kartenpos<<"\t"<<pPollengrid->xcoo<<"\t"<<pPollengrid->ycoo<<endl;
 			pollen_list2.push_back(pPollengrid);

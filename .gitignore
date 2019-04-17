@@ -7,6 +7,8 @@ nohup.out
 
 # exclude o(bject) and a(rchive)
 *.[oa]
+# exclude build folder
+build/
 
 # exclude temporary files
 *~
@@ -18,10 +20,6 @@ output/*.txt
 t_*.txt
 # exclude pollen-dispersal output files
 pollDist*
-
-
-# exclude TEST-folder
-TEST/
 
 # exclude postprocessing-output files
 postprocessing/*.png

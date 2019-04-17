@@ -1,3 +1,5 @@
+#pragma once
+
 #include<iostream>
 #include<stdlib.h>
 #include<stdio.h>
@@ -14,9 +16,9 @@
 #include<vector>
 #include<list>
 #include<algorithm>
-#include <valgrind/memcheck.h>
+// #include <valgrind/memcheck.h>
 #include <limits.h>
 #include <climits>	
 #include <float.h>	
 #include <omp.h>
-#include <mcheck.h>
+// #include <mcheck.h>

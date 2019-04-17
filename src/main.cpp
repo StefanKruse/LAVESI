@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+
 using namespace std;
 
 int yearposition;
@@ -71,6 +73,10 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	}
 	double end_time_Treedistribution = omp_get_wtime();
 
+	double start_time_Hinterlandseedintro = omp_get_wtime();
+	Hinterlandseedintro( &parameter[0], yearposition, world_seed_list, world_weather_list );
+	double end_time_Hinterlandseedintro = omp_get_wtime();
+
 	double start_time_etablierung = omp_get_wtime();
 	Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 	double end_time_etablierung = omp_get_wtime();
@@ -95,16 +101,17 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 	{
 		if(((parameter[0].ivort%50)==0) | (parameter[0].ivort==1))
 		{
-			printf("\n   - plotupdategrowth    seedwinddispersal  seedprod  treedistr treeestab  output    mortality ageing    TOTAL     ");
+			printf("\n      - plotupdate    growth  seeddisp  seedprod treedistr hinterlnd treeestab   output   mortalty    ageing     TOTAL     ");
 		}
 		
-		printf("\n %d  - %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
+		printf("\n%6i- %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", 
 			parameter[0].ivort,
 			end_time_kartenup - start_time_kartenup ,
 			end_time_wachstum - start_time_wachstum ,
 			end_time_Seeddispersal - start_time_Seeddispersal,
 			end_time_Seedproduction - start_time_Seedproduction,
 			end_time_Treedistribution - start_time_Treedistribution,
+			end_time_Hinterlandseedintro - start_time_Hinterlandseedintro,
 			end_time_etablierung - start_time_etablierung,
 			end_time_Dataoutput - start_time_Dataoutput ,
 			end_time_mortalitaet - start_time_mortalitaet,
@@ -113,6 +120,7 @@ void vegetationDynamics(int yearposition, int jahr, int t)
 				(end_time_mortalitaet - start_time_mortalitaet)+
 				(end_time_Dataoutput - start_time_Dataoutput)+
 				(end_time_etablierung - start_time_etablierung)+
+				(end_time_Treedistribution - start_time_Treedistribution)+
 				(end_time_Treedistribution - start_time_Treedistribution)+
 				(end_time_Seedproduction - start_time_Seedproduction)+
 				(end_time_Seeddispersal - start_time_Seeddispersal)+
@@ -187,11 +195,13 @@ void Spinupphase()
 				int lastyear=0;
 				int startlag=5;
 				
-				if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
-				{
-					firstyear=1934;
-					lastyear=2013;
-				}
+				// if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
+				// {
+					// firstyear=1934;
+					firstyear=world_weather_list[0][0]->jahr;
+					// lastyear=2013;
+					lastyear=world_weather_list[0][0]->jahr+100;
+				// }
 				
 				// choose a random year for weather determination
 				double x = rand()/(RAND_MAX + 1.0);
@@ -222,11 +232,13 @@ void Spinupphase()
 				int firstyear=0, lastyear=0;
 				int startlag=5;
 				
-				if ( parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24 )
-				{
-					firstyear=1934;
-					lastyear=2013;
-				}
+				// if ( parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24 )
+				// {
+					// firstyear=1934;
+					firstyear=world_weather_list[0][0]->jahr;
+					// lastyear=2013;
+					lastyear=world_weather_list[0][0]->jahr+100;
+				// }
 				
 				// take a random year for weather determination
 				double x = rand()/(RAND_MAX + 1.0);
@@ -802,14 +814,15 @@ int main()
 		Parameterinput();
 
 		// calculation of the starting year of the simulation
-		if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
-		{	
+		// if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
+		// {	
 			parameter[0].startjahr=2014-parameter[0].simduration; 
-		}
-		else
-		{
-			parameter[0].startjahr=2011-parameter[0].simduration;
-		}
+			// added here 20014 to acheive no negative years ---> might cause seg faults!
+		// }
+		// else
+		// {
+			// parameter[0].startjahr=2011-parameter[0].simduration;
+		// }
 		
 		int yearswithseedintropuffer=parameter[0].yearswithseedintro;	 
 		parameter[0].repeati=0;

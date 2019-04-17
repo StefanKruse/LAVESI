@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+
 using namespace std;
 
 void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
@@ -279,10 +281,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{
 				outputcurrencies=true;
 				
-				// if (parameter[0].ivort>1045)
 				if ( (parameter[0].ivort%25 == 0) )
 				{
-					ausgabedensity=true;// neu wegen permafrost hinzugefügt!
+					ausgabedensity=true;// new for permafrost map output
 					outputindividuals=true;
 				}
 
@@ -637,7 +638,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				{
 					cout << endl << "\tBasalarea = " << pEvaluation->basalarealist[pEvaluation->basalarealist.size()-1] << endl;
 					cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
-					cout << "tree_list.size() at Dataoutput = " << tree_list.size() << endl;
 					cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;
 				}
 				
@@ -835,34 +835,34 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				filepointer = fopen (dateiname.c_str(), "w+");
 		
 				// parameters
-				fprintf(filepointer, "Repeat;");
-				fprintf(filepointer, "YPLOTPOS;");
-				fprintf(filepointer, "XPLOTPOS;");
-				fprintf(filepointer, "weatherchoice;");
+				// fprintf(filepointer, "Repeat;");
+				// fprintf(filepointer, "YPLOTPOS;");
+				// fprintf(filepointer, "XPLOTPOS;");
+				// fprintf(filepointer, "weatherchoice;");
 				// time variables
-				fprintf(filepointer, "Zeitschritt;");
-				fprintf(filepointer, "Jahr;");
+				// fprintf(filepointer, "Zeitschritt;");
+				// fprintf(filepointer, "Jahr;");
 				// tree variables
 				fprintf(filepointer, "X;");
 				fprintf(filepointer, "Y;");
-				fprintf(filepointer, "Name;");
-				fprintf(filepointer, "NameM;");
-				fprintf(filepointer, "NameP;");
-				fprintf(filepointer, "line;");
-				fprintf(filepointer, "Generation;");
-				fprintf(filepointer, "Art;");
+				// fprintf(filepointer, "Name;");
+				// fprintf(filepointer, "NameM;");
+				// fprintf(filepointer, "NameP;");
+				// fprintf(filepointer, "line;");
+				// fprintf(filepointer, "Generation;");
+				// fprintf(filepointer, "Art;");
 				fprintf(filepointer, "height;");
 				fprintf(filepointer, "Dbasal;");
 				fprintf(filepointer, "Dbreast;");
 				fprintf(filepointer, "age;");
-				fprintf(filepointer, "cone;");
-				fprintf(filepointer, "coneheight;");
-				fprintf(filepointer, "seedprodAKT;");
-				fprintf(filepointer, "seedprodSUM;");
-				fprintf(filepointer, "Speicher;");
-				fprintf(filepointer, "densitywert;");
-				fprintf(filepointer, "Entfernung;");
-				fprintf(filepointer, "thawing_depth_infl;");	
+				// fprintf(filepointer, "cone;");
+				// fprintf(filepointer, "coneheight;");
+				// fprintf(filepointer, "seedprodAKT;");
+				// fprintf(filepointer, "seedprodSUM;");
+				// fprintf(filepointer, "Speicher;");
+				// fprintf(filepointer, "densitywert;");
+				// fprintf(filepointer, "Entfernung;");
+				// fprintf(filepointer, "thawing_depth_infl;");	
 				fprintf(filepointer, "\n");
 
 				if (filepointer == NULL)
@@ -879,34 +879,34 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{
 				pTree=(*pos);
 				// parameters
-				fprintf(filepointer, "%d;", parameter[0].repeati);
-				fprintf(filepointer, "%d;", pTree->yworldcoo);
-				fprintf(filepointer, "%d;", pTree->xworldcoo);
-				fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+				// fprintf(filepointer, "%d;", parameter[0].repeati);
+				// fprintf(filepointer, "%d;", pTree->yworldcoo);
+				// fprintf(filepointer, "%d;", pTree->xworldcoo);
+				// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 				// time variables
-				fprintf(filepointer, "%d;", t);
-				fprintf(filepointer, "%d;", jahr);
+				// fprintf(filepointer, "%d;", t);
+				// fprintf(filepointer, "%d;", jahr);
 				// tree variables
 				fprintf(filepointer, "%4.4f;", pTree->xcoo);
 				fprintf(filepointer, "%4.4f;", pTree->ycoo);
-				fprintf(filepointer, "%d;", pTree->name);
-				fprintf(filepointer, "%d;", pTree->namem);
-				fprintf(filepointer, "%d;", pTree->namep);
-				fprintf(filepointer, "%d;", pTree->line);
-				fprintf(filepointer, "%d;", pTree->generation);
-				fprintf(filepointer, "%d;", pTree->species);
+				// fprintf(filepointer, "%d;", pTree->name);
+				// fprintf(filepointer, "%d;", pTree->namem);
+				// fprintf(filepointer, "%d;", pTree->namep);
+				// fprintf(filepointer, "%d;", pTree->line);
+				// fprintf(filepointer, "%d;", pTree->generation);
+				// fprintf(filepointer, "%d;", pTree->species);
 				fprintf(filepointer, "%4.4f;", pTree->height);
 				fprintf(filepointer, "%4.4f;", pTree->dbasal);
 				fprintf(filepointer, "%4.4f;", pTree->dbreast);
 				fprintf(filepointer, "%d;", pTree->age);
-				fprintf(filepointer, "%d;", pTree->cone);
-				fprintf(filepointer, "%4.4f;", pTree->coneheight);
-				fprintf(filepointer, "%d;", pTree->seednewly_produced);
-				fprintf(filepointer, "%d;", pTree->seedproduced);
-				fprintf(filepointer, "%d;", pTree->buffer);
-				fprintf(filepointer, "%4.5f;", pTree->densitywert);
-				fprintf(filepointer, "%4.5f;", pTree->dispersaldistance);
-				fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
+				// fprintf(filepointer, "%d;", pTree->cone);
+				// fprintf(filepointer, "%4.4f;", pTree->coneheight);
+				// fprintf(filepointer, "%d;", pTree->seednewly_produced);
+				// fprintf(filepointer, "%d;", pTree->seedproduced);
+				// fprintf(filepointer, "%d;", pTree->buffer);
+				// fprintf(filepointer, "%4.5f;", pTree->densitywert);
+				// fprintf(filepointer, "%4.5f;", pTree->dispersaldistance);
+				// fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
 				fprintf(filepointer, "\n");
 
 				++pos;

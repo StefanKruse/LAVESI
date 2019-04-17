@@ -1,9 +1,8 @@
-#ifndef decinc
-#define decinc
+#pragma once
 
 	// plot dimensions rows==y, cols==x
- 	const int treerows=100;
- 	const int treecols=100;
+ 	const int treerows=2000;
+ 	const int treecols=20;
 
 	// parameter input
  	const int stringlengthmax=255;
@@ -42,5 +41,3 @@
 	vector<vector<double>> winddir(0);
 	int cntr;
 	vector<double> wdir(0),wspd(0);   
-
-#endif

@@ -2,9 +2,12 @@
 This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of the larch tree species <i>Larix gmelinii</i> (RUPR.) RUPR. which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug).
 
 ### Version history:
- - The version of this code is LAVESI-WIND v1.0 available at https://doi.org/10.5281/zenodo.1165383
- - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
+- The version of this code is based on LAVESI-WIND v1.0 
+- The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
 
+## CHANGELOG (only major changes in functionalities):
+- included a Hinterland seed input function to consider seed travel from the south into the plot area
+ 
 ### Authors:
 - Stefan Kruse - stefan.kruse@awi.de
 - Alexander Gerdes - alexander.gerdes@awi.de
@@ -37,6 +40,3 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
 ## Further hints: 
 1. start in background not bound to your console session by "nohup ./LAVESI_WIND &"
 2. change the area size of simulation in /inc/declarations.h at "...treerows" and "...cols", values given in meters
-
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1165383.svg)](https://doi.org/10.5281/zenodo.1165383)

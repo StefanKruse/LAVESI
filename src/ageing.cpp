@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+
 using namespace std;
 
 /****************************************************************************************//**
@@ -118,18 +120,6 @@ void Ageing( struct Parameter *parameter, vector<list<Tree*> > &world_tree_list,
 			else
 			{	
 				// check if cones were correctly assigned
-				signed int exitageingerror; 
-				
-				printf("\n A tree has no value in the substructure cone in function ageing \n"); 
-				printf("\n Continue the simulation with 1, stop it with any other key\n"); 
-				scanf("%d", &exitageingerror); 
-				
-				if (exitageingerror!=1) 
-				{
-					printf("LAVESI was stopped after a failure in ageing.cpp\n\n");
-					exit(1);
-				}
-		
 				delete pTree;
 				pos=tree_list.erase(pos);						
 			}

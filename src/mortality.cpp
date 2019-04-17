@@ -1,4 +1,6 @@
-﻿using namespace std;
+﻿#include "LAVESI.h"
+
+using namespace std;
 
 /****************************************************************************************//**
  * \brief calculate tree mortality
@@ -261,17 +263,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			}
 			else
 			{	
-				// safety procedure: has the variable incone been set?
-				signed int exiterrormortality; 
-				printf("\n In the mortality determining function a seed has no value applied to the variable incone\n"); 
-				printf("\n To continue the simulation, press 1, stop it with any other key\n"); 
-				
-				scanf("%d", &exiterrormortality); 
-                                if (exiterrormortality!=1) 
-                                {
-                                    printf("LaVeSi has been stopped after a failure in mortality.cpp\n\n");exit(1);
-                                }
-		
+				// check if the variable incone was set
 				delete pSeed;
 				pos=seed_list.erase(pos);						
 			}
@@ -780,6 +772,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 				
 				
 		// output of seeds (position and parents)
+		/*
 		if(parameter[0].ivort>1045)
 		{
 			char output[50];
@@ -806,6 +799,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			fclose(fdir);
 		}// file output
 			
+		*/
 		double end_time_poll=omp_get_wtime();
 		TreeMort(yearposition, weather_list, tree_list);
 		double end_time_mortpoll=omp_get_wtime();

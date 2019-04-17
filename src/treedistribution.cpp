@@ -295,23 +295,20 @@ void TreesIni(int maximal_word_length)
  * \brief Seedinput from hinterland
  *
  * ... parameter settings
- * hinterland>0 -> 0 means no, otherwise the number is the length in meters that is south of the simultation area
+ * hinterland (int) -> 0 means no, otherwise the number is the length in meters that is south of the simultation area
  *
  
- * 1. estimate number for 20 m slices
+ * 1. estimate number of 20 m slices
  * 1.1. take "fly out" probability but not for each but generally the proportion
  * 1.2. define random x/y start for each seed
  * 2. estimate mean height for each 20 m slice
- * 3. estimate dx/dy by Seedwinddispersal()
+ * 3. estimate dx/dy by function Seedwinddispersal()
  * 4. place new seed to seedlist
  *******************************************************************************************/
  
 void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list)
 {
 	
-	// general hinterland parameter
-	// int hinterland_maxlength=200000; // maximum length in meters to the south for additional seed introduction from Hinterland
-		// ... cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
 	
 	// function parameters
 	double logmodel_seeds_Po=7.8997307;
@@ -356,13 +353,16 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 			int exceedstoW=0;
 #endif
 
+			// hinterland_maxlength is cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
 			for(int yposhint=-10; yposhint>-1*parameter[0].hinterland_maxlength;yposhint=yposhint-20)
 			{
 				double jultempi=weather_list[yearposition]->temp7monthmean + ( -0.3508 * yposhint/(111120) );//conversion to degree latitude see...weatherinput.cpp
 									
 				double hinterheightsi=logmodel_heights_K/(1+exp(logmodel_heights_Po+logmodel_heights_r*jultempi));
-				int hinterseedsi=(int) floor(parameter[0].seedflightrate * logmodel_seeds_K/(1+exp(logmodel_seeds_Po+logmodel_seeds_r*jultempi)));
-				
+				int hinterseedsi=(int) floor(
+										parameter[0].seedflightrate * logmodel_seeds_K/(1+exp(logmodel_seeds_Po+logmodel_seeds_r*jultempi)) // determine number of seeds produced at this nucleus
+										)
+										* (double) treecols/20; // scaling to the witdth of the simulated area
 				for (int n=0;n<hinterseedsi;n++)
 				{
 					// calculate post-dispersal position with the parameters set for the simulation run using the wind-dependent seed dispersal function
@@ -398,8 +398,6 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 							specieszufall = 2;
 						}
 
-						
-						
 						// estimation of new positions
 						double ratiorn=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
 						double dispersaldistance=0.0;

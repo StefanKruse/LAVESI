@@ -1,7 +1,7 @@
 #pragma once
 
 	// plot dimensions rows==y, cols==x
- 	const int treerows=200000;
+ 	const int treerows=2000;
  	const int treecols=20;
 
 	// parameter input

@@ -137,7 +137,8 @@ using namespace std;
 		int		seedintronumber;
 		int 	seedintronumberpermanent;
 		bool	seedtravelbetween;
-		int		starttrees;	
+		int		starttrees;
+		int		hinterland_maxlength;
 		
 		// climate processing
 		int		weatherchoice;

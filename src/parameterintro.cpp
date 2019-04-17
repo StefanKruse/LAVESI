@@ -351,6 +351,13 @@ void Parameterinput(void)
 		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].starttrees);
 	}
 	
+	strcpy(uebergabestring,"hinterland_maxlength");
+	parameter[0].hinterland_maxlength=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].hinterland_maxlength);
+	}
+	
 	strcpy(uebergabestring,"coneage");
 	parameter[0].coneage=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true) 

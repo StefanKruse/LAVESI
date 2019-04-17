@@ -310,7 +310,7 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 {
 	
 	// general hinterland parameter
-	int hinterland_maxlength=200000; // maximum length in meters to the south
+	// int hinterland_maxlength=200000; // maximum length in meters to the south for additional seed introduction from Hinterland
 		// ... cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
 	
 	// function parameters
@@ -343,7 +343,7 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 		cout << " ... seed_list.size=" << seed_list.size() << endl;
 #endif
 		
-		if (hinterland_maxlength>0)
+		if (parameter[0].hinterland_maxlength>0)
 		{
 			int seednobuffer; 
 			
@@ -356,7 +356,7 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 			int exceedstoW=0;
 #endif
 
-			for(int yposhint=-10; yposhint>-1*hinterland_maxlength;yposhint=yposhint-20)
+			for(int yposhint=-10; yposhint>-1*parameter[0].hinterland_maxlength;yposhint=yposhint-20)
 			{
 				double jultempi=weather_list[yearposition]->temp7monthmean + ( -0.3508 * yposhint/(111120) );//conversion to degree latitude see...weatherinput.cpp
 									

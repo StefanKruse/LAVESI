@@ -279,8 +279,10 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{
 				outputcurrencies=true;
 				
-				if (parameter[0].ivort>1045)
+				// if (parameter[0].ivort>1045)
+				if ( (parameter[0].ivort%25 == 0) )
 				{
+					ausgabedensity=true;// neu wegen permafrost hinzugefügt!
 					outputindividuals=true;
 				}
 
@@ -924,7 +926,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
 
 			// assemble file name:
-			s1<<jahr;s2<<parameter[0].weatherchoice;
+			// s1<<jahr;s2<<parameter[0].weatherchoice;
+			s1<<parameter[0].ivort;s2<<parameter[0].weatherchoice;
 			dateiname="output/datatrees_Treedensity" +s1.str()+"_"+s2.str()+ ".csv";
 			s1.str("");s1.clear();s2.str("");s2.clear();
 				

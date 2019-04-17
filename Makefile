@@ -1,5 +1,5 @@
 HEADER=./inc/libraries.h ./inc/declarations.h ./inc/structures.h ./inc/functions.h
-CFLAGS= -c -O0 -g3  -ggdb3 -fno-omit-frame-pointer -std=c++0x -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/functions.h
+CFLAGS= -c -O3 -fno-omit-frame-pointer -std=c++0x -include ./inc/libraries.h -include ./inc/structures.h -include ./inc/declarations.h -include ./inc/functions.h
 CC=g++ -g #$(CXX)
 OBJS = $(./%.o)
 

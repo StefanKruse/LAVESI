@@ -800,7 +800,6 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
 			pEnvirgrid=plot_list[kartenpos];
-			pEnvirgrid->Treedensityvalue=0;
 			pEnvirgrid->Treenumber=0;
 			
 			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
@@ -836,16 +835,45 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 				pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
 			}
 			
-			if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
+			// if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
+			if (parameter[0].thawing_depth==true)
 			{
 				// calculation of an insulation by organic material (damping reduces thawing_depth, formula taken from literature)
 				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmean; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
-
-				pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+// cout << pEnvirgrid->Treedensityvalue << " ... ";
+				// pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+				if(pEnvirgrid->Treedensityvalue>0)
+				{
+					double treedensityinfluencepermafrost=(1/pEnvirgrid->Treedensityvalue);
+					if(treedensityinfluencepermafrost<0.25)
+					{
+						treedensityinfluencepermafrost=0.25;
+					} else if (treedensityinfluencepermafrost>=0.25 & treedensityinfluencepermafrost<0.5)
+					{
+						treedensityinfluencepermafrost=0.5;
+					} else if (treedensityinfluencepermafrost>=0.5 & treedensityinfluencepermafrost<0.75)
+					{
+						treedensityinfluencepermafrost=0.75;
+					} else
+					{
+						treedensityinfluencepermafrost=1;
+					}
+// cout << treedensityinfluencepermafrost << endl;
+						
+						
+						
+					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) ) * treedensityinfluencepermafrost;//test here different values 1/ must maybe maxvalue of treedensityvalues
+				} else
+				{
+					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) );
+				}
 			}
+		
+			pEnvirgrid->Treedensityvalue=0;//moved here from above so that the Treedensityvalue can be used for evalutaion of active layer
+
 		}
 	}// only one core
 
@@ -858,7 +886,6 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		for(int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 		{
 			pEnvirgrid=plot_list[kartenpos];
-			pEnvirgrid->Treedensityvalue=0;
 			pEnvirgrid->Treenumber=0;
 			
 			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
@@ -896,15 +923,44 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 				pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
 			}			
 
-			if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
+			// if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
+			if (parameter[0].thawing_depth==true)
 			{
+				// calculation of an insulation by organic material (damping reduces thawing_depth, formula taken from literature)
 				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmean; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
 				
-				pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+// cout << pEnvirgrid->Treedensityvalue << " ... ";
+				// pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+				if(pEnvirgrid->Treedensityvalue>0)
+				{
+					double treedensityinfluencepermafrost=(1/pEnvirgrid->Treedensityvalue);
+					if(treedensityinfluencepermafrost<0.25)
+					{
+						treedensityinfluencepermafrost=0.25;
+					} else if (treedensityinfluencepermafrost>=0.25 & treedensityinfluencepermafrost<0.5)
+					{
+						treedensityinfluencepermafrost=0.5;
+					} else if (treedensityinfluencepermafrost>=0.5 & treedensityinfluencepermafrost<0.75)
+					{
+						treedensityinfluencepermafrost=0.75;
+					} else
+					{
+						treedensityinfluencepermafrost=1;
+					}
+// cout << treedensityinfluencepermafrost << endl;
+						
+					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) ) * treedensityinfluencepermafrost;//test here different values 1/ must maybe maxvalue of treedensityvalues
+				} else
+				{
+					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) );
+				}
 			}
+			
+			pEnvirgrid->Treedensityvalue=0;
+
 		}
 	}// more than one core
 }

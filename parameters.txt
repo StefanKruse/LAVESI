@@ -11,7 +11,7 @@
 // 0.1 -----> Display in console
 parameterinputvis=0;				// (int 0,1) show read-in of parameters
 yearlyvis=0;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
-qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
+qualiyearlyvis=1;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=0;				// (int 0,1) seed dispersal
 mortvis=0;							// (int 0,1) mortality of trees >200 cm
 computationtimevis=1;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
@@ -32,7 +32,7 @@ vegetation=0;						// (int 0,1) Representation of an organic layer
 
 
 // 0.4 Computation environment
-omp_num_threads=1;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=12;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -91,7 +91,7 @@ ivortmax=1000;						// (int) spin up phase before the simulation period and maxi
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
-resetyear=0;						// (int) year to save all container for a later resume from this time point
+resetyear=-99999;						// (int) year to save all container for a later resume from this time point
 specpres=1;							// (int) which larch species should be present in the model
 										// 0==both Larix gmelinii and L. sibirica 
 										// 1==only Larix gmelinii

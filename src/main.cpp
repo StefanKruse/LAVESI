@@ -492,6 +492,7 @@ void createLists()
 			vector<Evaluation*> evaluation_list;			  // Creating new evaluation_list 
 			world_evaluation_list.push_back(evaluation_list); // include new evaluation_list in corresponding world list
 			
+			//CREATES THE WORLD POLLEN GRID
 			vector<Pollengrid*> pollen_list;
 			world_pollen_list.push_back(pollen_list);
 			
@@ -520,7 +521,7 @@ void createLists()
 
 /****************************************************************************************//**
  * \brief initialise Envirgrid Element and Evaluation
- *
+ *        As well as the so called pollengrid necessary for accelerated paternal heredity.
  *
  *
  *
@@ -535,7 +536,7 @@ void initialiseMaps()
 		vector<Envirgrid*>& plot_list = *posw;
 		
 		vector<vector<Pollengrid*>>::iterator posw2=(world_pollen_list.begin()+aktort);
-		vector<Pollengrid*>& pollen_list2 = *posw2;
+		vector<Pollengrid*>& pollen_list = *posw2;
 	
 		vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 		vector<Evaluation*>& evaluation_list = *posiwelt;
@@ -554,29 +555,20 @@ void initialiseMaps()
 		double lentx=(double) (parameter[0].pollengridxpoints);
 		double lenty=(double) (parameter[0].pollengridypoints);
 		
-		
-		for(int kartenpos=0;kartenpos< (parameter[0].pollengridpoints); kartenpos++)
+		//THIS LOOP CREATES THE POLLEN GRID ON EACH PLOT WITH A RESOLUTION OF 
+		//(parameter[0].pollengridxpoints)*(parameter[0].pollengridypoints);
+		for(int kartenpos=0;kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++)
 		{
-		//cout<<kartenpos<<endl;
 			pPollengrid= new Pollengrid();
 			pPollengrid->Number=kartenpos+1;
 		
-			//pPollengrid->xcoo=fmod((double)kartenpos,lent)/lent*treerows
-			//								 +0.5*treerows/lent;
-											 
-			//pPollengrid->ycoo=floor(kartenpos/lent)*treecols/lent
-			//								   +0.5*treecols/lent;
-			
 			pPollengrid->xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
 											 +0.5*treerows/lentx;
 											 
 			pPollengrid->ycoo=floor(kartenpos/lenty)*treecols/lenty
 											   +0.5*treecols/lenty;
 			
-											   
-			
-			//cout<<kartenpos<<"\t"<<pPollengrid->xcoo<<"\t"<<pPollengrid->ycoo<<endl;
-			pollen_list2.push_back(pPollengrid);
+			pollen_list.push_back(pPollengrid);
 		}
 		
 		for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++) 
@@ -758,6 +750,8 @@ void finishSimulation()
 		world_plot_list.shrink_to_fit();
 		world_evaluation_list.clear();
 		world_evaluation_list.shrink_to_fit();
+		world_pollen_list.clear();
+		world_pollen_list.shrink_to_fit();
 				
 		for(int i=0; i<globalyears.size();i++)
 		{

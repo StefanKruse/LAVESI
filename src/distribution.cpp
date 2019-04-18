@@ -45,7 +45,10 @@ using namespace std;
  
  
 /*
-Mixrand yields random numbers that are distributed according to the mixed distribution of two gaussian. Also works for std*=0 
+mixrand() yields random numbers that are distributed according to the mixed distribution of two gaussians. 
+This also works for standarddeviations std1=0 , so that the mixed distribution contains a gaussian 
+distribution around mu2 with std2 and the discrete value mu1.
+The maximum value is 5/3, and minimum is 1/3, so that seed weights do not diverge or become <=0.
 */
 double mixrand(double mu1,double std1,double mu2,double std2)
 {
@@ -63,7 +66,12 @@ return R1;
 }
 
 
-
+/*
+NOT IN USE.
+meanrand() yields random numbers that are distributed according to the mean of two gaussian distributions. 
+This also works for standarddeviations std1=0, std2=0, so that the return value is the mean value of mu1 and mu2.
+The maximum value is 5/3, and the minimum is 1/3, so that seed weights do not diverge or become <=0.
+*/
 double meanrand(double mu1,double std1,double mu2,double std2)
 {
 
@@ -150,18 +158,14 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
 	//{
 for (vector<Pollengrid*>::iterator pos = pollen_list.begin(); pos != pollen_list.end(); )
 	{
-//
+//		Old version: use pTree_copy and the above for loop, in order to check every tree for genetic lineage.	
 //		pTree_copy= *posb;
 		pPollengrid=*pos;
 		int tresize=pPollengrid->Treenames.size();
-		//cout<<pPollengrid->Number<<"\t"<<tresize<<endl;
-		// only if the pollinating tree has cones:
+		// only if the pollinating tree has cones (see mortality.cpp)!
 		if((tresize)!=0)
 		{
-//if(pEnvirgrid_copy->Treenumber!=0)
-//		{
-					
-			
+	
 			dx=(pPollengrid->xcoo)-x; 
 			dy=(pPollengrid->ycoo)-y; 
 //
@@ -187,12 +191,11 @@ for (vector<Pollengrid*>::iterator pos = pollen_list.begin(); pos != pollen_list
 			else
 			{
 				
-				//pName.push_back(pPollengrid->Treenames[rand()%tresize]);
 				pName.push_back(pPollengrid->Number);
 				
 				//HAVE ONE PARTICULAR TRAIT VALUE FOR EVERY GRID CELL!
 				
-				//INHERITING THAWING DEPTH INFL 
+				//INHERITING SEED WEIGHT
 				thdpthinfl.push_back(pPollengrid->seedweight);
 				//thdpthinflvar.push_back(pPollengrid->seedweightvar);
 				

@@ -322,6 +322,42 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			omp_set_dynamic(0); //disable dynamic teams
 			omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			
+			
+		if(pTree->cone!=0){
+						
+						//The grid is updated here in every time step. This way dying trees are filtered out.
+							double lent=sqrt(parameter[0].pollengridpoints);
+							double lentx=(parameter[0].pollengridxpoints);
+							double lenty=(parameter[0].pollengridypoints);
+							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							{
+							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lentx >= pTree->xcoo)
+								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lenty	>= pTree->ycoo)
+								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lentx	<  pTree->ycoo)	
+								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lenty	<  pTree->xcoo)
+								)
+								{
+									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
+									pTree->subgridVECpos=
+									(pollen_list[kartenpos]->Treenames.size()-1);
+									pollen_list[kartenpos]->seedweight+=pTree->seedweight;
+									
+									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
+
+									pTree->subgridpos=kartenpos+1;
+								}
+							}	
+								
+							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							{
+								if(pollen_list[kartenpos]->Treenames.size()>1){
+									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
+									pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
+								}
+							}
+								
+				}
+			
 			double direction=0.0;
 			double velocity=0.0;
 			unsigned int ripm=0,cntr=0;
@@ -473,6 +509,41 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			double m=parameter[0].pollengregorym;
 			vector<int> Vname;
 			vector<double> Vthdpth;
+			
+			if(pTree->cone!=0){
+						
+						//...because the grid is updated here in every time step. This way dying trees are filtered.
+							double lent=sqrt(parameter[0].pollengridpoints);
+							double lentx=(parameter[0].pollengridxpoints);
+							double lenty=(parameter[0].pollengridypoints);
+							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							{
+							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lentx >= pTree->xcoo)
+								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lenty	>= pTree->ycoo)
+								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lentx	<  pTree->ycoo)	
+								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lenty	<  pTree->xcoo)
+								)
+								{
+									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
+									pTree->subgridVECpos=//pollen_list2[kartenpos]->Treenames.begin()+
+									(pollen_list[kartenpos]->Treenames.size()-1);
+									pollen_list[kartenpos]->seedweight+=pTree->seedweight;
+									
+									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
+
+									pTree->subgridpos=kartenpos+1;
+								}
+							}	
+								
+							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							{
+								if(pollen_list[kartenpos]->Treenames.size()>1){
+									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
+									pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
+								}
+							}
+								
+				}
 	
 			#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
 			{
@@ -648,10 +719,10 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 					lasttreewithseeds_pos=treeiter;
 				}
 				
-				//vector<Pollengrid*>& pollen_list2=*(world_pollen_list.begin()+aktort);
-				//vector<Pollengrid*>& pollen_list2=*world_position_p;
-
+///NOTE: POLLEN GRID ONLY WORKS IN mcorevariant==3!!		 
 					if(pTree->cone!=0){
+						
+						//...because the grid is updated here in every time step. This way dying trees are filtered.
 							double lent=sqrt(parameter[0].pollengridpoints);
 							double lentx=(parameter[0].pollengridxpoints);
 							double lenty=(parameter[0].pollengridypoints);
@@ -682,8 +753,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								}
 							}
 								
-													}
-				//}
+				}
 			}
 			advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 					
@@ -785,12 +855,19 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
+									//Vname.at(iran) is the chosen pollen grid cell number returned from the pollination function
+									//Vthdpth.at(iran) is the chosen trait (seed weight) value returned from the pollination function
 									pSeed->namep=Vname.at(iran);
-									//pSeed->seedweight=Vthdpth.at(iran);
+									//The standard deviations of the two gaussian peaks from which the new seed weight value
+									//is drawn is here set to 0.5 (above:0.0) for this benchmarking version. 
+									//This should be changed to a pollengrid size dependent law derived from genetic studies
+									//(square root?... according to neutral theory) for std1 and a tree dependent std2.
+									//
 									pSeed->seedweight=mixrand(Vthdpth.at(iran),0.5,pTree->seedweight,0.5);
 								} 
 								else
 								{
+									//If no fathering pollen grid cell is found....
 									pSeed->namep=0;
 									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
 								}

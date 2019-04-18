@@ -351,11 +351,30 @@ void Clearalllists(void)
 
 		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
 		vector<Envirgrid*>& plot_list = *posiweltk;
+		
+		vector<vector<Pollengrid*> >::iterator posiweltp = (world_pollen_list.begin()+aktort);
+		vector<Pollengrid*>& pollengrid = *posiweltp;
 	
 		vector<vector<Evaluation*> >::iterator posiwelt = (world_evaluation_list.begin()+aktort);
 		vector<Evaluation*>& evaluation_list = *posiwelt;
 	
 		aktort++;
+		
+		
+		for (int kartenpos=0; kartenpos< (parameter[0].pollengridypoints  * parameter[0].pollengridxpoints); kartenpos++)
+		{
+			
+			pPollengrid= pollengrid.at(kartenpos);
+			 
+			pPollengrid->Treenames.clear();
+			pPollengrid->Treenames.shrink_to_fit();
+			 
+			delete pPollengrid;
+		}
+		pollengrid.clear();
+		pollengrid.shrink_to_fit();
+		//cout<<pollengrid.size()<<endl;
+		
 				
 		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos)
 		{

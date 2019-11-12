@@ -1,3 +1,4 @@
+#include "LAVESI.h"				   
 using namespace std;
 
 void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > &world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list, vector<vector<Evaluation*> > &world_evaluation_list)
@@ -279,7 +280,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{
 				outputcurrencies=true;
 				
-				if (parameter[0].ivort>1045)
+				if ( (parameter[0].ivort%25 == 0) )
+					//|| parameter[0].ivort>())
 				{
 					outputindividuals=true;
 				}

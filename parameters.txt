@@ -18,7 +18,7 @@ computationtimevis=0;				// (int 0,1) include visualisation and output of comput
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=0;  						// (int) choice of data output files 
+outputmode=1;  						// (int) choice of data output files 
 										// 0=="full"
 										// 1=="normal"
 										// 2=="OMP only => currencies + computation time"
@@ -32,7 +32,7 @@ vegetation=0;						// (int 0,1) Representation of an organic layer
 
 
 // 0.4 Computation environment
-omp_num_threads=8;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=4;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -53,7 +53,7 @@ omp_num_threads=8;					// (int 1,system specific maximum) Number of cores used f
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=24;					// (int) Type of weather forcing series 
+weatherchoice=7001;					// (int) Type of weather forcing series 
 										//  22==TY02
 										//  22==CH17
 										//  23==CH02
@@ -129,6 +129,7 @@ starttrees=12;						// (int) type of initial tree set up
 										// 12==CH17
 										// and SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 meters) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
 										// ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
+hinterland_maxlength=50; 		// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland																																		
 										
 // 1.4.2 -----> Pollen dispersal
 pollination=9;						// (int 0,1,2) allow pollen dispersal

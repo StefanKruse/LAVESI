@@ -1,3 +1,6 @@
+#pragma once
+
+#include <vector>
 using namespace std;
 	
 	struct Tree 
@@ -156,6 +159,7 @@ using namespace std;
 		int 	seedintronumberpermanent;
 		bool	seedtravelbetween;
 		int		starttrees;	
+		int		hinterland_maxlength;					
 		
 		// climate processing
 		int		weatherchoice;

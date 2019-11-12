@@ -1,4 +1,5 @@
-﻿using namespace std;
+﻿#include "LAVESI.h"				   
+using namespace std;
 
 /****************************************************************************************//**
  * \brief calculate tree mortality
@@ -276,16 +277,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			else
 			{	
 				// safety procedure: has the variable incone been set?
-				signed int exiterrormortality; 
-				printf("\n In the mortality determining function a seed has no value applied to the variable incone\n"); 
-				printf("\n To continue the simulation, press 1, stop it with any other key\n"); 
 				
-				scanf("%d", &exiterrormortality); 
-                                if (exiterrormortality!=1) 
-                                {
-                                    printf("LaVeSi has been stopped after a failure in mortality.cpp\n\n");exit(1);
-                                }
-		
 				delete pSeed;
 				pos=seed_list.erase(pos);						
 			}
@@ -456,6 +448,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									pSeed->namep=0;
 									pSeed->seedweight=mixrand(pTree->seedweight,0.0,pTree->seedweight,0.0);
+									pSeed->thawing_depthinfluence=100;
 								}
 															
 								pSeed->line=pTree->line;
@@ -638,12 +631,14 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
 									//pSeed->seedweight=100;
+									pSeed->thawing_depthinfluence=100;
 									pSeed->seedweight=
 									mixrand(pTree->seedweight,0.0,Vthdpth.at(iran),0.0);
 								} 
 								else
 								{
 									pSeed->namep=0;
+									pSeed->thawing_depthinfluence=100;
 									pSeed->seedweight=mixrand(pTree->seedweight,0.0,pTree->seedweight,0.0);
 									//pSeed->seedweightvar=pTree->seedweightvar;
 									///AND THEN THE SEED GROWS TO A TREE WTH THE SAME PARAMETERS
@@ -858,6 +853,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									//Vname.at(iran) is the chosen pollen grid cell number returned from the pollination function
 									//Vthdpth.at(iran) is the chosen trait (seed weight) value returned from the pollination function
 									pSeed->namep=Vname.at(iran);
+									pSeed->thawing_depthinfluence=100;
 									//The standard deviations of the two gaussian peaks from which the new seed weight value
 									//is drawn is here set to 0.5 (above:0.0) for this benchmarking version. 
 									//This should be changed to a pollengrid size dependent law derived from genetic studies

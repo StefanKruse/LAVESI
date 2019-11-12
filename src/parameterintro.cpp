@@ -1,3 +1,4 @@
+	#include "LAVESI.h"			   
 using namespace std;
 //THERE IS A SIMILARLY NAMED VOID FUNCTION BELOW!?
 double Parameterinput(char *uebergabestring, int stringlengthmax, char *divisionsign, struct Parameter *parameter)
@@ -368,6 +369,12 @@ void Parameterinput(void)
 	if (parameter[0].parameterinputvis ==true) 
 	{
 		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].starttrees);
+	}
+	strcpy(uebergabestring,"hinterland_maxlength");
+	parameter[0].hinterland_maxlength=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].hinterland_maxlength);
 	}
 	
 	strcpy(uebergabestring,"coneage");

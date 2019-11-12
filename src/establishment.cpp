@@ -1,3 +1,5 @@
+#include "LAVESI.h"
+#include <cassert>
 using namespace std;
 
 void Treeestablishment( struct Parameter *parameter, int yearposition, vector<list<Tree*> > &world_tree_list, vector<list<Seed*> > & world_seed_list, vector<vector<Weather*> > &world_weather_list, vector<vector<Envirgrid*> > &world_plot_list)
@@ -30,6 +32,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					int i=(int) floor(pSeed->ycoo*parameter[0].sizemagnif);
 					int j=(int) floor(pSeed->xcoo*parameter[0].sizemagnif);
 					
+					assert(i*treecols*parameter[0].sizemagnif+j >= 0);								   
 					double keimungauflageinfluence=(1.0-0.01)/(200.0-600.0)*( (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->litterheight )+1.495; 
 					
 					if (keimungauflageinfluence<0.01)
@@ -207,18 +210,6 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 					}
 					else 
 					{ 
-						// safety routine: is species defined?
-						signed int exiterrorestablish; 
-						printf("\n In establishment.cpp a tree was not assigned a new species value.\n");
-						printf("\n continue typing 1, press any other key to exit\n");
-						scanf("%d", &exiterrorestablish); 
-
-						if (exiterrorestablish!=1) 
-						{
-							printf("LAVESI was exited after an error occurring in establishment.cpp\n");
-							exit(1);
-						}
-
 						delete pSeed;
 						pos=seed_list.erase(pos);	
 					}

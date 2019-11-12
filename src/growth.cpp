@@ -1,3 +1,4 @@
+#include "LAVESI.h"
 using namespace std;
 
 /****************************************************************************************//**
@@ -295,16 +296,6 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 			{ 	
 				
 				// safety routine: is the substructure height now defined?
-				signed int exitgrowtherror; 
-				printf("\n In growth.cpp a tree was not assigned a new height value.\n");
-				printf("\n continue typing 1, press any other key to exit\n");
-				scanf("%d", &exitgrowtherror); 
-
-				if (exitgrowtherror!=1) 
-				{
-					printf("LAVESI was exited after an error occurred in growth.cpp\n");
-					exit(1);
-				}
 				delete pTree;
 				pos=tree_list.erase(pos);						
 			} 

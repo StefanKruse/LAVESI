@@ -1,5 +1,5 @@
-#ifndef decinc
-#define decinc
+#pragma once
+
 
 	// plot dimensions rows==y, cols==x
  	const int treerows=50;
@@ -46,4 +46,3 @@
 	int cntr;
 	vector<double> wdir(0),wspd(0);   
 	
-#endif

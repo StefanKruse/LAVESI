@@ -721,7 +721,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 							double lent=sqrt(parameter[0].pollengridpoints);
 							double lentx=(parameter[0].pollengridxpoints);
 							double lenty=(parameter[0].pollengridypoints);
-							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++)
 							{
 							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lentx >= pTree->xcoo)
 								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lenty	>= pTree->ycoo)
@@ -740,7 +740,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								}
 							}	
 								
-							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
+							for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++)
 							{
 								if(pollen_list[kartenpos]->Treenames.size()>1){
 									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();

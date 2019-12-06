@@ -2,7 +2,7 @@
 using namespace std;
 
 int yearposition;
-
+time_t start_timeout;
 /****************************************************************************************//**
  * \brief go through all functions for vegetation dynamics
  *
@@ -366,6 +366,21 @@ void Yearsteps()
 				Savealllists();
 				cout << "In year = " << jahr << " everything was saved!" << endl << endl;
 			}
+			// timeout check. if the time limit is reached the tree positions are saved and the yearsteps are stopped resulting in the end of the programm
+			if (parameter[0].timedoutput=true)
+			{
+				time_t current_timeout;
+				time(&current_timeout);
+				double timeout_progress = difftime(current_timeout,start_timeout);
+				double timeout_overall = parameter[0].timelimit *60*60;
+				if (timeout_overall<timeout_progress)
+				{
+					printf ("\n Time limit was reached \n current tree position will be saved and the simulation will be ended \n");
+					parameter[0].outputmode=0;  
+					Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+					return;
+				}
+			}	
 		}// year step
 		
 		// variation of parameters depends on experimental setting beginning at resetyear
@@ -575,7 +590,7 @@ void initialiseMaps()
 			pPollengrid->xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
 											 +0.5*treerows/lentx;
 											 
-			pPollengrid->ycoo=floor(kartenpos/lenty)*treecols/lenty
+			pPollengrid->ycoo=floor(kartenpos/lentx)*treecols/lenty
 											   +0.5*treecols/lenty;
 			
 			pollen_list.push_back(pPollengrid);
@@ -819,10 +834,13 @@ void finishSimulation()
 int main()
 {	
 		clock_t start_time_main = clock();
-						
+		time(&start_timeout);				
 		// random number initialization
 		srand((unsigned) time(NULL));
-
+		
+		// creating output folder if not already existing
+		const int noerror =system("mkdir -p output");
+		
 		// console output of the version and general information
 		printf("\n---->\tLAVESI\n");
 		printf("\n You have started  LAVESI-WIND, " 

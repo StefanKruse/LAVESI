@@ -119,7 +119,28 @@ void Parameterinput(void)
 	{
 		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputmode);
 	}
-
+	
+		strcpy(uebergabestring,"timedoutput");
+	if (((int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]))==1) 
+	{
+		parameter[0].timedoutput=true;
+	}
+	else 
+	{
+		parameter[0].timedoutput=false;
+	};
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].timedoutput)?"true":"false");
+	}
+	
+	strcpy(uebergabestring,"timelimit");
+	parameter[0].timelimit=(double) (Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].timelimit);
+	}
+	
 	strcpy(uebergabestring,"seedwinddispersalvis");
 	if (((int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]))==1) 
 	{

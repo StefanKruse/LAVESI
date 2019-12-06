@@ -116,6 +116,8 @@ using namespace std;
 		int 	parameteri;
 		int 	outputall;
 		bool 	computationtimevis;
+		int	timedoutput;
+		double	timelimit;
 
 		// time steps and repeats
 		int		simduration;	

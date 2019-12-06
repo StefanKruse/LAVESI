@@ -11,21 +11,22 @@
 // 0.1 -----> Display in console
 parameterinputvis=0;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
-qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
+qualiyearlyvis=1;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=0;				// (int 0,1) seed dispersal
 mortvis=0;							// (int 0,1) mortality of trees >200 cm
 computationtimevis=0;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=1;  						// (int) choice of data output files 
+outputmode=2;  						// (int) choice of data output files 
 										// 0=="full"
 										// 1=="normal"
 										// 2=="OMP only => currencies + computation time"
 outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
 										// 1==output of all tree data on the plot
-
+timedoutput=0;						// (int 0,1) have a timedshutoff point (used when running on servers with timelimit)
+timelimit=48;						// (double) time simulation should run for in hours (set to server limit minus a few yearsteps)
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation
 vegetation=0;						// (int 0,1) Representation of an organic layer
@@ -85,13 +86,13 @@ windsource=1;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 simduration=80;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
-ivortmax=10;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
-resetyear=0;						// (int) year to save all container for a later resume from this time point
+resetyear=-99999;						// (int) year to save all container for a later resume from this time point
 specpres=1;							// (int) which larch species should be present in the model
 										// 0==both Larix gmelinii and L. sibirica 
 										// 1==only Larix gmelinii
@@ -101,9 +102,9 @@ specpres=1;							// (int) which larch species should be present in the model
 mapxlength=1;						// (int) number of parallel executed plots for each climate
 mapylength=1;						// (int) number of plots along a south-north transect
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
-pollengridpoints=16;//pollengridxpoints, pollengridypoints dynamisch...
-pollengridxpoints=16;
-pollengridypoints=16;
+pollengridpoints=50;//pollengridxpoints, pollengridypoints dynamisch...
+pollengridxpoints=50;
+pollengridypoints=1;
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction

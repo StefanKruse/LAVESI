@@ -849,7 +849,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								// if chosen, determine the father by pollination out of available (matured) trees
 								if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 								{
-									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
+									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size(); //at the end -1 was deleteed as it is suspected to be causing the bug
 									//Vname.at(iran) is the chosen pollen grid cell number returned from the pollination function
 									//Vthdpth.at(iran) is the chosen trait (seed weight) value returned from the pollination function
 									pSeed->namep=Vname.at(iran);

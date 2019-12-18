@@ -224,7 +224,12 @@ void TreesIni(int maximal_word_length)
 					f = fopen("input/CH17I_Treevert2011_100_50000.csv","r");
 					printf("load: input/CH17I_Treevert2011_100_50000.csv");
 				}
-					
+				else if (parameter[0].starttrees==3)
+				{
+					printf("trying to load it");
+					f = fopen("input/continue.csv","r");
+					printf("load: input/continue.csv");
+				}	
 				if (f==NULL)
 				{
 					printf("Tree input file not available!\n");

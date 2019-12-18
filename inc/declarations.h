@@ -2,8 +2,8 @@
 
 
 	// plot dimensions rows==y, cols==x
- 	const int treerows=50;
- 	const int treecols=50;
+ 	const int treerows=200;
+ 	const int treecols=200;
 
 	// parameter input
  	const int stringlengthmax=255;

@@ -1,5 +1,5 @@
 HEADERS=$(wildcard inc/*.h)
-CFLAGS=-O3 -fno-omit-frame-pointer -std=c++0x -I inc
+CFLAGS=-O3 -flto -fno-fat-lto-objects -std=c++0x -I inc
 CC=g++
 OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 
@@ -9,7 +9,7 @@ OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 
 all: LAVESI_WIND
 
-clean: 
+clean:
 	rm -rf data*.csv nohup.out output/data*.csv t_*.txt pollDist* output/windgen*.txt t_*.txt build LAVESI_WIND
 
 cleanoutput:
@@ -24,11 +24,14 @@ parallel: all
 paralleldebug: CFLAGS += -fopenmp -O0 -g3 -ggdb3 -DDEBUG
 paralleldebug: all
 
+profile: CFLAGS += -fopenmp -g -DDEBUG
+profile: all
+
 # Files
 
 build/%.o: src/%.cpp $(HEADERS)
 	@mkdir -p build
 	$(CC) -c $< -o $@ $(CFLAGS)
-	
+
 LAVESI_WIND: $(OBJS)
 	$(CC) $^ -lm -z muldefs -o $@ $(CFLAGS)

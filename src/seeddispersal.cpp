@@ -1,3 +1,4 @@
+#include <random>
 #include "LAVESI.h"
 
 using namespace std;
@@ -425,9 +426,12 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
             if (mcorevariant == 2) {                                // OMP==2
                 omp_set_dynamic(0);                                 // disable dynamic teams
                 omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
+                std::random_device random_dev;
 
 #pragma omp parallel private(pSeed)
                 {
+                    std::mt19937 rng(random_dev());
+                    std::uniform_real_distribution<double> uniform(0, 1);
                     int thread_count = omp_get_num_threads();
                     int thread_num = omp_get_thread_num();
                     size_t chunk_size = seed_list.size() / thread_count;
@@ -446,10 +450,10 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
                         pSeed = (*it);
 
                         if (pSeed->incone == true) {
-                            double flug = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                            double flug = uniform(rng);
 
                             if (flug <= parameter[0].seedflightrate) {
-                                double ratiorn = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                                double ratiorn = uniform(rng);
 
                                 if (ratiorn > 0.0) {
                                     pSeed->incone = false;
@@ -464,7 +468,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
                                     Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, pSeed->releaseheight, pSeed->species);
 
                                     if (parameter[0].ivort > 1045 && parameter[0].outputmode != 9 && parameter[0].omp_num_threads == 1) {
-                                        double seedeinschreibzufall = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                                        double seedeinschreibzufall = uniform(rng);
 
                                         if (seedeinschreibzufall < 0.01) {
                                             dispersaldistance = sqrt(pow(iquer, 2) + pow(jquer, 2));

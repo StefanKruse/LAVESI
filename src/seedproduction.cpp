@@ -14,7 +14,7 @@ void Seedproduction(struct Parameter* parameter, vector<list<Tree*>>& world_tree
         list<Tree*>& tree_list = *posw;
 
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            pTree = (*pos);
+            auto pTree = (*pos);
 
             if (pTree->cone == 1) {
                 int newseedsproduced = (int)floor(parameter[0].seedprodfactor               // seed production in dependence of a factor

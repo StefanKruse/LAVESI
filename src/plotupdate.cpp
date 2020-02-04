@@ -13,7 +13,7 @@ using namespace std;
  *******************************************************************************************/
 void AddTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
     for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-        pTree = (*pos);
+        auto pTree = (*pos);
 
         int i = (int)floor(pTree->ycoo * parameter[0].sizemagnif);
         int j = (int)floor(pTree->xcoo * parameter[0].sizemagnif);
@@ -112,7 +112,7 @@ void AddTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
 void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
     if (parameter[0].omp_num_threads == 1) {  // only one core
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
-            pTree = (*pos);
+            auto pTree = (*pos);
 
             int i = (int)floor(pTree->ycoo * parameter[0].sizemagnif);
             int j = (int)floor(pTree->xcoo * parameter[0].sizemagnif);
@@ -377,7 +377,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
         omp_set_dynamic(0);                                 // disable dynamic teams
         omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 
-#pragma omp parallel private(pTree)
+#pragma omp parallel
         {
             int thread_count = omp_get_num_threads();
             int thread_num = omp_get_thread_num();
@@ -397,7 +397,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 #pragma omp barrier
 
             for (auto it = begin; it != end; ++it) {
-                pTree = (*it);
+                auto pTree = (*it);
 
                 int i = (int)floor(pTree->ycoo * parameter[0].sizemagnif);
                 int j = (int)floor(pTree->xcoo * parameter[0].sizemagnif);
@@ -678,7 +678,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>& weather_list) {
     if (parameter[0].omp_num_threads == 1) {  // only one core
         for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-            pEnvirgrid = plot_list[kartenpos];
+            auto pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid->Treedensityvalue = 0;
             pEnvirgrid->Treenumber = 0;
 
@@ -723,9 +723,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>
         omp_set_dynamic(1);
         omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 
-#pragma omp parallel for private(pEnvirgrid)
+#pragma omp parallel for
         for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-            pEnvirgrid = plot_list[kartenpos];
+            auto pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid->Treedensityvalue = 0;
             pEnvirgrid->Treenumber = 0;
 

@@ -2,6 +2,18 @@
 
 using namespace std;
 
+// TODO temporary
+extern vector<list<Tree*>> world_tree_list;
+extern vector<list<Seed*>> world_seed_list;
+extern vector<vector<Weather*>> world_weather_list;
+extern vector<vector<Envirgrid*>> world_plot_list;
+extern vector<vector<Evaluation*>> world_evaluation_list;
+extern vector<list<Tree*>> world_tree_list_copy;
+extern vector<list<Seed*>> world_seed_list_copy;
+extern vector<vector<Envirgrid*>> world_plot_list_copy;
+extern vector<vector<Evaluation*>> world_evaluation_list_copy;
+
+
 /****************************************************************************************/
 /**
  * \brief
@@ -13,7 +25,7 @@ using namespace std;
  *
  *******************************************************************************************/
 
-void Savealllists(void) {
+void Savealllists() {
     // copy Trees
     int aktort = 0;
     for (vector<list<Tree*>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
@@ -31,9 +43,9 @@ void Savealllists(void) {
 
         int countertree = 1;
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            pTree = (*pos);
+            auto pTree = (*pos);
 
-            pTree_copy = new Tree();
+            auto pTree_copy = new Tree();
 
             pTree_copy->yworldcoo = pTree->yworldcoo;
             pTree_copy->xworldcoo = pTree->xworldcoo;
@@ -95,9 +107,9 @@ void Savealllists(void) {
 
         int counterseed = 1;  // for displaying the first seed
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
 
-            pSeed_copy = new Seed();
+            auto pSeed_copy = new Seed();
 
             pSeed_copy->xworldcoo = pSeed->xworldcoo;
             pSeed_copy->yworldcoo = pSeed->yworldcoo;
@@ -144,9 +156,9 @@ void Savealllists(void) {
 
         int counterkarten = 1;  // for displaying the first plot
         for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
-            pEnvirgrid = (*pos);
+            auto pEnvirgrid = (*pos);
 
-            pEnvirgrid_copy = new Envirgrid();
+            auto pEnvirgrid_copy = new Envirgrid();
 
             pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
             pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
@@ -200,9 +212,9 @@ void Savealllists(void) {
 
         int counterauswert = 1;  // for displaying the first evaluation list element
         for (vector<Evaluation*>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
-            pEvaluation = (*pos);
+            auto pEvaluation = (*pos);
 
-            pEvaluation_copy = new Evaluation();
+            auto pEvaluation_copy = new Evaluation();
 
             pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
             pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
@@ -327,26 +339,26 @@ void Clearalllists(void) {
         aktort++;
 
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
-            pTree = (*pos);
+            auto pTree = (*pos);
             delete pTree;
         }
         tree_list.clear();
 
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
             delete pSeed;
         }
         seed_list.clear();
 
         for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-            pEnvirgrid = plot_list.at(kartenpos);
+            auto pEnvirgrid = plot_list.at(kartenpos);
             delete pEnvirgrid;
         }
         plot_list.clear();
         plot_list.shrink_to_fit();
 
         for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos) {
-            pEvaluation = (*pos);
+            auto pEvaluation = (*pos);
 
             pEvaluation->basalarealist.clear();
             pEvaluation->basalarealist.shrink_to_fit();
@@ -416,9 +428,9 @@ void Restorealllists(void) {
 
         int countertree = 1;  // for displaying the first tree
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            pTree = (*pos);
+            auto pTree = (*pos);
 
-            pTree_copy = new Tree();
+            auto pTree_copy = new Tree();
 
             pTree_copy->yworldcoo = pTree->yworldcoo;
             pTree_copy->xworldcoo = pTree->xworldcoo;
@@ -480,9 +492,9 @@ void Restorealllists(void) {
 
         int counterseed = 1;  // for displaying the first seed
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
 
-            pSeed_copy = new Seed();
+            auto pSeed_copy = new Seed();
 
             pSeed_copy->xworldcoo = pSeed->xworldcoo;
             pSeed_copy->yworldcoo = pSeed->yworldcoo;
@@ -530,9 +542,9 @@ void Restorealllists(void) {
 
         int counterkarten = 1;  // for displaying the first plot list element
         for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
-            pEnvirgrid = (*pos);
+            auto pEnvirgrid = (*pos);
 
-            pEnvirgrid_copy = new Envirgrid();
+            auto pEnvirgrid_copy = new Envirgrid();
 
             pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
             pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
@@ -587,9 +599,9 @@ void Restorealllists(void) {
 
         int counterauswert = 1;
         for (vector<Evaluation*>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
-            pEvaluation = (*pos);
+            auto pEvaluation = (*pos);
 
-            pEvaluation_copy = new Evaluation();
+            auto pEvaluation_copy = new Evaluation();
 
             pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
             pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
@@ -714,27 +726,27 @@ void Clearalllists_copy(void) {
         aktort++;
 
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
-            pTree = (*pos);
+            auto pTree = (*pos);
             delete pTree;
         }
         tree_list.clear();
 
         // deleting seed list elements
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
             delete pSeed;
         }
         seed_list.clear();
 
         // delete plot list elements
         for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-            pEnvirgrid = plot_list[kartenpos];
+            auto pEnvirgrid = plot_list[kartenpos];
             delete pEnvirgrid;
         }
         plot_list.clear();
 
         for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos) {
-            pEvaluation = (*pos);
+            auto pEvaluation = (*pos);
             pEvaluation->basalarealist.clear();
             pEvaluation->basalarearunmeanlist.clear();
             pEvaluation->nheight0b40liste.clear();

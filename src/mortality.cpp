@@ -23,7 +23,7 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 
     // biotic influence:
     for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-        pTree = (*pos);
+        auto pTree = (*pos);
 
         if (pTree->growing == true) {
             // if maximal age is exceeded an additional factor occurs
@@ -214,7 +214,7 @@ void Mortality(struct Parameter* parameter,
 
         // mortality of seeds
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
             double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
 
             if (pSeed->incone == false) {
@@ -279,8 +279,7 @@ void Mortality(struct Parameter* parameter,
             vector<int> Vname;
             vector<double> Vthdpth;
 
-#pragma omp parallel default(shared) private(pTree, pSeed, pTree_copy, direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, \
-                                             Vthdpth)
+#pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
             {
                 // declare a local seed list to be filled by each thread
                 list<Seed*> newseed_list;
@@ -318,7 +317,7 @@ void Mortality(struct Parameter* parameter,
                     double end_timer_eachtree_advance = omp_get_wtime();
                     timer_eachtree_advance += end_timer_eachtree_advance - start_timer_eachtree;
 
-                    pTree = (*posb);
+                    auto pTree = (*posb);
 
                     double end_timer_eachtree_vecini = omp_get_wtime();
                     timer_eachtree_vectini += end_timer_eachtree_vecini - end_timer_eachtree_advance;
@@ -350,7 +349,7 @@ void Mortality(struct Parameter* parameter,
 
                             // get the characteristics for each surviving seed and push these back new to seed_list
                             for (int sl = 0; sl < seedlebend; sl++) {
-                                pSeed = new Seed();
+                                auto pSeed = new Seed();
 
                                 pSeed->yworldcoo = aktortyworldcoo;
                                 pSeed->xworldcoo = aktortxworldcoo;
@@ -420,8 +419,7 @@ void Mortality(struct Parameter* parameter,
             vector<int> Vname;
             vector<double> Vthdpth;
 
-#pragma omp parallel default(shared) private(pTree, pSeed, pTree_copy, direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, \
-                                             Vthdpth)
+#pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
             {
                 if ((parameter[0].ivort == 1)) {
                     cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads()
@@ -476,7 +474,7 @@ void Mortality(struct Parameter* parameter,
                     double end_timer_eachtree_advance = omp_get_wtime();
                     timer_eachtree_advance += end_timer_eachtree_advance - start_timer_eachtree;
 
-                    pTree = (*it);
+                    auto pTree = (*it);
 
                     double end_timer_eachtree_vecini = omp_get_wtime();
                     timer_eachtree_vectini += end_timer_eachtree_vecini - end_timer_eachtree_advance;
@@ -501,7 +499,7 @@ void Mortality(struct Parameter* parameter,
 
                             // get the characteristics for each surviving seed and push these back new to seed_list
                             for (int sl = 0; sl < seedlebend; sl++) {
-                                pSeed = new Seed();
+                                auto pSeed = new Seed();
 
                                 pSeed->yworldcoo = aktortyworldcoo;
                                 pSeed->xworldcoo = aktortxworldcoo;
@@ -577,7 +575,7 @@ void Mortality(struct Parameter* parameter,
             int lasttreewithseeds_pos = 0;
             int treeiter = 0;
             for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb) {
-                pTree = (*posb);
+                auto pTree = (*posb);
 
                 treeiter = treeiter + 1;
 
@@ -587,8 +585,7 @@ void Mortality(struct Parameter* parameter,
             }
             advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 
-#pragma omp parallel default(shared) private(pTree, pSeed, pTree_copy, direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, \
-                                             Vthdpth)
+#pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
             {
                 direction = 0.0;
                 velocity = 0.0;
@@ -644,7 +641,7 @@ void Mortality(struct Parameter* parameter,
                     double end_timer_eachtree_advance = omp_get_wtime();
                     timer_eachtree_advance += end_timer_eachtree_advance - start_timer_eachtree;
 
-                    pTree = (*it);
+                    auto pTree = (*it);
 
                     double end_timer_eachtree_vecini = omp_get_wtime();
                     timer_eachtree_vectini += end_timer_eachtree_vecini - end_timer_eachtree_advance;
@@ -673,7 +670,7 @@ void Mortality(struct Parameter* parameter,
                             timer_tresedliv += end_timer_tresedliv - start_timer_tresedliv;
 
                             for (int sl = 0; sl < seedlebend; sl++) {
-                                pSeed = new Seed();
+                                auto pSeed = new Seed();
 
                                 pSeed->yworldcoo = aktortyworldcoo;
                                 pSeed->xworldcoo = aktortxworldcoo;

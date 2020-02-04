@@ -81,7 +81,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
             for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
                 double time_start_individual_seed = omp_get_wtime();
 
-                pSeed = (*pos);
+                auto pSeed = (*pos);
 
                 if (pSeed->incone == true) {
                     double flug = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
@@ -260,7 +260,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
                 for (unsigned int pari = 0; pari < seed_list.size();) {
                     list<Seed*>::iterator pos = seed_list.begin();
                     advance(pos, pari);
-                    pSeed = (*pos);
+                    auto pSeed = (*pos);
 
                     if (pSeed->incone == true) {
                         double flug = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
@@ -428,7 +428,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
                 omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
                 std::random_device random_dev;
 
-#pragma omp parallel private(pSeed)
+#pragma omp parallel
                 {
                     std::mt19937 rng(random_dev());
                     std::uniform_real_distribution<double> uniform(0, 1);
@@ -447,7 +447,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
 
 #pragma omp barrier
                     for (auto it = begin; it != end; ++it) {
-                        pSeed = (*it);
+                        auto pSeed = (*it);
 
                         if (pSeed->incone == true) {
                             double flug = uniform(rng);
@@ -614,7 +614,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<list<Seed*>>& w
 
                 // delete seeds which exceed the plot's borders
                 for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-                    pSeed = (*pos);
+                    auto pSeed = (*pos);
 
                     if (pSeed->ycoo == -99999.9) {
                         delete pSeed;

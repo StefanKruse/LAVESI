@@ -55,7 +55,7 @@ void Dataoutput(int t,
         vector<vector<Evaluation*>>::iterator posiweltausw = (world_evaluation_list.begin() + aktort);
         vector<Evaluation*>& evaluation_list = *posiweltausw;
         vector<Evaluation*>::iterator posausw = evaluation_list.begin();
-        pEvaluation = (*posausw);
+        auto pEvaluation = (*posausw);
 
         aktort++;
 
@@ -76,7 +76,7 @@ void Dataoutput(int t,
         double meantreeheight = 0.0, meantreeage = 0.0;
 
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            pTree = (*pos);
+            auto pTree = (*pos);
 
             if ((pTree->xcoo >= xminwindow) && (pTree->xcoo <= xmaxwindow) && (pTree->ycoo >= yminwindow)
                 && (pTree->ycoo <= ymaxwindow)) {  // loop over reduced plot
@@ -410,7 +410,7 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", jahr);
 
             for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                pTree = (*pos);
+                auto pTree = (*pos);
 
                 if ((pTree->xcoo >= xminwindow) && (pTree->xcoo <= xmaxwindow) && (pTree->ycoo >= yminwindow) && (pTree->ycoo <= ymaxwindow)) {
                     if (pTree->species == 1) {
@@ -521,7 +521,7 @@ void Dataoutput(int t,
             // for counting species:
             int specseed1 = 0, specseed2 = 0;
             for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) {
-                pSeed = (*pos);
+                auto pSeed = (*pos);
                 if ((pSeed->xcoo >= xminwindow) && (pSeed->xcoo <= xmaxwindow) && (pSeed->ycoo >= yminwindow) && (pSeed->ycoo <= ymaxwindow)) {
                     if (pSeed->incone == true) {
                         seedconezahl++;
@@ -692,7 +692,7 @@ void Dataoutput(int t,
                     fseek(filepointer, 0, SEEK_END);
 
                     for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                        pTree = (*pos);
+                        auto pTree = (*pos);
 
                         fprintf(filepointer, "%d;", pTree->name);
                         fprintf(filepointer, "%d;", pTree->namem);
@@ -748,7 +748,7 @@ void Dataoutput(int t,
                     fseek(filepointer, 0, SEEK_END);
 
                     for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                        pTree = (*pos);
+                        auto pTree = (*pos);
 
                         fprintf(filepointer, "%d;", parameter[0].repeati);
                         fprintf(filepointer, "%d;", pTree->yworldcoo);
@@ -848,7 +848,7 @@ void Dataoutput(int t,
 
             // data output for each tree
             for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                pTree = (*pos);
+                auto pTree = (*pos);
                 // parameters
                 // fprintf(filepointer, "%d;", parameter[0].repeati);
                 // fprintf(filepointer, "%d;", pTree->yworldcoo);
@@ -934,7 +934,7 @@ void Dataoutput(int t,
 
             // data evaluation and output
             for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-                pEnvirgrid = plot_list[kartenpos];
+                auto pEnvirgrid = plot_list[kartenpos];
                 if ((pEnvirgrid->Treenumber > 0)
                     && ((pEnvirgrid->xcoo >= xminwindow * parameter[0].sizemagnif) && (pEnvirgrid->xcoo <= xmaxwindow * parameter[0].sizemagnif)
                         && (pEnvirgrid->ycoo >= yminwindow * parameter[0].sizemagnif)

@@ -4,6 +4,27 @@ using namespace std;
 
 int yearposition;
 
+// lists and pointers
+vector<list<Tree*>> world_tree_list;
+vector<list<Seed*>> world_seed_list;
+vector<vector<Weather*>> world_weather_list;
+vector<vector<Envirgrid*>> world_plot_list;
+vector<vector<Evaluation*>> world_evaluation_list;
+
+// lists for resetyear copies
+vector<list<Tree*>> world_tree_list_copy;
+vector<list<Seed*>> world_seed_list_copy;
+vector<vector<Envirgrid*>> world_plot_list_copy;
+vector<vector<Evaluation*>> world_evaluation_list_copy;
+
+// wind data
+vector<int> globalyears;
+vector<vector<double>> windspd;
+vector<vector<double>> winddir;
+int cntr;
+vector<double> wdir, wspd;
+
+
 /****************************************************************************************/
 /**
  * \brief go through all functions for vegetation dynamics
@@ -217,7 +238,7 @@ void Spinupphase() {
                      ++posausw) {  // world evaluation list begin
                     vector<Evaluation*>& evaluation_list = *posausw;
                     vector<Evaluation*>::iterator posauswakt = evaluation_list.begin();
-                    pEvaluation = (*posauswakt);
+                    auto pEvaluation = (*posauswakt);
 
                     aktort++;
 
@@ -326,7 +347,7 @@ void Yearsteps() {
                 vector<Weather*>& weather_list = *posw;
 
                 for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-                    pWeather = weather_list[iweather];
+                    auto pWeather = weather_list[iweather];
                     delete pWeather;
                 }
                 weather_list.clear();
@@ -470,7 +491,7 @@ void initialiseMaps() {
         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-            pEnvirgrid = new Envirgrid();
+            auto pEnvirgrid = new Envirgrid();
 
             pEnvirgrid->yworldcoo = aktortyworldcoo;
             pEnvirgrid->xworldcoo = aktortxworldcoo;
@@ -499,7 +520,7 @@ void initialiseMaps() {
         }
 
         // create an evaluation element for each site
-        pEvaluation = new Evaluation();
+        auto pEvaluation = new Evaluation();
         pEvaluation->yworldcoo = aktortyworldcoo;
         pEvaluation->xworldcoo = aktortxworldcoo;
         pEvaluation->basalarealist.clear();
@@ -614,7 +635,7 @@ void finishSimulation() {
         }
 
         for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-            pWeather = weather_list.at(iweather);
+            auto pWeather = weather_list.at(iweather);
             delete pWeather;
         }
         weather_list.clear();

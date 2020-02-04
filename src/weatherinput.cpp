@@ -2,6 +2,13 @@
 
 using namespace std;
 
+// TODO temporary
+extern vector<vector<Weather*>> world_weather_list;
+extern vector<double> wdir, wspd;
+extern vector<vector<double>> windspd;
+extern vector<vector<double>> winddir;
+extern vector<int> globalyears;
+
 void getTemp1(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
     int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
     int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
@@ -52,7 +59,7 @@ void getTemp1(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
                                + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
                               / 12;
 
-            pWeather = new Weather();
+            auto pWeather = new Weather();
 
             pWeather->yworldcoo = aktortyworldcoo;
             pWeather->xworldcoo = aktortxworldcoo;
@@ -151,7 +158,7 @@ void getPrec1(char dateinameprec[50], vector<Weather*>& weather_list, int maxima
             precipitationsumbuf = (prec1monthmeanbuf + prec2monthmeanbuf + prec3monthmeanbuf + prec4monthmeanbuf + prec5monthmeanbuf + prec6monthmeanbuf
                                    + prec7monthmeanbuf + prec8monthmeanbuf + prec9monthmeanbuf + prec10monthmeanbuf + prec11monthmeanbuf + prec12monthmeanbuf);
 
-            pWeather = weather_list[counter - 2];
+            auto pWeather = weather_list[counter - 2];
 
             pWeather->prec1monthmean = prec1monthmeanbuf + parameter[0].precdiffort / 12;
             pWeather->prec2monthmean = prec2monthmeanbuf + parameter[0].precdiffort / 12;
@@ -213,7 +220,7 @@ void getTemp2(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
             jahrbuf = strtod(strtok(puffer, " "), NULL);
             tempyearmeanbuf = strtod(strtok(NULL, " "), NULL);
 
-            pWeather = new Weather();
+            auto pWeather = new Weather();
 
             pWeather->yworldcoo = aktortyworldcoo;
             pWeather->xworldcoo = aktortxworldcoo;
@@ -333,7 +340,7 @@ void getPrec2(char dateinameprec[50], vector<Weather*>& weather_list, int maxima
             precipitationsumbuf = (prec1monthmeanbuf + prec2monthmeanbuf + prec3monthmeanbuf + prec4monthmeanbuf + prec5monthmeanbuf + prec6monthmeanbuf
                                    + prec7monthmeanbuf + prec8monthmeanbuf + prec9monthmeanbuf + prec10monthmeanbuf + prec11monthmeanbuf + prec12monthmeanbuf);
 
-            pWeather = weather_list[counter - 2];
+            auto pWeather = weather_list[counter - 2];
 
             pWeather->prec1monthmean = prec1monthmeanbuf + parameter[0].precdiffort / 12;
             pWeather->prec2monthmean = prec2monthmeanbuf + parameter[0].precdiffort / 12;
@@ -412,7 +419,7 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
                                + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
                               / 12;
 
-            pWeather = new Weather();
+            auto pWeather = new Weather();
 
             pWeather->yworldcoo = aktortyworldcoo;
             pWeather->xworldcoo = aktortxworldcoo;

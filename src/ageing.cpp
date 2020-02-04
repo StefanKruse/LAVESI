@@ -19,7 +19,7 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
         list<Seed*>& seed_list = *posw;
 
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
             pSeed->age++;
 
             // seeds older than gmelseedmaxage years (L.gmelinii) and 10 years (L.sibirica) die
@@ -51,7 +51,7 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
         list<Tree*>& tree_list = *posw;
 
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            pTree = (*pos);
+            auto pTree = (*pos);
             pTree->age++;
 
             if (pTree->cone == 0) {

@@ -2,6 +2,9 @@
 
 using namespace std;
 
+// TODO temporary
+extern vector<double> wdir, wspd;
+
 /***********************************************************************************
  * AUTHORS: Gerdes, Alexander; Kath, Nadja; Kruse, Stefan
  *
@@ -114,7 +117,7 @@ void Pollinationprobability(double x,
     I0kappa = 0.16666 * (exp(kappa) + 4.0 + exp(-1.0 * kappa));
 
     for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end();) {
-        pTree_copy = *posb;
+        auto pTree_copy = *posb;
 
         // only if the pollinating tree has cones:
         if (pTree_copy->cone != 0) {

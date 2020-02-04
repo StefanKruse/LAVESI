@@ -26,7 +26,7 @@ void Treeestablishment(struct Parameter* parameter,
 
         // go through seed list
         for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            pSeed = (*pos);
+            auto pSeed = (*pos);
 
             if (pSeed->incone == false) {
                 // cout << pSeed->ycoo << " / ";
@@ -79,7 +79,7 @@ void Treeestablishment(struct Parameter* parameter,
                         < (parameter[0].germinationrate
                            + (parameter[0].germinatioweatherinfluence * maxbasalwachstum / exp(parameter[0].gdbasalconstgmel)) * keimungauflageinfluence)) {
                         if (maxbasalwachstum > 0.0) {
-                            pTree = new Tree();
+                            auto pTree = new Tree();
 
                             pTree->yworldcoo = pSeed->yworldcoo;
                             pTree->xworldcoo = pSeed->xworldcoo;
@@ -128,7 +128,7 @@ void Treeestablishment(struct Parameter* parameter,
                         < (parameter[0].germinationrate
                            + (parameter[0].germinatioweatherinfluence * maxbasalwachstum / exp(parameter[0].gdbasalconstsib)) * keimungauflageinfluence)) {
                         if (maxbasalwachstum > 0.0) {
-                            pTree = new Tree();
+                            auto pTree = new Tree();
 
                             pTree->yworldcoo = pSeed->yworldcoo;
                             pTree->xworldcoo = pSeed->xworldcoo;

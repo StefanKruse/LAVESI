@@ -14,10 +14,10 @@ using namespace std;
  *
  *******************************************************************************************/
 
-double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list) {
+double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tree* pTree) {
     double maxbw_help = 0;
-    if (parameter[0].lineartransect == true) {
-        if (parameter[0].thawing_depth == true) {
+    if (parameter[0].lineartransect) {
+        if (parameter[0].thawing_depth) {
             if (pTree->species == 1) {
                 maxbw_help =
                     exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
@@ -47,7 +47,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list) {
             }
         }
     } else {
-        if (parameter[0].thawing_depth == true) {
+        if (parameter[0].thawing_depth) {
             if (pTree->species == 1) {
                 maxbw_help = exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
                                  + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)
@@ -69,7 +69,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list) {
             }
         }
     }
-    return (maxbw_help);
+    return maxbw_help;
 }
 
 /****************************************************************************************/
@@ -83,7 +83,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list) {
  *position in north-south transect
  *
  *******************************************************************************************/
-double getMaxbreastwachstum(int yearposition, vector<Weather*>& weather_list) {
+double getMaxbreastwachstum(int yearposition, vector<Weather*>& weather_list, Tree* pTree) {
     double maxbrw_help = 0;
 
     if (parameter[0].lineartransect == true) {
@@ -167,11 +167,11 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
         aktort++;
 
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            pTree = (*pos);
+            auto pTree = (*pos);
 
             double maxbasalwachstum = 0.0;
 
-            maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list);
+            maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, pTree);
 
             double basalwachstum = maxbasalwachstum * ((double)pTree->buffer) * (1.0 - pTree->densitywert);
 
@@ -194,7 +194,7 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
             double breastwachstum = 0;
 
             if (pTree->height >= 130.0) {
-                maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list);
+                maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, pTree);
 
                 breastwachstum = maxbreastwachstum * ((double)pTree->buffer) * (1.0 - pTree->densitywert);
 

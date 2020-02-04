@@ -2,6 +2,10 @@
 
 using namespace std;
 
+// TODO temporary
+extern vector<list<Tree*>> world_tree_list;
+extern vector<list<Seed*>> world_seed_list;
+
 /****************************************************************************************/
 /**
  * \brief Seedinput in the beginning
@@ -98,7 +102,7 @@ void Seedin() {
                 }
 
                 if (seedeintragen == true) {
-                    pSeed = new Seed();
+                    auto pSeed = new Seed();
 
                     pSeed->yworldcoo = aktortyworldcoo;
                     pSeed->xworldcoo = aktortxworldcoo;
@@ -197,7 +201,7 @@ void TreesIni(int maximal_word_length) {
                     sscanf(strtok(NULL, ";"), "%d", &conebuf);
                     sscanf(strtok(NULL, ";"), "%d", &agebuf);
 
-                    pTree = new Tree();
+                    auto pTree = new Tree();
 
                     pTree->yworldcoo = aktortyworldcoo;
                     pTree->xworldcoo = aktortxworldcoo;
@@ -410,7 +414,7 @@ void Hinterlandseedintro(struct Parameter* parameter, int yearposition, vector<l
                         introduced++;
 #endif
 
-                        pSeed = new Seed();
+                        auto pSeed = new Seed();
 
                         pSeed->yworldcoo = aktortyworldcoo;
                         pSeed->xworldcoo = aktortxworldcoo;

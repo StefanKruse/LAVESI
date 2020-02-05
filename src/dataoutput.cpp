@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
@@ -7,7 +8,7 @@ void Dataoutput(int t,
                 struct Parameter* parameter,
                 int yearposition,
                 vector<list<Tree*>>& world_tree_list,
-                vector<list<Seed*>>& world_seed_list,
+                vector<VectorList<Seed>>& world_seed_list,
                 vector<vector<Weather*>>& world_weather_list,
                 vector<vector<Envirgrid*>>& world_plot_list,
                 vector<vector<Evaluation*>>& world_evaluation_list) {
@@ -35,7 +36,6 @@ void Dataoutput(int t,
     bool outputcurrencies = false;
     bool outputposition = false;
     bool outputindividuals = false;
-    bool ausgabedendro = false;
     bool ausgabedensity = false;
 
     // preprocessing and output of data for each plot
@@ -43,8 +43,8 @@ void Dataoutput(int t,
     for (vector<list<Tree*>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {  // world tree list loop
         list<Tree*>& tree_list = *posw;
 
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
-        list<Seed*>& seed_list = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
+        VectorList<Seed>& seed_list = *world_positon_s;
 
         vector<vector<Envirgrid*>>::iterator poskarten = (world_plot_list.begin() + aktort);
         vector<Envirgrid*>& plot_list = *poskarten;
@@ -520,18 +520,18 @@ void Dataoutput(int t,
             int seedconezahl = 0, seedbodenzahl = 0;
             // for counting species:
             int specseed1 = 0, specseed2 = 0;
-            for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) {
-                auto pSeed = (*pos);
-                if ((pSeed->xcoo >= xminwindow) && (pSeed->xcoo <= xmaxwindow) && (pSeed->ycoo >= yminwindow) && (pSeed->ycoo <= ymaxwindow)) {
-                    if (pSeed->incone == true) {
+            for (unsigned int i = 0; i < seed_list.size(); ++i) {
+                const auto& seed = seed_list[i];
+                if ((seed.xcoo >= xminwindow) && (seed.xcoo <= xmaxwindow) && (seed.ycoo >= yminwindow) && (seed.ycoo <= ymaxwindow)) {
+                    if (seed.incone) {
                         seedconezahl++;
                     } else {
                         seedbodenzahl++;
                     }
                     // counting species:
-                    if (pSeed->species == 1) {
+                    if (seed.species == 1) {
                         specseed1 = specseed1 + 1;
-                    } else if (pSeed->species == 2) {
+                    } else if (seed.species == 2) {
                         specseed2 = specseed2 + 1;
                     }
                 }

@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
@@ -6,14 +7,14 @@ int yearposition;
 
 // lists and pointers
 vector<list<Tree*>> world_tree_list;
-vector<list<Seed*>> world_seed_list;
+vector<VectorList<Seed>> world_seed_list;
 vector<vector<Weather*>> world_weather_list;
 vector<vector<Envirgrid*>> world_plot_list;
 vector<vector<Evaluation*>> world_evaluation_list;
 
 // lists for resetyear copies
 vector<list<Tree*>> world_tree_list_copy;
-vector<list<Seed*>> world_seed_list_copy;
+vector<VectorList<Seed>> world_seed_list_copy;
 vector<vector<Envirgrid*>> world_plot_list_copy;
 vector<vector<Evaluation*>> world_evaluation_list_copy;
 
@@ -23,7 +24,6 @@ vector<vector<double>> windspd;
 vector<vector<double>> winddir;
 int cntr;
 vector<double> wdir, wspd;
-
 
 /****************************************************************************************/
 /**
@@ -433,8 +433,7 @@ void createLists() {
             list<Tree*> tree_list;                 // Creating new tree_list
             world_tree_list.push_back(tree_list);  // include new tree_list in corresponding world list
 
-            list<Seed*> seed_list;                 // Creating new seed_list
-            world_seed_list.push_back(seed_list);  // include new seed_list in corresponding world list
+            world_seed_list.emplace_back();  // include new seed_list in corresponding world list
 
             vector<Weather*> weather_list;               // Creating new weather_list
             world_weather_list.push_back(weather_list);  // include new weather_list in corresponding world list
@@ -450,8 +449,7 @@ void createLists() {
                 list<Tree*> tree_list;                      // Creating new tree_list
                 world_tree_list_copy.push_back(tree_list);  // include new tree_list in corresponding world list
 
-                list<Seed*> seed_list;                      // Creating new seed_list
-                world_seed_list_copy.push_back(seed_list);  // include new seed_list in corresponding world list
+                world_seed_list_copy.emplace_back();  // include new seed_list in corresponding world list
 
                 vector<Envirgrid*> plot_list;               // Creating new plot_list
                 world_plot_list_copy.push_back(plot_list);  // include new plot_list in corresponding world list
@@ -602,21 +600,18 @@ void runSimulation() {
 /**
  * \brief finish the simulation
  *
- * do something I don't understand \n
  * clear all lists
  *
  *******************************************************************************************/
 void finishSimulation() {
+    /*
+      TODO remove
     int aktort = 0;
 
     for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather*>& weather_list = *posw;
 
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
-        list<Tree*>& tree_list = *world_positon_b;
-
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
-        list<Seed*>& seed_list = *world_positon_s;
+        auto& seed_list = world_seed_list[aktort];
 
         aktort++;
         // calculation of the current location in coordinates
@@ -680,6 +675,7 @@ void finishSimulation() {
         world_plot_list_copy.clear();
         world_evaluation_list_copy.clear();
     }
+    */
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

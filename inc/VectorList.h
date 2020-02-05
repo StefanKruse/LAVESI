@@ -19,6 +19,11 @@ class VectorList {
 
     std::size_t size() const { return members.size(); }
     std::size_t removed_size() const { return removed.size(); }
+    void clear() {
+        auto guard = lock.guard();  // as long as this is in scope, no other thread can lock
+        members.clear();
+        removed.clear();
+    }
 
     // access member - must not be called while another thread might call `add`
     T& operator[](std::size_t i) { return members[i]; }

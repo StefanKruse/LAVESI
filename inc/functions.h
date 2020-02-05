@@ -2,6 +2,7 @@
 
 #include <list>
 #include <vector>
+#include "VectorList.h"
 
 using namespace std;
 
@@ -12,33 +13,36 @@ void Dataoutput(int t,
                 struct Parameter* parameter,
                 int yearposition,
                 vector<list<Tree*>>& world_tree_list,
-                vector<list<Seed*>>& world_seed_list,
+                vector<VectorList<Seed>>& world_seed_list,
                 vector<vector<Weather*>>& world_weather_list,
                 vector<vector<Envirgrid*>>& world_plot_list,
                 vector<vector<Evaluation*>>& world_evaluation_list);
 void Treedistribution(struct Parameter* parameter, int stringlengthmax);
-void Hinterlandseedintro(struct Parameter* parameter, int yearposition, vector<list<Seed*>>& world_seed_list, vector<vector<Weather*>>& world_weather_list);
+void Hinterlandseedintro(struct Parameter* parameter,
+                         int yearposition,
+                         vector<VectorList<Seed>>& world_seed_list,
+                         vector<vector<Weather*>>& world_weather_list);
 void Environmentupdate(struct Parameter* parameter,
                        int yearposition,
                        vector<vector<Envirgrid*>>& world_plot_list,
                        vector<list<Tree*>>& world_tree_list,
                        vector<vector<Weather*>>& world_weather_list);
 void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& world_tree_list, vector<vector<Weather*>>& world_weather_list);
-void Seeddispersal(int Jahr, struct Parameter* parameter, vector<list<Seed*>>& world_seed_list);
+void Seeddispersal(int Jahr, struct Parameter* parameter, vector<VectorList<Seed>>& world_seed_list);
 void Seedproduction(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list);
 void Treeestablishment(struct Parameter* parameter,
                        int yearposition,
                        vector<list<Tree*>>& world_tree_list,
-                       vector<list<Seed*>>& world_seed_list,
+                       vector<VectorList<Seed>>& world_seed_list,
                        vector<vector<Weather*>>& world_weather_list,
                        vector<vector<Envirgrid*>>& world_plot_list);
 void Mortality(struct Parameter* parameter,
                int Jahr,
                int yearposition,
                vector<list<Tree*>>& world_tree_list,
-               vector<list<Seed*>>& world_seed_list,
+               vector<VectorList<Seed>>& world_seed_list,
                vector<vector<Weather*>>& world_weather_list);
-void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, vector<list<Seed*>>& world_seed_list);
+void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list);
 void Pollinationprobability(double x,
                             double y,
                             struct Parameter* parameter,

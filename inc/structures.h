@@ -55,6 +55,7 @@ struct Seed {
     double pollenfall;
     double descent;
     double thawing_depthinfluence;
+    bool dead = false;
 };
 
 struct Envirgrid {

@@ -1,12 +1,13 @@
 #include <cassert>
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
 void Treeestablishment(struct Parameter* parameter,
                        int yearposition,
                        vector<list<Tree*>>& world_tree_list,
-                       vector<list<Seed*>>& world_seed_list,
+                       vector<VectorList<Seed>>& world_seed_list,
                        vector<vector<Weather*>>& world_weather_list,
                        vector<vector<Envirgrid*>>& world_plot_list) {
     int aktort = 0;
@@ -16,8 +17,8 @@ void Treeestablishment(struct Parameter* parameter,
         vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         list<Tree*>& tree_list = *world_positon_b;
 
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
-        list<Seed*>& seed_list = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
+        VectorList<Seed>& seed_list = *world_positon_s;
 
         vector<vector<Envirgrid*>>::iterator world_positon_k = (world_plot_list.begin() + aktort);
         vector<Envirgrid*>& plot_list = *world_positon_k;
@@ -25,15 +26,16 @@ void Treeestablishment(struct Parameter* parameter,
         aktort++;
 
         // go through seed list
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            auto pSeed = (*pos);
+        for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
+            auto& seed = seed_list[i_seed];
+            if (seed.dead) {
+                continue;
+            }
 
-            if (pSeed->incone == false) {
-                // cout << pSeed->ycoo << " / ";
-
+            if (!seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
-                int i = (int)floor(pSeed->ycoo * parameter[0].sizemagnif);
-                int j = (int)floor(pSeed->xcoo * parameter[0].sizemagnif);
+                int i = (int)floor(seed.ycoo * parameter[0].sizemagnif);
+                int j = (int)floor(seed.xcoo * parameter[0].sizemagnif);
 
                 assert(i * treecols * parameter[0].sizemagnif + j >= 0);
 
@@ -49,22 +51,22 @@ void Treeestablishment(struct Parameter* parameter,
                 double maxbasalwachstum = 0;
 
                 if (parameter[0].lineartransect == true) {
-                    if (pSeed->species == 1) {
+                    if (seed.species == 1) {
                         maxbasalwachstum =
                             exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * 0 + parameter[0].gdbasalfacqgmel * 0 * 0)
-                            * (((weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming) / ((double)treerows)) * pSeed->ycoo
+                            * (((weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming) / ((double)treerows)) * seed.ycoo
                                + weather_list[yearposition]->weatherfactorming);
-                    } else if (pSeed->species == 2) {
+                    } else if (seed.species == 2) {
                         maxbasalwachstum =
                             exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * 0 + parameter[0].gdbasalfacqsib * 0 * 0)
-                            * (((weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins) / ((double)treerows)) * pSeed->ycoo
+                            * (((weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins) / ((double)treerows)) * seed.ycoo
                                + weather_list[yearposition]->weatherfactormins);
                     }
                 } else {
-                    if (pSeed->species == 1) {
+                    if (seed.species == 1) {
                         maxbasalwachstum = exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * 0 + parameter[0].gdbasalfacqgmel * 0 * 0)
                                            * weather_list[yearposition]->weatherfactorg;
-                    } else if (pSeed->species == 2) {
+                    } else if (seed.species == 2) {
                         maxbasalwachstum = exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * 0 + parameter[0].gdbasalfacqsib * 0 * 0)
                                            * weather_list[yearposition]->weatherfactors;
                     }
@@ -74,23 +76,23 @@ void Treeestablishment(struct Parameter* parameter,
 
                 // add new tree if seed germinates
                 // minimal germination rate is roughly estimated
-                if (pSeed->species == 1) {
+                if (seed.species == 1) {
                     if (zufallsz
                         < (parameter[0].germinationrate
                            + (parameter[0].germinatioweatherinfluence * maxbasalwachstum / exp(parameter[0].gdbasalconstgmel)) * keimungauflageinfluence)) {
                         if (maxbasalwachstum > 0.0) {
                             auto pTree = new Tree();
 
-                            pTree->yworldcoo = pSeed->yworldcoo;
-                            pTree->xworldcoo = pSeed->xworldcoo;
-                            pTree->xcoo = pSeed->xcoo;
-                            pTree->ycoo = pSeed->ycoo;
+                            pTree->yworldcoo = seed.yworldcoo;
+                            pTree->xworldcoo = seed.xworldcoo;
+                            pTree->xcoo = seed.xcoo;
+                            pTree->ycoo = seed.ycoo;
                             pTree->name = ++parameter[0].nameakt;
-                            pTree->namem = pSeed->namem;
-                            pTree->namep = pSeed->namep;
+                            pTree->namem = seed.namem;
+                            pTree->namep = seed.namep;
                             pTree->yr_of_establishment = yearposition;
-                            pTree->line = pSeed->line;
-                            pTree->generation = pSeed->generation;
+                            pTree->line = seed.line;
+                            pTree->generation = seed.generation;
                             pTree->dbasal = maxbasalwachstum;
                             pTree->dbasalrel = 1.0;
                             pTree->dbreast = 0.0;
@@ -108,38 +110,34 @@ void Treeestablishment(struct Parameter* parameter,
                             pTree->seedproduced = 0;
                             pTree->buffer = 1;
                             pTree->densitywert = 0;
-                            pTree->dispersaldistance = pSeed->dispersaldistance;
+                            pTree->dispersaldistance = seed.dispersaldistance;
                             pTree->growing = true;
-                            pTree->species = pSeed->species;
+                            pTree->species = seed.species;
                             pTree->thawing_depthinfluence = 100;
 
                             tree_list.push_back(pTree);
 
-                            delete pSeed;
-                            pos = seed_list.erase(pos);
-                        } else {
-                            ++pos;
+                            seed.dead = true;
+                            seed_list.remove(i_seed);
                         }
-                    } else {
-                        ++pos;
                     }
-                } else if (pSeed->species == 2) {
+                } else if (seed.species == 2) {
                     if (zufallsz
                         < (parameter[0].germinationrate
                            + (parameter[0].germinatioweatherinfluence * maxbasalwachstum / exp(parameter[0].gdbasalconstsib)) * keimungauflageinfluence)) {
                         if (maxbasalwachstum > 0.0) {
                             auto pTree = new Tree();
 
-                            pTree->yworldcoo = pSeed->yworldcoo;
-                            pTree->xworldcoo = pSeed->xworldcoo;
-                            pTree->xcoo = pSeed->xcoo;
-                            pTree->ycoo = pSeed->ycoo;
+                            pTree->yworldcoo = seed.yworldcoo;
+                            pTree->xworldcoo = seed.xworldcoo;
+                            pTree->xcoo = seed.xcoo;
+                            pTree->ycoo = seed.ycoo;
                             pTree->name = ++parameter[0].nameakt;
-                            pTree->namem = pSeed->namem;
-                            pTree->namep = pSeed->namep;
+                            pTree->namem = seed.namem;
+                            pTree->namep = seed.namep;
                             pTree->yr_of_establishment = yearposition;
-                            pTree->line = pSeed->line;
-                            pTree->generation = pSeed->generation;
+                            pTree->line = seed.line;
+                            pTree->generation = seed.generation;
                             pTree->dbasal = maxbasalwachstum;
                             pTree->dbasalrel = 1.0;
                             pTree->dbreast = 0.0;
@@ -159,27 +157,19 @@ void Treeestablishment(struct Parameter* parameter,
                             pTree->buffer = 1;
                             pTree->densitywert = 0;
                             pTree->thawing_depthinfluence = 100;
-                            pTree->dispersaldistance = pSeed->dispersaldistance;
+                            pTree->dispersaldistance = seed.dispersaldistance;
                             pTree->growing = true;
-                            pTree->species = pSeed->species;
+                            pTree->species = seed.species;
                             tree_list.push_back(pTree);
 
-                            delete pSeed;
-                            pos = seed_list.erase(pos);
-                        } else {
-                            ++pos;
+                            seed.dead = true;
+                            seed_list.remove(i_seed);
                         }
-                    } else {
-                        ++pos;
                     }
                 } else {
-                    delete pSeed;
-                    pos = seed_list.erase(pos);
+                    seed.dead = true;
+                    seed_list.remove(i_seed);
                 }
-            }
-
-            else if (pSeed->incone == true) {
-                ++pos;
             }
         }
     }

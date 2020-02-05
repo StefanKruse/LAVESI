@@ -1,18 +1,18 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
 // TODO temporary
 extern vector<list<Tree*>> world_tree_list;
-extern vector<list<Seed*>> world_seed_list;
+extern vector<VectorList<Seed>> world_seed_list;
 extern vector<vector<Weather*>> world_weather_list;
 extern vector<vector<Envirgrid*>> world_plot_list;
 extern vector<vector<Evaluation*>> world_evaluation_list;
 extern vector<list<Tree*>> world_tree_list_copy;
-extern vector<list<Seed*>> world_seed_list_copy;
+extern vector<VectorList<Seed>> world_seed_list_copy;
 extern vector<vector<Envirgrid*>> world_plot_list_copy;
 extern vector<vector<Evaluation*>> world_evaluation_list_copy;
-
 
 /****************************************************************************************/
 /**
@@ -92,12 +92,12 @@ void Savealllists() {
 
     // copy Seeds
     aktort = 0;
-    for (vector<list<Seed*>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
-        list<Seed*>& seed_list = *posw;
+    for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
+        VectorList<Seed>& seed_list = *posw;
 
         // opening the original seed list and the referring reset list ..._copy
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
-        list<Seed*>& seed_list_copy = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
+        VectorList<Seed>& seed_list_copy = *world_positon_s;
 
         aktort++;
 
@@ -105,34 +105,7 @@ void Savealllists() {
         cout << "seed_list.size()=" << seed_list.size() << endl;
         cout << "seed_list_copy.size() before copying=" << seed_list_copy.size() << endl;
 
-        int counterseed = 1;  // for displaying the first seed
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            auto pSeed = (*pos);
-
-            auto pSeed_copy = new Seed();
-
-            pSeed_copy->xworldcoo = pSeed->xworldcoo;
-            pSeed_copy->yworldcoo = pSeed->yworldcoo;
-            pSeed_copy->xcoo = pSeed->xcoo;
-            pSeed_copy->ycoo = pSeed->ycoo;
-            pSeed_copy->namem = pSeed->namem;
-            pSeed_copy->namep = pSeed->namep;
-            pSeed_copy->line = pSeed->line;
-            pSeed_copy->generation = pSeed->generation;
-            pSeed_copy->species = pSeed->species;
-            pSeed_copy->incone = pSeed->incone;
-            pSeed_copy->weight = pSeed->weight;
-            pSeed_copy->age = pSeed->age;
-            pSeed_copy->longdispersed = pSeed->longdispersed;
-            seed_list_copy.push_back(pSeed_copy);
-
-            if (counterseed == 1) {
-                cout << pSeed->age << " <-pSeed ... seedage ... pSeed_copy-> " << pSeed_copy->age << endl;
-            }
-
-            ++pos;
-            ++counterseed;
-        }
+        seed_list_copy = seed_list;
 
         cout << "seed_list_copy.size() after copying=" << seed_list_copy.size() << endl;
         cout << endl;
@@ -327,8 +300,8 @@ void Clearalllists(void) {
         vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         list<Tree*>& tree_list = *world_positon_b;
 
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
-        list<Seed*>& seed_list = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
+        VectorList<Seed>& seed_list = *world_positon_s;
 
         vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list.begin() + aktort);
         vector<Envirgrid*>& plot_list = *posiweltk;
@@ -344,10 +317,6 @@ void Clearalllists(void) {
         }
         tree_list.clear();
 
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos) {
-            auto pSeed = (*pos);
-            delete pSeed;
-        }
         seed_list.clear();
 
         for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
@@ -477,12 +446,12 @@ void Restorealllists(void) {
 
     // copying Seeds
     aktort = 0;
-    for (vector<list<Seed*>>::iterator posw = world_seed_list_copy.begin(); posw != world_seed_list_copy.end(); ++posw) {
-        list<Seed*>& seed_list = *posw;
+    for (vector<VectorList<Seed>>::iterator posw = world_seed_list_copy.begin(); posw != world_seed_list_copy.end(); ++posw) {
+        VectorList<Seed>& seed_list = *posw;
 
         // opening the original seed list and the referring reset list ..._copy
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
-        list<Seed*>& seed_list_copy = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
+        VectorList<Seed>& seed_list_copy = *world_positon_s;
 
         aktort++;
 
@@ -490,34 +459,7 @@ void Restorealllists(void) {
         cout << "seed_list.size() before copying =" << seed_list.size() << endl;
         cout << "seed_list_copy.size() before copying =" << seed_list_copy.size() << endl;
 
-        int counterseed = 1;  // for displaying the first seed
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            auto pSeed = (*pos);
-
-            auto pSeed_copy = new Seed();
-
-            pSeed_copy->xworldcoo = pSeed->xworldcoo;
-            pSeed_copy->yworldcoo = pSeed->yworldcoo;
-            pSeed_copy->xcoo = pSeed->xcoo;
-            pSeed_copy->ycoo = pSeed->ycoo;
-            pSeed_copy->namem = pSeed->namem;
-            pSeed_copy->namep = pSeed->namep;
-            pSeed_copy->line = pSeed->line;
-            pSeed_copy->generation = pSeed->generation;
-            pSeed_copy->species = pSeed->species;
-            pSeed_copy->incone = pSeed->incone;
-            pSeed_copy->weight = pSeed->weight;
-            pSeed_copy->age = pSeed->age;
-            pSeed_copy->longdispersed = pSeed->longdispersed;
-            seed_list_copy.push_back(pSeed_copy);
-
-            if (counterseed == 1) {
-                cout << pSeed->age << " <-pSeed ... seedage ... pSeed_copy-> " << pSeed_copy->age << endl;
-            }
-
-            ++pos;
-            ++counterseed;
-        }
+        seed_list_copy = seed_list;
 
         cout << "seed_list.size() after copying=" << seed_list.size() << endl;
         cout << "seed_list_copy.size() after copying=" << seed_list_copy.size() << endl;
@@ -714,8 +656,8 @@ void Clearalllists_copy(void) {
     for (vector<list<Tree*>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
         list<Tree*>& tree_list = *posw;
 
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
-        list<Seed*>& seed_list = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
+        VectorList<Seed>& seed_list = *world_positon_s;
 
         vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
         vector<Envirgrid*>& plot_list = *posiweltk;
@@ -731,11 +673,6 @@ void Clearalllists_copy(void) {
         }
         tree_list.clear();
 
-        // deleting seed list elements
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos) {
-            auto pSeed = (*pos);
-            delete pSeed;
-        }
         seed_list.clear();
 
         // delete plot list elements

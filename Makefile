@@ -1,5 +1,5 @@
 HEADERS=$(wildcard inc/*.h)
-CFLAGS=-O3 -flto -fno-fat-lto-objects -std=c++0x -I inc
+CFLAGS=-O3 -flto -fno-fat-lto-objects -std=c++0x -I inc -Wall
 CC=g++
 OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 

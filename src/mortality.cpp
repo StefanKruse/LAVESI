@@ -1,4 +1,5 @@
 ﻿#include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
@@ -195,7 +196,7 @@ void Mortality(struct Parameter* parameter,
                int Jahr,
                int yearposition,
                vector<list<Tree*>>& world_tree_list,
-               vector<list<Seed*>>& world_seed_list,
+               vector<VectorList<Seed>>& world_seed_list,
                vector<vector<Weather*>>& world_weather_list) {
     int aktort = 0;
 
@@ -205,36 +206,24 @@ void Mortality(struct Parameter* parameter,
         vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         list<Tree*>& tree_list = *world_positon_b;
 
-        vector<list<Seed*>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
-        list<Seed*>& seed_list = *world_positon_s;
+        vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
+        VectorList<Seed>& seed_list = *world_positon_s;
 
         aktort++;
 
         double start_time_mortpoll = omp_get_wtime();
 
         // mortality of seeds
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            auto pSeed = (*pos);
+        for (unsigned int i = 0; i < seed_list.size(); ++i) {
+            auto& seed = seed_list[i];
+            if (seed.dead) {
+                continue;
+            }
             double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
 
-            if (pSeed->incone == false) {
-                if (zufallsz < parameter[0].seedfloormort) {
-                    delete pSeed;
-                    pos = seed_list.erase(pos);
-                } else {
-                    ++pos;
-                }
-            } else if (pSeed->incone == true) {
-                if (zufallsz < parameter[0].seedconemort) {
-                    delete pSeed;
-                    pos = seed_list.erase(pos);
-                } else {
-                    ++pos;
-                }
-            } else {
-                // check if the variable incone was set
-                delete pSeed;
-                pos = seed_list.erase(pos);
+            if (zufallsz < seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort) {
+                seed.dead = true;
+                seed_list.remove(i);
             }
         }
 
@@ -282,7 +271,7 @@ void Mortality(struct Parameter* parameter,
 #pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
             {
                 // declare a local seed list to be filled by each thread
-                list<Seed*> newseed_list;
+                VectorList<Seed> newseed_list;
 
                 direction = 0.0;
                 velocity = 0.0;
@@ -349,33 +338,34 @@ void Mortality(struct Parameter* parameter,
 
                             // get the characteristics for each surviving seed and push these back new to seed_list
                             for (int sl = 0; sl < seedlebend; sl++) {
-                                auto pSeed = new Seed();
+                                Seed seed;
 
-                                pSeed->yworldcoo = aktortyworldcoo;
-                                pSeed->xworldcoo = aktortxworldcoo;
-                                pSeed->xcoo = pTree->xcoo;
-                                pSeed->ycoo = pTree->ycoo;
-                                pSeed->namem = pTree->name;
+                                seed.yworldcoo = aktortyworldcoo;
+                                seed.xworldcoo = aktortxworldcoo;
+                                seed.xcoo = pTree->xcoo;
+                                seed.ycoo = pTree->ycoo;
+                                seed.namem = pTree->name;
 
                                 // if chosen, determine the father by pollination out of available (matured) trees
                                 if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
                                     int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
-                                    pSeed->namep = Vname.at(iran);
-                                    pSeed->thawing_depthinfluence = Vthdpth.at(iran);
+                                    seed.namep = Vname.at(iran);
+                                    seed.thawing_depthinfluence = Vthdpth.at(iran);
                                 } else {
-                                    pSeed->namep = 0;
-                                    pSeed->thawing_depthinfluence = 100;
+                                    seed.namep = 0;
+                                    seed.thawing_depthinfluence = 100;
                                 }
 
-                                pSeed->line = pTree->line;
-                                pSeed->generation = pTree->generation + 1;
-                                pSeed->incone = true;
-                                pSeed->weight = 1;
-                                pSeed->age = 0;
-                                pSeed->species = pTree->species;
-                                pSeed->releaseheight = pTree->height;
+                                seed.line = pTree->line;
+                                seed.generation = pTree->generation + 1;
+                                seed.incone = true;
+                                seed.weight = 1;
+                                seed.age = 0;
+                                seed.species = pTree->species;
+                                seed.releaseheight = pTree->height;
+                                seed.dead = false;
 
-                                newseed_list.push_back(pSeed);
+                                seed_list.add(seed);
                             }
                         }
 
@@ -384,18 +374,6 @@ void Mortality(struct Parameter* parameter,
                     }
 
                     timer_eachtree_total += omp_get_wtime() - start_timer_eachtree;
-                }
-
-// append all newly created seed from each thread at once to the seed_list
-#pragma omp critical
-                {
-                    seed_list.splice(seed_list.end(), newseed_list);
-
-                    timer_eachtree_advance_all += timer_eachtree_advance / n_trees;
-                    timer_eachtree_vectini_all += timer_eachtree_vectini / n_trees;
-                    timer_eachtree_seedsurv_all += timer_eachtree_seedsurv / n_trees;
-                    timer_eachtree_seedadd_all += timer_eachtree_seedadd / n_trees;
-                    timer_eachtree_total_all += timer_eachtree_total / n_trees;
                 }
             }  // parallel region
 
@@ -455,9 +433,6 @@ void Mortality(struct Parameter* parameter,
                     std::advance(end, chunk_size);
                 }
 
-                // declare a local seed list to be filled by each thread
-                list<Seed*> newseed_list;
-
                 int n_trees = 0;
                 double timer_eachtree_advance = 0;
                 double timer_eachtree_vectini = 0;
@@ -499,33 +474,34 @@ void Mortality(struct Parameter* parameter,
 
                             // get the characteristics for each surviving seed and push these back new to seed_list
                             for (int sl = 0; sl < seedlebend; sl++) {
-                                auto pSeed = new Seed();
+                                Seed seed;
 
-                                pSeed->yworldcoo = aktortyworldcoo;
-                                pSeed->xworldcoo = aktortxworldcoo;
-                                pSeed->xcoo = pTree->xcoo;
-                                pSeed->ycoo = pTree->ycoo;
-                                pSeed->namem = pTree->name;
+                                seed.yworldcoo = aktortyworldcoo;
+                                seed.xworldcoo = aktortxworldcoo;
+                                seed.xcoo = pTree->xcoo;
+                                seed.ycoo = pTree->ycoo;
+                                seed.namem = pTree->name;
+                                seed.dead = false;
 
                                 // if chosen, determine the father by pollination out of available (matured) trees
                                 if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
                                     int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
-                                    pSeed->namep = Vname.at(iran);
-                                    pSeed->thawing_depthinfluence = 100;
+                                    seed.namep = Vname.at(iran);
+                                    seed.thawing_depthinfluence = 100;
                                 } else {
-                                    pSeed->namep = 0;
-                                    pSeed->thawing_depthinfluence = 100;
+                                    seed.namep = 0;
+                                    seed.thawing_depthinfluence = 100;
                                 }
 
-                                pSeed->line = pTree->line;
-                                pSeed->generation = pTree->generation + 1;
-                                pSeed->incone = true;
-                                pSeed->weight = 1;
-                                pSeed->age = 0;
-                                pSeed->species = pTree->species;
-                                pSeed->releaseheight = pTree->height;
+                                seed.line = pTree->line;
+                                seed.generation = pTree->generation + 1;
+                                seed.incone = true;
+                                seed.weight = 1;
+                                seed.age = 0;
+                                seed.species = pTree->species;
+                                seed.releaseheight = pTree->height;
 
-                                newseed_list.push_back(pSeed);
+                                seed_list.add(seed);
                             }
                         }
 
@@ -536,19 +512,7 @@ void Mortality(struct Parameter* parameter,
                     timer_eachtree_total += omp_get_wtime() - start_timer_eachtree;
 
                 }  // main tree loop on each core
-
-// append all newly created seed from each thread at once to the seed_list
-#pragma omp critical
-                {
-                    seed_list.splice(seed_list.end(), newseed_list);
-
-                    timer_eachtree_advance_all += timer_eachtree_advance / n_trees;
-                    timer_eachtree_vectini_all += timer_eachtree_vectini / n_trees;
-                    timer_eachtree_seedsurv_all += timer_eachtree_seedsurv / n_trees;
-                    timer_eachtree_seedadd_all += timer_eachtree_seedadd / n_trees;
-                    timer_eachtree_total_all += timer_eachtree_total / n_trees;
-                }
-            }  // parallel region
+            }      // parallel region
 
             Vname.clear();
             Vname.shrink_to_fit();
@@ -621,7 +585,7 @@ void Mortality(struct Parameter* parameter,
                 }
 
                 // declare a local seed list to be filled by each thread
-                list<Seed*> newseed_list;
+                VectorList<Seed> newseed_list;
 
                 int n_trees = 0;
                 double timer_eachtree_advance = 0;
@@ -670,33 +634,34 @@ void Mortality(struct Parameter* parameter,
                             timer_tresedliv += end_timer_tresedliv - start_timer_tresedliv;
 
                             for (int sl = 0; sl < seedlebend; sl++) {
-                                auto pSeed = new Seed();
+                                Seed seed;
 
-                                pSeed->yworldcoo = aktortyworldcoo;
-                                pSeed->xworldcoo = aktortxworldcoo;
-                                pSeed->xcoo = pTree->xcoo;
-                                pSeed->ycoo = pTree->ycoo;
-                                pSeed->namem = pTree->name;
+                                seed.yworldcoo = aktortyworldcoo;
+                                seed.xworldcoo = aktortxworldcoo;
+                                seed.xcoo = pTree->xcoo;
+                                seed.ycoo = pTree->ycoo;
+                                seed.namem = pTree->name;
+                                seed.dead = false;
 
                                 // if chosen, determine the father by pollination out of available (matured) trees
                                 if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
                                     int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
-                                    pSeed->namep = Vname.at(iran);
-                                    pSeed->thawing_depthinfluence = 100;
+                                    seed.namep = Vname.at(iran);
+                                    seed.thawing_depthinfluence = 100;
                                 } else {
-                                    pSeed->namep = 0;
-                                    pSeed->thawing_depthinfluence = 100;
+                                    seed.namep = 0;
+                                    seed.thawing_depthinfluence = 100;
                                 }
 
-                                pSeed->line = pTree->line;
-                                pSeed->generation = pTree->generation + 1;
-                                pSeed->incone = true;
-                                pSeed->weight = 1;
-                                pSeed->age = 0;
-                                pSeed->species = pTree->species;
-                                pSeed->releaseheight = pTree->height;
+                                seed.line = pTree->line;
+                                seed.generation = pTree->generation + 1;
+                                seed.incone = true;
+                                seed.weight = 1;
+                                seed.age = 0;
+                                seed.species = pTree->species;
+                                seed.releaseheight = pTree->height;
 
-                                newseed_list.push_back(pSeed);
+                                seed_list.add(seed);
                             }
 
                             double end_timer_createseeds = omp_get_wtime();
@@ -709,22 +674,7 @@ void Mortality(struct Parameter* parameter,
 
                     timer_eachtree_total += omp_get_wtime() - start_timer_eachtree;
                 }  // main tree loop on each core
-
-// append all newly created seed from each thread at once to the seed_list
-#pragma omp critical
-                {
-                    seed_list.splice(seed_list.end(), newseed_list);
-
-                    timer_eachtree_advance_all += timer_eachtree_advance / n_trees;
-                    timer_eachtree_vectini_all += timer_eachtree_vectini / n_trees;
-                    timer_eachtree_seedsurv_all += timer_eachtree_seedsurv / n_trees;
-                    timer_eachtree_seedadd_all += timer_eachtree_seedadd / n_trees;
-                    timer_eachtree_total_all += timer_eachtree_total / n_trees;
-
-                    timer_tresedliv_all += timer_tresedliv / n_trees;
-                    timer_createseeds_all += timer_createseeds / n_trees;
-                }
-            }  // parallel region
+            }      // parallel region
 
             Vname.clear();
             Vname.shrink_to_fit();
@@ -732,35 +682,6 @@ void Mortality(struct Parameter* parameter,
             Vthdpth.shrink_to_fit();
         }  // OMP==3
 
-        // output of seeds (position and parents)
-        /*
-        if(parameter[0].ivort>1045)
-        {
-                char output[50];
-
-                FILE *fdir;
-                sprintf(output,"output/windgen_IVORT%.4d_REP%.3d.txt",parameter[0].ivort,parameter[0].repeati);
-                fdir=fopen(output,"a+");
-                if(fdir==NULL)
-                {
-                        fdir=fopen(output,"a+");
-                        fprintf(fdir,"IVORT \t X0 \t Y0 \t namep  \t namem \n");
-                }
-
-                for(list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); ++pos)
-                {
-                        pSeed=(*pos);
-
-                        if(pSeed->age==0)
-                        {
-                                fprintf(fdir,"%lf \t %lf \t %d \t %d \n",pSeed->xcoo,pSeed->ycoo,pSeed->namep,pSeed->namem);
-                        }
-                }
-
-                fclose(fdir);
-        }// file output
-
-        */
         double end_time_poll = omp_get_wtime();
         TreeMort(yearposition, weather_list, tree_list);
         double end_time_mortpoll = omp_get_wtime();

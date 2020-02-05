@@ -106,7 +106,8 @@ void Pollinationprobability(double x,
 
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = wspd.at(ripm);
-    } else if ((cntr == 0 && (parameter[0].windsource == 1) || parameter[0].windsource == 0)) {
+    } else if ((cntr == 0 && (parameter[0].windsource == 1)
+                || parameter[0].windsource == 0)) {  // TODO place () properly!! (cntr==0) && ((...) || (...)) or ((cntr==0) && (...)) || (...) ???
         direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
         velocity = 2.777;  // 10 km/h
     }

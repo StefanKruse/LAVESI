@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
@@ -14,23 +15,21 @@ using namespace std;
  *
  *******************************************************************************************/
 
-void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, vector<list<Seed*>>& world_seed_list) {
-    for (vector<list<Seed*>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
-        list<Seed*>& seed_list = *posw;
+void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list) {
+    for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
+        VectorList<Seed>& seed_list = *posw;
 
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end();) {
-            auto pSeed = (*pos);
-            pSeed->age++;
+        for (unsigned int i = 0; i < seed_list.size(); ++i) {
+            auto& seed = seed_list[i];
+            if (seed.dead) {
+                continue;
+            }
+            seed.age++;
 
             // seeds older than gmelseedmaxage years (L.gmelinii) and 10 years (L.sibirica) die
-            if ((pSeed->species == 1) && (pSeed->age > parameter[0].gmelseedmaxage)) {
-                delete pSeed;
-                pos = seed_list.erase(pos);
-            } else if ((pSeed->species == 2) && (pSeed->age > 10)) {
-                delete pSeed;
-                pos = seed_list.erase(pos);
-            } else {
-                ++pos;
+            if (((seed.species == 1) && (seed.age > parameter[0].gmelseedmaxage)) || ((seed.species == 2) && (seed.age > 10))) {
+                seed.dead = true;
+                seed_list.remove(i);
             }
         }
     }

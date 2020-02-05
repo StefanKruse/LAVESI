@@ -1,10 +1,11 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
 // TODO temporary
 extern vector<list<Tree*>> world_tree_list;
-extern vector<list<Seed*>> world_seed_list;
+extern vector<VectorList<Seed>> world_seed_list;
 
 /****************************************************************************************/
 /**
@@ -17,8 +18,8 @@ extern vector<list<Seed*>> world_seed_list;
 
 void Seedin() {
     int aktort = 0;
-    for (vector<list<Seed*>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
-        list<Seed*>& seed_list = *posw;
+    for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
+        VectorList<Seed>& seed_list = *posw;
 
         aktort++;
 
@@ -101,28 +102,28 @@ void Seedin() {
                     specieszufall = 2;
                 }
 
-                if (seedeintragen == true) {
-                    auto pSeed = new Seed();
+                if (seedeintragen) {
+                    Seed seed;
+                    seed.yworldcoo = aktortyworldcoo;
+                    seed.xworldcoo = aktortxworldcoo;
+                    seed.xcoo = jseed;
+                    seed.ycoo = iseed;
+                    seed.namem = 0;
+                    seed.namep = 0;
+                    seed.line = ++parameter[0].lineakt;
+                    seed.generation = 0;
+                    seed.incone = false;
+                    seed.weight = 1;
+                    seed.age = 0;
+                    seed.longdispersed = false;
+                    seed.species = specieszufall;
+                    seed.releaseheight = 0;
+                    seed.thawing_depthinfluence = 100;
+                    seed.dead = false;
 
-                    pSeed->yworldcoo = aktortyworldcoo;
-                    pSeed->xworldcoo = aktortxworldcoo;
-                    pSeed->xcoo = jseed;
-                    pSeed->ycoo = iseed;
-                    pSeed->namem = 0;
-                    pSeed->namep = 0;
-                    pSeed->line = ++parameter[0].lineakt;
-                    pSeed->generation = 0;
-                    pSeed->incone = false;
-                    pSeed->weight = 1;
-                    pSeed->age = 0;
-                    pSeed->longdispersed = false;
-                    pSeed->species = specieszufall;
-                    pSeed->releaseheight = 0;
-                    pSeed->thawing_depthinfluence = 100;
+                    seed_list.add(seed);
 
-                    seed_list.push_back(pSeed);
-
-                    if ((pSeed->yworldcoo < 0.0) | (pSeed->yworldcoo > (double)(treerows - 1)) | (pSeed->xcoo < 0.0) | (pSeed->xcoo > (double)(treecols - 1))) {
+                    if ((seed.yworldcoo < 0.0) || (seed.yworldcoo > (double)(treerows - 1)) || (seed.xcoo < 0.0) || (seed.xcoo > (double)(treecols - 1))) {
                         printf("\n\nLaVeSi was stopped\n");
                         printf("=> Treedistribution.cpp\n");
                         printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", iseed, jseed);
@@ -253,7 +254,7 @@ void TreesIni(int maximal_word_length) {
  * ... parameter settings
  * hinterland (int) -> 0 means no, otherwise the number is the length in meters that is south of the simultation area
  *
- 
+ 
  * 1. estimate number of 20 m slices
  * 1.1. take "fly out" probability but not for each but generally the proportion
  * 1.2. define random x/y start for each seed
@@ -262,7 +263,10 @@ void TreesIni(int maximal_word_length) {
  * 4. place new seed to seedlist
  *******************************************************************************************/
 
-void Hinterlandseedintro(struct Parameter* parameter, int yearposition, vector<list<Seed*>>& world_seed_list, vector<vector<Weather*>>& world_weather_list) {
+void Hinterlandseedintro(struct Parameter* parameter,
+                         int yearposition,
+                         vector<VectorList<Seed>>& world_seed_list,
+                         vector<vector<Weather*>>& world_weather_list) {
     // function parameters
     double logmodel_seeds_Po = 7.8997307;
     double logmodel_seeds_r = -0.6616466;
@@ -276,8 +280,8 @@ void Hinterlandseedintro(struct Parameter* parameter, int yearposition, vector<l
     // ... for each tree the mean number of seeds and height at the position at the hinterland
     // ... jultemp based on position
     int aktort = 0;
-    for (vector<list<Seed*>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
-        list<Seed*>& seed_list = *posw;
+    for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
+        VectorList<Seed>& seed_list = *posw;
 
         // grant weather access
         vector<vector<Weather*>>::iterator world_positon_weather = (world_weather_list.begin() + aktort);
@@ -293,8 +297,6 @@ void Hinterlandseedintro(struct Parameter* parameter, int yearposition, vector<l
 #endif
 
         if (parameter[0].hinterland_maxlength > 0) {
-            int seednobuffer;
-
 #ifdef DEBUG
             // debugging output
             int introduced = 0;
@@ -414,29 +416,29 @@ void Hinterlandseedintro(struct Parameter* parameter, int yearposition, vector<l
                         introduced++;
 #endif
 
-                        auto pSeed = new Seed();
+                        Seed seed;
 
-                        pSeed->yworldcoo = aktortyworldcoo;
-                        pSeed->xworldcoo = aktortxworldcoo;
-                        pSeed->xcoo = xseed;
-                        pSeed->ycoo = yseed;
-                        pSeed->namem = 0;
-                        pSeed->namep = 0;
-                        pSeed->line = ++parameter[0].lineakt;
-                        pSeed->generation = 0;
-                        pSeed->incone = false;
-                        pSeed->weight = 1;
-                        pSeed->age = 0;
-                        pSeed->longdispersed = false;
-                        pSeed->species = specieszufall;
-                        pSeed->releaseheight = hinterheightsi;
-                        pSeed->thawing_depthinfluence = 100;
-                        pSeed->dispersaldistance = dispersaldistance;
+                        seed.yworldcoo = aktortyworldcoo;
+                        seed.xworldcoo = aktortxworldcoo;
+                        seed.xcoo = xseed;
+                        seed.ycoo = yseed;
+                        seed.namem = 0;
+                        seed.namep = 0;
+                        seed.line = ++parameter[0].lineakt;
+                        seed.generation = 0;
+                        seed.incone = false;
+                        seed.weight = 1;
+                        seed.age = 0;
+                        seed.longdispersed = false;
+                        seed.species = specieszufall;
+                        seed.releaseheight = hinterheightsi;
+                        seed.thawing_depthinfluence = 100;
+                        seed.dispersaldistance = dispersaldistance;
+                        seed.dead = false;
 
-                        seed_list.push_back(pSeed);
+                        seed_list.add(seed);
 
-                        if ((pSeed->yworldcoo < 0.0) | (pSeed->yworldcoo > (double)(treerows - 1)) | (pSeed->xcoo < 0.0)
-                            | (pSeed->xcoo > (double)(treecols - 1))) {
+                        if ((seed.yworldcoo < 0.0) | (seed.yworldcoo > (double)(treerows - 1)) | (seed.xcoo < 0.0) | (seed.xcoo > (double)(treecols - 1))) {
                             printf("\n\nLaVeSi was stopped\n");
                             printf("=> Treedistribution.cpp\n");
                             printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", yseed, xseed);

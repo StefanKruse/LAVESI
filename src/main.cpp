@@ -640,19 +640,11 @@ int main() {
     Parameterinput();
 
     // calculation of the starting year of the simulation
-    // if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
-    // {
     parameter[0].startjahr = 2014 - parameter[0].simduration;
-    // added here 20014 to acheive no negative years ---> might cause seg faults!
-    // }
-    // else
-    // {
-    // parameter[0].startjahr=2011-parameter[0].simduration;
-    // }
+
 
     int yearswithseedintropuffer = parameter[0].yearswithseedintro;
     parameter[0].repeati = 0;
-    int zaehler = 0;
 
     // buffer simulation length
     int simdurationini = parameter[0].simduration;
@@ -663,8 +655,8 @@ int main() {
         parameter[0].repeati++;
         parameter[0].simduration = simdurationini;
 
-        zaehler++;
-        printf("\n\tProgress: %d of %d\n", zaehler, parameter[0].runs);
+        nruns++;
+        printf("\n\tProgress: %d of %d\n", nruns, parameter[0].runs);
 
         parameter[0].nameakt = 0;
         parameter[0].lineakt = 0;

@@ -35,15 +35,10 @@ vector<double> wdir, wspd;
  *
  *******************************************************************************************/
 void vegetationDynamics(int yearposition, int jahr, int t) {
-    double start_time_kartenup = omp_get_wtime();
     Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
-    double end_time_kartenup = omp_get_wtime();
 
-    double start_time_wachstum = omp_get_wtime();
     Growth(&parameter[0], yearposition, world_tree_list, world_weather_list);
-    double end_time_wachstum = omp_get_wtime();
 
-    double start_time_Seeddispersal = omp_get_wtime();
     int findyr1 = 0, findyr2 = 0, yr = 0;
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
         if (parameter[0].windsource == 1) {
@@ -67,13 +62,9 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
         }
     }
     Seeddispersal(yr, &parameter[0], world_seed_list);
-    double end_time_Seeddispersal = omp_get_wtime();
 
-    double start_time_Seedproduction = omp_get_wtime();
     Seedproduction(&parameter[0], world_tree_list);
-    double end_time_Seedproduction = omp_get_wtime();
 
-    double start_time_Treedistribution = omp_get_wtime();
     if (parameter[0].seedintro == true && parameter[0].yearswithseedintro > 0) {
         parameter[0].starter = true;
         Treedistribution(&parameter[0], stringlengthmax);
@@ -82,69 +73,20 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
         parameter[0].starter = true;
         Treedistribution(&parameter[0], stringlengthmax);
     }
-    double end_time_Treedistribution = omp_get_wtime();
 
-    double start_time_Hinterlandseedintro = omp_get_wtime();
     Hinterlandseedintro(&parameter[0], yearposition, world_seed_list, world_weather_list);
-    double end_time_Hinterlandseedintro = omp_get_wtime();
 
-    double start_time_etablierung = omp_get_wtime();
     Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
-    double end_time_etablierung = omp_get_wtime();
 
-    double start_time_Dataoutput = omp_get_wtime();
     Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
-    double end_time_Dataoutput = omp_get_wtime();
 
-    double start_time_mortalitaet = omp_get_wtime();
     Mortality(&parameter[0], yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
     wspd.clear();
     wdir.clear();
     wspd.shrink_to_fit();
     wdir.shrink_to_fit();
-    double end_time_mortalitaet = omp_get_wtime();
 
-    double start_time_Ageing = omp_get_wtime();
     Ageing(&parameter[0], world_tree_list, world_seed_list);
-    double end_time_Ageing = omp_get_wtime();
-
-    if (parameter[0].computationtimevis == 1) {
-        if (((parameter[0].ivort % 50) == 0) | (parameter[0].ivort == 1)) {
-            printf("\n      - plotupdate    growth  seeddisp  seedprod treedistr hinterlnd treeestab   output   mortalty    ageing     TOTAL     ");
-        }
-
-        printf("\n%6i- %10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f", parameter[0].ivort, end_time_kartenup - start_time_kartenup,
-               end_time_wachstum - start_time_wachstum, end_time_Seeddispersal - start_time_Seeddispersal, end_time_Seedproduction - start_time_Seedproduction,
-               end_time_Treedistribution - start_time_Treedistribution, end_time_Hinterlandseedintro - start_time_Hinterlandseedintro,
-               end_time_etablierung - start_time_etablierung, end_time_Dataoutput - start_time_Dataoutput, end_time_mortalitaet - start_time_mortalitaet,
-               end_time_Ageing - start_time_Ageing,
-               ((end_time_Ageing - start_time_Ageing) + (end_time_mortalitaet - start_time_mortalitaet) + (end_time_Dataoutput - start_time_Dataoutput)
-                + (end_time_etablierung - start_time_etablierung) + (end_time_Treedistribution - start_time_Treedistribution)
-                + (end_time_Treedistribution - start_time_Treedistribution) + (end_time_Seedproduction - start_time_Seedproduction)
-                + (end_time_Seeddispersal - start_time_Seeddispersal) + (end_time_wachstum - start_time_wachstum) + (end_time_kartenup - start_time_kartenup)));
-
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin());
-        list<Tree*>& tree_list = *world_positon_b;
-
-    openmort:
-        FILE* fp3;
-        fp3 = fopen("t_N_mort.txt", "a+");
-        if (fp3 == 0) {
-            goto openmort;
-        }
-
-        fprintf(fp3, "%lu;%d;%f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f;%10.20f\n", tree_list.size(), parameter[0].ivort,
-                end_time_mortalitaet - start_time_mortalitaet, end_time_kartenup - start_time_kartenup, end_time_wachstum - start_time_wachstum,
-                end_time_Seeddispersal - start_time_Seeddispersal, end_time_Seedproduction - start_time_Seedproduction,
-                end_time_Treedistribution - start_time_Treedistribution, end_time_etablierung - start_time_etablierung,
-                end_time_Dataoutput - start_time_Dataoutput, end_time_mortalitaet - start_time_mortalitaet, end_time_Ageing - start_time_Ageing,
-                (end_time_Ageing - start_time_Ageing) + (end_time_mortalitaet - start_time_mortalitaet) + (end_time_Dataoutput - start_time_Dataoutput)
-                    + (end_time_etablierung - start_time_etablierung) + (end_time_Treedistribution - start_time_Treedistribution)
-                    + (end_time_Seedproduction - start_time_Seedproduction) + (end_time_Seeddispersal - start_time_Seeddispersal)
-                    + (end_time_wachstum - start_time_wachstum) + (end_time_kartenup - start_time_kartenup));
-
-        fclose(fp3);
-    }
 }
 
 /****************************************************************************************/
@@ -614,9 +556,7 @@ void runSimulation() {
  *
  *******************************************************************************************/
 int main() {
-    clock_t start_time_main = clock();
-
-    // random number initialization
+    // random number initialization ; TODO delete when all rand() replaces
     srand((unsigned)time(NULL));
 
     // console output of the version and general information
@@ -665,15 +605,5 @@ int main() {
         runSimulation();
     }
 
-    clock_t end_time_main = clock();
-    cout << endl << "... ending simulation.\nTotal time: " << (((double)(end_time_main - start_time_main)) / CLOCKS_PER_SEC) << endl;
-
-    // export total simulation time for the current simulation area
-    if (parameter[0].computationtimevis == 1) {
-        FILE* fptA;
-        fptA = fopen("t_A.txt", "a+");
-        fprintf(fptA, "%d \t %f \n", (treerows * treecols), (((double)(end_time_main - start_time_main)) / CLOCKS_PER_SEC));
-        fclose(fptA);
-    }
     return 0;
 }

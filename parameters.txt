@@ -14,7 +14,6 @@ yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,
 qualiyearlyvis=1;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=0;				// (int 0,1) seed dispersal
 mortvis=0;							// (int 0,1) mortality of trees >200 cm
-computationtimevis=1;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 

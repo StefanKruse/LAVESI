@@ -92,7 +92,6 @@ struct Parameter {
     int outputmode;
     int parameteri;
     int outputall;
-    bool computationtimevis;
 
     // time steps and repeats
     int simduration;

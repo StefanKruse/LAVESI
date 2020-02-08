@@ -758,9 +758,6 @@ void Parameterinput(void) {
     strcpy(uebergabestring, "pollengregorym");
     parameter[0].pollengregorym = (double)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
 
-    strcpy(uebergabestring, "computationtimevis");
-    parameter[0].computationtimevis = (bool)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
-
     // further variables
     parameter[0].tempdiffort = 0.0;
     parameter[0].precdiffort = 0.0;

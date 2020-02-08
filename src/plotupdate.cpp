@@ -795,26 +795,10 @@ void Environmentupdate(struct Parameter* parameter,
 
         aktort++;
 
-        double time_start_0 = omp_get_wtime();
         ResetMaps(yearposition, plot_list, weather_list);
-        double time_ResetMaps = omp_get_wtime();
 
         AddTreeDensity(tree_list, plot_list);
-        double time_AddTreeDensity = omp_get_wtime();
 
         IndividualTreeDensity(tree_list, plot_list);
-
-        if (parameter[0].computationtimevis == 1) {
-        openupdate:
-            FILE* fp5;
-            fp5 = fopen("t_N_plotupdate.txt", "a+");
-            if (fp5 == 0) {
-                goto openupdate;
-            }
-            fprintf(fp5, "%d;%lu;%10.20f;%10.20f;%10.20f\n", parameter[0].ivort, tree_list.size(), time_ResetMaps - time_start_0,
-                    time_AddTreeDensity - time_ResetMaps, omp_get_wtime() - time_AddTreeDensity);
-
-            fclose(fp5);
-        }
     }
 }

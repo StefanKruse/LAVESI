@@ -76,15 +76,11 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
         int rausgeflogenN = 0, rausgeflogenO = 0, rausgeflogenS = 0, rausgeflogenW = 0;
 
         if (parameter[0].omp_num_threads == 0) {
-            double cum_time_individual_seed = 0;
-            double cum_time_Seedwinddispersal = 0;
-
             for (unsigned int i = 0; i < seed_list.size(); ++i) {
                 auto& seed = seed_list[i];
                 if (seed.dead) {
                     continue;
                 }
-                double time_start_individual_seed = omp_get_wtime();
 
                 if (seed.incone) {
                     double flug = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
@@ -102,9 +98,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                             double jquer = 0;
                             double iquer = 0;
 
-                            double time_start_individual_seed_Seedwinddispersal = omp_get_wtime();
                             Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, seed.releaseheight, seed.species);
-                            cum_time_Seedwinddispersal += omp_get_wtime() - time_start_individual_seed_Seedwinddispersal;
 
                             seed.xcoo = seed.xcoo + jquer;
                             seed.ycoo = seed.ycoo + iquer;
@@ -179,11 +173,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                         }
                     }
                 }
-
-                cum_time_individual_seed += omp_get_wtime() - time_start_individual_seed;
             }
-
-            cout << endl << "All seeds:" << cum_time_individual_seed << " with Seedwinddispersal-function:" << cum_time_Seedwinddispersal << endl;
         } else {  // multi-core-processing
             // manually chose the implementation of multi-core-processing
             int mcorevariant = 2;

@@ -596,88 +596,6 @@ void runSimulation() {
     Yearsteps();
 }
 
-/****************************************************************************************/
-/**
- * \brief finish the simulation
- *
- * clear all lists
- *
- *******************************************************************************************/
-void finishSimulation() {
-    /*
-      TODO remove
-    int aktort = 0;
-
-    for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
-        vector<Weather*>& weather_list = *posw;
-
-        auto& seed_list = world_seed_list[aktort];
-
-        aktort++;
-        // calculation of the current location in coordinates
-        int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-        int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-
-        int number_of_seeds_in_cone = 0;
-        for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); pos++) {
-            if ((*pos)->incone == true) {
-                number_of_seeds_in_cone++;
-            }
-        }
-
-        if (parameter[0].yearlyvis == true) {
-            printf("seed number Z= %d\n", number_of_seeds_in_cone);
-        }
-
-        for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-            auto pWeather = weather_list.at(iweather);
-            delete pWeather;
-        }
-        weather_list.clear();
-        weather_list.shrink_to_fit();
-    }
-
-    Clearalllists();
-
-    world_tree_list.clear();
-    world_tree_list.shrink_to_fit();
-    world_seed_list.clear();
-    world_seed_list.shrink_to_fit();
-    world_weather_list.clear();
-    world_weather_list.shrink_to_fit();
-    world_plot_list.clear();
-    world_plot_list.shrink_to_fit();
-    world_evaluation_list.clear();
-    world_evaluation_list.shrink_to_fit();
-
-    for (int i = 0; i < globalyears.size(); i++) {
-        winddir.at(i).clear();
-        winddir.at(i).shrink_to_fit();
-
-        windspd.at(i).clear();
-        windspd.at(i).shrink_to_fit();
-    }
-
-    winddir.clear();
-    winddir.shrink_to_fit();
-
-    windspd.clear();
-    windspd.shrink_to_fit();
-
-    globalyears.clear();
-    globalyears.shrink_to_fit();
-
-    if (parameter[0].resetyear > 0) {
-        Clearalllists_copy();
-
-        world_tree_list_copy.clear();
-        world_seed_list_copy.clear();
-        world_plot_list_copy.clear();
-        world_evaluation_list_copy.clear();
-    }
-    */
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 /////////////						  /////////////////////////////////////////////////////////
@@ -753,8 +671,6 @@ int main() {
         parameter[0].yearswithseedintro = yearswithseedintropuffer;
 
         runSimulation();
-
-        finishSimulation();
     }
 
     clock_t end_time_main = clock();

@@ -346,7 +346,6 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     // estimation of new positions
                     double ratiorn = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
                     double dispersaldistance = 0.0;
-                    double direction = 0.0;
                     double velocity = 0.0;
                     double wdirection = 0.0;
                     double jquer = 0;

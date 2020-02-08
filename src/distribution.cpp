@@ -88,28 +88,13 @@ void Pollinationprobability(double x,
     thdpthinfl.clear();
     thdpthinfl.shrink_to_fit();
 
-    if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
-        cntr = 1;
-    } else if (parameter[0].windsource == 4) {
-        direction = M_PI * (0 / 180);
-        velocity = 2.777;
-    } else if (parameter[0].windsource == 5) {
-        direction = M_PI * (180 / 180);
-        velocity = 2.777;
-    } else if (parameter[0].windsource == 0) {
-        direction = 2 * M_PI * (rand() / RAND_MAX);
-        velocity = 2.777;
-    }
-
-    if (cntr != 0 && (parameter[0].windsource == 1)) {
+    if (parameter[0].windsource == 1) {// EraInterim
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
-
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = wspd.at(ripm);
-    } else if ((cntr == 0 && (parameter[0].windsource == 1)
-                || parameter[0].windsource == 0)) {  // TODO place () properly!! (cntr==0) && ((...) || (...)) or ((cntr==0) && (...)) || (...) ???
+	} else {// random
         direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
-        velocity = 2.777;  // 10 km/h
+        velocity = 2.777;
     }
 
     pe = parameter[0].pollenfall / velocity;
@@ -192,27 +177,18 @@ double getEntfernung(double D, double ratiorn_help) {
 }
 
 void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec) {
-    int cntr = 1, ripm = 0;
+    int ripm = 0;
     double dispersaldistance = 0;
     double maxdispersaldistance = 0;
     double direction = 0.0;
     double velocity = 0.0;
 
-    if (parameter[0].windsource == 4) {
-        direction = M_PI * (0 / 180);
-        cntr = 0;  // speed up
-        velocity = 2.7777;
-    } else if (parameter[0].windsource == 5) {
-        direction = M_PI * (180 / 180);
-        cntr = 0;  // speed up
-        velocity = 2.7777;
-    } else if (cntr != 0 && (parameter[0].windsource == 1)) {
+    if (parameter[0].windsource == 1) {// EraInterim
         // choose a month between May and September:
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = (wspd.at(ripm));
-        cntr = 1;  // speed up
-    } else if ((parameter[0].windsource == 0) || (cntr == 0 && (parameter[0].windsource == 1))) {
+    } else {// random
         direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
         velocity = 2.7777;
     }
@@ -225,7 +201,7 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, dou
 
     if (parameter[0].dispersalmode == 5) {
         dispersaldistance = getEntfernung(maxdispersaldistance, rn);
-    } else if (parameter[0].dispersalmode != 5) {
+    } else {
         dispersaldistance = getEntfernung(maxdispersaldistance, rn);
     }
 

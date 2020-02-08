@@ -96,7 +96,6 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                             seed.incone = false;
 
                             double dispersaldistance = 0;
-                            double direction = 0.0;
                             double velocity = 0;
                             double wdirection = 0.0;
 
@@ -106,68 +105,6 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                             double time_start_individual_seed_Seedwinddispersal = omp_get_wtime();
                             Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, seed.releaseheight, seed.species);
                             cum_time_Seedwinddispersal += omp_get_wtime() - time_start_individual_seed_Seedwinddispersal;
-
-                            if (parameter[0].ivort > 1045 && parameter[0].outputmode != 9) {
-                                double seedeinschreibzufall = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-
-                                if (seedeinschreibzufall < 0.01) {
-                                    dispersaldistance = sqrt(pow(iquer, 2) + pow(jquer, 2));
-                                    direction = atan2(iquer, jquer);
-
-                                    FILE* filepointer;
-                                    string dateiname;
-
-                                    // assembling file name
-                                    char dateinamesuf[12];
-                                    sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice, parameter[0].repeati);
-                                    dateiname = "output/dataseed_distance" + string(dateinamesuf) + ".csv";
-
-                                    filepointer = fopen(dateiname.c_str(), "r+");
-                                    if (filepointer == NULL) {
-                                        filepointer = fopen(dateiname.c_str(), "w");
-
-                                        fprintf(filepointer, "IVORT;");
-                                        fprintf(filepointer, "name;");
-                                        fprintf(filepointer, "year;");
-                                        fprintf(filepointer, "parentheight;");
-                                        fprintf(filepointer, "distance;");
-                                        fprintf(filepointer, "direction;");
-                                        fprintf(filepointer, "xcoo;");
-                                        fprintf(filepointer, "ycoo;");
-                                        fprintf(filepointer, "species;");
-                                        fprintf(filepointer, "weatherchoice;");
-                                        fprintf(filepointer, "thawing_depth;");
-                                        fprintf(filepointer, "windspd;");
-                                        fprintf(filepointer, "winddir;");
-
-                                        fprintf(filepointer, "\n");
-
-                                        if (filepointer == NULL) {
-                                            fprintf(stderr, "Error: Seed distance file could not be opened!\n");
-                                            exit(1);
-                                        }
-                                    }
-
-                                    fseek(filepointer, 0, SEEK_END);
-
-                                    fprintf(filepointer, "%d;", parameter[0].ivort);
-                                    fprintf(filepointer, "%d;", seed.namem);
-                                    fprintf(filepointer, "%d;", jahr);
-                                    fprintf(filepointer, "%4.3f;", seed.releaseheight);
-                                    fprintf(filepointer, "%4.5f;", sqrt(iquer * iquer + jquer * jquer));
-                                    fprintf(filepointer, "%4.5f;", direction);
-                                    fprintf(filepointer, "%4.5f;", seed.xcoo);
-                                    fprintf(filepointer, "%4.5f;", seed.ycoo);
-                                    fprintf(filepointer, "%d;", seed.species);
-                                    fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                                    fprintf(filepointer, "%d;", parameter[0].thawing_depth);
-                                    fprintf(filepointer, "%lf;", velocity);
-                                    fprintf(filepointer, "%lf;", wdirection);
-                                    fprintf(filepointer, "\n");
-
-                                    fclose(filepointer);
-                                }
-                            }
 
                             seed.xcoo = seed.xcoo + jquer;
                             seed.ycoo = seed.ycoo + iquer;

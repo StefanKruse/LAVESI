@@ -79,8 +79,6 @@ lineartransect=1;					// (int 0,1) approximation of temperature and precipitatio
 windsource=1;						// (int) source of wind data
 										// 0==random dispersal direction and not depending on wind speed
 										// 1==EraInterim
-										// 4==North Wind
-										// 5==South Wind
 									
 // 1.2 -----> Simulation run characteristics
 simduration=5996;						// (int) duration of the simulation period depending on the available weather data series

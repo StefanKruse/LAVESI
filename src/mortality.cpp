@@ -228,374 +228,137 @@ void Mortality(struct Parameter* parameter,
         int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-        // chose the implementation of multi-core-processing
-        int mcorevariant = 3;
-        // 1 == use advance to iterate through lists, but this makes the computation really slow
-        // 2 == split list to X lists of the same length
-        // 3 == trees are ordered by age which is highly correlated with seedprodAKT so that only elements are considered untiil the last tree producing seeds
-        if (mcorevariant == 1) {  // OMP==1
-            // loop around the loop for MULTI-CORE-PROCESSING
-            // before run a program parallel set the number of helpers by changing the environment variable
-            // ... ... export OMP_NUM_THREADS=4
-            // ... or explicitly overwrite the environmental variable by setting the helper number directly
-            // ... ... omp_set_num_threads(int); // which is set in the parameter.txt file variable "omp_num_threads"
+        // implementation of multi-core-processing == trees are ordered by age which is highly correlated with seedprodAKT so that only elements are considered untiil the last tree producing seeds
+		omp_set_dynamic(0);                                 // disable dynamic teams ; TODO remove here
+		omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
 
-            // loop with omp through each element of the list
-            omp_set_dynamic(0);                                 // disable dynamic teams
-            omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
+		double direction = 0.0;
+		double velocity = 0.0;
+		unsigned int ripm = 0, cntr = 0;
+		double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
+		double I0kappa = 0.0;
+		double pe = 0.01;
+		double C = parameter[0].pollengregoryc;
+		double m = parameter[0].pollengregorym;
+		vector<int> Vname;
+		vector<double> Vthdpth;
 
-            double direction = 0.0;
-            double velocity = 0.0;
-            unsigned int ripm = 0, cntr = 0;
-            double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
-            double I0kappa = 0.0;
-            double pe = 0.01;
-            double C = parameter[0].pollengregoryc;
-            double m = parameter[0].pollengregorym;
-            vector<int> Vname;
-            vector<double> Vthdpth;
+		// set end of the iterations split up to last tree with produced seeds
+		list<Tree*>::iterator lasttreewithseeds_iter = tree_list.begin();
+		int lasttreewithseeds_pos = 0;
+		int treeiter = 0;
+		for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb) {
+			auto pTree = (*posb);
 
-#pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
-            {
-                // declare a local seed list to be filled by each thread
-                VectorList<Seed> newseed_list;
+			treeiter = treeiter + 1;
 
-                direction = 0.0;
-                velocity = 0.0;
-                ripm = 0, cntr = 0;
-                p = 0.0;
-                kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
-                I0kappa = 0.0;
-                pe = 0.01;
-                C = parameter[0].pollengregoryc;
-                m = parameter[0].pollengregorym;
-                phi = 0.0;
-                dr = 0.0;
-                dx = 0.0;
-                dy = 0.0;
-
-                int n_trees = 0;
-#pragma omp for nowait schedule(guided)
-                for (unsigned int pari = 0; pari < tree_list.size(); ++pari) {
-                    ++n_trees;  // for later calculating mean of computation times // TODO necesary?
-
-                    list<Tree*>::iterator posb = tree_list.begin();
-                    // since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
-                    advance(posb, pari);
-
-                    auto pTree = (*posb);
-
-                    if ((parameter[0].ivort == 1) & (pari == 0)) {
-                        cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads()
-                             << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl
-                             << endl;
-                    }
-
-                    if (pTree->seednewly_produced > 0) {
-                        int seedlebend = 0;
-                        for (int sna = 0; sna < pTree->seednewly_produced; sna++) {
-                            double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-                            if (zufallsz >= parameter[0].seedconemort) {
-                                ++seedlebend;
-                            }
-                        }
-
-                        if (seedlebend > 0) {
-                            if ((parameter[0].pollination == 1 && Jahr > 1978 && Jahr < 2013 && parameter[0].spinupphase == false && parameter[0].ivort > 1045)
-                                || (parameter[0].pollination == 9)) {
-                                Pollinationprobability(pTree->xcoo, pTree->ycoo, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi,
-                                                       dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees);
-                            }
-
-                            // get the characteristics for each surviving seed and push these back new to seed_list
-                            for (int sl = 0; sl < seedlebend; sl++) {
-                                Seed seed;
-
-                                seed.yworldcoo = aktortyworldcoo;
-                                seed.xworldcoo = aktortxworldcoo;
-                                seed.xcoo = pTree->xcoo;
-                                seed.ycoo = pTree->ycoo;
-                                seed.namem = pTree->name;
-
-                                // if chosen, determine the father by pollination out of available (matured) trees
-                                if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
-                                    int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
-                                    seed.namep = Vname.at(iran);
-                                    seed.thawing_depthinfluence = Vthdpth.at(iran);
-                                } else {
-                                    seed.namep = 0;
-                                    seed.thawing_depthinfluence = 100;
-                                }
-
-                                seed.line = pTree->line;
-                                seed.generation = pTree->generation + 1;
-                                seed.incone = true;
-                                seed.weight = 1;
-                                seed.age = 0;
-                                seed.species = pTree->species;
-                                seed.releaseheight = pTree->height;
-                                seed.dead = false;
-
-                                seed_list.add(seed);
-                            }
-                        }
-                    }
-                }
-            }  // parallel region
-
-            Vname.clear();
-            Vname.shrink_to_fit();
-            Vthdpth.clear();
-            Vthdpth.shrink_to_fit();
-        }                                                       // OMP==1
-        if (mcorevariant == 2) {                                // OMP==2
-            omp_set_dynamic(0);                                 // disable dynamic teams
-            omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
-
-            double direction = 0.0;
-            double velocity = 0.0;
-            unsigned int ripm = 0, cntr = 0;
-            double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
-            double I0kappa = 0.0;
-            double pe = 0.01;
-            double C = parameter[0].pollengregoryc;
-            double m = parameter[0].pollengregorym;
-            vector<int> Vname;
-            vector<double> Vthdpth;
+			if (pTree->seednewly_produced > 0) {
+				lasttreewithseeds_pos = treeiter;
+			}
+		}
+		advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 
 #pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
-            {
-                if ((parameter[0].ivort == 1)) {
-                    cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads()
-                         << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl
-                         << endl;
-                }
+		{
+			direction = 0.0;
+			velocity = 0.0;
+			ripm = 0, cntr = 0;
+			p = 0.0;
+			kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
+			phi = 0.0;
+			dr = 0.0;
+			dx = 0.0;
+			dy = 0.0;
+			I0kappa = 0.0;
+			pe = 0.01;
+			C = parameter[0].pollengregoryc;
+			m = parameter[0].pollengregorym;
 
-                direction = 0.0;
-                velocity = 0.0;
-                ripm = 0, cntr = 0;
-                p = 0.0;
-                kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
-                I0kappa = 0.0;
-                pe = 0.01;
-                C = parameter[0].pollengregoryc;
-                m = parameter[0].pollengregorym;
-                phi = 0.0;
-                dr = 0.0;
-                dx = 0.0;
-                dy = 0.0;
+			int thread_count = omp_get_num_threads();
+			int thread_num = omp_get_thread_num();
+			size_t chunk_size = lasttreewithseeds_pos / thread_count;
+			auto begin = tree_list.begin();
+			std::advance(begin, thread_num * chunk_size);
+			auto end = begin;
 
-                // slit the lists manually
-                int thread_count = omp_get_num_threads();
-                int thread_num = omp_get_thread_num();
-                size_t chunk_size = tree_list.size() / thread_count;
-                auto begin = tree_list.begin();
-                std::advance(begin, thread_num * chunk_size);
-                auto end = begin;
-                if (thread_num == (thread_count - 1))  // the last thread iterates through the remaining elements
-                {
-                    end = tree_list.end();
-                } else {
-                    std::advance(end, chunk_size);
-                }
+			if (thread_num == (thread_count - 1)) {
+				if ((parameter[0].ivort == 1)) {
+					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads()
+						 << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl
+						 << endl;
+				}
 
-                int n_trees = 0;
-// wait for all threads to initialize and then proceed
-#pragma omp barrier
-                for (auto it = begin; it != end; ++it) {
-                    ++n_trees; // TODO necessary?
+				end = lasttreewithseeds_iter;
+			} else {
+				std::advance(end, chunk_size);
+			}
 
-                    auto pTree = (*it);
+			// declare a local seed list to be filled by each thread
+			VectorList<Seed> newseed_list;
 
-                    if (pTree->seednewly_produced > 0) {
-                        int seedlebend = 0;
-                        for (int sna = 0; sna < pTree->seednewly_produced; sna++) {
-                            double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-                            if (zufallsz >= parameter[0].seedconemort) {
-                                ++seedlebend;
-                            }
-                        }
-
-                        if (seedlebend > 0) {
-                            if ((parameter[0].pollination == 1 && Jahr > 1978 && Jahr < 2013 && parameter[0].spinupphase == false && parameter[0].ivort > 1045)
-                                || (parameter[0].pollination == 9)) {
-                                Pollinationprobability(pTree->xcoo, pTree->ycoo, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi,
-                                                       dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees);
-                            }
-
-                            // get the characteristics for each surviving seed and push these back new to seed_list
-                            for (int sl = 0; sl < seedlebend; sl++) {
-                                Seed seed;
-
-                                seed.yworldcoo = aktortyworldcoo;
-                                seed.xworldcoo = aktortxworldcoo;
-                                seed.xcoo = pTree->xcoo;
-                                seed.ycoo = pTree->ycoo;
-                                seed.namem = pTree->name;
-                                seed.dead = false;
-
-                                // if chosen, determine the father by pollination out of available (matured) trees
-                                if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
-                                    int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
-                                    seed.namep = Vname.at(iran);
-                                    seed.thawing_depthinfluence = 100;
-                                } else {
-                                    seed.namep = 0;
-                                    seed.thawing_depthinfluence = 100;
-                                }
-
-                                seed.line = pTree->line;
-                                seed.generation = pTree->generation + 1;
-                                seed.incone = true;
-                                seed.weight = 1;
-                                seed.age = 0;
-                                seed.species = pTree->species;
-                                seed.releaseheight = pTree->height;
-
-                                seed_list.add(seed);
-                            }
-                        }
-                    }
-                }  // main tree loop on each core
-            }      // parallel region
-
-            Vname.clear();
-            Vname.shrink_to_fit();
-            Vthdpth.clear();
-            Vthdpth.shrink_to_fit();
-        }                                                       // OMP==2
-        if (mcorevariant == 3) {                                // OMP==3
-            omp_set_dynamic(0);                                 // disable dynamic teams
-            omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
-
-            double direction = 0.0;
-            double velocity = 0.0;
-            unsigned int ripm = 0, cntr = 0;
-            double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
-            double I0kappa = 0.0;
-            double pe = 0.01;
-            double C = parameter[0].pollengregoryc;
-            double m = parameter[0].pollengregorym;
-            vector<int> Vname;
-            vector<double> Vthdpth;
-
-            // set end of the iterations split up to last tree with produced seeds
-            list<Tree*>::iterator lasttreewithseeds_iter = tree_list.begin();
-            int lasttreewithseeds_pos = 0;
-            int treeiter = 0;
-            for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb) {
-                auto pTree = (*posb);
-
-                treeiter = treeiter + 1;
-
-                if (pTree->seednewly_produced > 0) {
-                    lasttreewithseeds_pos = treeiter;
-                }
-            }
-            advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
-
-#pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
-            {
-                direction = 0.0;
-                velocity = 0.0;
-                ripm = 0, cntr = 0;
-                p = 0.0;
-                kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
-                phi = 0.0;
-                dr = 0.0;
-                dx = 0.0;
-                dy = 0.0;
-                I0kappa = 0.0;
-                pe = 0.01;
-                C = parameter[0].pollengregoryc;
-                m = parameter[0].pollengregorym;
-
-                int thread_count = omp_get_num_threads();
-                int thread_num = omp_get_thread_num();
-                size_t chunk_size = lasttreewithseeds_pos / thread_count;
-                auto begin = tree_list.begin();
-                std::advance(begin, thread_num * chunk_size);
-                auto end = begin;
-
-                if (thread_num == (thread_count - 1)) {
-                    if ((parameter[0].ivort == 1)) {
-                        cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads()
-                             << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl
-                             << endl;
-                    }
-
-                    end = lasttreewithseeds_iter;
-                } else {
-                    std::advance(end, chunk_size);
-                }
-
-                // declare a local seed list to be filled by each thread
-                VectorList<Seed> newseed_list;
-
-                int n_trees = 0;
+			int n_trees = 0;
 
 // wait for all threads to initialize and then proceed
 #pragma omp barrier
-                for (auto it = begin; it != end; ++it) {
-                    ++n_trees;  // for calculating mean of computation times // TODO still necessary
+			for (auto it = begin; it != end; ++it) {
+				++n_trees;  // for calculating mean of computation times // TODO still necessary
 
-                    auto pTree = (*it);
+				auto pTree = (*it);
 
-                    if (pTree->seednewly_produced > 0) {
-                        int seedlebend = 0;
-                        for (int sna = 0; sna < pTree->seednewly_produced; sna++) {
-                            double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-                            if (zufallsz >= parameter[0].seedconemort) {
-                                ++seedlebend;
-                            }
-                        }
+				if (pTree->seednewly_produced > 0) {
+					int seedlebend = 0;
+					for (int sna = 0; sna < pTree->seednewly_produced; sna++) {
+						double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+						if (zufallsz >= parameter[0].seedconemort) {
+							++seedlebend;
+						}
+					}
 
-                        if (seedlebend > 0) {
-                            if ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
-                                Pollinationprobability(pTree->xcoo, pTree->ycoo, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi,
-                                                       dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees);
-                            }
+					if (seedlebend > 0) {
+						if ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
+							Pollinationprobability(pTree->xcoo, pTree->ycoo, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi,
+												   dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees);
+						}
 
-                            for (int sl = 0; sl < seedlebend; sl++) {
-                                Seed seed;
+						for (int sl = 0; sl < seedlebend; sl++) {
+							Seed seed;
 
-                                seed.yworldcoo = aktortyworldcoo;
-                                seed.xworldcoo = aktortxworldcoo;
-                                seed.xcoo = pTree->xcoo;
-                                seed.ycoo = pTree->ycoo;
-                                seed.namem = pTree->name;
-                                seed.dead = false;
+							seed.yworldcoo = aktortyworldcoo;
+							seed.xworldcoo = aktortxworldcoo;
+							seed.xcoo = pTree->xcoo;
+							seed.ycoo = pTree->ycoo;
+							seed.namem = pTree->name;
+							seed.dead = false;
 
-                                // if chosen, determine the father by pollination out of available (matured) trees
-                                if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
-                                    int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
-                                    seed.namep = Vname.at(iran);
-                                    seed.thawing_depthinfluence = 100;
-                                } else {
-                                    seed.namep = 0;
-                                    seed.thawing_depthinfluence = 100;
-                                }
+							// if chosen, determine the father by pollination out of available (matured) trees
+							if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
+								int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
+								seed.namep = Vname.at(iran);
+								seed.thawing_depthinfluence = 100;
+							} else {
+								seed.namep = 0;
+								seed.thawing_depthinfluence = 100;
+							}
 
-                                seed.line = pTree->line;
-                                seed.generation = pTree->generation + 1;
-                                seed.incone = true;
-                                seed.weight = 1;
-                                seed.age = 0;
-                                seed.species = pTree->species;
-                                seed.releaseheight = pTree->height;
+							seed.line = pTree->line;
+							seed.generation = pTree->generation + 1;
+							seed.incone = true;
+							seed.weight = 1;
+							seed.age = 0;
+							seed.species = pTree->species;
+							seed.releaseheight = pTree->height;
 
-                                seed_list.add(seed);
-                            }
-                        }
-                    }
-                }  // main tree loop on each core
-            }      // parallel region
+							seed_list.add(seed);
+						}
+					}
+				}
+			}  // main tree loop on each core
+		}      // parallel region
 
-            Vname.clear();
-            Vname.shrink_to_fit();
-            Vthdpth.clear();
-            Vthdpth.shrink_to_fit();
-        }  // OMP==3
+		Vname.clear();
+		Vname.shrink_to_fit();
+		Vthdpth.clear();
+		Vthdpth.shrink_to_fit();
 
         TreeMort(yearposition, weather_list, tree_list);
     }

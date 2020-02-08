@@ -11,7 +11,7 @@
 // 0.1 -----> Display in console
 parameterinputvis=0;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
-qualiyearlyvis=1;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
+qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=0;				// (int 0,1) seed dispersal
 mortvis=0;							// (int 0,1) mortality of trees >200 cm
 

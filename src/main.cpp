@@ -1,9 +1,10 @@
 #include "LAVESI.h"
-using namespace std;
+ using namespace std;
 
 int yearposition;
 time_t start_timeout;
 bool timeoutspinuphappened =false;
+
 /****************************************************************************************//**
  * \brief go through all functions for vegetation dynamics
  *
@@ -199,7 +200,7 @@ void Spinupphase()
 					// firstyear=1934;
 					firstyear=world_weather_list[0][0]->jahr;
 					// lastyear=2013;
-					lastyear=world_weather_list[0][0]->jahr+100;
+					lastyear=world_weather_list[0][0]->jahr+90;
 				// }
 				
 				// choose a random year for weather determination
@@ -252,7 +253,7 @@ void Spinupphase()
 					// firstyear=1934;
 					firstyear=world_weather_list[0][0]->jahr;
 					// lastyear=2013;
-					lastyear=world_weather_list[0][0]->jahr+100;
+					lastyear=world_weather_list[0][0]->jahr+94;
 				// }
 				
 				// take a random year for weather determination
@@ -408,101 +409,53 @@ void Yearsteps()
 		// variation of parameters depends on experimental setting beginning at resetyear
 		if (parameter[0].resetyear>0)
 		{
-			// save the value read in from the parameter file
-			double incfac_buffer=parameter[0].incfac;
-			double densityvaluemanipulatorexp_buffer=parameter[0].densityvaluemanipulatorexp;
-			int seedintronumberpermanent_buffer=parameter[0].seedintronumberpermanent;
-
-			double tempdiffort_buffer=parameter[0].tempdiffort;
-			
-			for(double tempdifforti=-0.5; tempdifforti<0.9; tempdifforti=tempdifforti+0.5)
+ 
+			parameter[0].variabletraits=0;
+			parameter[0].pollination=0;
+ 
+ 
+			cout << " starting simulation runs " << endl;
+ 
+			// reset of the simulation run to resetyear
+			Clearalllists();
+			cout << " Lists deleted!!" << endl;
+			Restorealllists();
+			cout << " Lists restored!!" << endl;
+ 
+			printf("\n\n begin the simulation run time steps...\n");
+			cout << " Length of a simulation=" << ((parameter[0].simduration-(2014-parameter[0].resetyear))+1) << endl;
+ 
+			for (int t=((parameter[0].simduration-(2014-parameter[0].resetyear))+1);t<parameter[0].simduration;t++)
 			{
-				parameter[0].tempdiffort=tempdifforti;
-				// read in weather data with new tempdiffort parameter
-				for (vector<vector<Weather*> >::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw)
+ 
+				parameter[0].ivort++;
+ 
+				int jahr=parameter[0].startjahr+t;
+ 
+				yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the startjahr
+ 
+				if (parameter[0].yearlyvis==true)
 				{
-					vector<Weather*>& weather_list = *posw;
-
-					for (unsigned int iweather=0; iweather<weather_list.size(); ++iweather)	
-					{
-						pWeather=weather_list[iweather];
-						delete pWeather;
-					}
-					weather_list.clear();
+					printf("\nSites per location\tYear\tProgress\tSimulation duration\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simduration);
 				}
-				Weatherinput( &parameter[0],  stringlengthmax, world_weather_list);
-
-				// repeat simulation runs beginning at resetyear for different parameter settings
-				for(int parameteri=0;parameteri<4;parameteri++)
+				else
 				{
-					// parameter variation
-					if(parameteri==1)
-					{
-						parameter[0].incfac=5;
-					}
-					else if(parameteri==2)
-					{
-						parameter[0].densityvaluemanipulatorexp=2;
-					}
-					else if(parameteri==3)
-					{
-						parameter[0].seedintronumberpermanent=1000;
-					}
-
-					cout << " starting simulation runs " << endl;
-					
-					// reset of the simulation run to resetyear
-					Clearalllists();
-					cout << "           Lists deleted!!" << endl;
-					Restorealllists();
-					cout << "           Lists restored!!" << endl;
-							
-					printf("\n\n begin the simulation run time steps...\n");
-					cout << "     Length of a simulation=" << ((parameter[0].simduration-(2011-parameter[0].resetyear))+1) << endl;
-					
-					for (int t=((parameter[0].simduration-(2011-parameter[0].resetyear))+1);t<parameter[0].simduration;t++)
-					{
-						
-						parameter[0].ivort++;
-						
-						int jahr=parameter[0].startjahr+t;
-						
-						yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the startjahr
-
-						if (parameter[0].yearlyvis==true)
-						{
-							printf("\nSites per location\tYear\tProgress\tSimulation duration\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, t, parameter[0].simduration);
-						}
-						else 
-						{
-							printf("t=%d", jahr);
-
-							if ((jahr%100)==0)
-							{
-								printf("\n");
-							}
-						}
-						
-						// go through all functions for vegetation dynamics
-						vegetationDynamics(yearposition, jahr,t);
-						
-						// save all data at resetyear 
-						if (jahr==parameter[0].resetyear)
-						{
-							Savealllists();
-							cout << "At year= " << jahr << " all saved!" << endl << endl;
-						}
-					}
-					
-					// restore initial values
-					parameter[0].incfac=incfac_buffer;
-					parameter[0].densityvaluemanipulatorexp=densityvaluemanipulatorexp_buffer;
-					parameter[0].seedintronumberpermanent=seedintronumberpermanent_buffer;
+					printf("t=%d", jahr);
+ 
+				if ((jahr%100)==0)
+				{
+					printf("\n");
 				}
-			
-				parameter[0].tempdiffort=tempdiffort_buffer;
 			}
+ 
+			// go through all functions for vegetation dynamics
+			vegetationDynamics(yearposition, jahr,t);
+ 
 		}
+ 
+ 
+ 
+	}
 }
 
 
@@ -719,7 +672,7 @@ void runSimulation()
 
 		// plot and evaluation list preparation for each location on the transect 
 		initialiseMaps();
-
+		printf("this far");
 		// tree input similar to CH17 or seed input
 		Treedistribution(&parameter[0], stringlengthmax);
 		
@@ -855,7 +808,7 @@ void finishSimulation()
  *******************************************************************************************/
 int main()
 {	
-		clock_t start_time_main = clock();
+	clock_t start_time_main = clock();
 		time(&start_timeout);				
 		// random number initialization
 		srand((unsigned) time(NULL));

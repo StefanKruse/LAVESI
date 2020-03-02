@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include "LAVESI.h"
 using namespace std;
 	
 	struct Tree 
@@ -40,6 +40,7 @@ using namespace std;
 		
 		//SEEDWEIGHT IS A DIMENSIONLESS NUMBER IN REFERENCE TO A STANDARD SEED WEIGHT
 		double seedweight,seedweightvar;
+		double droughtresist;
 	};
 
 	struct Seed 
@@ -65,6 +66,7 @@ using namespace std;
 		double 	descent; 
 		double 	thawing_depthinfluence;
 		double seedweight,seedweightvar;
+		double droughtresist;
 	};
 
 	struct Envirgrid 
@@ -96,11 +98,13 @@ using namespace std;
 	struct Pollengrid 
 	{
 		int Number;
+		int name;
 		double	xcoo;
 		double	ycoo;
 		vector<int> Treenames;
 		
 		double seedweight,seedweightvar;
+		double droughtresist;
 	};
 
 	struct Parameter
@@ -233,6 +237,7 @@ using namespace std;
 		int 	windsource;
 		int 	boundaryconditions;
 		double 	pollendirectionvariance;
+		int	variabletraits;
 		int 	pollination;
 		double 	pollenfall;
 		double 	pollengregorym,pollengregoryc;
@@ -345,4 +350,6 @@ using namespace std;
 		vector<double> meantreeheightrunmeanliste;
 		vector<double> meantreeageliste;
 		vector<double> meantreeagerunmeanliste;
-	};				
+	};	
+
+			

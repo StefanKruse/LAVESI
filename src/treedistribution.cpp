@@ -139,13 +139,16 @@ void Seedin()
 					pSeed->species=specieszufall;
 					pSeed->releaseheight=0;
 					pSeed->thawing_depthinfluence=100;
-					
-					if((rand()%2)){
-						pSeed->seedweight=0.5;
-					}else{
-						pSeed->seedweight=0.5;
-						}
-					
+					if (parameter[0].variabletraits==1) 
+					{
+						pSeed->seedweight=normrand(0.9,0.5,0.33,1.66);
+						pSeed->droughtresist=normrand(50,20,0,100);
+					}
+					else 
+					{
+						pSeed->seedweight=1;
+						pSeed->droughtresist=0;
+					}
 					seed_list.push_back(pSeed);	
 					
 					if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )
@@ -175,7 +178,6 @@ void TreesIni(int maximal_word_length)
 {
 		FILE *f;
 		f=NULL;
-		
 		// set up of initial trees from different files
 		if (parameter[0].starttrees!=0)
 		{
@@ -188,7 +190,7 @@ void TreesIni(int maximal_word_length)
 
 				int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
 				int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
-
+				
 				if (parameter[0].starttrees==12)
 				{
 					f = fopen("input/CH17I_Treevert2011.csv","r");
@@ -226,10 +228,14 @@ void TreesIni(int maximal_word_length)
 				}
 				else if (parameter[0].starttrees==3)
 				{
-					printf("trying to load it");
 					f = fopen("input/continue.csv","r");
 					printf("load: input/continue.csv");
-				}	
+				}
+				else if (parameter[0].starttrees==81)
+				{
+					f = fopen("input/PURI_trees2001.csv","r");
+					printf("load: input/PURI_trees2001.csv");
+				}
 				if (f==NULL)
 				{
 					printf("Tree input file not available!\n");
@@ -296,14 +302,16 @@ void TreesIni(int maximal_word_length)
 						{
 							pTree->species=2;
 						}	
-						
-						if((rand()%2)){
-						pTree->seedweight=1.5;
-						}else{
-						pTree->seedweight=0.5;
-						}
-						
-						
+						if (parameter[0].variabletraits==1) 
+							{
+								pTree->seedweight=normrand(1,0.5,0.33,1.66);
+								pTree->droughtresist=normrand(50,20,0,100);
+							}
+						else 
+							{
+								pTree->seedweight=1;
+								pTree->droughtresist=0;
+							}
 						tree_list.push_back(pTree);
 					}
 					counter++;
@@ -540,7 +548,16 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 							pSeed->releaseheight=hinterheightsi;
 							pSeed->thawing_depthinfluence=100;
 							pSeed->dispersaldistance=dispersaldistance;	
-							
+							if (parameter[0].variabletraits==1 )
+							{
+								pSeed->seedweight=normrand(0.9,0.5,0.33,1.66);
+								pSeed->droughtresist=normrand(50,20,0,100);
+							}
+							else 
+							{
+								pSeed->seedweight=1;
+								pSeed->droughtresist=0;
+							}
 							seed_list.push_back(pSeed);	
 							
 							if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )

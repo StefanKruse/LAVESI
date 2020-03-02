@@ -680,7 +680,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					s3.str("");s3.clear();
 				}
 
-				if(parameter[0].boundaryconditions==3)
+				if(parameter[0].boundaryconditions==4) //was 3, but not known why so changed as a quickfix
 				{
 					// trying to open the file for reading
 					filepointer = fopen (dateiname.c_str(), "r+");
@@ -763,6 +763,10 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "seedprodAKT;");
 						fprintf(filepointer, "seedprodSUM;");
 						fprintf(filepointer, "seedweight;");
+						fprintf(filepointer, "droughtresist;");
+						fprintf(filepointer, "name;");
+						fprintf(filepointer, "namem;");
+						fprintf(filepointer, "namep;");
 						fprintf(filepointer, "\n");
 
 						if (filepointer == NULL)
@@ -796,6 +800,10 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "%d;", pTree->seednewly_produced);
 						fprintf(filepointer, "%d;", pTree->seedproduced);
 						fprintf(filepointer, "%lf;", pTree->seedweight);
+						fprintf(filepointer, "%4.4f;", pTree->droughtresist);
+						fprintf(filepointer, "%d;", pTree->name);
+						fprintf(filepointer, "%d;", pTree->namem);
+						fprintf(filepointer, "%d;", pTree->namep);
 						fprintf(filepointer, "\n");
 
 						++pos;

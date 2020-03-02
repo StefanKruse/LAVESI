@@ -118,7 +118,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 										exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal)))));	
 			double weather_mort_gmel	= parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);
 			double weather_mort_sib	= parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);				
-			double dry_mort		= parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5);
+			double dry_mort		= (parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5))*(pTree->droughtresist/100);
 			
 			// calculating the mortality rate of the tree considering the factors of each mortality rate
 			double Treemortg = 0.0 
@@ -240,7 +240,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 		
 
 		aktort++;
-
+	
 		double start_time_mortpoll=omp_get_wtime();
 		
 		// mortality of seeds
@@ -302,387 +302,8 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			// 1 == use advance to iterate through lists, but this makes the computation really slow
 			// 2 == split list to X lists of the same length
 			// 3 == trees are ordered by age which is highly correlated with seedprodAKT so that only elements are considered untiil the last tree producing seeds
-		if(mcorevariant==1)
-		{// OMP==1
-			// loop around the loop for MULTI-CORE-PROCESSING
-			// before run a program parallel set the number of helpers by changing the environment variable
-			// ... ... export OMP_NUM_THREADS=4
-			// ... or explicitly overwrite the environmental variable by setting the helper number directly
-			// ... ... omp_set_num_threads(int); // which is set in the parameter.txt file variable "omp_num_threads"
-
-			// loop with omp through each element of the list
-			omp_set_dynamic(0); //disable dynamic teams
-			omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-			
-			
-		if(pTree->cone!=0){
-						
-						//The grid is updated here in every time step. This way dying trees are filtered out.
-							double lent=sqrt(parameter[0].pollengridpoints);
-							double lentx=(parameter[0].pollengridxpoints);
-							double lenty=(parameter[0].pollengridypoints);
-							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
-							{
-							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lentx >= pTree->xcoo)
-								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lenty	>= pTree->ycoo)
-								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lentx	<  pTree->ycoo)	
-								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lenty	<  pTree->xcoo)
-								)
-								{
-									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
-									pTree->subgridVECpos=
-									(pollen_list[kartenpos]->Treenames.size()-1);
-									pollen_list[kartenpos]->seedweight+=pTree->seedweight;
-									
-									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
-
-									pTree->subgridpos=kartenpos+1;
-								}
-							}	
-								
-							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
-							{
-								if(pollen_list[kartenpos]->Treenames.size()>1){
-									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
-									pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
-								}
-							}
-								
-				}
-			
-			double direction=0.0;
-			double velocity=0.0;
-			unsigned int ripm=0,cntr=0;
-			double p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
-			double I0kappa=0.0;
-			double pe=0.01;
-			double C=parameter[0].pollengregoryc;
-			double m=parameter[0].pollengregorym;
-			vector<int> Vname;
-			vector<double> Vthdpth;
-
-			#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
-			{
-				// declare a local seed list to be filled by each thread
-				list<Seed*> newseed_list;
-				
-				direction=0.0;velocity=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
-				I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
-				
-				int n_trees=0;
-				double timer_eachtree_advance=0;
-				double timer_eachtree_vectini=0;
-				double timer_eachtree_seedsurv=0;
-				double timer_eachtree_seedadd=0;
-				double timer_eachtree_total=0;
-				
-				#pragma omp for nowait schedule(guided) 
-				for(unsigned int pari=0; pari<tree_list.size(); ++pari)
-				{
-					double start_timer_eachtree=omp_get_wtime();
-					++n_trees;//for later calculating mean of computation times
-				
-					list<Tree*>::iterator posb=tree_list.begin();
-					// since the iterator must be an int for omp, the iterator has to be constructed for each tree instance and advanced to the correct position
-					advance(posb, pari);
-					
-					double end_timer_eachtree_advance=omp_get_wtime();
-					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
-
-					pTree=(*posb);			
-					
-					double end_timer_eachtree_vecini=omp_get_wtime();
-					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
-
-					if((parameter[0].ivort==1) & (pari==0))
-					{
-						cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
-					}
-					
-					if(pTree->seednewly_produced>0)
-					{
-						int seedlebend=0;
-						for(int sna=0; sna < pTree->seednewly_produced; sna++)
-						{
-							double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-							if(zufallsz>=parameter[0].seedconemort) 
-							{
-								++seedlebend;
-							}
-						}
-						
-						double end_timer_seedsurv_vecini=omp_get_wtime();
-						timer_eachtree_seedsurv+=end_timer_seedsurv_vecini-end_timer_eachtree_vecini;
-
-						if(seedlebend>0)
-						{
-							if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].spinupphase==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))
-							{
-								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_p, //world_positon_p       
-													direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
-													Vname,Vthdpth,
-													n_trees
-													);
-							}
-					
-							// get the characteristics for each surviving seed and push these back new to seed_list
-							for(int sl=0; sl<seedlebend; sl++)
-							{
-								pSeed= new Seed();
-								
-								pSeed->yworldcoo=aktortyworldcoo;
-								pSeed->xworldcoo=aktortxworldcoo;
-								pSeed->xcoo=pTree->xcoo;
-								pSeed->ycoo=pTree->ycoo;
-								pSeed->namem=pTree->name;
-								
-								// if chosen, determine the father by pollination out of available (matured) trees
-								if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
-								{
-									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
-									pSeed->namep=Vname.at(iran);
-									pSeed->seedweight=
-								mixrand(Vthdpth.at(iran),0.0,pTree->seedweight,0.0);
-								} 
-								else
-								{
-									pSeed->namep=0;
-									pSeed->seedweight=mixrand(pTree->seedweight,0.0,pTree->seedweight,0.0);
-									pSeed->thawing_depthinfluence=100;
-								}
-															
-								pSeed->line=pTree->line;
-								pSeed->generation=pTree->generation+1;
-								pSeed->incone=true;
-								pSeed->weight=1;
-								pSeed->age=0;
-								pSeed->species=pTree->species;
-								pSeed->releaseheight=pTree->height;
-
-								newseed_list.push_back(pSeed);
-							}
-
-						}
-						
-						double end_timer_seedsurv_seedadd=omp_get_wtime();
-						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
-					}
-					
-					timer_eachtree_total+=omp_get_wtime()-start_timer_eachtree;
-				}
-				
-				// append all newly created seed from each thread at once to the seed_list
-				#pragma omp critical
-				{
-					seed_list.splice(seed_list.end(), newseed_list);
-					
-					timer_eachtree_advance_all+=timer_eachtree_advance/n_trees;
-					timer_eachtree_vectini_all+=timer_eachtree_vectini/n_trees;
-					timer_eachtree_seedsurv_all+=timer_eachtree_seedsurv/n_trees;
-					timer_eachtree_seedadd_all+=timer_eachtree_seedadd/n_trees;
-					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
-				}
-			}// parallel region
-
-			Vname.clear();Vname.shrink_to_fit();
-			Vthdpth.clear();Vthdpth.shrink_to_fit();
-		}// OMP==1
-		if(mcorevariant==2)
-		{// OMP==2
-			omp_set_dynamic(0); //disable dynamic teams
-			omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-			double direction=0.0;
-			double velocity=0.0;
-			unsigned int ripm=0,cntr=0;
-			double p=0.0,kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2),phi=0.0,dr=0.0,dx=0.0,dy=0.0;
-			double I0kappa=0.0;
-			double pe=0.01;
-			double C=parameter[0].pollengregoryc;
-			double m=parameter[0].pollengregorym;
-			vector<int> Vname;
-			vector<double> Vthdpth;
-			
-			if(pTree->cone!=0){
-						
-						//...because the grid is updated here in every time step. This way dying trees are filtered.
-							double lent=sqrt(parameter[0].pollengridpoints);
-							double lentx=(parameter[0].pollengridxpoints);
-							double lenty=(parameter[0].pollengridypoints);
-							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
-							{
-							if(			 (pollen_list[kartenpos]->xcoo + 0.5*treerows/lentx >= pTree->xcoo)
-								&&       (pollen_list[kartenpos]->ycoo + 0.5*treecols/lenty	>= pTree->ycoo)
-								&&		 (pollen_list[kartenpos]->ycoo - 0.5*treecols/lentx	<  pTree->ycoo)	
-								&&		 (pollen_list[kartenpos]->xcoo - 0.5*treerows/lenty	<  pTree->xcoo)
-								)
-								{
-									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
-									pTree->subgridVECpos=//pollen_list2[kartenpos]->Treenames.begin()+
-									(pollen_list[kartenpos]->Treenames.size()-1);
-									pollen_list[kartenpos]->seedweight+=pTree->seedweight;
-									
-									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
-
-									pTree->subgridpos=kartenpos+1;
-								}
-							}	
-								
-							for(int kartenpos=0;kartenpos<parameter[0].pollengridpoints;kartenpos++)
-							{
-								if(pollen_list[kartenpos]->Treenames.size()>1){
-									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
-									pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
-								}
-							}
-								
-				}
-	
-			#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
-			{
-				if((parameter[0].ivort==1))
-				{
-					cout << " -- OMP -- set current number of helpers to =" << parameter[0].omp_num_threads << " --> realized =" << omp_get_num_threads() << " of maximum N=" << omp_get_num_procs() << " on this machine" << endl << endl;
-				}
-
-				direction=0.0;velocity=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
-				I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;phi=0.0;dr=0.0;dx=0.0;dy=0.0;
-			
-				// slit the lists manually
-				int thread_count=omp_get_num_threads();
-				int thread_num=omp_get_thread_num();
-				size_t chunk_size=tree_list.size()/thread_count;
-				auto begin=tree_list.begin();
-				std::advance(begin, thread_num*chunk_size);
-				auto end=begin;
-				if(thread_num==(thread_count-1)) // the last thread iterates through the remaining elements
-				{
-					end = tree_list.end();
-				} 
-				else
-				{
-					std::advance(end, chunk_size);
-				}
-						
-				// declare a local seed list to be filled by each thread
-				list<Seed*> newseed_list;
-
-				int n_trees=0;
-				double timer_eachtree_advance=0;
-				double timer_eachtree_vectini=0;
-				double timer_eachtree_seedsurv=0;
-				double timer_eachtree_seedadd=0;
-				double timer_eachtree_total=0;
-				
-				// wait for all threads to initialize and then proceed
-				#pragma omp barrier
-				for(auto it = begin; it != end; ++it)
-				{
-					double start_timer_eachtree=omp_get_wtime();
-					++n_trees;
-					
-					double end_timer_eachtree_advance=omp_get_wtime();
-					timer_eachtree_advance+=end_timer_eachtree_advance-start_timer_eachtree;
-
-					pTree=(*it);			
-					
-					double end_timer_eachtree_vecini=omp_get_wtime();
-					timer_eachtree_vectini+=end_timer_eachtree_vecini-end_timer_eachtree_advance;
-					
-					if(pTree->seednewly_produced>0)
-					{								
-						int seedlebend=0;
-						for(int sna=0; sna < pTree->seednewly_produced; sna++)
-						{
-							double zufallsz = 0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
-							if(zufallsz>=parameter[0].seedconemort) 
-							{
-								++seedlebend;
-							}
-						}
-						double end_timer_seedsurv_vecini=omp_get_wtime();
-						timer_eachtree_seedsurv+=end_timer_seedsurv_vecini-end_timer_eachtree_vecini;
-						
-						if(seedlebend>0)
-						{
-							if( (parameter[0].pollination==1 && Jahr>1978 && Jahr<2013 && parameter[0].spinupphase==false && parameter[0].ivort>1045) || (parameter[0].pollination==9))
-							{
-								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_p,//world_positon_b        
-												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
-												Vname,Vthdpth,
-												n_trees
-											);
-							}
-					
-							// get the characteristics for each surviving seed and push these back new to seed_list
-							for(int sl=0; sl<seedlebend; sl++)
-							{
-								pSeed= new Seed();
-								
-								pSeed->yworldcoo=aktortyworldcoo;
-								pSeed->xworldcoo=aktortxworldcoo;
-								pSeed->xcoo=pTree->xcoo;
-								pSeed->ycoo=pTree->ycoo;
-								pSeed->namem=pTree->name;
-								
-								// if chosen, determine the father by pollination out of available (matured) trees
-								if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
-								{
-									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
-									pSeed->namep=Vname.at(iran);
-									//pSeed->seedweight=100;
-									pSeed->thawing_depthinfluence=100;
-									pSeed->seedweight=
-									mixrand(pTree->seedweight,0.0,Vthdpth.at(iran),0.0);
-								} 
-								else
-								{
-									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
-									pSeed->seedweight=mixrand(pTree->seedweight,0.0,pTree->seedweight,0.0);
-									//pSeed->seedweightvar=pTree->seedweightvar;
-									///AND THEN THE SEED GROWS TO A TREE WTH THE SAME PARAMETERS
-									///PROBLEMS: - NO negative values please
-									///			 - what if the new value in every generation leads to some sort of a DRIFT?   
-								}
-								
-								pSeed->line=pTree->line;
-								pSeed->generation=pTree->generation+1;
-								pSeed->incone=true;
-								pSeed->weight=1;
-								pSeed->age=0;
-								pSeed->species=pTree->species;
-								pSeed->releaseheight=pTree->height;
-
-								newseed_list.push_back(pSeed);
-							}
-						}
-
-						double end_timer_seedsurv_seedadd=omp_get_wtime();
-						timer_eachtree_seedadd+=end_timer_seedsurv_seedadd-end_timer_seedsurv_vecini;
-
-					}
-					
-					timer_eachtree_total+=omp_get_wtime()-start_timer_eachtree;
-
-				}// main tree loop on each core
-				
-				// append all newly created seed from each thread at once to the seed_list
-				#pragma omp critical
-				{
-					seed_list.splice(seed_list.end(), newseed_list);
-					
-					timer_eachtree_advance_all+=timer_eachtree_advance/n_trees;
-					timer_eachtree_vectini_all+=timer_eachtree_vectini/n_trees;
-					timer_eachtree_seedsurv_all+=timer_eachtree_seedsurv/n_trees;
-					timer_eachtree_seedadd_all+=timer_eachtree_seedadd/n_trees;
-					timer_eachtree_total_all+=timer_eachtree_total/n_trees;
-				}
-			}// parallel region
-			
-			Vname.clear();Vname.shrink_to_fit();
-			Vthdpth.clear();Vthdpth.shrink_to_fit();
-		}// OMP==2
+		
+		
 		if(mcorevariant==3)
 		{// OMP==3
 			omp_set_dynamic(0); //disable dynamic teams
@@ -698,11 +319,19 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 			double m=parameter[0].pollengregorym;
 			vector<int> Vname;
 			vector<double> Vthdpth;
-			
+			vector<double> Vdrought;
+			vector<int> pollname;
 			// set end of the iterations split up to last tree with produced seeds
 			list<Tree*>::iterator lasttreewithseeds_iter=tree_list.begin();
 			int lasttreewithseeds_pos=0;
 			int treeiter=0;
+			for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++)
+							{
+							
+									pollen_list[kartenpos]->Treenames.clear();
+									pollen_list[kartenpos]->seedweight=0;
+									pollen_list[kartenpos]->droughtresist=10;
+							}	
 			for(list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
 			{
 				pTree=(*posb);
@@ -730,9 +359,10 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								)
 								{
 									pollen_list[kartenpos]->Treenames.push_back(pTree->name);
-									pTree->subgridVECpos=//pollen_list2[kartenpos]->Treenames.begin()+
-									(pollen_list[kartenpos]->Treenames.size()-1);
+									//pTree->subgridVECpos=//pollen_list2[kartenpos]->Treenames.begin()+
+									//(pollen_list[kartenpos]->Treenames.size()-1);
 									pollen_list[kartenpos]->seedweight+=pTree->seedweight;
+									pollen_list[kartenpos]->droughtresist+=pTree->droughtresist;
 									
 									//NEUE IDEE: RAND ZIEHEN. IF RAND()>xyz, return irgendwas. DAS BENÖTIGT KEINEN VEKTOR
 
@@ -740,19 +370,20 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								}
 							}	
 								
-							for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++)
-							{
-								if(pollen_list[kartenpos]->Treenames.size()>1){
-									pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
-									pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
-								}
-							}
 								
+				}
+			}
+			for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++)
+			{
+				if(pollen_list[kartenpos]->Treenames.size()>1){
+					pollen_list[kartenpos]->seedweight/=pollen_list[kartenpos]->Treenames.size();
+					pollen_list[kartenpos]->droughtresist/=pollen_list[kartenpos]->Treenames.size();
+					// pollen_list[kartenpos]->seedweightvar+=(pTree->seedweight-pollen_list[kartenpos]->seedweight)*(pTree->seedweight-pollen_list[kartenpos]->seedweight);
 				}
 			}
 			advance(lasttreewithseeds_iter, lasttreewithseeds_pos);
 					
-			#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth)
+			#pragma omp parallel default(shared) private(pTree,pSeed,       pTree_copy,    direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m       ,Vname,Vthdpth,Vdrought,pollname)
 			{
 				direction=0.0;velocity=0.0;ripm=0,cntr=0;p=0.0;kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);phi=0.0;dr=0.0;dx=0.0;dy=0.0;
 				I0kappa=0.0;pe=0.01;C=parameter[0].pollengregoryc;m=parameter[0].pollengregorym;
@@ -828,7 +459,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 							{
 								Pollinationprobability(pTree->xcoo,pTree->ycoo,&parameter[0],world_positon_p,        
 												direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m,       
-												Vname,Vthdpth,
+												Vname,Vthdpth,Vdrought,pollname,
 												n_trees
 											);
 							}
@@ -852,21 +483,40 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size(); //at the end -1 was deleteed as it is suspected to be causing the bug
 									//Vname.at(iran) is the chosen pollen grid cell number returned from the pollination function
 									//Vthdpth.at(iran) is the chosen trait (seed weight) value returned from the pollination function
-									pSeed->namep=Vname.at(iran);
+									pSeed->namep=Vname.at(iran); 
 									pSeed->thawing_depthinfluence=100;
 									//The standard deviations of the two gaussian peaks from which the new seed weight value
 									//is drawn is here set to 0.5 (above:0.0) for this benchmarking version. 
 									//This should be changed to a pollengrid size dependent law derived from genetic studies
 									//(square root?... according to neutral theory) for std1 and a tree dependent std2.
 									//
-									pSeed->seedweight=mixrand(Vthdpth.at(iran),0.5,pTree->seedweight,0.5);
+									pSeed->seedweight=mixrand(Vthdpth.at(iran),0.05,pTree->seedweight,0.05,0.33,1.66); // changed the std to be a lot smaller since they can be any value anway. realistic value to be determined
+									// pSeed->seedweight=Vthdpth.at(iran); //used for testing
+									pSeed->droughtresist=mixrand(Vdrought.at(iran),2,pTree->droughtresist,20,0,100);
+									// pSeed->droughtresist=Vdrought.at(iran); //used for testing
 								} 
-								else
+								else if ((Vname.size()==0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 								{
 									//If no fathering pollen grid cell is found....
 									pSeed->namep=0;
-									pSeed->seedweight=mixrand(pTree->seedweight,0.5,pTree->seedweight,0.5);
-								}
+									pSeed->seedweight=normrand(pTree->seedweight,0.05,0.33,1.66);								
+									pSeed->droughtresist=normrand(pTree->droughtresist,2,0,100);								}
+								else if (parameter[0].pollination ==0)   ///should be further upstream to avoid unnecessary computation. no need to keep pollenlist when there is no pollination 
+								{
+									if (parameter[0].variabletraits == 1)
+									{
+									pSeed->namep=0;
+									pSeed->seedweight=normrand(0.8,0.5,0.33,1.66);
+									pSeed->droughtresist=normrand(50,20,0,100);
+									}
+									else
+									{
+									pSeed->namep=0;
+									pSeed->seedweight=1;
+									pSeed->droughtresist=50;
+									}
+								} 
+								
 								
 								pSeed->line=pTree->line;
 								pSeed->generation=pTree->generation+1;

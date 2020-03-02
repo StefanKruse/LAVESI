@@ -11,7 +11,7 @@
 #include<ctime>
 #include<time.h>
 #define _USE_MATH_DEFINES
-#include<math.h>
+#include<math.h> 
 #include<vector>
 #include<list>
 #include<algorithm>
@@ -21,3 +21,4 @@
 #include <float.h>	
 #include <omp.h>
 //#include <mcheck.h>
+

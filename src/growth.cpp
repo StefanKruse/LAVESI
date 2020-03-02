@@ -86,6 +86,8 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*> &weather_list)
 			}
 		}	
 	}
+	//just quickly added for testing
+	maxbw_help=maxbw_help *(pTree->droughtresist/100);
 	return (maxbw_help);
 }
 
@@ -175,6 +177,7 @@ double getMaxbreastwachstum(int yearposition,  vector<Weather*> &weather_list)
 			}	
 		}
 	}
+	maxbrw_help=maxbrw_help*(pTree->droughtresist/100);
 	return(maxbrw_help);
 }
 

@@ -52,21 +52,31 @@ This also works for standarddeviations std1=0 , so that the mixed distribution c
 distribution around mu2 with std2 and the discrete value mu1.
 The maximum value is 5/3, and minimum is 1/3, so that seed weights do not diverge or become <=0.
 */
-double mixrand(double mu1,double std1,double mu2,double std2)
+double mixrand(double mu1,double std1,double mu2,double std2, double Lbound, double Rbound)
 {
 	double R1,R2,z1=-1,z2=-1;
 do{
-	R1=rand()/(1.0+RAND_MAX);
-	R2=rand()/(1.0+RAND_MAX);
-	z1=(sqrt(-2.0*log(R1))+cos(2.0*M_PI*R2))*std1+mu1;
-	z2=(sqrt(-2.0*log(R1))+sin(2.0*M_PI*R2))*std2+mu2;
-	R1=(rand()%2)? z1:z2;
-}
-while(R1<=(1.0/3.0) || R1>=(5.0/3.0));
+	R1=rand()*(1.0/RAND_MAX);
+	R2=rand()*(1.0/RAND_MAX);
+	z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std1+mu1;
+	z2=(sqrt(-2.0*log(R1))*sin(2.0*M_PI*R2))*std2+mu2;
+	R1=((rand()%2)? z1:z2);
+}while(R1<=(Lbound) || R1>=(Rbound));
 //cout<<z1<<" "<<z2<<endl;
 return R1;
 }
 
+
+double normrand(double mu,double std,double Lbound, double Rbound)
+{
+	double R1,R2,z1=-1;
+do{
+	R1=rand()*(1.0/RAND_MAX);
+	R2=rand()*(1.0/RAND_MAX);
+	z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std+mu;
+}while(z1<=(Lbound) || z1>=(Rbound));
+return z1;	
+}
 
 /*
 NOT IN USE.
@@ -92,7 +102,7 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
  //vector<std::list<Tree*> >::iterator world_positon_b,
  vector<std::vector<Pollengrid*> >::iterator world_positon_p,
  double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
- vector<int> &pName, vector<double>  &thdpthinfl, int outputtreesiter)
+ vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<int>  &fathname, int outputtreesiter)
 {
   //list<Tree*>& tree_list = *world_positon_b;
   vector<Pollengrid*> pollen_list=*world_positon_p;
@@ -199,6 +209,8 @@ for (vector<Pollengrid*>::iterator pos = pollen_list.begin(); pos != pollen_list
 				
 				//INHERITING SEED WEIGHT
 				thdpthinfl.push_back(pPollengrid->seedweight);
+				droghtinfl.push_back(pPollengrid->droughtresist);
+				fathname.push_back(pPollengrid->name);
 				//thdpthinflvar.push_back(pPollengrid->seedweightvar);
 				
 				

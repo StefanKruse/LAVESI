@@ -936,6 +936,13 @@ void Parameterinput(void)
 		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);
 	}
 	
+	strcpy(uebergabestring,"variabletraits");
+	parameter[0].variabletraits=(int) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollination);
+	}
+	
 	strcpy(uebergabestring,"pollination");
 	parameter[0].pollination=(int) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
 	if (parameter[0].parameterinputvis ==true)

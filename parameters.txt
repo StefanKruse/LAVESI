@@ -11,14 +11,14 @@
 // 0.1 -----> Display in console
 parameterinputvis=0;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
-qualiyearlyvis=1;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
+qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=0;				// (int 0,1) seed dispersal
 mortvis=0;							// (int 0,1) mortality of trees >200 cm
 computationtimevis=0;				// (int 0,1) include visualisation and output of computation time a function of the plot size and number of trees
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=2;  						// (int) choice of data output files 
+outputmode=0;  						// (int) choice of data output files 
 										// 0=="full"
 										// 1=="normal"
 										// 2=="OMP only => currencies + computation time"
@@ -26,7 +26,7 @@ outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
 										// 1==output of all tree data on the plot
 timedoutput=0;						// (int 0,1) have a timedshutoff point (used when running on servers with timelimit)
-timelimit=24;						// (double) time simulation should run for in hours (set to server limit minus a few yearsteps)
+timelimit=48;						// (double) time simulation should run for in hours (set to server limit minus a few yearsteps)
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation
 vegetation=0;						// (int 0,1) Representation of an organic layer
@@ -86,13 +86,13 @@ windsource=1;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 simduration=80;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
-ivortmax=719;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
-resetyear=-99999;						// (int) year to save all container for a later resume from this time point
+resetyear=-999999;						// (int) year to save all container for a later resume from this time point
 specpres=1;							// (int) which larch species should be present in the model
 										// 0==both Larix gmelinii and L. sibirica 
 										// 1==only Larix gmelinii
@@ -102,25 +102,25 @@ specpres=1;							// (int) which larch species should be present in the model
 mapxlength=1;						// (int) number of parallel executed plots for each climate
 mapylength=1;						// (int) number of plots along a south-north transect
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
-pollengridpoints=25;//pollengridxpoints, pollengridypoints dynamisch...
-pollengridxpoints=5;
-pollengridypoints=5;
+pollengridpoints=240;//pollengridxpoints, pollengridypoints dynamisch...
+pollengridxpoints=120;
+pollengridypoints=8;
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=50; 			// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=20000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+seedintronumber=2000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=0;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=1;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=0;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 										// 0==into all plots along a transect
 										// 1==only southernmost plot
-seedwinddispersalmode=2;						// (int 1,2) positions for introduced seeds
+seedwinddispersalmode=1;						// (int 1,2) positions for introduced seeds
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
-boundaryconditions=1;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
+boundaryconditions=3;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 										// 0==seeds passing the borders are removed
 										// 1==the western/eastern and northern/southern border turned in both directions 
 										// 2==dispersal connection only on the western to eastern border
@@ -130,15 +130,17 @@ starttrees=0;						// (int) type of initial tree set up
 										// 12==CH17
 										// and SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000 2000x2000 meters) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
 										// ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
-hinterland_maxlength=50; 		// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland																																		
+hinterland_maxlength=0; 		// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland																																		
 										
 // 1.4.2 -----> Pollen dispersal
+
 pollination=9;						// (int 0,1,2) allow pollen dispersal
 										// 0==without pollination
 										// 1==pollination is computed during the simulation period (simduration)
 										// ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simduration==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
 										// 9==each year computation of pollination
 										// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
+variabletraits=1;						// (int 0,1) turning variable traits off and on (this determines the initial trees and if pollination is off if traits should vary or not (so if pollination is on the values are going to end up diferened no matter what this value says))
 
 pollendirectionvariance=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
 pollenfall=0.126;					// (double) pollen fall velocity

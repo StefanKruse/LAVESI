@@ -17,7 +17,7 @@ void Pollinationprobability(
 				double x, double y,struct Parameter *parameter, //vector<list<Tree*>>::iterator world_positon_b, 
 				vector<vector<Pollengrid*>>::iterator world_positon_p, 
 				double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
-				vector<int> &pName, vector<double>  &thdpthinfl,
+				vector<int> &pName, vector<double>  &thdpthinfl,vector<double>  &droghtinfl, vector<int> &fathname,
 				int outputtreesiter
 			);
 void Seedwinddispersal(double ad, double& cd, double& dd, double &vv, double &vd, double parhei, int seedspec);
@@ -27,4 +27,5 @@ void Clearalllists(void);
 void Restorealllists(void);
 void Clearalllists_copy(void);
 
-double mixrand(double mu1,double mu2,double std1,double std2);
+double mixrand(double mu1,double mu2,double std1,double std2, double Lbound, double Rbound);
+double normrand(double mu, double std, double Lbound, double Rbound);

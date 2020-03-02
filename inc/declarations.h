@@ -2,7 +2,7 @@
 
 
 	// plot dimensions rows==y, cols==x
- 	const int treerows=200;
+ 	const int treerows=3000;
  	const int treecols=200;
 
 	// parameter input

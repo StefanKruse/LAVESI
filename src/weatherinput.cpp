@@ -410,15 +410,16 @@ void getTemp3(int aktort, char dateinametemp[50],vector<Weather*>& weather_list)
 
 	if (parameter[0].lineartransect==true)
 	{
-	// neu um die Grenze an eine stelle zu rücken. Mitte = eingeladene Serie
+		// neu um die Grenze an eine stelle zu rücken. Mitte = eingeladene Serie
 		// ... 2° N nach norden verschoben
-		parameter[0].precdiffort=-5.3699 * (2.0);
-		parameter[0].tempdiffort=-0.3508 * (2.0);
-
-		parameter[0].tempdiffortmin=-0.3508 * -1*treerows/(111120);
-		parameter[0].precdiffortmin=-5.3699 * -1*treerows/(111120);
+		// parameter[0].tempdiffort=-0.3508 * (2.0);
+		// parameter[0].precdiffort=-5.3699 * (2.0);
+ 
+		// parameter[0].tempdiffortmin=-0.3508 * -1*treerows/(111120);
+		// parameter[0].precdiffortmin=-5.3699 * -1*treerows/(111120);
+		parameter[0].tempdiffortmin=-0.007177654 * -1*treerows;
+		parameter[0].precdiffortmin= 0.0129782 * -1*treerows;
 	}
-
 	FILE *f;
 	f = fopen(dateinametemp,"r"); 
 	if (f == NULL)
@@ -805,10 +806,17 @@ extern void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vec
 		else if (parameter[0].weatherchoice==7001)
 		{
 			char tempbuf[]="input/Coredata_complete_tmp_forw_ens01.csv";
-			char precbuf[]="input/Coredata_complete_prc.csv";
+			char precbuf[]="input/Coredata_complete_prc_dec2.csv";
 			strcpy(dateinametemp, tempbuf);
 			strcpy(dateinameprec, precbuf);					  
-		}	
+		}
+		else if (parameter[0].weatherchoice==814)
+		{
+		char tempbuf[]="input/PURI_tmp_minus4.csv";
+		char precbuf[]="input/PURI_prc.csv";
+		strcpy(dateinametemp, tempbuf);
+		strcpy(dateinameprec, precbuf);
+		}
 		getTemp3(aktort, dateinametemp,  weather_list);
 		getPrec1(dateinameprec, weather_list,stringlengthmax);
 		

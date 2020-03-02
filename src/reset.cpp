@@ -62,7 +62,8 @@ void Savealllists(void)
 			pTree_copy->thawing_depthinfluence=pTree->thawing_depthinfluence;
 			pTree_copy->longdispersed=pTree->longdispersed;
 			pTree_copy->growing=pTree->growing;
-				
+			pTree_copy->seedweight=pTree->seedweight;
+			pTree_copy->droughtresist=pTree->droughtresist;	
 			tree_list_copy.push_back(pTree_copy);
 
 			if(countertree==1)
@@ -116,6 +117,8 @@ void Savealllists(void)
 			pSeed_copy->weight=pSeed->weight;	
 			pSeed_copy->age=pSeed->age;			
 			pSeed_copy->longdispersed=pSeed->longdispersed;	
+			pSeed_copy->seedweight=pSeed->seedweight;
+			pSeed_copy->droughtresist=pSeed->droughtresist;	
 			seed_list_copy.push_back(pSeed_copy);	
 
 			if(counterseed==1)
@@ -462,10 +465,10 @@ void Restorealllists(void)
 	int aktort=0;
 	for (vector<list<Tree*> >::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw)
 	{ 
-		list<Tree*>& tree_list = *posw;
+		list<Tree*>& tree_list_copy = *posw;
 		
-		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
-		list<Tree*>& tree_list_copy = *world_positon_b;
+		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list_copy.begin()+aktort);
+		list<Tree*>& tree_list = *world_positon_b;
 		
 		aktort++;
 
@@ -474,40 +477,41 @@ void Restorealllists(void)
 		cout << "tree_list_copy.size() before copying =" << tree_list_copy.size() << endl;
 		
 		int countertree=1;	// for displaying the first tree
-		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
+		for (list<Tree*>::iterator pos = tree_list_copy.begin(); pos != tree_list_copy.end(); )
 		{ 
-			pTree=(*pos);
-
-			pTree_copy= new Tree();
+			pTree_copy=(*pos);
+			pTree= new Tree();
 			
-			pTree_copy->yworldcoo=pTree->yworldcoo;
-			pTree_copy->xworldcoo=pTree->xworldcoo;
-			pTree_copy->xcoo=pTree->xcoo;		
-			pTree_copy->ycoo=pTree->ycoo;
-			pTree_copy->name=pTree->name;
-			pTree_copy->namem=pTree->namem;
-			pTree_copy->namep=pTree->namep;
-			pTree_copy->line=pTree->line;			
-			pTree_copy->generation=pTree->generation;
-			pTree_copy->species=pTree->species;
-			pTree_copy->yr_of_establishment=pTree->yr_of_establishment;		
-			pTree_copy->yr_of_dying=pTree->yr_of_dying;		
-			pTree_copy->dbasal=pTree->dbasal;				
-			pTree_copy->dbasalrel=pTree->dbasalrel;			
-			pTree_copy->dbreast=pTree->dbreast;
-			pTree_copy->dbreastrel=pTree->dbreastrel;		
-			pTree_copy->height=pTree->height;
-			pTree_copy->age=pTree->age;
-			pTree_copy->cone=pTree->cone;
-			pTree_copy->coneheight=pTree->coneheight;
-			pTree_copy->seednewly_produced=pTree->seednewly_produced;
-			pTree_copy->seedproduced=pTree->seedproduced;
-			pTree_copy->buffer=pTree->buffer;
-			pTree_copy->densitywert=pTree->densitywert;
-			pTree_copy->thawing_depthinfluence=pTree->thawing_depthinfluence;
-			pTree_copy->longdispersed=pTree->longdispersed;
-			pTree_copy->growing=pTree->growing;
-			tree_list_copy.push_back(pTree_copy);
+			pTree->yworldcoo=pTree_copy->yworldcoo;
+			pTree->xworldcoo=pTree_copy->xworldcoo;
+			pTree->xcoo=pTree_copy->xcoo;		
+			pTree->ycoo=pTree_copy->ycoo;
+			pTree->name=pTree_copy->name;
+			pTree->namem=pTree_copy->namem;
+			pTree->namep=pTree_copy->namep;
+			pTree->line=pTree_copy->line;			
+			pTree->generation=pTree_copy->generation;
+			pTree->species=pTree_copy->species;
+			pTree->yr_of_establishment=pTree_copy->yr_of_establishment;		
+			pTree->yr_of_dying=pTree_copy->yr_of_dying;		
+			pTree->dbasal=pTree_copy->dbasal;				
+			pTree->dbasalrel=pTree_copy->dbasalrel;			
+			pTree->dbreast=pTree_copy->dbreast;
+			pTree->dbreastrel=pTree_copy->dbreastrel;		
+			pTree->height=pTree_copy->height;
+			pTree->age=pTree_copy->age;
+			pTree->cone=pTree_copy->cone;
+			pTree->coneheight=pTree_copy->coneheight;
+			pTree->seednewly_produced=pTree_copy->seednewly_produced;
+			pTree->seedproduced=pTree_copy->seedproduced;
+			pTree->buffer=pTree_copy->buffer;
+			pTree->densitywert=pTree_copy->densitywert;
+			pTree->thawing_depthinfluence=pTree_copy->thawing_depthinfluence;
+			pTree->longdispersed=pTree_copy->longdispersed;
+			pTree->growing=pTree_copy->growing;
+			pTree->seedweight=pTree_copy->seedweight;
+			pTree->droughtresist=pTree_copy->droughtresist;	
+			tree_list.push_back(pTree);
 			
 			if(countertree==1)
 			{
@@ -529,11 +533,11 @@ void Restorealllists(void)
 	aktort=0;
 	for (vector<list<Seed*> >::iterator posw = world_seed_list_copy.begin(); posw != world_seed_list_copy.end(); ++posw)
 	{ 
-		list<Seed*>& seed_list = *posw;
+		list<Seed*>& seed_list_copy = *posw;
 
 		// opening the original seed list and the referring reset list ..._copy		
-		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list.begin()+aktort);
-		list<Seed*>& seed_list_copy = *world_positon_s;
+		vector<list<Seed*> >::iterator world_positon_s = (world_seed_list_copy.begin()+aktort);
+		list<Seed*>& seed_list = *world_positon_s;
 				
 		aktort++;
 
@@ -542,26 +546,27 @@ void Restorealllists(void)
 		cout << "seed_list_copy.size() before copying =" << seed_list_copy.size() << endl;
 		
 		int counterseed=1;	// for displaying the first seed
-		for (list<Seed*>::iterator pos = seed_list.begin(); pos != seed_list.end(); )
+		for (list<Seed*>::iterator pos = seed_list_copy.begin(); pos != seed_list_copy.end(); )
 		{ 
-			pSeed=(*pos);
-
-			pSeed_copy= new Seed();	
+			pSeed_copy=(*pos);
+			pSeed= new Seed();
 			
-			pSeed_copy->xworldcoo=pSeed->xworldcoo;			
-			pSeed_copy->yworldcoo=pSeed->yworldcoo;	
-			pSeed_copy->xcoo=pSeed->xcoo;			
-			pSeed_copy->ycoo=pSeed->ycoo;		
-			pSeed_copy->namem=pSeed->namem;			
-			pSeed_copy->namep=pSeed->namep;		
-			pSeed_copy->line=pSeed->line;			
-			pSeed_copy->generation=pSeed->generation;	
-			pSeed_copy->species=pSeed->species;
-			pSeed_copy->incone=pSeed->incone;		
-			pSeed_copy->weight=pSeed->weight;	
-			pSeed_copy->age=pSeed->age;			
-			pSeed_copy->longdispersed=pSeed->longdispersed;	
-			seed_list_copy.push_back(pSeed_copy);
+			pSeed->xworldcoo=pSeed_copy->xworldcoo;			
+			pSeed->yworldcoo=pSeed_copy->yworldcoo;	
+			pSeed->xcoo=pSeed_copy->xcoo;			
+			pSeed->ycoo=pSeed_copy->ycoo;		
+			pSeed->namem=pSeed_copy->namem;			
+			pSeed->namep=pSeed_copy->namep;		
+			pSeed->line=pSeed_copy->line;			
+			pSeed->generation=pSeed_copy->generation;	
+			pSeed->species=pSeed_copy->species;
+			pSeed->incone=pSeed_copy->incone;		
+			pSeed->weight=pSeed_copy->weight;	
+			pSeed->age=pSeed_copy->age;			
+			pSeed->longdispersed=pSeed_copy->longdispersed;	
+			pSeed->seedweight=pSeed_copy->seedweight;
+			pSeed->droughtresist=pSeed_copy->droughtresist;	
+			seed_list.push_back(pSeed);
 			
 			if(counterseed==1)
 			{
@@ -582,11 +587,11 @@ void Restorealllists(void)
 	aktort=0;
 	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list_copy.begin(); posw != world_plot_list_copy.end(); ++posw)
 	{ 
-		vector<Envirgrid*>& plot_list = *posw;
+		vector<Envirgrid*>& plot_list_copy = *posw;
 
 		// opening the original plot list and the referring reset list ..._copy		
-		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list.begin()+aktort);
-		vector<Envirgrid*>& plot_list_copy = *posiweltk;
+		vector<vector<Envirgrid*> >::iterator posiweltk = (world_plot_list_copy.begin()+aktort);
+		vector<Envirgrid*>& plot_list = *posiweltk;
 				
 		aktort++;
 
@@ -595,32 +600,30 @@ void Restorealllists(void)
 		cout << "plot_list_copy.size() before copying =" << plot_list_copy.size() << endl;
 		
 		int counterkarten=1;	// for displaying the first plot list element
-		for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end(); )
+		for (vector<Envirgrid*>::iterator pos = plot_list_copy.begin(); pos != plot_list_copy.end(); )
 		{ 
-			pEnvirgrid=(*pos);
-
-			pEnvirgrid_copy= new Envirgrid();
-			
-			pEnvirgrid_copy->xworldcoo=pEnvirgrid->xworldcoo;	
-			pEnvirgrid_copy->yworldcoo=pEnvirgrid->yworldcoo;	
-			pEnvirgrid_copy->xcoo=pEnvirgrid->xcoo;		
-			pEnvirgrid_copy->ycoo=pEnvirgrid->ycoo;		
-			pEnvirgrid_copy->Treedensityvalue=pEnvirgrid->Treedensityvalue;
-			pEnvirgrid_copy->Treenumber=pEnvirgrid->Treenumber;	
-			pEnvirgrid_copy->maxthawing_depth=pEnvirgrid->maxthawing_depth;
-			pEnvirgrid_copy->litterheight=pEnvirgrid->litterheight;
-			pEnvirgrid_copy->litterheight0=pEnvirgrid->litterheight0;
-			pEnvirgrid_copy->litterheight1=pEnvirgrid->litterheight1;
-			pEnvirgrid_copy->litterheight2=pEnvirgrid->litterheight2;
-			pEnvirgrid_copy->litterheight3=pEnvirgrid->litterheight3;
-			pEnvirgrid_copy->litterheight4=pEnvirgrid->litterheight4;
-			pEnvirgrid_copy->litterheight5=pEnvirgrid->litterheight5;
-			pEnvirgrid_copy->litterheight6=pEnvirgrid->litterheight6;
-			pEnvirgrid_copy->litterheight7=pEnvirgrid->litterheight7;
-			pEnvirgrid_copy->litterheight8=pEnvirgrid->litterheight8;
-			pEnvirgrid_copy->litterheight9=pEnvirgrid->litterheight9;
-			pEnvirgrid_copy->litterheightmean=pEnvirgrid->litterheightmean;
-			plot_list_copy.push_back(pEnvirgrid_copy);
+			pEnvirgrid_copy=(*pos);
+			pEnvirgrid= new Envirgrid();
+			pEnvirgrid->xworldcoo=pEnvirgrid_copy->xworldcoo;	
+			pEnvirgrid->yworldcoo=pEnvirgrid_copy->yworldcoo;	
+			pEnvirgrid->xcoo=pEnvirgrid_copy->xcoo;		
+			pEnvirgrid->ycoo=pEnvirgrid_copy->ycoo;		
+			pEnvirgrid->Treedensityvalue=pEnvirgrid_copy->Treedensityvalue;
+			pEnvirgrid->Treenumber=pEnvirgrid_copy->Treenumber;	
+			pEnvirgrid->maxthawing_depth=pEnvirgrid_copy->maxthawing_depth;
+			pEnvirgrid->litterheight=pEnvirgrid_copy->litterheight;
+			pEnvirgrid->litterheight0=pEnvirgrid_copy->litterheight0;
+			pEnvirgrid->litterheight1=pEnvirgrid_copy->litterheight1;
+			pEnvirgrid->litterheight2=pEnvirgrid_copy->litterheight2;
+			pEnvirgrid->litterheight3=pEnvirgrid_copy->litterheight3;
+			pEnvirgrid->litterheight4=pEnvirgrid_copy->litterheight4;
+			pEnvirgrid->litterheight5=pEnvirgrid_copy->litterheight5;
+			pEnvirgrid->litterheight6=pEnvirgrid_copy->litterheight6;
+			pEnvirgrid->litterheight7=pEnvirgrid_copy->litterheight7;
+			pEnvirgrid->litterheight8=pEnvirgrid_copy->litterheight8;
+			pEnvirgrid->litterheight9=pEnvirgrid_copy->litterheight9;
+			pEnvirgrid->litterheightmean=pEnvirgrid_copy->litterheightmean;
+			plot_list.push_back(pEnvirgrid);
 		
 			if(counterkarten==1)
 			{
@@ -644,7 +647,7 @@ void Restorealllists(void)
 		vector<Evaluation*>& EvaluationListe = *posw;
 
 		// opening the standard list to push back elements to it from the reset list "..._copy"
-		vector<vector<Evaluation*> >::iterator posiwelta = (world_evaluation_list.begin()+aktort);
+		vector<vector<Evaluation*> >::iterator posiwelta = (world_evaluation_list_copy.begin()+aktort);
 		vector<Evaluation*>& EvaluationListe_copy = *posiwelta;
 		
 		aktort++;
@@ -654,104 +657,104 @@ void Restorealllists(void)
 		cout << "EvaluationListe_copy.size() before copying=" << EvaluationListe_copy.size() << endl;
 		
 		int counterauswert=1;
-		for (vector<Evaluation*>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end(); )
+		for (vector<Evaluation*>::iterator pos = EvaluationListe_copy.begin(); pos != EvaluationListe_copy.end(); )
 		{ 
 			pEvaluation=(*pos);
 
-			pEvaluation_copy= new Evaluation();
+			pEvaluation= new Evaluation();
 			
-			pEvaluation_copy->xworldcoo=pEvaluation->xworldcoo;	
-			pEvaluation_copy->yworldcoo=pEvaluation->yworldcoo;	
-			for (vector<double>::iterator posval=pEvaluation->basalarealist.begin(); posval<pEvaluation->basalarealist.end(); )
+			pEvaluation->xworldcoo=pEvaluation_copy->xworldcoo;	
+			pEvaluation->yworldcoo=pEvaluation_copy->yworldcoo;	
+			for (vector<double>::iterator posval=pEvaluation_copy->basalarealist.begin(); posval<pEvaluation_copy->basalarealist.end(); )
 			{
-				pEvaluation_copy->basalarealist.push_back((*posval));
+				pEvaluation->basalarealist.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->basalarearunmeanlist.begin(); posval<pEvaluation->basalarearunmeanlist.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->basalarearunmeanlist.begin(); posval<pEvaluation_copy->basalarearunmeanlist.end(); )
 			{
-				pEvaluation_copy->basalarearunmeanlist.push_back((*posval));
+				pEvaluation->basalarearunmeanlist.push_back((*posval));
 				++posval;
 			}
-			pEvaluation_copy->maxincrementbasalarea=pEvaluation->maxincrementbasalarea;		
-			pEvaluation_copy->countermaxincrementbasalarea=pEvaluation->countermaxincrementbasalarea;
-			pEvaluation_copy->yearofturningpoint=pEvaluation->yearofturningpoint;	
-			pEvaluation_copy->yearofequilibrium=pEvaluation->yearofequilibrium;			
-			pEvaluation_copy->postyearofturningpoint=pEvaluation->postyearofturningpoint;
-			for (vector<int>::iterator posval=pEvaluation->nheight0b40liste.begin(); posval<pEvaluation->nheight0b40liste.end(); )
+			pEvaluation->maxincrementbasalarea=pEvaluation_copy->maxincrementbasalarea;		
+			pEvaluation->countermaxincrementbasalarea=pEvaluation_copy->countermaxincrementbasalarea;
+			pEvaluation->yearofturningpoint=pEvaluation_copy->yearofturningpoint;	
+			pEvaluation->yearofequilibrium=pEvaluation_copy->yearofequilibrium;			
+			pEvaluation->postyearofturningpoint=pEvaluation_copy->postyearofturningpoint;
+			for (vector<int>::iterator posval=pEvaluation_copy->nheight0b40liste.begin(); posval<pEvaluation_copy->nheight0b40liste.end(); )
 			{
-				pEvaluation_copy->nheight0b40liste.push_back((*posval));
+				pEvaluation->nheight0b40liste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->nheight0b40runmeanliste.begin(); posval<pEvaluation->nheight0b40runmeanliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->nheight0b40runmeanliste.begin(); posval<pEvaluation_copy->nheight0b40runmeanliste.end(); )
 			{
-				pEvaluation_copy->nheight0b40runmeanliste.push_back((*posval));
+				pEvaluation->nheight0b40runmeanliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<int>::iterator posval=pEvaluation->nheight41b200liste.begin(); posval<pEvaluation->nheight41b200liste.end(); )
+			for (vector<int>::iterator posval=pEvaluation_copy->nheight41b200liste.begin(); posval<pEvaluation_copy->nheight41b200liste.end(); )
 			{
-				pEvaluation_copy->nheight41b200liste.push_back((*posval));
+				pEvaluation->nheight41b200liste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->nheight41b200runmeanliste.begin(); posval<pEvaluation->nheight41b200runmeanliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->nheight41b200runmeanliste.begin(); posval<pEvaluation_copy->nheight41b200runmeanliste.end(); )
 			{
-				pEvaluation_copy->nheight41b200runmeanliste.push_back((*posval));
+				pEvaluation->nheight41b200runmeanliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<int>::iterator posval=pEvaluation->nheight201b10000liste.begin(); posval<pEvaluation->nheight201b10000liste.end(); )
+			for (vector<int>::iterator posval=pEvaluation_copy->nheight201b10000liste.begin(); posval<pEvaluation_copy->nheight201b10000liste.end(); )
 			{
-				pEvaluation_copy->nheight201b10000liste.push_back((*posval));
+				pEvaluation->nheight201b10000liste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->nheight201b10000runmeanliste.begin(); posval<pEvaluation->nheight201b10000runmeanliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->nheight201b10000runmeanliste.begin(); posval<pEvaluation_copy->nheight201b10000runmeanliste.end(); )
 			{
-				pEvaluation_copy->nheight201b10000runmeanliste.push_back((*posval));
+				pEvaluation->nheight201b10000runmeanliste.push_back((*posval));
 				++posval;
 			}
 			
-			for (vector<double>::iterator posval=pEvaluation->meanbreastdiameterliste.begin(); posval<pEvaluation->meanbreastdiameterliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->meanbreastdiameterliste.begin(); posval<pEvaluation_copy->meanbreastdiameterliste.end(); )
 			{
-				pEvaluation_copy->meanbreastdiameterliste.push_back((*posval));
+				pEvaluation->meanbreastdiameterliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->meanbreastdiameterrunmeanliste.begin(); posval<pEvaluation->meanbreastdiameterrunmeanliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->meanbreastdiameterrunmeanliste.begin(); posval<pEvaluation_copy->meanbreastdiameterrunmeanliste.end(); )
 			{
-				pEvaluation_copy->meanbreastdiameterrunmeanliste.push_back((*posval));
+				pEvaluation->meanbreastdiameterrunmeanliste.push_back((*posval));
 				++posval;
 			}
 
-			for (vector<int>::iterator posval=pEvaluation->stemcountliste.begin(); posval<pEvaluation->stemcountliste.end(); )
+			for (vector<int>::iterator posval=pEvaluation_copy->stemcountliste.begin(); posval<pEvaluation_copy->stemcountliste.end(); )
 			{
-				pEvaluation_copy->stemcountliste.push_back((*posval));
+				pEvaluation->stemcountliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<int>::iterator posval=pEvaluation->stemcountrunmeanliste.begin(); posval<pEvaluation->stemcountrunmeanliste.end(); )
+			for (vector<int>::iterator posval=pEvaluation_copy->stemcountrunmeanliste.begin(); posval<pEvaluation_copy->stemcountrunmeanliste.end(); )
 			{
-				pEvaluation_copy->stemcountrunmeanliste.push_back((*posval));
+				pEvaluation->stemcountrunmeanliste.push_back((*posval));
 				++posval;
 			}
 
-			for (vector<double>::iterator posval=pEvaluation->meantreeheightliste.begin(); posval<pEvaluation->meantreeheightliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->meantreeheightliste.begin(); posval<pEvaluation_copy->meantreeheightliste.end(); )
 			{
-				pEvaluation_copy->meantreeheightliste.push_back((*posval));
+				pEvaluation->meantreeheightliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->meantreeheightrunmeanliste.begin(); posval<pEvaluation->meantreeheightrunmeanliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->meantreeheightrunmeanliste.begin(); posval<pEvaluation_copy->meantreeheightrunmeanliste.end(); )
 			{
-				pEvaluation_copy->meantreeheightrunmeanliste.push_back((*posval));
+				pEvaluation->meantreeheightrunmeanliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->meantreeageliste.begin(); posval<pEvaluation->meantreeageliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->meantreeageliste.begin(); posval<pEvaluation_copy->meantreeageliste.end(); )
 			{
-				pEvaluation_copy->meantreeageliste.push_back((*posval));
+				pEvaluation->meantreeageliste.push_back((*posval));
 				++posval;
 			}
-			for (vector<double>::iterator posval=pEvaluation->meantreeagerunmeanliste.begin(); posval<pEvaluation->meantreeagerunmeanliste.end(); )
+			for (vector<double>::iterator posval=pEvaluation_copy->meantreeagerunmeanliste.begin(); posval<pEvaluation_copy->meantreeagerunmeanliste.end(); )
 			{
-				pEvaluation_copy->meantreeagerunmeanliste.push_back((*posval));
+				pEvaluation->meantreeagerunmeanliste.push_back((*posval));
 				++posval;
 			}
 			
-			EvaluationListe_copy.push_back(pEvaluation_copy);
+			EvaluationListe.push_back(pEvaluation);
 	
 			if(counterauswert==1)
 			{

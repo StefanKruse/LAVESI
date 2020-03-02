@@ -129,7 +129,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->thawing_depthinfluence=100;
 								
 								pTree->seedweight=pSeed->seedweight;
-								
+								pTree->droughtresist=pSeed->droughtresist;
 								
 								tree_list.push_back(pTree);
 
@@ -193,6 +193,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								
 								
 								pTree->seedweight=pSeed->seedweight;
+								pTree->droughtresist=pSeed->droughtresist;
 								tree_list.push_back(pTree);	
 
 								delete pSeed;

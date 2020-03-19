@@ -33,6 +33,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 	bool outputindividuals=false;
 	bool ausgabedendro=false;
 	bool ausgabedensity=false;
+	bool cryogridoutput=false;
 
 	
 	// preprocessing and output of data for each plot
@@ -283,7 +284,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				
 				if ( (parameter[0].ivort%25 == 0) )
 				{
-					ausgabedensity=true;// new for permafrost map output
+					ausgabedensity=true;
+					cryogridoutput=true;// TODO: new for permafrost map output
 					outputindividuals=true;
 				}
 
@@ -981,6 +983,59 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 					fprintf(filepointer, "\n");
 				}
+			}
+
+			fclose(filepointer);
+
+			// -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
+			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+		}
+
+		if (cryogridoutput==true)
+		{//
+			// assemble file name:
+			s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
+			s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+			dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+ ".csv";
+			s1.str("");s1.clear();s2.str("");s2.clear();
+				
+			// trying to open the file for reading
+			filepointer = fopen (dateiname.c_str(), "r+");
+			// if fopen fails, open a new file + header output
+			if (filepointer == NULL)
+			{
+				filepointer = fopen (dateiname.c_str(), "w+");
+				
+				fprintf(filepointer, "X;");
+				fprintf(filepointer, "Y;");
+				fprintf(filepointer, "leafarea;");
+				fprintf(filepointer, "stemarea;");
+				fprintf(filepointer, "maxtreeheight;");
+
+				fprintf(filepointer, "\n");
+
+				if (filepointer == NULL)
+				{
+					fprintf(stderr, "Error: output file is missing!\n");
+					exit(1);
+				}
+			}
+
+			fseek(filepointer,0,SEEK_END);
+
+			// data evaluation and output
+			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
+			{
+				pEnvirgrid=plot_list[kartenpos];
+				
+				fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
+				fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
+				fprintf(filepointer, "%4.4f;", pEnvirgrid->leafarea);
+				fprintf(filepointer, "%4.4f;", pEnvirgrid->stemarea);
+				fprintf(filepointer, "%4.4f;", pEnvirgrid->maxtreeheight);
+				
+				fprintf(filepointer, "\n");
 			}
 
 			fclose(filepointer);

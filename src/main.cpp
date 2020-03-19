@@ -582,6 +582,10 @@ void initialiseMaps()
 			pEnvirgrid->litterheight8=200;	// in 0.1mm -> max 6.5535 m
 			pEnvirgrid->litterheight9=200;	// in 0.1mm -> max 6.5535 m 
 			pEnvirgrid->litterheightmean=200;
+
+			pEnvirgrid->leafarea=0;
+			pEnvirgrid->stemarea=0;
+			pEnvirgrid->maxtreeheight=0;
 			
 			plot_list.push_back(pEnvirgrid);	
 		}

@@ -32,7 +32,7 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 			flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.2*pTree->dbasal) ) ) )-1;
 		else if (parameter[0].calcinfarea == 6) //logistic growth function with maximum at 8 m
 			flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.5*pTree->dbasal) ) ) )-1;
-		
+				
 		// if the trees influences only one density grid cell
 		if ( flaechengroesze<(1.0/parameter[0].sizemagnif) )
 		{
@@ -88,6 +88,54 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 							
 			pTree->densitywert=sumdensitywert;
 		}
+
+		
+		// TODO: leaf- and stemarea distribution
+		// TODO: impact area for leaf- stemarea check
+		double crownradius=exp(0.9193333*log(pTree->dbasal) + 2.4618496) / 100; //in m
+		// if the trees influences only one density grid cell
+		if ( crownradius<(1.0/parameter[0].sizemagnif) )
+		{
+			plot_list[i*treecols*parameter[0].sizemagnif+j]->leafarea += 23.99583 * pTree->dbasal * 2 / (pow(1.0/parameter[0].sizemagnif,2));//TODO check parameterization 
+			plot_list[i*treecols*parameter[0].sizemagnif+j]->stemarea += M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal,2) + pow(pTree->height,2) )  / (pow(1.0/parameter[0].sizemagnif,2));
+			if(pTree->height > plot_list[i*treecols*parameter[0].sizemagnif+j]->maxtreeheight)
+				plot_list[i*treecols*parameter[0].sizemagnif+j]->maxtreeheight = pTree->height;
+		}
+		// if the trees influences more than one density grid cell
+		else
+		{
+			// determine dimensions of the grid around the tree
+			int xyquerrastpos= (int) floor( crownradius*parameter[0].sizemagnif );
+			
+			// TODO: check
+			double fractionimpactpertile = (pow(1.0/parameter[0].sizemagnif,2)) / (M_PI * pow(crownradius,2));
+			
+			// determine shifted coordinates and adding up the density value
+			double leafareaoftreepertile = fractionimpactpertile * 23.99583 * pTree->dbasal * 2;
+			double stemareaoftreepertile = fractionimpactpertile * M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal,2) + pow(pTree->height,2) );
+			
+			for (int rastposi=(i+xyquerrastpos); rastposi>(i-(xyquerrastpos+1)); rastposi--)
+			{
+				for (int rastposj=(j-xyquerrastpos); rastposj<(j+xyquerrastpos+1); rastposj++)
+				{
+					if ( ( rastposi<=( (treerows-1)*parameter[0].sizemagnif) && rastposi>=0 ) && ( rastposj<=( (treecols-1)*parameter[0].sizemagnif) && rastposj>=0 ) )
+					{
+						// Distance calculation to determine the influence of the density value in spatial units ...
+						// ... and inserting the value at every position
+						double entfrastpos=sqrt(pow(double(i-rastposi),2)+pow(double(j-rastposj),2));
+						// only if the current grid cell is part of the influence area, a value is assigned
+						if (entfrastpos<= (double) xyquerrastpos)
+						{
+							plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->leafarea += leafareaoftreepertile;
+							plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->stemarea += stemareaoftreepertile;
+							if(pTree->height > plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxtreeheight)
+								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxtreeheight = pTree->height;
+						}
+					}
+				}
+			}
+		}
+
 
 		++pos;
 	}
@@ -803,6 +851,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treenumber=0;
+			pEnvirgrid->leafarea=0;
+			pEnvirgrid->stemarea=0;
+			pEnvirgrid->maxtreeheight=0;
 			
 			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
 			{
@@ -889,6 +940,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treenumber=0;
+			pEnvirgrid->leafarea=0;
+			pEnvirgrid->stemarea=0;
+			pEnvirgrid->maxtreeheight=0;
 			
 			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
 			{

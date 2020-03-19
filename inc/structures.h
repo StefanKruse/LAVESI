@@ -80,6 +80,11 @@ using namespace std;
 		unsigned short litterheight8;
 		unsigned short litterheight9;
 		unsigned short litterheightmean;
+		double	leafarea;
+		double	stemarea;
+		// double	plantarea; // is la+sa, not needed to use explicit
+		double	maxtreeheight;
+		// double	finerootbiomass; // TODO: now constant later 
 	};
 
 	struct Parameter

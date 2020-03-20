@@ -181,7 +181,14 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 
 void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 {
-		// compile data and write to file
+	// rationale:
+	// 1. compile data and write to file 
+	// 2. call CryoGrid and estimate permafrost thaw depth
+	// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
+	
+	
+	if(true)
+	{// 1. compile data and write to file
 		FILE *filepointer;
 		string dateiname;
 
@@ -191,7 +198,8 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 		// s3 << std::setfill('0') << std::setw(6) << 1998;
 		// dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_"+s3.str()+".csv";
-		dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
+		// dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
+		dateiname="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv"; // TODO: add relative path
 		// s1.str("");s1.clear();s2.str("");s2.clear();s2.str("");s2.clear();
 
 		// trying to open the file for reading
@@ -201,7 +209,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		{
 			filepointer = fopen (dateiname.c_str(), "w+");
 			
-			fprintf(filepointer, "1998;current year;");
+			fprintf(filepointer, "%d;current year;", 1918+parameter[0].ivort);//TODO: change this later to 1000 years spinup and 200 years simulation => 918+...
 			fprintf(filepointer, "\n");
 			
 			fprintf(filepointer, "LAVESI output file for CryoGrid input;");
@@ -295,10 +303,26 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// for(double n : maxtreeheighti) {
 			// std::cout << n << '\n';
 		// }
-
-
 		
 		fclose(filepointer);
+	}
+
+	if(true)
+	{// 2. call CryoGrid and estimate permafrost thaw depth
+		// main.m from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg"
+		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
+		
+		cout << "try to called matlab at " << clock() << endl;
+		system("matlab -nodisplay -nojvm -nosplash < /legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main.m"); // const char?
+		cout << "after called matlab at " << clock() << endl;
+		// exit(1);
+	}
+
+	if(true)
+	{// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
+		// from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
+	}
+
 }
 
 
@@ -1251,7 +1275,7 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		// TODO: call only in certain years
 		if ( parameter[0].ivort%25 == 0 )
 		{
-			PrepareCryogrid(tree_list, cryo_list);			// collect information of trees
+			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
 			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
 		}
 	}

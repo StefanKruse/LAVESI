@@ -1006,7 +1006,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		aktort++;
 		
 		if (cryogridoutput==true)
-		{//
+		{
 			// assemble file name:
 			s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
 			s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
@@ -1054,10 +1054,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			}
 
 			fclose(filepointer);
-
-			// -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
-			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		}
 	}
 

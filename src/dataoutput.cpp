@@ -35,6 +35,46 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 	bool ausgabedensity=false;
 	bool cryogridoutput=false;
 
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+	if (parameter[0].dataoutput==true)
+	{
+		if (parameter[0].outputmode==0) // "full"
+		{
+			if (parameter[0].spinupphase==true)
+			{
+				outputcurrencies=true;
+				outputposition=true;
+			}
+			else 
+			{
+				outputcurrencies=true;
+				outputposition=true;
+				outputindividuals=true;
+				ausgabedensity=true;
+			}
+		}
+		else if (parameter[0].outputmode==1) // "normal"
+		{
+			outputcurrencies=true;
+			
+			if ( (parameter[0].ivort%25 == 0) )
+			{
+				ausgabedensity=true;
+				cryogridoutput=true;// TODO: new for permafrost map output
+				outputindividuals=true;
+			}
+
+		}
+		else if (parameter[0].outputmode==2) // "OMP"
+		{
+			outputcurrencies=true;
+		}
+	}
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+	
+	ostringstream s1,s2,s3,s4,s5,s6,s7,s8;
 	
 	// preprocessing and output of data for each plot
 	int aktort=0;
@@ -47,6 +87,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		
 		vector<vector<Envirgrid*> >::iterator poskarten = (world_plot_list.begin()+aktort);
 		vector<Envirgrid*>& plot_list = *poskarten;
+		
+		// vector<vector<Cryogrid*> >::iterator poscryogrid = (world_cryo_list.begin()+aktort);
+		// vector<Cryogrid*>& plot_list_cryo = *poscryogrid;
 		
 		vector<vector<Weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
 		vector<Weather*>& weather_list = *posiwelt;
@@ -259,46 +302,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 
 		
 		
-		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		if (parameter[0].dataoutput==true)
-		{
-			if (parameter[0].outputmode==0) // "full"
-			{
-				if (parameter[0].spinupphase==true)
-				{
-					outputcurrencies=true;
-					outputposition=true;
-				}
-				else 
-				{
-					outputcurrencies=true;
-					outputposition=true;
-					outputindividuals=true;
-					ausgabedensity=true;
-				}
-			}
-			else if (parameter[0].outputmode==1) // "normal"
-			{
-				outputcurrencies=true;
-				
-				if ( (parameter[0].ivort%25 == 0) )
-				{
-					ausgabedensity=true;
-					cryogridoutput=true;// TODO: new for permafrost map output
-					outputindividuals=true;
-				}
-
-			}
-			else if (parameter[0].outputmode==2) // "OMP"
-			{
-				outputcurrencies=true;
-			}
-		}
-		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-		
-		ostringstream s1,s2,s3,s4,s5,s6,s7,s8;
 	
 		if (outputcurrencies==true)
 		{// currencies output
@@ -992,6 +995,16 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		}
 
+	}
+	
+
+	aktort=0;
+	for (vector<vector<Cryogrid*> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); ++posw)
+	{
+		vector<Cryogrid*>& cryo_list = *posw;
+
+		aktort++;
+		
 		if (cryogridoutput==true)
 		{//
 			// assemble file name:
@@ -1025,24 +1038,28 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			fseek(filepointer,0,SEEK_END);
 
 			// data evaluation and output
-			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
+			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
+
+			for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
 			{
-				pEnvirgrid=plot_list[kartenpos];
+				pCryogrid=cryo_list[kartenpos];
 				
-				fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
-				fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
-				fprintf(filepointer, "%4.4f;", pEnvirgrid->leafarea);
-				fprintf(filepointer, "%4.4f;", pEnvirgrid->stemarea);
-				fprintf(filepointer, "%4.4f;", pEnvirgrid->maxtreeheight);
+				fprintf(filepointer, "%4.4f;", pCryogrid->xcoo);
+				fprintf(filepointer, "%4.4f;", pCryogrid->ycoo);
+				fprintf(filepointer, "%4.4f;", pCryogrid->leafarea);
+				fprintf(filepointer, "%4.4f;", pCryogrid->stemarea);
+				fprintf(filepointer, "%4.4f;", pCryogrid->maxtreeheight);
 				
 				fprintf(filepointer, "\n");
 			}
 
 			fclose(filepointer);
+			
 
 			// -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		}
-	} 
+	}
+
 }

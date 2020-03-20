@@ -25,6 +25,11 @@
   	Envirgrid *pEnvirgrid;
   	Envirgrid *pEnvirgrid_copy;
 	
+	// TODO: check
+  	vector<vector<Cryogrid*>> world_cryo_list(0);
+  	Cryogrid *pCryogrid;
+  	Cryogrid *pCryogrid_copy;
+	
   	vector<vector<Evaluation*> > world_evaluation_list(0);
   	Evaluation *pEvaluation;
   	Evaluation *pEvaluation_copy;

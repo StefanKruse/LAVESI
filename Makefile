@@ -13,7 +13,7 @@ clean:
 	rm -rf data*.csv nohup.out output/data*.csv t_*.txt pollDist* output/windgen*.txt t_*.txt build LAVESI_WIND
 
 cleanoutput:
-	rm -rf data*.csv output/data*.csv t_*.txt
+	rm -rf data*.csv output/data*.csv output/cryogridoutput*csv t_*.txt
 
 debug: CFLAGS += -O0 -g3 -ggdb3 -DDEBUG
 debug: all

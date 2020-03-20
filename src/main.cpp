@@ -500,6 +500,10 @@ void createLists()
 
 			vector<Envirgrid*> plot_list;					  // Creating new plot_list 
 			world_plot_list.push_back(plot_list);			  // include new plot_list in corresponding world list
+			
+			// TODO: check
+			vector<Cryogrid*> cryo_list;					  // Creating new plot_list 
+			world_cryo_list.push_back(cryo_list);			  // include new plot_list in corresponding world list
 
 			vector<Evaluation*> evaluation_list;			  // Creating new evaluation_list 
 			world_evaluation_list.push_back(evaluation_list); // include new evaluation_list in corresponding world list
@@ -583,9 +587,9 @@ void initialiseMaps()
 			pEnvirgrid->litterheight9=200;	// in 0.1mm -> max 6.5535 m 
 			pEnvirgrid->litterheightmean=200;
 
-			pEnvirgrid->leafarea=0;
-			pEnvirgrid->stemarea=0;
-			pEnvirgrid->maxtreeheight=0;
+			// pEnvirgrid->leafarea=0;
+			// pEnvirgrid->stemarea=0;
+			// pEnvirgrid->maxtreeheight=0;
 			
 			plot_list.push_back(pEnvirgrid);	
 		}
@@ -636,6 +640,39 @@ void initialiseMaps()
 
 		evaluation_list.push_back(pEvaluation);
 	}
+
+	aktort=0;
+	for (vector<vector<Cryogrid*> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); posw++)
+	{
+		vector<Cryogrid*>& cryo_list = *posw;
+
+		aktort++;
+
+		int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
+		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
+
+		// TODO: assure 10x10 m grid
+		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
+
+		// cout << (int) (ceil(treerows*parameter[0].sizemagnif/50) * ceil(treecols*parameter[0].sizemagnif/50)) << " cells to fill " << endl;
+		for (int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++) 
+		{ 
+			pCryogrid= new Cryogrid();
+
+			pCryogrid->ycoo=floor( (double) kartenpos/ceil(treecols*sizemagnifcryo) );
+			pCryogrid->xcoo=(double) kartenpos - (pCryogrid->ycoo * ceil(treecols*sizemagnifcryo));
+
+			pCryogrid->leafarea=0;
+			pCryogrid->stemarea=0;
+			pCryogrid->maxtreeheight=0;
+			pCryogrid->maxthawing_depth=1000;//in mm
+			
+			cryo_list.push_back(pCryogrid);	
+		}
+		
+		// cout << cryo_list.size() << " = length cryo_list (main.initialize)" << endl;
+	}
+
 }
 
 

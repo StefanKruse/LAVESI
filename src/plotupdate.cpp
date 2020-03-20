@@ -89,26 +89,65 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 			pTree->densitywert=sumdensitywert;
 		}
 
+		++pos;
+	}
+}
+
+void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
+{
+	// setup and wipe grid
+	double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
+	// cout << sizemagnifcryo << " sizemagnifcryo " << endl;
+
+	// TODO: maybe move to intializing
+	// cout << (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)) << " = cells in cryogrid (plotupdate)" << endl;	
+	for(int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++)
+	{
+		pCryogrid=cryo_list[kartenpos];
+		pCryogrid->leafarea=0;
+		pCryogrid->stemarea=0;
+		pCryogrid->maxtreeheight=0;
+	}
+	
+	for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
+	{
+		pTree=(*pos);
+		
+		// int i=(int) floor(pTree->ycoo*parameter[0].sizemagnif/50);
+		int i=(int) floor(pTree->ycoo*sizemagnifcryo);
+		// int j=(int) floor(pTree->xcoo*parameter[0].sizemagnif/50);
+		int j=(int) floor(pTree->xcoo*sizemagnifcryo);
+		
+		// cout << i << " i & " << j << " j " << endl;
+		
 		
 		// TODO: leaf- and stemarea distribution
 		// TODO: impact area for leaf- stemarea check
 		double crownradius=exp(0.9193333*log(pTree->dbasal) + 2.4618496) / 100; //in m
+		
+		// cout << crownradius << endl;
+		// cout << cryo_list.size() << " = length cryo_list" << endl;
+		// cout << world_cryo_list.size() << " = length world_cryo_list" << endl;
+		
+		double cryogridcellarea = pow(1.0/sizemagnifcryo, 2);
+		// cout << cryogridcellarea << " cellarea | "  << endl ;
+
 		// if the trees influences only one density grid cell
-		if ( crownradius<(1.0/parameter[0].sizemagnif) )
+		if ( crownradius < (1.0/sizemagnifcryo) )
 		{
-			plot_list[i*treecols*parameter[0].sizemagnif+j]->leafarea += 23.99583 * pTree->dbasal * 2 / (pow(1.0/parameter[0].sizemagnif,2));//TODO check parameterization 
-			plot_list[i*treecols*parameter[0].sizemagnif+j]->stemarea += M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal,2) + pow(pTree->height,2) )  / (pow(1.0/parameter[0].sizemagnif,2));
-			if(pTree->height > plot_list[i*treecols*parameter[0].sizemagnif+j]->maxtreeheight)
-				plot_list[i*treecols*parameter[0].sizemagnif+j]->maxtreeheight = pTree->height;
+			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->leafarea += 23.99583 * pTree->dbasal * 2 / cryogridcellarea;//TODO check parameterization 
+			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->stemarea += M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal,2) + pow(pTree->height,2) )  / cryogridcellarea;
+			if(pTree->height > cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight)
+				cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight = pTree->height;
 		}
 		// if the trees influences more than one density grid cell
 		else
 		{
 			// determine dimensions of the grid around the tree
-			int xyquerrastpos= (int) floor( crownradius*parameter[0].sizemagnif );
+			int xyquerrastpos= (int) floor(crownradius*sizemagnifcryo);
 			
 			// TODO: check
-			double fractionimpactpertile = (pow(1.0/parameter[0].sizemagnif,2)) / (M_PI * pow(crownradius,2));
+			double fractionimpactpertile = cryogridcellarea / (M_PI * pow(crownradius,2));
 			
 			// determine shifted coordinates and adding up the density value
 			double leafareaoftreepertile = fractionimpactpertile * 23.99583 * pTree->dbasal * 2;
@@ -118,24 +157,23 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 			{
 				for (int rastposj=(j-xyquerrastpos); rastposj<(j+xyquerrastpos+1); rastposj++)
 				{
-					if ( ( rastposi<=( (treerows-1)*parameter[0].sizemagnif) && rastposi>=0 ) && ( rastposj<=( (treecols-1)*parameter[0].sizemagnif) && rastposj>=0 ) )
+					if ( ( rastposi<=( ceil((treerows-1)*sizemagnifcryo)) && rastposi>=0 ) && ( rastposj<=( ceil((treecols-1)*sizemagnifcryo)) && rastposj>=0 ) )
 					{
 						// Distance calculation to determine the influence of the density value in spatial units ...
 						// ... and inserting the value at every position
 						double entfrastpos=sqrt(pow(double(i-rastposi),2)+pow(double(j-rastposj),2));
 						// only if the current grid cell is part of the influence area, a value is assigned
-						if (entfrastpos<= (double) xyquerrastpos)
+						if (entfrastpos <= (double) xyquerrastpos)
 						{
-							plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->leafarea += leafareaoftreepertile;
-							plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->stemarea += stemareaoftreepertile;
-							if(pTree->height > plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxtreeheight)
-								plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxtreeheight = pTree->height;
+							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->leafarea += leafareaoftreepertile;
+							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->stemarea += stemareaoftreepertile;
+							if(pTree->height > cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight)
+								cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight = pTree->height;
 						}
 					}
 				}
 			}
 		}
-
 
 		++pos;
 	}
@@ -851,9 +889,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treenumber=0;
-			pEnvirgrid->leafarea=0;
-			pEnvirgrid->stemarea=0;
-			pEnvirgrid->maxtreeheight=0;
+			// pEnvirgrid->leafarea=0;
+			// pEnvirgrid->stemarea=0;
+			// pEnvirgrid->maxtreeheight=0;
 			
 			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
 			{
@@ -940,9 +978,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 		{
 			pEnvirgrid=plot_list[kartenpos];
 			pEnvirgrid->Treenumber=0;
-			pEnvirgrid->leafarea=0;
-			pEnvirgrid->stemarea=0;
-			pEnvirgrid->maxtreeheight=0;
+			// pEnvirgrid->leafarea=0;
+			// pEnvirgrid->stemarea=0;
+			// pEnvirgrid->maxtreeheight=0;
 			
 			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
 			{
@@ -1037,7 +1075,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vector<Envirgrid*> > &world_plot_list, vector<list<Tree*> > &world_tree_list, vector<vector<Weather*> > &world_weather_list)
 {
 	int aktort=0;
-	
+
 	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
 	{
 		vector<Envirgrid*>& plot_list = *posw;
@@ -1075,9 +1113,24 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 					time_AddTreeDensity-time_ResetMaps, 
 					omp_get_wtime()-time_AddTreeDensity
 				);
-				
 			fclose(fp5);
 		}
 	}
-}
 
+
+	aktort=0;
+	for (vector<vector<Cryogrid*> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); ++posw)
+	{
+		vector<Cryogrid*>& cryo_list = *posw;
+
+		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
+		list<Tree*>& tree_list = *world_positon_b;
+
+		aktort++;
+
+		// TODO: call only in certain years
+		PrepareCryogrid(tree_list, cryo_list);			// collect information of trees
+		// UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
+	}
+
+}

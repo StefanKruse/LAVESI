@@ -136,9 +136,9 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		if ( crownradius < (1.0/sizemagnifcryo) )
 		{
 			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->leafarea += 23.99583 * pTree->dbasal * 2 / cryogridcellarea;//TODO check parameterization 
-			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->stemarea += M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal,2) + pow(pTree->height,2) )  / cryogridcellarea;
-			if(pTree->height > cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight)
-				cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight = pTree->height;
+			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->stemarea += M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal/100,2) + pow(pTree->height/100,2) )  / cryogridcellarea;
+			if(pTree->height/100 > cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight)
+				cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight = pTree->height/100;
 		}
 		// if the trees influences more than one density grid cell
 		else
@@ -151,7 +151,7 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			
 			// determine shifted coordinates and adding up the density value
 			double leafareaoftreepertile = fractionimpactpertile * 23.99583 * pTree->dbasal * 2;
-			double stemareaoftreepertile = fractionimpactpertile * M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal,2) + pow(pTree->height,2) );
+			double stemareaoftreepertile = fractionimpactpertile * M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal/100,2) + pow(pTree->height/100,2) );
 			
 			for (int rastposi=(i+xyquerrastpos); rastposi>(i-(xyquerrastpos+1)); rastposi--)
 			{
@@ -167,8 +167,8 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 						{
 							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->leafarea += leafareaoftreepertile;
 							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->stemarea += stemareaoftreepertile;
-							if(pTree->height > cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight)
-								cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight = pTree->height;
+							if(pTree->height/100 > cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight)
+								cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight = pTree->height/100;
 						}
 					}
 				}
@@ -179,7 +179,127 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 	}
 }
 
+void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
+{
+		// compile data and write to file
+		FILE *filepointer;
+		string dateiname;
 
+		// assemble file name:
+		ostringstream s1,s2,s3;
+		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
+		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+		// s3 << std::setfill('0') << std::setw(6) << 1998;
+		// dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_"+s3.str()+".csv";
+		dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
+		// s1.str("");s1.clear();s2.str("");s2.clear();s2.str("");s2.clear();
+
+		// trying to open the file for reading
+		filepointer = fopen (dateiname.c_str(), "r+");
+		// if fopen fails, open a new file + header output
+		if (filepointer == NULL)
+		{
+			filepointer = fopen (dateiname.c_str(), "w+");
+			
+			fprintf(filepointer, "1998;current year;");
+			fprintf(filepointer, "\n");
+			
+			fprintf(filepointer, "LAVESI output file for CryoGrid input;");
+			fprintf(filepointer, "min;");
+			fprintf(filepointer, "25quantile;");
+			fprintf(filepointer, "median;");
+			fprintf(filepointer, "75quantile;");
+			fprintf(filepointer, "max;");
+
+			fprintf(filepointer, "\n");
+
+			if (filepointer == NULL)
+			{
+				fprintf(stderr, "Error: output file is missing!\n");
+				exit(1);
+			}
+		}
+
+		fseek(filepointer,0,SEEK_END);
+
+		// data evaluation and output
+		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
+
+		std::vector<double> leafareai;
+		std::vector<double> stemareai;
+		std::vector<double> maxtreeheighti;
+		
+		for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
+		{
+			pCryogrid=cryo_list[kartenpos];
+
+			leafareai.push_back(pCryogrid->leafarea);
+			stemareai.push_back(pCryogrid->stemarea);
+			maxtreeheighti.push_back(pCryogrid->maxtreeheight);
+		}
+	
+		std::sort (leafareai.begin(), leafareai.end());
+		// std::cout << "The min is " << leafareai[0] << '\n';
+		// std::cout << "The 25% quartile is " << leafareai[leafareai.size()/2/2] << '\n';
+		// std::cout << "The median is " << leafareai[leafareai.size()/2] << '\n';
+		// std::cout << "The 75% quartile is " << leafareai[leafareai.size()/2+leafareai.size()/2/2] << '\n';
+		// std::cout << "The max is " << leafareai[leafareai.size()-1] << '\n';
+		fprintf(filepointer, "leafareaindex;");
+		fprintf(filepointer, "%10.1f;", leafareai[0]);
+		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()/2/2]);
+		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()/2]);
+		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()/2+leafareai.size()/2/2]);
+		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()-1]);
+		fprintf(filepointer, "\n");
+		
+		// Iterate and print values of vector
+		// for(double n : leafareai) {
+			// std::cout << n << '\n';
+		// }
+		
+		std::sort (stemareai.begin(), stemareai.end());
+		// std::cout << "The min is " << stemareai[0] << '\n';
+		// std::cout << "The 25% quartile is " << stemareai[stemareai.size()/2/2] << '\n';
+		// std::cout << "The median is " << stemareai[stemareai.size()/2] << '\n';
+		// std::cout << "The 75% quartile is " << stemareai[stemareai.size()/2+stemareai.size()/2/2] << '\n';
+		// std::cout << "The max is " << stemareai[stemareai.size()-1] << '\n';
+		fprintf(filepointer, "stemareaindex;");
+		fprintf(filepointer, "%10.2f;", stemareai[0]);
+		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()/2/2]);
+		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()/2]);
+		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()/2+stemareai.size()/2/2]);
+		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()-1]);
+		fprintf(filepointer, "\n");
+		
+		// Iterate and print values of vector
+		// for(double n : stemareai) {
+			// std::cout << n << '\n';
+		// }
+		
+		std::sort (maxtreeheighti.begin(), maxtreeheighti.end());
+		// std::cout << "The min is " << maxtreeheighti[0] << '\n';
+		// std::cout << "The 25% quartile is " << maxtreeheighti[maxtreeheighti.size()/2/2] << '\n';
+		// std::cout << "The median is " << maxtreeheighti[maxtreeheighti.size()/2] << '\n';
+		// std::cout << "The 75% quartile is " << maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2] << '\n';
+		// std::cout << "The max is " << maxtreeheighti[maxtreeheighti.size()-1] << '\n';
+
+		fprintf(filepointer, "maxtreeheight_m;");
+		fprintf(filepointer, "%3.3f;", maxtreeheighti[0]);
+		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2/2]);
+		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2]);
+		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2]);
+		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()-1]);
+		fprintf(filepointer, "\n");
+		
+		// Iterate and print values of vector
+		// for(double n : maxtreeheighti) {
+			// std::cout << n << '\n';
+		// }
+
+
+		
+		fclose(filepointer);
+}
 
 
 
@@ -1129,8 +1249,11 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		aktort++;
 
 		// TODO: call only in certain years
-		PrepareCryogrid(tree_list, cryo_list);			// collect information of trees
-		// UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
+		if ( parameter[0].ivort%25 == 0 )
+		{
+			PrepareCryogrid(tree_list, cryo_list);			// collect information of trees
+			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
+		}
 	}
 
 }

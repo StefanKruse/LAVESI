@@ -1039,22 +1039,21 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 
 			// data evaluation and output
 			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
-
+			
 			for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
 			{
 				pCryogrid=cryo_list[kartenpos];
 				
-				fprintf(filepointer, "%4.4f;", pCryogrid->xcoo);
-				fprintf(filepointer, "%4.4f;", pCryogrid->ycoo);
-				fprintf(filepointer, "%4.4f;", pCryogrid->leafarea);
-				fprintf(filepointer, "%4.4f;", pCryogrid->stemarea);
-				fprintf(filepointer, "%4.4f;", pCryogrid->maxtreeheight);
+				fprintf(filepointer, "%3.0f;", pCryogrid->xcoo);
+				fprintf(filepointer, "%3.0f;", pCryogrid->ycoo);
+				fprintf(filepointer, "%10.1f;", pCryogrid->leafarea);
+				fprintf(filepointer, "%10.2f;", pCryogrid->stemarea);
+				fprintf(filepointer, "%3.3f;", pCryogrid->maxtreeheight);
 				
 				fprintf(filepointer, "\n");
 			}
 
 			fclose(filepointer);
-			
 
 			// -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

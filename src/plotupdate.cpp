@@ -313,7 +313,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		
 		cout << "try to called matlab at " << clock() << endl;
-		system("matlab -nodisplay -nojvm -nosplash < /legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main.m"); // const char?
+		system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main.m');exit;\""); // TODO: make path relative
 		cout << "after called matlab at " << clock() << endl;
 		// exit(1);
 	}

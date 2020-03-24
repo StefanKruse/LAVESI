@@ -193,7 +193,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		string dateiname;
 
 		// assemble file name:
-		ostringstream s1,s2,s3;
+		ostringstream s1,s2;
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 		// s3 << std::setfill('0') << std::setw(6) << 1998;
@@ -313,7 +313,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		
 		cout << "try to called matlab at " << clock() << endl;
-		system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main.m');exit;\""); // TODO: make path relative
+		// system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main.m');exit;\""); // TODO: make path relative
 		cout << "after called matlab at " << clock() << endl;
 		// exit(1);
 	}
@@ -321,8 +321,46 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 	if(true)
 	{// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
 		// from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
-	}
+		
+		// cryogridoutput_00100_0000007001_aggregated.csv_cryogidresponse
+		
+		FILE *filepointer;
+		string dateiname;
+		ostringstream s1,s2;
 
+		// assemble file name
+		// ... use same as above //TODO: call it only one for matching
+		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
+		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+
+		dateiname="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv_cryogidresponse"; // TODO: add relative path
+
+		// trying to open the file for reading
+		filepointer = fopen (dateiname.c_str(), "r+");
+		
+		// if fopen fails just do no update of the environment grid
+		if (filepointer == NULL)
+		{
+			fprintf(stderr, "Error: cryogidresponse file is missing!\n");
+		} else
+		{
+			// read file per line
+			char linebuffer[255];
+			std::vector<double> activelayerdepthin;
+
+			while (fgets(linebuffer, stringlengthmax, filepointer) != NULL)
+			{
+				cout << linebuffer << " - read in -> "; // TODO: only for testing, delete
+				
+				activelayerdepthin.push_back(strtod(linebuffer, NULL));
+				
+				cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
+			}
+			cout << "length of activelayerdepthin = " << activelayerdepthin.size();// TODO: only for testing, delete
+			
+			fclose(filepointer);
+		}
+	}
 }
 
 

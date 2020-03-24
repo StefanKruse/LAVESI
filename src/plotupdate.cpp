@@ -178,7 +178,7 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		++pos;
 	}
 }
-
+	
 void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 {
 	// rationale:
@@ -186,7 +186,11 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 	// 2. call CryoGrid and estimate permafrost thaw depth
 	// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
 	
-	
+	// declaration of used vectors 
+	std::vector<double> leafareai;
+	std::vector<double> stemareai;
+	std::vector<double> maxtreeheighti;
+
 	if(true)
 	{// 1. compile data and write to file
 		FILE *filepointer;
@@ -232,10 +236,6 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 
 		// data evaluation and output
 		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
-
-		std::vector<double> leafareai;
-		std::vector<double> stemareai;
-		std::vector<double> maxtreeheighti;
 		
 		for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
 		{
@@ -298,11 +298,12 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2]);
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()-1]);
 		fprintf(filepointer, "\n");
-		
+
 		// Iterate and print values of vector
 		// for(double n : maxtreeheighti) {
 			// std::cout << n << '\n';
 		// }
+		// TODO: delete later only for testing
 		
 		fclose(filepointer);
 	}
@@ -338,12 +339,20 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// trying to open the file for reading
 		filepointer = fopen (dateiname.c_str(), "r+");
 		
-		// if fopen fails just do no update of the environment grid
+		// if fopen fails just do no update of the Envirgrid
 		if (filepointer == NULL)
 		{
 			fprintf(stderr, "Error: cryogidresponse file is missing!\n");
 		} else
 		{
+			// setup leafareaiout aggregated
+			std::vector<double> leafareaiout;
+			leafareaiout.push_back(leafareai[0]);
+			leafareaiout.push_back(leafareai[leafareai.size()/2/2]);
+			leafareaiout.push_back(leafareai[leafareai.size()/2]);
+			leafareaiout.push_back(leafareai[leafareai.size()/2+leafareai.size()/2/2]);
+			leafareaiout.push_back(leafareai[leafareai.size()-1]);
+
 			// read file per line
 			char linebuffer[255];
 			std::vector<double> activelayerdepthin;
@@ -355,10 +364,59 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 				activelayerdepthin.push_back(strtod(linebuffer, NULL));
 				
 				cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
+				cout << leafareaiout[activelayerdepthin.size()-1] << " leafarea " << endl; // print current value // TODO: only for testing, delete
 			}
 			cout << "length of activelayerdepthin = " << activelayerdepthin.size();// TODO: only for testing, delete
 			
 			fclose(filepointer);
+						
+			// setup linear model for interpolation
+			// y{activelayerdepthin} ~ x{leafareaiout}
+			
+			// calculation
+			
+				// n vals
+				int xn=leafareaiout.size();
+				int yn=activelayerdepthin.size();
+				// only if equal proceed
+				
+				cout << xn << " xn and yn " << yn << endl;
+				
+				// mean x
+			    double sum = 0;
+				for(int i = 0; i < xn; i++)
+				{
+					sum += leafareaiout[i];
+					cout << leafareaiout[i] << " / " << endl;
+				}
+				double xmean = sum/xn;
+				// diff square sums
+			    double xvariance;
+				for(int i = 0; i < xn; i++)
+					xvariance += pow(xmean-leafareaiout[i],2);
+				// mean y
+			    sum = 0;
+				for(int i = 0; i < xn; i++)
+				{
+					sum += activelayerdepthin[i];
+					cout << activelayerdepthin[i] << " / " << endl;
+				}
+				double ymean = sum/xn;
+				// diff square sums
+			    double yxcovariance;
+				for(int i = 0; i < xn; i++)
+					yxcovariance += (xmean-leafareaiout[i]) * (ymean-activelayerdepthin[i]);
+				// slope
+				double slope = yxcovariance / xvariance;
+				double intercept = ymean - slope * xmean;
+				
+				cout << " .. slope = " << slope << endl;
+				cout << " .. intercept = " << intercept << endl;
+			
+			// interpolate data to Envirgrid
+				// .. if negative values set to zero
+				
+				
 		}
 	}
 }

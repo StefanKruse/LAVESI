@@ -665,7 +665,7 @@ void initialiseMaps()
 			pCryogrid->leafarea=0;
 			pCryogrid->stemarea=0;
 			pCryogrid->maxtreeheight=0;
-			pCryogrid->maxthawing_depth=1000;//in mm
+			pCryogrid->maxthawing_depth=100.0;//in cm
 			
 			cryo_list.push_back(pCryogrid);	
 		}

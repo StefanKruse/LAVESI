@@ -96,17 +96,18 @@ void AddTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 {
 	// setup and wipe grid
-	double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
+	double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
 	// cout << sizemagnifcryo << " sizemagnifcryo " << endl;
 
 	// TODO: maybe move to intializing
 	// cout << (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)) << " = cells in cryogrid (plotupdate)" << endl;	
 	for(int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++)
 	{
-		pCryogrid=cryo_list[kartenpos];
-		pCryogrid->leafarea=0;
-		pCryogrid->stemarea=0;
-		pCryogrid->maxtreeheight=0;
+		pCryogrid = cryo_list[kartenpos];
+		
+		pCryogrid->leafarea = 0;
+		pCryogrid->stemarea = 0;
+		pCryogrid->maxtreeheight = 0;
 	}
 	
 	for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
@@ -194,24 +195,24 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 	if(true)
 	{// 1. compile data and write to file
 		FILE *filepointer;
-		string dateiname;
+		string filename;
 
 		// assemble file name:
 		ostringstream s1,s2;
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 		// s3 << std::setfill('0') << std::setw(6) << 1998;
-		// dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_"+s3.str()+".csv";
-		// dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
-		dateiname="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv"; // TODO: add relative path
+		// filename="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_"+s3.str()+".csv";
+		// filename="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
+		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv"; // TODO: add relative path
 		// s1.str("");s1.clear();s2.str("");s2.clear();s2.str("");s2.clear();
 
 		// trying to open the file for reading
-		filepointer = fopen (dateiname.c_str(), "r+");
+		filepointer = fopen (filename.c_str(), "r+");
 		// if fopen fails, open a new file + header output
 		if (filepointer == NULL)
 		{
-			filepointer = fopen (dateiname.c_str(), "w+");
+			filepointer = fopen (filename.c_str(), "w+");
 			
 			fprintf(filepointer, "%d;current year;", 1918+parameter[0].ivort);//TODO: change this later to 1000 years spinup and 200 years simulation => 918+...
 			fprintf(filepointer, "\n");
@@ -326,7 +327,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// cryogridoutput_00100_0000007001_aggregated.csv_cryogidresponse
 		
 		FILE *filepointer;
-		string dateiname;
+		string filename;
 		ostringstream s1,s2;
 
 		// assemble file name
@@ -334,10 +335,10 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 
-		dateiname="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv_cryogidresponse"; // TODO: add relative path
+		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv_cryogidresponse"; // TODO: add relative path
 
 		// trying to open the file for reading
-		filepointer = fopen (dateiname.c_str(), "r+");
+		filepointer = fopen (filename.c_str(), "r+");
 		
 		// if fopen fails just do no update of the Envirgrid
 		if (filepointer == NULL)
@@ -366,7 +367,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 				cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
 				cout << leafareaiout[activelayerdepthin.size()-1] << " leafarea " << endl; // print current value // TODO: only for testing, delete
 			}
-			cout << "length of activelayerdepthin = " << activelayerdepthin.size();// TODO: only for testing, delete
+			cout << "length of activelayerdepthin = " << activelayerdepthin.size() << endl;// TODO: only for testing, delete
 			
 			fclose(filepointer);
 						
@@ -413,14 +414,355 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 				cout << " .. slope = " << slope << endl;
 				cout << " .. intercept = " << intercept << endl;
 			
-			// interpolate data to Envirgrid
-				// .. if negative values set to zero
+			// estimate data to Envirgrid
+			// ... if negative values set to zero
+			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
+			
+			for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
+			{
+				pCryogrid=cryo_list[kartenpos];
+
+				double activelayeri = slope * pCryogrid->leafarea + intercept;
+				if(activelayeri<0)
+					activelayeri=0;
+				pCryogrid->maxthawing_depth = activelayeri;
 				
+				cout << " leafarea=" << pCryogrid->leafarea << " -> ALD=" << pCryogrid->maxthawing_depth << endl;
+			}
 				
 		}
 	}
 }
 
+void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_list)
+{
+	for (int i = 0; i < plot_list.size(); i++)
+	{
+		plot_list[i]->xcoo;
+		plot_list[i]->ycoo;
+		plot_list[i]->maxthawing_depth;
+		
+		// calculate weighted mean of surrounding 3x3 grid Cryogrid-maxthawing_depth values for each Envirgrid-Tile
+
+		// find position in Cryogrid
+		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
+
+		int yi = (int) floor(sizemagnifcryo * plot_list[i]->ycoo / parameter[0].sizemagnif);
+		int xi = (int) floor(sizemagnifcryo * plot_list[i]->xcoo / parameter[0].sizemagnif);
+
+		cout << endl << endl << "  plot coo x,y = " << plot_list[i]->xcoo << "," << plot_list[i]->ycoo << endl;
+		cout << " coo in Cryogrid x,y = " << xi << "," << yi << endl;
+
+	/*
+		//DENSITY 1
+		if (parameter[0].densitymode == 1)
+		{
+			pTree->densitywert = 0.0;
+		}
+		else 
+		{	
+			double flaechengroesze=0.0;
+			if (parameter[0].calcinfarea == 1) //linearly increasing
+				flaechengroesze = pTree->dbasal * parameter[0].incfac/100.0; 
+			else if (parameter[0].calcinfarea == 2) //linearly increasing
+				flaechengroesze = pTree->dbasal * (2/3) * parameter[0].incfac/100.0; 
+			else if (parameter[0].calcinfarea == 3) //linearly increasing
+				flaechengroesze = pTree->dbasal * (4/3) * parameter[0].incfac/100.0; 
+			else if (parameter[0].calcinfarea == 4) //logistic growth function with maximum at 8 m
+				flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.1*pTree->dbasal) ) ) )-1;
+			else if (parameter[0].calcinfarea == 5) //logistic growth function with maximum at 8 m
+				flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.2*pTree->dbasal) ) ) )-1;
+			else if (parameter[0].calcinfarea == 6) //logistic growth function with maximum at 8 m
+				flaechengroesze= ( 9/( 1+( ( (1/0.1)-1 )*exp(-0.5*pTree->dbasal) ) ) )-1;
+
+			// if the tree only influences one grid cell
+			if ( flaechengroesze < (1.0/parameter[0].sizemagnif) )
+			{
+				// DENSITY 2
+				if (parameter[0].densitymode == 2)
+				{
+					if (plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue > 0.0) 
+					{
+						if (parameter[0].densitytiletree==1)	// sum of values
+						{
+							pTree->densitywert =	(1.0 - (pTree->densitywert / plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue));
+								//                           density_desired(at position) / density_currently(at position)
+						}
+						else if (parameter[0].densitytiletree==2)	// multiplication of values
+						{
+							pTree->densitywert =	(1.0 - (pTree->densitywert
+														/ 
+														(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue*pTree->densitywert) 
+														)
+												);
+								//                           density_desired(at position) / density_currently(at position)
+						}
+					}
+					else
+					{
+						pTree->densitywert=0.0; // no competition
+					}
+				}
+				// DENSITY 3
+				else if (parameter[0].densitymode == 3)
+				{
+					// determine random grid cell position and assign a value
+					int izuf= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
+					int jzuf= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) * parameter[0].sizemagnif * rand() / (RAND_MAX + 1.0))) );
+					
+					if (plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue > 0.0) 
+					{
+						if (parameter[0].densitytiletree==1)	// sum of values
+						{
+							pTree->densitywert = (1.0 - (pTree->densitywert/ plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue));
+								//                           density_desired(at position) / density_currently(at position)
+						}
+						else if (parameter[0].densitytiletree==2)	// multiplication of values
+						{
+							pTree->densitywert =	(1.0 - (pTree->densitywert
+														/ 
+														(plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue*pTree->densitywert) 
+														)
+												);
+						}
+					}
+					else
+					{
+						pTree->densitywert = 0.0;
+					}
+				}
+				
+				// calculate the thawing depth influence on the tree growth
+				if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)) 
+				{
+					pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
+				}
+				else
+				{
+					pTree->thawing_depthinfluence=100;
+				}
+			}
+			else
+			{
+				// determine dimensions of the grid around the tree
+				int xyquerrastpos= (int) floor( flaechengroesze*parameter[0].sizemagnif );
+				double maxdist= sqrt(pow(double(xyquerrastpos),2)+pow(double(xyquerrastpos),2));
+
+				// determine shifted coordinates and adding up the density value
+				double sumdensitywert=0;
+				double sumthawing_depth=0;
+				
+				unsigned int anzahlflaechen=0;
+				
+				for (int rastposi=(i+xyquerrastpos); rastposi>(i-(xyquerrastpos+1)); rastposi--)
+				{
+					for (int rastposj=(j-xyquerrastpos); rastposj<(j+xyquerrastpos+1); rastposj++)
+					{
+						if ((rastposi<=( (treerows-1)*parameter[0].sizemagnif) && rastposi>=0) && ( rastposj<=( (treecols-1)*parameter[0].sizemagnif) && rastposj>=0))
+						{
+							// distance calculation to determine the influence of the density value in spatial unit
+							// ... similar to value insertion above
+							double entfrastpos=sqrt(pow(double(i-rastposi),2)+pow(double(j-rastposj),2));
+							
+							// only if the current grid cell is a part of the influenced area, a value is assigned
+							if (entfrastpos<= (double) xyquerrastpos)
+							{
+								int icurr=rastposi;
+								int jcurr=rastposj;
+
+								// change of i/j vals only if DENSITY 3
+								if (parameter[0].densitymode==3)
+								{
+									// calculate the position from where the density values are taken randomly
+									icurr= (int) floor( 0.0 + ( (double)  ( ((double) (treerows-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
+									jcurr= (int) floor( 0.0 + ( (double)  ( ((double) (treecols-1)) *parameter[0].sizemagnif*rand()/(RAND_MAX + 1.0))) );
+								}
+								
+								if (parameter[0].densitytiletree==1)	// sum of values
+								{
+									sumdensitywert+=plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensityvalue
+													* (1-entfrastpos/maxdist);
+								}
+								else if (parameter[0].densitytiletree==2)	// multiplication of values
+								{
+									// after weighting the additional values by the individual influence values the offset is added
+									sumdensitywert+=(plot_list[icurr*treecols*parameter[0].sizemagnif+jcurr]->Treedensityvalue
+													-pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0))
+													* pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0)
+													+ pow(pTree->dbasal, parameter[0].densitytreetile)/(entfrastpos+1.0);
+								}
+
+								sumthawing_depth+=(double) plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->maxthawing_depth;
+								anzahlflaechen++;
+							}
+						}
+					}
+				}
+
+				if (sumdensitywert > 0.0) 
+					pTree->densitywert = 1.0 - (pTree->densitywert/sumdensitywert);
+				//                           density_desired(at position) / density_currently(at position)
+				else 
+					pTree->densitywert=0.0;
+					
+				sumthawing_depth=( sumthawing_depth / (double) anzahlflaechen );
+				
+				if (sumthawing_depth  <2000)
+					pTree->thawing_depthinfluence = (unsigned short) ((200.0/2000.0) * sumthawing_depth);
+				else
+					pTree->thawing_depthinfluence = 100;
+			}
+
+			pTree->densitywert= pTree->densitywert*pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
+			
+			if (parameter[0].dichtheightrel==1) 
+			{
+				pTree->densitywert= pTree->densitywert*( -1.0/130.0*pTree->height + 1.0 );
+			} 
+			else if (parameter[0].dichtheightrel==2) 
+			{
+				pTree->densitywert= pTree->densitywert*( -1.0/200.0*pTree->height + 1.0 );
+			} 
+			else if (parameter[0].dichtheightrel==3) 
+			{
+				double hrelbuf=( -1.0/200.0*pTree->height + 1.0 );
+				if(hrelbuf<0.1) 
+					hrelbuf=0.1;
+				pTree->densitywert= pTree->densitywert*hrelbuf;
+			} 
+			else if (parameter[0].dichtheightrel==4)
+			{
+				if (pTree->height<40)
+					pTree->densitywert=1.0;
+				else if ((pTree->height>=40) & (pTree->height<200))
+					pTree->densitywert=0.5;
+				else if (pTree->height>=200)
+					pTree->densitywert=0.0;
+			} 
+			else if (parameter[0].dichtheightrel==5) 
+			{
+				if (pTree->height<40)
+					pTree->densitywert=1.0;
+				else if ((pTree->height>=40) & (pTree->height<200))
+					pTree->densitywert=0.55;
+				else if (pTree->height>=200)
+					pTree->densitywert=0.1;
+			} 
+			else if (parameter[0].dichtheightrel==6) 
+			{
+				if (pTree->height<40)
+					pTree->densitywert=1.0;
+				else if ((pTree->height>=40) & (pTree->height<200))
+					pTree->densitywert=0.9;
+				else if (pTree->height>=200)
+					pTree->densitywert=0.8;
+			}
+			else if (parameter[0].dichtheightrel==10) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				// ... linearly
+				double densitywertminimum=0.1;
+				double ageseinfluss=( -1*(1-densitywertminimum)/100.0* (double) pTree->age + 1.0 );
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+			}
+			else if (parameter[0].dichtheightrel==11) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				// ... linearly
+				double densitywertminimum=0.5;
+				double ageseinfluss=( -1*(1-densitywertminimum)/100.0* (double) pTree->age + 1.0 );
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+			}
+			else if (parameter[0].dichtheightrel==12) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				// ... linearly
+				double densitywertminimum=0.1;
+				double ageseinfluss=( -1*(1-densitywertminimum)/50.0* (double) pTree->age + 1.0 );
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+			}
+			else if (parameter[0].dichtheightrel==13) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				// ... linearly
+				double densitywertminimum=0.5;
+				double ageseinfluss=( -1*(1-densitywertminimum)/50.0* (double) pTree->age + 1.0 );
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+			}
+			else if (parameter[0].dichtheightrel==20) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				double densitywertminimum=0.1;
+				double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.5));
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+
+			}
+			else if (parameter[0].dichtheightrel==21) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				double densitywertminimum=0.5;
+				double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.15));
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+
+			}
+			else if (parameter[0].dichtheightrel==22) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				double densitywertminimum=0.1;
+				double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.6));
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+
+			}
+			else if (parameter[0].dichtheightrel==23) // added to fit the height classes distribution properly
+			{
+				// density value decreases by increasing tree height
+				double densitywertminimum=0.5;
+				double ageseinfluss=(1.0/pow(( (double) pTree->age +1.0), 0.175));
+				if(ageseinfluss<densitywertminimum)
+				{
+					ageseinfluss=densitywertminimum;
+				}
+				pTree->densitywert= pTree->densitywert*ageseinfluss;
+
+			}				
+			
+			if (pTree->densitywert<0) 
+				pTree->densitywert=0.0;
+
+			if (pTree->densitywert>parameter[0].desitymaxreduction) 
+				pTree->densitywert=parameter[0].desitymaxreduction;
+		} 
+	*/
+	}
+}
 
 
 /****************************************************************************************//**
@@ -1326,6 +1668,9 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		vector<vector<Weather*> >::iterator posiwelt = (world_weather_list.begin()+aktort);
 		vector<Weather*>& weather_list = *posiwelt;
 
+		vector<vector<Cryogrid*> >::iterator worldposcryogrid = (world_cryo_list.begin()+aktort);
+		vector<Cryogrid*>& cryo_list = *worldposcryogrid;
+
 		aktort++;
 
 		double time_start_0=omp_get_wtime();
@@ -1355,24 +1700,25 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 				);
 			fclose(fp5);
 		}
-	}
+	// }
 
 
-	aktort=0;
-	for (vector<vector<Cryogrid*> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); ++posw)
-	{
-		vector<Cryogrid*>& cryo_list = *posw;
+	// aktort=0;
+	// for (vector<vector<Cryogrid*> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); ++posw)
+	// {
+		// vector<Cryogrid*>& cryo_list = *posw;
 
-		vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
-		list<Tree*>& tree_list = *world_positon_b;
+		// vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
+		// list<Tree*>& tree_list = *world_positon_b;
 
-		aktort++;
+		// aktort++;
 
 		// TODO: call only in certain years
 		if ( parameter[0].ivort%25 == 0 )
 		{
 			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
 			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
+			UpdateEnvirgridALD(cryo_list, plot_list);	// interpolate for Envirgrid-tiles from Cryogrid active layer depth
 		}
 	}
 

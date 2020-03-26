@@ -10,10 +10,10 @@ OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 all: LAVESI_WIND
 
 clean: 
-	rm -rf data*.csv nohup.out output/data*.csv output/cryogridoutput*csv /legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput*.csv t_*.txt pollDist* output/windgen*.txt t_*.txt build LAVESI_WIND
+	rm -rf data*.csv nohup.out output/data*.csv output/cryogridoutput*csv /legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput* t_*.txt pollDist* output/windgen*.txt t_*.txt build LAVESI_WIND
 
 cleanoutput:
-	rm -rf data*.csv output/data*.csv output/cryogridoutput*csv t_*.txt
+	rm -rf data*.csv output/data*.csv output/cryogridoutput* t_*.txt
 
 debug: CFLAGS += -O0 -g3 -ggdb3 -DDEBUG
 debug: all

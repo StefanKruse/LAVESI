@@ -315,7 +315,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		
 		cout << "try to called matlab at " << clock() << endl;
-		system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main.m');exit;\""); // TODO: make path relative
+		system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main_LAVESI.m');exit;\""); // TODO: make path relative
 		cout << "after called matlab at " << clock() << endl;
 		// exit(1);
 	}
@@ -336,7 +336,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 
-		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv_cryogidresponse"; // TODO: add relative path
+		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv_CG.txt"; // TODO: add relative path
 
 		// trying to open the file for reading
 		filepointer = fopen (filename.c_str(), "r+");

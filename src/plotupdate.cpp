@@ -204,7 +204,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// s3 << std::setfill('0') << std::setw(6) << 1998;
 		// filename="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_"+s3.str()+".csv";
 		// filename="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
-		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv"; // TODO: add relative path
+		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt"; // TODO: add relative path
 		// s1.str("");s1.clear();s2.str("");s2.clear();s2.str("");s2.clear();
 
 		// trying to open the file for reading
@@ -214,7 +214,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		{
 			filepointer = fopen (filename.c_str(), "w+");
 			
-			fprintf(filepointer, "%d;current year;", 1918+parameter[0].ivort);//TODO: change this later to 1000 years spinup and 200 years simulation => 918+...
+			fprintf(filepointer, "%d;current year;;;;", 1918+parameter[0].ivort);//TODO: change this later to 1000 years spinup and 200 years simulation => 918+...
 			fprintf(filepointer, "\n");
 			
 			fprintf(filepointer, "LAVESI output file for CryoGrid input;");
@@ -222,7 +222,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			fprintf(filepointer, "25quantile;");
 			fprintf(filepointer, "median;");
 			fprintf(filepointer, "75quantile;");
-			fprintf(filepointer, "max;");
+			fprintf(filepointer, "max");
 
 			fprintf(filepointer, "\n");
 
@@ -258,7 +258,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()/2/2]);
 		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()/2]);
 		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()/2+leafareai.size()/2/2]);
-		fprintf(filepointer, "%10.1f;", leafareai[leafareai.size()-1]);
+		fprintf(filepointer, "%10.1f", leafareai[leafareai.size()-1]);
 		fprintf(filepointer, "\n");
 		
 		// Iterate and print values of vector
@@ -277,7 +277,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()/2/2]);
 		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()/2]);
 		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()/2+stemareai.size()/2/2]);
-		fprintf(filepointer, "%10.2f;", stemareai[stemareai.size()-1]);
+		fprintf(filepointer, "%10.2f", stemareai[stemareai.size()-1]);
 		fprintf(filepointer, "\n");
 		
 		// Iterate and print values of vector
@@ -297,7 +297,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2/2]);
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2]);
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2]);
-		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()-1]);
+		fprintf(filepointer, "%3.3f", maxtreeheighti[maxtreeheighti.size()-1]);
 		fprintf(filepointer, "\n");
 
 		// Iterate and print values of vector
@@ -325,7 +325,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// TODO: clean couts
 		// from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		
-		// cryogridoutput_00100_0000007001_aggregated.csv_cryogidresponse
+		// cryogridoutput_00025_0000007001_aggregated.txt_CG.csv
 		
 		FILE *filepointer;
 		string filename;
@@ -336,7 +336,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 
-		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv_CG.txt"; // TODO: add relative path
+		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt_CG.csv"; // TODO: add relative path
 
 		// trying to open the file for reading
 		filepointer = fopen (filename.c_str(), "r+");
@@ -359,16 +359,21 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			char linebuffer[255];
 			std::vector<double> activelayerdepthin;
 
+			int counter = 1; // to skip first line of file 
 			while (fgets(linebuffer, stringlengthmax, filepointer) != NULL)
 			{
-				// cout << linebuffer << " - read in -> "; // TODO: only for testing, delete
+				cout << linebuffer << " - read in -> "; // TODO: only for testing, delete
 				
-				activelayerdepthin.push_back(strtod(linebuffer, NULL));
-				
-				// cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
-				// cout << leafareaiout[activelayerdepthin.size()-1] << " leafarea " << endl; // print current value // TODO: only for testing, delete
+				if (counter>=2)
+				{
+					activelayerdepthin.push_back(strtod(linebuffer, NULL));
+					
+					cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
+					cout << leafareaiout[activelayerdepthin.size()-1] << " leafarea " << endl; // print current value // TODO: only for testing, delete
+				}
+				counter++;
 			}
-			// cout << "length of activelayerdepthin = " << activelayerdepthin.size() << endl;// TODO: only for testing, delete
+			cout << "length of activelayerdepthin = " << activelayerdepthin.size() << endl;// TODO: only for testing, delete
 			
 			fclose(filepointer);
 						

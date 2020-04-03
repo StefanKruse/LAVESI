@@ -215,7 +215,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			filepointer = fopen (filename.c_str(), "w+");
 			
 			int yeartocryogrid=1979;
-			if(parameter[0].currentyear>1979 && parameter[0].currentyear<2020)
+			if(parameter[0].currentyear>1979 && parameter[0].currentyear<=2100)// Range of EraInterim data for CryoGrid Forcing
 				yeartocryogrid=parameter[0].currentyear;
 			fprintf(filepointer, "%d;current year;;;;", yeartocryogrid);//TODO: check if year is correctly assigned
 			fprintf(filepointer, "\n");

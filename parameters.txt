@@ -53,12 +53,13 @@ omp_num_threads=16;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=7001;					// (int) Type of weather forcing series 
+weatherchoice=18070;				// (int) Type of weather forcing series 
 										//  22==TY02
 										//  22==CH17
 										//  23==CH02
 										//  24==CH06
 										// 	    ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
+										// 18070== data (CRUTS3.23,1901-1978, ERAINTERIM,1979-2100) for site id EN18070, AWI ENVI-Section Expedition in 2018, site id 070
 precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
 										// 0==not at all
 										// 1==linearly if smaller than threshold
@@ -71,7 +72,7 @@ weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipit
 nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northernmost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
 nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmost plot's position
 										// 111 km == 1 decimal degree
-lineartransect=1;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
+lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
 

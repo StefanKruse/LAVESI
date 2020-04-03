@@ -855,15 +855,14 @@ int main()
 		Parameterinput();
 
 		// calculation of the starting year of the simulation
-		// if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
-		// {	
+		if((parameter[0].weatherchoice== 21) or (parameter[0].weatherchoice== 22) or (parameter[0].weatherchoice== 23) or (parameter[0].weatherchoice== 24))
+		{	
 			parameter[0].startjahr=2014-parameter[0].simduration; 
-			// added here 20014 to acheive no negative years ---> might cause seg faults!
-		// }
-		// else
-		// {
-			// parameter[0].startjahr=2011-parameter[0].simduration;
-		// }
+		}
+		else if(parameter[0].weatherchoice== 18070)
+		{
+			parameter[0].startjahr=2101-parameter[0].simduration;
+		}
 		
 		int yearswithseedintropuffer=parameter[0].yearswithseedintro;	 
 		parameter[0].repeati=0;

@@ -810,6 +810,13 @@ extern void Weatherinput( struct Parameter *parameter,  int stringlengthmax, vec
 			strcpy(dateinametemp, tempbuf);
 			strcpy(dateinameprec, precbuf);
 		}	
+		else if (parameter[0].weatherchoice==18070)
+		{
+			char tempbuf[]="input/cryogrid_cruera_1901_2100_nyrba_temp.csv";
+			char precbuf[]="input/cryogrid_cruera_1901_2100_nyrba_prec.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}	
 		getTemp3(aktort, dateinametemp,  weather_list);
 		getPrec1(dateinameprec, weather_list,stringlengthmax);
 		

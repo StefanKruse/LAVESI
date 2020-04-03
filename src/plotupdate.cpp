@@ -315,7 +315,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		
 		cout << "try to called matlab at " << clock() << endl;
-		system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main_LAVESI.m');exit;\""); // TODO: make path relative
+		// system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main_LAVESI.m');exit;\""); // TODO: make path relative
 		cout << "after called matlab at " << clock() << endl;
 		// exit(1);
 	}
@@ -1482,18 +1482,6 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 				);
 			fclose(fp5);
 		}
-	// }
-
-
-	// aktort=0;
-	// for (vector<vector<Cryogrid*> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); ++posw)
-	// {
-		// vector<Cryogrid*>& cryo_list = *posw;
-
-		// vector<list<Tree*> >::iterator world_positon_b = (world_tree_list.begin()+aktort);
-		// list<Tree*>& tree_list = *world_positon_b;
-
-		// aktort++;
 
 		// TODO: call only in certain years
 		if ( parameter[0].ivort%25 == 0 )

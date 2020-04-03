@@ -116,6 +116,7 @@ using namespace std;
 		int		repeati;
 		unsigned int ivortmax;
 		unsigned int ivort;
+		int		currentyear;
 		bool 	stabilperiod;
 		double 	stabilmovingwindow;	
 		double 	stabilpercentchangethreshold;

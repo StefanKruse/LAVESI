@@ -194,18 +194,27 @@ void Spinupphase()
 				int firstyear =0;
 				int lastyear=0;
 				int startlag=5;
+				int jahr; // TODO: replace with global state variable currentyear
+				double randnyear = rand()/(RAND_MAX + 1.0);
 				
-				// if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
-				// {
+				if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
+				{
 					// firstyear=1934;
 					firstyear=world_weather_list[0][0]->jahr;
 					// lastyear=2013;
 					lastyear=world_weather_list[0][0]->jahr+100;
-				// }
+					
+					jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*randnyear);		
+				} else if(parameter[0].weatherchoice==18070)
+				{
+					firstyear=1979;
+					lastyear=2000;
+					
+					jahr= (firstyear) + (int) ( (double) (lastyear-firstyear)*randnyear);
+				}
 				
 				// choose a random year for weather determination
-				double x = rand()/(RAND_MAX + 1.0);
-				int jahr= (firstyear+startlag) + (int) ( (double) ((lastyear-startlag)-firstyear)*x);		
+				parameter[0].currentyear=jahr;
 			
 				// calculate current year position in list, according to first year in the Weather-List and the random year
 				int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1; 
@@ -352,6 +361,7 @@ void Yearsteps()
 
 			// calculate current year and print a summary of the year
 			int jahr=parameter[0].startjahr+t;
+			parameter[0].currentyear=parameter[0].startjahr+t; // TODO: replace other references to jahr with this global state variable
 			yearposition = ((world_weather_list[0][0]->jahr-parameter[0].startjahr) * -1)+t; // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year 
 
 			if (parameter[0].yearlyvis ==true) 

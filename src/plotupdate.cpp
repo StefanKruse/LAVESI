@@ -214,7 +214,10 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		{
 			filepointer = fopen (filename.c_str(), "w+");
 			
-			fprintf(filepointer, "%d;current year;;;;", 1918+parameter[0].ivort);//TODO: change this later to 1000 years spinup and 200 years simulation => 918+...
+			int yeartocryogrid=1979;
+			if(parameter[0].currentyear>1979 && parameter[0].currentyear<2020)
+				yeartocryogrid=parameter[0].currentyear;
+			fprintf(filepointer, "%d;current year;;;;", yeartocryogrid);//TODO: check if year is correctly assigned
 			fprintf(filepointer, "\n");
 			
 			fprintf(filepointer, "LAVESI output file for CryoGrid input;");
@@ -315,7 +318,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		
 		cout << "try to called matlab at " << clock() << endl;
-		// system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main_LAVESI.m');exit;\""); // TODO: make path relative
+		system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg/main_LAVESI.m');exit;\""); // TODO: make path relative
 		cout << "after called matlab at " << clock() << endl;
 		// exit(1);
 	}
@@ -362,14 +365,14 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			int counter = 1; // to skip first line of file 
 			while (fgets(linebuffer, stringlengthmax, filepointer) != NULL)
 			{
-				cout << linebuffer << " - read in -> "; // TODO: only for testing, delete
+				// cout << linebuffer << " - read in -> "; // TODO: only for testing, delete
 				
 				if (counter>=2)
 				{
 					activelayerdepthin.push_back(strtod(linebuffer, NULL));
 					
-					cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
-					cout << leafareaiout[activelayerdepthin.size()-1] << " leafarea " << endl; // print current value // TODO: only for testing, delete
+					// cout << activelayerdepthin[activelayerdepthin.size()-1] << endl; // print current value // TODO: only for testing, delete
+					// cout << leafareaiout[activelayerdepthin.size()-1] << " leafarea " << endl; // print current value // TODO: only for testing, delete
 				}
 				counter++;
 			}

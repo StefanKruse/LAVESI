@@ -1492,7 +1492,7 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		}
 
 		// TODO: call only in certain years
-		if ( parameter[0].ivort%25 == 0 )
+		if ( ( parameter[0].spinupphase==true & parameter[0].ivort == 1000 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0) )
 		{
 			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
 			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output

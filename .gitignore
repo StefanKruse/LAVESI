@@ -16,6 +16,7 @@ build/
 # exclude output files in output dir
 output/*.csv
 output/*.txt
+output/*.gz
 # exclude time usage output files
 t_*.txt
 # exclude pollen-dispersal output files

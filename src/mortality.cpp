@@ -391,7 +391,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
-									pSeed->thawing_depthinfluence=Vthdpth.at(iran);
+									pSeed->thawing_depthinfluence=Vthdpth.at(iran); // TODO: check funcionality
 								} 
 								else
 								{

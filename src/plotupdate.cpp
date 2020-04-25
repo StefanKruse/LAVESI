@@ -202,8 +202,6 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 		// s3 << std::setfill('0') << std::setw(6) << 1998;
-		// filename="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_"+s3.str()+".csv";
-		// filename="output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.csv";
 		filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt"; // TODO: add relative path
 		// s1.str("");s1.clear();s2.str("");s2.clear();s2.str("");s2.clear();
 
@@ -1493,9 +1491,10 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		}
 
 		// TODO: call only in certain years
-		if ( ( parameter[0].spinupphase==true & parameter[0].ivort == 1000 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0) )
-		{
+		if (parameter[0].ivort%25 == 0)
 			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
+		if (parameter[0].CryoGrid_thawing_depth==true & (( parameter[0].spinupphase==true & parameter[0].ivort == 500 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0)))
+		{
 			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
 			UpdateEnvirgridALD(cryo_list, plot_list);	// interpolate for Envirgrid-tiles from Cryogrid active layer depth
 		}

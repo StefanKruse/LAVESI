@@ -28,12 +28,12 @@ outputall=1;						// (int 0,1) sampling area determination
 
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation
-CryoGrid_thawing_depth=1;			// (int 0,1) Active layer calculation with coupled CryoGrid
+CryoGrid_thawing_depth=0;			// (int 0,1) Active layer calculation with coupled CryoGrid
 vegetation=0;						// (int 0,1) Representation of an organic layer
 
 
 // 0.4 Computation environment
-omp_num_threads=16;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=32;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -86,8 +86,8 @@ windsource=1;						// (int) source of wind data
 									
 // 1.2 -----> Simulation run characteristics
 simduration=200;					// (int) duration of the simulation period depending on the available weather data series
-runs=1;								// (int) number of repeated simulations
-ivortmax=1800;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+runs=10;								// (int) number of repeated simulations
+ivortmax=800;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)

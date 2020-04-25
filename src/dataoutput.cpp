@@ -319,21 +319,14 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				int h=0;
 	
 				// assemble file name
-				if (parameter[0].spinupphase==true)
-				{
-					s1<<parameter[0].repeati;
-					s2<<parameter[0].weatherchoice;
-					dateiname="output/dataentwicklung_currencies_" + s1.str()+"_"+s2.str() + ".csv";
-					s1.str("");s1.clear();
-					s2.str("");s2.clear();
-				}
-				else 
-				{
-					s1<<parameter[0].weatherchoice;
-					dateiname="output/datatrees_currencies_" + s1.str() + ".csv";
-					s1.str("");s1.clear();
-					s2.str("");s2.clear();
-				}
+				s1 << std::setfill('0') << std::setw(3) << parameter[0].repeati;
+				s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+				dateiname="output/datacurrencies_REPEAT" + s1.str()+"_"+s2.str() + ".csv";
+				s1.str("");
+				s1.clear();
+				s2.str("");
+				s2.clear();
+
 		
 				// trying to open the data file for reading
 				filepointer = fopen(dateiname.c_str(), "r+");
@@ -348,14 +341,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "Spinup;");
 				
 					// add column names to the file
-					if (parameter[0].spinupphase==true)
-					{
-						fprintf(filepointer, "Randomyear;");
-					}
-					else
-					{
-						fprintf(filepointer, "Year;");
-					}
+					fprintf(filepointer, "Year;");
 
 					fprintf(filepointer, "meanbas;");
 					fprintf(filepointer, "meanbr;");
@@ -661,29 +647,18 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			if ( parameter[0].ivort==1 || (parameter[0].spinupphase==true && (parameter[0].ivort%10)==0) || (parameter[0].spinupphase==false) )
 			{	
 				// assemble file name
-				if (parameter[0].spinupphase==true)
-				{
-					s1<<parameter[0].repeati;
-					s2<<parameter[0].weatherchoice;
-					s3<<parameter[0].ivort;
-					dateiname="output/dataentwicklung_positionsanalyse_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
-					s1.str("");s1.clear();
-					s2.str("");s2.clear();
-					s3.str("");s3.clear();
-				}
-				else 
-				{	
-					s1<<parameter[0].repeati;
-					s2<<parameter[0].weatherchoice;
-					s3<<parameter[0].ivort;
-					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
-					
-					dateiname="output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
-					
-					s1.str("");s1.clear();
-					s2.str("");s2.clear();
-					s3.str("");s3.clear();
-				}
+				s1 << std::setfill('0') << std::setw(3) << parameter[0].repeati;
+				s2 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
+				s3 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+				dateiname="output/datapositions_REPEAT" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
+				s1.str("");
+				s1.clear();
+				s2.str("");
+				s2.clear();
+				s3.str("");
+				s3.clear();
+
+
 
 				if(parameter[0].boundaryconditions==3)
 				{
@@ -822,15 +797,16 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// -- -- -- -- --   individual    trees -- -- -- -- -- -- //
 
 			// assemble file name
-			s1<<parameter[0].repeati;
-			s2<<parameter[0].weatherchoice;
-			s3<<parameter[0].ivort;
-			
-			dateiname="output/datatrees_" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
-			
-			s1.str("");s1.clear();
-			s2.str("");s2.clear();
-			s3.str("");s3.clear();
+			s1 << std::setfill('0') << std::setw(3) << parameter[0].repeati;
+			s2 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
+			s3 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+			dateiname="output/dataindividuals_REPEAT" + s1.str()+ "_" + s2.str() + "_" + s3.str() + ".csv";
+			s1.str("");
+			s1.clear();
+			s2.str("");
+			s2.clear();
+			s3.str("");
+			s3.clear();
 
 			// trying to open the file for reading
 			filepointer = fopen (dateiname.c_str(), "r+");
@@ -931,10 +907,16 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
 
 			// assemble file name:
-			// s1<<jahr;s2<<parameter[0].weatherchoice;
-			s1<<parameter[0].ivort;s2<<parameter[0].weatherchoice;
-			dateiname="output/datatrees_Treedensity" +s1.str()+"_"+s2.str()+ ".csv";
-			s1.str("");s1.clear();s2.str("");s2.clear();
+			s1 << std::setfill('0') << std::setw(3) << parameter[0].repeati;
+			s2 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
+			s3 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+			dateiname="output/datatreedensity_REPEAT" +s1.str()+"_"+s2.str()+"_"+s3.str()+ ".csv";
+			s1.str("");
+			s1.clear();
+			s2.str("");
+			s2.clear();
+			s3.str("");
+			s3.clear();
 				
 			// trying to open the file for reading
 			filepointer = fopen (dateiname.c_str(), "r+");
@@ -1004,10 +986,16 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		if (cryogridoutput==true)
 		{
 			// assemble file name:
-			s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
-			s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
-			dateiname="output/cryogridoutput_" +s1.str()+"_"+s2.str()+ ".csv";
-			s1.str("");s1.clear();s2.str("");s2.clear();
+			s1 << std::setfill('0') << std::setw(3) << parameter[0].repeati;
+			s2 << std::setfill('0') << std::setw(5) << parameter[0].ivort;
+			s3 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
+			dateiname="output/cryogridoutput_REPEAT" +s1.str()+"_"+s2.str()+"_"+s3.str()+ ".csv";
+			s1.str("");
+			s1.clear();
+			s2.str("");
+			s2.clear();
+			s3.str("");
+			s3.clear();
 				
 			// trying to open the file for reading
 			filepointer = fopen (dateiname.c_str(), "r+");

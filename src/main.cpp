@@ -582,7 +582,7 @@ void initialiseMaps()
 
 			pEnvirgrid->Treedensityvalue=0;
 			pEnvirgrid->Treenumber=0;
-			pEnvirgrid->maxthawing_depth=1000;
+			pEnvirgrid->maxthawing_depth=1000.0; // TODO: in mm, change all CryoGrid related code to mm as well
 			
 			pEnvirgrid->litterheight=200;	// in 0.1mm -> max 6.5535 m
 			pEnvirgrid->litterheight0=200;	// in 0.1mm -> max 6.5535 m
@@ -675,7 +675,7 @@ void initialiseMaps()
 			pCryogrid->leafarea=0;
 			pCryogrid->stemarea=0;
 			pCryogrid->maxtreeheight=0;
-			pCryogrid->maxthawing_depth=100.0;//in cm
+			pCryogrid->maxthawing_depth=1000.0; // in mm
 			
 			cryo_list.push_back(pCryogrid);	
 		}
@@ -894,7 +894,23 @@ int main()
 			parameter[0].nameakt=0;
 			parameter[0].lineakt=0;	
 			parameter[0].yearswithseedintro=yearswithseedintropuffer;	
-				
+			
+			// space for experimental paramameter changes
+				// impact of ALT on tree growth
+				// ... 1 standard
+				// ... >1 more impact meaning less growth and vice versa
+				if (parameter[0].repeati<=3)
+					parameter[0].thawing_depth_impactfactor = 1;
+				else if (parameter[0].repeati>3 && parameter[0].repeati<=6)
+					parameter[0].thawing_depth_impactfactor = 2;
+				else if (parameter[0].repeati>6 && parameter[0].repeati<=9)
+					parameter[0].thawing_depth_impactfactor = 5;
+				else if (parameter[0].repeati>9 && parameter[0].repeati<=10)
+				{
+					parameter[0].thawing_depth_impactfactor = 1;
+					parameter[0].CryoGrid_thawing_depth = true;
+				}
+			
 			runSimulation();
 				
 			finishSimulation();

@@ -28,6 +28,7 @@ outputall=1;						// (int 0,1) sampling area determination
 
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation
+CryoGrid_thawing_depth=1;			// (int 0,1) Active layer calculation with coupled CryoGrid
 vegetation=0;						// (int 0,1) Representation of an organic layer
 
 

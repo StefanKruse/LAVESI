@@ -434,7 +434,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 				double activelayeri = slope * pCryogrid->leafarea + intercept;
 				if(activelayeri<0)
 					activelayeri=0;
-				pCryogrid->maxthawing_depth = activelayeri;
+				pCryogrid->maxthawing_depth = activelayeri * 1000.0; // conversion from meter input to mm
 				
 				// cout << " leafarea=" << pCryogrid->leafarea << " -> ALD=" << pCryogrid->maxthawing_depth << endl;
 			}
@@ -547,7 +547,7 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 			
 			// cout << endl;
 			
-			// plot_list[i]->maxthawing_depth = weightedmean;
+			plot_list[i]->maxthawing_depth = weightedmean;
 		}
 	// cout << endl << " ... end UpdateEnvirgridALD in loop " << endl;
 	}
@@ -592,7 +592,7 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 				pTree->densitywert = 0.0;
 			}
 			else 
-			{	
+			{
 				double flaechengroesze=0.0;
 				if (parameter[0].calcinfarea == 1) //linearly increasing
 					flaechengroesze = pTree->dbasal * parameter[0].incfac/100.0; 
@@ -665,7 +665,7 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 					}
 					
 					// calculate the thawing depth influence on the tree growth
-					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)) 
+					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true)) 
 					{
 						pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 					}
@@ -1007,7 +1007,7 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 						}
 						
 						// calculate the influence of the thawing depth on the tree growth
-						if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true && parameter[0].spinupphase==false))
+						if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true))
 						{
 							pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
 						}
@@ -1079,7 +1079,7 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 
 						sumthawing_depth=( sumthawing_depth / (double) anzahlflaechen );
 						
-						if (sumthawing_depth  <2000)
+						if (sumthawing_depth < 2000)
 							pTree->thawing_depthinfluence = (unsigned short) ((200.0/2000.0) * sumthawing_depth);
 						else
 							pTree->thawing_depthinfluence = 100;
@@ -1265,7 +1265,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 			// pEnvirgrid->stemarea=0;
 			// pEnvirgrid->maxtreeheight=0;
 			
-			if (parameter[0].vegetation==true && parameter[0].spinupphase==false)
+			if (parameter[0].vegetation==true)
 			{
 				double auflagenwachstumsrate =0.05
 											 +( 1.0/( ((1.0/0.01)-(1.0/0.95))
@@ -1298,14 +1298,15 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 				pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
 			}
 			
-			// if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
-			if (parameter[0].thawing_depth==true)
+			if (parameter[0].thawing_depth==true && parameter[0].CryoGrid_thawing_depth==false) // in case of CryoGrid_thawing_depth==true estimation will be done externally
 			{
 				// calculation of an insulation by organic material (damping reduces thawing_depth, formula taken from literature)
 				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmean; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
+				
+/* TODO: clean up, was for testing
 // cout << pEnvirgrid->Treedensityvalue << " ... ";
 				// pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 				if(pEnvirgrid->Treedensityvalue>0)
@@ -1330,9 +1331,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 						
 					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) ) * treedensityinfluencepermafrost;//test here different values 1/ must maybe maxvalue of treedensityvalues
 				} else
-				{
+				{*/
 					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) );
-				}
+				// }
 			}
 		
 			pEnvirgrid->Treedensityvalue=0;//moved here from above so that the Treedensityvalue can be used for evalutaion of active layer
@@ -1389,15 +1390,15 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 				pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
 			}			
 
-			// if (parameter[0].thawing_depth==true && parameter[0].spinupphase==false)
-			if (parameter[0].thawing_depth==true)
+			if (parameter[0].thawing_depth==true && parameter[0].CryoGrid_thawing_depth==false) // in case of CryoGrid_thawing_depth==true estimation will be done externally
 			{
 				// calculation of an insulation by organic material (damping reduces thawing_depth, formula taken from literature)
 				double daempfung = (1.0/4000.0) * (double) pEnvirgrid->litterheightmean; // 1/4000 =slope to reach the maximum value at appr. 4000
 				
 				if (daempfung>=0.9) 
 					daempfung=0.9;
-				
+
+/* TODO: clean was for testing
 // cout << pEnvirgrid->Treedensityvalue << " ... ";
 				// pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday));	// 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 				if(pEnvirgrid->Treedensityvalue>0)
@@ -1420,9 +1421,9 @@ void ResetMaps(int yearposition, vector<Envirgrid*> &plot_list, vector<Weather*>
 						
 					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) ) * treedensityinfluencepermafrost;//test here different values 1/ must maybe maxvalue of treedensityvalues
 				} else
-				{
+				{*/
 					pEnvirgrid->maxthawing_depth= (unsigned short) ( 1000.0*(1.0-daempfung)*0.050*sqrt(weather_list[yearposition]->degreday) );
-				}
+				// }
 			}
 			
 			pEnvirgrid->Treedensityvalue=0;

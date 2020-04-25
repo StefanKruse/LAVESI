@@ -125,6 +125,7 @@ using namespace std;
 
 		// submodules
 		bool	thawing_depth;
+		bool	CryoGrid_thawing_depth;
 		bool	vegetation;	
 		int		specpres;
 

@@ -179,10 +179,23 @@ void Parameterinput(void)
 	{
 		parameter[0].thawing_depth=false;
 	};
-
 	if (parameter[0].parameterinputvis ==true) 
 	{
 		printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth)?"true":"false");
+	}
+	
+	strcpy(uebergabestring,"CryoGrid_thawing_depth");
+	if (((int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]))==1) 
+	{
+		parameter[0].CryoGrid_thawing_depth=true;
+	}
+	else 
+	{
+		parameter[0].CryoGrid_thawing_depth=false;
+	};
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].CryoGrid_thawing_depth)?"true":"false");
 	}
 
 	strcpy(uebergabestring,"vegetation");

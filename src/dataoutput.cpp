@@ -953,8 +953,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "Auflagenstaerke;");
 				fprintf(filepointer, "AuflagenstaerkeMittel;");
 				fprintf(filepointer, "Maxthawing_depth;");
-				fprintf(filepointer, "weatherchoice;");
-				fprintf(filepointer, "thawing_depth;");
 				fprintf(filepointer, "\n");
 
 				if (filepointer == NULL)
@@ -982,8 +980,6 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "%u;", pEnvirgrid->litterheight);
 					fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
 					fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
-					fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-					fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 					fprintf(filepointer, "\n");
 				}
 			}

@@ -396,7 +396,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								else
 								{
 									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
+									pSeed->thawing_depthinfluence=1.0;
 								}
 															
 								pSeed->line=pTree->line;
@@ -543,12 +543,12 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
-									pSeed->thawing_depthinfluence=100;
+									pSeed->thawing_depthinfluence=1.0;
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
+									pSeed->thawing_depthinfluence=1.0;
 								}
 								
 								pSeed->line=pTree->line;
@@ -720,12 +720,12 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 								{
 									int iran=(int) rand()/(RAND_MAX+1.0)*Vname.size()-1;
 									pSeed->namep=Vname.at(iran);
-									pSeed->thawing_depthinfluence=100;
+									pSeed->thawing_depthinfluence=1.0;
 								} 
 								else
 								{
 									pSeed->namep=0;
-									pSeed->thawing_depthinfluence=100;
+									pSeed->thawing_depthinfluence=1.0;
 								}
 								
 								pSeed->line=pTree->line;

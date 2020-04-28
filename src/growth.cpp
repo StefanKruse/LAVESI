@@ -214,15 +214,16 @@ void Growth(struct Parameter *parameter, int yearposition, vector<list<Tree*> > 
 			maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list);
 			
 			double ALTimpactfac = 1.0;
-			if(pTree->species==1)
+			if(pTree->species==1) // Larix gmelinii
 			{
-				ALTimpactfac = ((double) pTree->thawing_depthinfluence)/(100 * parameter[0].thawing_depth_impactfactor);
-
+				ALTimpactfac = pTree->thawing_depthinfluence / parameter[0].thawing_depth_impactfactor;
 			}
-			else
+			else // Larix sibirica
 			{
-				ALTimpactfac = (((double) pTree->thawing_depthinfluence*0.8)/(100 * parameter[0].thawing_depth_impactfactor) )-0.6;// TODO: check impact
+				ALTimpactfac = 0.5 * pTree->thawing_depthinfluence / parameter[0].thawing_depth_impactfactor;// TODO: check impact
 			}
+			if(ALTimpactfac>1.0)
+				ALTimpactfac=1.0;
 			
 			double basalwachstum = maxbasalwachstum
 									* ( (double) pTree->buffer)

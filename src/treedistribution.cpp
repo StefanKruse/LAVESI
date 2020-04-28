@@ -140,7 +140,7 @@ void Seedin()
 					pSeed->longdispersed=false;
 					pSeed->species=specieszufall;
 					pSeed->releaseheight=0;
-					pSeed->thawing_depthinfluence=100;
+					pSeed->thawing_depthinfluence=1.0;
 					
 					seed_list.push_back(pSeed);	
 					
@@ -267,7 +267,7 @@ void TreesIni(int maximal_word_length)
 						pTree->seedproduced=0; 	
 						pTree->buffer=1;	
 						pTree->densitywert=0;
-						pTree->thawing_depthinfluence=100;	
+						pTree->thawing_depthinfluence=1.0;	
 						pTree->growing=true;		
 						if(parameter[0].specpres==0 || parameter[0].specpres==1)
 						{
@@ -512,7 +512,7 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 							pSeed->longdispersed=false;
 							pSeed->species=specieszufall;
 							pSeed->releaseheight=hinterheightsi;
-							pSeed->thawing_depthinfluence=100;
+							pSeed->thawing_depthinfluence=1.0;
 							pSeed->dispersaldistance=dispersaldistance;	
 							
 							seed_list.push_back(pSeed);	

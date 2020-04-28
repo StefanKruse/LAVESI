@@ -662,15 +662,16 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 						}
 					}
 					
+					// TODO: clean code
 					// calculate the thawing depth influence on the tree growth
-					if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true)) 
-					{
-						pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
-					}
-					else
-					{
-						pTree->thawing_depthinfluence=100;
-					}
+					// if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true)) 
+					// {
+						pTree->thawing_depthinfluence = plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth / 1000.0; // scaling to m (1000.0 mm = 1.0 m)
+					// }
+					// else
+					// {
+						// pTree->thawing_depthinfluence=100;
+					// }
 				}
 				else
 				{
@@ -737,10 +738,11 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 						
 					sumthawing_depth=( sumthawing_depth / (double) anzahlflaechen );
 					
-					if (sumthawing_depth  <2000)
-						pTree->thawing_depthinfluence = (unsigned short) ((200.0/2000.0) * sumthawing_depth);
-					else
-						pTree->thawing_depthinfluence = 100;
+					// TODO: clean code
+					// if (sumthawing_depth  <2000)
+						pTree->thawing_depthinfluence = sumthawing_depth / 1000.0; // scaling to m (1000.0 mm = 1.0 m)
+					// else
+						// pTree->thawing_depthinfluence = 100;
 				}
 
 				pTree->densitywert= pTree->densitywert*pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
@@ -1004,15 +1006,16 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 							}
 						}
 						
+						// TODO: clean code
 						// calculate the influence of the thawing depth on the tree growth
-						if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true))
-						{
-							pTree->thawing_depthinfluence= (unsigned short) ((200.0/2000.0)* (double) plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth);
-						}
-						else
-						{
-							pTree->thawing_depthinfluence=100;
-						}
+						// if ((plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth<2000) && (parameter[0].thawing_depth==true))
+						// {
+							pTree->thawing_depthinfluence = plot_list[i*treecols*parameter[0].sizemagnif+j]->maxthawing_depth / 1000.0; // scaling to m (1000.0 mm = 1.0 m)
+						// }
+						// else
+						// {
+							// pTree->thawing_depthinfluence=100;
+						// }
 					}
 					// ... if the tree influences more than one section
 					else
@@ -1077,10 +1080,11 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 
 						sumthawing_depth=( sumthawing_depth / (double) anzahlflaechen );
 						
-						if (sumthawing_depth < 2000)
-							pTree->thawing_depthinfluence = (unsigned short) ((200.0/2000.0) * sumthawing_depth);
-						else
-							pTree->thawing_depthinfluence = 100;
+						// TODO: clean code
+						// if (sumthawing_depth < 2000)
+							pTree->thawing_depthinfluence = sumthawing_depth / 1000.0; // scaling to m (1000.0 mm = 1.0 m)
+						// else
+							// pTree->thawing_depthinfluence = 100;
 					}
 
 					pTree->densitywert= pTree->densitywert

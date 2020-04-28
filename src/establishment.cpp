@@ -125,7 +125,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->dispersaldistance=pSeed->dispersaldistance;
 								pTree->growing=true;
 								pTree->species=pSeed->species;
-								pTree->thawing_depthinfluence=100;
+								pTree->thawing_depthinfluence=1.0;
 								
 								tree_list.push_back(pTree);
 
@@ -182,7 +182,7 @@ void Treeestablishment( struct Parameter *parameter, int yearposition, vector<li
 								pTree->seedproduced=0; 
 								pTree->buffer=1;
 								pTree->densitywert=0;
-								pTree->thawing_depthinfluence=100;
+								pTree->thawing_depthinfluence=1.0;
 								pTree->dispersaldistance=pSeed->dispersaldistance;						
 								pTree->growing=true;
 								pTree->species=pSeed->species;

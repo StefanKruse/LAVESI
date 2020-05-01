@@ -897,6 +897,7 @@ int main()
 			parameter[0].lineakt=0;	
 			parameter[0].yearswithseedintro=yearswithseedintropuffer;	
 			
+			parameter[0].callcryogrid=false;
 			parameter[0].cryogridcalled=false;
 			
 			// space for experimental paramameter changes
@@ -909,11 +910,13 @@ int main()
 					parameter[0].thawing_depth_impactfactor = 2;
 				else if (parameter[0].repeati>6 && parameter[0].repeati<=9)
 					parameter[0].thawing_depth_impactfactor = 5;
-				else if (parameter[0].repeati>9 && parameter[0].repeati<=10)
+				else if (parameter[0].repeati>9 && parameter[0].repeati<=12) // ALT only estimated based on parameterization with CryoGrid
 				{
 					parameter[0].thawing_depth_impactfactor = 1;
 					parameter[0].CryoGrid_thawing_depth = true;
 				}
+				else if (parameter[0].repeati>12 && parameter[0].repeati<=13) // ALT by CryoGrid
+					parameter[0].callcryogrid = true;
 			
 			runSimulation();
 				

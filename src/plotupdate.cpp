@@ -464,27 +464,61 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 	}
 }
 
-void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_list)
+double estimateALT(double pai_i, double degredayi_i)
+{
+	double alt_i = 0.0;
+	double spike = -2.85000 + 0.00275*degredayi_i;
+	
+	if(pai_i<200)
+		alt_i = 1.8666667 + 0.0006667*pai_i;
+	else if(pai_i>200 & pai_i<350)
+		alt_i = 2.0 + ((spike-2.0)/(350-200))*(pai_i-200);
+	else if(pai_i>200 & pai_i<350)
+		alt_i = spike + ((2.2-spike)/(500-350))*(pai_i-350);
+	else if(pai_i>500)
+		alt_i = 1.8666667 + 0.0006667*pai_i;
+		
+	return(alt_i);
+}
+
+void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_list, vector<Weather*> &weather_list, int yearposition)
 {
 	
 	// estimate data to Cryogrid
 	// ... if negative values set to zero
 	double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
 	
-	cout << " .. slope = " << parameter[0].altslope << endl;
-	cout << " .. intercept = " << parameter[0].altintercept << endl;	
-	for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
+	if(parameter[0].callcryogrid==true)// when ALT was calculated by CryoGrid
 	{
-		pCryogrid=cryo_list[kartenpos];
+		cout << " .. slope = " << parameter[0].altslope << endl;
+		cout << " .. intercept = " << parameter[0].altintercept << endl;	
+		for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
+		{
+			pCryogrid=cryo_list[kartenpos];
 
-		double activelayeri = parameter[0].altslope * pCryogrid->leafarea + parameter[0].altintercept;
-		if(activelayeri<0)
-			activelayeri=0;
-		pCryogrid->maxthawing_depth = activelayeri * 1000.0; // conversion from meter input to mm
-		
-		// cout << " leafarea=" << pCryogrid->leafarea << " -> ALD=" << pCryogrid->maxthawing_depth << endl;
+			double activelayeri = parameter[0].altslope * pCryogrid->leafarea + parameter[0].altintercept;
+			if(activelayeri<0)
+				activelayeri=0;
+			pCryogrid->maxthawing_depth = activelayeri * 1000.0; // conversion from meter input to mm
+			
+			// cout << " leafarea=" << pCryogrid->leafarea << " -> ALD=" << pCryogrid->maxthawing_depth << endl;
+		}
 	}
-	
+	else// prior CryoGrid-parameterized ALT estimation
+	{
+		// assess climate data (Active Air Temperature (Sum(T>0)), AAT_>0, here named degreday) of current year
+		// ... and estimate ALT for each LAI+SAI=PAI value on the grid
+
+		for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
+		{
+			pCryogrid=cryo_list[kartenpos];
+
+			double activelayeri = estimateALT(pCryogrid->leafarea+pCryogrid->stemarea, weather_list[yearposition]->degreday);
+			if(activelayeri<0)
+				activelayeri=0;
+			pCryogrid->maxthawing_depth = activelayeri * 1000.0; // conversion from meter input to mm
+		}		
+	}
 	// TODO: clean couts
 	for (int i = 0; i < plot_list.size(); i++)
 	{		
@@ -1516,15 +1550,18 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		if(parameter[0].ivort%25 == 0)
 			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
 		
-		if(parameter[0].CryoGrid_thawing_depth==true & (( parameter[0].spinupphase==true & parameter[0].ivort == 500 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0)))
+		if(parameter[0].callcryogrid==true & parameter[0].CryoGrid_thawing_depth==true & (( parameter[0].spinupphase==true & parameter[0].ivort == 500 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0)))
 		// if(parameter[0].CryoGrid_thawing_depth==true &  parameter[0].ivort%25 == 0)// TODO: currently too slow so that only at certain times it can be called
 		{
 			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
 			parameter[0].cryogridcalled=true;
 		}
 		
-		if(parameter[0].cryogridcalled & parameter[0].ivort%25 == 0)// interpolate for Envirgrid-tiles from Cryogrid active layer depth, use former estimation values after once called CryoGrid
-			UpdateEnvirgridALD(cryo_list, plot_list);	
+		if(parameter[0].callcryogrid==false & parameter[0].CryoGrid_thawing_depth==true)
+			UpdateEnvirgridALD(cryo_list, plot_list, weather_list, yearposition);
+		else if(parameter[0].cryogridcalled==true & parameter[0].ivort%25 == 0)// interpolate for Envirgrid-tiles from Cryogrid active layer depth, use former estimation values after once called CryoGrid
+			UpdateEnvirgridALD(cryo_list, plot_list, weather_list, yearposition);
+			
 		
 		
 		AddTreeDensity(tree_list, plot_list);

@@ -128,6 +128,7 @@ using namespace std;
 		// submodules
 		bool	thawing_depth;
 		bool	CryoGrid_thawing_depth;
+		bool	callcryogrid;
 		bool	cryogridcalled;
 		double	altslope;
 		double	altintercept;

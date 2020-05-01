@@ -91,6 +91,8 @@ using namespace std;
 		double	stemarea;
 		// double	plantarea; // is la+sa, not needed to use explicit
 		double	maxtreeheight;
+		double	meantreeheight;
+		int		treecount;
 		// double	finerootbiomass; // TODO: now constant later 
 		double	maxthawing_depth;
 	};
@@ -126,6 +128,9 @@ using namespace std;
 		// submodules
 		bool	thawing_depth;
 		bool	CryoGrid_thawing_depth;
+		bool	cryogridcalled;
+		double	altslope;
+		double	altintercept;
 		double	thawing_depth_impactfactor;
 		bool	vegetation;	
 		int		specpres;

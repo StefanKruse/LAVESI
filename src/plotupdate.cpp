@@ -108,6 +108,8 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		pCryogrid->leafarea = 0;
 		pCryogrid->stemarea = 0;
 		pCryogrid->maxtreeheight = 0;
+		pCryogrid->treecount = 0;
+		pCryogrid->meantreeheight = 0;
 	}
 	
 	for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); )
@@ -140,6 +142,8 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->stemarea += M_PI * pTree->dbasal * sqrt( pow(pTree->dbasal/100,2) + pow(pTree->height/100,2) )  / cryogridcellarea;
 			if(pTree->height/100 > cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight)
 				cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->maxtreeheight = pTree->height/100;
+			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->meantreeheight += pTree->height/100;
+			cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->treecount++;
 		}
 		// if the trees influences more than one density grid cell
 		else
@@ -170,6 +174,8 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->stemarea += stemareaoftreepertile;
 							if(pTree->height/100 > cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight)
 								cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->maxtreeheight = pTree->height/100;
+							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->meantreeheight += pTree->height/100;
+							cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj]->treecount++;
 						}
 					}
 				}
@@ -178,6 +184,15 @@ void PrepareCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 
 		++pos;
 	}
+	// process mean value of tree height
+	// cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->meantreeheight/cryo_list[i*ceil(treecols*sizemagnifcryo)+j]->treecount;
+	for(int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++)
+	{
+		pCryogrid = cryo_list[kartenpos];
+
+		pCryogrid->meantreeheight = pCryogrid->meantreeheight / (double) pCryogrid->treecount;
+	}
+
 }
 	
 void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
@@ -191,6 +206,7 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 	std::vector<double> leafareai;
 	std::vector<double> stemareai;
 	std::vector<double> maxtreeheighti;
+	std::vector<double> meantreeheighti;
 
 	if(true)
 	{// 1. compile data and write to file
@@ -246,9 +262,15 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			leafareai.push_back(pCryogrid->leafarea);
 			stemareai.push_back(pCryogrid->stemarea);
 			maxtreeheighti.push_back(pCryogrid->maxtreeheight);
+			meantreeheighti.push_back(pCryogrid->meantreeheight);
 		}
-	
 		std::sort (leafareai.begin(), leafareai.end());
+		std::sort (stemareai.begin(), stemareai.end());
+		std::sort (maxtreeheighti.begin(), maxtreeheighti.end());
+		std::sort (meantreeheighti.begin(), meantreeheighti.end());
+	
+	
+	
 		// std::cout << "The min is " << leafareai[0] << '\n';
 		// std::cout << "The 25% quartile is " << leafareai[leafareai.size()/2/2] << '\n';
 		// std::cout << "The median is " << leafareai[leafareai.size()/2] << '\n';
@@ -267,7 +289,6 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 			// std::cout << n << '\n';
 		// }
 		
-		std::sort (stemareai.begin(), stemareai.end());
 		// std::cout << "The min is " << stemareai[0] << '\n';
 		// std::cout << "The 25% quartile is " << stemareai[stemareai.size()/2/2] << '\n';
 		// std::cout << "The median is " << stemareai[stemareai.size()/2] << '\n';
@@ -285,20 +306,39 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 		// for(double n : stemareai) {
 			// std::cout << n << '\n';
 		// }
+	
+		fprintf(filepointer, "mean50percent2maxtreeheight_m;");
+		fprintf(filepointer, "%3.3f;", (meantreeheighti[0] + maxtreeheighti[0])/2);
+		fprintf(filepointer, "%3.3f;", (meantreeheighti[meantreeheighti.size()/2/2] + maxtreeheighti[maxtreeheighti.size()/2/2])/2);
+		fprintf(filepointer, "%3.3f;", (meantreeheighti[meantreeheighti.size()/2] + maxtreeheighti[maxtreeheighti.size()/2])/2);
+		fprintf(filepointer, "%3.3f;", (meantreeheighti[meantreeheighti.size()/2+meantreeheighti.size()/2/2] + maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2])/2);
+		fprintf(filepointer, "%3.3f", (meantreeheighti[meantreeheighti.size()-1] + maxtreeheighti[maxtreeheighti.size()-1])/2);
+		fprintf(filepointer, "\n");
 		
-		std::sort (maxtreeheighti.begin(), maxtreeheighti.end());
 		// std::cout << "The min is " << maxtreeheighti[0] << '\n';
 		// std::cout << "The 25% quartile is " << maxtreeheighti[maxtreeheighti.size()/2/2] << '\n';
 		// std::cout << "The median is " << maxtreeheighti[maxtreeheighti.size()/2] << '\n';
 		// std::cout << "The 75% quartile is " << maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2] << '\n';
 		// std::cout << "The max is " << maxtreeheighti[maxtreeheighti.size()-1] << '\n';
-
 		fprintf(filepointer, "maxtreeheight_m;");
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[0]);
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2/2]);
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2]);
 		fprintf(filepointer, "%3.3f;", maxtreeheighti[maxtreeheighti.size()/2+maxtreeheighti.size()/2/2]);
 		fprintf(filepointer, "%3.3f", maxtreeheighti[maxtreeheighti.size()-1]);
+		fprintf(filepointer, "\n");
+
+		// std::cout << "The min is " << meantreeheighti[0] << '\n';
+		// std::cout << "The 25% quartile is " << meantreeheighti[meantreeheighti.size()/2/2] << '\n';
+		// std::cout << "The median is " << meantreeheighti[meantreeheighti.size()/2] << '\n';
+		// std::cout << "The 75% quartile is " << meantreeheighti[meantreeheighti.size()/2+meantreeheighti.size()/2/2] << '\n';
+		// std::cout << "The max is " << meantreeheighti[meantreeheighti.size()-1] << '\n';
+		fprintf(filepointer, "meantreeheight_m;");
+		fprintf(filepointer, "%3.3f;", meantreeheighti[0]);
+		fprintf(filepointer, "%3.3f;", meantreeheighti[meantreeheighti.size()/2/2]);
+		fprintf(filepointer, "%3.3f;", meantreeheighti[meantreeheighti.size()/2]);
+		fprintf(filepointer, "%3.3f;", meantreeheighti[meantreeheighti.size()/2+meantreeheighti.size()/2/2]);
+		fprintf(filepointer, "%3.3f", meantreeheighti[meantreeheighti.size()-1]);
 		fprintf(filepointer, "\n");
 
 		// Iterate and print values of vector
@@ -415,34 +455,36 @@ void UpdateCryogrid(list<Tree*> &tree_list, vector<Cryogrid*> &cryo_list)
 				for(int i = 0; i < xn; i++)
 					yxcovariance += (xmean-leafareaiout[i]) * (ymean-activelayerdepthin[i]);
 				// slope
-				double slope = yxcovariance / xvariance;
-				double intercept = ymean - slope * xmean;
+				parameter[0].altslope = yxcovariance / xvariance;
+				parameter[0].altintercept = ymean - parameter[0].altslope * xmean;
 				
-				// cout << " .. slope = " << slope << endl;
-				// cout << " .. intercept = " << intercept << endl;
-			
-			// estimate data to Envirgrid
-			// ... if negative values set to zero
-			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
-			
-			for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
-			{
-				pCryogrid=cryo_list[kartenpos];
-
-				double activelayeri = slope * pCryogrid->leafarea + intercept;
-				if(activelayeri<0)
-					activelayeri=0;
-				pCryogrid->maxthawing_depth = activelayeri * 1000.0; // conversion from meter input to mm
-				
-				// cout << " leafarea=" << pCryogrid->leafarea << " -> ALD=" << pCryogrid->maxthawing_depth << endl;
-			}
-				
+				cout << " .. slope = " << parameter[0].altslope << endl;
+				cout << " .. intercept = " << parameter[0].altintercept << endl;	
 		}
 	}
 }
 
 void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_list)
 {
+	
+	// estimate data to Cryogrid
+	// ... if negative values set to zero
+	double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
+	
+	cout << " .. slope = " << parameter[0].altslope << endl;
+	cout << " .. intercept = " << parameter[0].altintercept << endl;	
+	for (int kartenpos=0; kartenpos< (ceil(treerows*sizemagnifcryo) *ceil(treecols*sizemagnifcryo)); kartenpos++)
+	{
+		pCryogrid=cryo_list[kartenpos];
+
+		double activelayeri = parameter[0].altslope * pCryogrid->leafarea + parameter[0].altintercept;
+		if(activelayeri<0)
+			activelayeri=0;
+		pCryogrid->maxthawing_depth = activelayeri * 1000.0; // conversion from meter input to mm
+		
+		// cout << " leafarea=" << pCryogrid->leafarea << " -> ALD=" << pCryogrid->maxthawing_depth << endl;
+	}
+	
 	// TODO: clean couts
 	for (int i = 0; i < plot_list.size(); i++)
 	{		
@@ -540,7 +582,6 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
 				// cout << "veci=" << veci << ": d=" << dists[veci] << "  & ald=" << cgvals[veci] << endl;
 			// }
 			// weightedmean = weightedmean/cgvals.size();
-			// weightedmean = weightedmean;
 			// cout << "weightedmean=" << weightedmean << endl;
 			
 			// cout << endl;
@@ -573,7 +614,7 @@ void UpdateEnvirgridALD(vector<Cryogrid*> &cryo_list, vector<Envirgrid*> &plot_l
  *								   pTree->densitywert= pTree->densitywert *pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
  *******************************************************************************************/
 
- void IndividualTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
+void IndividualTreeDensity(list<Tree*> &tree_list, vector<Envirgrid*> &plot_list)
 {
 	if(parameter[0].omp_num_threads==1)
 	{// only one core
@@ -1451,7 +1492,7 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 {
 	int aktort=0;
 
-	for (vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
+	for(vector<vector<Envirgrid*> >::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw)
 	{
 		vector<Envirgrid*>& plot_list = *posw;
 
@@ -1469,6 +1510,22 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		double time_start_0=omp_get_wtime();
 		ResetMaps(yearposition, plot_list, weather_list);
 		double time_ResetMaps=omp_get_wtime();
+		
+		// TODO: call only in certain years
+		// external update of active layer thickness values
+		if(parameter[0].ivort%25 == 0)
+			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
+		
+		if(parameter[0].CryoGrid_thawing_depth==true & (( parameter[0].spinupphase==true & parameter[0].ivort == 500 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0)))
+		// if(parameter[0].CryoGrid_thawing_depth==true &  parameter[0].ivort%25 == 0)// TODO: currently too slow so that only at certain times it can be called
+		{
+			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
+			parameter[0].cryogridcalled=true;
+		}
+		
+		if(parameter[0].cryogridcalled & parameter[0].ivort%25 == 0)// interpolate for Envirgrid-tiles from Cryogrid active layer depth, use former estimation values after once called CryoGrid
+			UpdateEnvirgridALD(cryo_list, plot_list);	
+		
 		
 		AddTreeDensity(tree_list, plot_list);
 		double time_AddTreeDensity=omp_get_wtime();
@@ -1494,14 +1551,6 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 			fclose(fp5);
 		}
 
-		// TODO: call only in certain years
-		if (parameter[0].ivort%25 == 0)
-			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
-		if (parameter[0].CryoGrid_thawing_depth==true & (( parameter[0].spinupphase==true & parameter[0].ivort == 500 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0)))
-		{
-			UpdateCryogrid(tree_list, cryo_list);		// export data and call Cryogrid instance and collect back output
-			UpdateEnvirgridALD(cryo_list, plot_list);	// interpolate for Envirgrid-tiles from Cryogrid active layer depth
-		}
 	}
 
 }

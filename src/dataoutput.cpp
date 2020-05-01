@@ -403,7 +403,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "Seeds_sib;");
 					fprintf(filepointer, "Y_Pos_Max;");
 					// weather
-					fprintf(filepointer, "weathertyp;");
+					// fprintf(filepointer, "weathertyp;");
 					fprintf(filepointer, "Starttrees;");
 					fprintf(filepointer, "Jahrestemp;");
 					fprintf(filepointer, "Jantemp;");
@@ -608,7 +608,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", specseed2);				
 				fprintf(filepointer, "%4.2f;",yposmax);
 				// weather
-				fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+				// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 				fprintf(filepointer, "%d;", parameter[0].starttrees);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->tempyearmean);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp1monthmean);
@@ -725,9 +725,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					{
 						filepointer = fopen (dateiname.c_str(), "w+");
 						
-						fprintf(filepointer, "Repeat;");
-						fprintf(filepointer, "YPLOTPOS;");
-						fprintf(filepointer, "XPLOTPOS;");
+						// fprintf(filepointer, "Repeat;"); // TODO: cleaning
+						// fprintf(filepointer, "YPLOTPOS;");
+						// fprintf(filepointer, "XPLOTPOS;");
 						fprintf(filepointer, "Jahr;");
 						fprintf(filepointer, "zufallsJahr;");
 						fprintf(filepointer, "weatherchoice;");
@@ -758,9 +758,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					{
 						pTree=(*pos);
 						
-						fprintf(filepointer, "%d;", parameter[0].repeati);
-						fprintf(filepointer, "%d;", pTree->yworldcoo);
-						fprintf(filepointer, "%d;", pTree->xworldcoo);
+						// fprintf(filepointer, "%d;", parameter[0].repeati);
+						// fprintf(filepointer, "%d;", pTree->yworldcoo);
+						// fprintf(filepointer, "%d;", pTree->xworldcoo);
 						fprintf(filepointer, "%d;", parameter[0].ivort);
 						fprintf(filepointer, "%d;", jahr);
 						fprintf(filepointer, "%d;", parameter[0].weatherchoice);
@@ -925,9 +925,9 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			{
 				filepointer = fopen (dateiname.c_str(), "w+");
 				
-				fprintf(filepointer, "Repeat;");
-				fprintf(filepointer, "YPLOTPOS;");
-				fprintf(filepointer, "XPLOTPOS;");
+				// fprintf(filepointer, "Repeat;"); //TODO: cleaning
+				// fprintf(filepointer, "YPLOTPOS;");
+				// fprintf(filepointer, "XPLOTPOS;");
 				fprintf(filepointer, "X;");
 				fprintf(filepointer, "Y;");
 				fprintf(filepointer, "Treedensityvalue;");
@@ -950,11 +950,11 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			for (int kartenpos=0; kartenpos< (treerows*parameter[0].sizemagnif*treecols*parameter[0].sizemagnif); kartenpos++)
 			{
 				pEnvirgrid=plot_list[kartenpos];
-				if ( (pEnvirgrid->Treenumber>0) && ( (pEnvirgrid->xcoo>=xminwindow*parameter[0].sizemagnif) && (pEnvirgrid->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo>=yminwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
-				{// output only if tree density values >0 
-					fprintf(filepointer, "%d;", parameter[0].repeati);
-					fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
-					fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
+				// if ( (pEnvirgrid->Treenumber>0) && ( (pEnvirgrid->xcoo>=xminwindow*parameter[0].sizemagnif) && (pEnvirgrid->xcoo<=xmaxwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo>=yminwindow*parameter[0].sizemagnif) && (pEnvirgrid->ycoo<=ymaxwindow*parameter[0].sizemagnif) ) )
+				// {// output only if tree density values >0 // TODO: now all as thawing_depth changes dynamically
+					// fprintf(filepointer, "%d;", parameter[0].repeati); //TODO: cleaning
+					// fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
+					// fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
 					fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
 					fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
 					fprintf(filepointer, "%4.5f;", pEnvirgrid->Treedensityvalue);
@@ -963,7 +963,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
 					fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
 					fprintf(filepointer, "\n");
-				}
+				// }
 			}
 
 			fclose(filepointer);
@@ -1009,6 +1009,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "leafarea;");
 				fprintf(filepointer, "stemarea;");
 				fprintf(filepointer, "maxtreeheight;");
+				fprintf(filepointer, "meantreeheight;");
+				fprintf(filepointer, "maxthawing_depth;");
 
 				fprintf(filepointer, "\n");
 
@@ -1033,6 +1035,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%10.1f;", pCryogrid->leafarea);
 				fprintf(filepointer, "%10.2f;", pCryogrid->stemarea);
 				fprintf(filepointer, "%3.3f;", pCryogrid->maxtreeheight);
+				fprintf(filepointer, "%3.3f;", pCryogrid->meantreeheight);
+				fprintf(filepointer, "%3.3f;", pCryogrid->maxthawing_depth);
 				
 				fprintf(filepointer, "\n");
 			}

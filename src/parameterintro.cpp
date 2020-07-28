@@ -170,6 +170,12 @@ void Parameterinput(void) {
         printf("\n\n\t Modellparameter\n\n");
     }
 
+    strcpy(uebergabestring, "lastyearweatherdata");
+    parameter[0].lastyearweatherdata = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].lastyearweatherdata);
+    }
+	
     strcpy(uebergabestring, "simduration");
     parameter[0].simduration = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

@@ -1398,6 +1398,328 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			parameter[0].tempdiffortmin = (0.15173684/1000) * treerows;
 			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
 			
+			
+			
+			
+		} else if (parameter[0].weatherchoice == 2100312) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
+		// increasing scenario while 412 is stabilized ones
+            char tempbuf[] = "input/trans_Polar Urals_shift0N_temp_499-2300_rcp85increasing.csv";
+            char precbuf[] = "input/trans_Polar Urals_shift0N_prec_499-2300_rcp85increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.049983234/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.08816501/1000) * 0;
+		    parameter[0].tempdiffort = (0.08233378/1000) * 0;
+			parameter[0].precdiffort = (0.31567919/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.08233378/1000) * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+        } else if (parameter[0].weatherchoice == 2100322) {
+            char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp85increasing.csv";
+            char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp85increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001262349/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05785078/1000) * 0;
+		    parameter[0].tempdiffort = (0.05940048/1000) * 0;
+			parameter[0].precdiffort = (0.11536748/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.05940048/1000) * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100332) {
+            char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp85increasing.csv";
+            char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp85increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.133395946/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05886988/1000) * 0;
+		    parameter[0].tempdiffort = (-0.02204296/1000) * 0;
+			parameter[0].precdiffort = (0.00842138/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
+			parameter[0].tempdiffortmin = (-0.02204296/1000) * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+         } else if (parameter[0].weatherchoice == 2100342) {
+            char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp85increasing.csv";
+            char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp85increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001623102/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.12172445/1000) * 0;
+		    parameter[0].tempdiffort = (0.04269392/1000) * 0;
+			parameter[0].precdiffort = (0.21769910/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.04269392/1000) * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100352) {
+            char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp85increasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp85increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.128972760/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05026903/1000) * 0;
+		    parameter[0].tempdiffort = (0.15173684/1000) * 0;
+			parameter[0].precdiffort = (-0.27962335/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.15173684/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			
+			
+			
+			
+		} else if (parameter[0].weatherchoice == 2100412) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
+		// increasing scenario while 412 is stabilized ones
+            char tempbuf[] = "input/trans_Polar Urals_shift0N_temp_499-2300_rcp85stabilized.csv";
+            char precbuf[] = "input/trans_Polar Urals_shift0N_prec_499-2300_rcp85stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.049983234/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.08816501/1000) * 0;
+		    parameter[0].tempdiffort = (0.08233378/1000) * 0;
+			parameter[0].precdiffort = (0.31567919/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.08233378/1000) * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+        } else if (parameter[0].weatherchoice == 2100422) {
+            char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp85stabilized.csv";
+            char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp85stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001262349/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05785078/1000) * 0;
+		    parameter[0].tempdiffort = (0.05940048/1000) * 0;
+			parameter[0].precdiffort = (0.11536748/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.05940048/1000) * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100432) {
+            char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp85stabilized.csv";
+            char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp85stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.133395946/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05886988/1000) * 0;
+		    parameter[0].tempdiffort = (-0.02204296/1000) * 0;
+			parameter[0].precdiffort = (0.00842138/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
+			parameter[0].tempdiffortmin = (-0.02204296/1000) * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+         } else if (parameter[0].weatherchoice == 2100442) {
+            char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp85stabilized.csv";
+            char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp85stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001623102/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.12172445/1000) * 0;
+		    parameter[0].tempdiffort = (0.04269392/1000) * 0;
+			parameter[0].precdiffort = (0.21769910/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.04269392/1000) * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100452) {
+            char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp85stabilized.csv";
+            char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp85stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.128972760/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05026903/1000) * 0;
+		    parameter[0].tempdiffort = (0.15173684/1000) * 0;
+			parameter[0].precdiffort = (-0.27962335/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.15173684/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			
+			
+		} else if (parameter[0].weatherchoice == 2100512) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
+		// increasing scenario while 412 is stabilized ones
+            char tempbuf[] = "input/trans_Polar Urals_shift0N_temp_499-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Polar Urals_shift0N_prec_499-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.049983234/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.08816501/1000) * 0;
+		    parameter[0].tempdiffort = (0.08233378/1000) * 0;
+			parameter[0].precdiffort = (0.31567919/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.08233378/1000) * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+        } else if (parameter[0].weatherchoice == 2100522) {
+            char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001262349/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05785078/1000) * 0;
+		    parameter[0].tempdiffort = (0.05940048/1000) * 0;
+			parameter[0].precdiffort = (0.11536748/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.05940048/1000) * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100532) {
+            char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.133395946/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05886988/1000) * 0;
+		    parameter[0].tempdiffort = (-0.02204296/1000) * 0;
+			parameter[0].precdiffort = (0.00842138/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
+			parameter[0].tempdiffortmin = (-0.02204296/1000) * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+         } else if (parameter[0].weatherchoice == 2100542) {
+            char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001623102/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.12172445/1000) * 0;
+		    parameter[0].tempdiffort = (0.04269392/1000) * 0;
+			parameter[0].precdiffort = (0.21769910/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.04269392/1000) * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100552) {
+            char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.128972760/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05026903/1000) * 0;
+		    parameter[0].tempdiffort = (0.15173684/1000) * 0;
+			parameter[0].precdiffort = (-0.27962335/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.15173684/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			
+			
+			
+			
+		} else if (parameter[0].weatherchoice == 2100612) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
+		// increasing scenario while 412 is stabilized ones
+            char tempbuf[] = "input/trans_Polar Urals_shift0N_temp_499-2300_rcp45stabilized.csv";
+            char precbuf[] = "input/trans_Polar Urals_shift0N_prec_499-2300_rcp45stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.049983234/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.08816501/1000) * 0;
+		    parameter[0].tempdiffort = (0.08233378/1000) * 0;
+			parameter[0].precdiffort = (0.31567919/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.08233378/1000) * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+        } else if (parameter[0].weatherchoice == 2100622) {
+            char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp45stabilized.csv";
+            char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp45stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001262349/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05785078/1000) * 0;
+		    parameter[0].tempdiffort = (0.05940048/1000) * 0;
+			parameter[0].precdiffort = (0.11536748/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.05940048/1000) * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100632) {
+            char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp45stabilized.csv";
+            char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp45stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.133395946/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05886988/1000) * 0;
+		    parameter[0].tempdiffort = (-0.02204296/1000) * 0;
+			parameter[0].precdiffort = (0.00842138/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
+			parameter[0].tempdiffortmin = (-0.02204296/1000) * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+         } else if (parameter[0].weatherchoice == 2100642) {
+            char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp45stabilized.csv";
+            char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp45stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.001623102/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.12172445/1000) * 0;
+		    parameter[0].tempdiffort = (0.04269392/1000) * 0;
+			parameter[0].precdiffort = (0.21769910/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.04269392/1000) * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2100652) {
+            char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp45stabilized.csv";
+            char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp45stabilized.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (0.128972760/1000) * 0;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (0.05026903/1000) * 0;
+		    parameter[0].tempdiffort = (0.15173684/1000) * 0;
+			parameter[0].precdiffort = (-0.27962335/1000) * 0;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
+			parameter[0].tempdiffortmin = (0.15173684/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+
+
+
+
+		
         }
         getTemp3(aktort, dateinametemp, weather_list);
         getPrec1(dateinameprec, weather_list, stringlengthmax);

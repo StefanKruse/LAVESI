@@ -94,6 +94,7 @@ struct Parameter {
     int outputall;
 
     // time steps and repeats
+    int lastyearweatherdata;
     int simduration;
     int startjahr;
     int runs;

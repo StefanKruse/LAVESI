@@ -254,7 +254,8 @@ void Dataoutput(int t,
 
                 // if ((parameter[0].ivort % 25 == 0))
                 // if ( (parameter[0].ivort%25==0) | ( (parameter[0].ivort>=1000) & (parameter[0].ivort%10==0) ))
-                if ( (parameter[0].ivort%100==0) | ( (parameter[0].ivort>=2000 & parameter[0].ivort<3900) & (parameter[0].ivort%25==0) ) | ( (parameter[0].ivort>=3900) & (parameter[0].ivort%10==0) ))
+                // if ( (parameter[0].ivort%100==0) | ( (parameter[0].ivort>=2000 & parameter[0].ivort<3900) & (parameter[0].ivort%25==0) ) | ( (parameter[0].ivort>=3900) & (parameter[0].ivort%10==0) ))
+                if ( (parameter[0].ivort%100==0) | ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) ))
                 {
                     outputindividuals = true;
                     outputtransects = true;

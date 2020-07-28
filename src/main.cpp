@@ -580,7 +580,7 @@ int main() {
     Parameterinput();
 
     // calculation of the starting year of the simulation
-    parameter[0].startjahr = 2014 - parameter[0].simduration;
+    parameter[0].startjahr = 2100 - parameter[0].simduration;
 
 
     int yearswithseedintropuffer = parameter[0].yearswithseedintro;

@@ -36,6 +36,7 @@ void Dataoutput(int t,
     bool outputcurrencies = false;
     bool outputposition = false;
     bool outputindividuals = false;
+    bool outputtransects = false;
     bool ausgabedensity = false;
 
     // preprocessing and output of data for each plot
@@ -251,10 +252,12 @@ void Dataoutput(int t,
             {
                 outputcurrencies = true;
 
-                if ((parameter[0].ivort % 25 == 0))
-                //|| parameter[0].ivort>())
+                // if ((parameter[0].ivort % 25 == 0))
+                // if ( (parameter[0].ivort%25==0) | ( (parameter[0].ivort>=1000) & (parameter[0].ivort%10==0) ))
+                if ( (parameter[0].ivort%100==0) | ( (parameter[0].ivort>=2000 & parameter[0].ivort<3900) & (parameter[0].ivort%25==0) ) | ( (parameter[0].ivort>=3900) & (parameter[0].ivort%10==0) ))
                 {
                     outputindividuals = true;
+                    outputtransects = true;
                 }
 
             } else if (parameter[0].outputmode == 2)  // "OMP"
@@ -823,7 +826,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "NameP;");
                 // fprintf(filepointer, "line;");
                 // fprintf(filepointer, "Generation;");
-                // fprintf(filepointer, "Art;");
+                fprintf(filepointer, "Species;");
                 fprintf(filepointer, "height;");
                 fprintf(filepointer, "Dbasal;");
                 fprintf(filepointer, "Dbreast;");
@@ -858,17 +861,17 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "%d;", t);
                 // fprintf(filepointer, "%d;", jahr);
                 // tree variables
-                fprintf(filepointer, "%4.4f;", pTree->xcoo);
-                fprintf(filepointer, "%4.4f;", pTree->ycoo);
+                fprintf(filepointer, "%4.1f;", pTree->xcoo);
+                fprintf(filepointer, "%4.1f;", pTree->ycoo);
                 // fprintf(filepointer, "%d;", pTree->name);
                 // fprintf(filepointer, "%d;", pTree->namem);
                 // fprintf(filepointer, "%d;", pTree->namep);
                 // fprintf(filepointer, "%d;", pTree->line);
                 // fprintf(filepointer, "%d;", pTree->generation);
-                // fprintf(filepointer, "%d;", pTree->species);
-                fprintf(filepointer, "%4.4f;", pTree->height);
-                fprintf(filepointer, "%4.4f;", pTree->dbasal);
-                fprintf(filepointer, "%4.4f;", pTree->dbreast);
+                fprintf(filepointer, "%d;", pTree->species);
+                fprintf(filepointer, "%4.1f;", pTree->height);
+                fprintf(filepointer, "%4.2f;", pTree->dbasal);
+                fprintf(filepointer, "%4.2f;", pTree->dbreast);
                 fprintf(filepointer, "%d;", pTree->age);
                 // fprintf(filepointer, "%d;", pTree->cone);
                 // fprintf(filepointer, "%4.4f;", pTree->coneheight);
@@ -883,6 +886,97 @@ void Dataoutput(int t,
                 ++pos;
             }
 
+            fclose(filepointer);
+
+            // -- -- -- -- --       individual  trees    -- -- -- -- -- -- //
+            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+        }  // individual tree output
+        if (outputtransects == true) {  // individual tree output
+            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+            // -- -- -- -- --   individual    trees -- -- -- -- -- -- //
+
+            // assemble file name
+            s1 << parameter[0].repeati;
+            s2 << parameter[0].weatherchoice;
+            s3 << parameter[0].ivort;
+
+            dateiname = "output/datatransects_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
+
+            s1.str("");
+            s1.clear();
+            s2.str("");
+            s2.clear();
+            s3.str("");
+            s3.clear();
+
+            // trying to open the file for reading
+            filepointer = fopen(dateiname.c_str(), "r+");
+            // if fopen fails, open a new file + header output
+            if (filepointer == NULL) {
+                filepointer = fopen(dateiname.c_str(), "w+");
+
+                fprintf(filepointer, "Y;");
+                fprintf(filepointer, "Species1_stems;");
+                fprintf(filepointer, "Species2_stems;");
+                fprintf(filepointer, "Species1_seedlings;");
+                fprintf(filepointer, "Species2_seedlings;");
+                fprintf(filepointer, "\n");
+
+                if (filepointer == NULL) {
+                    fprintf(stderr, "Error: File could not be opened!\n");
+                    exit(1);
+                }
+            }
+
+            fseek(filepointer, 0, SEEK_END);
+
+            // aggregate output for y-transects on m-precision
+			vector<int> Species1_stems; 
+			vector<int> Species2_stems; 
+			vector<int> Species1_seedlings; 
+			vector<int> Species2_seedlings; 
+			// fill vector with zeros
+			for(int yposi=0; yposi < treerows; yposi++)
+			{
+				Species1_stems.push_back(0);
+				Species2_stems.push_back(0);
+				Species1_seedlings.push_back(0);
+				Species2_seedlings.push_back(0);
+			}
+			// count specimen
+            for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
+                auto pTree = (*pos);
+				
+				if(pTree->height>130)
+				{
+					if(pTree->species==1)
+						++Species1_stems[floor(pTree->ycoo)];
+					else
+						++Species2_stems[floor(pTree->ycoo)];
+				} else
+				{
+					if(pTree->species==1)
+						++Species1_seedlings[floor(pTree->ycoo)];
+					else
+						++Species2_seedlings[floor(pTree->ycoo)];
+					
+				}
+	             ++pos;
+			}
+			
+			// add data to file
+			for(int yposi=0; yposi < treerows; yposi++)
+			{
+                fprintf(filepointer, "%d;", yposi);
+                fprintf(filepointer, "%d;", Species1_stems[yposi]);
+                fprintf(filepointer, "%d;", Species2_stems[yposi]);
+                fprintf(filepointer, "%d;", Species1_seedlings[yposi]);
+                fprintf(filepointer, "%d;", Species2_seedlings[yposi]);
+                fprintf(filepointer, "\n");
+			}
+			
             fclose(filepointer);
 
             // -- -- -- -- --       individual  trees    -- -- -- -- -- -- //

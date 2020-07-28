@@ -7,7 +7,7 @@ using namespace std;
  * \brief calculate max. possible basal growth
  *
  * either just set to weather_list[yearposition]->weatherfactor *
- *exponential growth depending on dbh or, if transekts are
+ *exponential growth depending on dbh or, if transects are
  *calculated, calculated out of
  *weather_list[yearposition]->weatherfactormin (max basal growth at
  *most southern transekt and tree position in north-south transekt

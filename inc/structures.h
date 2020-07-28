@@ -141,8 +141,12 @@ struct Parameter {
     int weatherchoice;
     int precweather;
     double precthreshold;
+    double tempjandiffort;
+    double tempjuldiffort;
     double tempdiffort;
     double precdiffort;
+    double tempjandiffortmin;
+    double tempjuldiffortmin;
     double tempdiffortmin;
     double precdiffortmin;
     double evapod;

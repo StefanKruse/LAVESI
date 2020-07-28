@@ -7,7 +7,7 @@
 using namespace std;
 
 // plot dimensions rows==y, cols==x
-const int treerows = 2000;
+const int treerows = 100000;
 const int treecols = 20;
 
 // parameter input

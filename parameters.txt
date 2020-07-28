@@ -52,12 +52,75 @@ omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=7001;					// (int) Type of weather forcing series 
+weatherchoice=2100212;					// (int) Type of weather forcing series 
 										//  22==TY02
 										//  22==CH17
 										//  23==CH02
 										//  24==CH06
 										// 	    ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
+										// 2020nn transect start locations 01-04 approx south to north, 05 SE-NW each 1901 until 2018, 118 year-long
+										// 202001 Polar Urals
+										// 202002 Taimyr Peninsula
+										// 202003 Buor Khaya
+										// 202004 Kolyma
+										// 202005 Chukotka
+										// ... and -1999 to 2100 series based on simplified localization of Akademic Nauk ice core data and CRU TS data; 4100 year long
+										// 2020011 Polar Urals
+										// 2020021 Taimyr Peninsula
+										// 2020031 Buor Khaya
+										// 2020041 Kolyma
+										// 2020051 Chukotka
+
+										// ... and -499 to 2100 extract from before
+										// 2020012 Polar Urals
+										// 2020022 Taimyr Peninsula
+										// 2020032 Buor Khaya
+										// 2020042 Kolyma
+										// 2020052 Chukotka
+
+
+										// ... and -499 to 2100 extract from before but no clim adjustment
+										// 2020013 Polar Urals
+										// 2020023 Taimyr Peninsula
+										// 2020033 Buor Khaya
+										// 2020043 Kolyma
+										// 2020053 Chukotka
+
+										// ... and -499 to 2100 extract from before with clim adjust and 10th of clim grads
+										// 2020014 Polar Urals
+										// 2020024 Taimyr Peninsula
+										// 2020034 Buor Khaya
+										// 2020044 Kolyma
+										// 2020054 Chukotka
+										
+										// ... and -499 to 2100 without clim adjust and 10th of clim grads
+										// 2020015 Polar Urals
+										// 2020025 Taimyr Peninsula
+										// 2020035 Buor Khaya
+										// 2020045 Kolyma
+										// 2020055 Chukotka
+
+										// ... and -499 to 2100 with clim adjust to transition Taiga-Tundra at approx half of 150km transect
+										// 2020016 Polar Urals
+										// 2020026 Taimyr Peninsula
+										// 2020036 Buor Khaya
+										// 2020046 Kolyma
+										// 2020056 Chukotka
+
+										// ... and -499 to 2100 with clim adjust to transition Taiga-Tundra at approx half of 150km transect // 1 = baseline with 2 = -50km
+										// 2020111 Polar Urals
+										// 2020121 Taimyr Peninsula
+										// 2020131 Buor Khaya
+										// 2020141 Kolyma
+										// 2020151 Chukotka
+										
+										// ... with e.g. 211 now gridcell to north and last number gives position change
+										// ... ... 	1	2	3
+										// ... ... 	4	5	6 and 5 is the gridcell of treeline offset
+										// ... ... 	7	8	9
+										
+
+
 precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
 										// 0==not at all
 										// 1==linearly if smaller than threshold
@@ -80,9 +143,9 @@ windsource=1;						// (int) source of wind data
 										// 1==EraInterim
 									
 // 1.2 -----> Simulation run characteristics
-simduration=5996;						// (int) duration of the simulation period depending on the available weather data series
+simduration=2600;						// (int) duration of the simulation period depending on the available weather data series
 runs=1;								// (int) number of repeated simulations
-ivortmax=10;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
@@ -123,7 +186,7 @@ starttrees=0;						// (int) type of initial tree set up
 										// 12==CH17
 										// and SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
 										// ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
-hinterland_maxlength=50; 		// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
+hinterland_maxlength=500; 		// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
 										
 // 1.4.2 -----> Pollen dispersal
 pollination=0;						// (int 0,1,2) allow pollen dispersal
@@ -243,7 +306,7 @@ relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree g
 										//  1==linear influence of the relative growth on mortality
 										// >1==stronger
 										// <1==weaker
-mdensity=0.5;						// (double) mortality factor for density
+mdensity=1.0;						// (double) mortality factor for density
 densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
 mweather=0.1;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
 heightweathermorteinflussexp=0.2;	// (double) exponent for determining an influence of the tree height on the climate mortality

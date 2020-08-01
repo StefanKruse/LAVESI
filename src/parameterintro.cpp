@@ -115,6 +115,27 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].mortvis) ? "true" : "false");
     }
 
+    strcpy(uebergabestring, "elevationoffset");
+    parameter[0].elevationoffset = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].elevationoffset);
+    }
+    strcpy(uebergabestring, "temperaturelapse_jan");
+    parameter[0].temperaturelapse_jan = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].temperaturelapse_jan);
+    }
+    strcpy(uebergabestring, "temperaturelapse_jul");
+    parameter[0].temperaturelapse_jul = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].temperaturelapse_jul);
+    }
+    strcpy(uebergabestring, "precipitationlapse_year");
+    parameter[0].precipitationlapse_year = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].precipitationlapse_year);
+    }
+
     strcpy(uebergabestring, "evapod");
     parameter[0].evapod = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -170,6 +191,12 @@ void Parameterinput(void) {
         printf("\n\n\t Modellparameter\n\n");
     }
 
+    strcpy(uebergabestring, "lastyearweatherdata");
+    parameter[0].lastyearweatherdata = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].lastyearweatherdata);
+    }
+	
     strcpy(uebergabestring, "simduration");
     parameter[0].simduration = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

@@ -117,8 +117,10 @@ void Spinupphase() {
             // {
             // firstyear=1934;
             firstyear = world_weather_list[0][0]->jahr;
+			cout << "firstyear: " << firstyear << endl;
             // lastyear=2013;
             lastyear = world_weather_list[0][0]->jahr + 100;
+			cout << "lastyear: " << lastyear << endl;
             // }
 
             // choose a random year for weather determination
@@ -127,6 +129,7 @@ void Spinupphase() {
 
             // calculate current year position in list, according to first year in the Weather-List and the random year
             int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1;
+			cout << "yearposition: " << yearposition << endl;
 
             // go through all functions for vegetation dynamics
             vegetationDynamics(yearposition, jahr, t);
@@ -456,6 +459,33 @@ void initialiseMaps() {
             pEnvirgrid->litterheight9 = 200;  // in 0.1mm -> max 6.5535 m
             pEnvirgrid->litterheightmean = 200;
 
+			// elevation of each grid in m 
+			if(aktort == 1)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset - 1000.00;
+			} else if(aktort == 2)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset - 500.00;
+			} else if(aktort == 3)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset - 50.00;
+			} else if(aktort == 4)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset - 0.00;
+			} else if(aktort == 5)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset + 50.00;
+			} else if(aktort == 6)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset + 500.00;
+			} else if(aktort == 7)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset + 1000.00;
+			} else if(aktort == 8)
+			{
+				pEnvirgrid->elevation = parameter[0].elevationoffset + 1500.00;
+			}
+
             plot_list.push_back(pEnvirgrid);
         }
 
@@ -580,7 +610,7 @@ int main() {
     Parameterinput();
 
     // calculation of the starting year of the simulation
-    parameter[0].startjahr = 2014 - parameter[0].simduration;
+    parameter[0].startjahr = parameter[0].lastyearweatherdata - parameter[0].simduration;
 
 
     int yearswithseedintropuffer = parameter[0].yearswithseedintro;

@@ -79,6 +79,7 @@ struct Envirgrid {
     unsigned short litterheight9;
     // TODO std::array<unsigned short, 10> litterheight;
     unsigned short litterheightmean;
+	double elevation;
 };
 
 struct Parameter {
@@ -94,6 +95,7 @@ struct Parameter {
     int outputall;
 
     // time steps and repeats
+    int lastyearweatherdata;
     int simduration;
     int startjahr;
     int runs;
@@ -121,6 +123,11 @@ struct Parameter {
     bool lineartransect;
     double nposmax;
     double nposmin;
+	
+	double elevationoffset;
+	double temperaturelapse_jan;
+	double temperaturelapse_jul;
+	double precipitationlapse_year;
 
     // stabilization period
     bool starter;
@@ -142,6 +149,10 @@ struct Parameter {
     int precweather;
     double precthreshold;
     double tempdiffort;
+	double tempjandiffort; 
+	double tempjandiffortmin; 
+	double tempjuldiffort; 
+	double tempjuldiffortmin; 
     double precdiffort;
     double tempdiffortmin;
     double precdiffortmin;

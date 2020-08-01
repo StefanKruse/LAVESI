@@ -380,11 +380,11 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
     if (parameter[0].lineartransect == true) {
         // neu um die Grenze an eine stelle zu rücken. Mitte = eingeladene Serie
         // ... 2° N nach norden verschoben
-        parameter[0].precdiffort = -5.3699 * (2.0);
-        parameter[0].tempdiffort = -0.3508 * (2.0);
+        // parameter[0].precdiffort = -5.3699 * (2.0);
+        // parameter[0].tempdiffort = -0.3508 * (2.0);
 
-        parameter[0].tempdiffortmin = -0.3508 * -1 * treerows / (111120);
-        parameter[0].precdiffortmin = -5.3699 * -1 * treerows / (111120);
+        // parameter[0].tempdiffortmin = -0.3508 * -1 * treerows / (111120);
+        // parameter[0].precdiffortmin = -5.3699 * -1 * treerows / (111120);
     }
 
     FILE* f;
@@ -425,15 +425,27 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
             pWeather->xworldcoo = aktortxworldcoo;
             pWeather->jahr = counter + parameter[0].startjahr - 2;
             pWeather->tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
+			if(parameter[0].tempjandiffort!=0.0)
+				pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempjandiffort;
+			else
+				pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
+			if(parameter[0].tempjandiffort!=0.0)
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffort + parameter[0].tempjandiffortmin;
+			else
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
             pWeather->temp2monthmean = temp2monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp3monthmean = temp3monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp4monthmean = temp4monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp5monthmean = temp5monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp6monthmean = temp6monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp7monthmean = temp7monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
+			if(parameter[0].tempjuldiffort!=0.0)
+				pWeather->temp7monthmean = temp7monthmeanbuf + parameter[0].tempjuldiffort;
+			else
+				pWeather->temp7monthmean = temp7monthmeanbuf + parameter[0].tempdiffort;
+			if(parameter[0].tempjuldiffort!=0.0)
+				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempjuldiffort + parameter[0].tempjuldiffortmin;
+			else
+				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
             pWeather->temp8monthmean = temp8monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp9monthmean = temp9monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp10monthmean = temp10monthmeanbuf + parameter[0].tempdiffort;
@@ -625,8 +637,17 @@ void passWeather() {
 }
 
 extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vector<vector<Weather*>>& world_weather_list) {
-    char dateinametemp[50];
-    char dateinameprec[50];
+    char dateinametemp[250];
+    char dateinameprec[250];
+
+	parameter[0].tempjandiffort = 0.0;
+	parameter[0].tempjuldiffort = 0.0;
+	parameter[0].tempdiffort = 0.0;
+	parameter[0].precdiffort = 0.0;
+	parameter[0].tempjandiffortmin = 0.0;
+	parameter[0].tempjuldiffortmin = 0.0;
+	parameter[0].tempdiffortmin = 0.0;
+	parameter[0].precdiffortmin = 0.0;
 
     if ((parameter[0].windsource != 0) && (parameter[0].windsource != 4) && (parameter[0].windsource != 5)) {
         int findyr1 = 0, findyr2 = -100, jahr = 0, cntr = 0;
@@ -717,7 +738,66 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             char precbuf[] = "input/Coredata_complete_prc.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+			
+        } else if (parameter[0].weatherchoice == 2300851) {
+            char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    // parameter[0].tempjandiffort = (-0.133395946/1000) * 0;// in m: negative values for northward/colder areas
+		    // parameter[0].tempjuldiffort = (0.05886988/1000) * 0;
+		    // parameter[0].tempdiffort = (-0.02204296/1000) * 0;
+			// parameter[0].precdiffort = (0.00842138/1000) * 0;
+				// parameter[0].tempjandiffort = temperaturelapse_jan * 0;// in m: negative values for northward/colder areas
+				// parameter[0].tempjuldiffort = temperaturelapse_jul * 0;
+				// parameter[0].tempdiffort = 0;
+				// parameter[0].precdiffort = precipitationlapse_year * 0;
+			// transect weather variation
+			// parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
+			// parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
+			// parameter[0].tempdiffortmin = (-0.02204296/1000) * treerows;
+			// parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 2300451) {
+            char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp45increasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp45increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
         }
+			// elevation adjustment
+			double current_elevation;
+			if(aktort == 1)
+			{
+				current_elevation = parameter[0].elevationoffset - 1000.00;
+			} else if(aktort == 2)
+			{
+				current_elevation = parameter[0].elevationoffset - 500.00;
+			} else if(aktort == 3)
+			{
+				current_elevation = parameter[0].elevationoffset - 50.00;
+			} else if(aktort == 4)
+			{
+				current_elevation = parameter[0].elevationoffset - 0.00;
+			} else if(aktort == 5)
+			{
+				current_elevation = parameter[0].elevationoffset + 50.00;
+			} else if(aktort == 6)
+			{
+				current_elevation = parameter[0].elevationoffset + 500.00;
+			} else if(aktort == 7)
+			{
+				current_elevation = parameter[0].elevationoffset + 1000.00;
+			} else if(aktort == 8)
+			{
+				current_elevation = parameter[0].elevationoffset + 1500.00;
+				cout << " current_elevation: " << current_elevation << endl;
+			}
+				parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;// in m: negative values for northward/colder areas
+				parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * current_elevation;
+				parameter[0].tempdiffort = 0;
+				parameter[0].precdiffort = parameter[0].precipitationlapse_year * current_elevation;
+				cout << " tempjuldiffort: " << parameter[0].tempjuldiffort << endl;
+
         getTemp3(aktort, dateinametemp, weather_list);
         getPrec1(dateinameprec, weather_list, stringlengthmax);
 

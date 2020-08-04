@@ -120,6 +120,7 @@ struct Parameter {
     int mapylength;
     bool weathercalcgradient;
     bool lineartransect;
+	double locationshift;
     double nposmax;
     double nposmin;
 
@@ -242,8 +243,8 @@ struct Weather {
     int yworldcoo;
     int jahr;
     double temp1monthmean;
-    double temp1monthmeaniso;
     double temp1monthmeanmin;
+    double temp1monthmeaniso;
     double temp1monthmeanisomin;
     double temp2monthmean;
     double temp3monthmean;
@@ -251,8 +252,8 @@ struct Weather {
     double temp5monthmean;
     double temp6monthmean;
     double temp7monthmean;
-    double temp7monthmeaniso;
     double temp7monthmeanmin;
+    double temp7monthmeaniso;
     double temp7monthmeanisomin;
     double temp8monthmean;
     double temp9monthmean;
@@ -273,13 +274,26 @@ struct Weather {
     double prec10monthmean;
     double prec11monthmean;
     double prec12monthmean;
+    double prec1monthmeanmin;
+    double prec2monthmeanmin;
+    double prec3monthmeanmin;
+    double prec4monthmeanmin;
+    double prec5monthmeanmin;
+    double prec6monthmeanmin;
+    double prec7monthmeanmin;
+    double prec8monthmeanmin;
+    double prec9monthmeanmin;
+    double prec10monthmeanmin;
+    double prec11monthmeanmin;
+    double prec12monthmeanmin;
     int vegetationperiodlength;
-    int vegetationperiodlengthiso;
     int vegetationperiodlengthmin;
+    int vegetationperiodlengthiso;
     int vegetationperiodlengthisomin;
     double activeairtemp;
     double activeairtempmin;
     double degreday;
+    double degredaymin;
     double precipitationsum;
     double precipitationsummin;
     double weatherfactorg;
@@ -287,11 +301,16 @@ struct Weather {
     double weatherfactors;
     double weatherfactormins;
     double droughtmort;
+    double droughtmortmin;
     double janisothermrestriktions;
-    double julisothermrestriktion;
-    double nddrestriktion;
-    double janmorttemp;
+    double janisothermrestriktionsmin;
     double janisothermrestriktiong;
+    double janisothermrestriktiongmin;
+    double julisothermrestriktion;
+    double julisothermrestriktionmin;
+    double nddrestriktion;
+    double nddrestriktionmin;
+    double janmorttemp;
 };
 
 struct Evaluation {

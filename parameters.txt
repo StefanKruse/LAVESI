@@ -140,6 +140,7 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=1;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
+locationshift=-100000				// (double) offset shift of climate gradient in meter e.g. -100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=1;						// (int) source of wind data

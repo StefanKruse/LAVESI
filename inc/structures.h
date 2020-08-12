@@ -17,6 +17,7 @@ struct Tree {
     int yr_of_establishment;
     int yr_of_dying;
     double dbasal;
+    double dbasalmax;
     double dbasalrel;
     double dbreast;
     double dbreastrel;

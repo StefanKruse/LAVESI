@@ -52,7 +52,7 @@ omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=2100352;					// (int) Type of weather forcing series 
+weatherchoice=21007251;					// (int) Type of weather forcing series 
 										//  22==TY02
 										//  22==CH17
 										//  23==CH02
@@ -140,7 +140,7 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=1;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
-locationshift=-100000				// (double) offset shift of climate gradient in meter e.g. -100 m means to the north thus colder temperatures
+locationshift=0;				// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=1;						// (int) source of wind data
@@ -158,7 +158,7 @@ stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when 
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
 resetyear=-99999;						// (int) year to save all container for a later resume from this time point
-specpres=2;							// (int) which larch species should be present in the model
+specpres=1;							// (int) which larch species should be present in the model
 										// 0==both Larix gmelinii and L. sibirica 
 										// 1==only Larix gmelinii
 										// 2==only Larix sibirica
@@ -269,8 +269,8 @@ seeddescentg=0.86;					// (double) descent speed for L. gmelinii seeds (estimati
 seeddescents=0.93;					// (double) descent speed for L. sibirica seeds (estimation: Matlack 1987)
 distanceratio=0.16;					// (double) dispersal distance factor
 seedprodfactor=8;					// (double) seed production factor
-germinationrate=0.01;				// (double 0-1) germination rate
-germinatioweatherinfluence=0.447975;// (double) influence of the climate to germination
+germinationrate=0.0;				// (double 0-1) germination rate
+germinatioweatherinfluence=0.1;// (double) influence of the climate to germination
 gmelseedmaxage=2.0;					// (int) years of seed fertility for Larix gmelinii
 
 // 2.2 -----> Diameter growth
@@ -301,22 +301,22 @@ dbreastheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slop
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;						// (double 0-1) background mortality
 maximumage=609;						// (int) maximum tree age
-mortage=8.18785;						// (double) mortality factor if a tree exceeds the maximum age
-mortyouth=0.762855;						// (double) mortality factor for young individuals
-mortyouthinfluenceexp=0.79295;		// (double) exponent determining duration time of youth mortality
+mortage=10.0;						// (double) mortality factor if a tree exceeds the maximum age
+mortyouth=0.1;						// (double) mortality factor for young individuals
+mortyouthinfluenceexp=2.0;		// (double) exponent determining duration time of youth mortality
 										//  <1==longer
 										//  >1==shorter
-mgrowth=0.0;						// (double) factor for adjusting the influence of current tree growth on mortality
+mgrowth=0.1;						// (double) factor for adjusting the influence of current tree growth on mortality
 relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree growth on mortality
 										//  0==no influence of relative growth on mortality
 										//  1==linear influence of the relative growth on mortality
 										// >1==stronger
 										// <1==weaker
-mdensity=1.0;						// (double) mortality factor for density
+mdensity=0.1;						// (double) mortality factor for density
 densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
-mweather=0.1;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
-heightweathermorteinflussexp=0.2;	// (double) exponent for determining an influence of the tree height on the climate mortality
-mdrought=0.237805;				// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
+mweather=0.5;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
+heightweathermorteinflussexp=0.75;	// (double) exponent for determining an influence of the tree height on the climate mortality (value of 0.75 trees with height of 1 m 0.032 and 10 m 0.0056 as factor)
+mdrought=0.1;				// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
 seedconemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees
 seedfloormort=0.55803;				// (double 0-1) mortality rate of seeds at the ground
 

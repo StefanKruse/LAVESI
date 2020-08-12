@@ -54,14 +54,15 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
             }
 
             // calculation of young tree's mortality
+			/* // TODO: clean this calculation now replaced with simple version based on basal diameter
             double maxhg = 0;
             double maxhs = 0;
 			double maxhpufg;
 			double maxhpufs;
 			if (parameter[0].lineartransect) {
-				maxhpufg = ( weather_list[yearposition_help]->weatherfactorg + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming)) ) // scaled effect along transect
+				maxhpufg = ( weather_list[yearposition_help]->weatherfactorg - ( ( weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 									* exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal);
-				maxhpufs = ( weather_list[yearposition_help]->weatherfactors + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins)) ) // scaled effect along transect
+				maxhpufs = ( weather_list[yearposition_help]->weatherfactors - ( ( weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 									* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal);
 			} else
 			{
@@ -70,6 +71,7 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 				maxhpufs = weather_list[yearposition_help]->weatherfactors
 									* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal);
 			}
+			
             if (maxhpufg <= 0.0) {
                 if (parameter[0].allometryfunctiontype == 1) {
                     maxhg = parameter[0].dbasalheightalloslope
@@ -85,13 +87,13 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 				if (parameter[0].lineartransect) {
 				   if (parameter[0].allometryfunctiontype == 1) {
 						maxhg = parameter[0].dbasalheightalloslope * pow(
-											( weather_list[yearposition_help]->weatherfactorg + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming)) ) // scaled effect along transect
+											( weather_list[yearposition_help]->weatherfactorg - ( ( weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 											* exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
 											+ parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal),
 											parameter[0].dbasalheightalloexp);
 					} else {
 						maxhg = parameter[0].dbasalheightslopenonlin * 
-											( weather_list[yearposition_help]->weatherfactorg + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming)) ) // scaled effect along transect
+											( weather_list[yearposition_help]->weatherfactorg - ( ( weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 											* exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
 											+ parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal);
 					}
@@ -124,13 +126,13 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 				if (parameter[0].lineartransect) {
 				   if (parameter[0].allometryfunctiontype == 1) {
 						maxhs = parameter[0].dbasalheightalloslope * pow(
-											( weather_list[yearposition_help]->weatherfactors + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins)) ) // scaled effect along transect
+											( weather_list[yearposition_help]->weatherfactors - ( ( weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 											* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal
 											+ parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal),
 											parameter[0].dbasalheightalloexp);
 					} else {
 						maxhs = parameter[0].dbasalheightslopenonlin * 
-											( weather_list[yearposition_help]->weatherfactors + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins)) ) // scaled effect along transect											
+											( weather_list[yearposition_help]->weatherfactors - ( ( weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect											
 											* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal
 											+ parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal);
 					}
@@ -147,9 +149,11 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 					}
 				}
             }
+			*/
 
-            double sapl_mort_gmel = parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhg), parameter[0].mortyouthinfluenceexp);
-            double sapl_mort_sib = parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhs), parameter[0].mortyouthinfluenceexp);
+			// TODO: merge gmel/sib sapl_mort calculations
+            double sapl_mort_gmel = parameter[0].mortyouth * pow(exp((-1.0 * pTree->dbasal) + pTree->dbasalmax), parameter[0].mortyouthinfluenceexp);
+            double sapl_mort_sib = parameter[0].mortyouth * pow(exp((-1.0 * pTree->dbasal) + pTree->dbasalmax), parameter[0].mortyouthinfluenceexp);
             double age_mort = parameter[0].mortage * agesmort * (10.0 * parameter[0].mortbg);
             double growth_mort = parameter[0].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp));
             double dens_mort = parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert;
@@ -161,8 +165,9 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 											/ (1.0
 											   + (((1.0 - 0.5) / 0.5)
 												  * exp(
-												  ( anstiegweathermortg + ((pTree->ycoo / (double) treerows) * (anstiegweathermortg - anstiegweathermortgmin)) ) // scaled effect along transect
-												  * ( weather_list[yearposition_help]->weatherfactorg + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming)) ) // scaled effect along transect
+												  ( anstiegweathermortg - ( ( anstiegweathermortg - anstiegweathermortgmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+												  // ( anstiegweathermortg + ((pTree->ycoo / (double) treerows) * (anstiegweathermortg - anstiegweathermortgmin)) ) // scaled effect along transect
+												  * ( weather_list[yearposition_help]->weatherfactorg - ( ( weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 														* exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
 															  + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)))));
 				weathermortadds = 1.0
@@ -170,8 +175,9 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 											/ (1.0
 											   + (((1.0 - 0.5) / 0.5)
 												  * exp(
-												  ( anstiegweathermorts + ((pTree->ycoo / (double) treerows) * (anstiegweathermorts - anstiegweathermortsmin)) ) // scaled effect along transect
-												  * ( weather_list[yearposition_help]->weatherfactors + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins)) ) // scaled effect along transect
+												  ( anstiegweathermorts - ( ( anstiegweathermorts - anstiegweathermortsmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+												  // ( anstiegweathermorts + ((pTree->ycoo / (double) treerows) * (anstiegweathermorts - anstiegweathermortsmin)) ) // scaled effect along transect
+												  * ( weather_list[yearposition_help]->weatherfactors - ( ( weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 														* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal
 															  + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)))));
 			} else
@@ -191,13 +197,33 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 														* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal
 															  + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)))));
 			}
-            double weather_mort_gmel = parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);
-            double weather_mort_sib = parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);
-            double dry_mort = parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5);
 
+			double heightreduce = pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp); // includes a minimun limit
+			if(heightreduce < 0.001)
+				heightreduce=0.001;
+            double weather_mort_gmel = parameter[0].mweather * weathermortaddg * heightreduce;
+            double weather_mort_sib = parameter[0].mweather * weathermortadds * heightreduce;
+            double dry_mort=0.0;
+			if(parameter[0].lineartransect){
+				dry_mort = parameter[0].mdrought * 
+							( weather_list[yearposition_help]->droughtmort - ( ( weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+							// (weather_list[yearposition_help]->droughtmort + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin)))
+							* pow((1.0 / pTree->height), 0.5);
+			} else
+			{
+				dry_mort = parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5);
+			}
+			
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
             double Treemorts = 0.0 + parameter[0].mortbg + sapl_mort_sib + age_mort + growth_mort + dens_mort + weather_mort_sib + dry_mort;
+			
+// cout << weathermortaddg << ":" << pTree->ycoo << ":" << anstiegweathermortg << ":" << anstiegweathermortgmin << ":" << weather_list[yearposition_help]->droughtmort << ":" << weather_list[yearposition_help]->droughtmortmin << ":" << dry_mort << ":" << wachstumrel << ":" << Treemortg << ":" << weather_mort_gmel << ":" << sapl_mort_gmel << ":" << age_mort << ":" << growth_mort << ":" << dens_mort << ":" << pTree->height << ":" << maxhg << endl;
+// if(parameter[0].ivort>100){
+	// cout << weathermortaddg << ":" << pTree->ycoo << ":" << anstiegweathermortg << ":" << anstiegweathermortgmin << ":" << weather_list[yearposition_help]->droughtmort << ":" << weather_list[yearposition_help]->droughtmortmin << ":" << dry_mort << ":" << wachstumrel << ":" << Treemortg << ":" << weather_mort_gmel << ":" << sapl_mort_gmel << ":" << age_mort << ":" << growth_mort << ":" << dens_mort << ":" << pTree->dbasal << ":" << pTree->dbasalmax << endl;
+// }
+// if(parameter[0].ivort>101)
+	// exit(0);
 
             if (Treemortg > 1.0) {
                 Treemortg = 1.0;
@@ -211,25 +237,27 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
                 Treemorts = 0.0;
             }
 
-            if (parameter[0].mortvis == true && pTree->height > 200.0 && pTree->species == 1) {
-                printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f",
-                       pTree->height, pTree->dbasalrel, pTree->dbreastrel,
-                       parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhg), parameter[0].mortyouthinfluenceexp),
-                       parameter[0].mortage * (agesmort * (10.0 * parameter[0].mortbg)), +(1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp)),
-                       parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert,
-                       parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), 0.5),
-                       parameter[0].mdrought * (weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5)), Treemortg);
-            }
+			// TODO: clean
+            // if (parameter[0].mortvis == true && pTree->height > 200.0 && pTree->species == 1) {
+                // printf("\n H/Hmax=%4.1f/%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f",
+                       // pTree->height, maxhg,
+					   // pTree->dbasalrel, pTree->dbreastrel,
+                       // parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhg), parameter[0].mortyouthinfluenceexp),
+                       // parameter[0].mortage * (agesmort * (10.0 * parameter[0].mortbg)), +(1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp)),
+                       // parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert,
+                       // parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), 0.5),
+                       // parameter[0].mdrought * (weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5)), Treemortg);
+            // }
 
-            if (parameter[0].mortvis == true && pTree->height > 200.0 && pTree->species == 2) {
-                printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f",
-                       pTree->height, pTree->dbasalrel, pTree->dbreastrel,
-                       parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhs), parameter[0].mortyouthinfluenceexp),
-                       parameter[0].mortage * (agesmort * (10.0 * parameter[0].mortbg)), +(1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp)),
-                       parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert,
-                       parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), 0.5),
-                       parameter[0].mdrought * (weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5)), Treemorts);
-            }
+            // if (parameter[0].mortvis == true && pTree->height > 200.0 && pTree->species == 2) {
+                // printf("\n H=%4.1f DBrel/DBRrel=%4.2f/%4.2f => JUNG=%4.3f +ALT=%4.2f +AKTGRO=%4.2f +density=%4.4f +weather=%4.3f +drought=%4.4f =>%4.2f",
+                       // pTree->height, pTree->dbasalrel, pTree->dbreastrel,
+                       // parameter[0].mortyouth * pow(exp((-1.0 * pTree->height) + maxhs), parameter[0].mortyouthinfluenceexp),
+                       // parameter[0].mortage * (agesmort * (10.0 * parameter[0].mortbg)), +(1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp)),
+                       // parameter[0].mdensity * heightnkugeleinfluss * pTree->densitywert,
+                       // parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), 0.5),
+                       // parameter[0].mdrought * (weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5)), Treemorts);
+            // }
 
             // Determine if a tree dies (deletion of said tree in the corresponding list)
             double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));

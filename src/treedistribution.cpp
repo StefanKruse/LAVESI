@@ -108,6 +108,7 @@ void Seedin() {
                     seed.xworldcoo = aktortxworldcoo;
                     seed.xcoo = jseed;
                     seed.ycoo = iseed;
+// cout << iseed << " + ";
                     seed.namem = 0;
                     seed.namep = 0;
                     seed.line = ++parameter[0].lineakt;
@@ -355,7 +356,6 @@ void Hinterlandseedintro(struct Parameter* parameter,
 
                     xseed = xseed + jquer;
                     yseed = yseed + iquer;
-
                     // manipulate position according to boundary conditions if lands in simulated plot add to seedlist ...code adapted from seeddispersal.cpp
                     if (yseed > (double)(treerows - 1)) {
                         if ((parameter[0].boundaryconditions == 1)) {
@@ -421,7 +421,8 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         seed.xworldcoo = aktortxworldcoo;
                         seed.xcoo = xseed;
                         seed.ycoo = yseed;
-                        seed.namem = 0;
+// cout << yseed << " + ";
+                      seed.namem = 0;
                         seed.namep = 0;
                         seed.line = ++parameter[0].lineakt;
                         seed.generation = 0;

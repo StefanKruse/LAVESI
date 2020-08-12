@@ -611,7 +611,7 @@ void passWeather() {
             double droughtmortbuf = 0.0;
             double droughtmortbufmin = 0.0;
             double precgs = weather_list[iweather]->prec5monthmean + weather_list[iweather]->prec6monthmean + weather_list[iweather]->prec7monthmean + weather_list[iweather]->prec8monthmean;
-            double precgsmin = weather_list[iweather]->prec5monthmean + weather_list[iweather]->prec6monthmean + weather_list[iweather]->prec7monthmean + weather_list[iweather]->prec8monthmean;
+            double precgsmin = weather_list[iweather]->prec5monthmeanmin + weather_list[iweather]->prec6monthmeanmin + weather_list[iweather]->prec7monthmeanmin + weather_list[iweather]->prec8monthmeanmin;
             double duerreindex = parameter[0].evapod * weather_list[iweather]->vegetationperiodlength / precgs;
             double duerreindexmin = parameter[0].evapod * weather_list[iweather]->vegetationperiodlengthmin / precgsmin;
             if (duerreindex > 1) {
@@ -699,7 +699,58 @@ void passWeather() {
             } else {
                 weather_list[iweather]->nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather]->vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
-        }
+        
+		
+		
+		
+		
+		// output to check weather
+		FILE* fdir;
+		char filenamechar[50];
+		sprintf(filenamechar, "data_weatherprocessingcheck");
+		string output = "output/" + string(filenamechar) + ".csv";
+		fdir = fopen(output.c_str(), "a+");
+		
+		fprintf(fdir, 
+			"%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", 
+			weather_list[iweather]->temp1monthmeaniso,
+			weather_list[iweather]->temp1monthmeanisomin,
+			weather_list[iweather]->temp7monthmeaniso,
+			weather_list[iweather]->temp7monthmeanisomin,
+			weather_list[iweather]->droughtmort,
+			weather_list[iweather]->droughtmortmin,
+			(double) weather_list[iweather]->vegetationperiodlengthiso,
+			(double) weather_list[iweather]->vegetationperiodlengthisomin,
+			precgs,
+			precgsmin,
+			weather_list[iweather]->janisothermrestriktiong,
+			weather_list[iweather]->janisothermrestriktiongmin,
+			weather_list[iweather]->janisothermrestriktions,
+			weather_list[iweather]->janisothermrestriktionsmin,
+			weather_list[iweather]->julisothermrestriktion,
+			weather_list[iweather]->julisothermrestriktionmin,
+			weather_list[iweather]->nddrestriktion,
+			weather_list[iweather]->nddrestriktionmin
+		);
+		
+		fclose(fdir);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		}
     }
 }
 
@@ -1487,9 +1538,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100325) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp85increasing.csv";
@@ -1500,9 +1551,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100335) {
             char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp85increasing.csv";
@@ -1513,9 +1564,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100345) {
             char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp85increasing.csv";
@@ -1526,9 +1577,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100355) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp85increasing.csv";
@@ -1539,9 +1590,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 			
 			
@@ -1557,9 +1608,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100425) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp85stabilized.csv";
@@ -1570,9 +1621,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100435) {
             char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp85stabilized.csv";
@@ -1583,9 +1634,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100445) {
             char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp85stabilized.csv";
@@ -1596,9 +1647,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100455) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp85stabilized.csv";
@@ -1609,9 +1660,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 			
 		} else if (parameter[0].weatherchoice == 2100515) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
@@ -1625,9 +1676,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100525) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp45increasing.csv";
@@ -1638,9 +1689,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100535) {
             char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp45increasing.csv";
@@ -1651,9 +1702,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100545) {
             char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp45increasing.csv";
@@ -1664,9 +1715,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100555) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp45increasing.csv";
@@ -1677,9 +1728,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 			
 			
@@ -1695,9 +1746,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100625) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp45stabilized.csv";
@@ -1708,9 +1759,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100635) {
             char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp45stabilized.csv";
@@ -1721,9 +1772,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100645) {
             char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp45stabilized.csv";
@@ -1734,9 +1785,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100655) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp45stabilized.csv";
@@ -1747,9 +1798,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 
 
 
@@ -1768,9 +1819,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100322) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp85increasing.csv";
@@ -1781,9 +1832,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100332) {
             char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp85increasing.csv";
@@ -1794,9 +1845,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100342) {
             char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp85increasing.csv";
@@ -1807,9 +1858,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100352) {
             char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp85increasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp85increasing.csv";
@@ -1820,9 +1871,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 			
 			
@@ -1838,9 +1889,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100422) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp85stabilized.csv";
@@ -1851,9 +1902,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100432) {
             char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp85stabilized.csv";
@@ -1864,9 +1915,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100442) {
             char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp85stabilized.csv";
@@ -1877,9 +1928,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100452) {
             char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp85stabilized.csv";
             char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp85stabilized.csv";
@@ -1890,9 +1941,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 			
 		} else if (parameter[0].weatherchoice == 2100512) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
@@ -1906,9 +1957,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100522) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp45increasing.csv";
@@ -1919,9 +1970,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100532) {
             char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp45increasing.csv";
@@ -1932,9 +1983,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100542) {
             char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp45increasing.csv";
@@ -1945,9 +1996,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100552) {
             char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp45increasing.csv";
@@ -1958,9 +2009,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 			
 			
@@ -1976,9 +2027,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100622) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp45stabilized.csv";
@@ -1989,9 +2040,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100632) {
             char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp45stabilized.csv";
@@ -2002,9 +2053,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100642) {
             char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp45stabilized.csv";
@@ -2015,9 +2066,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100652) {
             char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp45stabilized.csv";
             char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp45stabilized.csv";
@@ -2028,9 +2079,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 
 
 
@@ -2051,9 +2102,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100725) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp85decreasing.csv";
@@ -2064,9 +2115,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100735) {
             char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp85decreasing.csv";
@@ -2077,9 +2128,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100745) {
             char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp85decreasing.csv";
@@ -2090,9 +2141,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100755) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp85decreasing.csv";
@@ -2103,9 +2154,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 		} else if (parameter[0].weatherchoice == 2100712) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
 		// decreasing scenario while 412 is stabilized ones
@@ -2118,9 +2169,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100722) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp85decreasing.csv";
@@ -2131,9 +2182,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100732) {
             char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp85decreasing.csv";
@@ -2144,9 +2195,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100742) {
             char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp85decreasing.csv";
@@ -2157,9 +2208,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100752) {
             char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp85decreasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp85decreasing.csv";
@@ -2170,9 +2221,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 	// decreasing rcp 4.5
 		} else if (parameter[0].weatherchoice == 2100815) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
 		// decreasing scenario while 412 is stabilized ones
@@ -2185,9 +2236,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100825) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp45decreasing.csv";
@@ -2198,9 +2249,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100835) {
             char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp45decreasing.csv";
@@ -2211,9 +2262,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100845) {
             char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp45decreasing.csv";
@@ -2224,9 +2275,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100855) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp45decreasing.csv";
@@ -2237,9 +2288,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 			
 		} else if (parameter[0].weatherchoice == 2100812) {//499:2300 so 1800 years long - january july temp for right representation of transects +++ last number gridcell for RCP8.5
 		// decreasing scenario while 412 is stabilized ones
@@ -2252,9 +2303,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.08816501/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.31567919/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.049983234/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.08816501/1000) * treerows;
-			parameter[0].precdiffortmin = (0.31567919/1000) * treerows;			
+			parameter[0].tempjandiffortmin = (0.049983234/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.08816501/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.31567919/1000) * -1.0 * treerows;			
         } else if (parameter[0].weatherchoice == 2100822) {
             char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp45decreasing.csv";
@@ -2265,9 +2316,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05785078/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.11536748/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001262349/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05785078/1000) * treerows;
-			parameter[0].precdiffortmin = (0.11536748/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001262349/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05785078/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.11536748/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100832) {
             char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp45decreasing.csv";
@@ -2278,9 +2329,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05886988/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.00842138/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
+			parameter[0].tempjandiffortmin = (-0.133395946/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05886988/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.00842138/1000) * -1.0 * treerows;
          } else if (parameter[0].weatherchoice == 2100842) {
             char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp45decreasing.csv";
@@ -2291,9 +2342,9 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.12172445/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (0.21769910/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.001623102/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.12172445/1000) * treerows;
-			parameter[0].precdiffortmin = (0.21769910/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.001623102/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.12172445/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (0.21769910/1000) * -1.0 * treerows;
         } else if (parameter[0].weatherchoice == 2100852) {
             char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp45decreasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp45decreasing.csv";
@@ -2304,10 +2355,146 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 		    parameter[0].tempjuldiffort = (0.05026903/1000) * parameter[0].locationshift;
 			parameter[0].precdiffort = (-0.27962335/1000) * parameter[0].locationshift;
 			// transect weather variation
-			parameter[0].tempjandiffortmin = (0.128972760/1000) * treerows;
-			parameter[0].tempjuldiffortmin = (0.05026903/1000) * treerows;
-			parameter[0].precdiffortmin = (-0.27962335/1000) * treerows;
+			parameter[0].tempjandiffortmin = (0.128972760/1000) * -1.0 * treerows;
+			parameter[0].tempjuldiffortmin = (0.05026903/1000) * -1.0 * treerows;
+			parameter[0].precdiffortmin = (-0.27962335/1000) * -1.0 * treerows;
 
+// CRU based climate gradient 
+// ... for Chukotka it is diff between 00 and NE gridcell for the other 00 and N0
+        } else if (parameter[0].weatherchoice == 21007121) {// last number added for CRU-Gridcell differences
+            char tempbuf[] = "input/trans_Polar Urals_shift0N_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Polar Urals_shift0N_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.03432693/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.04108829/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.1177749/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.03432693/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.04108829/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.1177749/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 21007151) {// last number added
+            char tempbuf[] = "input/trans_Polar Urals_shift00_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Polar Urals_shift00_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.03432693/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.04108829/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.1177749/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.03432693/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.04108829/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.1177749/1000) * treerows;
+	
+        } else if (parameter[0].weatherchoice == 21007221) {// last number added for CRU-Gridcell differences
+            char tempbuf[] = "input/trans_Taimyr Peninsula_shift0N_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Taimyr Peninsula_shift0N_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.007512627/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.04108829/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.1177749/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.007512627/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.04108829/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.1177749/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 21007251) {// last number added
+            char tempbuf[] = "input/trans_Taimyr Peninsula_shift00_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Taimyr Peninsula_shift00_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.007512627/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.005374418/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.03461587/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.007512627/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.005374418/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.03461587/1000) * treerows;
+	
+        } else if (parameter[0].weatherchoice == 21007321) {// last number added for CRU-Gridcell differences
+            char tempbuf[] = "input/trans_Buor Khaya_shift0N_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Buor Khaya_shift0N_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.0003467366/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.0037563135/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.03461587/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.0003467366/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.0037563135/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.03461587/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 21007351) {// last number added
+            char tempbuf[] = "input/trans_Buor Khaya_shift00_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Buor Khaya_shift00_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.0003467366/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.0037563135/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.03461587/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.0003467366/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.0037563135/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.03461587/1000) * treerows;
+	
+        } else if (parameter[0].weatherchoice == 21007421) {// last number added for CRU-Gridcell differences
+            char tempbuf[] = "input/trans_Kolyma_shift0N_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Kolyma_shift0N_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.008957363/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.003582945/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.2445649/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.008957363/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.003582945/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.2445649/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 21007451) {// last number added
+            char tempbuf[] = "input/trans_Kolyma_shift00_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Kolyma_shift00_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.008957363/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.003582945/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.2445649/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.008957363/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.003582945/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.2445649/1000) * treerows;
+	
+        } else if (parameter[0].weatherchoice == 21007521) {// last number added for CRU-Gridcell differences
+            char tempbuf[] = "input/trans_Chukotka_shift0N_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift0N_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.03304366/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.03185582/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.06041807/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.03304366/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.03185582/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.06041807/1000) * treerows;
+        } else if (parameter[0].weatherchoice == 21007551) {// last number added
+            char tempbuf[] = "input/trans_Chukotka_shift00_temp_499-2300_rcp85decreasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift00_prec_499-2300_rcp85decreasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			// baseline weather manipulation
+		    parameter[0].tempjandiffort = (-0.03304366/1000) * parameter[0].locationshift;// in m: negative values for northward/colder areas
+		    parameter[0].tempjuldiffort = (-0.03185582/1000) * parameter[0].locationshift;
+			parameter[0].precdiffort = (-0.06041807/1000) * parameter[0].locationshift;
+			// transect weather variation
+			parameter[0].tempjandiffortmin = (-0.03304366/1000) * treerows;
+			parameter[0].tempjuldiffortmin = (-0.03185582/1000) * treerows;
+			parameter[0].precdiffortmin = (-0.06041807/1000) * treerows;
 	
 
 		

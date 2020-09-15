@@ -25,6 +25,38 @@ vector<vector<double>> winddir;
 int cntr;
 vector<double> wdir, wspd;
 
+// parameterization
+// vector<double> vldt_weights;
+vector<double> vldt_stemcount;
+vector<double> prmz_weights;
+vector<double> prmz_mortyouth;
+vector<double> prmz_mgrowth;
+vector<double> prmz_mweather;
+vector<double> prmz_mdrought;
+vector<double> prmz_mdensity;
+vector<double> prmz_heightweathermorteinflussexp;
+vector<double> prmz_germinatioweatherinfluence;
+		double ndistrn(float mean, float sdev)
+		{
+		// Normalverteilte Zahl ziehen und 
+			//The polar form of the Box-Muller transformation is both faster and more robust numerically. The algorithmic description of it is:
+			float x1, x2, w, y1;//, y2;
+			do
+			{
+				x1 = 2.0 * (0.0 +(float) (1.0*rand()/(RAND_MAX + 1.0) ) ) - 1.0;
+				x2 = 2.0 * (0.0 +(float) (1.0*rand()/(RAND_MAX + 1.0) ) ) - 1.0;
+				w = x1 * x1 + x2 * x2;
+			} while ( w >= 1.0 );
+
+			w = sqrtf( (-2.0 * logf( w ) ) / w );
+			y1 = x1 * w;
+			// y2 = x2 * w;
+			float rn;
+			rn= mean + y1 * sdev; // mean=m, sdev=s
+			//printf("rn=%4.4f ", rn);
+			return rn;
+		}
+
 /****************************************************************************************/
 /**
  * \brief go through all functions for vegetation dynamics
@@ -370,6 +402,13 @@ void Yearsteps() {
  * (Welt)evaluation_list \n
  *******************************************************************************************/
 void createLists() {
+	// clear lists to prevent duplications for multiple runs
+	world_tree_list.clear();
+	world_seed_list.clear();
+	world_weather_list.clear();
+	world_plot_list.clear();
+	world_evaluation_list.clear();
+	
     for (int i = 0; i < parameter[0].mapylength; i++) {
         for (int j = 0; j < parameter[0].mapxlength; j++) {
             list<Tree*> tree_list;                 // Creating new tree_list
@@ -588,7 +627,7 @@ int main() {
 
     // buffer simulation length
     int simdurationini = parameter[0].simduration;
-
+	
     for (int nruns = 0; nruns < parameter[0].runs; nruns++) {
         parameter[0].starter = false;
 
@@ -602,7 +641,938 @@ int main() {
         parameter[0].lineakt = 0;
         parameter[0].yearswithseedintro = yearswithseedintropuffer;
 
+		// START Parameterization
+		if(nruns==1)
+		{
+			// Gewichte speichern => gelten fuer alle Parameter!
+			prmz_weights.push_back(1.0);// nur bei Lauf==1
+			prmz_weights.push_back(1.0);// nur bei Lauf==1 
+		}
+
+		// START set comparisonvalues
+			if (parameter[0].weatherchoice==0)
+			{
+				// 17 levels/sites
+				// vldt_weights.push_back();
+				vldt_stemcount.push_back(976.15032);
+				vldt_stemcount.push_back(2164.50723); 
+				vldt_stemcount.push_back(580.03135); 
+				vldt_stemcount.push_back(0.0); 
+				vldt_stemcount.push_back(3050.00000); 
+				vldt_stemcount.push_back(848.82636); 
+				vldt_stemcount.push_back(1867.41800); 
+				vldt_stemcount.push_back(735.64951); 
+				vldt_stemcount.push_back(6812.50000);
+				vldt_stemcount.push_back(1200.96154);
+				vldt_stemcount.push_back(509.29582);
+				vldt_stemcount.push_back(1037.50000);
+				vldt_stemcount.push_back(1518.40278);
+				vldt_stemcount.push_back(1437.50000);
+				vldt_stemcount.push_back(1043.75000);
+				vldt_stemcount.push_back(787.50000);
+				vldt_stemcount.push_back(16.22251);
+						   // # CRUplotlvl Count stemcount_mean stemcount_median stemcount_max
+						// # 1           1    13      961.74614        976.15032    2574.77330
+						// # 2           2     7     5959.65131       2164.50723   33400.00000
+						// # 3           3    21      615.73713        580.03135    1457.15192
+									// 4                				  0.0
+						// # 4           5     2     3050.00000       3050.00000    4600.00000
+						// # 5           6     2      848.82636        848.82636     947.85611
+						// # 6           7     3     2999.18648       1867.41800    7115.99434
+						// # 7           8     1      735.64951        735.64951     735.64951
+						// # 8           9     2     6812.50000       6812.50000    7531.25000
+						// # 9          10     2     1200.96154       1200.96154    1575.00000
+						// # 10         11     9      780.18000        509.29582    1875.00000
+						// # 11         12     2     1037.50000       1037.50000    1375.00000
+						// # 12         13     2     1518.40278       1518.40278    1700.00000
+						// # 13         14     2     1437.50000       1437.50000    1550.00000
+						// # 14         15     6      942.84812       1043.75000    1649.30556
+						// # 15         16     2      787.50000        787.50000     975.00000
+						// # 16         17     2       16.22251         16.22251      18.47177
+
+			}
+		// END set comparisonvalues
+
+// mortyouth=0.1;
+// mgrowth=0.1;
+// mweather=0.5;
+// mdrought=0.1;
+// mdensity=0.1;
+// heightweathermorteinflussexp=0.75;
+// germinatioweatherinfluence=1.0;
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_mortyouth=0.0;
+				double parametermax_mortyouth=0.2;
+
+				prmz_mortyouth.push_back(parametermin_mortyouth);
+				prmz_mortyouth.push_back(parametermax_mortyouth);
+			}
+			double sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			double wmean=0.0;
+			for (unsigned int position=0;position<prmz_mortyouth.size();++position)
+			{
+				wmean+=prmz_mortyouth[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			double wsd=0.0;
+			for (unsigned int position=0;position<prmz_mortyouth.size();++position)
+			{
+				wsd+= pow(prmz_mortyouth[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].mortyouth=ndistrn(wmean,wsd);
+cout << parameter[0].mortyouth << " ";
+
+					if(parameter[0].mortyouth>=0 && parameter[0].mortyouth<=1)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: mortyouth value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].mortyouth);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_mortyouth.push_back(parameter[0].mortyouth);
+			}
+		// END for each parameter
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_mgrowth=0.0;
+				double parametermax_mgrowth=0.2;
+
+				prmz_mgrowth.push_back(parametermin_mgrowth);
+				prmz_mgrowth.push_back(parametermax_mgrowth);
+			}
+			sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			wmean=0.0;
+			for (unsigned int position=0;position<prmz_mgrowth.size();++position)
+			{
+				wmean+=prmz_mgrowth[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			wsd=0.0;
+			for (unsigned int position=0;position<prmz_mgrowth.size();++position)
+			{
+				wsd+= pow(prmz_mgrowth[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].mgrowth=ndistrn(wmean,wsd);
+cout << parameter[0].mgrowth << " ";
+
+					if(parameter[0].mgrowth>=0 && parameter[0].mgrowth<=1)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: mgrowth value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].mgrowth);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_mgrowth.push_back(parameter[0].mgrowth);
+			}
+		// END for each parameter
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_mweather=0.0;
+				double parametermax_mweather=1.0;
+
+				prmz_mweather.push_back(parametermin_mweather);
+				prmz_mweather.push_back(parametermax_mweather);
+			}
+			sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			wmean=0.0;
+			for (unsigned int position=0;position<prmz_mweather.size();++position)
+			{
+				wmean+=prmz_mweather[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			wsd=0.0;
+			for (unsigned int position=0;position<prmz_mweather.size();++position)
+			{
+				wsd+= pow(prmz_mweather[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].mweather=ndistrn(wmean,wsd);
+cout << parameter[0].mweather << " ";
+
+					if(parameter[0].mweather>=0 && parameter[0].mweather<=1)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: mweather value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].mweather);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_mweather.push_back(parameter[0].mweather);
+			}
+		// END for each parameter
+		
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_mdrought=0.0;
+				double parametermax_mdrought=0.2;
+
+				prmz_mdrought.push_back(parametermin_mdrought);
+				prmz_mdrought.push_back(parametermax_mdrought);
+			}
+			sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			wmean=0.0;
+			for (unsigned int position=0;position<prmz_mdrought.size();++position)
+			{
+				wmean+=prmz_mdrought[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			wsd=0.0;
+			for (unsigned int position=0;position<prmz_mdrought.size();++position)
+			{
+				wsd+= pow(prmz_mdrought[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].mdrought=ndistrn(wmean,wsd);
+cout << parameter[0].mdrought << " ";
+
+					if(parameter[0].mdrought>=0 && parameter[0].mdrought<=1)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: mdrought value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].mdrought);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_mdrought.push_back(parameter[0].mdrought);
+			}
+		// END for each parameter
+		
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_mdensity=0.0;
+				double parametermax_mdensity=0.2;
+
+				prmz_mdensity.push_back(parametermin_mdensity);
+				prmz_mdensity.push_back(parametermax_mdensity);
+			}
+			sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			wmean=0.0;
+			for (unsigned int position=0;position<prmz_mdensity.size();++position)
+			{
+				wmean+=prmz_mdensity[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			wsd=0.0;
+			for (unsigned int position=0;position<prmz_mdensity.size();++position)
+			{
+				wsd+= pow(prmz_mdensity[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].mdensity=ndistrn(wmean,wsd);
+cout << parameter[0].mdensity << " ";
+
+					if(parameter[0].mdensity>=0 && parameter[0].mdensity<=1)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: mdensity value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].mdensity);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_mdensity.push_back(parameter[0].mdensity);
+			}
+		// END for each parameter
+		
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_heightweathermorteinflussexp=0.0;
+				double parametermax_heightweathermorteinflussexp=1.5;
+
+				prmz_heightweathermorteinflussexp.push_back(parametermin_heightweathermorteinflussexp);
+				prmz_heightweathermorteinflussexp.push_back(parametermax_heightweathermorteinflussexp);
+			}
+			sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			wmean=0.0;
+			for (unsigned int position=0;position<prmz_heightweathermorteinflussexp.size();++position)
+			{
+				wmean+=prmz_heightweathermorteinflussexp[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			wsd=0.0;
+			for (unsigned int position=0;position<prmz_heightweathermorteinflussexp.size();++position)
+			{
+				wsd+= pow(prmz_heightweathermorteinflussexp[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].heightweathermorteinflussexp=ndistrn(wmean,wsd);
+cout << parameter[0].heightweathermorteinflussexp << " ";
+
+					if(parameter[0].heightweathermorteinflussexp>=0.0 && parameter[0].heightweathermorteinflussexp<=2.0)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: heightweathermorteinflussexp value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].heightweathermorteinflussexp);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_heightweathermorteinflussexp.push_back(parameter[0].heightweathermorteinflussexp);
+			}
+		// END for each parameter
+		// START for each parameter set values
+			// ... set min/max
+			if(nruns==1)
+			{
+				double parametermin_germinatioweatherinfluence=0.9;
+				double parametermax_germinatioweatherinfluence=1.1;
+
+				prmz_germinatioweatherinfluence.push_back(parametermin_germinatioweatherinfluence);
+				prmz_germinatioweatherinfluence.push_back(parametermax_germinatioweatherinfluence);
+			}
+			sumweights=0;
+			for (unsigned int position=0;position<prmz_weights.size();++position)
+			{
+				sumweights+=prmz_weights[position];
+			}
+cout << "sum weights=" << sumweights << endl;
+
+			// calculate weightet mean and sd
+			wmean=0.0;
+			for (unsigned int position=0;position<prmz_germinatioweatherinfluence.size();++position)
+			{
+				wmean+=prmz_germinatioweatherinfluence[position]*prmz_weights[position];
+			}
+			wmean=wmean/sumweights;
+
+			wsd=0.0;
+			for (unsigned int position=0;position<prmz_germinatioweatherinfluence.size();++position)
+			{
+				wsd+= pow(prmz_germinatioweatherinfluence[position]-wmean, 2) *  (prmz_weights[position]/sumweights);
+			}
+			wsd=pow(wsd, 0.5);
+
+			// estimate new parameter value
+			for(int posi=0; posi<1; ++posi)
+			{
+				bool inboundary=false;
+				int anzahldos=0;
+				do
+				{
+					++anzahldos;
+
+					parameter[0].germinatioweatherinfluence=ndistrn(wmean,wsd);
+cout << parameter[0].germinatioweatherinfluence << " ";
+
+					if(parameter[0].germinatioweatherinfluence>=0.0 && parameter[0].germinatioweatherinfluence<=1.0)
+					{
+						inboundary=true;
+					}
+					if(anzahldos>1000)
+					{
+						// print warning to file
+						FILE *fpoint;
+						string fname;
+
+						fname="datatrees_pameterization_error_log.csv";
+						 
+						fpoint = fopen (fname.c_str(), "r+");
+
+						if (fpoint == NULL)
+						{
+							fpoint = fopen (fname.c_str(), "w");
+
+							fprintf(fpoint, "Repeat;");
+							fprintf(fpoint, "Prompt;");
+							fprintf(fpoint, "\n");
+
+							if (fpoint == NULL)
+							{
+								fprintf(stderr, "ERROR: file for log parameter sampling warnings not found!\n");
+								exit(1);
+							}
+						}
+
+						// Die neuen Informationen werden ans Ende der Datei geschrieben
+						fseek(fpoint,0,SEEK_END);
+
+						// Datenaufbereiten und in die Datei schreiben
+						fprintf(fpoint, "%d;", parameter[0].repeati);
+						fprintf(fpoint, "WARNING: germinatioweatherinfluence value after 1000 samples not able to estimated in boundaries, loop aborted and set to %4.5f;", parameter[0].germinatioweatherinfluence);
+						fprintf(fpoint, "\n");
+
+						fclose (fpoint);
+
+						inboundary=true;
+					}
+				} while(inboundary==false);
+
+				prmz_germinatioweatherinfluence.push_back(parameter[0].germinatioweatherinfluence);
+			}
+		// END for each parameter
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// START print estimated parameters to file
+			FILE *ftarget;
+			string fname;
+
+			fname="datatrees_parameterization_estimates.csv";
+			 
+			ftarget = fopen (fname.c_str(), "r+");
+			if (ftarget == NULL)
+			{
+				ftarget = fopen (fname.c_str(), "w");
+				fprintf(ftarget, "Repeat;");
+				 
+				fprintf(ftarget, "mortyouth;"); 
+				fprintf(ftarget, "mgrowth;"); 
+				fprintf(ftarget, "mweather;"); 
+				fprintf(ftarget, "mdrought;"); 
+				fprintf(ftarget, "mdensity;"); 
+				fprintf(ftarget, "heightweathermorteinflussexp;"); 
+				fprintf(ftarget, "germinatioweatherinfluence;"); 
+
+				fprintf(ftarget, "\n");
+
+				if (ftarget == NULL)
+				{
+					fprintf(stderr, "ERROR: file for parameter output not found!\n");
+					exit(1);
+				}
+			}
+
+			fseek(ftarget,0,SEEK_END);
+			fprintf(ftarget, "%d;", parameter[0].repeati);
+			fprintf(ftarget, "%4.5f;", parameter[0].mortyouth); 
+			fprintf(ftarget, "%4.5f;", parameter[0].mgrowth); 
+			fprintf(ftarget, "%4.5f;", parameter[0].mweather); 
+			fprintf(ftarget, "%4.5f;", parameter[0].mdrought); 
+			fprintf(ftarget, "%4.5f;", parameter[0].mdensity); 
+			fprintf(ftarget, "%4.5f;", parameter[0].heightweathermorteinflussexp); 
+			fprintf(ftarget, "%4.5f;", parameter[0].germinatioweatherinfluence); 
+			fprintf(ftarget, "\n");
+
+			fclose (ftarget);
+		// END print estimated parameters to file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
+		// END Parameterization
+		
         runSimulation();
+		
+		// START Parameterization
+			// gewicht startet bei 0 und wird dann mit dem Gewicht aufsummiert von allen Sites und am Ende der Mittelwert berechnet
+			// double deviation=0.0;
+			double residuals=0.0;
+
+			// Faktor für Umrechnung von pro 20*20 m^2 Fläche zu 1 ha Flächen
+			double perhascalingfactor=1.0/((treerows*treecols)/(100.0*100.0));
+			
+			int aktort_parameterization=0;
+			for (vector<list<Tree*> >::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw)
+			{
+				// list<Tree*>& tree_list = *posw;
+
+				vector<vector<Evaluation*> >::iterator posiweltausw = (world_evaluation_list.begin()+aktort_parameterization);
+				vector<Evaluation*>& evaluation_list = *posiweltausw;
+				vector<Evaluation*>::iterator posausw = evaluation_list.begin();
+				auto pEvaluation=(*posausw);
+				
+				aktort_parameterization++;
+				
+				// Berechnung des aktuellen Ortes
+				int aktortyweltcoo=(int) floor( (double) (aktort_parameterization-1)/parameter[0].mapxlength );
+				// int aktortxweltcoo=(aktort_parameterization-1) - (aktortyweltcoo * parameter[0].mapxlength);
+
+cout << " yweltout = " << aktortyweltcoo << endl;						
+				if(parameter[0].weatherchoice==0)
+				{
+					// +1 to avoid 0 in division
+					// deviation+=fabs( ( (1.0+pEvaluation->stemcountrunmeanliste.back()*perhascalingfactor) - vldt_stemcount[aktortyweltcoo]) / (1.0+vldt_stemcount[aktortyweltcoo]) );
+// cout << "   " << deviation << "   " << pEvaluation->stemcountrunmeanliste.back() << "   " << ( pEvaluation->stemcountrunmeanliste.back()*perhascalingfactor) << "  " << vldt_stemcount[aktortyweltcoo] << "  " << endl;
+					residuals+=fabs( (pEvaluation->stemcountrunmeanliste.back()*perhascalingfactor)-vldt_stemcount[aktortyweltcoo] );
+cout << " residuals=" << residuals << endl;
+				}
+			}
+			
+			// Gewichte-Wert Mittelwert berechnen und in List ans Ende anfuegen
+				// ... wenn keine Individuen gewachsen sind ist der Wert bei 24.0, dann wird der Wert auf 0.001 gesetzt
+				double abweichungsmapylength=17; // number of plots
+
+				// limitierung des Maximalwertes auf 100 (Gewicht = 1/ deviation => wert=0.01 => Gewicht=100)
+				// if(deviation<0.01)
+				// {
+					// deviation=0.01;
+				// }
+				
+				if(parameter[0].prmz_autoimprove==1)
+				{
+					prmz_weights.push_back( (1.0/fabs( residuals/abweichungsmapylength )) );
+				} else
+				{
+					prmz_weights.push_back( 1.0 );
+				}
+
+			//Ausgabe der Gewichte in eine Datei
+				// Dateinamen zusammensetzen
+				fname="databaeume_Gewichte_Parameterization.csv";
+				 
+				// Datei versuchen zum Lesen und Schreiben zu oeffnen
+				ftarget = fopen (fname.c_str(), "r+");
+				// falls nicht vorhanden, eine neue Datei mit Spaltenueberschriften anlegen
+				if (ftarget == NULL)
+				{
+				  ftarget = fopen (fname.c_str(), "w");
+
+					fprintf(ftarget, "Repeat;");
+					fprintf(ftarget, "Parametersetweight;");
+					fprintf(ftarget, "\n");
+
+					if (ftarget == NULL)
+					{
+						fprintf(stderr, "Fehler: databaeume_Gewichte_Parameterization.csv-Datei konnte nicht geoeffnet werden!\n");
+						exit(1);
+					}
+				}
+
+				// Die neuen Informationen werden ans Ende der Datei geschrieben
+				fseek(ftarget,0,SEEK_END);
+
+				// Datenaufbereiten und in die Datei schreiben
+				fprintf(ftarget, "%d;", parameter[0].repeati);
+				fprintf(ftarget, "%4.5f;", prmz_weights.back());
+				fprintf(ftarget, "\n");
+
+				fclose (ftarget);
+			// Ende der Ausgabefunktion
+
+cout << "prmz_weights.back() => letzter Wert=" << prmz_weights.back() << endl << endl;
+			
+			if(parameter[0].prmz_autoimprove==1 && nruns==11) // auf 11 damit noch 10 Werte zum Schätzen verbleiben => BEGINNT bei 0
+			{
+				// lösche die ersten beiden startwerte diese führen zu einer großen Streuung
+				// ... dazu kann auch einfach das Gewicht auf 0.0 gesetzt werden
+				cout << "prmz_weights[0] =" << prmz_weights[0] << "prmz_weights[1] =" << prmz_weights[1] << endl;
+				prmz_weights[0]=0.0;
+				prmz_weights[1]=0.0;
+				cout << "prmz_weights[0] =" << prmz_weights[0] << "prmz_weights[1] =" << prmz_weights[1] << endl << endl;
+
+			} 
+			if(parameter[0].prmz_autoimprove==1 && nruns>=21) //  auf 21 damit 20 Werte zum Schätzen genutzt werden können
+			{
+cout << "prmz_weights veraendern:    von= ";
+				// kleinsten Gewichtswert auf 0.0 setzen, da immer je Lauf ein neuer hinzukommt sollte es stabil laufen
+				signed int minimumgewichtposi=0;
+				double minimumgewicht=0.0;
+				int minimumgewichtiter=0;
+				for(signed int parameteri=0; parameteri<prmz_weights.size(); ++parameteri)
+				{
+cout << prmz_weights[parameteri] << ", ";
+					
+					if(prmz_weights[parameteri]>0.0)
+					{
+						// vergleiche Wert
+						// ... wenn es der erste Wert ist, dann speichere diesen in die Puffervariable
+						// ... ansonsten vergleiche den aktuellen mit dem gespeicherten Wert
+						// ... falls der neue Wert kleiner als der gespeicherte ist, kopiere diesen
+						if(minimumgewichtiter==0)
+						{
+							minimumgewicht=prmz_weights[parameteri];
+							minimumgewichtposi=parameteri;
+						} else
+						{
+							if(prmz_weights[parameteri]<minimumgewicht)
+							{
+								minimumgewicht=prmz_weights[parameteri];
+								minimumgewichtposi=parameteri;
+							}
+						}
+						
+						++minimumgewichtiter;
+					}
+				}
+cout << endl << "   => kleinster Wert=" << minimumgewicht << " auf Position=" << minimumgewichtposi << endl;
+				prmz_weights[minimumgewichtposi]=0.0;
+				
+				cout << "prmz_weights veraendern:    nach= ";
+				// kleinsten Gewichtswert auf 0.0 setzen, da immer je Lauf ein neuer hinzukommt sollte es stabil laufen
+				for(signed int parameteri=0; parameteri<prmz_weights.size(); ++parameteri)
+				{
+					cout << prmz_weights[parameteri] << ", ";
+				}
+			}
+
+		// END Parameterization
+		
     }
 
     return 0;

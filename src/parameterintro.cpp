@@ -222,6 +222,16 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].resetyear);
     }
 
+    strcpy(uebergabestring, "prmz_autoimprove");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0])) == 1) {
+        parameter[0].prmz_autoimprove = true;
+    } else {
+        parameter[0].prmz_autoimprove = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].prmz_autoimprove) ? "true" : "false");
+    }
+
     strcpy(uebergabestring, "specpres");
     parameter[0].specpres = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

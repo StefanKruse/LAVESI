@@ -107,7 +107,8 @@ struct Parameter {
     double stabilpercentchangethreshold;
     int resetyear;
     bool spinupphase;
-
+	bool prmz_autoimprove;
+	
     // submodules
     bool thawing_depth;
     bool vegetation;

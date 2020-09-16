@@ -7,7 +7,7 @@ using namespace std;
  * \brief calculate max. possible basal growth
  *
  * either just set to weather_list[yearposition]->weatherfactor *
- *exponential growth depending on dbh or, if transekts are
+ *exponential growth depending on dbh or, if transects are
  *calculated, calculated out of
  *weather_list[yearposition]->weatherfactormin (max basal growth at
  *most southern transekt and tree position in north-south transekt
@@ -22,28 +22,23 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tre
                 maxbw_help =
                     exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
                         + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)
-                    * (((weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming) / ((double)treerows)) * pTree->ycoo
-                       + weather_list[yearposition]->weatherfactorming)
+					* ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
                     * (((double)pTree->thawing_depthinfluence) / 100);
             } else if (pTree->species == 2) {
                 maxbw_help =
                     exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)
-                    * (((weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins) / ((double)treerows)) * pTree->ycoo
-                       + weather_list[yearposition]->weatherfactormins)
-                    * ((((double)pTree->thawing_depthinfluence * 0.8) / 100) - 0.6);
+ 					* ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) * ((((double)pTree->thawing_depthinfluence * 0.8) / 100) - 0.6);
             }
         } else {
             if (pTree->species == 1) {
                 maxbw_help =
                     exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
                         + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)
-                    * (((weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming) / ((double)treerows)) * pTree->ycoo
-                       + weather_list[yearposition]->weatherfactorming);
+					* ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) );
             } else if (pTree->species == 2) {
                 maxbw_help =
                     exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)
-                    * (((weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins) / ((double)treerows)) * pTree->ycoo
-                       + weather_list[yearposition]->weatherfactormins);
+					* ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) );
             }
         }
     } else {
@@ -172,6 +167,7 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
             double maxbasalwachstum = 0.0;
 
             maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, pTree);
+			pTree->dbasalmax = maxbasalwachstum;
 
             double basalwachstum = maxbasalwachstum * ((double)pTree->buffer) * (1.0 - pTree->densitywert);
 

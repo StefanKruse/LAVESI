@@ -254,7 +254,7 @@ void Dataoutput(int t,
                 if ((parameter[0].ivort % 25 == 0))
                 //|| parameter[0].ivort>())
                 {
-                    outputindividuals = true;
+                    // outputindividuals = true;
                 }
 
             } else if (parameter[0].outputmode == 2)  // "OMP"
@@ -634,32 +634,20 @@ void Dataoutput(int t,
 
             if (parameter[0].ivort == 1 || (parameter[0].spinupphase == true && (parameter[0].ivort % 10) == 0) || (parameter[0].spinupphase == false)) {
                 // assemble file name
-                if (parameter[0].spinupphase == true) {
                     s1 << parameter[0].repeati;
                     s2 << parameter[0].weatherchoice;
                     s3 << parameter[0].ivort;
-                    dateiname = "output/dataentwicklung_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
+                    s4 << aktort;
+                    dateiname = "output/datatrees_positions_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
                     s1.str("");
                     s1.clear();
                     s2.str("");
                     s2.clear();
                     s3.str("");
                     s3.clear();
-                } else {
-                    s1 << parameter[0].repeati;
-                    s2 << parameter[0].weatherchoice;
-                    s3 << parameter[0].ivort;
-                    dateiname = "output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
+                    s4.str("");
+                    s4.clear();
 
-                    dateiname = "output/datatrees_positionsanalyse_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
-
-                    s1.str("");
-                    s1.clear();
-                    s2.str("");
-                    s2.clear();
-                    s3.str("");
-                    s3.clear();
-                }
 
                 if (parameter[0].boundaryconditions == 3) {
                     // trying to open the file for reading
@@ -791,8 +779,9 @@ void Dataoutput(int t,
             s1 << parameter[0].repeati;
             s2 << parameter[0].weatherchoice;
             s3 << parameter[0].ivort;
+            s4 << aktort;
 
-            dateiname = "output/datatrees_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
+            dateiname = "output/datatrees_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
 
             s1.str("");
             s1.clear();
@@ -800,6 +789,8 @@ void Dataoutput(int t,
             s2.clear();
             s3.str("");
             s3.clear();
+            s4.str("");
+            s4.clear();
 
             // trying to open the file for reading
             filepointer = fopen(dateiname.c_str(), "r+");

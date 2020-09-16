@@ -764,8 +764,11 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }
+		
+
 			// elevation adjustment
 			double current_elevation;
+			/*
 			if(aktort == 1)
 			{
 				current_elevation = parameter[0].elevationoffset - 1000.00;
@@ -790,8 +793,14 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			} else if(aktort == 8)
 			{
 				current_elevation = parameter[0].elevationoffset + 1500.00;
-				cout << " current_elevation: " << current_elevation << endl;
+				// cout << " current_elevation: " << current_elevation << endl;
 			}
+			*/
+			double minele=300;
+			double maxele=1300;
+			double stepele=(maxele-minele)/(parameter[0].mapylength-1);
+			current_elevation=parameter[0].elevationoffset + minele+stepele*(aktort-1);
+			
 				parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;// in m: negative values for northward/colder areas
 				parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * current_elevation;
 				parameter[0].tempdiffort = 0;

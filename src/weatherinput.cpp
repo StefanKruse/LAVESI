@@ -765,47 +765,23 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinameprec, precbuf);
         }
 		
-
 			// elevation adjustment
 			double current_elevation;
-			/*
-			if(aktort == 1)
-			{
-				current_elevation = parameter[0].elevationoffset - 1000.00;
-			} else if(aktort == 2)
-			{
-				current_elevation = parameter[0].elevationoffset - 500.00;
-			} else if(aktort == 3)
-			{
-				current_elevation = parameter[0].elevationoffset - 50.00;
-			} else if(aktort == 4)
-			{
-				current_elevation = parameter[0].elevationoffset - 0.00;
-			} else if(aktort == 5)
-			{
-				current_elevation = parameter[0].elevationoffset + 50.00;
-			} else if(aktort == 6)
-			{
-				current_elevation = parameter[0].elevationoffset + 500.00;
-			} else if(aktort == 7)
-			{
-				current_elevation = parameter[0].elevationoffset + 1000.00;
-			} else if(aktort == 8)
-			{
-				current_elevation = parameter[0].elevationoffset + 1500.00;
-				// cout << " current_elevation: " << current_elevation << endl;
-			}
-			*/
 			double minele=300;
 			double maxele=1300;
+			// calculate steps by the set number of plots
 			double stepele=(maxele-minele)/(parameter[0].mapylength-1);
-			current_elevation=parameter[0].elevationoffset + minele+stepele*(aktort-1);
+			// assume if >1 y simulation plots that elevation range will be tested
+			if(parameter[0].mapylength>1)
+				current_elevation=parameter[0].elevationoffset + minele+stepele*(aktort-1);
+			else
+				current_elevation=parameter[0].elevationoffset;
 			
-				parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;// in m: negative values for northward/colder areas
-				parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * current_elevation;
-				parameter[0].tempdiffort = 0;
-				parameter[0].precdiffort = parameter[0].precipitationlapse_year * current_elevation;
-				cout << " tempjuldiffort: " << parameter[0].tempjuldiffort << endl;
+			parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;// in m: negative values for northward/colder areas
+			parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * current_elevation;
+			parameter[0].tempdiffort = 0;
+			parameter[0].precdiffort = parameter[0].precipitationlapse_year * current_elevation;
+			cout << " tempjuldiffort: " << parameter[0].tempjuldiffort << endl;
 
         getTemp3(aktort, dateinametemp, weather_list);
         getPrec1(dateinameprec, weather_list, stringlengthmax);

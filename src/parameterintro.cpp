@@ -160,10 +160,26 @@ void Parameterinput(void) {
     } else {
         parameter[0].thawing_depth = false;
     };
-
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth) ? "true" : "false");
     }
+	
+    strcpy(uebergabestring, "demlandscape");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0])) == 1) {
+        parameter[0].demlandscape = true;
+    } else {
+        parameter[0].demlandscape = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].demlandscape) ? "true" : "false");
+    }
+	
+    strcpy(uebergabestring, "demresolution");
+    parameter[0].demresolution = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].demresolution);
+    }
+
 
     strcpy(uebergabestring, "vegetation");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0])) == 1) {

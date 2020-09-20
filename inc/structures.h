@@ -80,6 +80,7 @@ struct Envirgrid {
     unsigned short litterheight9;
     // TODO std::array<unsigned short, 10> litterheight;
     unsigned short litterheightmean;
+	double elevationini;
 	double elevation;
 };
 
@@ -112,6 +113,8 @@ struct Parameter {
     // submodules
     bool thawing_depth;
     bool vegetation;
+	bool demlandscape;
+	int demresolution;
     int specpres;
 
     // multi-core processing with omp

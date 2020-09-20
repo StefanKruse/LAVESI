@@ -416,6 +416,167 @@ void createLists() {
  *
  *******************************************************************************************/
 
+void fillElevations(){
+	//0. only once at initializing & if(parameter[0].mapylength==1)
+	//1. load elevation data on coars resolution (e.g. 30 m)
+	//2. go over each point and interpolate (weighted mean) within a buffer radius of 15 m (minimum 1 point falls in)
+	
+	if(parameter[0].mapylength==1) {
+		// load elevation data
+		// ... prepare dummy data in R gradient with steps
+		// TODO: clean code
+			// ncols=10#10=10x10, 100=100*100
+			// ml=matrix(c(sample(0:10,replace=TRUE,0.3*ncols*ncols),sample(100:120,replace=TRUE,0.3*ncols*ncols),sample(200:220,replace=TRUE,0.4*ncols*ncols)),ncol=ncols,nrow=ncols)#100 values with 30 m resolution meaning 3 km grid
+			// image(ml)
+			// ml=cbind(ml,999)
+			// write.table(ml,"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_test.csv",row.names=FALSE,col.names=FALSE)
+			// how to code water => 9999
+			// real example:
+				// setwd("//dmawi/potsdam/data/bioing/user/IuliiaShevtsova/ishevtsova/biomass_2018chukotka/scenes/scenes/biomass/Tree_biomass_future_predict_project/DEM")
+				// library(raster)
+				// demin=raster("Tan_DEM_04_N67E168_proj58_study_area_water9999_cut.tif")
+				// plot(demin)
+				// demcrop=crop(demin, extent(c(643610-30,643610+300,7478992-30,7478992+300)))
+				// demcrop=crop(demin, extent(c(643610,643610+300,7478992,7478992+300)))
+				// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_300m.png")
+					// demcrop_plot=demcrop
+					// demcrop_plot[demcrop_plot==9999]=NA
+					// plot(demcrop_plot,colNA="blue")
+				// dev.off()
+				// write.table(as.matrix(demcrop),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_300m.csv",row.names=FALSE,col.names=FALSE)
+				// write.table(as.matrix(demcrop),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_330m.csv",row.names=FALSE,col.names=FALSE)
+				// demcrop=crop(demin, extent(c(643610,643610+3000,7478992,7478992+3000)))
+				// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_3000m.png")
+					// demcrop_plot=demcrop
+					// demcrop_plot[demcrop_plot==9999]=NA
+					// plot(demcrop_plot,colNA="blue")
+				// dev.off()
+				// write.table(as.matrix(demcrop),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_3000m.csv",row.names=FALSE,col.names=FALSE)
+				//.... read once processed data for check
+				// envirgridout=read.csv("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output/datatrees_Treedensity1937_2300851.csv", sep=";", dec=".")
+				// str(envirgridout)
+				// envirgridout$Elevation=as.numeric(as.character(envirgridout$Elevation))
+					// dev.new()
+					// plot(envirgridout[envirgridout$X==0,]$Elevation)
+					// min(envirgridout[envirgridout$X==0,]$Elevation)
+					// plot(envirgridout[envirgridout$X==1499,]$Elevation)
+				// library(lattice)
+				// envirgridout$Elevation[envirgridout$Elevation==9999]=NA
+				// dev.new();with(envirgridout, levelplot(Elevation~X+Y,ylim=c(1500,0)))
+				// with(envirgridout[envirgridout$Y<1300,], levelplot(Elevation~X+Y,ylim=c(1500,0)))
+			
+	// ... read data
+    FILE* f;
+    char demfilename[250];
+	// char deminputbuf[] = "input/dem_30m_test.csv";
+	char deminputbuf[] = "input/dem_30m_Ilirney_300m.csv"; //TODO: use parameter to set the input data file
+    strcpy(demfilename, deminputbuf);
+    f = fopen(demfilename, "r");
+    if (f == NULL) {
+        printf("DEM file not available!\n");
+        exit(1);
+    }
+
+	int deminputdimension = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
+    char puffer[255];
+	vector<double> elevationinput;
+	elevationinput.resize(deminputdimension*deminputdimension,0);
+	int counter=-1;
+    // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
+    while (fgets(puffer, 255, f) != NULL) {
+		counter++;
+		elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
+		for(int i=1; i<deminputdimension; ++i){
+			counter++;//0 to 99 are the rows
+			elevationinput[counter] = strtod(strtok(NULL, " "), NULL);
+		}
+    }
+    fclose(f);
+cout << " ==> elevationinput length = " << elevationinput.size() << endl;
+
+	for (int i=0;i<elevationinput.size();i++) {
+		cout << ' ' << elevationinput[i];
+		if((i+1)%deminputdimension==0)
+			cout << endl;
+	}
+
+	// interpolate to envirgrid		
+		for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
+			vector<Envirgrid*>& plot_list = *posw;
+// TODO: paralellize loop
+			for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
+				
+				// determine position and distances to gridpoints in low resolution grid
+				// pEnvirgrid->ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+				// pEnvirgrid->xcoo = (double)kartenpos - (pEnvirgrid->ycoo * (treecols * parameter[0].sizemagnif));
+				double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+				double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+				// double ycoodem =deminputdimension*ycoo/parameter[0].sizemagnif/treecols;
+				// double xcoodem = deminputdimension*xcoo/parameter[0].sizemagnif/treecols;
+				double ycoodem = ycoo/parameter[0].sizemagnif/parameter[0].demresolution;
+				double xcoodem = xcoo/parameter[0].sizemagnif/parameter[0].demresolution;
+				double ycoodemmod = ycoodem-floor(ycoodem);
+				ycoodem = floor(ycoodem);
+				double xcoodemmod = xcoodem-floor(xcoodem);
+				xcoodem = floor(xcoodem);
+cout << " y/x = " << ycoo << "/" << xcoo << "   => ycoodem =" << ycoodem <<"   => xcoodem =" << xcoodem << "   => ycoodemmod =" << ycoodemmod <<"   => xcoodemmod =" << xcoodemmod << endl;
+// cout << "ELE=" << elevationinput[ycoodem * 10 + xcoodem] << endl;
+
+				// elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
+				if(ycoodem<(deminputdimension-1) & xcoodem<(deminputdimension-1))// only if in range leaving out border
+				{
+cout << elevationinput[ycoodem * deminputdimension + xcoodem] 
+	<< " .. " << elevationinput[(ycoodem+1) * deminputdimension + xcoodem] 
+	<< " .. " << elevationinput[ycoodem * deminputdimension + (xcoodem+1)] 
+	<< " .. " << elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)]<< endl;
+					double eleinter = (
+						// upper left
+						elevationinput[ycoodem * deminputdimension + xcoodem] * (1-ycoodemmod)
+						+ elevationinput[ycoodem * deminputdimension + xcoodem] * (1-xcoodemmod)
+						// lower left
+						+ elevationinput[(ycoodem+1) * deminputdimension + xcoodem] * (ycoodemmod)
+						+ elevationinput[(ycoodem+1) * deminputdimension + xcoodem] * (1-xcoodemmod)
+						// upper right
+						+ elevationinput[ycoodem * deminputdimension + (xcoodem+1)] * (1-ycoodemmod)
+						+ elevationinput[ycoodem * deminputdimension + (xcoodem+1)] * (xcoodemmod)
+						// lower right
+						+ elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)] * (ycoodemmod)
+						+ elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)] * (xcoodemmod)
+						)/4;
+
+					int countwatercells = 0;
+					if(elevationinput[ycoodem * deminputdimension + xcoodem]==9999)
+						countwatercells++;
+					if(elevationinput[(ycoodem+1) * deminputdimension + xcoodem]==9999)
+						countwatercells++;
+					if(elevationinput[ycoodem * deminputdimension + (xcoodem+1)]==9999)
+						countwatercells++;
+					if(elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)]==9999)
+						countwatercells++;
+
+					// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 9999
+					if(countwatercells==0)
+						plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + eleinter;
+					else {
+						plot_list[kartenpos]->elevation = 9999;
+						// exit(1);
+					}
+				} else{
+					plot_list[kartenpos]->elevation = 9999;
+				}
+// cout << "ELE=" << eleinter << " => Ele in plot=" << plot_list[kartenpos]->elevation << endl;
+cout << " => Ele in plot=" << plot_list[kartenpos]->elevation << endl;
+// if(xcoo>30*5)
+	// exit(1);
+			}
+		}
+	}
+	
+// exit(1);
+
+
+}
+
 void initialiseMaps() {
     int aktort = 0;
     for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
@@ -460,31 +621,12 @@ void initialiseMaps() {
             pEnvirgrid->litterheightmean = 200;
 
 			// elevation of each grid in m 
-			if(aktort == 1)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset - 1000.00;
-			} else if(aktort == 2)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset - 500.00;
-			} else if(aktort == 3)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset - 50.00;
-			} else if(aktort == 4)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset - 0.00;
-			} else if(aktort == 5)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset + 50.00;
-			} else if(aktort == 6)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset + 500.00;
-			} else if(aktort == 7)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset + 1000.00;
-			} else if(aktort == 8)
-			{
-				pEnvirgrid->elevation = parameter[0].elevationoffset + 1500.00;
-			}
+			pEnvirgrid->elevationini = 9999; // will be used to later interpolate elevation of envirgrid
+			if(parameter[0].mapylength>1)
+				pEnvirgrid->elevation = 0.0; // baseline to zero and set later after parameterization of elevationoffset
+			else
+				pEnvirgrid->elevation = parameter[0].elevationoffset; // will be filled later with data on top of elevationoffset
+			
 
             plot_list.push_back(pEnvirgrid);
         }
@@ -556,6 +698,10 @@ void runSimulation() {
 
     // plot and evaluation list preparation for each location on the transect
     initialiseMaps();
+
+	// compute dem for each envir grid tile from read in data
+	if(parameter[0].demlandscape)
+		fillElevations();
 
     // tree input similar to CH17 or seed input
     Treedistribution(&parameter[0], stringlengthmax);

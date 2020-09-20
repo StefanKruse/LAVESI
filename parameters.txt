@@ -28,7 +28,8 @@ outputall=1;						// (int 0,1) sampling area determination
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation
 vegetation=0;						// (int 0,1) Representation of an organic layer
-
+demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
+demresolution=30;					// (int) Resolution in m of DEM
 
 // 0.4 Computation environment
 omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
@@ -106,7 +107,7 @@ specpres=1;							// (int) which larch species should be present in the model
 
 // 1.3 -----> Plot number
 mapxlength=1;						// (int) number of parallel executed plots for each climate
-mapylength=5;						// (int) number of plots along a south-north transect
+mapylength=1;						// (int) number of plots along a south-north transect
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
 	
 // 1.4 -----> Dispersal

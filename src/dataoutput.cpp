@@ -250,12 +250,15 @@ void Dataoutput(int t,
             } else if (parameter[0].outputmode == 1)  // "normal"
             {
                 outputcurrencies = true;
+				
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
 
-                if ((parameter[0].ivort % 25 == 0))
+                // if ((parameter[0].ivort % 25 == 0))
                 //|| parameter[0].ivort>())
-                {
+                // {
                     // outputindividuals = true;
-                }
+                // }
 
             } else if (parameter[0].outputmode == 2)  // "OMP"
             {
@@ -902,17 +905,18 @@ void Dataoutput(int t,
                 filepointer = fopen(dateiname.c_str(), "w+");
 
                 fprintf(filepointer, "Repeat;");
-                fprintf(filepointer, "YPLOTPOS;");
-                fprintf(filepointer, "XPLOTPOS;");
+                // fprintf(filepointer, "YPLOTPOS;");
+                // fprintf(filepointer, "XPLOTPOS;");
                 fprintf(filepointer, "X;");
                 fprintf(filepointer, "Y;");
                 fprintf(filepointer, "Treedensityvalue;");
                 fprintf(filepointer, "Treenumber;");
                 fprintf(filepointer, "Auflagenstaerke;");
-                fprintf(filepointer, "AuflagenstaerkeMittel;");
+                // fprintf(filepointer, "AuflagenstaerkeMittel;");
                 fprintf(filepointer, "Maxthawing_depth;");
-                fprintf(filepointer, "weatherchoice;");
-                fprintf(filepointer, "thawing_depth;");
+                fprintf(filepointer, "Elevation;");
+                // fprintf(filepointer, "weatherchoice;");
+                // fprintf(filepointer, "thawing_depth;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -926,22 +930,25 @@ void Dataoutput(int t,
             // data evaluation and output
             for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
                 auto pEnvirgrid = plot_list[kartenpos];
-                if ((pEnvirgrid->Treenumber > 0)
-                    && ((pEnvirgrid->xcoo >= xminwindow * parameter[0].sizemagnif) && (pEnvirgrid->xcoo <= xmaxwindow * parameter[0].sizemagnif)
+                if (parameter[0].demlandscape | 
+					( (pEnvirgrid->Treenumber > 0)
+						&& ((pEnvirgrid->xcoo >= xminwindow * parameter[0].sizemagnif) && (pEnvirgrid->xcoo <= xmaxwindow * parameter[0].sizemagnif)
                         && (pEnvirgrid->ycoo >= yminwindow * parameter[0].sizemagnif)
-                        && (pEnvirgrid->ycoo <= ymaxwindow * parameter[0].sizemagnif))) {  // output only if tree density values >0
+                        && (pEnvirgrid->ycoo <= ymaxwindow * parameter[0].sizemagnif)))
+						) {  // output only if tree density values >0
                     fprintf(filepointer, "%d;", parameter[0].repeati);
-                    fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
-                    fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
+                    // fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
+                    // fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
                     fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
                     fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
                     fprintf(filepointer, "%4.5f;", pEnvirgrid->Treedensityvalue);
                     fprintf(filepointer, "%d;", pEnvirgrid->Treenumber);
                     fprintf(filepointer, "%u;", pEnvirgrid->litterheight);
-                    fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
+                    // fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
                     fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
-                    fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                    fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+                    fprintf(filepointer, "%4.4f;", pEnvirgrid->elevation);
+                    // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+                    // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
                     fprintf(filepointer, "\n");
                 }
             }

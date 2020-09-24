@@ -144,6 +144,29 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 												  * ( weather_list[yearposition_help]->weatherfactors - ( ( weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
 														* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal
 															  + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)))));
+			} else if(parameter[0].demlandscape){
+				weathermortaddg = 1.0
+										 - (1.0
+											/ (1.0
+											   + (((1.0 - 0.5) / 0.5)
+													* exp(
+													( anstiegweathermortg - ( ( anstiegweathermortg - anstiegweathermortgmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+													// ( anstiegweathermortg + ((pTree->ycoo / (double) treerows) * (anstiegweathermortg - anstiegweathermortgmin)) ) // scaled effect along transect
+													// * ( weather_list[yearposition_help]->weatherfactorg - ( ( weather_list[yearposition_help]->weatherfactorg - weather_list[yearposition_help]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
+													* ((weather_list[yearposition_help]->weatherfactorg*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition_help]->weatherfactorming*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
+													* exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
+															  + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)))));
+				weathermortadds = 1.0
+										 - (1.0
+											/ (1.0
+											   + (((1.0 - 0.5) / 0.5)
+													* exp(
+													( anstiegweathermorts - ( ( anstiegweathermorts - anstiegweathermortsmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+													// ( anstiegweathermorts + ((pTree->ycoo / (double) treerows) * (anstiegweathermorts - anstiegweathermortsmin)) ) // scaled effect along transect
+													// * ( weather_list[yearposition_help]->weatherfactors - ( ( weather_list[yearposition_help]->weatherfactors - weather_list[yearposition_help]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) ) // scaled effect along transect
+													* ((weather_list[yearposition_help]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition_help]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
+													* exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal
+															  + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)))));
 			} else
 			{
 				weathermortaddg = 1.0
@@ -170,9 +193,15 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 
             double dry_mort=0.0;
 			if(parameter[0].lineartransect){
-				dry_mort = parameter[0].mdrought * 
-							( weather_list[yearposition_help]->droughtmort - ( ( weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+				dry_mort = parameter[0].mdrought
+							* ( weather_list[yearposition_help]->droughtmort - ( ( weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
 							// (weather_list[yearposition_help]->droughtmort + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin)))
+							* pow((1.0 / pTree->height), 0.5);
+			} else if(parameter[0].demlandscape){
+				dry_mort = parameter[0].mdrought
+							// ( weather_list[yearposition_help]->droughtmort - ( ( weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+							// (weather_list[yearposition_help]->droughtmort + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin)))
+							* ((weather_list[yearposition_help]->droughtmort*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition_help]->droughtmortmin*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
 							* pow((1.0 / pTree->height), 0.5);
 			} else
 			{

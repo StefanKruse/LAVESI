@@ -532,7 +532,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 										// dem sensing
 										if(parameter[0].demlandscape & (plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation<9999) ) {
 											sumelevation += plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation;
-											sumslope += plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation;
+											sumslope += plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->slope;
 											countelevation++;
 										}
 // cout << sumelevation << " --- " << plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation << endl;

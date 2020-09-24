@@ -707,6 +707,7 @@ cout << " ... start dem input" << endl;
 	// elein$Xc=elein$X/5
 	// elein$Yc=elein$Y/5
 
+	// trein=read.csv("datatrees_1_2300851_25_1.csv", sep=";",dec=".")
 	// trein=read.csv("datatrees_1_2300851_350_1.csv", sep=";",dec=".")
 	// trein=read.csv("datatrees_1_2300851_1000_1.csv", sep=";",dec=".")
 	// str(trein)

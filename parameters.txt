@@ -63,7 +63,7 @@ weatherchoice=2300851;					// (int) Type of weather forcing series
 										// 2300851 1901-2300 RCP 8.5 (4) at climate Lake Ilirney, Chuktoka (5) increasing 2100-2300 (1) 
 
 
-elevationoffset=-1450.0;				// in m adjust baselevel
+elevationoffset=-1600.0;				// in m adjust baselevel
 temperaturelapse_jan=0.001722;				// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 temperaturelapse_jul=-0.004033;				// temperature lapse rate for januar (warmest month) in degree celsius per meter elevation
 precipitationlapse_year=0.01709;				// precipitation lapse rate for whole year in mm prec per meter elevation

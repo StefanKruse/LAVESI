@@ -34,6 +34,8 @@ struct Tree {
     double dispersaldistance;
     bool growing;
     int species;
+	double elevation;
+	double slope;
 };
 
 struct Seed {
@@ -80,8 +82,8 @@ struct Envirgrid {
     unsigned short litterheight9;
     // TODO std::array<unsigned short, 10> litterheight;
     unsigned short litterheightmean;
-	double elevationini;
 	double elevation;
+	double slope;
 };
 
 struct Parameter {

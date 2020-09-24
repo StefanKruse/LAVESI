@@ -172,20 +172,20 @@ void getPrec1(char dateinameprec[50], vector<Weather*>& weather_list, int maxima
             pWeather->prec11monthmean = prec11monthmeanbuf + parameter[0].precdiffort / 12;
             pWeather->prec12monthmean = prec12monthmeanbuf + parameter[0].precdiffort / 12;
 			
-            pWeather->prec1monthmeanmin = prec1monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec2monthmeanmin = prec2monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec3monthmeanmin = prec3monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec4monthmeanmin = prec4monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec5monthmeanmin = prec5monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec6monthmeanmin = prec6monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec7monthmeanmin = prec7monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec8monthmeanmin = prec8monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec9monthmeanmin = prec9monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec10monthmeanmin = prec10monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec11monthmeanmin = prec11monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
-            pWeather->prec12monthmeanmin = prec12monthmeanbuf + parameter[0].precdiffort / 12 + parameter[0].precdiffortmin / 12;
+            pWeather->prec1monthmeanmin = prec1monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec2monthmeanmin = prec2monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec3monthmeanmin = prec3monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec4monthmeanmin = prec4monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec5monthmeanmin = prec5monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec6monthmeanmin = prec6monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec7monthmeanmin = prec7monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec8monthmeanmin = prec8monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec9monthmeanmin = prec9monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec10monthmeanmin = prec10monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec11monthmeanmin = prec11monthmeanbuf + parameter[0].precdiffortmin / 12;
+            pWeather->prec12monthmeanmin = prec12monthmeanbuf + parameter[0].precdiffortmin / 12;
             pWeather->precipitationsum = precipitationsumbuf + parameter[0].precdiffort;
-            pWeather->precipitationsummin = precipitationsumbuf + parameter[0].precdiffort + parameter[0].precdiffortmin;
+            pWeather->precipitationsummin = precipitationsumbuf + parameter[0].precdiffortmin;
         }
         counter++;
     }
@@ -440,9 +440,11 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 			else
 				pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
 			if(parameter[0].tempjandiffortmin!=0.0)
-				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffort + parameter[0].tempjandiffortmin;
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffortmin;
 			else
-				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffortmin;
+// cout << " jan: " << temp1monthmeanbuf << " + " << parameter[0].tempjandiffort << " = " << pWeather->temp1monthmean << endl;
+// cout << " janmin: " << temp1monthmeanbuf << " + " << parameter[0].tempjandiffortmin << " = " << pWeather->temp1monthmeanmin << endl;
             pWeather->temp2monthmean = temp2monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp3monthmean = temp3monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp4monthmean = temp4monthmeanbuf + parameter[0].tempdiffort;
@@ -453,9 +455,11 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 			else
 				pWeather->temp7monthmean = temp7monthmeanbuf + parameter[0].tempdiffort;
 			if(parameter[0].tempjuldiffortmin!=0.0)
-				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempjuldiffort + parameter[0].tempjuldiffortmin;
+				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempjuldiffortmin;
 			else
-				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
+				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffortmin;
+// cout << " jul: " << temp7monthmeanbuf << " + " << parameter[0].tempjuldiffort << " = " << pWeather->temp7monthmean << endl;
+// cout << " julmin: " << temp7monthmeanbuf << " + " << parameter[0].tempjuldiffortmin << " = " << pWeather->temp7monthmeanmin << endl;
             pWeather->temp8monthmean = temp8monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp9monthmean = temp9monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp10monthmean = temp10monthmeanbuf + parameter[0].tempdiffort;
@@ -710,7 +714,8 @@ void passWeather() {
 		fdir = fopen(output.c_str(), "a+");
 		
 		fprintf(fdir, 
-			"%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", 
+			"%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n", 
+			// "%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f\n". 
 			weather_list[iweather]->temp1monthmeaniso,
 			weather_list[iweather]->temp1monthmeanisomin,
 			// TODO: check why different values for jan temp iso vs. min when no difference is expected
@@ -867,6 +872,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinameprec, precbuf);
         }
 		
+		// TODO: clean and reorganize in parts to be switched on by demcompute switch
 			// elevation adjustment
 			double current_elevation;
 			double minele=300;
@@ -879,11 +885,14 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			else
 				current_elevation=parameter[0].elevationoffset;
 			
-			parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;// in m: negative values for northward/colder areas
+			parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;
+			parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (current_elevation+1000);// calculate changes per 1000 m to use later for tree growth estimation
 			parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * current_elevation;
+			parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * (current_elevation+1000);
 			parameter[0].tempdiffort = 0;
 			parameter[0].precdiffort = parameter[0].precipitationlapse_year * current_elevation;
-			cout << " tempjuldiffort: " << parameter[0].tempjuldiffort << endl;
+			parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (current_elevation+1000);
+// cout << " tempjuldiffort: " << parameter[0].tempjuldiffort << endl;
 
         getTemp3(aktort, dateinametemp, weather_list);
         getPrec1(dateinameprec, weather_list, stringlengthmax);

@@ -167,6 +167,7 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 				heightreduce=0.001;
             double weather_mort_gmel = parameter[0].mweather * weathermortaddg * heightreduce;
             double weather_mort_sib = parameter[0].mweather * weathermortadds * heightreduce;
+
             double dry_mort=0.0;
 			if(parameter[0].lineartransect){
 				dry_mort = parameter[0].mdrought * 
@@ -181,7 +182,8 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
 
             double Treemorts = 0.0 + parameter[0].mortbg + sapl_mort_sib + age_mort + growth_mort + dens_mort + weather_mort_sib + dry_mort;
-
+cout << pTree->dbasalmax << "; " << pTree->dbasalrel <<  " === " << parameter[0].mortbg << "; " << sapl_mort_gmel << "; " << age_mort << "; " << growth_mort << "; " << dens_mort << "; " << weather_mort_gmel << "; " << dry_mort << " => " << Treemortg;
+// cout << weather_mort_gmel << " + " << dry_mort << " => " << Treemortg;
             if (Treemortg > 1.0) {
                 Treemortg = 1.0;
             } else if (Treemortg < 0.0) {
@@ -199,8 +201,10 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
             if (((pTree->species == 1) && (zufallsz < Treemortg)) || ((pTree->species == 2) && (zufallsz < Treemorts))) {
                 delete pTree;
                 pos = tree_list.erase(pos);
+cout << " killed " << endl;
             } else {
                 ++pos;
+cout << " lives " << endl;
             }
         } else {
             ++pos;

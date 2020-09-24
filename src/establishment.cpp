@@ -31,13 +31,19 @@ void Treeestablishment(struct Parameter* parameter,
             if (seed.dead) {
                 continue;
             }
-
+			
             if (!seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
                 int i = (int)floor(seed.ycoo * parameter[0].sizemagnif);
                 int j = (int)floor(seed.xcoo * parameter[0].sizemagnif);
 
                 assert(i * treecols * parameter[0].sizemagnif + j >= 0);
+
+				if( (parameter[0].demlandscape) & ((plot_list[i * treecols * parameter[0].sizemagnif + j]->elevation==9999) | (plot_list[i * treecols * parameter[0].sizemagnif + j]->slope<5)) ){
+					seed.dead = true;
+					// seed_list.remove(i);
+					continue;
+				}
 
                 double keimungauflageinfluence =
                     (1.0 - 0.01) / (200.0 - 600.0) * ((double)plot_list[i * treecols * parameter[0].sizemagnif + j]->litterheight) + 1.495;
@@ -249,6 +255,7 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                     seed_list.remove(i_seed);
                 }
             }
-        }
+        
+		}
     }
 }

@@ -109,6 +109,7 @@ void AddTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
  **pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
  *******************************************************************************************/
 
+// TODO: implement sensing of trees of dem for only one core computation so far only multi-core implemented... which is then used in growth function to acess growth (elevation min and max of input)
 void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
     if (parameter[0].omp_num_threads == 1) {  // only one core
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
@@ -439,6 +440,12 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                             } else {
                                 pTree->densitywert = 0.0;  // no competition effect
                             }
+							
+							// dem sensing
+							if (parameter[0].demlandscape) {
+								pTree->elevation = plot_list[i * treecols * parameter[0].sizemagnif + j]->elevation;
+								pTree->slope = plot_list[i * treecols * parameter[0].sizemagnif + j]->slope;
+							}
                         }
                         // DENSITY 3
                         else if (parameter[0].densitymode == 3) {
@@ -461,7 +468,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                             } else {
                                 pTree->densitywert = 0.0;
                             }
-                        }
+						}
 
                         // calculate the influence of the thawing depth on the tree growth
                         if ((plot_list[i * treecols * parameter[0].sizemagnif + j]->maxthawing_depth < 2000)
@@ -481,8 +488,11 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                         // determine rescaled coordinates and summation of the density value
                         double sumdensitywert = 0;
                         double sumthawing_depth = 0;
-
                         unsigned int anzahlflaechen = 0;
+
+						double sumelevation = 0;
+						double sumslope = 0;
+                        unsigned int countelevation = 0;
 
                         for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
                             for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
@@ -518,6 +528,14 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 
                                         sumthawing_depth += (double)plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->maxthawing_depth;
                                         anzahlflaechen++;
+										
+										// dem sensing
+										if(parameter[0].demlandscape & (plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation<9999) ) {
+											sumelevation += plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation;
+											sumslope += plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation;
+											countelevation++;
+										}
+// cout << sumelevation << " --- " << plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation << endl;
                                     }
                                 }
                             }
@@ -534,6 +552,14 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                             pTree->thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
                         else
                             pTree->thawing_depthinfluence = 100;
+						
+						// dem sensing by mean value of gridcells in range
+						if (parameter[0].demlandscape) {
+							pTree->elevation = sumelevation / (double)countelevation;
+							pTree->slope = sumslope / (double)countelevation;
+						}
+// cout << sumelevation << countelevation << pTree->elevation << endl;
+// exit(1);
                     }
 
                     pTree->densitywert = pTree->densitywert

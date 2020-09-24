@@ -41,6 +41,52 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tre
 					* ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) );
             }
         }
+    } else if (parameter[0].demlandscape) {
+        if (parameter[0].thawing_depth) {
+            if (pTree->species == 1) {
+                maxbw_help =
+                    exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
+                        + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)
+					// * ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->elevation) ) )
+					* (weather_list[yearposition]->weatherfactorg*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))))
+                    * (((double)pTree->thawing_depthinfluence) / 100);
+            } else if (pTree->species == 2) {
+                maxbw_help =
+                    exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)
+ 					// * ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+					* (weather_list[yearposition]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))))
+					* ((((double)pTree->thawing_depthinfluence * 0.8) / 100) - 0.6);
+            }
+// cout << "ele=" << pTree->elevation << " => rel infl " << ( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)) << endl;
+        } else {
+            if (pTree->species == 1) {
+                maxbw_help =
+                    exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
+                        + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)
+					// * ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->ycoo) ) );
+ 					* (weather_list[yearposition]->weatherfactorg*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))));
+           } else if (pTree->species == 2) {
+                maxbw_help =
+                    exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * pTree->dbasal + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)
+					// * ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) );
+ 					* (weather_list[yearposition]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))));
+           }
+        }
+		
+/* // moved to growth
+		// slope impact with minimum threshold, maxima and maximum limit
+		// TODO: insert switch
+		double peakslopegrowth = 10.0;
+		if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
+			maxbw_help=0.0;
+		// else
+			// maxbw_help = maxbw_help * (1-fabs(pTree->slope-47.5)/47.5);
+		else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
+			maxbw_help = maxbw_help * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
+		else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
+			maxbw_help = maxbw_help * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
+// cout << "slope=" << pTree->slope << " => factor (5min..90max..via47.5max)=" << (1-fabs(pTree->slope-47.5)/47.5) << endl;	
+*/
     } else {
         if (parameter[0].thawing_depth) {
             if (pTree->species == 1) {
@@ -64,6 +110,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tre
             }
         }
     }
+	
     return maxbw_help;
 }
 
@@ -113,7 +160,52 @@ double getMaxbreastwachstum(int yearposition, vector<Weather*>& weather_list, Tr
                        + weather_list[yearposition]->weatherfactormins);
             }
         }
-    } else {
+    } else if (parameter[0].demlandscape) {
+        if (parameter[0].thawing_depth) {
+            if (pTree->species == 1) {
+                maxbrw_help =
+                    exp(parameter[0].gdbreastconstgmel + parameter[0].gdbreastfacgmel * pTree->dbasal
+                        + parameter[0].gdbreastfacqgmel * pTree->dbasal * pTree->dbasal)
+					// * ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->elevation) ) )
+					* (weather_list[yearposition]->weatherfactorg*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))))
+                    * (((double)pTree->thawing_depthinfluence) / 100);
+            } else if (pTree->species == 2) {
+                maxbrw_help =
+                    exp(parameter[0].gdbreastconstsib + parameter[0].gdbreastfacgmel * pTree->dbasal + parameter[0].gdbreastfacqsib * pTree->dbasal * pTree->dbasal)
+ 					// * ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
+					* (weather_list[yearposition]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))))
+					* ((((double)pTree->thawing_depthinfluence * 0.8) / 100) - 0.6);
+            }
+// cout << "ele=" << pTree->elevation << " => rel infl " << ( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)) << endl;
+        } else {
+            if (pTree->species == 1) {
+                maxbrw_help =
+                    exp(parameter[0].gdbreastconstgmel + parameter[0].gdbreastfacgmel * pTree->dbreast
+                        + parameter[0].gdbreastfacqgmel * pTree->dbreast * pTree->dbreast)
+                    // * (((weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming) / ((double)treerows)) * pTree->ycoo + weather_list[yearposition]->weatherfactorming);
+					* (weather_list[yearposition]->weatherfactorg*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))));
+            } else if (pTree->species == 2) {
+                maxbrw_help =
+                    exp(parameter[0].gdbreastconstsib + parameter[0].gdbreastfacsib * pTree->dbreast
+                        + parameter[0].gdbreastfacqsib * pTree->dbreast * pTree->dbreast)
+                    // * (((weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins) / ((double)treerows)) * pTree->ycoo + weather_list[yearposition]->weatherfactormins);
+					* (weather_list[yearposition]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))));
+            }
+        }
+/* // moved to growth
+		// slope impact with minimum threshold, maxima and maximum limit
+		// TODO: insert switch
+		double peakslopegrowth = 10.0;
+		if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
+			maxbrw_help=0.0;
+		else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
+			// maxbrw_help = maxbrw_help * (1-fabs(pTree->slope-47.5)/47.5);
+			maxbrw_help = maxbrw_help * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
+		else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
+			// maxbrw_help = maxbrw_help * (1-fabs(pTree->slope-47.5)/47.5);
+			maxbrw_help = maxbrw_help * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
+*/
+	} else {
         if (parameter[0].thawing_depth == true) {
             if (pTree->species == 1) {
                 maxbrw_help = exp(parameter[0].gdbreastconstgmel + parameter[0].gdbreastfacgmel * pTree->dbreast
@@ -170,8 +262,18 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
 			pTree->dbasalmax = maxbasalwachstum;
 
             double basalwachstum = maxbasalwachstum * ((double)pTree->buffer) * (1.0 - pTree->densitywert);
-
             basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * pTree->dbasal;
+			
+			// slope impact with minimum threshold, maxima and maximum limit
+			// TODO: insert switch
+			double peakslopegrowth = 10.0;
+			if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
+				basalwachstum=0.0;
+			else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
+				basalwachstum = basalwachstum * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
+			else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
+				basalwachstum = basalwachstum * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
+			
             if (basalwachstum < 0.0) {
                 basalwachstum = 0.0;
             }
@@ -179,11 +281,15 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
             if (pTree->growing == true) {
                 pTree->dbasal += basalwachstum;
             }
+// cout << pTree->dbasalmax << " + " << pTree->dbasal << " + " << pTree->elevation << " + " << pTree->slope << " + " << pTree->densitywert << " + " << pTree->buffer << endl;
 
             if (parameter[0].relgrowthinfluence == 0) {
                 pTree->dbasalrel = 1.0;
             } else if (parameter[0].relgrowthinfluence == 1) {
-                pTree->dbasalrel = basalwachstum / (maxbasalwachstum + (maxbasalwachstum * parameter[0].basalinfluenceoldyoung * pTree->dbasal));
+				if(maxbasalwachstum<=0.0)
+					pTree->dbasalrel = 0.0;
+				else
+					pTree->dbasalrel = basalwachstum / (maxbasalwachstum + (maxbasalwachstum * parameter[0].basalinfluenceoldyoung * pTree->dbasal));
             }
 
             double maxbreastwachstum = 0;
@@ -193,6 +299,15 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
                 maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, pTree);
 
                 breastwachstum = maxbreastwachstum * ((double)pTree->buffer) * (1.0 - pTree->densitywert);
+
+				// slope impact with minimum threshold, maxima and maximum limit
+				// TODO: insert switch
+				if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
+					breastwachstum=0.0;
+				else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
+					breastwachstum = breastwachstum * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
+				else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
+					breastwachstum = breastwachstum * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
 
                 if (breastwachstum < 0.0) {
                     breastwachstum = 0.0;
@@ -205,7 +320,10 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
                 if (parameter[0].relgrowthinfluence == 0) {
                     pTree->dbreastrel = 1.0;
                 } else if (parameter[0].relgrowthinfluence == 1) {
-                    pTree->dbreastrel = breastwachstum / maxbreastwachstum;
+					if(maxbreastwachstum<=0.0)
+						pTree->dbreastrel = 0.0;
+					else
+						pTree->dbreastrel = breastwachstum / maxbreastwachstum;
                 }
             }
 

@@ -37,16 +37,19 @@ void Treeestablishment(struct Parameter* parameter,
                 int i = (int)floor(seed.ycoo * parameter[0].sizemagnif);
                 int j = (int)floor(seed.xcoo * parameter[0].sizemagnif);
 
-                assert(i * treecols * parameter[0].sizemagnif + j >= 0);
+				unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
 
-				if( (parameter[0].demlandscape) & ((plot_list[i * treecols * parameter[0].sizemagnif + j]->elevation==9999) | (plot_list[i * treecols * parameter[0].sizemagnif + j]->slope<5)) ){
+                assert(curposi >= 0);
+				
+
+				if( (parameter[0].demlandscape) & ((plot_list[curposi]->elevation==9999) | (plot_list[curposi]->slope<5)) ){
 					seed.dead = true;
 					// seed_list.remove(i);
 					continue;
 				}
 
                 double keimungauflageinfluence =
-                    (1.0 - 0.01) / (200.0 - 600.0) * ((double)plot_list[i * treecols * parameter[0].sizemagnif + j]->litterheight) + 1.495;
+                    (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi]->litterheight) + 1.495;
 
                 if (keimungauflageinfluence < 0.01) {
                     keimungauflageinfluence = 0.01;
@@ -55,14 +58,14 @@ void Treeestablishment(struct Parameter* parameter,
 
 
 
-// maxthawing_depth
-// calculate the thawing depth influence on the tree growth
-double thawing_depthinfluence_help = 100;
-if((plot_list[i * treecols * parameter[0].sizemagnif + j]->maxthawing_depth < 2000)
-	&& parameter[0].thawing_depth == true) {//TODO: check calculation only during spinup 
-	thawing_depthinfluence_help =
-		(unsigned short)((200.0 / 2000.0) * (double)plot_list[i * treecols * parameter[0].sizemagnif + j]->maxthawing_depth);
-}
+				// maxthawing_depth
+				// calculate the thawing depth influence on the tree growth
+				double thawing_depthinfluence_help = 100;
+				if((plot_list[curposi]->maxthawing_depth < 2000)
+					&& parameter[0].thawing_depth == true) {//TODO: check calculation only during spinup 
+					thawing_depthinfluence_help =
+						(unsigned short)((200.0 / 2000.0) * (double)plot_list[curposi]->maxthawing_depth);
+				}
 				
 					
                 // ... and weather.
@@ -118,16 +121,16 @@ double density_help = pow(
 	parameter[0].densityvaluemanipulatorexp);
 // get gridcell
 if (parameter[0].densitymode == 2) {
-	if (plot_list[i * treecols * parameter[0].sizemagnif + j]->Treedensityvalue > 0.0) {
+	if (plot_list[curposi]->Treedensityvalue > 0.0) {
 		if (parameter[0].densitytiletree == 1)  // sum of values
 		{
-			density_help = (1.0 - (density_help / plot_list[i * treecols * parameter[0].sizemagnif + j]->Treedensityvalue));
+			density_help = (1.0 - (density_help / plot_list[curposi]->Treedensityvalue));
 			//                           density_desired(at position) / density_currently(at position)
 		} else if (parameter[0].densitytiletree == 2)  // multiplication of values
 		{
 			density_help =
 				(1.0
-				 - (density_help / (plot_list[i * treecols * parameter[0].sizemagnif + j]->Treedensityvalue * density_help)));
+				 - (density_help / (plot_list[curposi]->Treedensityvalue * density_help)));
 			//                           density_desired(at position) / density_currently(at position)
 		}
 	} else {

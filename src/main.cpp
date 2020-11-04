@@ -423,121 +423,20 @@ void fillElevations(){
 	
 	if(parameter[0].mapylength==1) {
 cout << " ... start dem input" << endl;
-		// load elevation data
-		// ... prepare dummy data in R gradient with steps
-		// TODO: clean code
-			// ncols=10#10=10x10, 100=100*100
-			// ml=matrix(c(sample(0:10,replace=TRUE,0.3*ncols*ncols),sample(100:120,replace=TRUE,0.3*ncols*ncols),sample(200:220,replace=TRUE,0.4*ncols*ncols)),ncol=ncols,nrow=ncols)#100 values with 30 m resolution meaning 3 km grid
-			// image(ml)
-			// ml=cbind(ml,999)
-			// write.table(ml,"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_test.csv",row.names=FALSE,col.names=FALSE)
-			// how to code water => 9999
-			// real example:
-				// setwd("//dmawi/potsdam/data/bioing/user/IuliiaShevtsova/ishevtsova/biomass_2018chukotka/scenes/scenes/biomass/Tree_biomass_future_predict_project/DEM")
-				// library(raster)
-				// # for slope ... threshhold ~5 (smaller no growth)
-				// slopein=raster("slope_aspect_TAnDEM_ilirney_study_area_water9999.tif")
-				// # test with slope<5 over test sites
-				// xmin=643610-10*30
-				// ymin=7478992-5*30
-				// size=600
-				// slopecrop=crop(slopein, extent(c(xmin,xmin+size,ymin,ymin+size)))
-				// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/slope_30m_Ilirney_600m.png")
-					// demcrop_plot=slopecrop
-					// demcrop_plot[demcrop_plot==9999]=NA
-					// plot(demcrop_plot,colNA="blue")
-				// dev.off()				
-				// write.table(as.matrix(round(slopecrop,2)),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/slope_30m_Ilirney_600m.csv",row.names=FALSE,col.names=FALSE)
-				
-				// demin=raster("Tan_DEM_04_N67E168_proj58_study_area_water9999_cut.tif")
-				// demcrop=crop(demin, extent(c(xmin,xmin+size,ymin,ymin+size)))
-				// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_600m.png")
-					// demcrop_plot=demcrop
-					// demcrop_plot[demcrop_plot==9999]=NA
-					// plot(demcrop_plot,colNA="blue")
-				// dev.off()				
-				// write.table(as.matrix(round(demcrop,2)),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_600m.csv",row.names=FALSE,col.names=FALSE)
-					// # for slope ... threshhold ~5 (smaller no growth)
-					// slopein=raster("slope_aspect_TAnDEM_ilirney_study_area_water9999.tif")
-					// # test with slope<5 over test sites
-					// xmin=643610-10*30
-					// ymin=7478992-5*30
-					// size=3000
-					// slopecrop=crop(slopein, extent(c(xmin,xmin+size,ymin,ymin+size)))
-					// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/slope_30m_Ilirney_3000m.png")
-						// demcrop_plot=slopecrop
-						// demcrop_plot[demcrop_plot==9999]=NA
-						// plot(demcrop_plot,colNA="blue")
-					// dev.off()				
-					// write.table(as.matrix(round(slopecrop,2)),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/slope_30m_Ilirney_3000m.csv",row.names=FALSE,col.names=FALSE)
-					
-					// demin=raster("Tan_DEM_04_N67E168_proj58_study_area_water9999_cut.tif")
-					// demcrop=crop(demin, extent(c(xmin,xmin+size,ymin,ymin+size)))
-					// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_3000m.png")
-						// demcrop_plot=demcrop
-						// demcrop_plot[demcrop_plot==9999]=NA
-						// plot(demcrop_plot,colNA="blue")
-					// dev.off()				
-					// write.table(as.matrix(round(demcrop,2)),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_3000m.csv",row.names=FALSE,col.names=FALSE)
-						// # for slope ... threshhold ~5 (smaller no growth)
-						// slopein=raster("slope_aspect_TAnDEM_ilirney_study_area_water9999.tif")
-						// # test with slope<5 over test sites
-						// xmin=643610-10*30
-						// ymin=7478992-5*30
-						// size=1000
-						// slopecrop=crop(slopein, extent(c(xmin,xmin+size,ymin,ymin+size)))
-						// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/slope_30m_Ilirney_1000m.png")
-							// demcrop_plot=slopecrop
-							// demcrop_plot[demcrop_plot==9999]=NA
-							// plot(demcrop_plot,colNA="blue")
-						// dev.off()				
-						// write.table(as.matrix(round(slopecrop,2)),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/slope_30m_Ilirney_1000m.csv",row.names=FALSE,col.names=FALSE)
-						
-						// demin=raster("Tan_DEM_04_N67E168_proj58_study_area_water9999_cut.tif")
-						// demcrop=crop(demin, extent(c(xmin,xmin+size,ymin,ymin+size)))
-						// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_1000m.png")
-							// demcrop_plot=demcrop
-							// demcrop_plot[demcrop_plot==9999]=NA
-							// plot(demcrop_plot,colNA="blue")
-						// dev.off()				
-						// write.table(as.matrix(round(demcrop,2)),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_1000m.csv",row.names=FALSE,col.names=FALSE)
+cout << " ... treerows=y: " << treerows << "    & treecols=x:" << treecols << endl;
 
-				// demin=raster("Tan_DEM_04_N67E168_proj58_study_area_water9999_cut.tif")
-				// plot(demin)
-				// demcrop=crop(demin, extent(c(643610-30,643610+300,7478992-30,7478992+300)))
-				// demcrop=crop(demin, extent(c(643610,643610+300,7478992,7478992+300)))
-				// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_300m.png")
-					// demcrop_plot=demcrop
-					// demcrop_plot[demcrop_plot==9999]=NA
-					// plot(demcrop_plot,colNA="blue")
-				// dev.off()
-				// write.table(as.matrix(demcrop),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_300m.csv",row.names=FALSE,col.names=FALSE)
-				// write.table(as.matrix(demcrop),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_330m.csv",row.names=FALSE,col.names=FALSE)
-				// demcrop=crop(demin, extent(c(643610,643610+3000,7478992,7478992+3000)))
-				// png("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_3000m.png")
-					// demcrop_plot=demcrop
-					// demcrop_plot[demcrop_plot==9999]=NA
-					// plot(demcrop_plot,colNA="blue")
-				// dev.off()
-				// write.table(as.matrix(demcrop),"//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/input/dem_30m_Ilirney_3000m.csv",row.names=FALSE,col.names=FALSE)
-				//.... read once processed data for check
-				// envirgridout=read.csv("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output/datatrees_Treedensity1937_2300851.csv", sep=";", dec=".")
-				// str(envirgridout)
-				// envirgridout$Elevation=as.numeric(as.character(envirgridout$Elevation))
-					// dev.new()
-					// plot(envirgridout[envirgridout$X==0,]$Elevation)
-					// min(envirgridout[envirgridout$X==0,]$Elevation)
-					// plot(envirgridout[envirgridout$X==1499,]$Elevation)
-				// library(lattice)
-				// envirgridout$Elevation[envirgridout$Elevation==9999]=NA
-				// dev.new();with(envirgridout, levelplot(Elevation~X+Y,ylim=c(1500,0)))
-				// with(envirgridout[envirgridout$Y<1300,], levelplot(Elevation~X+Y,ylim=c(1500,0)))
-			
 	// ... read dem data
     FILE* f;
     char demfilename[250];
 	// char deminputbuf[] = "input/dem_30m_test.csv";
-	char deminputbuf[] = "input/dem_30m_Ilirney_3000m.csv"; //TODO: use parameter to set the input data file
+	// char deminputbuf[] = "input/dem_30m_Ilirney_3000m.csv"; //TODO: use parameter to set the input data file
+	// char deminputbuf[] = "input/dem_30m_Ilirney_13260x31440m.csv"; //TODO: use parameter to set the input data file
+	// char deminputbuf[] = "input/dem_30m_Ilirney_12249x11615m.csv"; //TODO: use parameter to set the input data file
+	// char deminputbuf[] = "input/dem_30m_Ilirney_5000x4000m.csv"; //TODO: use parameter to set the input data file
+	// char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv"; //x=5000 y=4000 north Ilirney
+	// char deminputbuf[] = "input/dem_30m_Ilirney_647902x7485357m.csv"; //x=5010 y=8010 north Ilirney
+	// char deminputbuf[] = "input/dem_30m_Ilirney_652912x7487367m.csv"; //x=10010 y=10010 north Ilirney
+	char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
     strcpy(demfilename, deminputbuf);
     f = fopen(demfilename, "r");
     if (f == NULL) {
@@ -545,32 +444,45 @@ cout << " ... start dem input" << endl;
         exit(1);
     }
 
-	int deminputdimension = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
-    char puffer[1000];
+	// int deminputdimension = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
+	int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
+	int deminputdimension_x = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
+    char puffer[3000];
 	vector<double> elevationinput;
-	elevationinput.resize(deminputdimension*deminputdimension,0);
+	// elevationinput.resize(deminputdimension*deminputdimension,0);
+	elevationinput.resize(deminputdimension_y*deminputdimension_x,0);
 	int counter=-1;
+cout << " ... elevation input set up ..." << endl;
     // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
-    while (fgets(puffer, 1000, f) != NULL) {
+    while (fgets(puffer, 3000, f) != NULL) {
 		counter++;
 		elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
-		for(int i=1; i<deminputdimension; ++i){
+		// for(int i=1; i<deminputdimension; ++i){
+		for(int i=1; i<deminputdimension_x; ++i){
 			counter++;//0 to 99 are the rows
 			elevationinput[counter] = strtod(strtok(NULL, " "), NULL);
 		}
     }
     fclose(f);
-// cout << " ==> elevationinput length = " << elevationinput.size() << endl;
+cout << " ==> elevationinput length = " << elevationinput.size() << endl;
 
-	for (unsigned int i=0;i<elevationinput.size();i++) {
-		cout << ' ' << elevationinput[i];
-		if((i+1)%deminputdimension==0)
-			cout << endl;
-	}
+	// for (unsigned int i=0;i<elevationinput.size();i++) {
+		// cout << ' ' << elevationinput[i];
+		// // if((i+1)%deminputdimension==0)
+		// if((i+1)%deminputdimension_y==0)
+			// cout << endl;
+	// }
 
 	// ... read slope data
     char slopefilename[250];
-	char slopeinputbuf[] = "input/slope_30m_Ilirney_3000m.csv"; //TODO: use parameter to set the input data file
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_3000m.csv"; //TODO: use parameter to set the input data file
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_13260x31440m.csv"; //manually change in declarations.h -> const int treerows = 3000; y to 31440 and x cols to 13260
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_12249x11615m.csv"; //manually change in declarations.h -> const int treerows = 3000; y to 31440 and x cols to 13260
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7485357m.csv";
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_652912x7487367m.csv";	//1010x1010
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_650902x7485357m.csv";// 8010x8010
+	char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
     strcpy(slopefilename, slopeinputbuf);
     f = fopen(slopefilename, "r");
     if (f == NULL) {
@@ -579,25 +491,28 @@ cout << " ... start dem input" << endl;
     }
 
 	vector<double> slopeinput;
-	slopeinput.resize(deminputdimension*deminputdimension,0);
+	// slopeinput.resize(deminputdimension*deminputdimension,0);
+	slopeinput.resize(deminputdimension_y*deminputdimension_x,0);
 	counter=-1;
     // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
-    while (fgets(puffer, 1000, f) != NULL) {
+    while (fgets(puffer, 3000, f) != NULL) {
 		counter++;
 		slopeinput[counter] = strtod(strtok(puffer, " "), NULL);
-		for(int i=1; i<deminputdimension; ++i){
+		// for(int i=1; i<deminputdimension; ++i){
+		for(int i=1; i<deminputdimension_x; ++i){
 			counter++;//0 to 99 are the rows
 			slopeinput[counter] = strtod(strtok(NULL, " "), NULL);
 		}
     }
     fclose(f);
-// cout << " ==> slopeinput length = " << slopeinput.size() << endl;
+cout << " ==> slopeinput length = " << slopeinput.size() << endl;
 
-	for (unsigned int i=0;i<slopeinput.size();i++) {
-		cout << ' ' << slopeinput[i];
-		if((i+1)%deminputdimension==0)
-			cout << endl;
-	}
+	// for (unsigned int i=0;i<slopeinput.size();i++) {
+		// cout << ' ' << slopeinput[i];
+		// // if((i+1)%deminputdimension==0)
+		// if((i+1)%deminputdimension_y==0)
+			// cout << endl;
+	// }
 
 // exit(1);
 
@@ -605,11 +520,13 @@ cout << " ... start dem input" << endl;
 
 
 	// interpolate to envirgrid		
+cout << "... interpolate to envirgrid started" << endl;
 	for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
 		vector<Envirgrid*>& plot_list = *posw;
 // TODO: paralellize loop
-		for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
-			
+// cout << " ... treerows=y: " << treerows << "    & treecols=x:" << treecols << "    & sizemagnif:" << parameter[0].sizemagnif << endl;
+// cout << " std::numeric_limits<unsigned long long int>::max() =" << std::numeric_limits<unsigned long long int>::max() << endl;
+		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
 			// determine position and distances to gridpoints in low resolution grid
 			// pEnvirgrid->ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
 			// pEnvirgrid->xcoo = (double)kartenpos - (pEnvirgrid->ycoo * (treecols * parameter[0].sizemagnif));
@@ -626,52 +543,61 @@ cout << " ... start dem input" << endl;
 // cout << " y/x = " << ycoo << "/" << xcoo << "   => ycoodem =" << ycoodem <<"   => xcoodem =" << xcoodem << "   => ycoodemmod =" << ycoodemmod <<"   => xcoodemmod =" << xcoodemmod << endl;
 // cout << "ELE=" << elevationinput[ycoodem * 10 + xcoodem] << endl;
 
+// cout << kartenpos << endl;
 			// elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
-			if( (ycoodem<(deminputdimension-1)) & (xcoodem<(deminputdimension-1)) )// only if in range leaving out border
+			if( (ycoodem<(deminputdimension_y-1)) & (xcoodem<(deminputdimension_x-1)) )// only if in range leaving out border
 			{
-// cout << elevationinput[ycoodem * deminputdimension + xcoodem] 
-// << " .. " << elevationinput[(ycoodem+1) * deminputdimension + xcoodem] 
-// << " .. " << elevationinput[ycoodem * deminputdimension + (xcoodem+1)] 
-// << " .. " << elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)]<< endl;
+// cout << elevationinput[ycoodem * deminputdimension_x + xcoodem] 
+// << " .. " << elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] 
+// << " .. " << elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] 
+// << " .. " << elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]<< endl;
+
+// cout << slopeinput[ycoodem * deminputdimension_x + xcoodem] 
+// << " .. " << slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] 
+// << " .. " << slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] 
+// << " .. " << slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]<< endl;
+
 				double eleinter = (
 					// upper left
-					elevationinput[ycoodem * deminputdimension + xcoodem] * (1-ycoodemmod)
-					+ elevationinput[ycoodem * deminputdimension + xcoodem] * (1-xcoodemmod)
+					elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
+					+ elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
 					// lower left
-					+ elevationinput[(ycoodem+1) * deminputdimension + xcoodem] * (ycoodemmod)
-					+ elevationinput[(ycoodem+1) * deminputdimension + xcoodem] * (1-xcoodemmod)
+					+ elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+					+ elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
 					// upper right
-					+ elevationinput[ycoodem * deminputdimension + (xcoodem+1)] * (1-ycoodemmod)
-					+ elevationinput[ycoodem * deminputdimension + (xcoodem+1)] * (xcoodemmod)
+					+ elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
+					+ elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					// lower right
-					+ elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)] * (ycoodemmod)
-					+ elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)] * (xcoodemmod)
+					+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
+					+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					)/4;
+// cout << " = => eleinter:" << eleinter << endl;
 				double slopeinter = (
 					// upper left
-					slopeinput[ycoodem * deminputdimension + xcoodem] * (1-ycoodemmod)
-					+ slopeinput[ycoodem * deminputdimension + xcoodem] * (1-xcoodemmod)
+					slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
+					+ slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
 					// lower left
-					+ slopeinput[(ycoodem+1) * deminputdimension + xcoodem] * (ycoodemmod)
-					+ slopeinput[(ycoodem+1) * deminputdimension + xcoodem] * (1-xcoodemmod)
+					+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+					+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
 					// upper right
-					+ slopeinput[ycoodem * deminputdimension + (xcoodem+1)] * (1-ycoodemmod)
-					+ slopeinput[ycoodem * deminputdimension + (xcoodem+1)] * (xcoodemmod)
+					+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
+					+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					// lower right
-					+ slopeinput[(ycoodem+1) * deminputdimension + (xcoodem+1)] * (ycoodemmod)
-					+ slopeinput[(ycoodem+1) * deminputdimension + (xcoodem+1)] * (xcoodemmod)
+					+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
+					+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					)/4;
+// cout << " = => slopeinter:" << slopeinter << endl;
 
 				int countwatercells = 0;
-				if(elevationinput[ycoodem * deminputdimension + xcoodem]==9999)
+				if(elevationinput[ycoodem * deminputdimension_x + xcoodem]==9999)
 					countwatercells++;
-				if(elevationinput[(ycoodem+1) * deminputdimension + xcoodem]==9999)
+				if(elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999)
 					countwatercells++;
-				if(elevationinput[ycoodem * deminputdimension + (xcoodem+1)]==9999)
+				if(elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999)
 					countwatercells++;
-				if(elevationinput[(ycoodem+1) * deminputdimension + (xcoodem+1)]==9999)
+				if(elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999)
 					countwatercells++;
-
+// cout << " = => countwatercells:" << countwatercells << endl;
 				// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 9999
 				if(countwatercells==0) {
 					plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + eleinter;
@@ -679,7 +605,6 @@ cout << " ... start dem input" << endl;
 				} else {
 					plot_list[kartenpos]->elevation = 9999;
 					plot_list[kartenpos]->slope = 9999;
-					// exit(1);
 				}
 			} else {
 				plot_list[kartenpos]->elevation = 9999;
@@ -689,15 +614,16 @@ cout << " ... start dem input" << endl;
 // cout << " => Ele in plot=" << plot_list[kartenpos]->elevation << endl;
 // cout << " => Slope in plot=" << plot_list[kartenpos]->slope << endl;
 // if(xcoo>30*5)
-// exit(1);
 		}
 	}
+// exit(1);
 	}
 	
 // exit(1);
 
 	// # test r output rep
 	// setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
+	// setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/spatialimpltest/offmin1700/output")
 	// elein=read.csv("datatrees_Treedensity1_2300851.csv", sep=";",dec=".")
 	// str(elein)
 	// elein$Slope[elein$Slope==9999]=NA
@@ -708,7 +634,7 @@ cout << " ... start dem input" << endl;
 	// elein$Yc=elein$Y/5
 
 	// trein=read.csv("datatrees_1_2300851_25_1.csv", sep=";",dec=".")
-	// trein=read.csv("datatrees_1_2300851_350_1.csv", sep=";",dec=".")
+	// trein=read.csv("datatrees_1_2300851_325_1.csv", sep=";",dec=".")
 	// trein=read.csv("datatrees_1_2300851_1000_1.csv", sep=";",dec=".")
 	// str(trein)
 	// trein1=read.csv("datatrees_1_2300851_1100_1.csv", sep=";",dec=".")
@@ -716,18 +642,55 @@ cout << " ... start dem input" << endl;
 	// trein2=read.csv("datatrees_1_2300851_1200_1.csv", sep=";",dec=".")
 	// str(trein2)
 
-	// p=with(elein, levelplot(Elevation~Xc+Yc, ylim=c(3000,0)))
 	// p=with(elein, levelplot(Slope~Xc+Yc, ylim=c(3000,0)))
+	// dev.new()
+	// p=with(elein, levelplot(Elevation~Xc+Yc, ylim=c(3000,0)))
 	// ## insert additional points
 	// update(p, panel = function(...) {
 	  // panel.levelplot(...)
-	  // panel.xyplot(trein$X,trein$Y, pch = 17, col = "forestgreen", cex=0.5+trein$height/100)
+	  // panel.xyplot(trein$X,trein$Y, pch = 17, col = "forestgreen", cex=0.5+trein$height/1000)
 	  // #panel.xyplot(trein1$X,trein1$Y, pch = 17, col = "orange", cex=0.2+trein1$height/100/2)
 	  // #panel.xyplot(trein2$X,trein2$Y, pch = 17, col = "orange", cex=0.2+trein2$height/100/2)
 	// })
+	
+	// p=with(elein, levelplot(Elevation~Xc+Yc, ylim=c(3000,0)))
+	// update(p, panel = function(...) {
+	  // panel.levelplot(...)
+	  // panel.xyplot(trein[trein$age>50,]$X,trein[trein$age>50,]$Y, pch = 17, col = "orange", cex=0.5+trein[trein$age>50,]$height/1000)
+	// })
+	
+	// with(elein, contourplot(Slope~Xc+Yc, ylim=c(3000,0), at=c(10,15)))
+	// with(elein, levelplot(Slope~Xc+Yc, ylim=c(3000,0), at=c(9.5,15)))
+	
+	
+	
+	setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
+	setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
+	elein=read.csv("datatrees_Treedensity1_2300851.csv", sep=";",dec=".")
+	str(elein)	
+	elein$Elevation[elein$Elevation==9999]=NA
+	library(lattice)
+	elein$Xc=elein$X/5
+	elein$Yc=elein$Y/5
+	trein=read.csv("datatrees_1_2300851_950_1.csv", sep=";",dec=".")
+	p=with(elein, levelplot(Elevation~Xc+Yc, asp=1))
+	p2=update(p, panel = function(...) {
+	  panel.levelplot(...)
+	  panel.xyplot(trein$X,trein$Y, pch = 17, col = "forestgreen", cex=0.5+trein$height/1000)
+	})
+	png("datatrees_1_2300851_950_1.png",width=2100, height=2100)
+		print(p2)
+	dev.off()
+	
+	
+	
+	
+cout << " ... end dem and slope input" << endl;
+
 }
 
 void initialiseMaps() {
+cout << " -> started initialise Maps " << endl;
     int aktort = 0;
     for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
         vector<Envirgrid*>& plot_list = *posw;
@@ -744,7 +707,11 @@ void initialiseMaps() {
         int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-        for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
+// cout << " ... ... (unsigned long long int) (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif)= " << (unsigned long long int) (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif) << endl;
+// cout << " ... ... (unsigned long long int) (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif)= " << ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif) << endl;
+// should be for 10010*10010 tiles= 2505002500
+
+       for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
             auto pEnvirgrid = new Envirgrid();
 
             pEnvirgrid->yworldcoo = aktortyworldcoo;
@@ -828,6 +795,7 @@ void initialiseMaps() {
 
         evaluation_list.push_back(pEvaluation);
     }
+cout << " ... ... ended initialise Maps " << endl;
 }
 
 /****************************************************************************************/

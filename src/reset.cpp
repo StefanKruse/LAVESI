@@ -319,7 +319,7 @@ void Clearalllists(void) {
 
         seed_list.clear();
 
-        for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
+        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
             auto pEnvirgrid = plot_list.at(kartenpos);
             delete pEnvirgrid;
         }
@@ -676,7 +676,7 @@ void Clearalllists_copy(void) {
         seed_list.clear();
 
         // delete plot list elements
-        for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
+        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
             auto pEnvirgrid = plot_list[kartenpos];
             delete pEnvirgrid;
         }

@@ -933,7 +933,7 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // data evaluation and output
-            for (int kartenpos = 0; kartenpos < (treerows * parameter[0].sizemagnif * treecols * parameter[0].sizemagnif); kartenpos++) {
+            for (unsigned long long int  kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
                 auto pEnvirgrid = plot_list[kartenpos];
                 // if (parameter[0].demlandscape | 
                 if ( (parameter[0].demlandscape & ( (((pEnvirgrid->xcoo/parameter[0].sizemagnif/30)-floor(pEnvirgrid->xcoo/parameter[0].sizemagnif/30))==0) & (((pEnvirgrid->ycoo/parameter[0].sizemagnif/30)-floor(pEnvirgrid->ycoo/parameter[0].sizemagnif/30))==0) )) | 

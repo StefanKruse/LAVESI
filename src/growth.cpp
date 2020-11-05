@@ -73,21 +73,6 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tre
  					* ((weather_list[yearposition]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))));
            }
         }
-		
-/* // moved to growth
-		// slope impact with minimum threshold, maxima and maximum limit
-		// TODO: insert switch
-		double peakslopegrowth = 10.0;
-		if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
-			maxbw_help=0.0;
-		// else
-			// maxbw_help = maxbw_help * (1-fabs(pTree->slope-47.5)/47.5);
-		else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
-			maxbw_help = maxbw_help * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
-		else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
-			maxbw_help = maxbw_help * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
-// cout << "slope=" << pTree->slope << " => factor (5min..90max..via47.5max)=" << (1-fabs(pTree->slope-47.5)/47.5) << endl;	
-*/
     } else {
         if (parameter[0].thawing_depth) {
             if (pTree->species == 1) {
@@ -193,19 +178,6 @@ double getMaxbreastwachstum(int yearposition, vector<Weather*>& weather_list, Tr
 						* ((weather_list[yearposition]->weatherfactors*( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( pTree->elevation-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))));
             }
         }
-/* // moved to growth
-		// slope impact with minimum threshold, maxima and maximum limit
-		// TODO: insert switch
-		double peakslopegrowth = 10.0;
-		if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
-			maxbrw_help=0.0;
-		else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
-			// maxbrw_help = maxbrw_help * (1-fabs(pTree->slope-47.5)/47.5);
-			maxbrw_help = maxbrw_help * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
-		else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
-			// maxbrw_help = maxbrw_help * (1-fabs(pTree->slope-47.5)/47.5);
-			maxbrw_help = maxbrw_help * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
-*/
 	} else {
         if (parameter[0].thawing_depth == true) {
             if (pTree->species == 1) {
@@ -267,14 +239,17 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
 			
 			// slope impact with minimum threshold, maxima and maximum limit
 			// TODO: insert switch
-			double peakslopegrowth = 10.0;
-			if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
-				basalwachstum=0.0;
-			else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
-				basalwachstum = basalwachstum * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
-			else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
-				basalwachstum = basalwachstum * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
-			
+			// double peakslopegrowth = 10.0;
+			// if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
+				// basalwachstum=0.0;
+			// else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
+				// basalwachstum = basalwachstum * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
+			// else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
+				// basalwachstum = basalwachstum * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
+			if (parameter[0].demlandscape) {
+				basalwachstum=basalwachstum * pTree->envirimpact;
+			}
+				
             if (basalwachstum < 0.0) {
                 basalwachstum = 0.0;
             }
@@ -303,13 +278,16 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
 
 				// slope impact with minimum threshold, maxima and maximum limit
 				// TODO: insert switch
-				if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
-					breastwachstum=0.0;
-				else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
-					breastwachstum = breastwachstum * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
-				else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
-					breastwachstum = breastwachstum * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
-
+				// if ( (pTree->slope<5.0) | (pTree->slope>90.0)) // limits
+					// breastwachstum=0.0;
+				// else if (pTree->slope<(5+(peakslopegrowth-5)))// assuming peak at 15
+					// breastwachstum = breastwachstum * (1-fabs(pTree->slope-peakslopegrowth)/(peakslopegrowth-5));
+				// else if (pTree->slope>=(5+(peakslopegrowth-5)))// assuming peak at 15
+					// breastwachstum = breastwachstum * (1-(pTree->slope-(5+(peakslopegrowth-5)))/(90-(5+(peakslopegrowth-5))) );
+				if (parameter[0].demlandscape) {
+					breastwachstum=breastwachstum * pTree->envirimpact;
+				}
+				
                 if (breastwachstum < 0.0) {
                     breastwachstum = 0.0;
                 }

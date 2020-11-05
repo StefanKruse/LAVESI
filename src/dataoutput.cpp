@@ -831,7 +831,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "Entfernung;");
                 // fprintf(filepointer, "thawing_depth_infl;");
                 fprintf(filepointer, "Elevation;");
-                fprintf(filepointer, "Slope;");
+                fprintf(filepointer, "Envirgrowthimpact;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -875,7 +875,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "%4.5f;", pTree->dispersaldistance);
                 // fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
                 fprintf(filepointer, "%4.4f;", pTree->elevation);
-                fprintf(filepointer, "%4.4f;", pTree->slope);
+                fprintf(filepointer, "%4.4f;", pTree->envirimpact);
                 fprintf(filepointer, "\n");
 
                 ++pos;
@@ -919,7 +919,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "AuflagenstaerkeMittel;");
                 fprintf(filepointer, "Maxthawing_depth;");
                 fprintf(filepointer, "Elevation;");
-                fprintf(filepointer, "Slope;");
+                fprintf(filepointer, "Envirgrowthimpact;");
                 // fprintf(filepointer, "weatherchoice;");
                 // fprintf(filepointer, "thawing_depth;");
                 fprintf(filepointer, "\n");
@@ -953,7 +953,7 @@ void Dataoutput(int t,
                     // fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
                     fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
                     fprintf(filepointer, "%4.4f;", pEnvirgrid->elevation);
-                    fprintf(filepointer, "%4.4f;", pEnvirgrid->slope);
+                    fprintf(filepointer, "%4.4f;", pEnvirgrid->envirgrowthimpact);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                     // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
                     fprintf(filepointer, "\n");

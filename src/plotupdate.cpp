@@ -461,7 +461,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 							// dem sensing
 							if (parameter[0].demlandscape) {
 								pTree->elevation = plot_list[curposi]->elevation;
-								pTree->slope = plot_list[curposi]->slope;
+								pTree->envirimpact = plot_list[curposi]->envirgrowthimpact;
 							}
                         }
                         // DENSITY 3
@@ -510,7 +510,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                         unsigned int anzahlflaechen = 0;
 
 						double sumelevation = 0;
-						double sumslope = 0;
+						double sumenvirgrowthimpact = 0;
                         unsigned int countelevation = 0;
 
                         for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
@@ -553,7 +553,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 										// dem sensing
 										if(parameter[0].demlandscape & (plot_list[curposii]->elevation<9999) ) {
 											sumelevation += plot_list[curposii]->elevation;
-											sumslope += plot_list[curposii]->slope;
+											sumenvirgrowthimpact += plot_list[curposii]->envirgrowthimpact;
 											countelevation++;
 										}
 // cout << sumelevation << " --- " << plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation << endl;
@@ -577,7 +577,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 						// dem sensing by mean value of gridcells in range
 						if (parameter[0].demlandscape) {
 							pTree->elevation = sumelevation / (double)countelevation;
-							pTree->slope = sumslope / (double)countelevation;
+							pTree->envirimpact = sumenvirgrowthimpact / (double)countelevation;
 						}
 // cout << sumelevation << countelevation << pTree->elevation << endl;
 // exit(1);

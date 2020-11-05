@@ -35,7 +35,7 @@ struct Tree {//TODO: check variable types for memory improvements
     bool growing;
     int species;
 	double elevation;
-	double slope;
+	double envirimpact;
 };
 
 struct Seed {//TODO: check variable types for memory improvements
@@ -83,8 +83,8 @@ struct Envirgrid {
     unsigned short litterheightmean;
     // TODO std::array<unsigned short, 10> litterheight;
 	double elevation;	//TODO: double 8 bytes -> for memory consumptiom optimization use: signed short int (max 32768), therefore precision only 10 cm max +/-3.2 km elevation range (8 -> 2 bytes)
-	double slope; //TODO: check use of unsigned short int as only between 0 and 45 *1000 possible, so 1/1000 degree precision (8 -> 2 bytes)
-	double twi; //TODO: check use of unsigned short int as only between 0 and 40 *1000 possible, so 1/1000 units precision (8 -> 2 bytes)
+	// double slope; //TODO: check use of unsigned short int as only between 0 and 45 *1000 possible, so 1/1000 degree precision (8 -> 2 bytes)
+	double envirgrowthimpact; //TODO: check use of unsigned short int as only between 0 and 40 *1000 possible, so 1/1000 units precision (8 -> 2 bytes)
 };
 
 struct Parameter {

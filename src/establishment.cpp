@@ -42,7 +42,7 @@ void Treeestablishment(struct Parameter* parameter,
                 assert(curposi >= 0);
 				
 
-				if( (parameter[0].demlandscape) & ((plot_list[curposi]->elevation==9999) | (plot_list[curposi]->slope<5)) ){
+				if( (parameter[0].demlandscape) & (plot_list[curposi]->elevation==9999) ){
 					seed.dead = true;
 					// seed_list.remove(i);
 					continue;

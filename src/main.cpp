@@ -613,22 +613,20 @@ cout << "... interpolate to envirgrid started" << endl;
 					+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
 					+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					)/4;
-// cout << " = => slopeinter:" << slopeinter << endl;
 				double twiinter = (
 					// upper left
-					slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
-					+ slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+					twiinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
+					+ twiinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
 					// lower left
-					+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-					+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+					+ twiinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+					+ twiinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
 					// upper right
-					+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
-					+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+					+ twiinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
+					+ twiinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					// lower right
-					+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
-					+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+					+ twiinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
+					+ twiinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 					)/4;
-// cout << " = => twiinter:" << twiinter << endl;
 
 				int countwatercells = 0;
 				if(elevationinput[ycoodem * deminputdimension_x + xcoodem]==9999)
@@ -643,71 +641,38 @@ cout << "... interpolate to envirgrid started" << endl;
 				// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 9999
 				if(countwatercells==0) {
 					plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + eleinter;
-					plot_list[kartenpos]->slope = slopeinter;
-					plot_list[kartenpos]->twi = twiinter;
+					// plot_list[kartenpos]->slope = slopeinter;
+					
+					// calculate environment-growth-impact (value between 0 and 1)
+						// f(TWI)		= -0.045999* TWI + 0.994066
+						// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
+									// 	= 0.85654 * exp(-1/2 * (slope- 8.78692)^2/6.90743^2)
+// cout << " = => slopeinter:" << slopeinter << " => factor:" << (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743))) << endl;
+// cout << " = => twiinter:" << twiinter << " => factor:" << (-0.045999* twiinter + 0.994066 ) << endl;
+						double envirgrowthimpact = 
+										0.5 * (-0.045999* twiinter + 0.994066 )
+										+ (1.0-0.5) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
+					plot_list[kartenpos]->envirgrowthimpact = envirgrowthimpact;
+// cout << " => envirgrowthimpact in plot=" << plot_list[kartenpos]->envirgrowthimpact << endl;
 				} else {
 					plot_list[kartenpos]->elevation = 9999;
-					plot_list[kartenpos]->slope = 9999;
-					plot_list[kartenpos]->twi = 9999;
+					plot_list[kartenpos]->envirgrowthimpact = 9999;
 				}
 			} else {
 				plot_list[kartenpos]->elevation = 9999;
-				plot_list[kartenpos]->slope = 9999;
-				plot_list[kartenpos]->twi = 9999;
+				plot_list[kartenpos]->envirgrowthimpact = 9999;
 			}
-// cout << "ELE=" << eleinter << " => Ele in plot=" << plot_list[kartenpos]->elevation << endl;
-// cout << " => Ele in plot=" << plot_list[kartenpos]->elevation << endl;
-// cout << " => Slope in plot=" << plot_list[kartenpos]->slope << endl;
-// cout << " => TWI in plot=" << plot_list[kartenpos]->twi << endl;
-// if(xcoo>30*5)
 		}
 	}
 	}
 	
+	// TODO: remove not used input vectors
+	// elevationinput
+	// slopeinput
+	// twiinput
+	
 
-	// # test r output rep
-	// setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
-	// setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/spatialimpltest/offmin1700/output")
-	// elein=read.csv("datatrees_Treedensity1_2300851.csv", sep=";",dec=".")
-	// str(elein)
-	// elein$Slope[elein$Slope==9999]=NA
-	// elein$Slope[elein$Slope<5]=NA
-	// elein$Elevation[elein$Elevation==9999]=NA
-	// library(lattice)
-	// elein$Xc=elein$X/5
-	// elein$Yc=elein$Y/5
-
-	// trein=read.csv("datatrees_1_2300851_25_1.csv", sep=";",dec=".")
-	// trein=read.csv("datatrees_1_2300851_325_1.csv", sep=";",dec=".")
-	// trein=read.csv("datatrees_1_2300851_1000_1.csv", sep=";",dec=".")
-	// str(trein)
-	// trein1=read.csv("datatrees_1_2300851_1100_1.csv", sep=";",dec=".")
-	// str(trein1)
-	// trein2=read.csv("datatrees_1_2300851_1200_1.csv", sep=";",dec=".")
-	// str(trein2)
-
-	// p=with(elein, levelplot(Slope~Xc+Yc, ylim=c(3000,0)))
-	// dev.new()
-	// p=with(elein, levelplot(Elevation~Xc+Yc, ylim=c(3000,0)))
-	// ## insert additional points
-	// update(p, panel = function(...) {
-	  // panel.levelplot(...)
-	  // panel.xyplot(trein$X,trein$Y, pch = 17, col = "forestgreen", cex=0.5+trein$height/1000)
-	  // #panel.xyplot(trein1$X,trein1$Y, pch = 17, col = "orange", cex=0.2+trein1$height/100/2)
-	  // #panel.xyplot(trein2$X,trein2$Y, pch = 17, col = "orange", cex=0.2+trein2$height/100/2)
-	// })
-	
-	// p=with(elein, levelplot(Elevation~Xc+Yc, ylim=c(3000,0)))
-	// update(p, panel = function(...) {
-	  // panel.levelplot(...)
-	  // panel.xyplot(trein[trein$age>50,]$X,trein[trein$age>50,]$Y, pch = 17, col = "orange", cex=0.5+trein[trein$age>50,]$height/1000)
-	// })
-	
-	// with(elein, contourplot(Slope~Xc+Yc, ylim=c(3000,0), at=c(10,15)))
-	// with(elein, levelplot(Slope~Xc+Yc, ylim=c(3000,0), at=c(9.5,15)))
-	
-	
-	
+	// test output with r 
 	// setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
 	// setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
 	// elein=read.csv("datatrees_Treedensity1_2300851.csv", sep=";",dec=".")

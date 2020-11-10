@@ -106,9 +106,9 @@ void Pollinationprobability(double x,
         auto pTree_copy = *posb;
 
         // only if the pollinating tree has cones:
-        if (pTree_copy->cone != 0) {
-            dx = (pTree_copy->xcoo) - x;
-            dy = (pTree_copy->ycoo) - y;
+        if (pTree_copy->cone == true) {
+            dx = ((double)pTree_copy->xcoo/1000) - x;
+            dy = ((double)pTree_copy->ycoo/1000) - y;
             dr = sqrt(dx * dx + dy * dy);
 
             if ((dr != 0)) {
@@ -123,7 +123,7 @@ void Pollinationprobability(double x,
             if (rand() > p * RAND_MAX) {
                 ++posb;
             } else {
-                pName.push_back(pTree_copy->name);
+                // pName.push_back(pTree_copy->name);
                 thdpthinfl.push_back(100);
 
                 ++posb;
@@ -136,8 +136,8 @@ void Pollinationprobability(double x,
                 sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
                 string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
                 fdir = fopen(output.c_str(), "a+");
-                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name,
-                        pTree_copy->xcoo, pTree_copy->ycoo, x, y);
+                // fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name, pTree_copy->xcoo, pTree_copy->ycoo, x, y);
+                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)pTree_copy->xcoo/1000, (double)pTree_copy->ycoo/1000, x, y);
                 fclose(fdir);
             }
         } else {

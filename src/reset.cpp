@@ -47,18 +47,18 @@ void Savealllists() {
 
             auto pTree_copy = new Tree();
 
-            pTree_copy->yworldcoo = pTree->yworldcoo;
-            pTree_copy->xworldcoo = pTree->xworldcoo;
+            // pTree_copy->yworldcoo = pTree->yworldcoo;
+            // pTree_copy->xworldcoo = pTree->xworldcoo;
             pTree_copy->xcoo = pTree->xcoo;
             pTree_copy->ycoo = pTree->ycoo;
-            pTree_copy->name = pTree->name;
-            pTree_copy->namem = pTree->namem;
-            pTree_copy->namep = pTree->namep;
-            pTree_copy->line = pTree->line;
-            pTree_copy->generation = pTree->generation;
+            // pTree_copy->name = pTree->name;
+            // pTree_copy->namem = pTree->namem;
+            // pTree_copy->namep = pTree->namep;
+            // pTree_copy->line = pTree->line;
+            // pTree_copy->generation = pTree->generation;
             pTree_copy->species = pTree->species;
-            pTree_copy->yr_of_establishment = pTree->yr_of_establishment;
-            pTree_copy->yr_of_dying = pTree->yr_of_dying;
+            // pTree_copy->yr_of_establishment = pTree->yr_of_establishment;
+            // pTree_copy->yr_of_dying = pTree->yr_of_dying;
             pTree_copy->dbasal = pTree->dbasal;
             pTree_copy->dbasalrel = pTree->dbasalrel;
             pTree_copy->dbreast = pTree->dbreast;
@@ -68,8 +68,8 @@ void Savealllists() {
             pTree_copy->cone = pTree->cone;
             pTree_copy->coneheight = pTree->coneheight;
             pTree_copy->seednewly_produced = pTree->seednewly_produced;
-            pTree_copy->seedproduced = pTree->seedproduced;
-            pTree_copy->buffer = pTree->buffer;
+            // pTree_copy->seedproduced = pTree->seedproduced;
+            // pTree_copy->buffer = pTree->buffer;
             pTree_copy->densitywert = pTree->densitywert;
             pTree_copy->thawing_depthinfluence = pTree->thawing_depthinfluence;
             pTree_copy->longdispersed = pTree->longdispersed;
@@ -133,25 +133,25 @@ void Savealllists() {
 
             auto pEnvirgrid_copy = new Envirgrid();
 
-            pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
-            pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
-            pEnvirgrid_copy->xcoo = pEnvirgrid->xcoo;
-            pEnvirgrid_copy->ycoo = pEnvirgrid->ycoo;
+            // pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
+            // pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
+            // pEnvirgrid_copy->xcoo = pEnvirgrid->xcoo;
+            // pEnvirgrid_copy->ycoo = pEnvirgrid->ycoo;
             pEnvirgrid_copy->Treedensityvalue = pEnvirgrid->Treedensityvalue;
             pEnvirgrid_copy->Treenumber = pEnvirgrid->Treenumber;
             pEnvirgrid_copy->maxthawing_depth = pEnvirgrid->maxthawing_depth;
-            pEnvirgrid_copy->litterheight = pEnvirgrid->litterheight;
-            pEnvirgrid_copy->litterheight0 = pEnvirgrid->litterheight0;
-            pEnvirgrid_copy->litterheight1 = pEnvirgrid->litterheight1;
-            pEnvirgrid_copy->litterheight2 = pEnvirgrid->litterheight2;
-            pEnvirgrid_copy->litterheight3 = pEnvirgrid->litterheight3;
-            pEnvirgrid_copy->litterheight4 = pEnvirgrid->litterheight4;
-            pEnvirgrid_copy->litterheight5 = pEnvirgrid->litterheight5;
-            pEnvirgrid_copy->litterheight6 = pEnvirgrid->litterheight6;
-            pEnvirgrid_copy->litterheight7 = pEnvirgrid->litterheight7;
-            pEnvirgrid_copy->litterheight8 = pEnvirgrid->litterheight8;
-            pEnvirgrid_copy->litterheight9 = pEnvirgrid->litterheight9;
-            pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
+            // pEnvirgrid_copy->litterheight = pEnvirgrid->litterheight;
+            // pEnvirgrid_copy->litterheight0 = pEnvirgrid->litterheight0;
+            // pEnvirgrid_copy->litterheight1 = pEnvirgrid->litterheight1;
+            // pEnvirgrid_copy->litterheight2 = pEnvirgrid->litterheight2;
+            // pEnvirgrid_copy->litterheight3 = pEnvirgrid->litterheight3;
+            // pEnvirgrid_copy->litterheight4 = pEnvirgrid->litterheight4;
+            // pEnvirgrid_copy->litterheight5 = pEnvirgrid->litterheight5;
+            // pEnvirgrid_copy->litterheight6 = pEnvirgrid->litterheight6;
+            // pEnvirgrid_copy->litterheight7 = pEnvirgrid->litterheight7;
+            // pEnvirgrid_copy->litterheight8 = pEnvirgrid->litterheight8;
+            // pEnvirgrid_copy->litterheight9 = pEnvirgrid->litterheight9;
+            // pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
             plot_list_copy.push_back(pEnvirgrid_copy);
 
             if (counterkarten == 1) {
@@ -189,8 +189,8 @@ void Savealllists() {
 
             auto pEvaluation_copy = new Evaluation();
 
-            pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
-            pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
+            // pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
+            // pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
             for (vector<double>::iterator posval = pEvaluation->basalarealist.begin(); posval < pEvaluation->basalarealist.end();) {
                 pEvaluation_copy->basalarealist.push_back((*posval));
                 ++posval;
@@ -401,18 +401,18 @@ void Restorealllists(void) {
 
             auto pTree_copy = new Tree();
 
-            pTree_copy->yworldcoo = pTree->yworldcoo;
-            pTree_copy->xworldcoo = pTree->xworldcoo;
+            // pTree_copy->yworldcoo = pTree->yworldcoo;
+            // pTree_copy->xworldcoo = pTree->xworldcoo;
             pTree_copy->xcoo = pTree->xcoo;
             pTree_copy->ycoo = pTree->ycoo;
-            pTree_copy->name = pTree->name;
-            pTree_copy->namem = pTree->namem;
-            pTree_copy->namep = pTree->namep;
-            pTree_copy->line = pTree->line;
-            pTree_copy->generation = pTree->generation;
+            // pTree_copy->name = pTree->name;
+            // pTree_copy->namem = pTree->namem;
+            // pTree_copy->namep = pTree->namep;
+            // pTree_copy->line = pTree->line;
+            // pTree_copy->generation = pTree->generation;
             pTree_copy->species = pTree->species;
-            pTree_copy->yr_of_establishment = pTree->yr_of_establishment;
-            pTree_copy->yr_of_dying = pTree->yr_of_dying;
+            // pTree_copy->yr_of_establishment = pTree->yr_of_establishment;
+            // pTree_copy->yr_of_dying = pTree->yr_of_dying;
             pTree_copy->dbasal = pTree->dbasal;
             pTree_copy->dbasalrel = pTree->dbasalrel;
             pTree_copy->dbreast = pTree->dbreast;
@@ -422,8 +422,8 @@ void Restorealllists(void) {
             pTree_copy->cone = pTree->cone;
             pTree_copy->coneheight = pTree->coneheight;
             pTree_copy->seednewly_produced = pTree->seednewly_produced;
-            pTree_copy->seedproduced = pTree->seedproduced;
-            pTree_copy->buffer = pTree->buffer;
+            // pTree_copy->seedproduced = pTree->seedproduced;
+            // pTree_copy->buffer = pTree->buffer;
             pTree_copy->densitywert = pTree->densitywert;
             pTree_copy->thawing_depthinfluence = pTree->thawing_depthinfluence;
             pTree_copy->longdispersed = pTree->longdispersed;
@@ -488,25 +488,25 @@ void Restorealllists(void) {
 
             auto pEnvirgrid_copy = new Envirgrid();
 
-            pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
-            pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
-            pEnvirgrid_copy->xcoo = pEnvirgrid->xcoo;
-            pEnvirgrid_copy->ycoo = pEnvirgrid->ycoo;
+            // pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
+            // pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
+            // pEnvirgrid_copy->xcoo = pEnvirgrid->xcoo;
+            // pEnvirgrid_copy->ycoo = pEnvirgrid->ycoo;
             pEnvirgrid_copy->Treedensityvalue = pEnvirgrid->Treedensityvalue;
             pEnvirgrid_copy->Treenumber = pEnvirgrid->Treenumber;
             pEnvirgrid_copy->maxthawing_depth = pEnvirgrid->maxthawing_depth;
-            pEnvirgrid_copy->litterheight = pEnvirgrid->litterheight;
-            pEnvirgrid_copy->litterheight0 = pEnvirgrid->litterheight0;
-            pEnvirgrid_copy->litterheight1 = pEnvirgrid->litterheight1;
-            pEnvirgrid_copy->litterheight2 = pEnvirgrid->litterheight2;
-            pEnvirgrid_copy->litterheight3 = pEnvirgrid->litterheight3;
-            pEnvirgrid_copy->litterheight4 = pEnvirgrid->litterheight4;
-            pEnvirgrid_copy->litterheight5 = pEnvirgrid->litterheight5;
-            pEnvirgrid_copy->litterheight6 = pEnvirgrid->litterheight6;
-            pEnvirgrid_copy->litterheight7 = pEnvirgrid->litterheight7;
-            pEnvirgrid_copy->litterheight8 = pEnvirgrid->litterheight8;
-            pEnvirgrid_copy->litterheight9 = pEnvirgrid->litterheight9;
-            pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
+            // pEnvirgrid_copy->litterheight = pEnvirgrid->litterheight;
+            // pEnvirgrid_copy->litterheight0 = pEnvirgrid->litterheight0;
+            // pEnvirgrid_copy->litterheight1 = pEnvirgrid->litterheight1;
+            // pEnvirgrid_copy->litterheight2 = pEnvirgrid->litterheight2;
+            // pEnvirgrid_copy->litterheight3 = pEnvirgrid->litterheight3;
+            // pEnvirgrid_copy->litterheight4 = pEnvirgrid->litterheight4;
+            // pEnvirgrid_copy->litterheight5 = pEnvirgrid->litterheight5;
+            // pEnvirgrid_copy->litterheight6 = pEnvirgrid->litterheight6;
+            // pEnvirgrid_copy->litterheight7 = pEnvirgrid->litterheight7;
+            // pEnvirgrid_copy->litterheight8 = pEnvirgrid->litterheight8;
+            // pEnvirgrid_copy->litterheight9 = pEnvirgrid->litterheight9;
+            // pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
             plot_list_copy.push_back(pEnvirgrid_copy);
 
             if (counterkarten == 1) {
@@ -545,8 +545,8 @@ void Restorealllists(void) {
 
             auto pEvaluation_copy = new Evaluation();
 
-            pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
-            pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
+            // pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
+            // pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
             for (vector<double>::iterator posval = pEvaluation->basalarealist.begin(); posval < pEvaluation->basalarealist.end();) {
                 pEvaluation_copy->basalarealist.push_back((*posval));
                 ++posval;

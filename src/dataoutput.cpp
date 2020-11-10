@@ -60,8 +60,8 @@ void Dataoutput(int t,
         aktort++;
 
         // calculation of the current location in a world grid
-        int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-        int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -78,8 +78,8 @@ void Dataoutput(int t,
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
             auto pTree = (*pos);
 
-            if ((pTree->xcoo >= xminwindow) && (pTree->xcoo <= xmaxwindow) && (pTree->ycoo >= yminwindow)
-                && (pTree->ycoo <= ymaxwindow)) {  // loop over reduced plot
+            if (((double)pTree->xcoo/1000 >= xminwindow) && ((double)pTree->xcoo/1000 <= xmaxwindow) && ((double)pTree->ycoo/1000 >= yminwindow)
+                && ((double)pTree->ycoo/1000 <= ymaxwindow)) {  // loop over reduced plot
                 // basal area as population size identifier
                 if (pTree->height >= 130) {
                     basalarea += (M_PI * pow((pTree->dbreast / 2), 2));
@@ -93,8 +93,8 @@ void Dataoutput(int t,
                     nheight41b200++;
                 } else if (pTree->height > 200) {
                     nheight201b10000++;
-                    meantreeheight += pTree->height;
-                    meantreeage += (double)pTree->age;
+                    meantreeheight += (double) pTree->height;
+                    meantreeage += (double) pTree->age;
                 }
 
                 if (pTree->dbreast > 0) {
@@ -310,8 +310,8 @@ void Dataoutput(int t,
             if (filepointer == NULL) {
                 filepointer = fopen(dateiname.c_str(), "w+");
                 fprintf(filepointer, "Repeat;");
-                fprintf(filepointer, "YPLOTPOS;");
-                fprintf(filepointer, "XPLOTPOS;");
+                // fprintf(filepointer, "YPLOTPOS;");
+                // fprintf(filepointer, "XPLOTPOS;");
                 fprintf(filepointer, "Progress;");
                 fprintf(filepointer, "Spinup;");
 
@@ -406,8 +406,8 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             fprintf(filepointer, "%d;", parameter[0].repeati);
-            fprintf(filepointer, "%d;", aktortyworldcoo);
-            fprintf(filepointer, "%d;", aktortxworldcoo);
+            // fprintf(filepointer, "%d;", aktortyworldcoo);
+            // fprintf(filepointer, "%d;", aktortxworldcoo);
             fprintf(filepointer, "%d;", parameter[0].ivort);
             fprintf(filepointer, "%d;", t);
             fprintf(filepointer, "%d;", jahr);
@@ -415,7 +415,7 @@ void Dataoutput(int t,
             for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
                 auto pTree = (*pos);
 
-                if ((pTree->xcoo >= xminwindow) && (pTree->xcoo <= xmaxwindow) && (pTree->ycoo >= yminwindow) && (pTree->ycoo <= ymaxwindow)) {
+                if (((double)pTree->xcoo/1000 >= xminwindow) && ((double)pTree->xcoo/1000 <= xmaxwindow) && ((double)pTree->ycoo/1000 >= yminwindow) && ((double)pTree->ycoo/1000 <= ymaxwindow)) {
                     if (pTree->species == 1) {
                         // bin trees by age
                         if (pTree->age == 0) {
@@ -502,7 +502,7 @@ void Dataoutput(int t,
 
                     // counting seeds
                     gesamtseedAKT += pTree->seednewly_produced;
-                    gesamtseedSUM += pTree->seedproduced;
+                    // gesamtseedSUM += pTree->seedproduced;
 
                     // counting species
                     if (pTree->species == 1) {
@@ -511,8 +511,8 @@ void Dataoutput(int t,
                         spectree2++;
                     }
 
-                    if (pTree->ycoo > yposmax) {
-                        yposmax = pTree->ycoo;
+                    if ((double)pTree->ycoo/1000 > yposmax) {
+                        yposmax = (double)pTree->ycoo/1000;
                     }
                 }
 
@@ -525,7 +525,7 @@ void Dataoutput(int t,
             int specseed1 = 0, specseed2 = 0;
             for (unsigned int i = 0; i < seed_list.size(); ++i) {
                 const auto& seed = seed_list[i];
-                if ((seed.xcoo >= xminwindow) && (seed.xcoo <= xmaxwindow) && (seed.ycoo >= yminwindow) && (seed.ycoo <= ymaxwindow)) {
+                if (((double)seed.xcoo/1000 >= xminwindow) && ((double)seed.xcoo/1000 <= xmaxwindow) && ((double)seed.ycoo/1000 >= yminwindow) && ((double)seed.ycoo/1000 <= ymaxwindow)) {
                     if (seed.incone) {
                         seedconezahl++;
                     } else {
@@ -660,8 +660,8 @@ void Dataoutput(int t,
                         filepointer = fopen(dateiname.c_str(), "w+");
 
                         // column names
-                        fprintf(filepointer, "Name;");
-                        fprintf(filepointer, "NameM;");
+                        // fprintf(filepointer, "Name;");
+                        // fprintf(filepointer, "NameM;");
                         fprintf(filepointer, "DBasal;");
                         fprintf(filepointer, "DBrust;");
                         fprintf(filepointer, "height;");
@@ -669,9 +669,9 @@ void Dataoutput(int t,
                         fprintf(filepointer, "X;");
                         fprintf(filepointer, "Y;");
                         fprintf(filepointer, "densitywert;");
-                        fprintf(filepointer, "Generation;");
+                        // fprintf(filepointer, "Generation;");
                         fprintf(filepointer, "seedprodAKT;");
-                        fprintf(filepointer, "seedprodSUM;");
+                        // fprintf(filepointer, "seedprodSUM;");
                         fprintf(filepointer, "\n");
 
                         if (filepointer == NULL) {
@@ -685,18 +685,18 @@ void Dataoutput(int t,
                     for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
                         auto pTree = (*pos);
 
-                        fprintf(filepointer, "%d;", pTree->name);
-                        fprintf(filepointer, "%d;", pTree->namem);
+                        // fprintf(filepointer, "%d;", pTree->name);
+                        // fprintf(filepointer, "%d;", pTree->namem);
                         fprintf(filepointer, "%4.4f;", pTree->dbasal);
                         fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                        fprintf(filepointer, "%4.4f;", pTree->height);
+                        fprintf(filepointer, "%4.4f;", (double) pTree->height);
                         fprintf(filepointer, "%d;", pTree->age);
-                        fprintf(filepointer, "%4.4f;", pTree->xcoo);
-                        fprintf(filepointer, "%4.4f;", pTree->ycoo);
+                        fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
+                        fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
                         fprintf(filepointer, "%4.5f;", pTree->densitywert);
-                        fprintf(filepointer, "%d;", pTree->generation);
+                        // fprintf(filepointer, "%d;", pTree->generation);
                         fprintf(filepointer, "%d;", pTree->seednewly_produced);
-                        fprintf(filepointer, "%d;", pTree->seedproduced);
+                        // fprintf(filepointer, "%d;", pTree->seedproduced);
                         fprintf(filepointer, "\n");
 
                         ++pos;
@@ -711,8 +711,8 @@ void Dataoutput(int t,
                         filepointer = fopen(dateiname.c_str(), "w+");
 
                         fprintf(filepointer, "Repeat;");
-                        fprintf(filepointer, "YPLOTPOS;");
-                        fprintf(filepointer, "XPLOTPOS;");
+                        // fprintf(filepointer, "YPLOTPOS;");
+                        // fprintf(filepointer, "XPLOTPOS;");
                         fprintf(filepointer, "Jahr;");
                         fprintf(filepointer, "zufallsJahr;");
                         fprintf(filepointer, "weatherchoice;");
@@ -723,10 +723,10 @@ void Dataoutput(int t,
                         fprintf(filepointer, "X;");
                         fprintf(filepointer, "Y;");
                         fprintf(filepointer, "densitywert;");
-                        fprintf(filepointer, "Generation;");
+                        // fprintf(filepointer, "Generation;");
                         fprintf(filepointer, "coneheight;");
                         fprintf(filepointer, "seedprodAKT;");
-                        fprintf(filepointer, "seedprodSUM;");
+                        // fprintf(filepointer, "seedprodSUM;");
                         fprintf(filepointer, "thawing_depth_infl;");
                         fprintf(filepointer, "\n");
 
@@ -742,22 +742,22 @@ void Dataoutput(int t,
                         auto pTree = (*pos);
 
                         fprintf(filepointer, "%d;", parameter[0].repeati);
-                        fprintf(filepointer, "%d;", pTree->yworldcoo);
-                        fprintf(filepointer, "%d;", pTree->xworldcoo);
+                        // fprintf(filepointer, "%d;", pTree->yworldcoo);
+                        // fprintf(filepointer, "%d;", pTree->xworldcoo);
                         fprintf(filepointer, "%d;", parameter[0].ivort);
                         fprintf(filepointer, "%d;", jahr);
                         fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                         fprintf(filepointer, "%4.4f;", pTree->dbasal);
                         fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                        fprintf(filepointer, "%4.4f;", pTree->height);
+                        fprintf(filepointer, "%4.4f;", (double) pTree->height);
                         fprintf(filepointer, "%d;", pTree->age);
-                        fprintf(filepointer, "%4.4f;", pTree->xcoo);
-                        fprintf(filepointer, "%4.4f;", pTree->ycoo);
+                        fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
+                        fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
                         fprintf(filepointer, "%4.5f;", pTree->densitywert);
-                        fprintf(filepointer, "%d;", pTree->generation);
-                        fprintf(filepointer, "%4.4f;", pTree->coneheight);
+                        // fprintf(filepointer, "%d;", pTree->generation);
+                        fprintf(filepointer, "%4.4f;", (double) pTree->coneheight);
                         fprintf(filepointer, "%d;", pTree->seednewly_produced);
-                        fprintf(filepointer, "%d;", pTree->seedproduced);
+                        // fprintf(filepointer, "%d;", pTree->seedproduced);
                         fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
                         fprintf(filepointer, "\n");
 
@@ -854,15 +854,15 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "%d;", t);
                 // fprintf(filepointer, "%d;", jahr);
                 // tree variables
-                fprintf(filepointer, "%4.4f;", pTree->xcoo);
-                fprintf(filepointer, "%4.4f;", pTree->ycoo);
+                fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
+                fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
                 // fprintf(filepointer, "%d;", pTree->name);
                 // fprintf(filepointer, "%d;", pTree->namem);
                 // fprintf(filepointer, "%d;", pTree->namep);
                 // fprintf(filepointer, "%d;", pTree->line);
                 // fprintf(filepointer, "%d;", pTree->generation);
                 // fprintf(filepointer, "%d;", pTree->species);
-                fprintf(filepointer, "%4.4f;", pTree->height);
+                fprintf(filepointer, "%4.4f;", (double) pTree->height);
                 fprintf(filepointer, "%4.4f;", pTree->dbasal);
                 fprintf(filepointer, "%4.4f;", pTree->dbreast);
                 fprintf(filepointer, "%d;", pTree->age);
@@ -874,8 +874,8 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "%4.5f;", pTree->densitywert);
                 // fprintf(filepointer, "%4.5f;", pTree->dispersaldistance);
                 // fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
-                fprintf(filepointer, "%4.4f;", pTree->elevation);
-                fprintf(filepointer, "%4.4f;", pTree->envirimpact);
+                fprintf(filepointer, "%4.4f;", (double) pTree->elevation/10);
+                fprintf(filepointer, "%4.4f;", (double) pTree->envirimpact/10000);
                 fprintf(filepointer, "\n");
 
                 ++pos;
@@ -915,7 +915,7 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Y;");
                 fprintf(filepointer, "Treedensityvalue;");
                 fprintf(filepointer, "Treenumber;");
-                fprintf(filepointer, "Auflagenstaerke;");
+                // fprintf(filepointer, "Auflagenstaerke;");
                 // fprintf(filepointer, "AuflagenstaerkeMittel;");
                 fprintf(filepointer, "Maxthawing_depth;");
                 fprintf(filepointer, "Elevation;");
@@ -935,25 +935,29 @@ void Dataoutput(int t,
             // data evaluation and output
             for (unsigned long long int  kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
                 auto pEnvirgrid = plot_list[kartenpos];
+				double ycooi = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+				double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
                 // if (parameter[0].demlandscape | 
-                if ( (parameter[0].demlandscape & ( (((pEnvirgrid->xcoo/parameter[0].sizemagnif/30)-floor(pEnvirgrid->xcoo/parameter[0].sizemagnif/30))==0) & (((pEnvirgrid->ycoo/parameter[0].sizemagnif/30)-floor(pEnvirgrid->ycoo/parameter[0].sizemagnif/30))==0) )) | 
+                if ( (parameter[0].demlandscape & ( (((xcooi/parameter[0].sizemagnif/30)-floor(xcooi/parameter[0].sizemagnif/30))==0) & (((ycooi/parameter[0].sizemagnif/30)-floor(ycooi/parameter[0].sizemagnif/30))==0) )) | 
 					( (pEnvirgrid->Treenumber > 0)
-						&& ((pEnvirgrid->xcoo >= xminwindow * parameter[0].sizemagnif) && (pEnvirgrid->xcoo <= xmaxwindow * parameter[0].sizemagnif)
-                        && (pEnvirgrid->ycoo >= yminwindow * parameter[0].sizemagnif)
-                        && (pEnvirgrid->ycoo <= ymaxwindow * parameter[0].sizemagnif)))
+						&& ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
+                        && (ycooi >= yminwindow * parameter[0].sizemagnif)
+                        && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))
 						) {  // output only if tree density values >0
+
+						
                     fprintf(filepointer, "%d;", parameter[0].repeati);
                     // fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
                     // fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
-                    fprintf(filepointer, "%4.4f;", pEnvirgrid->xcoo);
-                    fprintf(filepointer, "%4.4f;", pEnvirgrid->ycoo);
-                    fprintf(filepointer, "%4.5f;", pEnvirgrid->Treedensityvalue);
+                    fprintf(filepointer, "%4.4f;", xcooi);
+                    fprintf(filepointer, "%4.4f;", ycooi);
+                    fprintf(filepointer, "%4.5f;", (double) pEnvirgrid->Treedensityvalue/10000);
                     fprintf(filepointer, "%d;", pEnvirgrid->Treenumber);
-                    fprintf(filepointer, "%u;", pEnvirgrid->litterheight);
+                    // fprintf(filepointer, "%u;", pEnvirgrid->litterheight);
                     // fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
                     fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
-                    fprintf(filepointer, "%4.4f;", pEnvirgrid->elevation);
-                    fprintf(filepointer, "%4.4f;", pEnvirgrid->envirgrowthimpact);
+                    fprintf(filepointer, "%4.4f;", (double) pEnvirgrid->elevation/10);
+                    fprintf(filepointer, "%4.4f;", (double) pEnvirgrid->envirgrowthimpact/10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                     // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
                     fprintf(filepointer, "\n");

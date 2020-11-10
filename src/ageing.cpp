@@ -36,7 +36,7 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
 
     int mat_age_length = 183;  // length of array maturationheight
     // height values in percent (0-99) computed using R
-    double maturationheight[] = {200,  201,  202,  203,  204,  205,  206,  207,  208,  209,  210,  211,  212,  213,   214,  215,  216,  217,  218,  219,  220,
+    unsigned short int maturationheight[] = {200,  201,  202,  203,  204,  205,  206,  207,  208,  209,  210,  211,  212,  213,   214,  215,  216,  217,  218,  219,  220,
                                  221,  222,  223,  224,  225,  226,  227,  228,  229,  230,  231,  232,  233,  234,   235,  236,  237,  238,  239,  240,  241,
                                  242,  243,  244,  245,  246,  248,  249,  250,  251,  252,  253,  254,  256,  257,   258,  259,  260,  262,  263,  264,  266,
                                  267,  269,  270,  271,  273,  274,  276,  277,  279,  281,  282,  284,  286,  287,   289,  291,  293,  295,  297,  299,  300,
@@ -53,8 +53,8 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
             auto pTree = (*pos);
             pTree->age++;
 
-            if (pTree->cone == 0) {
-                if (pTree->coneheight == 99999) {
+            if (pTree->cone == false) {
+                if (pTree->coneheight == 65535) {
                     // trees reaching the maturation age are assigned a minimum height value for them to bear cones
                     if (pTree->age > parameter[0].coneage) {
                         // calculate random position in the array of maturation heights defined earlier
@@ -63,7 +63,7 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
 
                         // possibility for a tree <2m to maturate
                         if (fraction == 0) {
-                            pTree->coneheight = 100 + ((double)100 * rand() / (RAND_MAX + 1.0));
+                            pTree->coneheight = (unsigned short int) 100 + ((double)100 * rand() / (RAND_MAX + 1.0));
                         } else {
                             pTree->coneheight = maturationheight[fraction];
                         }
@@ -71,17 +71,17 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
                 }
                 // tree already has a height of maturation assigned to it
                 // ... if a tree is taller than this maturation height, he starts to produce seeds
-                else if (pTree->coneheight != 99999) {
+                else if (pTree->coneheight != 65535) {
                     if (pTree->height >= pTree->coneheight) {
-                        pTree->cone = 1;
+                        pTree->cone = true;
                     }
                 }
 
                 ++pos;
             }
             // tree bears cones
-            else if (pTree->cone == 1) {
-                pTree->seedproduced += pTree->seednewly_produced;
+            else if (pTree->cone == true) {
+                // pTree->seedproduced += pTree->seednewly_produced;
                 pTree->seednewly_produced = 0;
 
                 ++pos;

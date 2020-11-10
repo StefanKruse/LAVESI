@@ -23,8 +23,8 @@ void Seedin() {
 
         aktort++;
 
-        int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-        int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         bool seedinput;
 
@@ -33,7 +33,7 @@ void Seedin() {
             seedinput = true;
         }
         // seedinput on southern site only
-        else if (parameter[0].realseedconnect == true && aktortyworldcoo == (parameter[0].mapylength - 1)) {
+        else if (parameter[0].realseedconnect == true && aktort == 1) {
             seedinput = true;
         }
         // no seedinput
@@ -104,16 +104,16 @@ void Seedin() {
 
                 if (seedeintragen) {
                     Seed seed;
-                    seed.yworldcoo = aktortyworldcoo;
-                    seed.xworldcoo = aktortxworldcoo;
-                    seed.xcoo = jseed;
-                    seed.ycoo = iseed;
-                    seed.namem = 0;
-                    seed.namep = 0;
-                    seed.line = ++parameter[0].lineakt;
-                    seed.generation = 0;
+                    // seed.yworldcoo = aktortyworldcoo;
+                    // seed.xworldcoo = aktortxworldcoo;
+                    seed.xcoo = (unsigned int) floor(1000* jseed);
+                    seed.ycoo = (unsigned int) floor(1000* iseed);
+                    // seed.namem = 0;
+                    // seed.namep = 0;
+                    // seed.line = ++parameter[0].lineakt;
+                    // seed.generation = 0;
                     seed.incone = false;
-                    seed.weight = 1;
+                    // seed.weight = 1;
                     seed.age = 0;
                     seed.longdispersed = false;
                     seed.species = specieszufall;
@@ -123,12 +123,12 @@ void Seedin() {
 
                     seed_list.add(seed);
 
-                    if ((seed.yworldcoo < 0.0) || (seed.yworldcoo > (double)(treerows - 1)) || (seed.xcoo < 0.0) || (seed.xcoo > (double)(treecols - 1))) {
-                        printf("\n\nLaVeSi was stopped\n");
-                        printf("=> Treedistribution.cpp\n");
-                        printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", iseed, jseed);
-                        exit(1);
-                    }
+                    // if ((seed.yworldcoo < 0.0) || (seed.yworldcoo > (double)(treerows - 1)) || (seed.xcoo < 0.0) || (seed.xcoo > (double)(treecols - 1))) {
+                        // printf("\n\nLaVeSi was stopped\n");
+                        // printf("=> Treedistribution.cpp\n");
+                        // printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", iseed, jseed);
+                        // exit(1);
+                    // }
                 }
             }
         }
@@ -156,8 +156,8 @@ void TreesIni(int maximal_word_length) {
 
             aktort++;
 
-            int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-            int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+            // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+            // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
             if (parameter[0].starttrees == 12) {
                 f = fopen("input/CH17I_Treevert2011.csv", "r");
@@ -204,29 +204,29 @@ void TreesIni(int maximal_word_length) {
 
                     auto pTree = new Tree();
 
-                    pTree->yworldcoo = aktortyworldcoo;
-                    pTree->xworldcoo = aktortxworldcoo;
-                    pTree->xcoo = (double)xcoobuf;
-                    pTree->ycoo = (double)ycoobuf;
-                    pTree->name = ++parameter[0].nameakt;
-                    pTree->namem = 0;
-                    pTree->namep = 0;
-                    pTree->line = ++parameter[0].lineakt;
-                    pTree->generation = 0;
-                    pTree->yr_of_establishment = 0;
+                    // pTree->yworldcoo = aktortyworldcoo;
+                    // pTree->xworldcoo = aktortxworldcoo;
+                    pTree->xcoo = (unsigned int) floor(1000* (double) xcoobuf);
+                    pTree->ycoo = (unsigned int) floor(1000* (double) ycoobuf);
+                    // pTree->name = ++parameter[0].nameakt;
+                    // pTree->namem = 0;
+                    // pTree->namep = 0;
+                    // pTree->line = ++parameter[0].lineakt;
+                    // pTree->generation = 0;
+                    // pTree->yr_of_establishment = 0;
                     pTree->dbasal = dbasalbuf;
-                    pTree->dbasalrel = 1.0;
+                    pTree->dbasalrel = (unsigned short int) floor(1000*1.0);
                     pTree->dbreast = dbreastbuf;
-                    pTree->dbreastrel = 1.0;
-                    pTree->height = heightbuf;
+                    pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
+                    pTree->height = (unsigned short int) heightbuf;
                     pTree->age = agebuf;
                     pTree->cone = conebuf;
-                    if (pTree->cone == 0) {
-                        pTree->coneheight = 99999.0;
+                    if (pTree->cone == true) {
+                        pTree->coneheight = 65535;
                     }
                     pTree->seednewly_produced = 0;
-                    pTree->seedproduced = 0;
-                    pTree->buffer = 1;
+                    // pTree->seedproduced = 0;
+                    // pTree->buffer = 1;
                     pTree->densitywert = 0;
                     pTree->thawing_depthinfluence = 100;
                     pTree->growing = true;
@@ -289,8 +289,8 @@ void Hinterlandseedintro(struct Parameter* parameter,
 
         aktort++;
 
-        int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-        int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 #ifdef DEBUG
         cout << " ... seed_list.size=" << seed_list.size() << endl;
@@ -345,7 +345,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
 
                     // estimation of new positions
                     double ratiorn = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-                    double dispersaldistance = 0.0;
+                    // double dispersaldistance = 0.0;
                     double velocity = 0.0;
                     double wdirection = 0.0;
                     double jquer = 0;
@@ -417,32 +417,32 @@ void Hinterlandseedintro(struct Parameter* parameter,
 
                         Seed seed;
 
-                        seed.yworldcoo = aktortyworldcoo;
-                        seed.xworldcoo = aktortxworldcoo;
-                        seed.xcoo = xseed;
-                        seed.ycoo = yseed;
-                        seed.namem = 0;
-                        seed.namep = 0;
-                        seed.line = ++parameter[0].lineakt;
-                        seed.generation = 0;
+                        // seed.yworldcoo = aktortyworldcoo;
+                        // seed.xworldcoo = aktortxworldcoo;
+                        seed.xcoo = (unsigned int) floor(1000*xseed);
+                        seed.ycoo = (unsigned int) floor(1000*yseed);
+                        // seed.namem = 0;
+                        // seed.namep = 0;
+                        // seed.line = ++parameter[0].lineakt;
+                        // seed.generation = 0;
                         seed.incone = false;
-                        seed.weight = 1;
+                        // seed.weight = 1;
                         seed.age = 0;
                         seed.longdispersed = false;
                         seed.species = specieszufall;
-                        seed.releaseheight = hinterheightsi;
+                        seed.releaseheight = (unsigned short int) hinterheightsi;
                         seed.thawing_depthinfluence = 100;
-                        seed.dispersaldistance = dispersaldistance;
+                        // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;
 
                         seed_list.add(seed);
 
-                        if ((seed.yworldcoo < 0.0) | (seed.yworldcoo > (double)(treerows - 1)) | (seed.xcoo < 0.0) | (seed.xcoo > (double)(treecols - 1))) {
-                            printf("\n\nLaVeSi was stopped\n");
-                            printf("=> Treedistribution.cpp\n");
-                            printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", yseed, xseed);
-                            exit(1);
-                        }
+                        // if ((seed.yworldcoo < 0.0) | (seed.yworldcoo > (double)(treerows - 1)) | (seed.xcoo < 0.0) | (seed.xcoo > (double)(treecols - 1))) {
+                            // printf("\n\nLaVeSi was stopped\n");
+                            // printf("=> Treedistribution.cpp\n");
+                            // printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", yseed, xseed);
+                            // exit(1);
+                        // }
                     }
                 }
             }

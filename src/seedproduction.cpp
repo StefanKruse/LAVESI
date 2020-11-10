@@ -16,11 +16,11 @@ void Seedproduction(struct Parameter* parameter, vector<list<Tree*>>& world_tree
         for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
             auto pTree = (*pos);
 
-            if (pTree->cone == 1) {
+            if (pTree->cone == true) {
                 int newseedsproduced = (int)floor(parameter[0].seedprodfactor               // seed production in dependence of a factor
-                                                  * pTree->height / 100                     // ... the tree's  height...
-                                                  * pTree->dbasalrel                        // ... the tree's current growth...
-                                                  * (1.0 - (1.0 / (pTree->height / 50))));  // ... height.
+                                                  * (double) pTree->height / 100                     // ... the tree's  height in m...
+                                                  * (double) pTree->dbasalrel/1000                        // ... the tree's current growth in cm...
+                                                  * (1.0 - (1.0 / ((double) pTree->height / 50))));  // ... height.
                 if (newseedsproduced > 0) {
                     pTree->seednewly_produced = newseedsproduced;
                 } else {

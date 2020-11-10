@@ -100,20 +100,20 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 						if (ratiorn > 0.0) {
 							seed.incone = false;
 
-							double dispersaldistance = 0.0;
+							// double dispersaldistance = 0.0;
 							double direction = 0.0;
 							double velocity = 0.0;
 							double wdirection = 0.0;
 							double jquer = 0;
 							double iquer = 0;
 
-							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, seed.releaseheight, seed.species);
+							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double) seed.releaseheight, seed.species);
 
 							if (parameter[0].ivort > 1045 && parameter[0].outputmode != 9 && parameter[0].omp_num_threads == 1) {
 								double seedeinschreibzufall = uniform(rng);
 
 								if (seedeinschreibzufall < 0.01) {
-									dispersaldistance = sqrt(pow(iquer, 2) + pow(jquer, 2));
+									// dispersaldistance = sqrt(pow(iquer, 2) + pow(jquer, 2));
 									direction = atan2(iquer, jquer);
 
 									FILE* filepointer;
@@ -129,10 +129,10 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 										filepointer = fopen(dateiname.c_str(), "w");
 
 										fprintf(filepointer, "IVORT;");
-										fprintf(filepointer, "name;");
+										// fprintf(filepointer, "name;");
 										fprintf(filepointer, "year;");
 										fprintf(filepointer, "parentheight;");
-										fprintf(filepointer, "distance;");
+										// fprintf(filepointer, "distance;");
 										fprintf(filepointer, "direction;");
 										fprintf(filepointer, "xcoo;");
 										fprintf(filepointer, "ycoo;");
@@ -153,13 +153,13 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 									fseek(filepointer, 0, SEEK_END);
 
 									fprintf(filepointer, "%d;", parameter[0].ivort);
-									fprintf(filepointer, "%d;", seed.namem);
+									// fprintf(filepointer, "%d;", seed.namem);
 									fprintf(filepointer, "%d;", jahr);
-									fprintf(filepointer, "%4.3f;", seed.releaseheight);
-									fprintf(filepointer, "%4.5f;", dispersaldistance);
+									fprintf(filepointer, "%4.3f;", (double) seed.releaseheight);
+									// fprintf(filepointer, "%4.5f;", dispersaldistance);
 									fprintf(filepointer, "%4.5f;", direction);
-									fprintf(filepointer, "%4.5f;", seed.xcoo);
-									fprintf(filepointer, "%4.5f;", seed.ycoo);
+									fprintf(filepointer, "%4.5f;", (double) seed.xcoo/1000);
+									fprintf(filepointer, "%4.5f;", (double) seed.ycoo/1000);
 									fprintf(filepointer, "%d;", seed.species);
 									fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 									fprintf(filepointer, "%d;", parameter[0].thawing_depth);
@@ -171,9 +171,9 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 								}
 							}
 
-							seed.xcoo = seed.xcoo + jquer;
-							seed.ycoo = seed.ycoo + iquer;
-							seed.dispersaldistance = dispersaldistance;
+							seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + jquer));
+							seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + iquer));
+							// seed.dispersaldistance = dispersaldistance;
 
 							/****************************************************************************************/
 							/**
@@ -185,11 +185,11 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 							bool sameausserhalb = false;
 
 							// Check if the seed is on the plot:
-							if (seed.ycoo > (double)(treerows - 1)) {
+							if ((double)seed.ycoo/1000 > (double)(treerows - 1)) {
 								if ((parameter[0].boundaryconditions == 1)) {
-									seed.ycoo = fmod(seed.ycoo, (double)(treerows - 1));
-									seed.namem = 0;
-									seed.namep = 0;
+									seed.ycoo = (unsigned int) floor(1000* fmod((double)seed.ycoo/1000, (double)(treerows - 1)));
+									// seed.namem = 0;
+									// seed.namep = 0;
 								} else if ((parameter[0].boundaryconditions == 3)) {
 									sameausserhalb = true;
 									rausgeflogenN++;
@@ -197,11 +197,11 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 									sameausserhalb = true;
 									rausgeflogenN++;
 								}
-							} else if (seed.ycoo < 0.0) {
+							} else if (seed.ycoo < 0) {
 								if ((parameter[0].boundaryconditions == 1)) {
-									seed.ycoo = (double)(treerows - 1) + fmod(seed.ycoo, (double)(treerows - 1));
-									seed.namem = 0;
-									seed.namep = 0;
+									seed.ycoo = (unsigned int) floor(1000* ((double)(treerows - 1) + fmod((double)seed.ycoo/1000, (double)(treerows - 1))));
+									// seed.namem = 0;
+									// seed.namep = 0;
 								} else if ((parameter[0].boundaryconditions == 3)) {
 									sameausserhalb = true;
 									rausgeflogenS++;
@@ -211,24 +211,24 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 								}
 							}
 
-							if (seed.xcoo < 0.0) {
+							if (seed.xcoo < 0) {
 								if ((parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3)) {
-									seed.xcoo = fmod(seed.xcoo, (double)(treecols - 1)) + (double)(treecols - 1);
-									seed.namem = 0;
-									seed.namep = 0;
+									seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)) + (double)(treecols - 1));
+									// seed.namem = 0;
+									// seed.namep = 0;
 								} else {
 									sameausserhalb = true;
 									rausgeflogenW++;
 								}
-							} else if (seed.xcoo > (double)(treecols - 1)) {
+							} else if ((double)seed.xcoo/1000 > (double)(treecols - 1)) {
 								if (parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3) {
-									seed.xcoo = fmod(seed.xcoo, (double)(treecols - 1));
-									seed.namem = 0;
-									seed.namep = 0;
+									seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)));
+									// seed.namem = 0;
+									// seed.namep = 0;
 
 								} else if ((parameter[0].boundaryconditions == 2)
 										   && (rand() < 0.5 * RAND_MAX)) {  // Reducing seed introduction on the western border:
-									seed.xcoo = fmod(seed.xcoo, (double)(treecols - 1));
+									seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)));
 								} else {
 									sameausserhalb = true;
 									rausgeflogenO++;
@@ -236,12 +236,12 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 							}
 
 							if ((sameausserhalb == false)
-								&& ((seed.ycoo < 0.0) | (seed.ycoo > (double)(treerows - 1)) | (seed.xcoo < 0.0)
-									| (seed.xcoo > (double)(treecols - 1)))) {
+								&& ((seed.ycoo < 0) | ((double)seed.ycoo/1000 > (double)(treerows - 1)) | (seed.xcoo < 0)
+									| ((double)seed.xcoo/1000 > (double)(treecols - 1)))) {
 								printf("\n\nLaVeSi was exited ");
 								printf("in Seeddispersal.cpp\n");
 								printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n",
-									   seed.ycoo, seed.xcoo);
+									   (double)seed.ycoo/1000, (double)seed.xcoo/1000);
 								exit(1);
 							}
 

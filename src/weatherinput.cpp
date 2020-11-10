@@ -10,17 +10,17 @@ extern vector<vector<double>> winddir;
 extern vector<int> globalyears;
 
 void getTemp1(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
-    int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-    int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+    // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+    // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-    if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
-        double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
-        double mapylengthdummy = parameter[0].mapylength;
-        double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
+    // if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
+        // double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
+        // double mapylengthdummy = parameter[0].mapylength;
+        // double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
 
-        parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
-        parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
-    }
+        // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
+        // parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
+    // }
 
     if (parameter[0].lineartransect == true) {
         parameter[0].tempdiffortmin = -0.3508 * treerows / (111120);
@@ -61,8 +61,8 @@ void getTemp1(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 
             auto pWeather = new Weather();
 
-            pWeather->yworldcoo = aktortyworldcoo;
-            pWeather->xworldcoo = aktortxworldcoo;
+            // pWeather->yworldcoo = aktortyworldcoo;
+            // pWeather->xworldcoo = aktortxworldcoo;
             pWeather->jahr = counter + parameter[0].startjahr - 2;
             pWeather->tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
             pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
@@ -194,25 +194,24 @@ void getPrec1(char dateinameprec[50], vector<Weather*>& weather_list, int maxima
 }
 
 void getTemp2(int aktort, char dateinametemp[50], vector<Weather*>& weather_list, int maximal_word_length) {
-    int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-    int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+    // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+    // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-    if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
-        double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
+    // if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
+        // double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
 
-        double mapylengthdummy = parameter[0].mapylength;
-        double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
+        // double mapylengthdummy = parameter[0].mapylength;
+        // double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
 
-        parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
-        parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
-    } else {
-        parameter[0].tempdiffort = 0.0;
-        parameter[0].precdiffort = 0.0;
-    }
+        // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
+        // parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
 
     if (parameter[0].lineartransect == true) {
         parameter[0].tempdiffortmin = -0.3508 * treerows / (111120);
         parameter[0].precdiffortmin = -5.3699 * treerows / (111120);
+    } else {
+        parameter[0].tempdiffort = 0.0;
+        parameter[0].precdiffort = 0.0;
     }
 
     FILE* f;
@@ -234,8 +233,8 @@ void getTemp2(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 
             auto pWeather = new Weather();
 
-            pWeather->yworldcoo = aktortyworldcoo;
-            pWeather->xworldcoo = aktortxworldcoo;
+            // pWeather->yworldcoo = aktortyworldcoo;
+            // pWeather->xworldcoo = aktortxworldcoo;
             pWeather->jahr = (int)floor(jahrbuf);
             pWeather->tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
             pWeather->tempyearmeanmin = tempyearmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
@@ -376,18 +375,17 @@ void getPrec2(char dateinameprec[50], vector<Weather*>& weather_list, int maxima
 }
 
 void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
-    int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-    int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+    // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+    // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-    if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
-        double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
-        double mapylengthdummy = parameter[0].mapylength;
-        double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
+    // if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
+        // double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
+        // double mapylengthdummy = parameter[0].mapylength;
+        // double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
 
-        // conversion degrees to metres "1 degree = 60 x 1852 m = 111120 m"
-        parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
-        parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
-    }
+        // parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
+        // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
+    // }
 
     if (parameter[0].lineartransect == true) {
         // neu um die Grenze an eine stelle zu rücken. Mitte = eingeladene Serie
@@ -431,8 +429,8 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 
             auto pWeather = new Weather();
 
-            pWeather->yworldcoo = aktortyworldcoo;
-            pWeather->xworldcoo = aktortxworldcoo;
+            // pWeather->yworldcoo = aktortyworldcoo;
+            // pWeather->xworldcoo = aktortxworldcoo;
             pWeather->jahr = counter + parameter[0].startjahr - 2;
             pWeather->tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
 			if(parameter[0].tempjandiffort!=0.0)
@@ -872,7 +870,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinameprec, precbuf);
         }
 		
-		// TODO: clean and reorganize in parts to be switched on by demcompute switch
+		// TODO: clean and reorganize in parts to be switched on by dem compute switch
 			// elevation adjustment
 			double current_elevation;
 			double minele=300;

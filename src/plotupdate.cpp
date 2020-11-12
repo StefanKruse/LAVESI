@@ -12,80 +12,112 @@ using namespace std;
  *
  *******************************************************************************************/
 void AddTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
-    for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-        auto pTree = (*pos);
+    if (parameter[0].omp_num_threads <= 1) {                 // more than one core
+		cout << " only one core available, exiting!" << endl;
+		exit(1);
+	} else {
+        omp_set_dynamic(0);                                 // disable dynamic teams
+        omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 
-        int i = (int)floor((double)pTree->ycoo/1000 * parameter[0].sizemagnif);
-        int j = (int)floor((double)pTree->xcoo/1000 * parameter[0].sizemagnif);
+#pragma omp parallel
+        {
+            int thread_count = omp_get_num_threads();
+            int thread_num = omp_get_thread_num();
+            size_t chunk_size = tree_list.size() / thread_count;
+            auto begin = tree_list.begin();
+            std::advance(begin, thread_num * chunk_size);
+            auto end = begin;
 
-        double flaechengroesze = 0.0;
-        if (parameter[0].calcinfarea == 1)  // linearly increasing
-            flaechengroesze = pTree->dbasal * parameter[0].incfac / 100.0;
-        else if (parameter[0].calcinfarea == 2)  // linearly increasing
-            flaechengroesze = pTree->dbasal * (2 / 3) * parameter[0].incfac / 100.0;
-        else if (parameter[0].calcinfarea == 3)  // linearly increasing
-            flaechengroesze = pTree->dbasal * (4 / 3) * parameter[0].incfac / 100.0;
-        else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
-            flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * pTree->dbasal)))) - 1;
-        else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
-            flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * pTree->dbasal)))) - 1;
-        else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
-            flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * pTree->dbasal)))) - 1;
-
-        // if the trees influences only one density grid cell
-        if (flaechengroesze < (1.0 / parameter[0].sizemagnif)) {
-			unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
-
-            plot_list[curposi]->Treedensityvalue += 
-				(unsigned short int) floor(10000*
-						pow(pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing)
-                        // weighing with diameter
-                        * pow(pTree->dbasal, parameter[0].densitytreetile),
-						parameter[0].densityvaluemanipulatorexp)
-					);
-            plot_list[curposi]->Treenumber++;
-            // pTree->densitywert=pow(pTree->dbasal, parameter[0].densitytreetile);
-            pTree->densitywert = pow(
-                pow(pTree->dbasal, parameter[0].densitytreetile) * pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
-                parameter[0].densityvaluemanipulatorexp);
-        }
-        // if the trees influences more than one density grid cell
-        else {
-            // determine dimensions of the grid around the tree
-            int xyquerrastpos = (int)floor(flaechengroesze * parameter[0].sizemagnif);
-            // determine shifted coordinates and adding up the density value
-            double sumdensitywert = 0;
-
-            for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
-                for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
-                    if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-                        && (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
-                        // Distance calculation to determine the influence of the density value in spatial units ...
-                        // ... and inserting the value at every position
-                        double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
-                        // only if the current grid cell is part of the influence area, a value is assigned
-                        if (entfrastpos <= (double)xyquerrastpos) {
-							unsigned long long int curposii = (unsigned long long int) rastposi * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) rastposj;
-
-                            plot_list[curposii]->Treedensityvalue +=
-								(unsigned short int) floor(10000*
-										pow(pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp)
-									);
-
-                            plot_list[curposii]->Treenumber++;
-
-                            sumdensitywert +=
-                                pow(pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
-                        }
-                    }
-                }
+            if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
+            {
+                end = tree_list.end();
+            } else {
+                std::advance(end, chunk_size);
             }
 
-            pTree->densitywert = sumdensitywert;
-        }
+// wait for all threads to initialize and then proceed
+#pragma omp barrier
 
-        ++pos;
-    }
+            for (auto it = begin; it != end; ++it) {
+                auto pTree = (*it);
+
+
+			// for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
+				// auto pTree = (*pos);
+
+				int i = (int)floor((double)pTree->ycoo/1000 * parameter[0].sizemagnif);
+				int j = (int)floor((double)pTree->xcoo/1000 * parameter[0].sizemagnif);
+
+				double flaechengroesze = 0.0;
+				if (parameter[0].calcinfarea == 1)  // linearly increasing
+					flaechengroesze = pTree->dbasal * parameter[0].incfac / 100.0;
+				else if (parameter[0].calcinfarea == 2)  // linearly increasing
+					flaechengroesze = pTree->dbasal * (2 / 3) * parameter[0].incfac / 100.0;
+				else if (parameter[0].calcinfarea == 3)  // linearly increasing
+					flaechengroesze = pTree->dbasal * (4 / 3) * parameter[0].incfac / 100.0;
+				else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
+					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * pTree->dbasal)))) - 1;
+				else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
+					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * pTree->dbasal)))) - 1;
+				else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
+					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * pTree->dbasal)))) - 1;
+
+				// if the trees influences only one density grid cell
+				if (flaechengroesze < (1.0 / parameter[0].sizemagnif)) {
+					unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
+
+					plot_list[curposi]->Treedensityvalue += 
+						(unsigned short int) floor(10000*
+								pow(pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing)
+								// weighing with diameter
+								* pow(pTree->dbasal, parameter[0].densitytreetile),
+								parameter[0].densityvaluemanipulatorexp)
+							);
+					plot_list[curposi]->Treenumber++;
+					// pTree->densitywert=pow(pTree->dbasal, parameter[0].densitytreetile);
+					pTree->densitywert = pow(
+						pow(pTree->dbasal, parameter[0].densitytreetile) * pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
+						parameter[0].densityvaluemanipulatorexp);
+				}
+				// if the trees influences more than one density grid cell
+				else {
+					// determine dimensions of the grid around the tree
+					int xyquerrastpos = (int)floor(flaechengroesze * parameter[0].sizemagnif);
+					// determine shifted coordinates and adding up the density value
+					double sumdensitywert = 0;
+
+					for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
+						for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
+							if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
+								&& (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
+								// Distance calculation to determine the influence of the density value in spatial units ...
+								// ... and inserting the value at every position
+								double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+								// only if the current grid cell is part of the influence area, a value is assigned
+								if (entfrastpos <= (double)xyquerrastpos) {
+									unsigned long long int curposii = (unsigned long long int) rastposi * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) rastposj;
+
+									plot_list[curposii]->Treedensityvalue +=
+										(unsigned short int) floor(10000*
+												pow(pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp)
+											);
+
+									plot_list[curposii]->Treenumber++;
+
+									sumdensitywert +=
+										pow(pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
+								}
+							}
+						}
+					}
+
+					pTree->densitywert = sumdensitywert;
+				}
+
+				// ++pos;
+			} // each tree
+		} // pragma
+	} // multiple cores
 }
 
 /****************************************************************************************/
@@ -273,34 +305,34 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                 pTree->densitywert = pTree->densitywert * pow((1.0 - (0.01 / pTree->dbasal)), parameter[0].densityvaluedbasalinfluence);
 
                 if (parameter[0].dichtheightrel == 1) {
-                    pTree->densitywert = pTree->densitywert * (-1.0 / 130.0 * (double) pTree->height + 1.0);
+                    pTree->densitywert = pTree->densitywert * (-1.0 / 130.0 * (double)pTree->height/100 + 1.0);
                 } else if (parameter[0].dichtheightrel == 2) {
-                    pTree->densitywert = pTree->densitywert * (-1.0 / 200.0 * (double) pTree->height + 1.0);
+                    pTree->densitywert = pTree->densitywert * (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
                 } else if (parameter[0].dichtheightrel == 3) {
-                    double hrelbuf = (-1.0 / 200.0 * (double) pTree->height + 1.0);
+                    double hrelbuf = (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
                     if (hrelbuf < 0.1)
                         hrelbuf = 0.1;
                     pTree->densitywert = pTree->densitywert * hrelbuf;
                 } else if (parameter[0].dichtheightrel == 4) {
-                    if (pTree->height < 40)
+                    if ((double)pTree->height/100 < 40)
                         pTree->densitywert = 1.0;
-                    else if ((pTree->height >= 40) & (pTree->height < 200))
+                    else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
                         pTree->densitywert = 0.5;
-                    else if (pTree->height >= 200)
+                    else if ((double)pTree->height/100 >= 200)
                         pTree->densitywert = 0.0;
                 } else if (parameter[0].dichtheightrel == 5) {
-                    if (pTree->height < 40)
+                    if ((double)pTree->height/100 < 40)
                         pTree->densitywert = 1.0;
-                    else if ((pTree->height >= 40) & (pTree->height < 200))
+                    else if (((double)pTree->height/100 >= 40) & (pTree->height/100 < 200))
                         pTree->densitywert = 0.55;
-                    else if (pTree->height >= 200)
+                    else if ((double)pTree->height/100 >= 200)
                         pTree->densitywert = 0.1;
                 } else if (parameter[0].dichtheightrel == 6) {
-                    if (pTree->height < 40)
+                    if ((double)pTree->height/100 < 40)
                         pTree->densitywert = 1.0;
-                    else if ((pTree->height >= 40) & (pTree->height < 200))
+                    else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
                         pTree->densitywert = 0.9;
-                    else if (pTree->height >= 200)
+                    else if ((double)pTree->height/100 >= 200)
                         pTree->densitywert = 0.8;
                 } else if (parameter[0].dichtheightrel == 10)  // added to fit the height classes distribution properly
                 {
@@ -556,8 +588,8 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 										
 										// dem sensing
 										if(parameter[0].demlandscape & (plot_list[curposii]->elevation<32767) ) {
-											sumelevation += (double) plot_list[curposii]->elevation/10;
-											sumenvirgrowthimpact += (double) plot_list[curposii]->envirgrowthimpact/10000;
+											sumelevation += (double)plot_list[curposii]->elevation/10;
+											sumenvirgrowthimpact += (double)plot_list[curposii]->envirgrowthimpact/10000;
 											countelevation++;
 										}
 // cout << sumelevation << " --- " << plot_list[rastposi * treecols * parameter[0].sizemagnif + rastposj]->elevation << endl;
@@ -581,7 +613,7 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 						// dem sensing by mean value of gridcells in range
 						if (parameter[0].demlandscape) {
 							pTree->elevation = (short int) floor(10*sumelevation / (double)countelevation);
-							pTree->envirimpact = (unsigned short int) floor(10000*sumenvirgrowthimpact / (double)countelevation);
+							pTree->envirimpact = (unsigned short int) floor(10000* sumenvirgrowthimpact / (double)countelevation);
 						}
 // cout << sumelevation << countelevation << pTree->elevation << endl;
 // exit(1);
@@ -592,34 +624,34 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                                                parameter[0].densityvaluedbasalinfluence);  // Optional: increasing influence by increasing tree height
 
                     if (parameter[0].dichtheightrel == 1) {
-                        pTree->densitywert = pTree->densitywert * (-1.0 / 130.0 * (double) pTree->height + 1.0);
+                        pTree->densitywert = pTree->densitywert * (-1.0 / 130.0 * (double)pTree->height/100 + 1.0);
                     } else if (parameter[0].dichtheightrel == 2) {
-                        pTree->densitywert = pTree->densitywert * (-1.0 / 200.0 * (double) pTree->height + 1.0);
+                        pTree->densitywert = pTree->densitywert * (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
                     } else if (parameter[0].dichtheightrel == 3) {
-                        double hrelbuf = (-1.0 / 200.0 * (double) pTree->height + 1.0);
+                        double hrelbuf = (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
                         if (hrelbuf < 0.1)
                             hrelbuf = 0.1;
                         pTree->densitywert = pTree->densitywert * hrelbuf;
                     } else if (parameter[0].dichtheightrel == 4) {
-                        if (pTree->height < 40)
+                        if ((double)pTree->height/100 < 40)
                             pTree->densitywert = 1.0;
-                        else if ((pTree->height >= 40) & (pTree->height < 200))
+                        else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
                             pTree->densitywert = 0.5;
-                        else if (pTree->height >= 200)
+                        else if ((double)pTree->height/100 >= 200)
                             pTree->densitywert = 0.0;
                     } else if (parameter[0].dichtheightrel == 5) {
-                        if (pTree->height < 40)
+                        if ((double)pTree->height/100 < 40)
                             pTree->densitywert = 1.0;
-                        else if ((pTree->height >= 40) & (pTree->height < 200))
+                        else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
                             pTree->densitywert = 0.55;
-                        else if (pTree->height >= 200)
+                        else if ((double)pTree->height/100 >= 200)
                             pTree->densitywert = 0.1;
                     } else if (parameter[0].dichtheightrel == 6) {
-                        if (pTree->height < 40)
+                        if ((double)pTree->height/100 < 40)
                             pTree->densitywert = 1.0;
-                        else if ((pTree->height >= 40) & (pTree->height < 200))
+                        else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
                             pTree->densitywert = 0.9;
-                        else if (pTree->height >= 200)
+                        else if ((double)pTree->height/100 >= 200)
                             pTree->densitywert = 0.8;
                     } else if (parameter[0].dichtheightrel == 10)  // added to fit the height classes distribution properly
                     {
@@ -774,10 +806,12 @@ void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>
     }  // only one core
 
     if (parameter[0].omp_num_threads > 1) {  // more than one core
-        omp_set_dynamic(1);
+		omp_set_dynamic(1);
         omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 
-#pragma omp parallel for
+#pragma omp parallel
+{
+#pragma omp for
         for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
             auto pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid->Treedensityvalue = 0;
@@ -822,6 +856,7 @@ void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>
                                      * sqrt(weather_list[yearposition]->degreday));  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
             }
         }
+} // pragma
     }  // more than one core
 }
 
@@ -859,5 +894,5 @@ void Environmentupdate(struct Parameter* parameter,
         IndividualTreeDensity(tree_list, plot_list);
     }
 	
-cout << " ... envir update done!" << endl;
+// cout << " ... envir update done!" << endl;
 }

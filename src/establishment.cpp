@@ -1,3 +1,4 @@
+#include <random>
 #include <cassert>
 #include "LAVESI.h"
 #include "VectorList.h"
@@ -25,6 +26,20 @@ void Treeestablishment(struct Parameter* parameter,
 
         aktort++;
 
+// parallelization
+// .. each thraed needs separate tree_list and splice at the end
+omp_set_dynamic(0); //disable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+std::random_device random_dev;
+// may be faster when number of threads are maximum available to avoid overhead by splice
+#pragma omp parallel
+{
+std::mt19937 rng(random_dev());
+std::uniform_real_distribution<double> uniform(0, 1);
+// declare a local seed list to be filled by each thread
+list<Tree*> newtree_list;
+
+#pragma omp for
         // go through seed list
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
             auto& seed = seed_list[i_seed];
@@ -88,7 +103,35 @@ void Treeestablishment(struct Parameter* parameter,
                             * ( weather_list[yearposition]->weatherfactors - ( ( weather_list[yearposition]->weatherfactors - weather_list[yearposition]->weatherfactormins ) * 1.0/(((double)treerows) / (double)seed.ycoo/1000) ) )
 							* (((double)thawing_depthinfluence_help) / 100);
                     }
-                } else {
+                } else if (parameter[0].demlandscape) {//copied from growth.cpp
+					if (parameter[0].thawing_depth) {
+						if (seed.species == 1) {
+							maxbw_help =
+								exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * 0
+									+ parameter[0].gdbasalfacqgmel * 0 * 0)
+								* (   (weather_list[yearposition]->weatherfactorg*   (    ((double)plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) 
+									+ (weather_list[yearposition]->weatherfactorming*(1-( ((double)plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
+								* (((double)seed.thawing_depthinfluence) / 100);
+// cout << " ... maxbw_help=" << maxbw_help << " <<< " << weather_list[yearposition]->weatherfactorg << " | " << weather_list[yearposition]->weatherfactorming << " | "  << (double)plot_list[curposi]->elevation/10 << endl;
+						} else if (seed.species == 2) {
+							maxbw_help =
+								exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * 0 + parameter[0].gdbasalfacqsib * 0 * 0)
+								* ((weather_list[yearposition]->weatherfactors*( ((double) plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( ((double) plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
+								* ((((double)seed.thawing_depthinfluence * 0.8) / 100) - 0.6);
+						}
+					} else {
+						if (seed.species == 1) {
+							maxbw_help =
+								exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * 0
+									+ parameter[0].gdbasalfacqgmel * 0 * 0)
+								* ((weather_list[yearposition]->weatherfactorg*( ((double) plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( ((double) plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))));
+					   } else if (seed.species == 2) {
+							maxbw_help =
+								exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * 0 + parameter[0].gdbasalfacqsib * 0 * 0)
+								* ((weather_list[yearposition]->weatherfactors*( ((double) plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( ((double) plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))));
+					   }
+					}
+				} else {
                     if (seed.species == 1) {
                         maxbw_help = exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * 0 + parameter[0].gdbasalfacqgmel * 0 * 0)
 											* weather_list[yearposition]->weatherfactorg
@@ -142,7 +185,8 @@ if (parameter[0].densitymode == 2) {
 double basalgrowth_help = maxbw_help * (1.0 - density_help);
 // if(basalgrowth_help < maxbw_help)
 	// cout << maxbw_help << " - > " << basalgrowth_help << endl;
-                double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                // double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                double zufallsz = uniform(rng);
 
                 // add new tree if seed germinates
 // cout << maxbw_help << " - " << " - " << basalgrowth_help << " - " << density_help << " - " << parameter[0].germinatioweatherinfluence * basalgrowth_help/maxbw_help << " - " << keimungauflageinfluence << endl;
@@ -182,12 +226,12 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                             pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                pTree->height = (unsigned short int) floor(parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
+                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
                             } else {
-                                pTree->height = (unsigned short int) floor(parameter[0].dbasalheightslopenonlin * maxbw_help);
+                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
                             }
                             pTree->age = 0;
-                            pTree->cone = true;
+                            pTree->cone = false;
                             pTree->coneheight = 65535;
                             pTree->seednewly_produced = 0;
                             // pTree->seedproduced = 0;
@@ -197,8 +241,10 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                             pTree->growing = true;
                             pTree->species = seed.species;
                             pTree->thawing_depthinfluence = thawing_depthinfluence_help;
-
-                            tree_list.push_back(pTree);
+							pTree->envirimpact = 10000;
+							
+                            // tree_list.push_back(pTree);
+                            newtree_list.push_back(pTree);
 
                             seed.dead = true;
                             seed_list.remove(i_seed);
@@ -232,9 +278,9 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                             pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                pTree->height = (unsigned short int) floor(parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
+                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
                             } else {
-                                pTree->height = (unsigned short int) floor(parameter[0].dbasalheightslopenonlin * maxbw_help);
+                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
                             }
 
                             pTree->age = 0;
@@ -248,7 +294,8 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                             // pTree->dispersaldistance = seed.dispersaldistance;
                             pTree->growing = true;
                             pTree->species = seed.species;
-                            tree_list.push_back(pTree);
+                            // tree_list.push_back(pTree);
+                            newtree_list.push_back(pTree);
 
                             seed.dead = true;
                             seed_list.remove(i_seed);
@@ -260,6 +307,12 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                 }
             }
         
-		}
+		}// seed_list loop
+// append all newly created seed from each thread at once to the seed_list
+#pragma omp critical
+{
+	tree_list.splice(tree_list.end(), newtree_list);
+}
+}// pragma
     }
 }

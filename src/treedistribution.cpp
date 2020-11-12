@@ -54,9 +54,18 @@ void Seedin() {
                 double jseed, iseed;
                 bool seedeintragen = false;
 
+				// set limits
+				double maxx = (double)(treecols - 1);
+				if(parameter[0].seedintro_maxx > 0)
+					maxx = (double) parameter[0].seedintro_maxx;
+
+				double maxy = (double)(treerows - 1);
+				if(parameter[0].seedintro_maxy > 0)
+					maxy = (double) parameter[0].seedintro_maxy;
+				
                 // seedwinddispersalmode==1 => randomly from the south border.
                 if (parameter[0].seedwinddispersalmode == 1) {
-                    jseed = 0.0 + ((double)(((double)(treecols - 1)) * rand() / (RAND_MAX + 1.0)));
+                    jseed = 0.0 + ((double)(maxx * rand() / (RAND_MAX + 1.0)));
 
                     double dispersaldistance;
 
@@ -76,8 +85,8 @@ void Seedin() {
                 }
                 // seedwinddispersalmode==2 => randomly all over the plot
                 else if (parameter[0].seedwinddispersalmode == 2) {
-                    jseed = 0.0 + ((double)(((double)(treecols - 1)) * rand() / (RAND_MAX + 1.0)));
-                    iseed = 0.0 + ((double)(((double)(treerows - 1)) * rand() / (RAND_MAX + 1.0)));
+                    jseed = 0.0 + ((double)(maxx * rand() / (RAND_MAX + 1.0)));
+                    iseed = 0.0 + ((double)(maxy * rand() / (RAND_MAX + 1.0)));
 
                     seedeintragen = true;
                 } else {
@@ -218,7 +227,7 @@ void TreesIni(int maximal_word_length) {
                     pTree->dbasalrel = (unsigned short int) floor(1000*1.0);
                     pTree->dbreast = dbreastbuf;
                     pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
-                    pTree->height = (unsigned short int) heightbuf;
+                    pTree->height = (unsigned short int) floor(100*heightbuf);
                     pTree->age = agebuf;
                     pTree->cone = conebuf;
                     if (pTree->cone == true) {
@@ -351,7 +360,8 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     double jquer = 0;
                     double iquer = 0;
 
-                    Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, specieszufall);
+                    double randomnumberwind = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                    Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, specieszufall, randomnumberwind);
 
                     xseed = xseed + jquer;
                     yseed = yseed + iquer;

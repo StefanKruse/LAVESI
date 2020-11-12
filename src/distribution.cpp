@@ -66,7 +66,9 @@ void Pollinationprobability(double x,
                             double m,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
-                            int outputtreesiter) {
+                            int outputtreesiter,
+							double randomnumberwind,
+							double randomnumberwindfather) {
     list<Tree*>& tree_list = *world_positon_b;
     direction = 0.0;
     velocity = 0.0;
@@ -89,11 +91,15 @@ void Pollinationprobability(double x,
     thdpthinfl.shrink_to_fit();
 
     if (parameter[0].windsource == 1) {// EraInterim
-        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
+        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
+        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * uniform(rng)));
+        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = wspd.at(ripm);
 	} else {// random
-        direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
+        // direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
+        // direction = 0.0 + ((double)(2 * M_PI) * uniform(rng));
+        direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.777;
     }
 
@@ -120,7 +126,9 @@ void Pollinationprobability(double x,
             p = exp(kappa * (cos(phi - direction) * -1)) / (2 * I0kappa) * (exp(-2 * pe * pow(dr, 1 - 0.5 * m) / (sqrt(M_PI) * C * (1 - 0.5 * m))));
             // f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
 
-            if (rand() > p * RAND_MAX) {
+            // if (rand() > p * RAND_MAX) {
+            // if (uniform(rng) > p) {
+            if (randomnumberwindfather > p) {
                 ++posb;
             } else {
                 // pName.push_back(pTree_copy->name);
@@ -176,7 +184,7 @@ double getEntfernung(double D, double ratiorn_help) {
     return (entf_help);
 }
 
-void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec) {
+void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec, double randomnumberwind) {
     int ripm = 0;
     double dispersaldistance = 0;
     double maxdispersaldistance = 0;
@@ -185,11 +193,15 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, dou
 
     if (parameter[0].windsource == 1) {// EraInterim
         // choose a month between May and September:
-        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
+        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
+        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * uniform(rng)));
+        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = (wspd.at(ripm));
     } else {// random
-        direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
+        // direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
+        // direction = 0.0 + ((double)(2 * M_PI) * uniform(rng));
+        direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.7777;
     }
 

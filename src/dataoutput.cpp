@@ -74,37 +74,83 @@ void Dataoutput(int t,
         int breastdiametercount = 0;
         int stemcount = 0;
         double meantreeheight = 0.0, meantreeage = 0.0;
+		
+omp_set_dynamic(0); //disable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            auto pTree = (*pos);
+#pragma omp parallel
+{
+// declarations for each thread
+double local_basalarea = 0.0;
+int local_nheight0b40 = 0, local_nheight41b200 = 0, local_nheight201b10000 = 0;
+double local_breastdiameter = 0.0;
+int local_breastdiametercount = 0;
+int local_stemcount = 0;
+double local_meantreeheight = 0.0, local_meantreeage = 0.0;
+
+// split list and assigne to threads
+int thread_count = omp_get_num_threads();
+int thread_num = omp_get_thread_num();
+size_t chunk_size = tree_list.size() / thread_count;
+auto begin = tree_list.begin();
+std::advance(begin, thread_num * chunk_size);
+auto end = begin;
+
+if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
+{
+	end = tree_list.end();
+} else {
+	std::advance(end, chunk_size);
+}
+
+#pragma omp barrier
+        // for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
+            // auto pTree = (*pos);
+		for (auto it = begin; it != end; ++it) {
+			auto pTree = (*it);
 
             if (((double)pTree->xcoo/1000 >= xminwindow) && ((double)pTree->xcoo/1000 <= xmaxwindow) && ((double)pTree->ycoo/1000 >= yminwindow)
                 && ((double)pTree->ycoo/1000 <= ymaxwindow)) {  // loop over reduced plot
                 // basal area as population size identifier
-                if (pTree->height >= 130) {
-                    basalarea += (M_PI * pow((pTree->dbreast / 2), 2));
-                    stemcount++;
+                if ((double)pTree->height/100 >= 130) {
+                    local_basalarea += (M_PI * pow((pTree->dbreast / 2), 2));
+                    local_stemcount++;
                 }
 
                 // population sizes in height classes
-                if (pTree->height <= 40) {
-                    nheight0b40++;
-                } else if ((pTree->height > 40) && (pTree->height <= 200)) {
-                    nheight41b200++;
-                } else if (pTree->height > 200) {
-                    nheight201b10000++;
-                    meantreeheight += (double) pTree->height;
-                    meantreeage += (double) pTree->age;
+                if ((double)pTree->height/100 <= 40) {
+                    local_nheight0b40++;
+                } else if (((double)pTree->height/100 > 40) && ((double)pTree->height/100 <= 200)) {
+                    local_nheight41b200++;
+                } else if ((double)pTree->height/100 > 200) {
+                    local_nheight201b10000++;
+                    local_meantreeheight += (double) pTree->height/100;
+                    local_meantreeage += (double) pTree->age;
                 }
 
                 if (pTree->dbreast > 0) {
-                    breastdiameter = breastdiameter + pTree->dbreast;
-                    breastdiametercount++;
+                    local_breastdiameter += pTree->dbreast;
+                    local_breastdiametercount++;
                 }
             }
 
-            ++pos;
+            // ++pos;
         }
+
+#pragma omp critical
+{
+	basalarea += local_basalarea;
+	nheight0b40 += local_nheight0b40;
+	nheight41b200 += local_nheight41b200;
+	nheight201b10000 += local_nheight201b10000;
+	breastdiameter += local_breastdiameter;
+	breastdiametercount += local_breastdiametercount;
+	stemcount += local_stemcount;
+	meantreeheight += local_meantreeheight;
+	meantreeage += local_meantreeage;
+}
+
+} // pragma
 
         // push back values in evaluation list
         pEvaluation->basalarealist.push_back(basalarea);
@@ -689,7 +735,7 @@ void Dataoutput(int t,
                         // fprintf(filepointer, "%d;", pTree->namem);
                         fprintf(filepointer, "%4.4f;", pTree->dbasal);
                         fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                        fprintf(filepointer, "%4.4f;", (double) pTree->height);
+                        fprintf(filepointer, "%4.4f;", (double) pTree->height/100);
                         fprintf(filepointer, "%d;", pTree->age);
                         fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
                         fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
@@ -749,13 +795,13 @@ void Dataoutput(int t,
                         fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                         fprintf(filepointer, "%4.4f;", pTree->dbasal);
                         fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                        fprintf(filepointer, "%4.4f;", (double) pTree->height);
+                        fprintf(filepointer, "%4.4f;", (double) pTree->height/100);
                         fprintf(filepointer, "%d;", pTree->age);
                         fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
                         fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
                         fprintf(filepointer, "%4.5f;", pTree->densitywert);
                         // fprintf(filepointer, "%d;", pTree->generation);
-                        fprintf(filepointer, "%4.4f;", (double) pTree->coneheight);
+                        fprintf(filepointer, "%4.4f;", (double) pTree->coneheight/100);
                         fprintf(filepointer, "%d;", pTree->seednewly_produced);
                         // fprintf(filepointer, "%d;", pTree->seedproduced);
                         fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
@@ -862,7 +908,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "%d;", pTree->line);
                 // fprintf(filepointer, "%d;", pTree->generation);
                 // fprintf(filepointer, "%d;", pTree->species);
-                fprintf(filepointer, "%4.4f;", (double) pTree->height);
+                fprintf(filepointer, "%4.4f;", (double) pTree->height/100);
                 fprintf(filepointer, "%4.4f;", pTree->dbasal);
                 fprintf(filepointer, "%4.4f;", pTree->dbreast);
                 fprintf(filepointer, "%d;", pTree->age);
@@ -933,12 +979,13 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // data evaluation and output
-            for (unsigned long long int  kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
+            // for (unsigned long long int  kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
+            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos = kartenpos+parameter[0].sizemagnif*parameter[0].demresolution) {
                 auto pEnvirgrid = plot_list[kartenpos];
 				double ycooi = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
 				double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
                 // if (parameter[0].demlandscape | 
-                if ( (parameter[0].demlandscape & ( (((xcooi/parameter[0].sizemagnif/30)-floor(xcooi/parameter[0].sizemagnif/30))==0) & (((ycooi/parameter[0].sizemagnif/30)-floor(ycooi/parameter[0].sizemagnif/30))==0) )) | 
+                if ( (parameter[0].demlandscape & ( (((xcooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(xcooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) & (((ycooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(ycooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) )) | 
 					( (pEnvirgrid->Treenumber > 0)
 						&& ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
                         && (ycooi >= yminwindow * parameter[0].sizemagnif)

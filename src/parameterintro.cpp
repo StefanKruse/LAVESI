@@ -442,6 +442,17 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
     }
 
+    strcpy(uebergabestring, "seedintro_maxy");
+    parameter[0].seedintro_maxy = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintro_maxy);
+    }
+    strcpy(uebergabestring, "seedintro_maxx");
+    parameter[0].seedintro_maxx = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintro_maxx);
+    }
+
     strcpy(uebergabestring, "yearswithseedintro");
     parameter[0].yearswithseedintro = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]));
     if (parameter[0].parameterinputvis == true) {

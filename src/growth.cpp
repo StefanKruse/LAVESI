@@ -49,7 +49,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tre
                     exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * pTree->dbasal
                         + parameter[0].gdbasalfacqgmel * pTree->dbasal * pTree->dbasal)
 					// * ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / pTree->elevation) ) )
-					* ((weather_list[yearposition]->weatherfactorg*( ((double) pTree->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( ((double) pTree->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
+					* ((weather_list[yearposition]->weatherfactorg*( ((double) pTree->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( ((double)pTree->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
                     * (((double)pTree->thawing_depthinfluence) / 100);
             } else if (pTree->species == 2) {
                 maxbw_help =
@@ -226,8 +226,37 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
 
         aktort++;
 
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            auto pTree = (*pos);
+
+omp_set_dynamic(0);                                 // disable dynamic teams ; TODO remove here
+omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
+// std::random_device random_dev;
+#pragma omp parallel
+{
+			// std::mt19937 rng(random_dev());
+			// std::uniform_real_distribution<double> uniform(0, 1);
+			
+			// split list and assigne to threads
+            int thread_count = omp_get_num_threads();
+            int thread_num = omp_get_thread_num();
+            size_t chunk_size = tree_list.size() / thread_count;
+            auto begin = tree_list.begin();
+            std::advance(begin, thread_num * chunk_size);
+            auto end = begin;
+
+            if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
+            {
+                end = tree_list.end();
+            } else {
+                std::advance(end, chunk_size);
+            }
+
+// wait for all threads to initialize and then proceed
+#pragma omp barrier
+
+        // for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
+            // auto pTree = (*pos);
+		for (auto it = begin; it != end; ++it) {
+			auto pTree = (*it);
 
             double maxbasalwachstum = 0.0;
 
@@ -258,6 +287,7 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
             if (pTree->growing == true) {
                 pTree->dbasal += basalwachstum;
             }
+// cout << (double)pTree->dbasalmax/1000 << " + " << pTree->dbasal << " + " << (double)pTree->elevation/10 << " + " << (double)pTree->envirimpact/10000 << " + " << pTree->densitywert << " => maxbasgrowth=" << maxbasalwachstum << " => ";
 // cout << pTree->dbasalmax << " + " << pTree->dbasal << " + " << pTree->elevation << " + " << pTree->slope << " + " << pTree->densitywert << " + " << pTree->buffer << endl;
 
             if (parameter[0].relgrowthinfluence == 0) {
@@ -266,13 +296,14 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
 				if(maxbasalwachstum<=0.0)
 					pTree->dbasalrel = 0;
 				else
-					pTree->dbasalrel = (unsigned short int) floor(1000*basalwachstum / (maxbasalwachstum + (maxbasalwachstum * parameter[0].basalinfluenceoldyoung * pTree->dbasal)));
+					pTree->dbasalrel = (unsigned short int) floor(1000* (basalwachstum / (maxbasalwachstum + (maxbasalwachstum * parameter[0].basalinfluenceoldyoung * pTree->dbasal))) );
             }
+// cout << " dbasalrel=" << pTree->dbasalrel << endl;
 
             double maxbreastwachstum = 0;
             double breastwachstum = 0;
 
-            if (pTree->height >= 130) {
+            if ((double)pTree->height/100 >= 130) {
                 maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, pTree);
 
                 // breastwachstum = maxbreastwachstum * ((double)pTree->buffer) * (1.0 - pTree->densitywert);
@@ -309,25 +340,26 @@ void Growth(struct Parameter* parameter, int yearposition, vector<list<Tree*>>& 
             }
 
             // tree height update
-            if (pTree->height < 130) {
+            if ((double)pTree->height/100 < 130) {
                 if (parameter[0].allometryfunctiontype == 1) {
-                    pTree->height = (unsigned short int) floor(parameter[0].dbasalheightalloslope * pow(pTree->dbasal, parameter[0].dbasalheightalloexp));
+                    pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(pTree->dbasal, parameter[0].dbasalheightalloexp));
                 } else {
-                    pTree->height = (unsigned short int) floor(parameter[0].dbasalheightslopenonlin * pTree->dbasal);
+                    pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * pTree->dbasal);
                 }
-            } else if (pTree->height >= 130) {
+            } else if ((double)pTree->height/100 >= 130) {
                 if (parameter[0].allometryfunctiontype == 1) {
-                    pTree->height = (unsigned short int) floor(parameter[0].dbreastheightalloslope * pow(pTree->dbreast, parameter[0].dbreastheightalloexp) + 130.0);
+                    pTree->height = (unsigned short int) floor(100* (parameter[0].dbreastheightalloslope * pow(pTree->dbreast, parameter[0].dbreastheightalloexp) + 130.0) );
                 } else {
-                    pTree->height = (unsigned short int) floor(pow((parameter[0].dbreastheightslopenonlin * pow(pTree->dbreast, 0.5)), 2) + 130.0);
+                    pTree->height = (unsigned short int) floor(100* (pow((parameter[0].dbreastheightslopenonlin * pow(pTree->dbreast, 0.5)), 2) + 130.0) );
                 }
-            } else {
+            } /* else {
                 // check if the substructure height defined
                 delete pTree;
                 pos = tree_list.erase(pos);
-            }
+            }*/
 
-            ++pos;
+            // ++pos;
         }
+} // pragma
     }
 }

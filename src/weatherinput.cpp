@@ -712,7 +712,7 @@ void passWeather() {
 		fdir = fopen(output.c_str(), "a+");
 		
 		fprintf(fdir, 
-			"%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n", 
+			"%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n", 
 			// "%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f\n". 
 			weather_list[iweather]->temp1monthmeaniso,
 			weather_list[iweather]->temp1monthmeanisomin,
@@ -732,7 +732,11 @@ void passWeather() {
 			weather_list[iweather]->julisothermrestriktion,
 			weather_list[iweather]->julisothermrestriktionmin,
 			weather_list[iweather]->nddrestriktion,
-			weather_list[iweather]->nddrestriktionmin
+			weather_list[iweather]->nddrestriktionmin,
+            weather_list[iweather]->weatherfactorg,
+            weather_list[iweather]->weatherfactorming,
+            weather_list[iweather]->weatherfactors,
+            weather_list[iweather]->weatherfactormins
 		);
 		
 		fclose(fdir);

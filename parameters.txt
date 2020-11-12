@@ -114,17 +114,19 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=50; 			// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=1000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+seedintronumber=100000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=10;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=1000;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 										// 0==into all plots along a transect
 										// 1==only southernmost plot
 seedwinddispersalmode=2;						// (int 1,2) positions for introduced seeds
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
+seedintro_maxy=5000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=5000;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
-boundaryconditions=1;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
+boundaryconditions=0;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 										// 0==seeds passing the borders are removed
 										// 1==the western/eastern and northern/southern border turned in both directions 
 										// 2==dispersal connection only on the western to eastern border

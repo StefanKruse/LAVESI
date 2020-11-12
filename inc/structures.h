@@ -26,14 +26,14 @@ struct Tree {//TODO: check variable types for memory improvements
     unsigned short int dbasalmax;			// 2	---> one year max probably few centimeters -> unsigned short int /1000 max 65cm
     unsigned short int dbasalrel;			// 2	---> one year max probably few centimeters -> unsigned short int /1000
     unsigned short int dbreastrel;			// 2	---> one year max probably few centimeters -> unsigned short int /1000
-    unsigned short int height;				// 2	-> was double
-    unsigned short int coneheight;			// 2	-> was double
+    unsigned short int height;				// 2	-> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision 
+    unsigned short int coneheight;			// 2	-> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision 
     unsigned short int age;					// 2 	-> was int
     unsigned short int seednewly_produced;	// 2 	-> was int
     signed short int species;				// 2 	-> was int
 	unsigned short int envirimpact;			// 2
 	short int elevation;					// 2
-    bool cone;								// 1	-> was int
+    bool cone;								// 1	-> was int coudl be replaced by single use of coneheight, if limit then no cone if different then cone
     bool longdispersed;						// 1
     bool growing;							// 1
 };
@@ -53,7 +53,7 @@ struct Seed {//TODO: check variable types for memory improvements
     // int namep;						// 4	-> deleted not in use right now
     // int line;						// 4	-> deleted not in use right now
     // int generation;					// 4	-> deleted not in use right now
-    unsigned short int releaseheight;	// 2	-> was double -> in cm 0 to 10000 so 65535 as max would be sufficient for trees up to 650m---> could use another double only for dispersal necessary
+    unsigned short int releaseheight;	// 2	-> was double -> unsigned short in then /100 in cm 0 to 10000 so 65535 as max would be sufficient for trees up to 65m---> could use another double only for dispersal necessary
     unsigned short int age;				// 2	-> was int
     signed short int species;			// 2	-> was int
     bool incone;						// 1
@@ -62,8 +62,6 @@ struct Seed {//TODO: check variable types for memory improvements
 };
 
 struct Envirgrid {
-	// Envirgrid(short int elevation = 0, unsigned short int Treedensityvalue = 0, unsigned short int Treenumber = 0, unsigned short maxthawing_depth = 0, unsigned short int envirgrowthimpact = 0): elevation(elevation), Treedensityvalue(Treedensityvalue), Treenumber(Treenumber), maxthawing_depth(maxthawing_depth), envirgrowthimpact(envirgrowthimpact) {}
-
 	// double xcoo; // TODO: max length*resolution is the highest resolution (e.g. 70000 for 14 km), check if double is necessary or signed int (8 -> 4 bytes)
     // double ycoo; // TODO: max length*resolution is the highest resolution (e.g. 70000 for 14 km), check if double is necessary or signed int (8 -> 4 bytes)
     // int xworldcoo; // TODO: check if necessary at all, use short int (4 -> 2 bytes)
@@ -87,6 +85,15 @@ struct Envirgrid {
     // TODO std::array<unsigned short, 10> litterheight;
 	// double slope; //TODO: check use of unsigned short int as only between 0 and 45 *1000 possible, so 1/1000 degree precision (8 -> 2 bytes)
 	unsigned short int envirgrowthimpact; 	//2		//TODO: use unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000 units precision (8 -> 2 bytes)
+	
+	// constructor
+	Envirgrid(short int elevation=0, unsigned short int Treedensityvalue=0, unsigned short int Treenumber=0, unsigned short maxthawing_depth=1000, unsigned short int envirgrowthimpact=1)
+		: elevation(elevation)
+		, Treedensityvalue(Treedensityvalue)
+		, Treenumber(Treenumber)
+		, maxthawing_depth(maxthawing_depth)
+		, envirgrowthimpact(envirgrowthimpact)
+	{}
 };
 
 struct Parameter {
@@ -149,6 +156,8 @@ struct Parameter {
     int seedwinddispersalmode;
     int seedintronumber;
     int seedintronumberpermanent;
+	unsigned int seedintro_maxy;
+	unsigned int seedintro_maxx;
     bool seedtravelbetween;
     int starttrees;
     int hinterland_maxlength;

@@ -1,4 +1,5 @@
-﻿#include "LAVESI.h"
+﻿#include <random>
+#include "LAVESI.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -25,9 +26,37 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
     anstiegweathermortgmin = (60 * weather_list[yearposition_help]->janisothermrestriktiongmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
     anstiegweathermortsmin = (60 * weather_list[yearposition_help]->janisothermrestriktionsmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
 
+
     // biotic influence:
-    for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-        auto pTree = (*pos);
+omp_set_dynamic(0);                                 // disable dynamic teams ; TODO remove here
+omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
+std::random_device random_dev;
+
+#pragma omp parallel
+{
+std::mt19937 rng(random_dev());
+std::uniform_real_distribution<double> uniform(0, 1);
+
+// split list and assigne to threads
+int thread_count = omp_get_num_threads();
+int thread_num = omp_get_thread_num();
+size_t chunk_size = tree_list.size() / thread_count;
+auto begin = tree_list.begin();
+std::advance(begin, thread_num * chunk_size);
+auto end = begin;
+
+if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
+{
+	end = tree_list.end();
+} else {
+	std::advance(end, chunk_size);
+}
+			
+#pragma omp barrier
+    // for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
+        // auto pTree = (*pos);
+	for (auto it = begin; it != end; ++it) {
+		auto pTree = (*it);
 
         if (pTree->growing == true) {
             // if maximal age is exceeded an additional factor occurs
@@ -38,18 +67,18 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 
             // height dependent influences
             double wachstumrel = 1.0;
-            if (pTree->height < 130) {
-                wachstumrel = (double) pTree->dbasalrel/1000;
+            if ((double)pTree->height/100 < 130) {
+                wachstumrel = (double)pTree->dbasalrel/1000;
             } else {
-                wachstumrel = (double) pTree->dbreastrel/1000;
+                wachstumrel = (double)pTree->dbreastrel/1000;
             }
 
             // extra competition effect
             double heightnkugeleinfluss = 1;
-            if ((double) pTree->height < (parameter[0].densityvaluemaximumatheight * 2)) {
+            if ((double)pTree->height/100 < (parameter[0].densityvaluemaximumatheight * 2)) {
                 heightnkugeleinfluss =
                     heightnkugeleinfluss
-                    + (sqrt(pow(parameter[0].densityvaluemaximumatheight, 2) - pow((double) pTree->height - parameter[0].densityvaluemaximumatheight, 2))
+                    + (sqrt(pow(parameter[0].densityvaluemaximumatheight, 2) - pow((double)pTree->height/100 - parameter[0].densityvaluemaximumatheight, 2))
                        / parameter[0].densityvaluemaximumatheight);
             }
 
@@ -185,7 +214,7 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 															  + parameter[0].gdbasalfacqsib * pTree->dbasal * pTree->dbasal)))));
 			}
 
-			double heightreduce = pow((1.0 / (double) pTree->height), parameter[0].heightweathermorteinflussexp); // includes a minimun limit
+			double heightreduce = pow((1.0 / (double) pTree->height/100), parameter[0].heightweathermorteinflussexp); // includes a minimun limit
 			if(heightreduce < 0.001)
 				heightreduce=0.001;
             double weather_mort_gmel = parameter[0].mweather * weathermortaddg * heightreduce;
@@ -196,22 +225,22 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
 				dry_mort = parameter[0].mdrought
 							* ( weather_list[yearposition_help]->droughtmort - ( ( weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin ) * 1.0/(((double)treerows) / (double)pTree->ycoo/1000) ) )
 							// (weather_list[yearposition_help]->droughtmort + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin)))
-							* pow((1.0 / (double) pTree->height), 0.5);
+							* pow((1.0 / (double)pTree->height/100), 0.5);
 			} else if(parameter[0].demlandscape){
 				dry_mort = parameter[0].mdrought
 							// ( weather_list[yearposition_help]->droughtmort - ( ( weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin ) * 1.0/(((double)treerows) / pTree->ycoo) ) )
 							// (weather_list[yearposition_help]->droughtmort + ((pTree->ycoo / (double) treerows) * (weather_list[yearposition_help]->droughtmort - weather_list[yearposition_help]->droughtmortmin)))
 							* ((weather_list[yearposition_help]->droughtmort*( ((double) pTree->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition_help]->droughtmortmin*(1-( ((double) pTree->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))))
-							* pow((1.0 / (double) pTree->height), 0.5);
+							* pow((1.0 / (double)pTree->height/100), 0.5);
 			} else
 			{
-				dry_mort = parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / (double) pTree->height), 0.5);
+				dry_mort = parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / (double)pTree->height/100), 0.5);
 			}
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
 
             double Treemorts = 0.0 + parameter[0].mortbg + sapl_mort_sib + age_mort + growth_mort + dens_mort + weather_mort_sib + dry_mort;
-// cout << pTree->dbasalmax << "; " << pTree->dbasalrel <<  " === " << parameter[0].mortbg << "; " << sapl_mort_gmel << "; " << age_mort << "; " << growth_mort << "; " << dens_mort << "; " << weather_mort_gmel << "; " << dry_mort << " => " << Treemortg;
+// cout << (double)pTree->dbasalmax/1000 << "; " << (double)pTree->dbasalrel/1000 <<  " === " << parameter[0].mortbg << "; " << sapl_mort_gmel << "; " << age_mort << "; " << growth_mort << "; " << dens_mort << "; " << weather_mort_gmel << "; " << dry_mort << " => " << Treemortg;
 // cout << weather_mort_gmel << " + " << dry_mort << " => " << Treemortg;
             if (Treemortg > 1.0) {
                 Treemortg = 1.0;
@@ -226,19 +255,37 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, list<Tree*>
             }
 
             // Determine if a tree dies (deletion of said tree in the corresponding list)
-            double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-            if (((pTree->species == 1) && (zufallsz < Treemortg)) || ((pTree->species == 2) && (zufallsz < Treemorts))) {
-                delete pTree;
-                pos = tree_list.erase(pos);
+            // double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+            double zufallsz = uniform(rng);
+            if ( (((pTree->species == 1) && (zufallsz < Treemortg)) || ((pTree->species == 2) && (zufallsz < Treemorts))) | (pTree->envirimpact<=0) ) {
+                // delete pTree;
+                // pos = tree_list.erase(pos);
+				
+				// alternatively set variables to dead and notgrowing negative ages will be used for rotting deadwood
+				pTree->growing = false;
 // cout << " killed " << endl;
-            } else {
+            }/* else {
                 ++pos;
 // cout << " lives " << endl;
             }
         } else {
             ++pos;
+			*/
         }
     }
+} // pragma
+	
+	// loop through list to remove dead individuals
+	// ... pTree->growing == false;
+    for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ) {
+        auto pTree = (*pos);
+		if(pTree->growing == false){
+			delete pTree;
+			pos = tree_list.erase(pos);
+		} else {
+			++pos;
+		}
+	}
 }
 
 /****************************************************************************************/
@@ -269,25 +316,37 @@ void Mortality(struct Parameter* parameter,
         aktort++;
 
         // mortality of seeds
+omp_set_dynamic(1);                                 // disable dynamic teams ; TODO remove here
+omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
+std::random_device random_dev;
+
+#pragma omp parallel
+{
+std::mt19937 rng(random_dev());
+std::uniform_real_distribution<double> uniform(0, 1);
+			
+#pragma omp for
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
             if (seed.dead) {
                 continue;
             }
-            double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+            // double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+            double zufallsz = uniform(rng);
 
             if (zufallsz < seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort) {
                 seed.dead = true;
                 seed_list.remove(i);
             }
         }
-
+} // pragma
         // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         // implementation of multi-core-processing == trees are ordered by age which is highly correlated with seedprodAKT so that only elements are considered untiil the last tree producing seeds
 		omp_set_dynamic(0);                                 // disable dynamic teams ; TODO remove here
 		omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
+		// std::random_device random_dev;
 
 		double direction = 0.0;
 		double velocity = 0.0;
@@ -317,6 +376,9 @@ void Mortality(struct Parameter* parameter,
 
 #pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
 		{
+			std::mt19937 rng(random_dev());
+			std::uniform_real_distribution<double> uniform(0, 1);
+			
 			direction = 0.0;
 			velocity = 0.0;
 			ripm = 0, cntr = 0;
@@ -365,7 +427,8 @@ void Mortality(struct Parameter* parameter,
 				if (pTree->seednewly_produced > 0) {
 					int seedlebend = 0;
 					for (int sna = 0; sna < pTree->seednewly_produced; sna++) {
-						double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+						// double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+						double zufallsz = uniform(rng);
 						if (zufallsz >= parameter[0].seedconemort) {
 							++seedlebend;
 						}
@@ -373,7 +436,9 @@ void Mortality(struct Parameter* parameter,
 
 					if (seedlebend > 0) {
 						if ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
-							Pollinationprobability((double)pTree->xcoo/1000, (double)pTree->ycoo/1000, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees);
+							double randomnumberwind = uniform(rng);
+							double randomnumberwindfather = uniform(rng);
+							Pollinationprobability((double)pTree->xcoo/1000, (double)pTree->ycoo/1000, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees, randomnumberwind, randomnumberwindfather);
 						}
 
 						for (int sl = 0; sl < seedlebend; sl++) {

@@ -1,3 +1,4 @@
+#include <random>
 #include "LAVESI.h"
 #include "VectorList.h"
 
@@ -19,6 +20,12 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
 
+omp_set_dynamic(1);                                 // disable dynamic teams ; TODO remove here
+omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
+
+#pragma omp parallel
+{
+#pragma omp for
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
             if (seed.dead) {
@@ -32,7 +39,7 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
                 seed_list.remove(i);
             }
         }
-    }
+} // pragma
 
     int mat_age_length = 183;  // length of array maturationheight
     // height values in percent (0-99) computed using R
@@ -48,48 +55,76 @@ void Ageing(struct Parameter* parameter, vector<list<Tree*>>& world_tree_list, v
 
     for (vector<list<Tree*>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         list<Tree*>& tree_list = *posw;
+		
+omp_set_dynamic(0);                                 // disable dynamic teams ; TODO remove here
+omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove here
+std::random_device random_dev;
+#pragma omp parallel
+{
+			std::mt19937 rng(random_dev());
+			std::uniform_real_distribution<double> uniform(0, 1);
+			
+			// split list and assigne to threads
+            int thread_count = omp_get_num_threads();
+            int thread_num = omp_get_thread_num();
+            size_t chunk_size = tree_list.size() / thread_count;
+            auto begin = tree_list.begin();
+            std::advance(begin, thread_num * chunk_size);
+            auto end = begin;
 
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            auto pTree = (*pos);
-            pTree->age++;
-
-            if (pTree->cone == false) {
-                if (pTree->coneheight == 65535) {
-                    // trees reaching the maturation age are assigned a minimum height value for them to bear cones
-                    if (pTree->age > parameter[0].coneage) {
-                        // calculate random position in the array of maturation heights defined earlier
-                        // ... in this there are values between 0 and 182 (corresp. to (0,1) )
-                        int fraction = 0 + (int)floor(((mat_age_length - 1) * rand() / (RAND_MAX + 1.0)));
-
-                        // possibility for a tree <2m to maturate
-                        if (fraction == 0) {
-                            pTree->coneheight = (unsigned short int) 100 + ((double)100 * rand() / (RAND_MAX + 1.0));
-                        } else {
-                            pTree->coneheight = maturationheight[fraction];
-                        }
-                    }
-                }
-                // tree already has a height of maturation assigned to it
-                // ... if a tree is taller than this maturation height, he starts to produce seeds
-                else if (pTree->coneheight != 65535) {
-                    if (pTree->height >= pTree->coneheight) {
-                        pTree->cone = true;
-                    }
-                }
-
-                ++pos;
-            }
-            // tree bears cones
-            else if (pTree->cone == true) {
-                // pTree->seedproduced += pTree->seednewly_produced;
-                pTree->seednewly_produced = 0;
-
-                ++pos;
+            if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
+            {
+                end = tree_list.end();
             } else {
-                // check if cones were correctly assigned
-                delete pTree;
-                pos = tree_list.erase(pos);
+                std::advance(end, chunk_size);
             }
-        }
-    }
+
+// wait for all threads to initialize and then proceed
+#pragma omp barrier
+
+			// for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
+				// auto pTree = (*pos);
+			for (auto it = begin; it != end; ++it) {
+				auto pTree = (*it);
+				pTree->age++;
+
+				if (pTree->cone == false) {
+					if (pTree->coneheight == 65535) {
+						// trees reaching the maturation age are assigned a minimum height value for them to bear cones
+						if (pTree->age > parameter[0].coneage) {
+							// calculate random position in the array of maturation heights defined earlier
+							// ... in this there are values between 0 and 182 (corresp. to (0,1) )
+							// int fraction = 0 + (int)floor(((mat_age_length - 1) * rand() / (RAND_MAX + 1.0)));
+							int fraction = 0 + (int)floor(((mat_age_length - 1) * uniform(rng)));
+
+							// possibility for a tree <2m to maturate
+							if (fraction == 0) {
+								// pTree->coneheight = (unsigned short int) 100 + ((double)100 * rand() / (RAND_MAX + 1.0));
+								pTree->coneheight = (unsigned short int) 100 + ((double)100 * uniform(rng));
+							} else {
+								pTree->coneheight = maturationheight[fraction];
+							}
+						}
+					}
+					// tree already has a height of maturation assigned to it
+					// ... if a tree is taller than this maturation height, he starts to produce seeds
+					else if (pTree->coneheight != 65535) {
+						if (pTree->height >= pTree->coneheight) {
+							pTree->cone = true;
+						}
+					}
+
+					// ++pos;
+				}
+				// tree bears cones
+				else if (pTree->cone == true) {
+					// pTree->seedproduced += pTree->seednewly_produced;
+					pTree->seednewly_produced = 0;
+
+					// ++pos;
+				}
+			}
+} // pragma
+		} // tree list
+	} // world list
 }

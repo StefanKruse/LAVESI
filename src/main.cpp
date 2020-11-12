@@ -36,13 +36,21 @@ vector<double> wdir, wspd;
  *******************************************************************************************/
 void vegetationDynamics(int yearposition, int jahr, int t) {
 
-cout << " started vegDyn / ";
+cout << " started vegDyn / ivort=" << parameter[0].ivort << " / ";
 
-cout << "envirupdate+";
+// cout << "Elapsed time: " <<  << " s\n";
+auto time_start = chrono::high_resolution_clock::now();
     Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+auto time_end = chrono::high_resolution_clock::now();
+chrono::duration<double> elapsed;
+elapsed = time_end - time_start;
+cout << "envirupdate(" << elapsed.count() << ")+";
 
-cout << "growth+";
+time_start = chrono::high_resolution_clock::now();
     Growth(&parameter[0], yearposition, world_tree_list, world_weather_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Growth(" << elapsed.count() << ")+";
 
     int findyr1 = 0, findyr2 = 0, yr = 0;
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
@@ -66,12 +74,19 @@ cout << "growth+";
             }
         }
     }
-cout << "seeddispersal+";
+time_start = chrono::high_resolution_clock::now();
     Seeddispersal(yr, &parameter[0], world_seed_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Seeddispersal(" << elapsed.count() << ")+";
 
-cout << "seedproduction+";
+time_start = chrono::high_resolution_clock::now();
     Seedproduction(&parameter[0], world_tree_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Seedproduction(" << elapsed.count() << ")+";
 
+time_start = chrono::high_resolution_clock::now();
     if (parameter[0].seedintro == true && parameter[0].yearswithseedintro > 0) {
         parameter[0].starter = true;
         Treedistribution(&parameter[0], stringlengthmax);
@@ -80,25 +95,43 @@ cout << "seedproduction+";
         parameter[0].starter = true;
         Treedistribution(&parameter[0], stringlengthmax);
     }
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Treedistribution(" << elapsed.count() << ")+";
 
-cout << "hinterlandseed+";
+time_start = chrono::high_resolution_clock::now();
     Hinterlandseedintro(&parameter[0], yearposition, world_seed_list, world_weather_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Hinterlandseedintro(" << elapsed.count() << ")+";
 
-cout << "treeestab+";
+time_start = chrono::high_resolution_clock::now();
     Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Treeestablishment(" << elapsed.count() << ")+";
 
-cout << "dataoutput+";
+time_start = chrono::high_resolution_clock::now();
     Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Dataoutput(" << elapsed.count() << ")+";
 
-cout << "mortality+";
+time_start = chrono::high_resolution_clock::now();
     Mortality(&parameter[0], yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
     wspd.clear();
     wdir.clear();
     wspd.shrink_to_fit();
     wdir.shrink_to_fit();
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Mortality(" << elapsed.count() << ")+";
 
-cout << "ageing";
+time_start = chrono::high_resolution_clock::now();
     Ageing(&parameter[0], world_tree_list, world_seed_list);
+time_end = chrono::high_resolution_clock::now();
+elapsed = time_end - time_start;
+cout << "Ageing(" << elapsed.count() << ")+";
 	
 cout << " /// done " << endl;
 }
@@ -682,8 +715,11 @@ omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 	// cout << " = => slopeinter:" << slopeinter << " => factor:" << (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743))) << endl;
 	// cout << " = => twiinter:" << twiinter << " => factor:" << (-0.045999* twiinter + 0.994066 ) << endl;
 						double envirgrowthimpact =
-											0.75 * (-0.045999* twiinter + 0.994066 )
-											+ (1.0-0.75) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
+											0.5 * (-0.045999* twiinter + 0.994066 )
+											+ (1.0-0.5) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
+											
+						// envirgrowthimpact=1.0; // TODO: clean here
+						
 						// plausibility check
 						if(envirgrowthimpact>1.0)
 							envirgrowthimpact=1.0;
@@ -693,7 +729,7 @@ omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 						// adjust by factor
 						double envirgrowthimpactfactor=1.0;
 						
-						plot_list[kartenpos]->envirgrowthimpact = (unsigned short int) floor(envirgrowthimpactfactor * envirgrowthimpact*10000);
+						plot_list[kartenpos]->envirgrowthimpact = (unsigned short int) floor(10000* envirgrowthimpactfactor * envirgrowthimpact);
 	// cout << " => envirgrowthimit pact in plot=" << plot_list[kartenpos]->envirgrowthimpact << endl;
 					} else {
 						plot_list[kartenpos]->elevation = 32767;
@@ -736,39 +772,49 @@ omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
 
 	// test output with r 
 	// setwd("//dmawi/potsdam/data/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
+	// setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/spatial_growthfactuning/growthfac_100_025twi_075slope/output")
+	// setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/spatial_growthfactuning/growthfac_100_050twi_050slope/output")
+	// setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/spatial_growthfactuning/growthfac_100_075twi_025slope/output")
 	// setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/LAVESI/output")
-	setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/spatial_growthfactuning/growthfac_100_025twi_075slope/output")
-	setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/spatial_growthfactuning/growthfac_100_050twi_050slope/output")
-	setwd("/bioing/user/stkruse/ChukotkaBiomassSims2020/spatial_growthfactuning/growthfac_100_075twi_025slope/output")
-	yrtoplot=1375
-	elein=read.csv("datatrees_Treedensity1_2300851.csv", sep=";",dec=".")
-	str(elein)	
-	elein$Elevation[elein$Elevation==3276.7000]=NA
-	library(lattice)
-	elein$Xc=elein$X/5
-	elein$Yc=elein$Y/5
+	// yrtoplot=75
+		// elein=read.csv("datatrees_Treedensity1_2300851.csv", sep=";",dec=".")
+		// str(elein)	
+		// elein$Elevation[elein$Elevation==3276.7000]=NA
+		// library(lattice)
+		// elein$Xc=elein$X/5
+		// elein$Yc=elein$Y/5
+		
+		// png("datatrees_Treedensity1_2300851_Elevation.png",width=2100, height=2100)
+			// p=with(elein, levelplot(Elevation~Xc+Yc, asp=1))
+			// print(p)
+		// dev.off()
+		// png("datatrees_Treedensity1_2300851_Envirgrowthimpact.png",width=2100, height=2100)
+			// p=with(elein, levelplot(Envirgrowthimpact~Xc+Yc, asp=1))
+			// print(p)
+		// dev.off()
+		
+	// #for(yrtoplot in (8:11)*100){
+	// for(yrtoplot in seq(25,1175,25)){
+
+		// trein=read.csv(paste0("datatrees_1_2300851_",yrtoplot,"_1.csv"), sep=";",dec=".")
+		// trein=trein[trein$height>40,]
+
+		// p=with(elein, levelplot(Elevation~Xc+Yc, asp=1))
+		// p2=update(p, panel = function(...) {
+		  // panel.levelplot(...)
+		  // panel.xyplot(trein$X,trein$Y, pch = 17, col = "forestgreen", cex=0.5+trein$height/1000)
+		// })
+		// png(paste0("datatrees_1_2300851_larger40_",yrtoplot,"_1.png"),width=2100, height=2100)
+			// print(p2)
+		// dev.off()
+	// }
 	
-	png("datatrees_Treedensity1_2300851_Elevation.png",width=2100, height=2100)
-		p=with(elein, levelplot(Elevation~Xc+Yc, asp=1))
-		print(p)
-	dev.off()
-	png("datatrees_Treedensity1_2300851_Envirgrowthimpact.png",width=2100, height=2100)
-		p=with(elein, levelplot(Envirgrowthimpact~Xc+Yc, asp=1))
-		print(p)
-	dev.off()
-	
 
-	trein=read.csv(paste0("datatrees_1_2300851_",yrtoplot,"_1.csv"), sep=";",dec=".")
-
-	p=with(elein, levelplot(Elevation~Xc+Yc, asp=1))
-	p2=update(p, panel = function(...) {
-	  panel.levelplot(...)
-	  panel.xyplot(trein$X,trein$Y, pch = 17, col = "forestgreen", cex=0.5+trein$height/1000)
-	})
-	png(paste0("datatrees_1_2300851_",yrtoplot,"_1.png"),width=2100, height=2100)
-		print(p2)
-	dev.off()
-
+    // ffmpeg -r 1 -i data/input-%4d.png -pix_fmt yuv420p -r 10 data/output.mp4
+    // ffmpeg -r 1 -i datatrees_1_2300851_larger40_%04_1.png -pix_fmt yuv420p -r 10 datatrees_1_2300851_larger40.mp4
+    // ffmpeg -r 1 -i 'ani (%02d).png' -pix_fmt yuv420p -r 10 'aniout.mp4'
+	// ffmpeg -i 'aniout.mp4' -vf "fps=4,scale=640:-1:flags=lanczos" -c:v pam -f image2pipe - | convert -delay 10 - -loop 0 -layers optimize 'aniout.mp4.2.gif'
+	// ffmpeg -i 'aniout.mp4' -vf "fps=4,scale=2100:-1:flags=lanczos" -c:v pam -f image2pipe - | convert -delay 10 - -loop 0 -layers optimize 'aniout.mp4.2large.gif'
 	
 	
 cout << " ... end dem and slope input" << endl;
@@ -797,8 +843,25 @@ cout << " -> started initialise Maps " << endl;
 // should be for 10010*10010 tiles= 2505002500
 
 // parallelize with pragma as only single core needs ~ 4min for 14x11 km area
-		// old replaced by parallelized version
-		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
+// ... first initialize plot_list (STL vector) should save ~75% time over only loop
+plot_list.reserve(((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif)); 
+// 124.484 s over 149.958 s
+// 127.596 s with emplace_back => no advance!
+// 121.947 s without internal
+
+short int initialelevation = 0;
+if(parameter[0].mapylength==1)
+	initialelevation = (short int) floor(10*parameter[0].elevationoffset);
+
+// resize fails as constructor element not correct
+// ... resize calls reserve internally so no extra call before necessary
+// plot_list.resize(((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif),Envirgrid(initialelevation,0,0,0,0));
+// cout << " first element elevation=" << plot_list[1]->elevation << endl;
+// cout << " last element elevation=" << plot_list[((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif) - 1]->elevation << endl;
+
+auto time_start = chrono::high_resolution_clock::now();
+		// old replaced by simpler version 
+/*		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
             auto pEnvirgrid = new Envirgrid();
 
             // pEnvirgrid->yworldcoo = aktortyworldcoo;
@@ -833,95 +896,27 @@ cout << " -> started initialise Maps " << endl;
 				pEnvirgrid->elevation = (short int) floor(10*parameter[0].elevationoffset); // will be filled later with data on top of elevationoffset
 			
 
-            plot_list.push_back(pEnvirgrid);
+            plot_list.emplace_back(pEnvirgrid);
         }
+*/
+		// old replaced by parallelized version
 
-/*
-// srtruct		
-		// paralellize
-		// 1. resize list container to final size
-		
-		// Envirgrid evi;
-		// evi.elevation=0;
-		// evi.Treedensityvalue=0; 
-		// evi.Treenumber=0; 		
-		// evi.maxthawing_depth=0;
-		// evi.envirgrowthimpact=0;
-	
-		// cout << " plot_list resizing, size at start=" << plot_list.size();
-		// plot_list.resize(((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif), evi);
-		// plot_list.fill(0, ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif)-1, evi);
-		// cout << " ====> after= " << plot_list.size() << endl;
-		// access last element
-		// cout << " last element elevation..." << plot_list[((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif)-1]->elevation << endl;
-		// cout << " last element Treenumber..." << plot_list[((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif)-1]->Treenumber << endl;
-		
-		
-cout << " max length should be:" << ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif) << endl;
-omp_set_dynamic(0);                                 // disable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
-#pragma omp parallel
-{
-            // int thread_count = omp_get_num_threads();
-            // int thread_num = omp_get_thread_num();
-            // size_t chunk_size = plot_list.size() / thread_count;
-            // auto begin = plot_list.begin();
-            // std::advance(begin, thread_num * chunk_size);
-            // auto end = begin;
-
-            // if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
-            // {
-                // end = plot_list.end();
-            // } else {
-                // std::advance(end, chunk_size);
-            // }
-
-// wait for all threads to initialize and then proceed
-// #pragma omp barrier
-
-		// for (auto it = begin; it != end; ++it) {
-			// auto pEnvirgrid = (*it);
-#pragma omp for
+// parallelizatoin only if each thread gets its own vector and then insert/splice all in the end
+// omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
+// #pragma omp parallel
+// {
+// #pragma omp for
 		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
-cout << " kapos:" << kartenpos << endl;
-            // auto pEnvirgrid = new Envirgrid();
-
-            // pEnvirgrid->yworldcoo = aktortyworldcoo;
-            // pEnvirgrid->xworldcoo = aktortxworldcoo;
-
-            // pEnvirgrid->ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
-            // pEnvirgrid->xcoo = (double)kartenpos - (pEnvirgrid->ycoo * (treecols * parameter[0].sizemagnif));
-
-            plot_list[kartenpos]->Treedensityvalue = 0;
-            plot_list[kartenpos]->Treenumber = 0;
-            plot_list[kartenpos]->maxthawing_depth = 1000;
-
-            // pEnvirgrid->litterheight = 200;   // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight0 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight1 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight2 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight3 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight4 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight5 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight6 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight7 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight8 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheight9 = 200;  // in 0.1mm -> max 6.5535 m
-            // pEnvirgrid->litterheightmean = 200;
-
-			// elevation of each grid in m 
-			// baseline to zero and set later after parameterization of elevationoffset
-			// ... in case of mapylength>1 weather files will be preprocessed on read in
-			if(parameter[0].mapylength>1)
-				plot_list[kartenpos]->elevation = 0.0; 
-			else
-				plot_list[kartenpos]->elevation = (short int) floor(10*parameter[0].elevationoffset); // will be filled later with data on top of elevationoffset
-			
-
-            // plot_list.push_back(pEnvirgrid);
+            auto pEnvirgrid = new Envirgrid({initialelevation,0,0,1000,0});
+            plot_list.emplace_back(pEnvirgrid);
         }
-}
-*/ // par end
+// }//pragma
+		
+auto time_end = chrono::high_resolution_clock::now();
+chrono::duration<double> elapsed;
+elapsed = time_end - time_start;
+cout << "Elapsed time: " << elapsed.count() << " s\n";
+
         // create an evaluation element for each site
         auto pEvaluation = new Evaluation();
         // pEvaluation->yworldcoo = aktortyworldcoo;

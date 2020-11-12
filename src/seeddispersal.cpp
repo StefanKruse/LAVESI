@@ -81,7 +81,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 		std::random_device random_dev;
 
 #pragma omp parallel
-		{
+{
 			std::mt19937 rng(random_dev());
 			std::uniform_real_distribution<double> uniform(0, 1);
 #pragma omp for
@@ -107,7 +107,8 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 							double jquer = 0;
 							double iquer = 0;
 
-							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double) seed.releaseheight, seed.species);
+							double randomnumberwind = uniform(rng);
+							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double) seed.releaseheight, seed.species, randomnumberwind);
 
 							if (parameter[0].ivort > 1045 && parameter[0].outputmode != 9 && parameter[0].omp_num_threads == 1) {
 								double seedeinschreibzufall = uniform(rng);
@@ -253,7 +254,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 					}
 				}
 			}
-		}  // pragma
+}  // pragma
 	}
 }
 

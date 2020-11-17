@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
@@ -11,113 +12,88 @@ using namespace std;
  *
  *
  *******************************************************************************************/
-void AddTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
-    if (parameter[0].omp_num_threads <= 1) {                 // more than one core
-		cout << " only one core available, exiting!" << endl;
-		exit(1);
-	} else {
-        omp_set_dynamic(0);                                 // disable dynamic teams
-        omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
+void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot_list) {
+
+// pragma omp initializing
+omp_set_dynamic(1); //enable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
-        {
-            int thread_count = omp_get_num_threads();
-            int thread_num = omp_get_thread_num();
-            size_t chunk_size = tree_list.size() / thread_count;
-            auto begin = tree_list.begin();
-            std::advance(begin, thread_num * chunk_size);
-            auto end = begin;
+{
+#pragma omp for
+	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+		auto& tree = tree_list[tree_i];
 
-            if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
-            {
-                end = tree_list.end();
-            } else {
-                std::advance(end, chunk_size);
-            }
+		int i = (int)floor((double)tree.ycoo/1000 * parameter[0].sizemagnif);
+		int j = (int)floor((double)tree.xcoo/1000 * parameter[0].sizemagnif);
 
-// wait for all threads to initialize and then proceed
-#pragma omp barrier
+		double flaechengroesze = 0.0;
+		if (parameter[0].calcinfarea == 1)  // linearly increasing
+			flaechengroesze = tree.dbasal * parameter[0].incfac / 100.0;
+		else if (parameter[0].calcinfarea == 2)  // linearly increasing
+			flaechengroesze = tree.dbasal * (2 / 3) * parameter[0].incfac / 100.0;
+		else if (parameter[0].calcinfarea == 3)  // linearly increasing
+			flaechengroesze = tree.dbasal * (4 / 3) * parameter[0].incfac / 100.0;
+		else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
+			flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * tree.dbasal)))) - 1;
+		else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
+			flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * tree.dbasal)))) - 1;
+		else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
+			flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * tree.dbasal)))) - 1;
 
-            for (auto it = begin; it != end; ++it) {
-                auto pTree = (*it);
+		// if the trees influences only one density grid cell
+		if (flaechengroesze < (1.0 / parameter[0].sizemagnif)) {
+			unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
 
+			plot_list[curposi]->Treedensityvalue += 
+				(unsigned short int) floor(10000*
+						pow(pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing)
+						// weighing with diameter
+						* pow(tree.dbasal, parameter[0].densitytreetile),
+						parameter[0].densityvaluemanipulatorexp)
+					);
+			plot_list[curposi]->Treenumber++;
+			// tree.densitywert=pow(tree.dbasal, parameter[0].densitytreetile);
+			tree.densitywert = pow(
+				pow(tree.dbasal, parameter[0].densitytreetile) * pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
+				parameter[0].densityvaluemanipulatorexp);
+		}
+		// if the trees influences more than one density grid cell
+		else {
+			// determine dimensions of the grid around the tree
+			int xyquerrastpos = (int)floor(flaechengroesze * parameter[0].sizemagnif);
+			// determine shifted coordinates and adding up the density value
+			double sumdensitywert = 0;
 
-			// for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-				// auto pTree = (*pos);
+			for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
+				for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
+					if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
+						&& (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
+						// Distance calculation to determine the influence of the density value in spatial units ...
+						// ... and inserting the value at every position
+						double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+						// only if the current grid cell is part of the influence area, a value is assigned
+						if (entfrastpos <= (double)xyquerrastpos) {
+							unsigned long long int curposii = (unsigned long long int) rastposi * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) rastposj;
 
-				int i = (int)floor((double)pTree->ycoo/1000 * parameter[0].sizemagnif);
-				int j = (int)floor((double)pTree->xcoo/1000 * parameter[0].sizemagnif);
+							plot_list[curposii]->Treedensityvalue +=
+								(unsigned short int) floor(10000*
+										pow(pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp)
+									);
 
-				double flaechengroesze = 0.0;
-				if (parameter[0].calcinfarea == 1)  // linearly increasing
-					flaechengroesze = pTree->dbasal * parameter[0].incfac / 100.0;
-				else if (parameter[0].calcinfarea == 2)  // linearly increasing
-					flaechengroesze = pTree->dbasal * (2 / 3) * parameter[0].incfac / 100.0;
-				else if (parameter[0].calcinfarea == 3)  // linearly increasing
-					flaechengroesze = pTree->dbasal * (4 / 3) * parameter[0].incfac / 100.0;
-				else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
-					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * pTree->dbasal)))) - 1;
-				else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
-					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * pTree->dbasal)))) - 1;
-				else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
-					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * pTree->dbasal)))) - 1;
+							plot_list[curposii]->Treenumber++;
 
-				// if the trees influences only one density grid cell
-				if (flaechengroesze < (1.0 / parameter[0].sizemagnif)) {
-					unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
-
-					plot_list[curposi]->Treedensityvalue += 
-						(unsigned short int) floor(10000*
-								pow(pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing)
-								// weighing with diameter
-								* pow(pTree->dbasal, parameter[0].densitytreetile),
-								parameter[0].densityvaluemanipulatorexp)
-							);
-					plot_list[curposi]->Treenumber++;
-					// pTree->densitywert=pow(pTree->dbasal, parameter[0].densitytreetile);
-					pTree->densitywert = pow(
-						pow(pTree->dbasal, parameter[0].densitytreetile) * pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
-						parameter[0].densityvaluemanipulatorexp);
-				}
-				// if the trees influences more than one density grid cell
-				else {
-					// determine dimensions of the grid around the tree
-					int xyquerrastpos = (int)floor(flaechengroesze * parameter[0].sizemagnif);
-					// determine shifted coordinates and adding up the density value
-					double sumdensitywert = 0;
-
-					for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
-						for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
-							if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-								&& (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
-								// Distance calculation to determine the influence of the density value in spatial units ...
-								// ... and inserting the value at every position
-								double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
-								// only if the current grid cell is part of the influence area, a value is assigned
-								if (entfrastpos <= (double)xyquerrastpos) {
-									unsigned long long int curposii = (unsigned long long int) rastposi * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) rastposj;
-
-									plot_list[curposii]->Treedensityvalue +=
-										(unsigned short int) floor(10000*
-												pow(pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp)
-											);
-
-									plot_list[curposii]->Treenumber++;
-
-									sumdensitywert +=
-										pow(pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
-								}
-							}
+							sumdensitywert +=
+								pow(pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
 						}
 					}
-
-					pTree->densitywert = sumdensitywert;
 				}
+			}
 
-				// ++pos;
-			} // each tree
-		} // pragma
-	} // multiple cores
+			tree.densitywert = sumdensitywert;
+		}
+	} // each tree
+} // pragma
 }
 
 /****************************************************************************************/
@@ -131,50 +107,50 @@ void AddTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
  * 1: no density calculated and densitywert=0.0 \n
  *
  * 2: ZOI-kind of type and
- *pTree->densitywert=1.0-(density_help/plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue)
+ *tree.densitywert=1.0-(density_help/plot_list[i*treecols*parameter[0].sizemagnif+j]->Treedensityvalue)
  *or \n
  *							sumdensitywert+=plot_list[rastposi*treecols*parameter[0].sizemagnif+rastposj]->Treedensityvalue;
- *\n pTree->densitywert=1.0-(density_help/sumdensitywert);
- *							pTree->densitywert=
- *pTree->densitywert
- **pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
+ *\n tree.densitywert=1.0-(density_help/sumdensitywert);
+ *							tree.densitywert=
+ *tree.densitywert
+ **pow((1.0-(0.01/tree.dbasal)),parameter[0].densityvaluedbasalinfluence);
  *
  * 3: random field of ZOI-Type and
- *pTree->densitywert=1.0-(density_help/plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue)
+ *tree.densitywert=1.0-(density_help/plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue)
  *or \n
  *								   sumdensitywert+=plot_list[izuf*treecols*parameter[0].sizemagnif+jzuf]->Treedensityvalue
- *\n pTree->densitywert=1.0-(density_help/sumdensitywert);
- *								   pTree->densitywert=
- *pTree->densitywert
- **pow((1.0-(0.01/pTree->dbasal)),parameter[0].densityvaluedbasalinfluence);
+ *\n tree.densitywert=1.0-(density_help/sumdensitywert);
+ *								   tree.densitywert=
+ *tree.densitywert
+ **pow((1.0-(0.01/tree.dbasal)),parameter[0].densityvaluedbasalinfluence);
  *******************************************************************************************/
 
 // TODO: implement sensing of trees of dem for only one core computation so far only multi-core implemented... which is then used in growth function to acess growth (elevation min and max of input)
-void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list) {
+void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot_list) {
     if (parameter[0].omp_num_threads == 1) {  // only one core
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
-            auto pTree = (*pos);
-
-            int i = (int)floor((double)pTree->ycoo/1000 * parameter[0].sizemagnif);
-            int j = (int)floor((double)pTree->xcoo/1000 * parameter[0].sizemagnif);
+		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+			auto& tree = tree_list[tree_i];
+			
+            int i = (int)floor((double)tree.ycoo/1000 * parameter[0].sizemagnif);
+            int j = (int)floor((double)tree.xcoo/1000 * parameter[0].sizemagnif);
 
             // DENSITY 1
             if (parameter[0].densitymode == 1) {
-                pTree->densitywert = 0.0;
+                tree.densitywert = 0.0;
             } else {
                 double flaechengroesze = 0.0;
                 if (parameter[0].calcinfarea == 1)  // linearly increasing
-                    flaechengroesze = pTree->dbasal * parameter[0].incfac / 100.0;
+                    flaechengroesze = tree.dbasal * parameter[0].incfac / 100.0;
                 else if (parameter[0].calcinfarea == 2)  // linearly increasing
-                    flaechengroesze = pTree->dbasal * (2 / 3) * parameter[0].incfac / 100.0;
+                    flaechengroesze = tree.dbasal * (2 / 3) * parameter[0].incfac / 100.0;
                 else if (parameter[0].calcinfarea == 3)  // linearly increasing
-                    flaechengroesze = pTree->dbasal * (4 / 3) * parameter[0].incfac / 100.0;
+                    flaechengroesze = tree.dbasal * (4 / 3) * parameter[0].incfac / 100.0;
                 else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
-                    flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * pTree->dbasal)))) - 1;
+                    flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * tree.dbasal)))) - 1;
                 else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
-                    flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * pTree->dbasal)))) - 1;
+                    flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * tree.dbasal)))) - 1;
                 else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
-                    flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * pTree->dbasal)))) - 1;
+                    flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * tree.dbasal)))) - 1;
 
                 // if the tree only influences one grid cell
                 if (flaechengroesze < (1.0 / parameter[0].sizemagnif)) {
@@ -186,17 +162,17 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
 
                             if (parameter[0].densitytiletree == 1)  // sum of values
                             {
-                                pTree->densitywert = (1.0 - (pTree->densitywert / plot_list[curposi]->Treedensityvalue));
+                                tree.densitywert = (1.0 - (tree.densitywert / plot_list[curposi]->Treedensityvalue));
                                 //                           density_desired(at position) / density_currently(at position)
                             } else if (parameter[0].densitytiletree == 2)  // multiplication of values
                             {
-                                pTree->densitywert =
+                                tree.densitywert =
                                     (1.0
-                                     - (pTree->densitywert / (plot_list[curposi]->Treedensityvalue * pTree->densitywert)));
+                                     - (tree.densitywert / (plot_list[curposi]->Treedensityvalue * tree.densitywert)));
                                 //                           density_desired(at position) / density_currently(at position)
                             }
                         } else {
-                            pTree->densitywert = 0.0;  // no competition
+                            tree.densitywert = 0.0;  // no competition
                         }
                     }
                     // DENSITY 3
@@ -210,17 +186,17 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                         if (plot_list[curposi]->Treedensityvalue > 0.0) {
                             if (parameter[0].densitytiletree == 1)  // sum of values
                             {
-                                pTree->densitywert =
-                                    (1.0 - (pTree->densitywert / plot_list[curposi]->Treedensityvalue));
+                                tree.densitywert =
+                                    (1.0 - (tree.densitywert / plot_list[curposi]->Treedensityvalue));
                                 //                           density_desired(at position) / density_currently(at position)
                             } else if (parameter[0].densitytiletree == 2)  // multiplication of values
                             {
-                                pTree->densitywert =
+                                tree.densitywert =
                                     (1.0
-                                     - (pTree->densitywert / (plot_list[curposi]->Treedensityvalue * pTree->densitywert)));
+                                     - (tree.densitywert / (plot_list[curposi]->Treedensityvalue * tree.densitywert)));
                             }
                         } else {
-                            pTree->densitywert = 0.0;
+                            tree.densitywert = 0.0;
                         }
                     }
 					
@@ -229,10 +205,10 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                     // calculate the thawing depth influence on the tree growth
                     if ((plot_list[curposi]->maxthawing_depth < 2000)
                         && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
-                        pTree->thawing_depthinfluence =
+                        tree.thawing_depthinfluence =
                             (unsigned short)((200.0 / 2000.0) * (double)plot_list[curposi]->maxthawing_depth);
                     } else {
-                        pTree->thawing_depthinfluence = 100;
+                        tree.thawing_depthinfluence = 100;
                     }
                 } else {
                     // determine dimensions of the grid around the tree
@@ -276,9 +252,9 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                                     {
                                         // after weighting the additional values by the individual influence values the offset is added
                                         sumdensitywert += (plot_list[curposii]->Treedensityvalue
-                                                           - pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0))
-                                                              * pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0)
-                                                          + pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0);
+                                                           - pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0))
+                                                              * pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0)
+                                                          + pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0);
                                     }
 
                                     sumthawing_depth += (double)plot_list[curposii]->maxthawing_depth;
@@ -289,187 +265,174 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                     }
 
                     if (sumdensitywert > 0.0)
-                        pTree->densitywert = 1.0 - (pTree->densitywert / sumdensitywert);
+                        tree.densitywert = 1.0 - (tree.densitywert / sumdensitywert);
                     //                           density_desired(at position) / density_currently(at position)
                     else
-                        pTree->densitywert = 0.0;
+                        tree.densitywert = 0.0;
 
                     sumthawing_depth = (sumthawing_depth / (double)anzahlflaechen);
 
                     if (sumthawing_depth < 2000)
-                        pTree->thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
+                        tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
                     else
-                        pTree->thawing_depthinfluence = 100;
+                        tree.thawing_depthinfluence = 100;
                 }
 
-                pTree->densitywert = pTree->densitywert * pow((1.0 - (0.01 / pTree->dbasal)), parameter[0].densityvaluedbasalinfluence);
+                tree.densitywert = tree.densitywert * pow((1.0 - (0.01 / tree.dbasal)), parameter[0].densityvaluedbasalinfluence);
 
                 if (parameter[0].dichtheightrel == 1) {
-                    pTree->densitywert = pTree->densitywert * (-1.0 / 130.0 * (double)pTree->height/100 + 1.0);
+                    tree.densitywert = tree.densitywert * (-1.0 / 130.0 * (double)tree.height/100 + 1.0);
                 } else if (parameter[0].dichtheightrel == 2) {
-                    pTree->densitywert = pTree->densitywert * (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
+                    tree.densitywert = tree.densitywert * (-1.0 / 200.0 * (double)tree.height/100 + 1.0);
                 } else if (parameter[0].dichtheightrel == 3) {
-                    double hrelbuf = (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
+                    double hrelbuf = (-1.0 / 200.0 * (double)tree.height/100 + 1.0);
                     if (hrelbuf < 0.1)
                         hrelbuf = 0.1;
-                    pTree->densitywert = pTree->densitywert * hrelbuf;
+                    tree.densitywert = tree.densitywert * hrelbuf;
                 } else if (parameter[0].dichtheightrel == 4) {
-                    if ((double)pTree->height/100 < 40)
-                        pTree->densitywert = 1.0;
-                    else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
-                        pTree->densitywert = 0.5;
-                    else if ((double)pTree->height/100 >= 200)
-                        pTree->densitywert = 0.0;
+                    if ((double)tree.height/100 < 40)
+                        tree.densitywert = 1.0;
+                    else if (((double)tree.height/100 >= 40) & ((double)tree.height/100 < 200))
+                        tree.densitywert = 0.5;
+                    else if ((double)tree.height/100 >= 200)
+                        tree.densitywert = 0.0;
                 } else if (parameter[0].dichtheightrel == 5) {
-                    if ((double)pTree->height/100 < 40)
-                        pTree->densitywert = 1.0;
-                    else if (((double)pTree->height/100 >= 40) & (pTree->height/100 < 200))
-                        pTree->densitywert = 0.55;
-                    else if ((double)pTree->height/100 >= 200)
-                        pTree->densitywert = 0.1;
+                    if ((double)tree.height/100 < 40)
+                        tree.densitywert = 1.0;
+                    else if (((double)tree.height/100 >= 40) & (tree.height/100 < 200))
+                        tree.densitywert = 0.55;
+                    else if ((double)tree.height/100 >= 200)
+                        tree.densitywert = 0.1;
                 } else if (parameter[0].dichtheightrel == 6) {
-                    if ((double)pTree->height/100 < 40)
-                        pTree->densitywert = 1.0;
-                    else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
-                        pTree->densitywert = 0.9;
-                    else if ((double)pTree->height/100 >= 200)
-                        pTree->densitywert = 0.8;
+                    if ((double)tree.height/100 < 40)
+                        tree.densitywert = 1.0;
+                    else if (((double)tree.height/100 >= 40) & ((double)tree.height/100 < 200))
+                        tree.densitywert = 0.9;
+                    else if ((double)tree.height/100 >= 200)
+                        tree.densitywert = 0.8;
                 } else if (parameter[0].dichtheightrel == 10)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     // ... linearly
                     double densitywertminimum = 0.1;
-                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)pTree->age + 1.0);
+                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)tree.age + 1.0);
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
                 } else if (parameter[0].dichtheightrel == 11)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     // ... linearly
                     double densitywertminimum = 0.5;
-                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)pTree->age + 1.0);
+                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)tree.age + 1.0);
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
                 } else if (parameter[0].dichtheightrel == 12)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     // ... linearly
                     double densitywertminimum = 0.1;
-                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)pTree->age + 1.0);
+                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)tree.age + 1.0);
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
                 } else if (parameter[0].dichtheightrel == 13)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     // ... linearly
                     double densitywertminimum = 0.5;
-                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)pTree->age + 1.0);
+                    double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)tree.age + 1.0);
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
                 } else if (parameter[0].dichtheightrel == 20)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     double densitywertminimum = 0.1;
-                    double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.5));
+                    double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.5));
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
 
                 } else if (parameter[0].dichtheightrel == 21)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     double densitywertminimum = 0.5;
-                    double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.15));
+                    double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.15));
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
 
                 } else if (parameter[0].dichtheightrel == 22)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     double densitywertminimum = 0.1;
-                    double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.6));
+                    double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.6));
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
 
                 } else if (parameter[0].dichtheightrel == 23)  // added to fit the height classes distribution properly
                 {
                     // density value decreases by increasing tree height
                     double densitywertminimum = 0.5;
-                    double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.175));
+                    double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.175));
                     if (ageseinfluss < densitywertminimum) {
                         ageseinfluss = densitywertminimum;
                     }
-                    pTree->densitywert = pTree->densitywert * ageseinfluss;
+                    tree.densitywert = tree.densitywert * ageseinfluss;
                 }
 
-                if (pTree->densitywert < 0)
-                    pTree->densitywert = 0.0;
+                if (tree.densitywert < 0)
+                    tree.densitywert = 0.0;
 
-                if (pTree->densitywert > parameter[0].desitymaxreduction)
-                    pTree->densitywert = parameter[0].desitymaxreduction;
+                if (tree.densitywert > parameter[0].desitymaxreduction)
+                    tree.densitywert = parameter[0].desitymaxreduction;
             }
         }
     }  // only one core
 
     if (parameter[0].omp_num_threads > 1) {                 // more than one core
-        omp_set_dynamic(0);                                 // disable dynamic teams
-        omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
+
+// pragma omp initializing
+omp_set_dynamic(1); //enable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
-        {
-            int thread_count = omp_get_num_threads();
-            int thread_num = omp_get_thread_num();
-            size_t chunk_size = tree_list.size() / thread_count;
-            auto begin = tree_list.begin();
-            std::advance(begin, thread_num * chunk_size);
-            auto end = begin;
+{
 
-            if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
-            {
-                end = tree_list.end();
-            } else {
-                std::advance(end, chunk_size);
-            }
+#pragma omp for
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
 
-// wait for all threads to initialize and then proceed
-#pragma omp barrier
-
-            for (auto it = begin; it != end; ++it) {
-                auto pTree = (*it);
-
-                int i = (int)floor((double)pTree->ycoo/1000 * parameter[0].sizemagnif);
-                int j = (int)floor((double)pTree->xcoo/1000 * parameter[0].sizemagnif);
+                int i = (int)floor((double)tree.ycoo/1000 * parameter[0].sizemagnif);
+                int j = (int)floor((double)tree.xcoo/1000 * parameter[0].sizemagnif);
 
                 // DENSITY 1
                 if (parameter[0].densitymode == 1) {
-                    pTree->densitywert = 0.0;
+                    tree.densitywert = 0.0;
                 } else {
                     double flaechengroesze = 0.0;
                     if (parameter[0].calcinfarea == 1)  // linearly increasing
-                        flaechengroesze = pTree->dbasal * parameter[0].incfac / 100.0;
+                        flaechengroesze = tree.dbasal * parameter[0].incfac / 100.0;
                     else if (parameter[0].calcinfarea == 2)  // linearly increasing
-                        flaechengroesze = pTree->dbasal * (2 / 3) * parameter[0].incfac / 100.0;
+                        flaechengroesze = tree.dbasal * (2 / 3) * parameter[0].incfac / 100.0;
                     else if (parameter[0].calcinfarea == 3)  // linearly increasing
-                        flaechengroesze = pTree->dbasal * (4 / 3) * parameter[0].incfac / 100.0;
+                        flaechengroesze = tree.dbasal * (4 / 3) * parameter[0].incfac / 100.0;
                     else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
-                        flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * pTree->dbasal)))) - 1;
+                        flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * tree.dbasal)))) - 1;
                     else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
-                        flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * pTree->dbasal)))) - 1;
+                        flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * tree.dbasal)))) - 1;
                     else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
-                        flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * pTree->dbasal)))) - 1;
+                        flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * tree.dbasal)))) - 1;
 
                     // if the tree only influences one grid cell
                     if (flaechengroesze < (1.0 / parameter[0].sizemagnif)) {
@@ -481,23 +444,23 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                             if (((double) plot_list[curposi]->Treedensityvalue/10000) > 0.0) {
                                 if (parameter[0].densitytiletree == 1)  // sum of values
                                 {
-                                    pTree->densitywert = (1.0 - (pTree->densitywert / ((double) plot_list[curposi]->Treedensityvalue/10000)));
+                                    tree.densitywert = (1.0 - (tree.densitywert / ((double) plot_list[curposi]->Treedensityvalue/10000)));
                                     //                           density_desired(at position) / density_currently(at position)
                                 } else if (parameter[0].densitytiletree == 2)  // multiplication of values
                                 {
-                                    pTree->densitywert = (1.0
-                                                          - (pTree->densitywert
-                                                             / (((double) plot_list[curposi]->Treedensityvalue/10000) * pTree->densitywert)));
+                                    tree.densitywert = (1.0
+                                                          - (tree.densitywert
+                                                             / (((double) plot_list[curposi]->Treedensityvalue/10000) * tree.densitywert)));
                                     //                         density_desired(at position) / density_currently(at position)
                                 }
                             } else {
-                                pTree->densitywert = 0.0;  // no competition effect
+                                tree.densitywert = 0.0;  // no competition effect
                             }
 							
 							// dem sensing
 							if (parameter[0].demlandscape) {
-								pTree->elevation = plot_list[curposi]->elevation;
-								pTree->envirimpact = plot_list[curposi]->envirgrowthimpact;
+								tree.elevation = plot_list[curposi]->elevation;
+								tree.envirimpact = plot_list[curposi]->envirgrowthimpact;
 							}
                         }
                         // DENSITY 3
@@ -511,27 +474,27 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                             if (((double) plot_list[curposii]->Treedensityvalue/10000) > 0.0) {
                                 if (parameter[0].densitytiletree == 1)  // sum of values
                                 {
-                                    pTree->densitywert =
-                                        (1.0 - (pTree->densitywert / ((double) plot_list[curposii]->Treedensityvalue/10000)));
+                                    tree.densitywert =
+                                        (1.0 - (tree.densitywert / ((double) plot_list[curposii]->Treedensityvalue/10000)));
                                     //                           density_desired(at position) / density_currently(at position)
                                 } else if (parameter[0].densitytiletree == 2)  // multiplication of values
                                 {
-                                    pTree->densitywert = (1.0
-                                                          - (pTree->densitywert
-                                                             / (((double) plot_list[curposii]->Treedensityvalue/10000) * pTree->densitywert)));
+                                    tree.densitywert = (1.0
+                                                          - (tree.densitywert
+                                                             / (((double) plot_list[curposii]->Treedensityvalue/10000) * tree.densitywert)));
                                 }
                             } else {
-                                pTree->densitywert = 0.0;
+                                tree.densitywert = 0.0;
                             }
 						}
 
                         // calculate the influence of the thawing depth on the tree growth
                         if ((plot_list[curposi]->maxthawing_depth < 2000)
                             && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
-                            pTree->thawing_depthinfluence =
+                            tree.thawing_depthinfluence =
                                 (unsigned short)((200.0 / 2000.0) * (double)plot_list[curposi]->maxthawing_depth);
                         } else {
-                            pTree->thawing_depthinfluence = 100;
+                            tree.thawing_depthinfluence = 100;
                         }
                     }
                     // ... if the tree influences more than one section
@@ -578,9 +541,9 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                                         } else if (parameter[0].densitytiletree == 2) {
                                             // after weighting the additional values by the individual influence values the offset is added
                                             sumdensitywert += (((double) plot_list[curposii]->Treedensityvalue/10000)
-                                                               - pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0))
-                                                                  * pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0)
-                                                              + pow(pTree->dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0);
+                                                               - pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0))
+                                                                  * pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0)
+                                                              + pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0);
                                         }
 
                                         sumthawing_depth += (double)plot_list[curposii]->maxthawing_depth;
@@ -599,148 +562,148 @@ void IndividualTreeDensity(list<Tree*>& tree_list, vector<Envirgrid*>& plot_list
                         }
 
                         if (sumdensitywert > 0.0)
-                            pTree->densitywert = 1.0 - (pTree->densitywert / sumdensitywert);
+                            tree.densitywert = 1.0 - (tree.densitywert / sumdensitywert);
                         else
-                            pTree->densitywert = 0.0;
+                            tree.densitywert = 0.0;
 
                         sumthawing_depth = (sumthawing_depth / (double)anzahlflaechen);
 
                         if (sumthawing_depth < 2000)
-                            pTree->thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
+                            tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
                         else
-                            pTree->thawing_depthinfluence = 100;
+                            tree.thawing_depthinfluence = 100;
 						
 						// dem sensing by mean value of gridcells in range
 						if (parameter[0].demlandscape) {
-							pTree->elevation = (short int) floor(10*sumelevation / (double)countelevation);
-							pTree->envirimpact = (unsigned short int) floor(10000* sumenvirgrowthimpact / (double)countelevation);
+							tree.elevation = (short int) floor(10*sumelevation / (double)countelevation);
+							tree.envirimpact = (unsigned short int) floor(10000* sumenvirgrowthimpact / (double)countelevation);
 						}
-// cout << sumelevation << countelevation << pTree->elevation << endl;
+// cout << sumelevation << countelevation << tree.elevation << endl;
 // exit(1);
                     }
 
-                    pTree->densitywert = pTree->densitywert
-                                         * pow((1.0 - (0.01 / pTree->dbasal)),
+                    tree.densitywert = tree.densitywert
+                                         * pow((1.0 - (0.01 / tree.dbasal)),
                                                parameter[0].densityvaluedbasalinfluence);  // Optional: increasing influence by increasing tree height
 
                     if (parameter[0].dichtheightrel == 1) {
-                        pTree->densitywert = pTree->densitywert * (-1.0 / 130.0 * (double)pTree->height/100 + 1.0);
+                        tree.densitywert = tree.densitywert * (-1.0 / 130.0 * (double)tree.height/100 + 1.0);
                     } else if (parameter[0].dichtheightrel == 2) {
-                        pTree->densitywert = pTree->densitywert * (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
+                        tree.densitywert = tree.densitywert * (-1.0 / 200.0 * (double)tree.height/100 + 1.0);
                     } else if (parameter[0].dichtheightrel == 3) {
-                        double hrelbuf = (-1.0 / 200.0 * (double)pTree->height/100 + 1.0);
+                        double hrelbuf = (-1.0 / 200.0 * (double)tree.height/100 + 1.0);
                         if (hrelbuf < 0.1)
                             hrelbuf = 0.1;
-                        pTree->densitywert = pTree->densitywert * hrelbuf;
+                        tree.densitywert = tree.densitywert * hrelbuf;
                     } else if (parameter[0].dichtheightrel == 4) {
-                        if ((double)pTree->height/100 < 40)
-                            pTree->densitywert = 1.0;
-                        else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
-                            pTree->densitywert = 0.5;
-                        else if ((double)pTree->height/100 >= 200)
-                            pTree->densitywert = 0.0;
+                        if ((double)tree.height/100 < 40)
+                            tree.densitywert = 1.0;
+                        else if (((double)tree.height/100 >= 40) & ((double)tree.height/100 < 200))
+                            tree.densitywert = 0.5;
+                        else if ((double)tree.height/100 >= 200)
+                            tree.densitywert = 0.0;
                     } else if (parameter[0].dichtheightrel == 5) {
-                        if ((double)pTree->height/100 < 40)
-                            pTree->densitywert = 1.0;
-                        else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
-                            pTree->densitywert = 0.55;
-                        else if ((double)pTree->height/100 >= 200)
-                            pTree->densitywert = 0.1;
+                        if ((double)tree.height/100 < 40)
+                            tree.densitywert = 1.0;
+                        else if (((double)tree.height/100 >= 40) & ((double)tree.height/100 < 200))
+                            tree.densitywert = 0.55;
+                        else if ((double)tree.height/100 >= 200)
+                            tree.densitywert = 0.1;
                     } else if (parameter[0].dichtheightrel == 6) {
-                        if ((double)pTree->height/100 < 40)
-                            pTree->densitywert = 1.0;
-                        else if (((double)pTree->height/100 >= 40) & ((double)pTree->height/100 < 200))
-                            pTree->densitywert = 0.9;
-                        else if ((double)pTree->height/100 >= 200)
-                            pTree->densitywert = 0.8;
+                        if ((double)tree.height/100 < 40)
+                            tree.densitywert = 1.0;
+                        else if (((double)tree.height/100 >= 40) & ((double)tree.height/100 < 200))
+                            tree.densitywert = 0.9;
+                        else if ((double)tree.height/100 >= 200)
+                            tree.densitywert = 0.8;
                     } else if (parameter[0].dichtheightrel == 10)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         // ... linearly
                         double densitywertminimum = 0.1;
-                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)pTree->age + 1.0);
+                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)tree.age + 1.0);
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
                     } else if (parameter[0].dichtheightrel == 11)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         // ... linearly
                         double densitywertminimum = 0.5;
-                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)pTree->age + 1.0);
+                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 100.0 * (double)tree.age + 1.0);
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
                     } else if (parameter[0].dichtheightrel == 12)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         // ... linearly
                         double densitywertminimum = 0.1;
-                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)pTree->age + 1.0);
+                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)tree.age + 1.0);
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
                     } else if (parameter[0].dichtheightrel == 13)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         // ... linearly
                         double densitywertminimum = 0.5;
-                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)pTree->age + 1.0);
+                        double ageseinfluss = (-1 * (1 - densitywertminimum) / 50.0 * (double)tree.age + 1.0);
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
                     } else if (parameter[0].dichtheightrel == 20)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         double densitywertminimum = 0.1;
-                        double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.5));
+                        double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.5));
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
 
                     } else if (parameter[0].dichtheightrel == 21)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         double densitywertminimum = 0.5;
-                        double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.15));
+                        double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.15));
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
 
                     } else if (parameter[0].dichtheightrel == 22)  // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         double densitywertminimum = 0.1;
-                        double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.6));
+                        double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.6));
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
 
                     } else if (parameter[0].dichtheightrel == 23)
                     // added to fit the height classes distribution properly
                     {
                         // density value decreases by increasing tree height
                         double densitywertminimum = 0.5;
-                        double ageseinfluss = (1.0 / pow(((double)pTree->age + 1.0), 0.175));
+                        double ageseinfluss = (1.0 / pow(((double)tree.age + 1.0), 0.175));
                         if (ageseinfluss < densitywertminimum) {
                             ageseinfluss = densitywertminimum;
                         }
-                        pTree->densitywert = pTree->densitywert * ageseinfluss;
+                        tree.densitywert = tree.densitywert * ageseinfluss;
                     }
 
-                    if (pTree->densitywert < 0)
-                        pTree->densitywert = 0.0;
+                    if (tree.densitywert < 0)
+                        tree.densitywert = 0.0;
 
                     // set to maximal value if density value is greater than it (rescaling)
-                    if (pTree->densitywert > parameter[0].desitymaxreduction)
-                        pTree->densitywert = parameter[0].desitymaxreduction;
+                    if (tree.densitywert > parameter[0].desitymaxreduction)
+                        tree.densitywert = parameter[0].desitymaxreduction;
                 }
             }
         }  // parallel region
@@ -806,8 +769,10 @@ void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>
     }  // only one core
 
     if (parameter[0].omp_num_threads > 1) {  // more than one core
-		omp_set_dynamic(1);
-        omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers
+	
+// pragma omp initializing
+omp_set_dynamic(1); //enable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
@@ -872,15 +837,15 @@ void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>
 void Environmentupdate(struct Parameter* parameter,
                        int yearposition,
                        vector<vector<Envirgrid*>>& world_plot_list,
-                       vector<list<Tree*>>& world_tree_list,
+                       vector<VectorList<Tree>>& world_tree_list,
                        vector<vector<Weather*>>& world_weather_list) {
     int aktort = 0;
 
     for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw) {
         vector<Envirgrid*>& plot_list = *posw;
 
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
-        list<Tree*>& tree_list = *world_positon_b;
+        vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
+        VectorList<Tree>& tree_list = *world_positon_b;
 
         vector<vector<Weather*>>::iterator posiwelt = (world_weather_list.begin() + aktort);
         vector<Weather*>& weather_list = *posiwelt;

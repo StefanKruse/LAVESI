@@ -63,11 +63,18 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
  *
  *******************************************************************************************/
 
-void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed>>& world_seed_list) {
+void Seeddispersal(
+					int jahr, 
+					struct Parameter* parameter, 
+					vector<VectorList<Seed>>& world_seed_list,
+					vector<vector<Envirgrid*>>& world_plot_list) {
     int aktort = 0;
 
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
+
+		vector<vector<Envirgrid*>>::iterator world_positon_b = (world_plot_list.begin() + aktort);
+		vector<Envirgrid*>& plot_list = *world_positon_b;
 
         // determine the current location, so that in long distance dispersal the target can be determined
         aktort++;
@@ -75,10 +82,11 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
         // variable for displaying seeds crossing the borders
         int rausgeflogenN = 0, rausgeflogenO = 0, rausgeflogenS = 0, rausgeflogenW = 0;
 
-		// implementation of multi-core-processing == split list to X lists
-		omp_set_dynamic(0);                                 // disable dynamic teams ; TODO remove later
-		omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers ; TODO remove later
-		std::random_device random_dev;
+			std::random_device random_dev;
+			
+// pragma omp initializing
+omp_set_dynamic(1); //enable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
@@ -101,88 +109,122 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 							seed.incone = false;
 
 							// double dispersaldistance = 0.0;
-							double direction = 0.0;
+							// double direction = 0.0;
 							double velocity = 0.0;
 							double wdirection = 0.0;
-							double jquer = 0;
-							double iquer = 0;
+							double jquer = 0.0;
+							double iquer = 0.0;
 
 							double randomnumberwind = uniform(rng);
-							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double) seed.releaseheight, seed.species, randomnumberwind);
+							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double) seed.releaseheight/100, seed.species, randomnumberwind);
+// cout << i << "...> " << " iquer=" << iquer << " + jquer=" << jquer << " ... x/y=" << seed.xcoo/1000 << "/" << seed.ycoo/1000 << endl;										
 
-							if (parameter[0].ivort > 1045 && parameter[0].outputmode != 9 && parameter[0].omp_num_threads == 1) {
-								double seedeinschreibzufall = uniform(rng);
+							// disperal limitation by elevation 
+							if(parameter[0].demlandscape) {
+								// TODO: add switch to parameter.txt
+								// seed trajectory elevation sensing
+								// 1. define releaseheight
+								// 2. access elevation along path
+								// 3. stop either when elevation>releaseheight or dispersal distance reached
 
-								if (seedeinschreibzufall < 0.01) {
-									// dispersaldistance = sqrt(pow(iquer, 2) + pow(jquer, 2));
-									direction = atan2(iquer, jquer);
+								// get start coordinates in elevation input grid
+									// bring to envirgrid resolution
+										int ycoostartdem = (int)floor((double)seed.ycoo/1000 * parameter[0].sizemagnif);
+										int xcoostartdem = (int)floor((double)seed.xcoo/1000 * parameter[0].sizemagnif);
 
-									FILE* filepointer;
-									string dateiname;
+									// get elevation of release + releaseheight
+										double startele = (double)plot_list[(unsigned long long int) ycoostartdem * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) xcoostartdem]->elevation/10 + (double)seed.releaseheight/100;
 
-									// assemble file name
-									char dateinamesuf[12];
-									sprintf(dateinamesuf, "%.4d_REP%.3d", parameter[0].weatherchoice, parameter[0].repeati);
-									dateiname = "output/dataseed_distance" + string(dateinamesuf) + ".csv";
+									// get target position on input grid
+										int ycootargetonelegrid = (int)floor(((double)seed.ycoo/1000 + iquer) * parameter[0].sizemagnif);
+										int xcootargetonelegrid = (int)floor(((double)seed.xcoo/1000 + jquer) * parameter[0].sizemagnif);
 
-									filepointer = fopen(dateiname.c_str(), "r+");
-									if (filepointer == NULL) {
-										filepointer = fopen(dateiname.c_str(), "w");
-
-										fprintf(filepointer, "IVORT;");
-										// fprintf(filepointer, "name;");
-										fprintf(filepointer, "year;");
-										fprintf(filepointer, "parentheight;");
-										// fprintf(filepointer, "distance;");
-										fprintf(filepointer, "direction;");
-										fprintf(filepointer, "xcoo;");
-										fprintf(filepointer, "ycoo;");
-										fprintf(filepointer, "species;");
-										fprintf(filepointer, "weatherchoice;");
-										fprintf(filepointer, "thawing_depth;");
-										fprintf(filepointer, "windspd;");
-										fprintf(filepointer, "winddir;");
-
-										fprintf(filepointer, "\n");
-
-										if (filepointer == NULL) {
-											fprintf(stderr, "Error: seed distance file could not be opened!\n");
-											exit(1);
+									// go stepswise to next grid in direction of dispersal
+										double ysteps = ycootargetonelegrid-ycoostartdem;
+										double xsteps = xcootargetonelegrid-xcoostartdem;
+										double ystepsize = ysteps / abs(ysteps);
+										double xstepsize = xsteps / abs(xsteps);
+										double maxsteps = abs(ysteps)+abs(xsteps);
+										// for upslope calculation
+										double eleonestepfurther = 32767/10;
+										if( ((ycoostartdem + ysteps*150) < (parameter[0].sizemagnif*(treerows-1)))
+												& ((xcoostartdem + xsteps*150) < (parameter[0].sizemagnif*treecols-1))
+												& ((ycoostartdem + ysteps*150)>=0)
+												& ((xcoostartdem + xsteps*150)>=0)
+											) {
+											 eleonestepfurther = plot_list[(unsigned long long int) (ycoostartdem + ysteps*150) * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) (xcoostartdem + xsteps*150)]->elevation/10;
 										}
-									}
 
-									fseek(filepointer, 0, SEEK_END);
+// cout << i << "...> " << "Start values: y/x (startele) = " << ycoostartdem << "/" << xcoostartdem << " (" << startele << ")" << endl;
+// cout << i << "...> " << "Target values: y/x = " << ycootargetonelegrid << "/" << xcootargetonelegrid << endl;
+// cout << "... max steps = " << maxsteps << " xsteps= " << xsteps << " & ysteps= " << ysteps << endl;
 
-									fprintf(filepointer, "%d;", parameter[0].ivort);
-									// fprintf(filepointer, "%d;", seed.namem);
-									fprintf(filepointer, "%d;", jahr);
-									fprintf(filepointer, "%4.3f;", (double) seed.releaseheight);
-									// fprintf(filepointer, "%4.5f;", dispersaldistance);
-									fprintf(filepointer, "%4.5f;", direction);
-									fprintf(filepointer, "%4.5f;", (double) seed.xcoo/1000);
-									fprintf(filepointer, "%4.5f;", (double) seed.ycoo/1000);
-									fprintf(filepointer, "%d;", seed.species);
-									fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-									fprintf(filepointer, "%d;", parameter[0].thawing_depth);
-									fprintf(filepointer, "%lf;", velocity);
-									fprintf(filepointer, "%lf;", wdirection);
-									fprintf(filepointer, "\n");
+										unsigned int stepi;
+										unsigned int stepdistance = 150; //in m when divided by parameter[0].sizemagnif, as dem curently 30 m resolution and grid 0.2 m, 150 means all 30 m
+										for(stepi=1; stepi <= maxsteps; stepi=stepi+stepdistance) {
+											// check whether step in y or x direction
+											if(abs(ysteps)>=abs(xsteps)){
+												ycoostartdem = ycoostartdem + (int)stepdistance*ystepsize;
+												ysteps = ysteps - ystepsize;
+											} else {
+												xcoostartdem = xcoostartdem + (int)stepdistance*xstepsize;
+												xsteps = xsteps - xstepsize;
+											}
+											
+											// only if still in plot
+											if( (ycoostartdem < (parameter[0].sizemagnif*(treerows-1)))
+												& (xcoostartdem < (parameter[0].sizemagnif*treecols-1))
+												& (ycoostartdem>=0)
+												& (xcoostartdem>=0)
+											) {
 
-									fclose(filepointer);
-								}
+												// assess current elevation
+												double actele = (double)plot_list[(unsigned long long int) ycoostartdem * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) xcoostartdem]->elevation/10;
+
+// cout << i << "...> " << "Step " << stepi << " >> y/x (ele) = " << ycoostartdem << "/" << xcoostartdem << " (" << actele << ")" << endl;
+												
+												if( (actele > startele) 
+													& (actele!=32767/10) 
+												) {// treat NA values (water areas) as last elevation values
+// cout << i << "...> "  << " disp shortened as upslope " << endl;
+													break;
+												}
+											} else {// seed leaves the plot
+// cout << i << "...> "  << " disp out of plot " << endl;
+												stepi = maxsteps;
+												break;
+											}
+										}
+										// calculate dispersal distance reduced by altitudinal impact
+										double dispfraction = stepi/maxsteps;
+										if(dispfraction>1.0) {
+											dispfraction=1.0;
+										} else if (dispfraction<0.0) {
+											dispfraction=0.0;
+										}
+										
+										// shorten when upslope dispersal
+										double upslopedispfact=1.0;
+										if( (eleonestepfurther!=32767/10)
+											& (eleonestepfurther>startele)
+										) {
+											upslopedispfact = 1.0 - ((eleonestepfurther-startele)/30/2); // scale to 30 m steps as elevation input; if +30 m on 30 m value 0.5
+											
+											if(upslopedispfact<0.0)
+												upslopedispfact=0.0;
+										}
+// cout << " ... eleonestepfurther=" << eleonestepfurther << " => upslopedispfact = " << upslopedispfact << endl;
+
+										seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + upslopedispfact*dispfraction*jquer));
+										seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + upslopedispfact*dispfraction*iquer));
+
+// cout << i << "...> " << " Dispersal realized: Dispfraction=" << dispfraction << " + iquer=" << iquer << " + jquer=" << jquer << " ... y/x=" << seed.ycoo/1000 << "/" << seed.xcoo/1000 << endl;										
+							} else {
+								seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + jquer));
+								seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + iquer));
 							}
 
-							seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + jquer));
-							seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + iquer));
-							// seed.dispersaldistance = dispersaldistance;
-
-							/****************************************************************************************/
-							/**
-							 * \brief calculate  Dispersal
-							 *within a plot
-							 *
-							 *
-							 *******************************************************************************************/
+							// check whether seed lands on plot or leaves the plot
 							bool sameausserhalb = false;
 
 							// Check if the seed is on the plot:

@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "VectorList.h"
 
 using namespace std;
 
@@ -49,7 +50,7 @@ extern vector<double> wdir, wspd;
 void Pollinationprobability(double x,
                             double y,
                             struct Parameter* parameter,
-                            vector<std::list<Tree*>>::iterator world_positon_b,
+                            vector<VectorList<Tree>>::iterator world_positon_b,
                             double direction,
                             double velocity,
                             unsigned int ripm,
@@ -69,7 +70,7 @@ void Pollinationprobability(double x,
                             int outputtreesiter,
 							double randomnumberwind,
 							double randomnumberwindfather) {
-    list<Tree*>& tree_list = *world_positon_b;
+    VectorList<Tree>& tree_list = *world_positon_b;
     direction = 0.0;
     velocity = 0.0;
     ripm = 0;
@@ -91,14 +92,10 @@ void Pollinationprobability(double x,
     thdpthinfl.shrink_to_fit();
 
     if (parameter[0].windsource == 1) {// EraInterim
-        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
-        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * uniform(rng)));
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = wspd.at(ripm);
 	} else {// random
-        // direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
-        // direction = 0.0 + ((double)(2 * M_PI) * uniform(rng));
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.777;
     }
@@ -108,13 +105,13 @@ void Pollinationprobability(double x,
     // Simpson integration + elec424.wikia.com/wiki/Modified_Bessel_Functions:
     I0kappa = 0.16666 * (exp(kappa) + 4.0 + exp(-1.0 * kappa));
 
-    for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end();) {
-        auto pTree_copy = *posb;
+	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+		auto& tree_copy = tree_list[tree_i];
 
         // only if the pollinating tree has cones:
-        if (pTree_copy->cone == true) {
-            dx = ((double)pTree_copy->xcoo/1000) - x;
-            dy = ((double)pTree_copy->ycoo/1000) - y;
+        if (tree_copy.cone == true) {
+            dx = ((double)tree_copy.xcoo/1000) - x;
+            dy = ((double)tree_copy.ycoo/1000) - y;
             dr = sqrt(dx * dx + dy * dy);
 
             if ((dr != 0)) {
@@ -126,15 +123,11 @@ void Pollinationprobability(double x,
             p = exp(kappa * (cos(phi - direction) * -1)) / (2 * I0kappa) * (exp(-2 * pe * pow(dr, 1 - 0.5 * m) / (sqrt(M_PI) * C * (1 - 0.5 * m))));
             // f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
 
-            // if (rand() > p * RAND_MAX) {
-            // if (uniform(rng) > p) {
             if (randomnumberwindfather > p) {
-                ++posb;
+                continue;
             } else {
-                // pName.push_back(pTree_copy->name);
+                // pName.push_back(tree_copy.name);
                 thdpthinfl.push_back(100);
-
-                ++posb;
             }
 
             // data output for pollen flight analysis
@@ -144,12 +137,10 @@ void Pollinationprobability(double x,
                 sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
                 string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
                 fdir = fopen(output.c_str(), "a+");
-                // fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, pTree_copy->name, pTree_copy->xcoo, pTree_copy->ycoo, x, y);
-                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)pTree_copy->xcoo/1000, (double)pTree_copy->ycoo/1000, x, y);
+                // fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, tree_copy.name, tree_copy.xcoo, tree_copy.ycoo, x, y);
+                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo/1000, (double)tree_copy.ycoo/1000, x, y);
                 fclose(fdir);
             }
-        } else {
-            ++posb;
         }
     }
 }
@@ -184,7 +175,14 @@ double getEntfernung(double D, double ratiorn_help) {
     return (entf_help);
 }
 
-void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec, double randomnumberwind) {
+void Seedwinddispersal(double rn, 
+						double& dx, 
+						double& dy, 
+						double& windspeed, 
+						double& winddirection, 
+						double parhei, 
+						int seedspec, 
+						double randomnumberwind) {
     int ripm = 0;
     double dispersaldistance = 0;
     double maxdispersaldistance = 0;

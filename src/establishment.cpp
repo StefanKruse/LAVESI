@@ -7,7 +7,7 @@ using namespace std;
 
 void Treeestablishment(struct Parameter* parameter,
                        int yearposition,
-                       vector<list<Tree*>>& world_tree_list,
+                       vector<VectorList<Tree>>& world_tree_list,
                        vector<VectorList<Seed>>& world_seed_list,
                        vector<vector<Weather*>>& world_weather_list,
                        vector<vector<Envirgrid*>>& world_plot_list) {
@@ -15,8 +15,8 @@ void Treeestablishment(struct Parameter* parameter,
     for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather*>& weather_list = *posw;
 
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
-        list<Tree*>& tree_list = *world_positon_b;
+        vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
+        VectorList<Tree>& tree_list = *world_positon_b;
 
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
@@ -26,21 +26,18 @@ void Treeestablishment(struct Parameter* parameter,
 
         aktort++;
 
-// parallelization
-// .. each thraed needs separate tree_list and splice at the end
-omp_set_dynamic(0); //disable dynamic teams
+		std::random_device random_dev;
+		
+// pragma omp initializing
+omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-std::random_device random_dev;
-// may be faster when number of threads are maximum available to avoid overhead by splice
+
 #pragma omp parallel
 {
-std::mt19937 rng(random_dev());
-std::uniform_real_distribution<double> uniform(0, 1);
-// declare a local seed list to be filled by each thread
-list<Tree*> newtree_list;
+		std::mt19937 rng(random_dev());
+		std::uniform_real_distribution<double> uniform(0, 1);
 
 #pragma omp for
-        // go through seed list
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
             auto& seed = seed_list[i_seed];
             if (seed.dead) {
@@ -59,7 +56,6 @@ list<Tree*> newtree_list;
 
 				if( (parameter[0].demlandscape) & (plot_list[curposi]->elevation==32767) ){
 					seed.dead = true;
-					// seed_list.remove(i);
 					continue;
 				}
 
@@ -185,7 +181,6 @@ if (parameter[0].densitymode == 2) {
 double basalgrowth_help = maxbw_help * (1.0 - density_help);
 // if(basalgrowth_help < maxbw_help)
 	// cout << maxbw_help << " - > " << basalgrowth_help << endl;
-                // double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
                 double zufallsz = uniform(rng);
 
                 // add new tree if seed germinates
@@ -207,44 +202,43 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
 							* keimungauflageinfluence // litter layer dependency
 						)) {
                         if (maxbw_help > 0.0) {
-                            auto pTree = new Tree();
+                            Tree tree;
 
-                            // pTree->yworldcoo = seed.yworldcoo;
-                            // pTree->xworldcoo = seed.xworldcoo;
-                            pTree->xcoo = seed.xcoo;
-                            pTree->ycoo = seed.ycoo;
-                            // pTree->name = ++parameter[0].nameakt;
-                            // pTree->namem = seed.namem;
-                            // pTree->namep = seed.namep;
-                            // pTree->yr_of_establishment = yearposition;
-                            // pTree->line = seed.line;
-                            // pTree->generation = seed.generation;
-                            pTree->dbasal = basalgrowth_help;
-                            pTree->dbasalmax = (unsigned short int) floor(1000*maxbw_help);
-                            pTree->dbasalrel = (unsigned short int) floor(1000*1.0);
-                            pTree->dbreast = 0.0;
-                            pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
+                            // tree.yworldcoo = seed.yworldcoo;
+                            // tree.xworldcoo = seed.xworldcoo;
+                            tree.xcoo = seed.xcoo;
+                            tree.ycoo = seed.ycoo;
+                            // tree.name = ++parameter[0].nameakt;
+                            // tree.namem = seed.namem;
+                            // tree.namep = seed.namep;
+                            // tree.yr_of_establishment = yearposition;
+                            // tree.line = seed.line;
+                            // tree.generation = seed.generation;
+                            tree.dbasal = basalgrowth_help;
+                            tree.dbasalmax = (unsigned short int) floor(1000*maxbw_help);
+                            tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                            tree.dbreast = 0.0;
+                            tree.dbreastrel = (unsigned short int) floor(1000*1.0);
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
+                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
                             } else {
-                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
+                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
                             }
-                            pTree->age = 0;
-                            pTree->cone = false;
-                            pTree->coneheight = 65535;
-                            pTree->seednewly_produced = 0;
-                            // pTree->seedproduced = 0;
-                            // pTree->buffer = 1;
-                            pTree->densitywert = density_help;
-                            // pTree->dispersaldistance = seed.dispersaldistance;
-                            pTree->growing = true;
-                            pTree->species = seed.species;
-                            pTree->thawing_depthinfluence = thawing_depthinfluence_help;
-							pTree->envirimpact = 10000;
+                            tree.age = 0;
+                            tree.cone = false;
+                            tree.coneheight = 65535;
+                            tree.seednewly_produced = 0;
+                            // tree.seedproduced = 0;
+                            // tree.buffer = 1;
+                            tree.densitywert = density_help;
+                            // tree.dispersaldistance = seed.dispersaldistance;
+                            tree.growing = true;
+                            tree.species = seed.species;
+                            tree.thawing_depthinfluence = thawing_depthinfluence_help;
+							tree.envirimpact = 10000;
 							
-                            // tree_list.push_back(pTree);
-                            newtree_list.push_back(pTree);
+                            tree_list.add(tree);
 
                             seed.dead = true;
                             seed_list.remove(i_seed);
@@ -259,43 +253,42 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
 							* keimungauflageinfluence // litter layer dependency
 						)) {
                         if (maxbw_help > 0.0) {
-                            auto pTree = new Tree();
+                            Tree tree;
 
-                            // pTree->yworldcoo = seed.yworldcoo;
-                            // pTree->xworldcoo = seed.xworldcoo;
-                            pTree->xcoo = seed.xcoo;
-                            pTree->ycoo = seed.ycoo;
-                            // pTree->name = ++parameter[0].nameakt;
-                            // pTree->namem = seed.namem;
-                            // pTree->namep = seed.namep;
-                            // pTree->yr_of_establishment = yearposition;
-                            // pTree->line = seed.line;
-                            // pTree->generation = seed.generation;
-                            pTree->dbasal = basalgrowth_help;
-                            pTree->dbasalmax = (unsigned short int) floor(1000*maxbw_help);
-							pTree->dbasalrel = (unsigned short int) floor(1000*1.0);
-                            pTree->dbreast = 0.0;
-                            pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
+                            // tree.yworldcoo = seed.yworldcoo;
+                            // tree.xworldcoo = seed.xworldcoo;
+                            tree.xcoo = seed.xcoo;
+                            tree.ycoo = seed.ycoo;
+                            // tree.name = ++parameter[0].nameakt;
+                            // tree.namem = seed.namem;
+                            // tree.namep = seed.namep;
+                            // tree.yr_of_establishment = yearposition;
+                            // tree.line = seed.line;
+                            // tree.generation = seed.generation;
+                            tree.dbasal = basalgrowth_help;
+                            tree.dbasalmax = (unsigned short int) floor(1000*maxbw_help);
+							tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                            tree.dbreast = 0.0;
+                            tree.dbreastrel = (unsigned short int) floor(1000*1.0);
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
+                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
                             } else {
-                                pTree->height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
+                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
                             }
 
-                            pTree->age = 0;
-                            pTree->cone = true;
-                            pTree->coneheight = 65535;
-                            pTree->seednewly_produced = 0;
-                            // pTree->seedproduced = 0;
-                            // pTree->buffer = 1;
-                            pTree->densitywert = density_help;
-                            pTree->thawing_depthinfluence = thawing_depthinfluence_help;
-                            // pTree->dispersaldistance = seed.dispersaldistance;
-                            pTree->growing = true;
-                            pTree->species = seed.species;
-                            // tree_list.push_back(pTree);
-                            newtree_list.push_back(pTree);
+                            tree.age = 0;
+                            tree.cone = false;
+                            tree.coneheight = 65535;
+                            tree.seednewly_produced = 0;
+                            // tree.seedproduced = 0;
+                            // tree.buffer = 1;
+                            tree.densitywert = density_help;
+                            tree.thawing_depthinfluence = thawing_depthinfluence_help;
+                            // tree.dispersaldistance = seed.dispersaldistance;
+                            tree.growing = true;
+                            tree.species = seed.species;
+                            tree_list.add(tree);
 
                             seed.dead = true;
                             seed_list.remove(i_seed);
@@ -306,13 +299,7 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
                     seed_list.remove(i_seed);
                 }
             }
-        
 		}// seed_list loop
-// append all newly created seed from each thread at once to the seed_list
-#pragma omp critical
-{
-	tree_list.splice(tree_list.end(), newtree_list);
-}
 }// pragma
     }
 }

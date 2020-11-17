@@ -4,12 +4,12 @@
 using namespace std;
 
 // TODO temporary
-extern vector<list<Tree*>> world_tree_list;
+extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 extern vector<vector<Weather*>> world_weather_list;
 extern vector<vector<Envirgrid*>> world_plot_list;
 extern vector<vector<Evaluation*>> world_evaluation_list;
-extern vector<list<Tree*>> world_tree_list_copy;
+extern vector<VectorList<Tree>> world_tree_list_copy;
 extern vector<VectorList<Seed>> world_seed_list_copy;
 extern vector<vector<Envirgrid*>> world_plot_list_copy;
 extern vector<vector<Evaluation*>> world_evaluation_list_copy;
@@ -28,12 +28,12 @@ extern vector<vector<Evaluation*>> world_evaluation_list_copy;
 void Savealllists() {
     // copy Trees
     int aktort = 0;
-    for (vector<list<Tree*>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
-        list<Tree*>& tree_list = *posw;
+    for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
+        VectorList<Tree>& tree_list = *posw;
 
         // opening the original tree list and the referring reset list ..._copy
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list_copy.begin() + aktort);
-        list<Tree*>& tree_list_copy = *world_positon_b;
+        vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list_copy.begin() + aktort);
+        VectorList<Tree>& tree_list_copy = *world_positon_b;
 
         aktort++;
 
@@ -42,46 +42,46 @@ void Savealllists() {
         cout << "tree_list_copy.size() before copying =" << tree_list_copy.size() << endl;
 
         int countertree = 1;
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            auto pTree = (*pos);
-
-            auto pTree_copy = new Tree();
-
-            // pTree_copy->yworldcoo = pTree->yworldcoo;
-            // pTree_copy->xworldcoo = pTree->xworldcoo;
-            pTree_copy->xcoo = pTree->xcoo;
-            pTree_copy->ycoo = pTree->ycoo;
-            // pTree_copy->name = pTree->name;
-            // pTree_copy->namem = pTree->namem;
-            // pTree_copy->namep = pTree->namep;
-            // pTree_copy->line = pTree->line;
-            // pTree_copy->generation = pTree->generation;
-            pTree_copy->species = pTree->species;
-            // pTree_copy->yr_of_establishment = pTree->yr_of_establishment;
-            // pTree_copy->yr_of_dying = pTree->yr_of_dying;
-            pTree_copy->dbasal = pTree->dbasal;
-            pTree_copy->dbasalrel = pTree->dbasalrel;
-            pTree_copy->dbreast = pTree->dbreast;
-            pTree_copy->dbreastrel = pTree->dbreastrel;
-            pTree_copy->height = pTree->height;
-            pTree_copy->age = pTree->age;
-            pTree_copy->cone = pTree->cone;
-            pTree_copy->coneheight = pTree->coneheight;
-            pTree_copy->seednewly_produced = pTree->seednewly_produced;
-            // pTree_copy->seedproduced = pTree->seedproduced;
-            // pTree_copy->buffer = pTree->buffer;
-            pTree_copy->densitywert = pTree->densitywert;
-            pTree_copy->thawing_depthinfluence = pTree->thawing_depthinfluence;
-            pTree_copy->longdispersed = pTree->longdispersed;
-            pTree_copy->growing = pTree->growing;
-
-            tree_list_copy.push_back(pTree_copy);
+		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+			auto& tree = tree_list[tree_i];
+			Tree newtree;
+			
+			// copy
+            // newtree.yworldcoo = tree.yworldcoo;
+            // newtree.xworldcoo = tree.xworldcoo;
+            newtree.xcoo = tree.xcoo;
+            newtree.ycoo = tree.ycoo;
+            // newtree.name = tree.name;
+            // newtree.namem = tree.namem;
+            // newtree.namep = tree.namep;
+            // newtree.line = tree.line;
+            // newtree.generation = tree.generation;
+            newtree.species = tree.species;
+            // newtree.yr_of_establishment = tree.yr_of_establishment;
+            // newtree.yr_of_dying = tree.yr_of_dying;
+            newtree.dbasal = tree.dbasal;
+            newtree.dbasalrel = tree.dbasalrel;
+            newtree.dbreast = tree.dbreast;
+            newtree.dbreastrel = tree.dbreastrel;
+            newtree.height = tree.height;
+            newtree.age = tree.age;
+            newtree.cone = tree.cone;
+            newtree.coneheight = tree.coneheight;
+            newtree.seednewly_produced = tree.seednewly_produced;
+            // newtree.seedproduced = tree.seedproduced;
+            // newtree.buffer = tree.buffer;
+            newtree.densitywert = tree.densitywert;
+            newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
+            newtree.longdispersed = tree.longdispersed;
+            newtree.growing = tree.growing;
+			
+			// add
+			tree_list_copy.add(newtree);
 
             if (countertree == 1) {
-                cout << pTree->height << " <-pTree ... Treeheight ... pTree_copy-> " << pTree_copy->height << endl;
+                cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
             }
 
-            ++pos;
             ++countertree;
         }
 
@@ -297,8 +297,8 @@ void Savealllists() {
 void Clearalllists(void) {
     int aktort = 0;
     for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
-        list<Tree*>& tree_list = *world_positon_b;
+        vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
+        VectorList<Tree>& tree_list = *world_positon_b;
 
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
@@ -311,12 +311,8 @@ void Clearalllists(void) {
 
         aktort++;
 
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
-            auto pTree = (*pos);
-            delete pTree;
-        }
+		// remove elements
         tree_list.clear();
-
         seed_list.clear();
 
         for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
@@ -383,11 +379,11 @@ void Clearalllists(void) {
 void Restorealllists(void) {
     // copying Trees
     int aktort = 0;
-    for (vector<list<Tree*>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
-        list<Tree*>& tree_list = *posw;
+    for (vector<VectorList<Tree>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
+        VectorList<Tree>& tree_list = *posw;
 
-        vector<list<Tree*>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
-        list<Tree*>& tree_list_copy = *world_positon_b;
+        vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
+        VectorList<Tree>& tree_list_copy = *world_positon_b;
 
         aktort++;
 
@@ -396,45 +392,46 @@ void Restorealllists(void) {
         cout << "tree_list_copy.size() before copying =" << tree_list_copy.size() << endl;
 
         int countertree = 1;  // for displaying the first tree
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            auto pTree = (*pos);
-
-            auto pTree_copy = new Tree();
-
-            // pTree_copy->yworldcoo = pTree->yworldcoo;
-            // pTree_copy->xworldcoo = pTree->xworldcoo;
-            pTree_copy->xcoo = pTree->xcoo;
-            pTree_copy->ycoo = pTree->ycoo;
-            // pTree_copy->name = pTree->name;
-            // pTree_copy->namem = pTree->namem;
-            // pTree_copy->namep = pTree->namep;
-            // pTree_copy->line = pTree->line;
-            // pTree_copy->generation = pTree->generation;
-            pTree_copy->species = pTree->species;
-            // pTree_copy->yr_of_establishment = pTree->yr_of_establishment;
-            // pTree_copy->yr_of_dying = pTree->yr_of_dying;
-            pTree_copy->dbasal = pTree->dbasal;
-            pTree_copy->dbasalrel = pTree->dbasalrel;
-            pTree_copy->dbreast = pTree->dbreast;
-            pTree_copy->dbreastrel = pTree->dbreastrel;
-            pTree_copy->height = pTree->height;
-            pTree_copy->age = pTree->age;
-            pTree_copy->cone = pTree->cone;
-            pTree_copy->coneheight = pTree->coneheight;
-            pTree_copy->seednewly_produced = pTree->seednewly_produced;
-            // pTree_copy->seedproduced = pTree->seedproduced;
-            // pTree_copy->buffer = pTree->buffer;
-            pTree_copy->densitywert = pTree->densitywert;
-            pTree_copy->thawing_depthinfluence = pTree->thawing_depthinfluence;
-            pTree_copy->longdispersed = pTree->longdispersed;
-            pTree_copy->growing = pTree->growing;
-            tree_list_copy.push_back(pTree_copy);
+		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+			auto& tree = tree_list[tree_i];
+			Tree newtree;
+			
+			// copy
+            // newtree.yworldcoo = tree.yworldcoo;
+            // newtree.xworldcoo = tree.xworldcoo;
+            newtree.xcoo = tree.xcoo;
+            newtree.ycoo = tree.ycoo;
+            // newtree.name = tree.name;
+            // newtree.namem = tree.namem;
+            // newtree.namep = tree.namep;
+            // newtree.line = tree.line;
+            // newtree.generation = tree.generation;
+            newtree.species = tree.species;
+            // newtree.yr_of_establishment = tree.yr_of_establishment;
+            // newtree.yr_of_dying = tree.yr_of_dying;
+            newtree.dbasal = tree.dbasal;
+            newtree.dbasalrel = tree.dbasalrel;
+            newtree.dbreast = tree.dbreast;
+            newtree.dbreastrel = tree.dbreastrel;
+            newtree.height = tree.height;
+            newtree.age = tree.age;
+            newtree.cone = tree.cone;
+            newtree.coneheight = tree.coneheight;
+            newtree.seednewly_produced = tree.seednewly_produced;
+            // newtree.seedproduced = tree.seedproduced;
+            // newtree.buffer = tree.buffer;
+            newtree.densitywert = tree.densitywert;
+            newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
+            newtree.longdispersed = tree.longdispersed;
+            newtree.growing = tree.growing;
+			
+			// add
+			tree_list_copy.add(newtree);
 
             if (countertree == 1) {
-                cout << pTree->height << " <-pTree ... Treeheight ... pTree_copy-> " << pTree_copy->height << endl;
+                cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
             }
 
-            ++pos;
             ++countertree;
         }
 
@@ -653,8 +650,8 @@ void Restorealllists(void) {
 
 void Clearalllists_copy(void) {
     int aktort = 0;
-    for (vector<list<Tree*>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
-        list<Tree*>& tree_list = *posw;
+    for (vector<VectorList<Tree>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
+        VectorList<Tree>& tree_list = *posw;
 
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
@@ -666,13 +663,9 @@ void Clearalllists_copy(void) {
         vector<Evaluation*>& evaluation_list = *posiwelt;
 
         aktort++;
-
-        for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); ++pos) {
-            auto pTree = (*pos);
-            delete pTree;
-        }
+		
+		// remove elements
         tree_list.clear();
-
         seed_list.clear();
 
         // delete plot list elements

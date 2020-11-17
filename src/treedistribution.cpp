@@ -4,7 +4,7 @@
 using namespace std;
 
 // TODO temporary
-extern vector<list<Tree*>> world_tree_list;
+extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 
 /****************************************************************************************/
@@ -160,8 +160,8 @@ void TreesIni(int maximal_word_length) {
     // set up of initial trees from different files
     if (parameter[0].starttrees != 0) {
         int aktort = 0;
-        for (vector<list<Tree*>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); posw++) {
-            list<Tree*>& tree_list = *posw;
+        for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); posw++) {
+            VectorList<Tree>& tree_list = *posw;
 
             aktort++;
 
@@ -211,42 +211,42 @@ void TreesIni(int maximal_word_length) {
                     sscanf(strtok(NULL, ";"), "%d", &conebuf);
                     sscanf(strtok(NULL, ";"), "%d", &agebuf);
 
-                    auto pTree = new Tree();
+                    Tree tree;
 
-                    // pTree->yworldcoo = aktortyworldcoo;
-                    // pTree->xworldcoo = aktortxworldcoo;
-                    pTree->xcoo = (unsigned int) floor(1000* (double) xcoobuf);
-                    pTree->ycoo = (unsigned int) floor(1000* (double) ycoobuf);
-                    // pTree->name = ++parameter[0].nameakt;
-                    // pTree->namem = 0;
-                    // pTree->namep = 0;
-                    // pTree->line = ++parameter[0].lineakt;
-                    // pTree->generation = 0;
-                    // pTree->yr_of_establishment = 0;
-                    pTree->dbasal = dbasalbuf;
-                    pTree->dbasalrel = (unsigned short int) floor(1000*1.0);
-                    pTree->dbreast = dbreastbuf;
-                    pTree->dbreastrel = (unsigned short int) floor(1000*1.0);
-                    pTree->height = (unsigned short int) floor(100*heightbuf);
-                    pTree->age = agebuf;
-                    pTree->cone = conebuf;
-                    if (pTree->cone == true) {
-                        pTree->coneheight = 65535;
+                    // tree.yworldcoo = aktortyworldcoo;
+                    // tree.xworldcoo = aktortxworldcoo;
+                    tree.xcoo = (unsigned int) floor(1000* (double) xcoobuf);
+                    tree.ycoo = (unsigned int) floor(1000* (double) ycoobuf);
+                    // tree.name = ++parameter[0].nameakt;
+                    // tree.namem = 0;
+                    // tree.namep = 0;
+                    // tree.line = ++parameter[0].lineakt;
+                    // tree.generation = 0;
+                    // tree.yr_of_establishment = 0;
+                    tree.dbasal = dbasalbuf;
+                    tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                    tree.dbreast = dbreastbuf;
+                    tree.dbreastrel = (unsigned short int) floor(1000*1.0);
+                    tree.height = (unsigned short int) floor(100*heightbuf);
+                    tree.age = agebuf;
+                    tree.cone = conebuf;
+                    if (tree.cone == true) {
+                        tree.coneheight = 65535;
                     }
-                    pTree->seednewly_produced = 0;
-                    // pTree->seedproduced = 0;
-                    // pTree->buffer = 1;
-                    pTree->densitywert = 0;
-                    pTree->thawing_depthinfluence = 100;
-                    pTree->growing = true;
+                    tree.seednewly_produced = 0;
+                    // tree.seedproduced = 0;
+                    // tree.buffer = 1;
+                    tree.densitywert = 0;
+                    tree.thawing_depthinfluence = 100;
+                    tree.growing = true;
                     if (parameter[0].specpres == 0 || parameter[0].specpres == 1) {
-                        pTree->species = 1;
+                        tree.species = 1;
                     }
                     if (parameter[0].specpres == 2) {
-                        pTree->species = 2;
+                        tree.species = 2;
                     }
 
-                    tree_list.push_back(pTree);
+                    tree_list.add(tree);
                 }
                 counter++;
             }
@@ -440,7 +440,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         seed.age = 0;
                         seed.longdispersed = false;
                         seed.species = specieszufall;
-                        seed.releaseheight = (unsigned short int) hinterheightsi;
+                        seed.releaseheight = (unsigned short int) floor(100*hinterheightsi);
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;

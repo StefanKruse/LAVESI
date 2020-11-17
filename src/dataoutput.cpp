@@ -7,7 +7,7 @@ void Dataoutput(int t,
                 int jahr,
                 struct Parameter* parameter,
                 int yearposition,
-                vector<list<Tree*>>& world_tree_list,
+                vector<VectorList<Tree>>& world_tree_list,
                 vector<VectorList<Seed>>& world_seed_list,
                 vector<vector<Weather*>>& world_weather_list,
                 vector<vector<Envirgrid*>>& world_plot_list,
@@ -40,8 +40,8 @@ void Dataoutput(int t,
 
     // preprocessing and output of data for each plot
     int aktort = 0;
-    for (vector<list<Tree*>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {  // world tree list loop
-        list<Tree*>& tree_list = *posw;
+    for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {  // world tree list loop
+        VectorList<Tree>& tree_list = *posw;
 
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
@@ -75,66 +75,48 @@ void Dataoutput(int t,
         int stemcount = 0;
         double meantreeheight = 0.0, meantreeage = 0.0;
 		
-omp_set_dynamic(0); //disable dynamic teams
+// pragma omp initializing
+omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
+		
 #pragma omp parallel
 {
-// declarations for each thread
-double local_basalarea = 0.0;
-int local_nheight0b40 = 0, local_nheight41b200 = 0, local_nheight201b10000 = 0;
-double local_breastdiameter = 0.0;
-int local_breastdiametercount = 0;
-int local_stemcount = 0;
-double local_meantreeheight = 0.0, local_meantreeage = 0.0;
+		// declarations for each thread
+		double local_basalarea = 0.0;
+		int local_nheight0b40 = 0, local_nheight41b200 = 0, local_nheight201b10000 = 0;
+		double local_breastdiameter = 0.0;
+		int local_breastdiametercount = 0;
+		int local_stemcount = 0;
+		double local_meantreeheight = 0.0, local_meantreeage = 0.0;
 
-// split list and assigne to threads
-int thread_count = omp_get_num_threads();
-int thread_num = omp_get_thread_num();
-size_t chunk_size = tree_list.size() / thread_count;
-auto begin = tree_list.begin();
-std::advance(begin, thread_num * chunk_size);
-auto end = begin;
-
-if (thread_num == (thread_count - 1))  // last thread takes the remaining elements
-{
-	end = tree_list.end();
-} else {
-	std::advance(end, chunk_size);
-}
-
-#pragma omp barrier
-        // for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-            // auto pTree = (*pos);
-		for (auto it = begin; it != end; ++it) {
-			auto pTree = (*it);
-
-            if (((double)pTree->xcoo/1000 >= xminwindow) && ((double)pTree->xcoo/1000 <= xmaxwindow) && ((double)pTree->ycoo/1000 >= yminwindow)
-                && ((double)pTree->ycoo/1000 <= ymaxwindow)) {  // loop over reduced plot
+#pragma omp for
+		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+			auto& tree = tree_list[tree_i];
+		
+            if (((double)tree.xcoo/1000 >= xminwindow) && ((double)tree.xcoo/1000 <= xmaxwindow) && ((double)tree.ycoo/1000 >= yminwindow)
+                && ((double)tree.ycoo/1000 <= ymaxwindow)) {  // loop over reduced plot
                 // basal area as population size identifier
-                if ((double)pTree->height/100 >= 130) {
-                    local_basalarea += (M_PI * pow((pTree->dbreast / 2), 2));
+                if ((double)tree.height/100 >= 130) {
+                    local_basalarea += (M_PI * pow((tree.dbreast / 2), 2));
                     local_stemcount++;
                 }
 
                 // population sizes in height classes
-                if ((double)pTree->height/100 <= 40) {
+                if ((double)tree.height/100 <= 40) {
                     local_nheight0b40++;
-                } else if (((double)pTree->height/100 > 40) && ((double)pTree->height/100 <= 200)) {
+                } else if (((double)tree.height/100 > 40) && ((double)tree.height/100 <= 200)) {
                     local_nheight41b200++;
-                } else if ((double)pTree->height/100 > 200) {
+                } else if ((double)tree.height/100 > 200) {
                     local_nheight201b10000++;
-                    local_meantreeheight += (double) pTree->height/100;
-                    local_meantreeage += (double) pTree->age;
+                    local_meantreeheight += (double) tree.height/100;
+                    local_meantreeage += (double) tree.age;
                 }
 
-                if (pTree->dbreast > 0) {
-                    local_breastdiameter += pTree->dbreast;
+                if (tree.dbreast > 0) {
+                    local_breastdiameter += tree.dbreast;
                     local_breastdiametercount++;
                 }
             }
-
-            // ++pos;
         }
 
 #pragma omp critical
@@ -458,111 +440,109 @@ if (thread_num == (thread_count - 1))  // last thread takes the remaining elemen
             fprintf(filepointer, "%d;", t);
             fprintf(filepointer, "%d;", jahr);
 
-            for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                auto pTree = (*pos);
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
 
-                if (((double)pTree->xcoo/1000 >= xminwindow) && ((double)pTree->xcoo/1000 <= xmaxwindow) && ((double)pTree->ycoo/1000 >= yminwindow) && ((double)pTree->ycoo/1000 <= ymaxwindow)) {
-                    if (pTree->species == 1) {
+                if (((double)tree.xcoo/1000 >= xminwindow) && ((double)tree.xcoo/1000 <= xmaxwindow) && ((double)tree.ycoo/1000 >= yminwindow) && ((double)tree.ycoo/1000 <= ymaxwindow)) {
+                    if (tree.species == 1) {
                         // bin trees by age
-                        if (pTree->age == 0) {
+                        if (tree.age == 0) {
                             ageg0++;
-                        } else if (pTree->age == 1) {
+                        } else if (tree.age == 1) {
                             ageg1++;
-                        } else if (pTree->age == 2) {
+                        } else if (tree.age == 2) {
                             ageg2++;
-                        } else if (pTree->age == 3) {
+                        } else if (tree.age == 3) {
                             ageg3++;
-                        } else if (pTree->age == 4) {
+                        } else if (tree.age == 4) {
                             ageg4++;
-                        } else if (pTree->age == 5) {
+                        } else if (tree.age == 5) {
                             ageg5++;
-                        } else if ((pTree->age > 5) && (pTree->age <= 10)) {
+                        } else if ((tree.age > 5) && (tree.age <= 10)) {
                             ageg6b10++;
-                        } else if ((pTree->age > 10) && (pTree->age <= 20)) {
+                        } else if ((tree.age > 10) && (tree.age <= 20)) {
                             ageg11b20++;
-                        } else if ((pTree->age > 20) && (pTree->age <= 50)) {
+                        } else if ((tree.age > 20) && (tree.age <= 50)) {
                             ageg21b50++;
-                        } else if ((pTree->age > 50) && (pTree->age <= 100)) {
+                        } else if ((tree.age > 50) && (tree.age <= 100)) {
                             ageg51b100++;
-                        } else if ((pTree->age > 100) && (pTree->age <= 150)) {
+                        } else if ((tree.age > 100) && (tree.age <= 150)) {
                             ageg101b150++;
-                        } else if ((pTree->age > 150) && (pTree->age <= 200)) {
+                        } else if ((tree.age > 150) && (tree.age <= 200)) {
                             ageg151b200++;
-                        } else if ((pTree->age > 200) && (pTree->age <= 300)) {
+                        } else if ((tree.age > 200) && (tree.age <= 300)) {
                             ageg201b300++;
-                        } else if ((pTree->age > 300) && (pTree->age <= 400)) {
+                        } else if ((tree.age > 300) && (tree.age <= 400)) {
                             ageg301b400++;
-                        } else if ((pTree->age > 400) && (pTree->age <= 500)) {
+                        } else if ((tree.age > 400) && (tree.age <= 500)) {
                             ageg401b500++;
-                        } else if ((pTree->age > 500) && (pTree->age <= 600)) {
+                        } else if ((tree.age > 500) && (tree.age <= 600)) {
                             ageg501b600++;
-                        } else if ((pTree->age > 600) && (pTree->age <= 700)) {
+                        } else if ((tree.age > 600) && (tree.age <= 700)) {
                             ageg601b700++;
-                        } else if (pTree->age > 700) {
+                        } else if (tree.age > 700) {
                             ageg701plus++;
                         }
-                    } else if (pTree->species == 2) {
-                        if (pTree->age == 0) {
+                    } else if (tree.species == 2) {
+                        if (tree.age == 0) {
                             ages0++;
-                        } else if (pTree->age == 1) {
+                        } else if (tree.age == 1) {
                             ages1++;
-                        } else if (pTree->age == 2) {
+                        } else if (tree.age == 2) {
                             ages2++;
-                        } else if (pTree->age == 3) {
+                        } else if (tree.age == 3) {
                             ages3++;
-                        } else if (pTree->age == 4) {
+                        } else if (tree.age == 4) {
                             ages4++;
-                        } else if (pTree->age == 5) {
+                        } else if (tree.age == 5) {
                             ages5++;
-                        } else if ((pTree->age > 5) && (pTree->age <= 10)) {
+                        } else if ((tree.age > 5) && (tree.age <= 10)) {
                             ages6b10++;
-                        } else if ((pTree->age > 10) && (pTree->age <= 20)) {
+                        } else if ((tree.age > 10) && (tree.age <= 20)) {
                             ages11b20++;
-                        } else if ((pTree->age > 20) && (pTree->age <= 50)) {
+                        } else if ((tree.age > 20) && (tree.age <= 50)) {
                             ages21b50++;
-                        } else if ((pTree->age > 50) && (pTree->age <= 100)) {
+                        } else if ((tree.age > 50) && (tree.age <= 100)) {
                             ages51b100++;
-                        } else if ((pTree->age > 100) && (pTree->age <= 150)) {
+                        } else if ((tree.age > 100) && (tree.age <= 150)) {
                             ages101b150++;
-                        } else if ((pTree->age > 150) && (pTree->age <= 200)) {
+                        } else if ((tree.age > 150) && (tree.age <= 200)) {
                             ages151b200++;
-                        } else if ((pTree->age > 200) && (pTree->age <= 300)) {
+                        } else if ((tree.age > 200) && (tree.age <= 300)) {
                             ages201b300++;
-                        } else if ((pTree->age > 300) && (pTree->age <= 400)) {
+                        } else if ((tree.age > 300) && (tree.age <= 400)) {
                             ages301b400++;
-                        } else if ((pTree->age > 400) && (pTree->age <= 500)) {
+                        } else if ((tree.age > 400) && (tree.age <= 500)) {
                             ages401b500++;
-                        } else if ((pTree->age > 500) && (pTree->age <= 600)) {
+                        } else if ((tree.age > 500) && (tree.age <= 600)) {
                             ages501b600++;
-                        } else if ((pTree->age > 600) && (pTree->age <= 700)) {
+                        } else if ((tree.age > 600) && (tree.age <= 700)) {
                             ages601b700++;
-                        } else if (pTree->age > 700) {
+                        } else if (tree.age > 700) {
                             ages701plus++;
                         }
                     }
 
-                    if (pTree->dbasal > 0) {
-                        meanbas = meanbas + pTree->dbasal;
+                    if (tree.dbasal > 0) {
+                        meanbas = meanbas + tree.dbasal;
                         h++;
                     }
 
                     // counting seeds
-                    gesamtseedAKT += pTree->seednewly_produced;
-                    // gesamtseedSUM += pTree->seedproduced;
+                    gesamtseedAKT += tree.seednewly_produced;
+                    // gesamtseedSUM += tree.seedproduced;
 
                     // counting species
-                    if (pTree->species == 1) {
+                    if (tree.species == 1) {
                         spectree1++;
-                    } else if (pTree->species == 2) {
+                    } else if (tree.species == 2) {
                         spectree2++;
                     }
 
-                    if ((double)pTree->ycoo/1000 > yposmax) {
-                        yposmax = (double)pTree->ycoo/1000;
+                    if ((double)tree.ycoo/1000 > yposmax) {
+                        yposmax = (double)tree.ycoo/1000;
                     }
                 }
-
-                ++pos;
             }
 
             // for counting seeds:
@@ -728,24 +708,22 @@ if (thread_num == (thread_count - 1))  // last thread takes the remaining elemen
 
                     fseek(filepointer, 0, SEEK_END);
 
-                    for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                        auto pTree = (*pos);
+					for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+						auto& tree = tree_list[tree_i];
 
-                        // fprintf(filepointer, "%d;", pTree->name);
-                        // fprintf(filepointer, "%d;", pTree->namem);
-                        fprintf(filepointer, "%4.4f;", pTree->dbasal);
-                        fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                        fprintf(filepointer, "%4.4f;", (double) pTree->height/100);
-                        fprintf(filepointer, "%d;", pTree->age);
-                        fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
-                        fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
-                        fprintf(filepointer, "%4.5f;", pTree->densitywert);
-                        // fprintf(filepointer, "%d;", pTree->generation);
-                        fprintf(filepointer, "%d;", pTree->seednewly_produced);
-                        // fprintf(filepointer, "%d;", pTree->seedproduced);
+                        // fprintf(filepointer, "%d;", tree.name);
+                        // fprintf(filepointer, "%d;", tree.namem);
+                        fprintf(filepointer, "%4.4f;", tree.dbasal);
+                        fprintf(filepointer, "%4.4f;", tree.dbreast);
+                        fprintf(filepointer, "%4.4f;", (double) tree.height/100);
+                        fprintf(filepointer, "%d;", tree.age);
+                        fprintf(filepointer, "%4.4f;", (double)tree.xcoo/1000);
+                        fprintf(filepointer, "%4.4f;", (double)tree.ycoo/1000);
+                        fprintf(filepointer, "%4.5f;", tree.densitywert);
+                        // fprintf(filepointer, "%d;", tree.generation);
+                        fprintf(filepointer, "%d;", tree.seednewly_produced);
+                        // fprintf(filepointer, "%d;", tree.seedproduced);
                         fprintf(filepointer, "\n");
-
-                        ++pos;
                     }
 
                     fclose(filepointer);
@@ -784,30 +762,28 @@ if (thread_num == (thread_count - 1))  // last thread takes the remaining elemen
 
                     fseek(filepointer, 0, SEEK_END);
 
-                    for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                        auto pTree = (*pos);
+					for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+						auto& tree = tree_list[tree_i];
 
                         fprintf(filepointer, "%d;", parameter[0].repeati);
-                        // fprintf(filepointer, "%d;", pTree->yworldcoo);
-                        // fprintf(filepointer, "%d;", pTree->xworldcoo);
+                        // fprintf(filepointer, "%d;", tree.yworldcoo);
+                        // fprintf(filepointer, "%d;", tree.xworldcoo);
                         fprintf(filepointer, "%d;", parameter[0].ivort);
                         fprintf(filepointer, "%d;", jahr);
                         fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                        fprintf(filepointer, "%4.4f;", pTree->dbasal);
-                        fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                        fprintf(filepointer, "%4.4f;", (double) pTree->height/100);
-                        fprintf(filepointer, "%d;", pTree->age);
-                        fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
-                        fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
-                        fprintf(filepointer, "%4.5f;", pTree->densitywert);
-                        // fprintf(filepointer, "%d;", pTree->generation);
-                        fprintf(filepointer, "%4.4f;", (double) pTree->coneheight/100);
-                        fprintf(filepointer, "%d;", pTree->seednewly_produced);
-                        // fprintf(filepointer, "%d;", pTree->seedproduced);
-                        fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
+                        fprintf(filepointer, "%4.4f;", tree.dbasal);
+                        fprintf(filepointer, "%4.4f;", tree.dbreast);
+                        fprintf(filepointer, "%4.4f;", (double) tree.height/100);
+                        fprintf(filepointer, "%d;", tree.age);
+                        fprintf(filepointer, "%4.4f;", (double)tree.xcoo/1000);
+                        fprintf(filepointer, "%4.4f;", (double)tree.ycoo/1000);
+                        fprintf(filepointer, "%4.5f;", tree.densitywert);
+                        // fprintf(filepointer, "%d;", tree.generation);
+                        fprintf(filepointer, "%4.4f;", (double) tree.coneheight/100);
+                        fprintf(filepointer, "%d;", tree.seednewly_produced);
+                        // fprintf(filepointer, "%d;", tree.seedproduced);
+                        fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
                         fprintf(filepointer, "\n");
-
-                        ++pos;
                     }
 
                     fclose(filepointer);
@@ -889,42 +865,41 @@ if (thread_num == (thread_count - 1))  // last thread takes the remaining elemen
             fseek(filepointer, 0, SEEK_END);
 
             // data output for each tree
-            for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end();) {
-                auto pTree = (*pos);
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+				
                 // parameters
                 // fprintf(filepointer, "%d;", parameter[0].repeati);
-                // fprintf(filepointer, "%d;", pTree->yworldcoo);
-                // fprintf(filepointer, "%d;", pTree->xworldcoo);
+                // fprintf(filepointer, "%d;", tree.yworldcoo);
+                // fprintf(filepointer, "%d;", tree.xworldcoo);
                 // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                 // time variables
                 // fprintf(filepointer, "%d;", t);
                 // fprintf(filepointer, "%d;", jahr);
                 // tree variables
-                fprintf(filepointer, "%4.4f;", (double)pTree->xcoo/1000);
-                fprintf(filepointer, "%4.4f;", (double)pTree->ycoo/1000);
-                // fprintf(filepointer, "%d;", pTree->name);
-                // fprintf(filepointer, "%d;", pTree->namem);
-                // fprintf(filepointer, "%d;", pTree->namep);
-                // fprintf(filepointer, "%d;", pTree->line);
-                // fprintf(filepointer, "%d;", pTree->generation);
-                // fprintf(filepointer, "%d;", pTree->species);
-                fprintf(filepointer, "%4.4f;", (double) pTree->height/100);
-                fprintf(filepointer, "%4.4f;", pTree->dbasal);
-                fprintf(filepointer, "%4.4f;", pTree->dbreast);
-                fprintf(filepointer, "%d;", pTree->age);
-                // fprintf(filepointer, "%d;", pTree->cone);
-                // fprintf(filepointer, "%4.4f;", pTree->coneheight);
-                // fprintf(filepointer, "%d;", pTree->seednewly_produced);
-                // fprintf(filepointer, "%d;", pTree->seedproduced);
-                // fprintf(filepointer, "%d;", pTree->buffer);
-                // fprintf(filepointer, "%4.5f;", pTree->densitywert);
-                // fprintf(filepointer, "%4.5f;", pTree->dispersaldistance);
-                // fprintf(filepointer, "%lf;", pTree->thawing_depthinfluence);
-                fprintf(filepointer, "%4.4f;", (double) pTree->elevation/10);
-                fprintf(filepointer, "%4.4f;", (double) pTree->envirimpact/10000);
+                fprintf(filepointer, "%4.4f;", (double)tree.xcoo/1000);
+                fprintf(filepointer, "%4.4f;", (double)tree.ycoo/1000);
+                // fprintf(filepointer, "%d;", tree.name);
+                // fprintf(filepointer, "%d;", tree.namem);
+                // fprintf(filepointer, "%d;", tree.namep);
+                // fprintf(filepointer, "%d;", tree.line);
+                // fprintf(filepointer, "%d;", tree.generation);
+                // fprintf(filepointer, "%d;", tree.species);
+                fprintf(filepointer, "%4.4f;", (double) tree.height/100);
+                fprintf(filepointer, "%4.4f;", tree.dbasal);
+                fprintf(filepointer, "%4.4f;", tree.dbreast);
+                fprintf(filepointer, "%d;", tree.age);
+                // fprintf(filepointer, "%d;", tree.cone);
+                // fprintf(filepointer, "%4.4f;", tree.coneheight);
+                // fprintf(filepointer, "%d;", tree.seednewly_produced);
+                // fprintf(filepointer, "%d;", tree.seedproduced);
+                // fprintf(filepointer, "%d;", tree.buffer);
+                // fprintf(filepointer, "%4.5f;", tree.densitywert);
+                // fprintf(filepointer, "%4.5f;", tree.dispersaldistance);
+                // fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
+                fprintf(filepointer, "%4.4f;", (double) tree.elevation/10);
+                fprintf(filepointer, "%4.4f;", (double) tree.envirimpact/10000);
                 fprintf(filepointer, "\n");
-
-                ++pos;
             }
 
             fclose(filepointer);

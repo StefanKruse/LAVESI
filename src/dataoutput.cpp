@@ -36,6 +36,7 @@ void Dataoutput(int t,
     bool outputcurrencies = false;
     bool outputposition = false;
     bool outputindividuals = false;
+    bool outputgriddedbiomass = false;
     bool ausgabedensity = false;
 
     // preprocessing and output of data for each plot
@@ -282,10 +283,12 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
 					ausgabedensity = true;
 
-                if ((parameter[0].ivort % 25 == 0))
-                // || parameter[0].ivort>())
+                if ((parameter[0].ivort % 25 == 0) 
+					| (parameter[0].ivort > parameter[0].ivortmax)
+				)
                 {
-                    outputindividuals = true;
+                    // outputindividuals = true;
+					outputgriddedbiomass = true;
                 }
 
             } else if (parameter[0].outputmode == 2)  // "OMP"
@@ -908,6 +911,105 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
             // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
         }  // individual tree output
+
+        if (outputgriddedbiomass == true) {  // gridded tree biomass output
+            // assemble file name
+            s1 << parameter[0].repeati;
+            s2 << parameter[0].weatherchoice;
+            s3 << parameter[0].ivort;
+            s4 << aktort;
+
+            dateiname = "output/databiomassgrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
+
+            s1.str("");
+            s1.clear();
+            s2.str("");
+            s2.clear();
+            s3.str("");
+            s3.clear();
+            s4.str("");
+            s4.clear();
+
+			
+			// aggregate data on 30 m grid
+			int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
+			int deminputdimension_x = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
+			vector<double> AGBneedleliving;
+			AGBneedleliving.resize(deminputdimension_y*deminputdimension_x,0);
+			vector<double> AGBwoodliving;
+			AGBwoodliving.resize(deminputdimension_y*deminputdimension_x,0);
+			vector<double> Stemcount;
+			Stemcount.resize(deminputdimension_y*deminputdimension_x,0);
+			vector<double> Basalarea;
+			Basalarea.resize(deminputdimension_y*deminputdimension_x,0);
+
+omp_set_dynamic(1); //enable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+
+#pragma omp parallel
+{
+#pragma omp for
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+				// calculate grid position from x/y coordinates
+				unsigned int grid_i =  floor((double)tree.ycoo/1000 / 30) * deminputdimension_x + floor((double)tree.xcoo/1000 / 30);
+
+				// calculate biomass values for each tree
+				AGBneedleliving[grid_i] += 703.62/(1+ exp( ((double)tree.height/100 - 579.5) /208.69) );
+				AGBwoodliving[grid_i] += 78713.63/(1+ exp( ((double)tree.height/100 - 793.64) /73.91) );
+				
+				// aggregate other variables
+				if( ((double) tree.height/100) > 130) {
+					Stemcount[grid_i]++;
+				    Basalarea[grid_i] += (M_PI * pow((tree.dbreast/100 / 2), 2));// in sq.m so here conversion from cm to m
+				}
+			}
+}// pragma
+
+
+            // trying to open the file for reading
+            filepointer = fopen(dateiname.c_str(), "r+");
+            // if fopen fails, open a new file + header output
+            if (filepointer == NULL) {
+                filepointer = fopen(dateiname.c_str(), "w+");
+
+                fprintf(filepointer, "x;");
+                fprintf(filepointer, "y;");
+                fprintf(filepointer, "AGBneedleliving;");
+                fprintf(filepointer, "AGBwoodliving;");
+                fprintf(filepointer, "Stemcount;");
+                fprintf(filepointer, "Basalarea;");
+                fprintf(filepointer, "\n");
+
+                if (filepointer == NULL) {
+                    fprintf(stderr, "Error: File could not be opened!\n");
+                    exit(1);
+                }
+            }
+
+            fseek(filepointer, 0, SEEK_END);
+
+            // data output for each tree
+			for (unsigned int grid_i = 0; grid_i < AGBneedleliving.size(); ++grid_i) {
+				// if(AGBneedleliving[grid_i]>0) {
+					unsigned int y = floor((double)grid_i / deminputdimension_x);
+					unsigned int x = (double)grid_i - y * deminputdimension_x;
+
+					fprintf(filepointer, "%d;", x);
+					fprintf(filepointer, "%d;", y);
+					fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i]);//in kg/sq.m.
+					// fprintf(filepointer, "%4.8f;", (((1*1)/(30*30))/1000)*AGBneedleliving[grid_i]);//in kg/sq.m.
+					fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i]);
+					// fprintf(filepointer, "%4.8f;", (((1*1)/(30*30))/1000)*AGBwoodliving[grid_i]);
+					fprintf(filepointer, "%4.2f;", (((100*100)/(30*30)))* Stemcount[grid_i]);// in stems/ha
+					fprintf(filepointer, "%4.8f;", ((100*100)/(30*30))* Basalarea[grid_i]);
+					fprintf(filepointer, "\n");
+				// }
+            }
+
+            fclose(filepointer);
+        }  // gridded tree biomass output
+
 
         if (ausgabedensity == true) {  // tree density map output
             // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

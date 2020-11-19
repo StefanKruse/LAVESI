@@ -467,14 +467,11 @@ void fillElevations(){
 	//2. go over each point and interpolate (weighted mean) within a buffer radius of 15 m (minimum 1 point falls in)
 	
 	if(parameter[0].mapylength==1) {
-// cout << " ... start dem input" << endl;
-// cout << " ... treerows=y: " << treerows << "    & treecols=x:" << treecols << endl;
-
 	// ... read dem data
     FILE* f;
     char demfilename[250];
-	// char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
-	char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
+	char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
+	// char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
     strcpy(demfilename, deminputbuf);
     f = fopen(demfilename, "r");
     if (f == NULL) {
@@ -482,32 +479,27 @@ void fillElevations(){
         exit(1);
     }
 
-	// int deminputdimension = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
 	int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
 	int deminputdimension_x = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
     char puffer[3000];
 	vector<double> elevationinput;
-	// elevationinput.resize(deminputdimension*deminputdimension,0);
 	elevationinput.resize(deminputdimension_y*deminputdimension_x,0);
 	int counter=-1;
-// cout << " ... elevation input set up ..." << endl;
     // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
     while (fgets(puffer, 3000, f) != NULL) {
 		counter++;
 		elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
-		// for(int i=1; i<deminputdimension; ++i){
 		for(int i=1; i<deminputdimension_x; ++i){
-			counter++;//0 to 99 are the rows
+			counter++;// rows
 			elevationinput[counter] = strtod(strtok(NULL, " "), NULL);
 		}
     }
     fclose(f);
-// cout << " ==> elevationinput length = " << elevationinput.size() << endl;
 
 	// ... read slope data
     char slopefilename[250];
-	// char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
-	char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
+	char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
     strcpy(slopefilename, slopeinputbuf);
     f = fopen(slopefilename, "r");
     if (f == NULL) {
@@ -516,26 +508,22 @@ void fillElevations(){
     }
 
 	vector<double> slopeinput;
-	// slopeinput.resize(deminputdimension*deminputdimension,0);
 	slopeinput.resize(deminputdimension_y*deminputdimension_x,0);
 	counter=-1;
-    // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
     while (fgets(puffer, 3000, f) != NULL) {
 		counter++;
 		slopeinput[counter] = strtod(strtok(puffer, " "), NULL);
-		// for(int i=1; i<deminputdimension; ++i){
 		for(int i=1; i<deminputdimension_x; ++i){
-			counter++;//0 to 99 are the rows
+			counter++;
 			slopeinput[counter] = strtod(strtok(NULL, " "), NULL);
 		}
     }
     fclose(f);
-// cout << " ==> slopeinput length = " << slopeinput.size() << endl;
 
 	// ... read slope data
     char twifilename[250];
-	// char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
-	char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020  
+	char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
+	// char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020  
     strcpy(twifilename, twiinputbuf);
     f = fopen(twifilename, "r");
     if (f == NULL) {
@@ -546,23 +534,19 @@ void fillElevations(){
 	vector<double> twiinput;
 	twiinput.resize(deminputdimension_y*deminputdimension_x,0);
 	counter=-1;
-    // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
     while (fgets(puffer, 3000, f) != NULL) {
 		counter++;
 		twiinput[counter] = strtod(strtok(puffer, " "), NULL);
-		// for(int i=1; i<deminputdimension; ++i){
 		for(int i=1; i<deminputdimension_x; ++i){
-			counter++;//0 to 99 are the rows
+			counter++;
 			twiinput[counter] = strtod(strtok(NULL, " "), NULL);
 		}
     }
     fclose(f);
-// cout << " ==> twiinput length = " << twiinput.size() << endl;
 
 
 
 	// interpolate to envirgrid		
-// cout << "... interpolate to envirgrid started" << endl;
 	for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
 		vector<Envirgrid*>& plot_list = *posw;
 
@@ -577,31 +561,16 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				// determine position and distances to gridpoints in low resolution grid
 				double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
 				double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
-				// double ycoodem =deminputdimension*ycoo/parameter[0].sizemagnif/treecols;
-				// double xcoodem = deminputdimension*xcoo/parameter[0].sizemagnif/treecols;
 				double ycoodem = ycoo/parameter[0].sizemagnif/parameter[0].demresolution;
 				double xcoodem = xcoo/parameter[0].sizemagnif/parameter[0].demresolution;
 				double ycoodemmod = ycoodem-floor(ycoodem);
 				ycoodem = floor(ycoodem);
 				double xcoodemmod = xcoodem-floor(xcoodem);
 				xcoodem = floor(xcoodem);
-// cout << " y/x = " << ycoo << "/" << xcoo << "   => ycoodem =" << ycoodem <<"   => xcoodem =" << xcoodem << "   => ycoodemmod =" << ycoodemmod <<"   => xcoodemmod =" << xcoodemmod << endl;
-// cout << "ELE=" << elevationinput[ycoodem * 10 + xcoodem] << endl;
 
-// cout << kartenpos << endl;
 				// elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
 				if( (ycoodem<(deminputdimension_y-1)) & (xcoodem<(deminputdimension_x-1)) )// only if in range leaving out border
 				{
-// cout << elevationinput[ycoodem * deminputdimension_x + xcoodem] 
-// << " .. " << elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] 
-// << " .. " << elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] 
-// << " .. " << elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]<< endl;
-
-// cout << slopeinput[ycoodem * deminputdimension_x + xcoodem] 
-// << " .. " << slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] 
-// << " .. " << slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] 
-// << " .. " << slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]<< endl;
-
 					double eleinter = (
 						// upper left
 						elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
@@ -616,7 +585,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
 						+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
 						)/4;
-// cout << " = => eleinter:" << eleinter << endl;
 					double slopeinter = (
 						// upper left
 						slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
@@ -667,7 +635,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 							| (twiinput[(ycoodem +1)* deminputdimension_x + (xcoodem+1)]==9999) 
 							)
 						countwatercells++;
-// cout << " = => countwatercells:" << countwatercells << endl;
 					// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 32767
 					if(countwatercells==0) {
 						plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + (short int) floor(10*eleinter);
@@ -677,13 +644,10 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 							// f(TWI)		= -0.045999* TWI + 0.994066
 							// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
 										// 	= 0.85654 * exp(-1/2 * (slope- 8.78692)^2/6.90743^2)
-// cout << " = => slopeinter:" << slopeinter << " => factor:" << (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743))) << endl;
-// cout << " = => twiinter:" << twiinter << " => factor:" << (-0.045999* twiinter + 0.994066 ) << endl;
 						double envirgrowthimpact =
 											0.5 * (-0.045999* twiinter + 0.994066 )
 											+ (1.0-0.5) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
 											
-						// envirgrowthimpact=1.0; // TODO: clean here
 						
 						// plausibility check
 						if(envirgrowthimpact>1.0)
@@ -695,7 +659,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						double envirgrowthimpactfactor=1.0;
 						
 						plot_list[kartenpos]->envirgrowthimpact = (unsigned short int) floor(10000* envirgrowthimpactfactor * envirgrowthimpact);
-// cout << " => envirgrowthimit pact in plot=" << plot_list[kartenpos]->envirgrowthimpact << endl;
 					} else {
 						plot_list[kartenpos]->elevation = 32767;
 						plot_list[kartenpos]->envirgrowthimpact = 0;
@@ -724,8 +687,8 @@ cout << " -> started initialise Maps " << endl;
         aktort++;
 
         // calculation of a different position in coordinates:
-        //		xwelt= repeating the same position
-        //		ywelt= different position along the transect
+        //		xworld= repeating the same position
+        //		yworld= different position along the transect
         // necessary for the global lists
         // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
@@ -845,7 +808,7 @@ void runSimulation() {
  *
  * Read Parameters
  * Start Simulation
- * Finish Simulation
+ *
  *
  *******************************************************************************************/
 int main() {
@@ -855,18 +818,14 @@ int main() {
     // console output of the version and general information
     printf("\n---->\tLAVESI\n");
     printf(
-        "\n You have started  LAVESI-WIND, "
-        "An individually-based and spatial explicit simulation model"
-        " for the vegetation dynamics of LARIX (Mill.)"
-        " - driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 1.0 (Multiprocessing)"
-        "\n Date:\t\t 22.01.2018"
+        "\n You have started  LAVESI, "
+        "An individual-based and spatially explicit simulation model for vegetation dynamics of summergreen larches (Larix Mill.) in a 3-dimensional landscape - driven by temperature, precipitation and wind data."
+        "\n\n Version:\t 1.2 (LAVESI-WIND-3DENVIR)"
+        "\n Date:\t\t 19.11.2020"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
-        "\n\t Alexander Gerdes\talexander.gerdes@awi.de"
-        "\n\t Nadja Kath\tnadja.kath@awi.de"
         "\n\t of prior versions:"
-        "\n\t Mareike Wieczorek\tmareike.wieczorek@awi.de"
+        "\n\t Alexander Gerdes, Nadja Kath, Mareike Wieczorek"
         "\n");
     printf("\n<----\n");
 
@@ -874,33 +833,18 @@ int main() {
 	omp_set_dynamic(1); //enable dynamic teams
 	omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
+	// read in all simulation parameters from parameters.txt
     Parameterinput();
 
     // calculation of the starting year of the simulation
     parameter[0].startjahr = parameter[0].lastyearweatherdata - parameter[0].simduration;
 
-
+	// initialize run parameters for each repeated run
     int yearswithseedintropuffer = parameter[0].yearswithseedintro;
     parameter[0].repeati = 0;
-
-    // buffer simulation length
     int simdurationini = parameter[0].simduration;
 
-
-	// test structure sizes for optimization
-	cout << " size of Tree structure: " << sizeof(Tree) << endl;
-	cout << " size of Seed structure: " << sizeof(Seed) << endl;
-	cout << " size of Envirgrid structure: " << sizeof(Envirgrid) << endl;
-	cout << " ... ... " << endl;
-	cout << "unsigned short int : " << sizeof(unsigned short int) << endl;
-	cout << "short int : " << sizeof(short int) << endl;//-32768 to 32767
-	cout << "unsigned int : " << sizeof(unsigned int) << endl;//0 to 4294967295
-	cout << "int : " << sizeof(int) << endl;
-	cout << "double : " << sizeof(double) << endl;
-	cout << "bool : " << sizeof(bool) << endl;
-	cout << "unsigned short : " << sizeof(unsigned short) << endl;
-
-
+	// run repeated simulations
     for (int nruns = 0; nruns < parameter[0].runs; nruns++) {
         parameter[0].starter = false;
 

@@ -37,6 +37,7 @@ void Dataoutput(int t,
     bool outputposition = false;
     bool outputindividuals = false;
     bool outputgriddedbiomass = false;
+    bool outputtransects = false;
     bool ausgabedensity = false;
 
     // preprocessing and output of data for each plot
@@ -265,8 +266,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
         if (parameter[0].dataoutput == true) {
-            if (parameter[0].outputmode == 0)  // "full"
-            {
+            if (parameter[0].outputmode == 0) { // "full"
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
                     outputposition = true;
@@ -276,26 +276,28 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                     outputindividuals = true;
                     ausgabedensity = true;
                 }
-            } else if (parameter[0].outputmode == 1)  // "normal"
-            {
+            } else if (parameter[0].outputmode == 1) { // "normal,gridded"
                 outputcurrencies = true;
 				
 				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
 					ausgabedensity = true;
 
-                if ((parameter[0].ivort % 25 == 0) 
-					| (parameter[0].ivort > parameter[0].ivortmax)
-				)
-                {
+                if (parameter[0].ivort % 20 == 0) {
                     // outputindividuals = true;
 					outputgriddedbiomass = true;
                 }
+				
 
-            } else if (parameter[0].outputmode == 2)  // "OMP"
-            {
+            } else if (parameter[0].outputmode == 2) {  // "OMP"
                 outputcurrencies = true;
+            } else if (parameter[0].outputmode == 3) { // "transect"
+                outputcurrencies = true;
+				
+                if ( (parameter[0].ivort%100==0) | ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) )) {
+					outputtransects = true;
+				}
             }
-        }
+		}
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
@@ -1010,6 +1012,95 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             fclose(filepointer);
         }  // gridded tree biomass output
 
+        if (outputtransects == true) {  // transect output
+            // assemble file name
+            s1 << parameter[0].repeati;
+            s2 << parameter[0].weatherchoice;
+            s3 << parameter[0].ivort;
+
+            dateiname = "output/datatransects_" + s1.str() + "_" + s2.str() + "_" + s3.str() + ".csv";
+
+            s1.str("");
+            s1.clear();
+            s2.str("");
+            s2.clear();
+            s3.str("");
+            s3.clear();
+
+            // trying to open the file for reading
+            filepointer = fopen(dateiname.c_str(), "r+");
+            // if fopen fails, open a new file + header output
+            if (filepointer == NULL) {
+                filepointer = fopen(dateiname.c_str(), "w+");
+
+                fprintf(filepointer, "Y;");
+                fprintf(filepointer, "Species1_stems;");
+                fprintf(filepointer, "Species2_stems;");
+                fprintf(filepointer, "Species1_seedlings;");
+                fprintf(filepointer, "Species2_seedlings;");
+												   
+                fprintf(filepointer, "\n");
+
+                if (filepointer == NULL) {
+                    fprintf(stderr, "Error: File could not be opened!\n");
+                    exit(1);
+                }
+            }
+
+            fseek(filepointer, 0, SEEK_END);
+
+            // aggregate output for y-transects on m-precision
+			vector<int> Species1_stems; 
+			vector<int> Species2_stems; 
+			vector<int> Species1_seedlings; 
+			vector<int> Species2_seedlings; 
+			// fill vectors with zeros
+			Species1_stems.resize(treerows,0);
+			Species2_stems.resize(treerows,0);
+			Species1_seedlings.resize(treerows,0);
+			Species2_seedlings.resize(treerows,0);
+			
+			// count specimen
+omp_set_dynamic(1); //enable dynamic teams
+omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+
+#pragma omp parallel
+{
+#pragma omp for
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+				unsigned int yposi =  floor((double)tree.ycoo/1000);
+
+				// aggregate variables
+				if( ((double) tree.height/100) > 130 ) {
+					
+					if(tree.species==1)
+						Species1_stems[yposi]++;
+					else
+						Species2_stems[yposi]++;
+				} else 
+				{
+					if(tree.species==1)
+						Species1_seedlings[yposi]++;
+					else
+						Species2_seedlings[yposi]++;					
+				}
+			}
+}// pragma
+
+			// add data to file
+			for(int yposi=0; yposi < treerows; yposi++)
+			{
+                fprintf(filepointer, "%d;", yposi);
+                fprintf(filepointer, "%d;", Species1_stems[yposi]);
+                fprintf(filepointer, "%d;", Species2_stems[yposi]);
+                fprintf(filepointer, "%d;", Species1_seedlings[yposi]);
+                fprintf(filepointer, "%d;", Species2_seedlings[yposi]);
+                fprintf(filepointer, "\n");
+			}
+			
+            fclose(filepointer);
+        }  // transect output
 
         if (ausgabedensity == true) {  // tree density map output
             // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -1096,3 +1187,4 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
         }
     }
 }
+

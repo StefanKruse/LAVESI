@@ -9,123 +9,7 @@ extern vector<vector<double>> windspd;
 extern vector<vector<double>> winddir;
 extern vector<int> globalyears;
 
-void getTemp1(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
-    // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-    // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-
-    // if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
-        // double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
-        // double mapylengthdummy = parameter[0].mapylength;
-        // double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
-
-        // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
-        // parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
-    // }
-
-    if (parameter[0].lineartransect == true) {
-        parameter[0].tempdiffortmin = -0.3508 * treerows / (111120);
-        parameter[0].precdiffortmin = -5.3699 * treerows / (111120);
-    }
-
-    FILE* f;
-    f = fopen(dateinametemp, "r");
-    if (f == NULL) {
-        printf("Temperature file not available!\n");
-        exit(1);
-    }
-
-    char puffer[255];
-    int counter = 1;
-    double tempyearmeanbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf,
-        temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
-
-    // read in line by line, partially preprocess data
-    while (fgets(puffer, 255, f) != NULL) {
-        if (counter >= 2) {
-            temp1monthmeanbuf = strtod(strtok(puffer, " "), NULL);
-            temp2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp4monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp5monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp6monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp7monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp8monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp9monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp10monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp11monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp12monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-
-            tempyearmeanbuf = (temp1monthmeanbuf + temp2monthmeanbuf + temp3monthmeanbuf + temp4monthmeanbuf + temp5monthmeanbuf + temp6monthmeanbuf
-                               + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
-                              / 12;
-
-            auto pWeather = new Weather();
-
-            // pWeather->yworldcoo = aktortyworldcoo;
-            // pWeather->xworldcoo = aktortxworldcoo;
-            pWeather->jahr = counter + parameter[0].startjahr - 2;
-            pWeather->tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
-            pWeather->temp2monthmean = temp2monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp3monthmean = temp3monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp4monthmean = temp4monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp5monthmean = temp5monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp6monthmean = temp6monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp7monthmean = temp7monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
-            pWeather->temp8monthmean = temp8monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp9monthmean = temp9monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp10monthmean = temp10monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp11monthmean = temp11monthmeanbuf + parameter[0].tempdiffort;
-            pWeather->temp12monthmean = temp12monthmeanbuf + parameter[0].tempdiffort;
-
-            double sumacttemp = 0, sumacttempmin = 0, sumdegreday = 0;
-            int ndegreday = 0, ndegredaymin = 0;
-
-            // daily mean temperature estimation from mean July temperature:
-            double julitemp = pWeather->temp7monthmean;
-            double julitempmin = pWeather->temp7monthmeanmin;
-
-            for (int i = 1; i <= 365; i++) {
-                double tagestemp = 0;
-
-                if (parameter[0].weatherchoice < 10) {
-                    tagestemp = ((20.5 * sin((0.61 * ((double)i / (365.0 / 12.0))) + 3.8)) - 21.0 + julitemp);
-                } else {
-                    tagestemp = (julitemp + 24 * sin((2 * M_PI) / 365 * (i - 100))) - 25;
-                }
-
-                if (tagestemp > 0) {
-                    ndegreday++;
-                    sumdegreday += tagestemp;
-                    if (tagestemp > 10) {
-                        sumacttemp = sumacttemp + tagestemp;
-                    }
-                }
-                double tagestempmin = tagestemp - julitemp + julitempmin;
-                if (tagestempmin > 0) {
-                    ndegredaymin++;
-                    if (tagestempmin > 10) {
-                        sumacttempmin = sumacttempmin + tagestempmin;
-                    }
-                }
-            }
-            pWeather->activeairtemp = sumacttemp;
-            pWeather->vegetationperiodlength = ndegreday;
-            pWeather->activeairtempmin = sumacttempmin;
-            pWeather->vegetationperiodlengthmin = ndegredaymin;
-            pWeather->degreday = sumdegreday;
-
-            weather_list.push_back(pWeather);
-        }
-        counter++;
-    }
-
-    fclose(f);
-}
-
-void getPrec1(char dateinameprec[50], vector<Weather*>& weather_list, int maximal_word_length) {
+void getPrec(char dateinameprec[50], vector<Weather*>& weather_list, int maximal_word_length) {
     FILE* fp;
     fp = fopen(dateinameprec, "r");
 
@@ -193,188 +77,7 @@ void getPrec1(char dateinameprec[50], vector<Weather*>& weather_list, int maxima
     fclose(fp);
 }
 
-void getTemp2(int aktort, char dateinametemp[50], vector<Weather*>& weather_list, int maximal_word_length) {
-    // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-    // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-
-    // if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
-        // double Nposcenter = (parameter[0].nposmax + parameter[0].nposmin) / 2;
-
-        // double mapylengthdummy = parameter[0].mapylength;
-        // double Nposakt = parameter[0].nposmax - ((parameter[0].nposmax - parameter[0].nposmin) * aktortyworldcoo / (mapylengthdummy - 1.0));
-
-        // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
-        // parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
-
-    if (parameter[0].lineartransect == true) {
-        parameter[0].tempdiffortmin = -0.3508 * treerows / (111120);
-        parameter[0].precdiffortmin = -5.3699 * treerows / (111120);
-    } else {
-        parameter[0].tempdiffort = 0.0;
-        parameter[0].precdiffort = 0.0;
-    }
-
-    FILE* f;
-    f = fopen(dateinametemp, "r");
-    if (f == NULL) {
-        printf("Temperature file not available!\n");
-        exit(1);
-    }
-
-    char puffer[255];
-    int counter = 1;
-    double jahrbuf, tempyearmeanbuf;
-
-    // read in line by line, partially preprocess data
-    while (fgets(puffer, maximal_word_length, f) != NULL) {
-        if (counter >= 2) {
-            jahrbuf = strtod(strtok(puffer, " "), NULL);
-            tempyearmeanbuf = strtod(strtok(NULL, " "), NULL);
-
-            auto pWeather = new Weather();
-
-            // pWeather->yworldcoo = aktortyworldcoo;
-            // pWeather->xworldcoo = aktortxworldcoo;
-            pWeather->jahr = (int)floor(jahrbuf);
-            pWeather->tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
-            pWeather->tempyearmeanmin = tempyearmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
-
-            double sumacttemp = 0;
-            double sumacttempmin = 0;
-            double sumdegreday = 0;
-            int ndegreday = 0;
-            int ndegredaymin = 0;
-
-            double tempyearmeanbuf = pWeather->tempyearmean;
-            double tempyearmeanminbuf = pWeather->tempyearmeanmin;
-            double temp1monthmeanbuf = 0, temp1monthmeanminbuf = 0;
-            double temp7monthmeanbuf = 0, temp7monthmeanminbuf = 0;
-
-            // parameters of the sine function for daily temperature estimation
-            double ausdehnung = 0.567980348064239;
-            double verschiebung = 4.03428152771763;
-            double amplianstieg = -0.585543287044634;
-            double ampliyschn = 15.5976677143297;
-            double yabsanstieg = -0.881262021169085;
-            double yabsschn = -0.00908805024019213;
-            double ampli = 1.05 * (ampliyschn + amplianstieg * tempyearmeanbuf);
-            double amplimin = 1.05 * (ampliyschn + amplianstieg * tempyearmeanminbuf);
-            double yabs = yabsschn + yabsanstieg * tempyearmeanbuf;
-            double yabsmin = yabsschn + yabsanstieg * tempyearmeanminbuf;
-
-            for (int i = 1; i <= 365; i++) {
-                double tagestemp = ((ampli * sin((ausdehnung * ((double)i / (365.0 / 12.0))) + verschiebung)) - yabs);
-                if (tagestemp > 0) {
-                    ndegreday++;
-                    sumdegreday += tagestemp;
-                    if (tagestemp > 10) {
-                        sumacttemp = sumacttemp + tagestemp;
-                    }
-                }
-                double tagestempmin = ((tagestemp + yabs) / ampli) * amplimin - yabsmin;
-                if (tagestempmin > 0) {
-                    ndegredaymin++;
-                    if (tagestempmin > 10) {
-                        sumacttempmin = sumacttempmin + tagestempmin;
-                    }
-                }
-
-                if ((i >= 1) & (i <= 31)) {
-                    temp1monthmeanbuf = temp1monthmeanbuf + tagestemp;
-                    temp1monthmeanminbuf = temp1monthmeanminbuf + tagestempmin;
-                }
-
-                if ((i >= 182) & (i <= 212)) {
-                    temp7monthmeanbuf = temp7monthmeanbuf + tagestemp;
-                    temp7monthmeanminbuf = temp7monthmeanminbuf + tagestempmin;
-                }
-            }
-
-            pWeather->activeairtemp = sumacttemp;
-            pWeather->degreday = sumdegreday;
-            pWeather->vegetationperiodlength = ndegreday;
-            pWeather->activeairtempmin = sumacttempmin;
-            pWeather->vegetationperiodlengthmin = ndegredaymin;
-            pWeather->temp1monthmean = temp1monthmeanbuf / 31;
-            pWeather->temp1monthmeanmin = temp1monthmeanminbuf / 31;
-            pWeather->temp7monthmean = temp7monthmeanbuf / 31;
-            pWeather->temp7monthmeanmin = temp7monthmeanminbuf / 31;
-
-            weather_list.push_back(pWeather);
-        }
-        counter++;
-    }
-
-    fclose(f);
-}
-
-void getPrec2(char dateinameprec[50], vector<Weather*>& weather_list, int maximal_word_length) {
-    FILE* fp;
-    fp = fopen(dateinameprec, "r");
-    if (fp == NULL) {
-        printf("Niederschlagsdatei nicht vorhanden!\n");
-        exit(1);
-    }
-
-    int counter = 1;
-    char puffer[255];
-    double precipitationsumbuf;
-    double prec1monthmeanbuf;
-    double prec2monthmeanbuf;
-    double prec3monthmeanbuf;
-    double prec4monthmeanbuf;
-    double prec5monthmeanbuf;
-    double prec6monthmeanbuf;
-    double prec7monthmeanbuf;
-    double prec8monthmeanbuf;
-    double prec9monthmeanbuf;
-    double prec10monthmeanbuf;
-    double prec11monthmeanbuf;
-    double prec12monthmeanbuf;
-
-    while (fgets(puffer, maximal_word_length, fp) != NULL) {
-        if (counter >= 2) {
-            strtod(strtok(puffer, " "), NULL);
-            prec1monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec4monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec5monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec6monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec7monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec8monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec9monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec10monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec11monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec12monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-
-            precipitationsumbuf = (prec1monthmeanbuf + prec2monthmeanbuf + prec3monthmeanbuf + prec4monthmeanbuf + prec5monthmeanbuf + prec6monthmeanbuf
-                                   + prec7monthmeanbuf + prec8monthmeanbuf + prec9monthmeanbuf + prec10monthmeanbuf + prec11monthmeanbuf + prec12monthmeanbuf);
-
-            auto pWeather = weather_list[counter - 2];
-
-            pWeather->prec1monthmean = prec1monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec2monthmean = prec2monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec3monthmean = prec3monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec4monthmean = prec4monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec5monthmean = prec5monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec6monthmean = prec6monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec7monthmean = prec7monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec8monthmean = prec8monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec9monthmean = prec9monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec10monthmean = prec10monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec11monthmean = prec11monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->prec12monthmean = prec12monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather->precipitationsum = precipitationsumbuf + parameter[0].precdiffort;
-            pWeather->precipitationsummin = precipitationsumbuf + parameter[0].precdiffort + parameter[0].precdiffortmin;
-        }
-        counter++;
-    }
-
-    fclose(fp);
-}
-
-void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
+void getTemp(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
     // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
     // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -387,15 +90,6 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
         // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
     // }
 
-    if (parameter[0].lineartransect == true) {
-        // neu um die Grenze an eine stelle zu rücken. Mitte = eingeladene Serie
-        // ... 2° N nach norden verschoben
-        // parameter[0].precdiffort = -5.3699 * (2.0);
-        // parameter[0].tempdiffort = -0.3508 * (2.0);
-
-        // parameter[0].tempdiffortmin = -0.3508 * -1 * treerows / (111120);
-        // parameter[0].precdiffortmin = -5.3699 * -1 * treerows / (111120);
-    }
 
     FILE* f;
     f = fopen(dateinametemp, "r");
@@ -438,11 +132,9 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 			else
 				pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
 			if(parameter[0].tempjandiffortmin!=0.0)
-				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffortmin;
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffort + parameter[0].tempjandiffortmin;
 			else
-				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffortmin;
-// cout << " jan: " << temp1monthmeanbuf << " + " << parameter[0].tempjandiffort << " = " << pWeather->temp1monthmean << endl;
-// cout << " janmin: " << temp1monthmeanbuf << " + " << parameter[0].tempjandiffortmin << " = " << pWeather->temp1monthmeanmin << endl;
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
             pWeather->temp2monthmean = temp2monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp3monthmean = temp3monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp4monthmean = temp4monthmeanbuf + parameter[0].tempdiffort;
@@ -456,8 +148,6 @@ void getTemp3(int aktort, char dateinametemp[50], vector<Weather*>& weather_list
 				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempjuldiffortmin;
 			else
 				pWeather->temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffortmin;
-// cout << " jul: " << temp7monthmeanbuf << " + " << parameter[0].tempjuldiffort << " = " << pWeather->temp7monthmean << endl;
-// cout << " julmin: " << temp7monthmeanbuf << " + " << parameter[0].tempjuldiffortmin << " = " << pWeather->temp7monthmeanmin << endl;
             pWeather->temp8monthmean = temp8monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp9monthmean = temp9monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp10monthmean = temp10monthmeanbuf + parameter[0].tempdiffort;
@@ -848,33 +538,166 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 			
-        } else if (parameter[0].weatherchoice == 2300851) {
-            char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp45increasing.csv";
-            char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp45increasing.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			// baseline weather manipulation
-		    // parameter[0].tempjandiffort = (-0.133395946/1000) * 0;// in m: negative values for northward/colder areas
-		    // parameter[0].tempjuldiffort = (0.05886988/1000) * 0;
-		    // parameter[0].tempdiffort = (-0.02204296/1000) * 0;
-			// parameter[0].precdiffort = (0.00842138/1000) * 0;
-				// parameter[0].tempjandiffort = temperaturelapse_jan * 0;// in m: negative values for northward/colder areas
-				// parameter[0].tempjuldiffort = temperaturelapse_jul * 0;
-				// parameter[0].tempdiffort = 0;
-				// parameter[0].precdiffort = precipitationlapse_year * 0;
-			// transect weather variation
-			// parameter[0].tempjandiffortmin = (-0.133395946/1000) * treerows;
-			// parameter[0].tempjuldiffortmin = (0.05886988/1000) * treerows;
-			// parameter[0].tempdiffortmin = (-0.02204296/1000) * treerows;
-			// parameter[0].precdiffortmin = (0.00842138/1000) * treerows;
         } else if (parameter[0].weatherchoice == 2300451) {
             char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp45increasing.csv";
             char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp45increasing.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-        }
-		
-		// TODO: clean and reorganize in parts to be switched on by dem compute switch
+        } else if (parameter[0].weatherchoice == 2300851) {
+            char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp85increasing.csv";
+            char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp85increasing.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+// forcing with 501:1900 reconstruction, 1901:2018 CRU TS 4 reanalysis and 2019:3000 predictions CMIP5 until 2500 and remain at final sim years or back to 1901-2000 period until 3000, naming conventions
+// ... 501 == start year
+// ... ...3000 == final year
+// ... .......2 == Transect 2 Taimyr Peninsula
+// ... .......3 == Transect 3 Buor Khaya
+// ... .......4 == Transect 4 Kolyma
+// ... .......5 == Transect 5 Chukotka
+// ... ........1 == rcp2.6
+// ... ........2 == rcp4.5
+// ... ........3 == rcp8.5
+// ... ........4 == rcp2.6 half => 1.3
+// ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
+// ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
+
+// RCP2.6
+        } else if (parameter[0].weatherchoice == 501300021) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP26temp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300031) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP26temp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300041) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP26temp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300051) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP26temp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+// RCP4.5
+        } else if (parameter[0].weatherchoice == 501300022) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP45temp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+        } else if (parameter[0].weatherchoice == 501300032) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP45temp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300042) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP45temp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300052) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP45temp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+// RCP8.5
+        } else if (parameter[0].weatherchoice == 501300023) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP85temp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300033) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP85temp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300043) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP85temp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300053) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP85temp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+// RCP2.6 half as strong warming named 1.3
+        } else if (parameter[0].weatherchoice == 501300024) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP13temp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300034) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP13temp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300044) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP13temp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300054) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP13temp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+//  cooling back down to 1901:1987
+// RCP2.6 but with cooling back down to 1901:1987
+        } else if (parameter[0].weatherchoice == 501300025) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP26cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300035) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP26cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
+             strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300045) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP26cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300055) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP26cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+// RCP2.6 half as strong warming named 1.3 but with cooling back down to 1901:1987
+        } else if (parameter[0].weatherchoice == 501300026) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP13cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300036) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP13cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300046) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP13cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300056) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP13cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+		}
+
+		if(parameter[0].demlandscape) {
 			// elevation adjustment
 			double current_elevation;
 			double minele=300;
@@ -894,13 +717,20 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			parameter[0].tempdiffort = 0;
 			parameter[0].precdiffort = parameter[0].precipitationlapse_year * current_elevation;
 			parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (current_elevation+1000);
-// cout << " tempjuldiffort: " << parameter[0].tempjuldiffort << endl;
-
-        getTemp3(aktort, dateinametemp, weather_list);
-        getPrec1(dateinameprec, weather_list, stringlengthmax);
-
-        parameter[0].parameterinputvis = true;
-    }
+		} else if(parameter[0].lineartransect) {
+			parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * parameter[0].locationshift;// in m: negative values for northward/colder areas
+			parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * treerows;
+			parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * parameter[0].locationshift;
+			parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * treerows;
+			parameter[0].tempdiffort = 0;
+			parameter[0].precdiffort = parameter[0].precipitationlapse_year * parameter[0].locationshift;
+			parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * treerows;
+		}
+		
+		getTemp(aktort, dateinametemp, weather_list);
+		getPrec(dateinameprec, weather_list, stringlengthmax);
+	}
 
     passWeather();
 }
+

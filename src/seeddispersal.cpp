@@ -145,14 +145,14 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 									double xstepsize = xsteps / abs(xsteps);
 									double maxsteps = abs(ysteps)+abs(xsteps);
 									// for upslope calculation
-									double eleonestepfurther = 32767/10;
-									if( ((ycoostartdem + ysteps*150) < (parameter[0].sizemagnif*(treerows-1)))
-											& ((xcoostartdem + xsteps*150) < (parameter[0].sizemagnif*treecols-1))
-											& ((ycoostartdem + ysteps*150)>=0)
-											& ((xcoostartdem + xsteps*150)>=0)
-										) {
-										 eleonestepfurther = plot_list[(unsigned long long int) (ycoostartdem + ysteps*150) * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) (xcoostartdem + xsteps*150)]->elevation/10;
-									}
+									// double eleonestepfurther = 32767/10;
+									// if( ((ycoostartdem + ysteps*150) < (parameter[0].sizemagnif*(treerows-1)))
+											// & ((xcoostartdem + xsteps*150) < (parameter[0].sizemagnif*treecols-1))
+											// & ((ycoostartdem + ysteps*150)>=0)
+											// & ((xcoostartdem + xsteps*150)>=0)
+										// ) {
+										 // eleonestepfurther = plot_list[(unsigned long long int) (ycoostartdem + ysteps*150) * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) (xcoostartdem + xsteps*150)]->elevation/10;
+									// }
 
 									unsigned int stepi;
 									unsigned int stepdistance = 150; //in m when divided by parameter[0].sizemagnif, as dem curently 30 m resolution and grid 0.2 m, 150 means all 30 m

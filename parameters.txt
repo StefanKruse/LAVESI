@@ -19,7 +19,8 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 dataoutput=1;						// (int 0,1) write data to files 
 outputmode=1;  						// (int) choice of data output files 
 										// 0=="full"
-										// 1=="normal"
+										// 1=="normal, gridded"
+										// 3=="transect"
 										// 2=="OMP only => currencies + computation time"
 outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
@@ -30,6 +31,7 @@ thawing_depth=1;					// (int 0,1) Active layer calculation
 vegetation=0;						// (int 0,1) Representation of an organic layer
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=30;					// (int) Resolution in m of DEM
+elevationoffset=-1600.0;				// in m adjust baselevel
 
 // 0.4 Computation environment
 omp_num_threads=72;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
@@ -53,7 +55,7 @@ omp_num_threads=72;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=2300851;					// (int) Type of weather forcing series 
+weatherchoice=2300451;					// (int) Type of weather forcing series 
 										//  22==TY02
 										//  22==CH17
 										//  23==CH02
@@ -61,12 +63,41 @@ weatherchoice=2300851;					// (int) Type of weather forcing series
 										// 	    ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
 										// 2300451 1901-2300 RCP 4.5 (4) at climate Lake Ilirney, Chuktoka (5) increasing 2100-2300 (1) 
 										// 2300851 1901-2300 RCP 8.5 (4) at climate Lake Ilirney, Chuktoka (5) increasing 2100-2300 (1) 
+										// +
+										// forcing with 501:1900 reconstruction, 1901:2018 CRU TS 4 reanalysis and 2019:3000 predictions CMIP5 until 2500 and remain at final sim years or back to 1901-2000 period until 3000, naming conventions
+										// ... 501 == start year
+										// ... ...3000 == final year
+										// ... .......2 == Transect 2 Taimyr Peninsula
+										// ... .......3 == Transect 3 Buor Khaya
+										// ... .......4 == Transect 4 Kolyma
+										// ... .......5 == Transect 5 Chukotka
+										// ... ........1 == rcp2.6
+										// ... ........2 == rcp4.5
+										// ... ........3 == rcp8.5
+										// ... ........4 == rcp2.6 half => 1.3
+										// ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
+										// ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
 
-
-elevationoffset=-1600.0;				// in m adjust baselevel
 temperaturelapse_jan=0.001722;				// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
+											// chukotka elevation:	0.001722
+											// .      . transect:	(-0.03304366/1000)=-0.00003304366 // ori per km
+											// Taimyr . transect:	(-0.007512627/1000)=-0.000007512627 // ori per km
+											// Buor Kh. transect:	(-0.0003467366/1000)=-0.0000003467366 // ori per km
+											// Kolyma . transect:	(-0.008957363/1000)=-0.000008957363 // ori per km
+											
 temperaturelapse_jul=-0.004033;				// temperature lapse rate for januar (warmest month) in degree celsius per meter elevation
-precipitationlapse_year=0.01709;				// precipitation lapse rate for whole year in mm prec per meter elevation
+											// chukotka elevation:	-0.004033
+											// .      . transect:	(-0.03185582/1000)=-0.00003185582
+											// Taimyr . transect:	(-0.005374418/1000)=-0.000005374418 // ori per km
+											// Buor Kh. transect:	(-0.0037563135/1000)=-0.0000037563135 // ori per km
+											// Kolyma . transect:	(-0.003582945/1000)=-0.000003582945 // ori per km
+											
+precipitationlapse_year=0.01709;			// precipitation lapse rate for whole year in mm prec per meter elevation
+											// chukotka elevation:	0.01709
+											// .      . transect:	(-0.06041807/1000)=-0.00006041807
+											// Taimyr . transect:	(-0.03461587/1000)=-0.00003461587 // ori per km
+											// Buor Kh. transect:	(-0.0437466/1000)=-0.0000437466 // ori per km
+											// Kolyma . transect:	(-0.2445649/1000)=-0.0002445649 // ori per km
 
 precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
 										// 0==not at all
@@ -83,6 +114,7 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// 0==synchronous forcing per plot
 										// 1==linearly changing from south to north
+locationshift=0;				// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=1;						// (int) source of wind data

@@ -137,6 +137,7 @@ struct Parameter {
     int mapylength;
     bool weathercalcgradient;
     bool lineartransect;
+    double locationshift;
     double nposmax;
     double nposmin;
 	

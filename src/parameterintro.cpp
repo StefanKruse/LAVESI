@@ -296,6 +296,12 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].lineartransect) ? "true" : "false");
     }
+	
+    strcpy(uebergabestring, "locationshift");
+    parameter[0].locationshift = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.4f ==> Main \n", uebergabestring, parameter[0].locationshift);
+    }
 
     strcpy(uebergabestring, "nposmax");
     parameter[0].nposmax = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);

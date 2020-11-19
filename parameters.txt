@@ -34,7 +34,7 @@ demresolution=30;					// (int) Resolution in m of DEM
 elevationoffset=-1600.0;				// in m adjust baselevel
 
 // 0.4 Computation environment
-omp_num_threads=72;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 

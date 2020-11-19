@@ -68,6 +68,7 @@ void getPrec(char dateinameprec[50], vector<Weather*>& weather_list, int maximal
             pWeather->prec10monthmeanmin = prec10monthmeanbuf + parameter[0].precdiffortmin / 12;
             pWeather->prec11monthmeanmin = prec11monthmeanbuf + parameter[0].precdiffortmin / 12;
             pWeather->prec12monthmeanmin = prec12monthmeanbuf + parameter[0].precdiffortmin / 12;
+
             pWeather->precipitationsum = precipitationsumbuf + parameter[0].precdiffort;
             pWeather->precipitationsummin = precipitationsumbuf + parameter[0].precdiffortmin;
         }
@@ -132,9 +133,9 @@ void getTemp(int aktort, char dateinametemp[50], vector<Weather*>& weather_list)
 			else
 				pWeather->temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
 			if(parameter[0].tempjandiffortmin!=0.0)
-				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffort + parameter[0].tempjandiffortmin;
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffortmin;
 			else
-				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffort + parameter[0].tempdiffortmin;
+				pWeather->temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffortmin;
             pWeather->temp2monthmean = temp2monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp3monthmean = temp3monthmeanbuf + parameter[0].tempdiffort;
             pWeather->temp4monthmean = temp4monthmeanbuf + parameter[0].tempdiffort;
@@ -719,12 +720,12 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (current_elevation+1000);
 		} else if(parameter[0].lineartransect) {
 			parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * parameter[0].locationshift;// in m: negative values for northward/colder areas
-			parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * treerows;
+			parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (parameter[0].locationshift + (double)treerows);
 			parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * parameter[0].locationshift;
-			parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * treerows;
+			parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * (parameter[0].locationshift + (double)treerows);
 			parameter[0].tempdiffort = 0;
 			parameter[0].precdiffort = parameter[0].precipitationlapse_year * parameter[0].locationshift;
-			parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * treerows;
+			parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (parameter[0].locationshift + (double)treerows);
 		}
 		
 		getTemp(aktort, dateinametemp, weather_list);

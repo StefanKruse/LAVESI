@@ -11,8 +11,10 @@ using namespace std;
 // const int treecols = 5010;
 // const int treerows = 14010;//30m_Ilirney_653902x7489357m
 // const int treecols = 11020;
-const int treerows = 18210;//30m_Ilirney_x635418-652338m_y7472396-7490606m
-const int treecols = 16920;
+// const int treerows = 18210;//30m_Ilirney_x635418-652338m_y7472396-7490606m
+// const int treecols = 16920;
+const int treerows = 14220;//30m_Ilirney_x641658-649518m_y7476056-7490276m
+const int treecols = 7860;
 
 // parameter input
 const int stringlengthmax = 255;

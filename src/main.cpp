@@ -659,8 +659,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 							// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
 										// 	= 0.85654 * exp(-1/2 * (slope- 8.78692)^2/6.90743^2)
 						double envirgrowthimpact =
-											0.5 * (-0.045999* twiinter + 0.994066 )
-											+ (1.0-0.5) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
+											parameter[0].slopetwiratio * (-0.045999* twiinter + 0.994066 )
+											+ (1-parameter[0].slopetwiratio) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
 											
 						
 						// plausibility check

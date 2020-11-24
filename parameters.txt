@@ -17,7 +17,7 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=1;  						// (int) choice of data output files 
+outputmode=11;  						// (int) choice of data output files 
 										// 0=="full"
 										// 1=="normal, gridded"
 										// 3=="transect"
@@ -32,6 +32,7 @@ vegetation=0;						// (int 0,1) Representation of an organic layer
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=30;					// (int) Resolution in m of DEM
 elevationoffset=-1600.0;				// in m adjust baselevel
+slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
 omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
@@ -55,7 +56,7 @@ omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=2300451;					// (int) Type of weather forcing series 
+weatherchoice=501300051;					// (int) Type of weather forcing series 
 										//  22==TY02
 										//  22==CH17
 										//  23==CH02
@@ -122,10 +123,11 @@ windsource=1;						// (int) source of wind data
 										// 1==EraInterim
 									
 // 1.2 -----> Simulation run characteristics
-lastyearweatherdata=2300;			// (int) determined by the input data series
-simduration=399;						// (int) duration of the simulation period depending on the available weather data series
+lastyearweatherdata=3000;			// (int) determined by the input data series
+simduration=2500;					// (int) duration of the simulation period depending on the available weather data series
+stopatyear=2020;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
-ivortmax=1000;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
 										// >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)

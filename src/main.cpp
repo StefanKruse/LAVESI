@@ -321,6 +321,13 @@ void Yearsteps() {
             Savealllists();
             cout << "In year = " << jahr << " everything was saved!" << endl << endl;
         }
+		
+		// abort simulation when year set
+		if( parameter[0].ivort > (parameter[0].ivortmax+parameter[0].lastyearweatherdata-parameter[0].stopatyear) ) {
+			cout << "Simulation aborted as requested in parameter.txt->stopatyear!" << endl;
+			exit(1);
+		}
+	
     }  // year step
 
     // variation of parameters depends on experimental setting beginning at resetyear
@@ -406,6 +413,7 @@ void Yearsteps() {
             parameter[0].tempdiffort = tempdiffort_buffer;
         }
     }
+
 }
 
 /****************************************************************************************/
@@ -470,8 +478,9 @@ void fillElevations(){
 	// ... read dem data
     FILE* f;
     char demfilename[250];
-	char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
 	// char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
+	// char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
+	char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210 
     strcpy(demfilename, deminputbuf);
     f = fopen(demfilename, "r");
     if (f == NULL) {
@@ -481,12 +490,12 @@ void fillElevations(){
 
 	int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
 	int deminputdimension_x = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
-    char puffer[3000];
+    char puffer[6000];
 	vector<double> elevationinput;
 	elevationinput.resize(deminputdimension_y*deminputdimension_x,0);
 	int counter=-1;
     // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
-    while (fgets(puffer, 3000, f) != NULL) {
+    while (fgets(puffer, 6000, f) != NULL) {
 		counter++;
 		elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
 		for(int i=1; i<deminputdimension_x; ++i){
@@ -498,8 +507,9 @@ void fillElevations(){
 
 	// ... read slope data
     char slopefilename[250];
-	char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
 	// char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
+	// char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
+	char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210 
     strcpy(slopefilename, slopeinputbuf);
     f = fopen(slopefilename, "r");
     if (f == NULL) {
@@ -510,7 +520,7 @@ void fillElevations(){
 	vector<double> slopeinput;
 	slopeinput.resize(deminputdimension_y*deminputdimension_x,0);
 	counter=-1;
-    while (fgets(puffer, 3000, f) != NULL) {
+    while (fgets(puffer, 6000, f) != NULL) {
 		counter++;
 		slopeinput[counter] = strtod(strtok(puffer, " "), NULL);
 		for(int i=1; i<deminputdimension_x; ++i){
@@ -522,8 +532,9 @@ void fillElevations(){
 
 	// ... read slope data
     char twifilename[250];
-	char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
 	// char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020  
+	// char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
+	char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210 
     strcpy(twifilename, twiinputbuf);
     f = fopen(twifilename, "r");
     if (f == NULL) {
@@ -534,7 +545,7 @@ void fillElevations(){
 	vector<double> twiinput;
 	twiinput.resize(deminputdimension_y*deminputdimension_x,0);
 	counter=-1;
-    while (fgets(puffer, 3000, f) != NULL) {
+    while (fgets(puffer, 6000, f) != NULL) {
 		counter++;
 		twiinput[counter] = strtod(strtok(puffer, " "), NULL);
 		for(int i=1; i<deminputdimension_x; ++i){

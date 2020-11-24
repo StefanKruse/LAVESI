@@ -1,7 +1,7 @@
 #!/bin/sh
-#SBATCH --job-name="LAVESI12h"
-#SBATCH --qos=normal
-#SBATCH --time="12:00:00"
+#SBATCH --job-name="LAVESI48h"
+#SBATCH --qos=large
+#SBATCH --time="48:00:00"
 #SBATCH --output=%j.txt
 #SBATCH --error=%j.txt
 #SBATCH --export=ALL

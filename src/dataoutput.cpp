@@ -286,6 +286,17 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                     // outputindividuals = true;
 					outputgriddedbiomass = true;
                 }
+            } else if (parameter[0].outputmode == 11) { // "normal,gridded"
+                outputcurrencies = true;
+				
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
+
+                if ( (parameter[0].ivort == 1000)
+						| (parameter[0].ivort >= 1100)
+					) {
+					outputgriddedbiomass = true;
+                }
 				
 
             } else if (parameter[0].outputmode == 2) {  // "OMP"

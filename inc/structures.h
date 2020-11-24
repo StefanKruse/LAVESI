@@ -111,6 +111,7 @@ struct Parameter {
     // time steps and repeats
     int lastyearweatherdata;
     int simduration;
+    int stopatyear;
     int startjahr;
     int runs;
     int repeati;
@@ -142,6 +143,7 @@ struct Parameter {
     double nposmin;
 	
 	double elevationoffset;
+	double slopetwiratio;
 	double temperaturelapse_jan;
 	double temperaturelapse_jul;
 	double precipitationlapse_year;

@@ -1,5 +1,5 @@
 #!/bin/sh
-#SBATCH --job-name="LAVESI"
+#SBATCH --job-name="LAVESI48h"
 #SBATCH --qos=large
 #SBATCH --time="48:00:00"
 #SBATCH --output=%j.txt
@@ -9,7 +9,6 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=36
-#SBATCH --workdir=.
 #SBATCH --partition=fat
 export OMP_PROC_BIND=true
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK

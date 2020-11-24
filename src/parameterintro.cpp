@@ -120,6 +120,13 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].elevationoffset);
     }
+	
+    strcpy(uebergabestring, "slopetwiratio");
+    parameter[0].slopetwiratio = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].slopetwiratio);
+    }
+	
     strcpy(uebergabestring, "temperaturelapse_jan");
     parameter[0].temperaturelapse_jan = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -217,6 +224,11 @@ void Parameterinput(void) {
     parameter[0].simduration = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].simduration);
+    }
+    strcpy(uebergabestring, "stopatyear");
+    parameter[0].stopatyear = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].stopatyear);
     }
 
     strcpy(uebergabestring, "runs");

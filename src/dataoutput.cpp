@@ -291,6 +291,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				
 				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
 					ausgabedensity = true;
+					
+				if(parameter[0].ivort == 2)// test
+					outputgriddedbiomass = true;
 
                 if ( (parameter[0].ivort == 1000)
 						| (parameter[0].ivort >= 1100)
@@ -951,10 +954,36 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			AGBneedleliving.resize(deminputdimension_y*deminputdimension_x,0);
 			vector<double> AGBwoodliving;
 			AGBwoodliving.resize(deminputdimension_y*deminputdimension_x,0);
-			vector<double> Stemcount;
+			vector<unsigned int> Stemcount;
 			Stemcount.resize(deminputdimension_y*deminputdimension_x,0);
 			vector<double> Basalarea;
 			Basalarea.resize(deminputdimension_y*deminputdimension_x,0);
+			vector<unsigned int> Indicount_10;
+			vector<unsigned int> Indicount_40;
+			vector<unsigned int> Indicount_100;
+			vector<unsigned int> Indicount_200;
+			vector<unsigned int> Indicount_300;
+			vector<unsigned int> Indicount_400;
+			vector<unsigned int> Indicount_500;
+			vector<unsigned int> Indicount_750;
+			vector<unsigned int> Indicount_1000;
+			vector<unsigned int> Indicount_1250;
+			vector<unsigned int> Indicount_1500;
+			vector<unsigned int> Indicount_2000;
+			vector<unsigned int> Indicount_larger2000;
+			Indicount_10.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_40.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_100.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_200.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_300.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_400.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_500.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_750.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_1000.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_1250.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_1500.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_2000.resize(deminputdimension_y*deminputdimension_x,0);
+			Indicount_larger2000.resize(deminputdimension_y*deminputdimension_x,0);
 
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -968,14 +997,65 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				unsigned int grid_i =  floor((double)tree.ycoo/1000 / 30) * deminputdimension_x + floor((double)tree.xcoo/1000 / 30);
 
 				// calculate biomass values for each tree
-				AGBneedleliving[grid_i] += 703.62/(1+ exp( ((double)tree.height/100 - 579.5) /208.69) );
-				AGBwoodliving[grid_i] += 78713.63/(1+ exp( ((double)tree.height/100 - 793.64) /73.91) );
+				AGBneedleliving[grid_i] +=  703.6207 /(1+ exp( -1.0*((double)tree.height/100 - 579.4998 ) /208.687  ) );
+				AGBwoodliving[grid_i] +=  78713.62675/(1+ exp( -1.0*((double)tree.height/100 - 793.64156) / 73.91302) );
 				
-				// aggregate other variables
-				if( ((double) tree.height/100) > 130) {
+				// aggregate stand level variables
+				if( ((double) tree.height/100) > 130 ) {
 					Stemcount[grid_i]++;
 				    Basalarea[grid_i] += (M_PI * pow((tree.dbreast/100 / 2), 2));// in sq.m so here conversion from cm to m
 				}
+				// aggregate further stand structure variables
+				if( ((double) tree.height/100) < 10) {
+					Indicount_10[grid_i]++;
+				} else if( (((double) tree.height/100) >= 10)
+							& (((double) tree.height/100) < 40)
+							) {
+					Indicount_40[grid_i]++;
+				} else if( (((double) tree.height/100) >= 40)
+							& (((double) tree.height/100) < 100)
+							) {
+					Indicount_100[grid_i]++;
+				} else if( (((double) tree.height/100) >= 100)
+							& (((double) tree.height/100) < 200)
+							) {
+					Indicount_200[grid_i]++;
+				} else if( (((double) tree.height/100) >= 200)
+							& (((double) tree.height/100) < 300)
+							) {
+					Indicount_300[grid_i]++;
+				} else if( (((double) tree.height/100) >= 300)
+							& (((double) tree.height/100) < 400)
+							) {
+					Indicount_400[grid_i]++;
+				} else if( (((double) tree.height/100) >= 400)
+							& (((double) tree.height/100) < 500)
+							) {
+					Indicount_500[grid_i]++;
+				} else if( (((double) tree.height/100) >= 500)
+							& (((double) tree.height/100) < 750)
+							) {
+					Indicount_750[grid_i]++;
+				} else if( (((double) tree.height/100) >= 750)
+							& (((double) tree.height/100) < 1000)
+							) {
+					Indicount_1000[grid_i]++;
+				} else if( (((double) tree.height/100) >= 1000)
+							& (((double) tree.height/100) < 1250)
+							) {
+					Indicount_1250[grid_i]++;
+				} else if( (((double) tree.height/100) >= 1250)
+							& (((double) tree.height/100) < 1500)
+							) {
+					Indicount_1500[grid_i]++;
+				} else if( (((double) tree.height/100) >= 1500)
+							& (((double) tree.height/100) < 2000)
+							) {
+					Indicount_2000[grid_i]++;
+				} else if( ((double) tree.height/100) >= 2000) {
+					Indicount_larger2000[grid_i]++;
+				}
+				
 			}
 }// pragma
 
@@ -992,6 +1072,18 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 fprintf(filepointer, "AGBwoodliving;");
                 fprintf(filepointer, "Stemcount;");
                 fprintf(filepointer, "Basalarea;");
+                fprintf(filepointer, "Individuals_0_10cm;");
+                fprintf(filepointer, "Individuals_10_40cm;");
+                fprintf(filepointer, "Individuals_40_100cm;");
+                fprintf(filepointer, "Individuals_100_200cm;");
+                fprintf(filepointer, "Individuals_200_300cm;");
+                fprintf(filepointer, "Individuals_300_400cm;");
+                fprintf(filepointer, "Individuals_400_500cm;");
+                fprintf(filepointer, "Individuals_500_750cm;");
+                fprintf(filepointer, "Individuals_750_1000cm;");
+                fprintf(filepointer, "Individuals_1250_1500cm;");
+                fprintf(filepointer, "Individuals_1500_2000cm;");
+                fprintf(filepointer, "Individuals_larger2000cm;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -1010,12 +1102,23 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 					fprintf(filepointer, "%d;", x);
 					fprintf(filepointer, "%d;", y);
-					fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i]);//in kg/sq.m.
-					// fprintf(filepointer, "%4.8f;", (((1*1)/(30*30))/1000)*AGBneedleliving[grid_i]);//in kg/sq.m.
-					fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i]);
-					// fprintf(filepointer, "%4.8f;", (((1*1)/(30*30))/1000)*AGBwoodliving[grid_i]);
-					fprintf(filepointer, "%4.2f;", (((100*100)/(30*30)))* Stemcount[grid_i]);// in stems/ha
+					fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i]/1000/(30*30));//in kg/sq.m.
+					fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i]/1000/(30*30));//in kg/sq.m.
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Stemcount[grid_i]);// in stems/ha
 					fprintf(filepointer, "%4.8f;", ((100*100)/(30*30))* Basalarea[grid_i]);
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_10[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_40[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_100[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_200[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_300[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_400[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_500[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_750[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_1000[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_1250[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_1500[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_2000[grid_i]);// in individuals/ha
+					fprintf(filepointer, "%d;", (((100*100)/(30*30)))* Indicount_larger2000[grid_i]);// in individuals/ha
 					fprintf(filepointer, "\n");
 				// }
             }

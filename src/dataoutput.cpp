@@ -295,8 +295,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				if(parameter[0].ivort == 2)// test
 					outputgriddedbiomass = true;
 
-                if ( (parameter[0].ivort == 1000)
-						| (parameter[0].ivort >= 1100)
+                if ( (parameter[0].ivort == 1400)
+						| (parameter[0].ivort >= 1500)
 					) {
 					outputgriddedbiomass = true;
                 }
@@ -1081,6 +1081,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 fprintf(filepointer, "Individuals_400_500cm;");
                 fprintf(filepointer, "Individuals_500_750cm;");
                 fprintf(filepointer, "Individuals_750_1000cm;");
+                fprintf(filepointer, "Individuals_1000_1250cm;");
                 fprintf(filepointer, "Individuals_1250_1500cm;");
                 fprintf(filepointer, "Individuals_1500_2000cm;");
                 fprintf(filepointer, "Individuals_larger2000cm;");

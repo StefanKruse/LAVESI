@@ -696,6 +696,50 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
+// RCP4.5 but with cooling back down to 1901:1987
+        } else if (parameter[0].weatherchoice == 501300027) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP45cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300037) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP45cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP45prec_501-3000.csv";
+             strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300047) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP45cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300057) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP45cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
+// RCP8.5 but with cooling back down to 1901:1987
+        } else if (parameter[0].weatherchoice == 501300028) {// last number added
+            char tempbuf[] = "input/transectTaimyr Peninsula_RCP85cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectTaimyr Peninsula_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300038) {// last number added
+            char tempbuf[] = "input/transectBuor Khaya_RCP85cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectBuor Khaya_RCP85prec_501-3000.csv";
+             strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300048) {// last number added
+            char tempbuf[] = "input/transectKolyma_RCP85cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectKolyma_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 501300058) {// last number added
+            char tempbuf[] = "input/transectChukotka_RCP85cooltemp_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
 		}
 
 		if(parameter[0].demlandscape) {

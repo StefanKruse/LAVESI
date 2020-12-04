@@ -323,7 +323,11 @@ void Yearsteps() {
         }
 		
 		// abort simulation when year set
-		if( parameter[0].ivort > (parameter[0].ivortmax+parameter[0].lastyearweatherdata-parameter[0].stopatyear) ) {
+		if( parameter[0].ivort > (parameter[0].ivortmax
+									+parameter[0].stopatyear 
+									-(parameter[0].lastyearweatherdata-parameter[0].simduration)
+									)
+			) {
 			cout << "Simulation aborted as requested in parameter.txt->stopatyear!" << endl;
 			exit(1);
 		}

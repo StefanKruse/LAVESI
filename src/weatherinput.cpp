@@ -453,9 +453,71 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
         int findyr1 = 0, findyr2 = -100, jahr = 0, cntr = 0;
 
         string filename;
+		ostringstream foldername;
         std::ostringstream ss;
         string item;
+		
+		// define input folder
+		if(
+		// Taimyr Peninsula
+			(parameter[0].weatherchoice == 501300021) |
+			(parameter[0].weatherchoice == 501300022) |
+			(parameter[0].weatherchoice == 501300023) |
+			(parameter[0].weatherchoice == 501300024) |
+			(parameter[0].weatherchoice == 501300025) |
+			(parameter[0].weatherchoice == 501300026) |
+			(parameter[0].weatherchoice == 501300027) |
+			(parameter[0].weatherchoice == 501300028) |
+			(parameter[0].weatherchoice == 21) |
+			(parameter[0].weatherchoice == 22) |
+			(parameter[0].weatherchoice == 23) |
+			(parameter[0].weatherchoice == 24) |
+			(parameter[0].weatherchoice == 7001)
+			) {
+			foldername << "wind_Taimyr";
+		} else if(
+		// Buor Khaya Peninsula
+			(parameter[0].weatherchoice == 501300031) |
+			(parameter[0].weatherchoice == 501300032) |
+			(parameter[0].weatherchoice == 501300033) |
+			(parameter[0].weatherchoice == 501300034) |
+			(parameter[0].weatherchoice == 501300035) |
+			(parameter[0].weatherchoice == 501300036) |
+			(parameter[0].weatherchoice == 501300037) |
+			(parameter[0].weatherchoice == 501300038)
+			) {
+			foldername << "wind_BuorKhaya";
+		} else if(
+		// Kolyma River Basin
+			(parameter[0].weatherchoice == 501300041) |
+			(parameter[0].weatherchoice == 501300042) |
+			(parameter[0].weatherchoice == 501300043) |
+			(parameter[0].weatherchoice == 501300044) |
+			(parameter[0].weatherchoice == 501300045) |
+			(parameter[0].weatherchoice == 501300046) |
+			(parameter[0].weatherchoice == 501300047) |
+			(parameter[0].weatherchoice == 501300048)
+			) {
+			foldername << "wind_Kolyma";
+		} else if(
+		// Chukotka
+			(parameter[0].weatherchoice == 501300051) |
+			(parameter[0].weatherchoice == 501300052) |
+			(parameter[0].weatherchoice == 501300053) |
+			(parameter[0].weatherchoice == 501300054) |
+			(parameter[0].weatherchoice == 501300055) |
+			(parameter[0].weatherchoice == 501300056) |
+			(parameter[0].weatherchoice == 501300057) |
+			(parameter[0].weatherchoice == 501300058) |
+			(parameter[0].weatherchoice == 2300451) |
+			(parameter[0].weatherchoice == 2300851)
+			) {
+			foldername << "wind_Chukotka";
+		}
+		
 
+
+			
         for (int t = 0; t < parameter[0].simduration; t++) {
             cntr = 0;
 
@@ -463,7 +525,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 
             if (parameter[0].windsource == 1) {
                 findyr1 = 1979;
-                findyr2 = 2012;
+                findyr2 = 2018;
             }
 
             ss.str("");
@@ -473,7 +535,8 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
                 ss << jahr;
 
                 if (parameter[0].windsource == 1) {
-                    filename = "input/winddata/winddata" + ss.str() + "_EraInterim.dat";
+                    // filename = "input/winddata/winddata" + ss.str() + "_EraInterim.dat";
+                    filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
                 }
 
                 ifstream fileinp(filename.c_str());

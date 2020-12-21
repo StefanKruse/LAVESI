@@ -125,7 +125,7 @@ windsource=1;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=3000;			// (int) determined by the input data series
 simduration=2500;					// (int) duration of the simulation period depending on the available weather data series
-stopatyear=2020;					// (int) simulation is stopped after this year
+stopatyear=3000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										//   0==without spin up phase
@@ -157,8 +157,8 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;						// (int 1,2) positions for introduced seeds
 										// 1==neg. exp. from south border 
 										// 2==randomly into the plot
-seedintro_maxy=5000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=5000;
+seedintro_maxy=4000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=4000;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 										// 0==seeds passing the borders are removed

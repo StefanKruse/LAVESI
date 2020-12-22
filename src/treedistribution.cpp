@@ -3,26 +3,15 @@
 
 using namespace std;
 
-// TODO temporary
+// TODO temporary here
 extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
-
-/****************************************************************************************/
-/**
- * \brief Seedinput in the beginning
- *
- * if seedinput==true, start simulation with seedinput \n
- * recall if sites are empty of trees
- *
- *******************************************************************************************/
 
 void Seedin() {
     int aktort = 0;
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-
         aktort++;
-
         // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -31,13 +20,9 @@ void Seedin() {
         // seedinput on all sites
         if (parameter[0].realseedconnect == false) {
             seedinput = true;
-        }
-        // seedinput on southern site only
-        else if (parameter[0].realseedconnect == true && aktort == 1) {
+        } else if (parameter[0].realseedconnect == true && aktort == 1) {// seedinput on southern site only
             seedinput = true;
-        }
-        // no seedinput
-        else {
+        } else {// no seedinput
             seedinput = false;
         }
 
@@ -96,19 +81,19 @@ void Seedin() {
                     exit(1);
                 }
 
-                double seedzufall = 0.0;
-                int specieszufall = 0;
+                double rn_seed = 0.0;
+                int rn_species = 0;
                 if (parameter[0].specpres == 0) {
-                    seedzufall = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-                    if ((seedzufall >= 0.0) && (seedzufall <= 0.5)) {
-                        specieszufall = 1;
-                    } else if ((seedzufall > 0.5) && (seedzufall <= 1.0)) {
-                        specieszufall = 2;
+                    rn_seed = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                    if ((rn_seed >= 0.0) && (rn_seed <= 0.5)) {
+                        rn_species = 1;
+                    } else if ((rn_seed > 0.5) && (rn_seed <= 1.0)) {
+                        rn_species = 2;
                     }
                 } else if (parameter[0].specpres == 1) {
-                    specieszufall = 1;
+                    rn_species = 1;
                 } else if (parameter[0].specpres == 2) {
-                    specieszufall = 2;
+                    rn_species = 2;
                 }
 
                 if (seedeintragen) {
@@ -125,33 +110,17 @@ void Seedin() {
                     // seed.weight = 1;
                     seed.age = 0;
                     seed.longdispersed = false;
-                    seed.species = specieszufall;
+                    seed.species = rn_species;
                     seed.releaseheight = 0;
                     seed.thawing_depthinfluence = 100;
                     seed.dead = false;
 
                     seed_list.add(seed);
-
-                    // if ((seed.yworldcoo < 0.0) || (seed.yworldcoo > (double)(treerows - 1)) || (seed.xcoo < 0.0) || (seed.xcoo > (double)(treecols - 1))) {
-                        // printf("\n\nLaVeSi was stopped\n");
-                        // printf("=> Treedistribution.cpp\n");
-                        // printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", iseed, jseed);
-                        // exit(1);
-                    // }
                 }
             }
         }
     }
 }
-
-/****************************************************************************************/
-/**
- * \brief Set starting population to CH-17/I and variations
- *
- * read file and place trees according to their coordinates
- *
- *
- *******************************************************************************************/
 
 void TreesIni(int maximal_word_length) {
     FILE* f;
@@ -162,9 +131,7 @@ void TreesIni(int maximal_word_length) {
         int aktort = 0;
         for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); posw++) {
             VectorList<Tree>& tree_list = *posw;
-
             aktort++;
-
             // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
             // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -256,22 +223,6 @@ void TreesIni(int maximal_word_length) {
     }
 }
 
-/****************************************************************************************/
-/**
- * \brief Seedinput from hinterland
- *
- * ... parameter settings
- * hinterland (int) -> 0 means no, otherwise the number is the length in meters that is south of the simultation area
- *
- 
- * 1. estimate number of 20 m slices
- * 1.1. take "fly out" probability but not for each but generally the proportion
- * 1.2. define random x/y start for each seed
- * 2. estimate mean height for each 20 m slice
- * 3. estimate dx/dy by function Seedwinddispersal()
- * 4. place new seed to seedlist
- *******************************************************************************************/
-
 void Hinterlandseedintro(struct Parameter* parameter,
                          int yearposition,
                          vector<VectorList<Seed>>& world_seed_list,
@@ -285,7 +236,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
     double logmodel_heights_r = -0.5932627;
     double logmodel_heights_K = 353.5688136;
 
-    // set "trees" directly as seeds with the relevant information
+    // set 'trees' directly as seeds with the relevant information
     // ... for each tree the mean number of seeds and height at the position at the hinterland
     // ... jultemp based on position
     int aktort = 0;
@@ -295,9 +246,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
         // grant weather access
         vector<vector<Weather*>>::iterator world_positon_weather = (world_weather_list.begin() + aktort);
         vector<Weather*>& weather_list = *world_positon_weather;
-
         aktort++;
-
         // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -426,7 +375,6 @@ void Hinterlandseedintro(struct Parameter* parameter,
 #endif
 
                         Seed seed;
-
                         // seed.yworldcoo = aktortyworldcoo;
                         // seed.xworldcoo = aktortxworldcoo;
                         seed.xcoo = (unsigned int) floor(1000*xseed);
@@ -446,13 +394,6 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         seed.dead = false;
 
                         seed_list.add(seed);
-
-                        // if ((seed.yworldcoo < 0.0) | (seed.yworldcoo > (double)(treerows - 1)) | (seed.xcoo < 0.0) | (seed.xcoo > (double)(treecols - 1))) {
-                            // printf("\n\nLaVeSi was stopped\n");
-                            // printf("=> Treedistribution.cpp\n");
-                            // printf("... reason: new seed has coordinates beyond the plots borders (with Pos(Y=%4.2f,X=%4.2f))\n", yseed, xseed);
-                            // exit(1);
-                        // }
                     }
                 }
             }
@@ -465,22 +406,12 @@ void Hinterlandseedintro(struct Parameter* parameter,
     }
 }
 
-/****************************************************************************************/
-/**
- * \brief Start either with empty site and seed input or with
- *11-CH-17/I tree coordinates
- *
- *
- *
- *******************************************************************************************/
-
-void Treedistribution(struct Parameter* parameter, int stringlengthmax) {
-    // either seed introduction...
-    if ((parameter[0].starter == true)) {
+void Treedistribution(struct Parameter* parameter, 
+					  int stringlengthmax) {
+    if ((parameter[0].starter == true)) {// either seed introduction...
         Seedin();
-    }
-    // ... or use initial tree input data files
-    else {
+    } else {// ... or use initial tree input data files
         TreesIni(stringlengthmax);
     }
 }
+

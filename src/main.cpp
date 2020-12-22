@@ -25,20 +25,10 @@ vector<vector<double>> winddir;
 int cntr;
 vector<double> wdir, wspd;
 
-/****************************************************************************************/
-/**
- * \brief go through all functions for vegetation dynamics
- *
- * This function calls all other functions necessary to determine
- *growth, mortality, ageing etc
- *
- *
- *******************************************************************************************/
 void vegetationDynamics(int yearposition, int jahr, int t) {
 
-cout << " started vegDyn / ivort=" << parameter[0].ivort << " / ";
+cout << " started vegetation dynamics / ivort=" << parameter[0].ivort << " / ";
 
-// cout << "Elapsed time: " <<  << " s\n";
 auto time_start = chrono::high_resolution_clock::now();
     Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
 auto time_end = chrono::high_resolution_clock::now();
@@ -56,7 +46,7 @@ cout << "Growth(" << elapsed.count() << ")+";
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
         if (parameter[0].windsource == 1) {
             findyr1 = 1979;
-            findyr2 = 2012;
+            findyr2 = 2012;// TODO: adjust to available data
         }
     }
 
@@ -136,16 +126,6 @@ cout << "Ageing(" << elapsed.count() << ")+";
 cout << " /// done " << endl;
 }
 
-/****************************************************************************************/
-/**
- * \brief Spinupphase - get stable state before starting the real
- *simulation
- *
- * initialise "Einschwingung" to reach a stable state before starting
- *the normal routine and call vegetationDynamics
- *
- *
- *******************************************************************************************/
 void Spinupphase() {
     int t = -1;
 
@@ -159,16 +139,11 @@ void Spinupphase() {
             int firstyear = 0;
             int lastyear = 0;
             int startlag = 5;
-
-            // if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
-            // {
-            // firstyear=1934;
+			
             firstyear = world_weather_list[0][0]->jahr;
 			cout << "firstyear: " << firstyear << endl;
-            // lastyear=2013;
             lastyear = world_weather_list[0][0]->jahr + 100;
 			cout << "lastyear: " << lastyear << endl;
-            // }
 
             // choose a random year for weather determination
             double x = rand() / (RAND_MAX + 1.0);
@@ -197,13 +172,8 @@ void Spinupphase() {
             int firstyear = 0, lastyear = 0;
             int startlag = 5;
 
-            // if ( parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24 )
-            // {
-            // firstyear=1934;
             firstyear = world_weather_list[0][0]->jahr;
-            // lastyear=2013;
             lastyear = world_weather_list[0][0]->jahr + 100;
-            // }
 
             // take a random year for weather determination
             double x = rand() / (RAND_MAX + 1.0);
@@ -287,16 +257,6 @@ void Spinupphase() {
     parameter[0].spinupphase = false;
 }
 
-/****************************************************************************************/
-/**
- * \brief Yearsteps - run through the simulation for all years
- *(simduration)
- *
- *
- * initialise yearly steps and call vegetationDynamics
- *
- *
- *******************************************************************************************/
 void Yearsteps() {
     printf("\n\nstarting yearly time steps...\n");
 
@@ -324,15 +284,15 @@ void Yearsteps() {
 		
 		// abort simulation when year set
 		if( parameter[0].ivort > (parameter[0].ivortmax
-									+parameter[0].stopatyear 
-									-(parameter[0].lastyearweatherdata-parameter[0].simduration)
+								  +parameter[0].stopatyear 
+								  -(parameter[0].lastyearweatherdata-parameter[0].simduration)
 									)
 			) {
 			cout << "Simulation aborted as requested in parameter.txt->stopatyear!" << endl;
 			exit(1);
 		}
 	
-    }  // year step
+    }// year step
 
     // variation of parameters depends on experimental setting beginning at resetyear
     if (parameter[0].resetyear > 0) {
@@ -417,45 +377,25 @@ void Yearsteps() {
             parameter[0].tempdiffort = tempdiffort_buffer;
         }
     }
-
 }
 
-/****************************************************************************************/
-/**
- * \brief create all lists needed for the model
- *
- *
- * (Welt)tree_list \n
- * (Welt)seed_list \n
- * (Welt)weather_list \n
- * (Welt)plot_list \n
- * (Welt)evaluation_list \n
- *******************************************************************************************/
 void createLists() {
     for (int i = 0; i < parameter[0].mapylength; i++) {
         for (int j = 0; j < parameter[0].mapxlength; j++) {
             world_tree_list.emplace_back();  // include new tree_list in corresponding world list
-
             world_seed_list.emplace_back();  // include new seed_list in corresponding world list
-
             vector<Weather*> weather_list;               // Creating new weather_list
             world_weather_list.push_back(weather_list);  // include new weather_list in corresponding world list
-
             vector<Envirgrid*> plot_list;          // Creating new plot_list
             world_plot_list.push_back(plot_list);  // include new plot_list in corresponding world list
-
             vector<Evaluation*> evaluation_list;               // Creating new evaluation_list
             world_evaluation_list.push_back(evaluation_list);  // include new evaluation_list in corresponding world list
 
-            if (parameter[0].resetyear > 0) {
-                // Create lists for resetting to a certain year
+            if (parameter[0].resetyear > 0) {// create lists for resetting to a certain year
                 world_tree_list_copy.emplace_back();  // include new seed_list in corresponding world list
-				
-                world_seed_list_copy.emplace_back();  // include new seed_list in corresponding world list
-
+				world_seed_list_copy.emplace_back();  // include new seed_list in corresponding world list
                 vector<Envirgrid*> plot_list;               // Creating new plot_list
                 world_plot_list_copy.push_back(plot_list);  // include new plot_list in corresponding world list
-
                 vector<Evaluation*> evaluation_list;                    // Creating new evaluation_list
                 world_evaluation_list_copy.push_back(evaluation_list);  // include new evaluation_list in corresponding world list
             }
@@ -463,114 +403,102 @@ void createLists() {
     }
 }
 
-/****************************************************************************************/
-/**
- * \brief initialise Envirgrid Element and Evaluation
- *
- *
- *
- *
- *
- *******************************************************************************************/
-
 void fillElevations(){
-	//0. only once at initializing & if(parameter[0].mapylength==1)
-	//1. load elevation data on coars resolution (e.g. 30 m)
-	//2. go over each point and interpolate (weighted mean) within a buffer radius of 15 m (minimum 1 point falls in)
+	// 0. only once at initializing & if(parameter[0].mapylength==1)
+	// 1. load elevation data on coars resolution (e.g. 30 m)
+	// 2. go over each point and interpolate (weighted mean) within a buffer radius of 15 m (minimum 1 point falls in)
+	// TODO: add fileinput to be set by parameter.txt
 	
 	if(parameter[0].mapylength==1) {
-	// ... read dem data
-    FILE* f;
-    char demfilename[250];
-	char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
-	// char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
-	// char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210 
-	// char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220 
-	// char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310 
-    strcpy(demfilename, deminputbuf);
-    f = fopen(demfilename, "r");
-    if (f == NULL) {
-        printf("DEM file not available!\n");
-        exit(1);
-    }
-
-	int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
-	int deminputdimension_x = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
-    char puffer[6000];
-	vector<double> elevationinput;
-	elevationinput.resize(deminputdimension_y*deminputdimension_x,0);
-	int counter=-1;
-    // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
-    while (fgets(puffer, 6000, f) != NULL) {
-		counter++;
-		elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
-		for(int i=1; i<deminputdimension_x; ++i){
-			counter++;// rows
-			elevationinput[counter] = strtod(strtok(NULL, " "), NULL);
+		// ... read dem data
+		FILE* f;
+		char demfilename[250];
+		char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
+		// char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010 
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210 
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220 
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310 
+		strcpy(demfilename, deminputbuf);
+		f = fopen(demfilename, "r");
+		if (f == NULL) {
+			printf("DEM file not available!\n");
+			exit(1);
 		}
-    }
-    fclose(f);
 
-	// ... read slope data
-    char slopefilename[250];
-	char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
-	// char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
-	// char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210 
-	// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220  
-	// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310  
-    strcpy(slopefilename, slopeinputbuf);
-    f = fopen(slopefilename, "r");
-    if (f == NULL) {
-        printf("Slope file not available!\n");
-        exit(1);
-    }
-
-	vector<double> slopeinput;
-	slopeinput.resize(deminputdimension_y*deminputdimension_x,0);
-	counter=-1;
-    while (fgets(puffer, 6000, f) != NULL) {
-		counter++;
-		slopeinput[counter] = strtod(strtok(puffer, " "), NULL);
-		for(int i=1; i<deminputdimension_x; ++i){
+		int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
+		int deminputdimension_x = treecols/parameter[0].demresolution; // matrix + 1 to avoid border effects
+		char puffer[6000];
+		vector<double> elevationinput;
+		elevationinput.resize(deminputdimension_y*deminputdimension_x,0);
+		int counter=-1;
+		// read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000 entries)
+		while (fgets(puffer, 6000, f) != NULL) {
 			counter++;
-			slopeinput[counter] = strtod(strtok(NULL, " "), NULL);
+			elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
+			for(int i=1; i<deminputdimension_x; ++i){
+				counter++;// rows
+				elevationinput[counter] = strtod(strtok(NULL, " "), NULL);
+			}
 		}
-    }
-    fclose(f);
+		fclose(f);
 
-	// ... read slope data
-    char twifilename[250];
-	char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020  
-	// char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
-	// char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210 
-	// char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220 
-	// char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310 
-    strcpy(twifilename, twiinputbuf);
-    f = fopen(twifilename, "r");
-    if (f == NULL) {
-        printf("TWI file not available!\n");
-        exit(1);
-    }
+		// ... read slope data
+		char slopefilename[250];
+		char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020 
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210 
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220  
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310  
+		strcpy(slopefilename, slopeinputbuf);
+		f = fopen(slopefilename, "r");
+		if (f == NULL) {
+			printf("Slope file not available!\n");
+			exit(1);
+		}
 
-	vector<double> twiinput;
-	twiinput.resize(deminputdimension_y*deminputdimension_x,0);
-	counter=-1;
-    while (fgets(puffer, 6000, f) != NULL) {
-		counter++;
-		twiinput[counter] = strtod(strtok(puffer, " "), NULL);
-		for(int i=1; i<deminputdimension_x; ++i){
+		vector<double> slopeinput;
+		slopeinput.resize(deminputdimension_y*deminputdimension_x,0);
+		counter=-1;
+		while (fgets(puffer, 6000, f) != NULL) {
 			counter++;
-			twiinput[counter] = strtod(strtok(NULL, " "), NULL);
+			slopeinput[counter] = strtod(strtok(puffer, " "), NULL);
+			for(int i=1; i<deminputdimension_x; ++i){
+				counter++;
+				slopeinput[counter] = strtod(strtok(NULL, " "), NULL);
+			}
 		}
-    }
-    fclose(f);
+		fclose(f);
 
+		// ... read slope data
+		char twifilename[250];
+		char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv"; //x=5010 y=4020  
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010 
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210 
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220 
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310 
+		strcpy(twifilename, twiinputbuf);
+		f = fopen(twifilename, "r");
+		if (f == NULL) {
+			printf("TWI file not available!\n");
+			exit(1);
+		}
 
+		vector<double> twiinput;
+		twiinput.resize(deminputdimension_y*deminputdimension_x,0);
+		counter=-1;
+		while (fgets(puffer, 6000, f) != NULL) {
+			counter++;
+			twiinput[counter] = strtod(strtok(puffer, " "), NULL);
+			for(int i=1; i<deminputdimension_x; ++i){
+				counter++;
+				twiinput[counter] = strtod(strtok(NULL, " "), NULL);
+			}
+		}
+		fclose(f);
 
-	// interpolate to envirgrid		
-	for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
-		vector<Envirgrid*>& plot_list = *posw;
-
+		// interpolate to envirgrid		
+		for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
+			vector<Envirgrid*>& plot_list = *posw;
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -578,121 +506,118 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 #pragma omp parallel
 {
 #pragma omp for
-			for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
-				// determine position and distances to gridpoints in low resolution grid
-				double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
-				double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
-				double ycoodem = ycoo/parameter[0].sizemagnif/parameter[0].demresolution;
-				double xcoodem = xcoo/parameter[0].sizemagnif/parameter[0].demresolution;
-				double ycoodemmod = ycoodem-floor(ycoodem);
-				ycoodem = floor(ycoodem);
-				double xcoodemmod = xcoodem-floor(xcoodem);
-				xcoodem = floor(xcoodem);
+				for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
+					// determine position and distances to gridpoints in low resolution grid
+					double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+					double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+					double ycoodem = ycoo/parameter[0].sizemagnif/parameter[0].demresolution;
+					double xcoodem = xcoo/parameter[0].sizemagnif/parameter[0].demresolution;
+					double ycoodemmod = ycoodem-floor(ycoodem);
+					ycoodem = floor(ycoodem);
+					double xcoodemmod = xcoodem-floor(xcoodem);
+					xcoodem = floor(xcoodem);
 
-				// elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
-				if( (ycoodem<(deminputdimension_y-1)) & (xcoodem<(deminputdimension_x-1)) )// only if in range leaving out border
-				{
-					double eleinter = (
-						// upper left
-						elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
-						+ elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
-						// lower left
-						+ elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-						+ elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
-						// upper right
-						+ elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
-						+ elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
-						// lower right
-						+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
-						+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
-						)/4;
-					double slopeinter = (
-						// upper left
-						slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
-						+ slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
-						// lower left
-						+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-						+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
-						// upper right
-						+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
-						+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
-						// lower right
-						+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
-						+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
-						)/4;
-					double twiinter = (
-						// upper left
-						twiinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
-						+ twiinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
-						// lower left
-						+ twiinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-						+ twiinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
-						// upper right
-						+ twiinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
-						+ twiinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
-						// lower right
-						+ twiinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
-						+ twiinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
-						)/4;
+					// elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
+					if( (ycoodem<(deminputdimension_y-1)) & (xcoodem<(deminputdimension_x-1)) )// only if in range leaving out border
+					{
+						double eleinter = (
+							// upper left
+							elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
+							+ elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+							// lower left
+							+ elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+							+ elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+							// upper right
+							+ elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
+							+ elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+							// lower right
+							+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
+							+ elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+							)/4;
+						double slopeinter = (
+							// upper left
+							slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
+							+ slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+							// lower left
+							+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+							+ slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+							// upper right
+							+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
+							+ slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+							// lower right
+							+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
+							+ slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+							)/4;
+						double twiinter = (
+							// upper left
+							twiinput[ycoodem * deminputdimension_x + xcoodem] * (1-ycoodemmod)
+							+ twiinput[ycoodem * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+							// lower left
+							+ twiinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+							+ twiinput[(ycoodem+1) * deminputdimension_x + xcoodem] * (1-xcoodemmod)
+							// upper right
+							+ twiinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (1-ycoodemmod)
+							+ twiinput[ycoodem * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+							// lower right
+							+ twiinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (ycoodemmod)
+							+ twiinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)] * (xcoodemmod)
+							)/4;
 
-					int countwatercells = 0;
-					if( (elevationinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
-							| (slopeinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
-							| (twiinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
-							)
-						countwatercells++;
-					if( (elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999)
-							| (slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
-							| (twiinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
-							)
-						countwatercells++;
-					if( (elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999)
-							| (slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
-							| (twiinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
-							)
-						countwatercells++;
-					if( (elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999)
-							| (slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999) 
-							| (twiinput[(ycoodem +1)* deminputdimension_x + (xcoodem+1)]==9999) 
-							)
-						countwatercells++;
-					// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 32767
-					if(countwatercells==0) {
-						plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + (short int) floor(10*eleinter);
-						// plot_list[kartenpos]->slope = slopeinter;
-						
-						// calculate environment-growth-impact (value between 0 and 1)
-							// f(TWI)		= -0.045999* TWI + 0.994066
-							// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
-										// 	= 0.85654 * exp(-1/2 * (slope- 8.78692)^2/6.90743^2)
-						double envirgrowthimpact =
-											parameter[0].slopetwiratio * (-0.045999* twiinter + 0.994066 )
-											+ (1-parameter[0].slopetwiratio) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
-											
-						
-						// plausibility check
-						if(envirgrowthimpact>1.0)
-							envirgrowthimpact=1.0;
-						if(envirgrowthimpact<0.0)
-							envirgrowthimpact=0.0;
-						
-						// adjust by factor
-						double envirgrowthimpactfactor=1.0;
-						
-						plot_list[kartenpos]->envirgrowthimpact = (unsigned short int) floor(10000* envirgrowthimpactfactor * envirgrowthimpact);
+						int countwatercells = 0;
+						if( (elevationinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
+								| (slopeinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
+								| (twiinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
+								)
+							countwatercells++;
+						if( (elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999)
+								| (slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
+								| (twiinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
+								)
+							countwatercells++;
+						if( (elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999)
+								| (slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
+								| (twiinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
+								)
+							countwatercells++;
+						if( (elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999)
+								| (slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999) 
+								| (twiinput[(ycoodem +1)* deminputdimension_x + (xcoodem+1)]==9999) 
+								)
+							countwatercells++;
+						// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 32767
+						if(countwatercells==0) {
+							plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + (short int) floor(10*eleinter);
+							// plot_list[kartenpos]->slope = slopeinter;
+							
+							// calculate environment-growth-impact (value between 0 and 1)
+								// f(TWI)		= slope * TWI + intercept
+								// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
+							double envirgrowthimpact =
+												parameter[0].slopetwiratio * (-0.045999* twiinter + 0.994066 )
+												+ (1-parameter[0].slopetwiratio) * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692)*(slopeinter - 8.78692))/(6.90743*6.90743)));
+												
+							
+							// plausibility check
+							if(envirgrowthimpact>1.0)
+								envirgrowthimpact=1.0;
+							if(envirgrowthimpact<0.0)
+								envirgrowthimpact=0.0;
+
+							// adjust by factor
+							double envirgrowthimpactfactor=1.0;
+							plot_list[kartenpos]->envirgrowthimpact = (unsigned short int) floor(10000* envirgrowthimpactfactor * envirgrowthimpact);
+						} else {
+							plot_list[kartenpos]->elevation = 32767;
+							plot_list[kartenpos]->envirgrowthimpact = 0;
+						}
 					} else {
 						plot_list[kartenpos]->elevation = 32767;
 						plot_list[kartenpos]->envirgrowthimpact = 0;
 					}
-				} else {
-					plot_list[kartenpos]->elevation = 32767;
-					plot_list[kartenpos]->envirgrowthimpact = 0;
 				}
-			}
-		}//pragma
+}//pragma
+		}
 	}
-	}
-
 cout << " ... end dem and slope input" << endl;
 }
 
@@ -701,12 +626,9 @@ cout << " -> started initialise Maps " << endl;
     int aktort = 0;
     for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
         vector<Envirgrid*>& plot_list = *posw;
-
         vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
         vector<Evaluation*>& evaluation_list = *posiwelt;
-
         aktort++;
-
         // calculation of a different position in coordinates:
         //		xworld= repeating the same position
         //		yworld= different position along the transect
@@ -780,18 +702,6 @@ cout << " -> started initialise Maps " << endl;
 cout << " ... ... ended initialise Maps " << endl;
 }
 
-/****************************************************************************************/
-/**
- * \brief start the simulation
- *
- * initialise some parameters \n
- * create lists \n
- * read weather \n
- * initilise Maps \n
- * distribute trees \n
- * start Enschwingphase \n
- * start yearly timesteps \n
- *******************************************************************************************/
 void runSimulation() {
     createLists();
 
@@ -804,36 +714,22 @@ void runSimulation() {
 	if(parameter[0].demlandscape)
 		fillElevations();
 
-    // tree input similar to CH17 or seed input
+    // tree input from files and/or seed input
     Treedistribution(&parameter[0], stringlengthmax);
 
     parameter[0].ivort = 0;
 
-    // get to a stable state before starting the real simulation
     Spinupphase();
-
     Yearsteps();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 /////////////						  /////////////////////////////////////////////////////////
 /////////////		   MAIN		      /////////////////////////////////////////////////////////
 /////////////			 			  /////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-/****************************************************************************************/
-/**
- * \brief main routine to start model
- *
- * Read Parameters
- * Start Simulation
- *
- *
- *******************************************************************************************/
 int main() {
-    // random number initialization ; TODO delete when all rand() replaces
+    // random number initialization ; TODO delete when all rand() are replaced
     srand((unsigned)time(NULL));
 
     // console output of the version and general information
@@ -842,7 +738,7 @@ int main() {
         "\n You have started  LAVESI, "
         "An individual-based and spatially explicit simulation model for vegetation dynamics of summergreen larches (Larix Mill.) in a 3-dimensional landscape - driven by temperature, precipitation and wind data."
         "\n\n Version:\t 1.2 (LAVESI-WIND-3DENVIR)"
-        "\n Date:\t\t 19.11.2020"
+        "\n Date:\t\t 22.12.2020"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
         "\n\t of prior versions:"
@@ -884,3 +780,4 @@ int main() {
 
     return 0;
 }
+

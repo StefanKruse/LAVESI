@@ -3,49 +3,8 @@
 
 using namespace std;
 
-// TODO temporary
+// TODO temporary here
 extern vector<double> wdir, wspd;
-
-/***********************************************************************************
- * AUTHORS: Gerdes, Alexander; Kath, Nadja; Kruse, Stefan
- *
- * NAME:
- * distribution.cpp
- *
- * CONTENTS:
- * This .cpp file contains the three functions used by LaVeSi to realize wind driven
- * seed- and pollen dispersal:
- * a) Pollinationprobability:
- *    A function returning a vector of the most probable trees to pollinate a tree
- *    at the position x,y
- *
- * b) getEntfernung:
- *    A function calculating and returning the traveling distance for:
- *
- * c) Seedwinddispersal:
- *    The function returning the new position of a seed after dispersal.
- *    In this the wind direction and wind speed is chosen, using the wind direction
- *    for the seed flight direction and the wind velocity to determine the ballistic
- *    maximal flight distance (Matlack) to determine the standard deviation in b)
- *
- * INPUT DATA:
- *  a) absolute position of an individual tree/seed, the tree list's iterator,
- *     the year of seed production,
- *     a globally defined std:vector<double> of wind speeds and wind directions and
- *     a set of parameters
- *  b) the ballistic maximum dispersal distance D, a random number ratiorn \in (0,1)
- *     and a set of parameters
- *  c) the random number \in (0,1) mentioned above, the year of seed dispersal,
- *     a globally defined std:vector<double> of wind speeds and wind directions and
- *     a set of parameters
- *
- * POSSIBLE OUTPUT DATA:
- *  a) a vector of the names of the most probable trees to pollinate another tree,
- *     earlier versions: conceptual preparation for later use: cpSNPs-> genetic data
- *  b) the flight distance of a dispersed seed
- *  c) the absolute position of a dispersed seed in x,y-coordinates
- *
- ************************************************************************************/
 
 void Pollinationprobability(double x,
                             double y,
@@ -85,7 +44,6 @@ void Pollinationprobability(double x,
     pe = 0.01;
     C = parameter[0].pollengregoryc;
     m = parameter[0].pollengregorym;
-
     pName.clear();
     pName.shrink_to_fit();
     thdpthinfl.clear();
@@ -99,17 +57,14 @@ void Pollinationprobability(double x,
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.777;
     }
-
     pe = parameter[0].pollenfall / velocity;
 
-    // Simpson integration + elec424.wikia.com/wiki/Modified_Bessel_Functions:
+    // Simpson integration + https://elec424.fandom.com/wiki/Modified_Bessel_Functions
     I0kappa = 0.16666 * (exp(kappa) + 4.0 + exp(-1.0 * kappa));
 
 	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 		auto& tree_copy = tree_list[tree_i];
-
-        // only if the pollinating tree has cones:
-        if (tree_copy.cone == true) {
+		if (tree_copy.cone == true) {// only if the pollinating tree has cones:
             dx = ((double)tree_copy.xcoo/1000) - x;
             dy = ((double)tree_copy.ycoo/1000) - y;
             dr = sqrt(dx * dx + dy * dy);
@@ -137,7 +92,6 @@ void Pollinationprobability(double x,
                 sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
                 string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
                 fdir = fopen(output.c_str(), "a+");
-                // fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, tree_copy.name, tree_copy.xcoo, tree_copy.ycoo, x, y);
                 fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo/1000, (double)tree_copy.ycoo/1000, x, y);
                 fclose(fdir);
             }
@@ -167,7 +121,7 @@ double getEntfernung(double D, double ratiorn_help) {
                         + (1 / gaussfatratio) * parameter[0].distanceratio * (pow(ratiorn_help, (-1 * (1 + fatalpha))))));
 
     } else {
-        printf("LaVeSi was stopped\n\n");
+        printf("LAVESI was stopped\n\n");
         printf("... choice of dispersal mode (= %d) not available!\n", parameter[0].dispersalmode);
         exit(1);
     }
@@ -191,14 +145,10 @@ void Seedwinddispersal(double rn,
 
     if (parameter[0].windsource == 1) {// EraInterim
         // choose a month between May and September:
-        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * rand() / (RAND_MAX + 1.0)));
-        // ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * uniform(rng)));
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = (wspd.at(ripm));
     } else {// random
-        // direction = 0.0 + ((double)(2 * M_PI) * rand() / (RAND_MAX + 1.0));
-        // direction = 0.0 + ((double)(2 * M_PI) * uniform(rng));
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.7777;
     }
@@ -215,9 +165,10 @@ void Seedwinddispersal(double rn,
         dispersaldistance = getEntfernung(maxdispersaldistance, rn);
     }
 
+	// set return variables
     dy = cos(direction) * dispersaldistance;
     dx = sin(direction) * dispersaldistance;
-
     windspeed = velocity;
     winddirection = direction;
 }
+

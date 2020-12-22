@@ -3,19 +3,9 @@
 
 using namespace std;
 
-/****************************************************************************************/
-/**
- * \brief calculate max. possible basal growth
- *
- * either just set to weather_list[yearposition]->weatherfactor *
- *exponential growth depending on dbh or, if transects are
- *calculated, calculated out of
- *weather_list[yearposition]->weatherfactormin (max basal growth at
- *most southern transekt and tree position in north-south transekt
- *
- *******************************************************************************************/
-
-double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tree tree) {
+double getMaxbasalwachstum(int yearposition,
+						   vector<Weather*>& weather_list, 
+						   Tree tree) {
     double maxbw_help = 0;
     if (parameter[0].lineartransect) {
         if (parameter[0].thawing_depth) {
@@ -92,22 +82,13 @@ double getMaxbasalwachstum(int yearposition, vector<Weather*>& weather_list, Tre
             }
         }
     }
-	
+
     return maxbw_help;
 }
 
-/****************************************************************************************/
-/**
- * \brief calculate min. possible growth at breast height
- *
- * either taken from just set to
- *weather_list[yearposition]->maxbreastwachstumjahr \n or if
- *transects are calculated calculated out of
- *weather_list[yearposition]->maxbasalwachstumjahrmin and tree
- *position in north-south transect
- *
- *******************************************************************************************/
-double getMaxbreastwachstum(int yearposition, vector<Weather*>& weather_list, Tree tree) {
+double getMaxbreastwachstum(int yearposition, 
+							vector<Weather*>& weather_list, 
+							Tree tree) {
     double maxbrw_help = 0;
 
     if (parameter[0].lineartransect == true) {
@@ -191,26 +172,15 @@ double getMaxbreastwachstum(int yearposition, vector<Weather*>& weather_list, Tr
     return (maxbrw_help);
 }
 
-/****************************************************************************************/
-/**
- * \brief calculate basal and breast height growth of each tree in
- *the simulation
- *
- * basalwachstum = maxbasalwachstum * densitywert *
- *thawing_depthinfluence/100;	\n basalwachstum = basalwachstum
- *+ basalwachstum * basalinfluenceoldyoung * dbasal; \n
- * breastwachstum = maxbreastwachstum * densitywert *
- *thawing_depthinfluence)/100;  \n
- *
- *******************************************************************************************/
-void Growth(struct Parameter* parameter, int yearposition, vector<VectorList<Tree>>& world_tree_list, vector<vector<Weather*>>& world_weather_list) {
+void Growth(struct Parameter* parameter, 
+			int yearposition, 
+			vector<VectorList<Tree>>& world_tree_list, 
+			vector<vector<Weather*>>& world_weather_list) {
     int aktort = 0;
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-
         vector<vector<Weather*>>::iterator posiwelt = (world_weather_list.begin() + aktort);
         vector<Weather*>& weather_list = *posiwelt;
-
         aktort++;
 		
 // pragma omp initializing
@@ -222,13 +192,10 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 #pragma omp for
 		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 			auto& tree = tree_list[tree_i];
-
             double maxbasalwachstum = 0.0;
-
             maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
 			tree.dbasalmax = (unsigned short int) floor(1000*maxbasalwachstum);
 
-            // double basalwachstum = maxbasalwachstum * ((double)tree.buffer) * (1.0 - tree.densitywert);
             double basalwachstum = maxbasalwachstum * (1.0 - tree.densitywert);
             basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
 			
@@ -259,7 +226,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             if ((double)tree.height/100 >= 130) {
                 maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
 
-                // breastwachstum = maxbreastwachstum * ((double)tree.buffer) * (1.0 - tree.densitywert);
                 breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
 
 				if (parameter[0].demlandscape) {
@@ -302,3 +268,4 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 } // pragma
     }
 }
+

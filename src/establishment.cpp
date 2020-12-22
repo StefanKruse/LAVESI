@@ -14,16 +14,12 @@ void Treeestablishment(struct Parameter* parameter,
     int aktort = 0;
     for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather*>& weather_list = *posw;
-
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         VectorList<Tree>& tree_list = *world_positon_b;
-
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
-
         vector<vector<Envirgrid*>>::iterator world_positon_k = (world_plot_list.begin() + aktort);
         vector<Envirgrid*>& plot_list = *world_positon_k;
-
         aktort++;
 
 		std::random_device random_dev;
@@ -52,25 +48,23 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
 
                 assert(curposi >= 0);
-				
 
 				if( (parameter[0].demlandscape) & (plot_list[curposi]->elevation==32767) ){
 					seed.dead = true;
 					continue;
 				}
 
-                double keimungauflageinfluence =
+                double germinationlitterheightinfluence =
                     (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
-                    // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi]->litterheight) + 1.495;
+                    // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi]->litterheight) + 1.495; // TODO: check litterheight implementation
 
-                if (keimungauflageinfluence < 0.01) {
-                    keimungauflageinfluence = 0.01;
+                if (germinationlitterheightinfluence < 0.01) {
+                    germinationlitterheightinfluence = 0.01;
                 }
 
 
 
 
-				// maxthawing_depth
 				// calculate the thawing depth influence on the tree growth
 				double thawing_depthinfluence_help = 100;
 				if((plot_list[curposi]->maxthawing_depth < 2000)
@@ -79,11 +73,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						(unsigned short)((200.0 / 2000.0) * (double)plot_list[curposi]->maxthawing_depth);
 				}
 				
-					
                 // ... and weather.
                 // calculate the latest growth performance
-				// TODO: clean code 
-				// TODO: merge with growth functions
+				// TODO: merge with general growth functions
                 double maxbw_help = 0;
 
                 if (parameter[0].lineartransect == true) {
@@ -138,89 +130,77 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                     }
                 }
 
-// TODO: clean code and merge with functions from plotupdate.cpp/growth.cpp
-// individual seedling growth depends on density
-// define seedlings density value
-        double flaechengroesze = 0.0;
-        if (parameter[0].calcinfarea == 1)  // linearly increasing
-            flaechengroesze = maxbw_help * parameter[0].incfac / 100.0;
-        else if (parameter[0].calcinfarea == 2)  // linearly increasing
-            flaechengroesze = maxbw_help * (2 / 3) * parameter[0].incfac / 100.0;
-        else if (parameter[0].calcinfarea == 3)  // linearly increasing
-            flaechengroesze = maxbw_help * (4 / 3) * parameter[0].incfac / 100.0;
-        else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
-            flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * maxbw_help)))) - 1;
-        else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
-            flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * maxbw_help)))) - 1;
-        else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
-            flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * maxbw_help)))) - 1;
+				// individual seedling growth depends on density
+				// define seedlings density value
+				double flaechengroesze = 0.0;
+				if (parameter[0].calcinfarea == 1)  // linearly increasing
+					flaechengroesze = maxbw_help * parameter[0].incfac / 100.0;
+				else if (parameter[0].calcinfarea == 2)  // linearly increasing
+					flaechengroesze = maxbw_help * (2 / 3) * parameter[0].incfac / 100.0;
+				else if (parameter[0].calcinfarea == 3)  // linearly increasing
+					flaechengroesze = maxbw_help * (4 / 3) * parameter[0].incfac / 100.0;
+				else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
+					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * maxbw_help)))) - 1;
+				else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
+					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * maxbw_help)))) - 1;
+				else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
+					flaechengroesze = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * maxbw_help)))) - 1;
 
-double density_help = pow(
-	pow(maxbw_help, parameter[0].densitytreetile) * pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
-	parameter[0].densityvaluemanipulatorexp);
-// get gridcell
-if (parameter[0].densitymode == 2) {
-	if (((double) plot_list[curposi]->Treedensityvalue/10000) > 0.0) {
-		if (parameter[0].densitytiletree == 1)  // sum of values
-		{
-			density_help = (1.0 - (density_help / ((double) plot_list[curposi]->Treedensityvalue/10000)));
-			//                           density_desired(at position) / density_currently(at position)
-		} else if (parameter[0].densitytiletree == 2)  // multiplication of values
-		{
-			density_help =
-				(1.0
-				 - (density_help / (((double) plot_list[curposi]->Treedensityvalue/10000) * density_help)));
-			//                           density_desired(at position) / density_currently(at position)
-		}
-	} else {
-		density_help = 0.0;  // no competition
-	}
-}					
-// update growth
-double basalgrowth_help = maxbw_help * (1.0 - density_help);
-// if(basalgrowth_help < maxbw_help)
-	// cout << maxbw_help << " - > " << basalgrowth_help << endl;
-                double zufallsz = uniform(rng);
+				double density_help = pow(
+					pow(maxbw_help, parameter[0].densitytreetile) * pow(flaechengroesze / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
+					parameter[0].densityvaluemanipulatorexp);
+				// get gridcell
+				if (parameter[0].densitymode == 2) {
+					if (((double) plot_list[curposi]->Treedensityvalue/10000) > 0.0) {
+						if (parameter[0].densitytiletree == 1)  // sum of values
+						{
+							density_help = (1.0 - (density_help / ((double) plot_list[curposi]->Treedensityvalue/10000)));
+							//                           density_desired(at position) / density_currently(at position)
+						} else if (parameter[0].densitytiletree == 2)  // multiplication of values
+						{
+							density_help =
+								(1.0
+								 - (density_help / (((double) plot_list[curposi]->Treedensityvalue/10000) * density_help)));
+							//                           density_desired(at position) / density_currently(at position)
+						}
+					} else {
+						density_help = 0.0;  // no competition
+					}
+				}					
+				// update growth
+				double basalgrowth_help = maxbw_help * (1.0 - density_help);
+				double zufallsz = uniform(rng);
 
-                // add new tree if seed germinates
-// cout << maxbw_help << " - " << " - " << basalgrowth_help << " - " << density_help << " - " << parameter[0].germinatioweatherinfluence * basalgrowth_help/maxbw_help << " - " << keimungauflageinfluence << endl;
-// cout << basalgrowth_help << " - " << exp(parameter[0].gdbasalconstgmel) << " - " << ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / seed.ycoo) ) ) << " y==" << seed.ycoo << endl;
-
-// cout << parameter[0].germinationrate // background germination rate
-// + (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
-// * parameter[0].germinatioweatherinfluence * ( weather_list[yearposition]->weatherfactorg - ( ( weather_list[yearposition]->weatherfactorg - weather_list[yearposition]->weatherfactorming ) * 1.0/(((double)treerows) / seed.ycoo) ) ) // weather influence
-// * keimungauflageinfluence // litter layer dependency
-// << " ";
-				// minimal germination rate is roughly estimated
+				// minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
 				double germgmel=0.0;
 				double germsib=0.0;
                 if (parameter[0].lineartransect == true) {
 					germgmel=parameter[0].germinationrate // background germination rate
 								+ (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
 								* parameter[0].germinatioweatherinfluence * pow(( weather_list[yearposition]->weatherfactorg + ( (weather_list[yearposition]->weatherfactorming-weather_list[yearposition]->weatherfactorg) * ((double)seed.ycoo/1000)/((double)treerows)) ), 2.0) // weather influence
-								* keimungauflageinfluence; // litter layer dependency
+								* germinationlitterheightinfluence; // litter layer dependency
 					germsib=parameter[0].germinationrate // background germination rate
 								+ (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
 								* parameter[0].germinatioweatherinfluence * pow(( weather_list[yearposition]->weatherfactors + ( (weather_list[yearposition]->weatherfactormins-weather_list[yearposition]->weatherfactors) * ((double)seed.ycoo/1000)/((double)treerows)) ), 2.0) // weather influence
-								* keimungauflageinfluence; // litter layer dependency
+								* germinationlitterheightinfluence; // litter layer dependency
 				} else if (parameter[0].demlandscape) {
 					germgmel=parameter[0].germinationrate // background germination rate
 								+ (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
 								* parameter[0].germinatioweatherinfluence * pow(( (weather_list[yearposition]->weatherfactorg*   (    ((double)plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactorming*(1-( ((double)plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))) ), 2.0) // weather influence
-								* keimungauflageinfluence; // litter layer dependency
+								* germinationlitterheightinfluence; // litter layer dependency
 					germsib=parameter[0].germinationrate // background germination rate
 								+ (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
 								* parameter[0].germinatioweatherinfluence * pow(( (weather_list[yearposition]->weatherfactors*   (    ((double)plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000))) + (weather_list[yearposition]->weatherfactormins*(1-( ((double)plot_list[curposi]->elevation/10)-(parameter[0].elevationoffset+1000))/(parameter[0].elevationoffset-(parameter[0].elevationoffset+1000)))) ), 2.0) // weather influence
-								* keimungauflageinfluence; // litter layer dependency
+								* germinationlitterheightinfluence; // litter layer dependency
                 } else {
 					germgmel=parameter[0].germinationrate // background germination rate
 								+ (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
 								* parameter[0].germinatioweatherinfluence * pow(weather_list[yearposition]->weatherfactorg, 2.0) // weather influence
-								* keimungauflageinfluence; // litter layer dependency
+								* germinationlitterheightinfluence; // litter layer dependency
 					germsib=parameter[0].germinationrate // background germination rate
 								+ (basalgrowth_help/maxbw_help) // rel growth on position is density dependent
 								* parameter[0].germinatioweatherinfluence * pow(weather_list[yearposition]->weatherfactors, 2.0) // weather influence
-								* keimungauflageinfluence; // litter layer dependency
+								* germinationlitterheightinfluence; // litter layer dependency
 				}
 
                 if (seed.species == 1) {
@@ -321,3 +301,4 @@ double basalgrowth_help = maxbw_help * (1.0 - density_help);
 }// pragma
     }
 }
+

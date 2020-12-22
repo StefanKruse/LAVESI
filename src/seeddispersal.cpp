@@ -4,16 +4,6 @@
 
 using namespace std;
 
-/****************************************************************************************/
-/**
- * \brief calculate dispersal distance dependent on dispersal mode
- *(0-5)
- *
- *
- *
- *
- *******************************************************************************************/
-
 void Seedoutput(int aktort, double dispersaldistance, float direction, int neueweltcoo) {
     FILE* filepointer;
     string dateiname;
@@ -53,18 +43,7 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
     fclose(filepointer);
 }
 
-/****************************************************************************************/
-/**
- * \brief calculate seed dispersal
- *
- *
- *
- *
- *
- *******************************************************************************************/
-
-void Seeddispersal(
-					int jahr, 
+void Seeddispersal( int jahr, 
 					struct Parameter* parameter, 
 					vector<VectorList<Seed>>& world_seed_list,
 					vector<vector<Envirgrid*>>& world_plot_list) {
@@ -79,8 +58,8 @@ void Seeddispersal(
         // determine the current location, so that in long distance dispersal the target can be determined
         aktort++;
 
-        // variable for displaying seeds crossing the borders
-        int rausgeflogenN = 0, rausgeflogenO = 0, rausgeflogenS = 0, rausgeflogenW = 0;
+        // variable for displaying seeds crossing the borders // TODO: move to only used when debugging mode
+        int seedleftN = 0, seedleftE = 0, seedleftS = 0, seedleftW = 0;
 
 		std::random_device random_dev;
 		
@@ -120,7 +99,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 						// disperal limitation by elevation 
 						if(parameter[0].demlandscape) {
-							// TODO: add switch to parameter.txt
 							// seed trajectory elevation sensing
 							// 1. define releaseheight
 							// 2. access elevation along path
@@ -144,18 +122,10 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 									double ystepsize = ysteps / abs(ysteps);
 									double xstepsize = xsteps / abs(xsteps);
 									double maxsteps = abs(ysteps)+abs(xsteps);
+									
 									// for upslope calculation
-									// double eleonestepfurther = 32767/10;
-									// if( ((ycoostartdem + ysteps*150) < (parameter[0].sizemagnif*(treerows-1)))
-											// & ((xcoostartdem + xsteps*150) < (parameter[0].sizemagnif*treecols-1))
-											// & ((ycoostartdem + ysteps*150)>=0)
-											// & ((xcoostartdem + xsteps*150)>=0)
-										// ) {
-										 // eleonestepfurther = plot_list[(unsigned long long int) (ycoostartdem + ysteps*150) * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) (xcoostartdem + xsteps*150)]->elevation/10;
-									// }
-
 									unsigned int stepi;
-									unsigned int stepdistance = 150; //in m when divided by parameter[0].sizemagnif, as dem curently 30 m resolution and grid 0.2 m, 150 means all 30 m
+									unsigned int stepdistance = 150; //in m when divided by parameter[0].sizemagnif, as dem curently 30 m resolution and grid 0.2 m, 150 means each 30 m
 									for(stepi=1; stepi <= maxsteps; stepi=stepi+stepdistance) {
 										// check whether step in y or x direction
 										if(abs(ysteps)>=abs(xsteps)){
@@ -172,11 +142,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 											& (ycoostartdem>=0)
 											& (xcoostartdem>=0)
 										) {
-
 											// assess current elevation
 											double actele = (double)plot_list[(unsigned long long int) ycoostartdem * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) xcoostartdem]->elevation/10;
 
-											
 											if( (actele > startele) 
 												& (actele!=32767/10) 
 											) {// treat NA values (water areas) as last elevation values
@@ -197,18 +165,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 									
 									// shorten when upslope dispersal
 									double upslopedispfact=1.0;
-									// if( (eleonestepfurther!=32767/10)
-										// & (eleonestepfurther>startele)
-									// ) {
-										// upslopedispfact = 1.0 - ((eleonestepfurther-startele)/30/2); // scale to 30 m steps as elevation input; if +30 m on 30 m value 0.5
-										
-										// if(upslopedispfact<0.0)
-											// upslopedispfact=0.0;
-									// }
-
 									seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + upslopedispfact*dispfraction*jquer));
 									seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + upslopedispfact*dispfraction*iquer));
-
 						} else {
 							seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + jquer));
 							seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + iquer));
@@ -216,8 +174,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 						// check whether seed lands on plot or leaves the plot
 						bool sameausserhalb = false;
-
-						// Check if the seed is on the plot:
 						if ((double)seed.ycoo/1000 > (double)(treerows - 1)) {
 							if ((parameter[0].boundaryconditions == 1)) {
 								seed.ycoo = (unsigned int) floor(1000* fmod((double)seed.ycoo/1000, (double)(treerows - 1)));
@@ -225,10 +181,10 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 								// seed.namep = 0;
 							} else if ((parameter[0].boundaryconditions == 3)) {
 								sameausserhalb = true;
-								rausgeflogenN++;
+								seedleftN++;
 							} else {
 								sameausserhalb = true;
-								rausgeflogenN++;
+								seedleftN++;
 							}
 						} else if (seed.ycoo < 0) {
 							if ((parameter[0].boundaryconditions == 1)) {
@@ -237,13 +193,12 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 								// seed.namep = 0;
 							} else if ((parameter[0].boundaryconditions == 3)) {
 								sameausserhalb = true;
-								rausgeflogenS++;
+								seedleftS++;
 							} else {
 								sameausserhalb = true;
-								rausgeflogenS++;
+								seedleftS++;
 							}
 						}
-
 						if (seed.xcoo < 0) {
 							if ((parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3)) {
 								seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)) + (double)(treecols - 1));
@@ -251,7 +206,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 								// seed.namep = 0;
 							} else {
 								sameausserhalb = true;
-								rausgeflogenW++;
+								seedleftW++;
 							}
 						} else if ((double)seed.xcoo/1000 > (double)(treecols - 1)) {
 							if (parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3) {
@@ -264,7 +219,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 								seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)));
 							} else {
 								sameausserhalb = true;
-								rausgeflogenO++;
+								seedleftE++;
 							}
 						}
 

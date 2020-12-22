@@ -61,14 +61,13 @@ void Dataoutput(int t,
 
         aktort++;
 
-        // calculation of the current location in a world grid
+        // calculation of the current location in a world grid // currently not used
         // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        // -- -- -- update evaluation lists -- -- -- --	-- -- -- -- -- //
 
+
+        // update evaluation lists
         // declarations
         double basalarea = 0.0;
         int nheight0b40 = 0, nheight41b200 = 0, nheight201b10000 = 0;
@@ -258,13 +257,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 }
             }
         }
+		// evaluation_list update			
 
-        // -- --			 evaluation_list update				 -- -- //
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+		// define output based on parameter setting
         if (parameter[0].dataoutput == true) {
             if (parameter[0].outputmode == 0) { // "full"
                 if (parameter[0].spinupphase == true) {
@@ -283,50 +278,38 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 					ausgabedensity = true;
 
                 if (parameter[0].ivort % 20 == 0) {
-                    // outputindividuals = true;
 					outputgriddedbiomass = true;
                 }
-            } else if (parameter[0].outputmode == 11) { // "normal,gridded"
+            } else if (parameter[0].outputmode == 11) { // "normal,gridded,large area"
                 outputcurrencies = true;
 				
 				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
 					ausgabedensity = true;
-					
-				if(parameter[0].ivort == 2)// test
-					outputgriddedbiomass = true;
 
-                if ( (parameter[0].ivort == 1400)
-						| (parameter[0].ivort >= 1500)
+                if ( 	(parameter[0].ivort % 100 == 0)
+						| ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) )
 					) {
 					outputgriddedbiomass = true;
                 }
-				
-
             } else if (parameter[0].outputmode == 2) {  // "OMP"
                 outputcurrencies = true;
             } else if (parameter[0].outputmode == 3) { // "transect"
                 outputcurrencies = true;
 				
-                if ( (parameter[0].ivort%100==0) | ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) )) {
+                if ( 	(parameter[0].ivort%100==0) 
+						| ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) )) {
 					outputtransects = true;
 				}
             }
-		}
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+		} // define output 
+
 
         ostringstream s1, s2, s3, s4, s5, s6, s7, s8;
 
         if (outputcurrencies == true) {  // currencies output
-                                         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-                                         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-                                         // -- -- -- -- -- -- -- trees currencies -- -- -- -- -- -- -- //
-
             // declarations
-            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0,
-                ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
-            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0,
-                ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
+            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0, ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
+            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0, ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
             int gesamtseedAKT = 0, gesamtseedSUM = 0;
             int spectree1 = 0, spectree2 = 0;
             double yposmax = 0.0;
@@ -364,83 +347,83 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
                 // add column names to the file
                 if (parameter[0].spinupphase == true) {
-                    fprintf(filepointer, "Randomyear;");
+                    fprintf(filepointer, "Random_year;");
                 } else {
                     fprintf(filepointer, "Year;");
                 }
 
-                fprintf(filepointer, "meanbas;");
-                fprintf(filepointer, "meanbr;");
+                fprintf(filepointer, "Mean_basal_diameter;");
+                fprintf(filepointer, "Mean_breast_diameter;");
 
                 // tree stand
-                fprintf(filepointer, "Ausschnittsgroesze;");
-                fprintf(filepointer, "NderH0bis40;");
-                fprintf(filepointer, "NderH40bis200;");
-                fprintf(filepointer, "NderH200bis10000;");
+                fprintf(filepointer, "Sampling_area;");
+                fprintf(filepointer, "N_H0to40;");
+                fprintf(filepointer, "N_H40to200;");
+                fprintf(filepointer, "N_H200to10000;");
                 fprintf(filepointer, "Basalarea;");
                 fprintf(filepointer, "Stemcount;");
-                fprintf(filepointer, "MeanTreeHeight;");
-                fprintf(filepointer, "MeanTreeAge;");
-                fprintf(filepointer, "Wendejahr;");
-                fprintf(filepointer, "Saettigungsjahr;");
-                fprintf(filepointer, "ageg0;");
-                fprintf(filepointer, "ages0;");
-                fprintf(filepointer, "ageg1;");
-                fprintf(filepointer, "ages1;");
-                fprintf(filepointer, "ageg2;");
-                fprintf(filepointer, "ages2;");
-                fprintf(filepointer, "ageg3;");
-                fprintf(filepointer, "ages3;");
-                fprintf(filepointer, "ageg4;");
-                fprintf(filepointer, "ages4;");
-                fprintf(filepointer, "ageg5;");
-                fprintf(filepointer, "ages5;");
-                fprintf(filepointer, "ageg6bis10;");
-                fprintf(filepointer, "ages6bis10;");
-                fprintf(filepointer, "ageg11bis20;");
-                fprintf(filepointer, "ages11bis20;");
-                fprintf(filepointer, "ageg21bis50;");
-                fprintf(filepointer, "ages21bis50;");
-                fprintf(filepointer, "ageg51bis100;");
-                fprintf(filepointer, "ages51bis100;");
-                fprintf(filepointer, "ageg101bis150;");
-                fprintf(filepointer, "ages101bis150;");
-                fprintf(filepointer, "ageg151bis200;");
-                fprintf(filepointer, "ages151bis200;");
-                fprintf(filepointer, "ageg201bis300;");
-                fprintf(filepointer, "ages201bis300;");
-                fprintf(filepointer, "ageg301bis400;");
-                fprintf(filepointer, "ages301bis400;");
-                fprintf(filepointer, "ageg401bis500;");
-                fprintf(filepointer, "ages401bis500;");
-                fprintf(filepointer, "ageg501bis600;");
-                fprintf(filepointer, "ages501bis600;");
-                fprintf(filepointer, "ageg601bis700;");
-                fprintf(filepointer, "ages601bis700;");
-                fprintf(filepointer, "ageg701plus;");
-                fprintf(filepointer, "ages701plus;");
-                fprintf(filepointer, "GesamtseedprodAKT;");
-                fprintf(filepointer, "GesamtseedprodSUM;");
-                fprintf(filepointer, "Trees_gmel;");
-                fprintf(filepointer, "Trees_sib;");
-                fprintf(filepointer, "GesamtseedBoden;");
-                fprintf(filepointer, "Gesamtseedtrees;");
-                fprintf(filepointer, "Seeds_gmel;");
-                fprintf(filepointer, "Seeds_sib;");
-                fprintf(filepointer, "Y_Pos_Max;");
+                fprintf(filepointer, "Mean_tree_height;");
+                fprintf(filepointer, "Mean_tree_age;");
+                fprintf(filepointer, "Turningpoint_year;");
+                fprintf(filepointer, "Equillibrium_year;");
+                fprintf(filepointer, "Age_Lgmel_0;");
+                fprintf(filepointer, "Age_Lsibi_0;");
+                fprintf(filepointer, "Age_Lgmel_1;");
+                fprintf(filepointer, "Age_Lsibi_1;");
+                fprintf(filepointer, "Age_Lgmel_2;");
+                fprintf(filepointer, "Age_Lsibi_2;");
+                fprintf(filepointer, "Age_Lgmel_3;");
+                fprintf(filepointer, "Age_Lsibi_3;");
+                fprintf(filepointer, "Age_Lgmel_4;");
+                fprintf(filepointer, "Age_Lsibi_4;");
+                fprintf(filepointer, "Age_Lgmel_5;");
+                fprintf(filepointer, "Age_Lsibi_5;");
+                fprintf(filepointer, "Age_Lgmel_6to10;");
+                fprintf(filepointer, "Age_Lsibi_6to10;");
+                fprintf(filepointer, "Age_Lgmel_11to20;");
+                fprintf(filepointer, "Age_Lsibi_11to20;");
+                fprintf(filepointer, "Age_Lgmel_21to50;");
+                fprintf(filepointer, "Age_Lsibi_21to50;");
+                fprintf(filepointer, "Age_Lgmel_51to100;");
+                fprintf(filepointer, "Age_Lsibi_51to100;");
+                fprintf(filepointer, "Age_Lgmel_101to150;");
+                fprintf(filepointer, "Age_Lsibi_101to150;");
+                fprintf(filepointer, "Age_Lgmel_151to200;");
+                fprintf(filepointer, "Age_Lsibi_151to200;");
+                fprintf(filepointer, "Age_Lgmel_201to300;");
+                fprintf(filepointer, "Age_Lsibi_201to300;");
+                fprintf(filepointer, "Age_Lgmel_301to400;");
+                fprintf(filepointer, "Age_Lsibi_301to400;");
+                fprintf(filepointer, "Age_Lgmel_401to500;");
+                fprintf(filepointer, "Age_Lsibi_401to500;");
+                fprintf(filepointer, "Age_Lgmel_501to600;");
+                fprintf(filepointer, "Age_Lsibi_501to600;");
+                fprintf(filepointer, "Age_Lgmel_601to700;");
+                fprintf(filepointer, "Age_Lsibi_601to700;");
+                fprintf(filepointer, "Age_Lgmel_701plus;");
+                fprintf(filepointer, "Age_Lsibi_701plus;");
+                fprintf(filepointer, "Seed_produced_currently;");
+                fprintf(filepointer, "Seed_produced_total;");
+                fprintf(filepointer, "N_trees_Lgmel;");
+                fprintf(filepointer, "N_trees_Lsibi;");
+                fprintf(filepointer, "N_seed_onground;");
+                fprintf(filepointer, "N_seed_ontrees;");
+                fprintf(filepointer, "N_seeds_Lgmel;");
+                fprintf(filepointer, "N_seeds_Lsibi;");
+                fprintf(filepointer, "Y_position_max;");
                 // weather
-                fprintf(filepointer, "weathertyp;");
-                fprintf(filepointer, "Starttrees;");
-                fprintf(filepointer, "Jahrestemp;");
-                fprintf(filepointer, "Jantemp;");
-                fprintf(filepointer, "Julitemp;");
-                fprintf(filepointer, "Veglaenge;");
+                fprintf(filepointer, "Weather_type;");
+                // fprintf(filepointer, "Start_trees;");
+                fprintf(filepointer, "Temperature_mean_year;");
+                fprintf(filepointer, "Temperature_mean_january;");
+                fprintf(filepointer, "Temperature_mean_july;");
+                fprintf(filepointer, "Vegetation_period_length;");
                 fprintf(filepointer, "AAT;");
                 fprintf(filepointer, "DDT;");
-                fprintf(filepointer, "Prec;");
-                fprintf(filepointer, "weatherfaktor_gmel;");
-                fprintf(filepointer, "weatherfaktor_sib;");
-                fprintf(filepointer, "thawing_depth_infl;");
+                fprintf(filepointer, "Precipitation_sum_year;");
+                fprintf(filepointer, "Weather_factor_Lgmel;");
+                fprintf(filepointer, "Weather_factor_Lsibi;");
+                fprintf(filepointer, "Thawing_depth_influence;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -648,7 +631,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             fprintf(filepointer, "%4.2f;", yposmax);
             // weather
             fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-            fprintf(filepointer, "%d;", parameter[0].starttrees);
+            // fprintf(filepointer, "%d;", parameter[0].starttrees);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->tempyearmean);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp1monthmean);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp7monthmean);
@@ -669,17 +652,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
                 cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;
             }
+        } // trees currencies
 
-            // -- -- -- -- -- -- -- trees Currencies -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        }
-
-        if (outputposition == true) {  // tree position output
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
-
+        if (outputposition == true) {// tree position output
             if (parameter[0].ivort == 1 || (parameter[0].spinupphase == true && (parameter[0].ivort % 10) == 0) || (parameter[0].spinupphase == false)) {
                 // assemble file name
                     s1 << parameter[0].repeati;
@@ -707,16 +682,16 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                         // column names
                         // fprintf(filepointer, "Name;");
                         // fprintf(filepointer, "NameM;");
-                        fprintf(filepointer, "DBasal;");
-                        fprintf(filepointer, "DBrust;");
-                        fprintf(filepointer, "height;");
-                        fprintf(filepointer, "age;");
+                        fprintf(filepointer, "Diameter_basal;");
+                        fprintf(filepointer, "Diameter_breast;");
+                        fprintf(filepointer, "Height;");
+                        fprintf(filepointer, "Age;");
                         fprintf(filepointer, "X;");
                         fprintf(filepointer, "Y;");
-                        fprintf(filepointer, "densitywert;");
+                        fprintf(filepointer, "Density_value;");
                         // fprintf(filepointer, "Generation;");
-                        fprintf(filepointer, "seedprodAKT;");
-                        // fprintf(filepointer, "seedprodSUM;");
+                        fprintf(filepointer, "Seeds_produced_currently;");
+                        // fprintf(filepointer, "Seeds_produced_total;");
                         fprintf(filepointer, "\n");
 
                         if (filepointer == NULL) {
@@ -756,21 +731,21 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                         fprintf(filepointer, "Repeat;");
                         // fprintf(filepointer, "YPLOTPOS;");
                         // fprintf(filepointer, "XPLOTPOS;");
-                        fprintf(filepointer, "Jahr;");
-                        fprintf(filepointer, "zufallsJahr;");
-                        fprintf(filepointer, "weatherchoice;");
-                        fprintf(filepointer, "DBasal;");
-                        fprintf(filepointer, "DBrust;");
-                        fprintf(filepointer, "height;");
-                        fprintf(filepointer, "age;");
+                        fprintf(filepointer, "Year;");
+                        fprintf(filepointer, "Random_year;");
+                        fprintf(filepointer, "Weather_type;");
+                        fprintf(filepointer, "Diameter_basal;");
+                        fprintf(filepointer, "Diameter_breast;");
+                        fprintf(filepointer, "Height;");
+                        fprintf(filepointer, "Age;");
                         fprintf(filepointer, "X;");
                         fprintf(filepointer, "Y;");
-                        fprintf(filepointer, "densitywert;");
+                        fprintf(filepointer, "Density_value;");
                         // fprintf(filepointer, "Generation;");
-                        fprintf(filepointer, "coneheight;");
-                        fprintf(filepointer, "seedprodAKT;");
-                        // fprintf(filepointer, "seedprodSUM;");
-                        fprintf(filepointer, "thawing_depth_infl;");
+                        fprintf(filepointer, "Cone_height;");
+                        fprintf(filepointer, "Seeds_produced_currently;");
+                        // fprintf(filepointer, "Seeds_produced_total;");
+                        fprintf(filepointer, "Thawing_depth_influence;");
                         fprintf(filepointer, "\n");
 
                         if (filepointer == NULL) {
@@ -808,25 +783,16 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                     fclose(filepointer);
                 }
             }
+        } // tree position output
 
-            // -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        }  // tree position output
-
-        if (outputindividuals == true) {  // individual tree output
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- --   individual    trees -- -- -- -- -- -- //
+        if (outputindividuals == true) {// individual tree output
 
             // assemble file name
             s1 << parameter[0].repeati;
             s2 << parameter[0].weatherchoice;
             s3 << parameter[0].ivort;
             s4 << aktort;
-
             dateiname = "output/datatrees_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
-
             s1.str("");
             s1.clear();
             s2.str("");
@@ -846,31 +812,31 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 // fprintf(filepointer, "Repeat;");
                 // fprintf(filepointer, "YPLOTPOS;");
                 // fprintf(filepointer, "XPLOTPOS;");
-                // fprintf(filepointer, "weatherchoice;");
+                // fprintf(filepointer, "Weather_type;");
                 // time variables
-                // fprintf(filepointer, "Zeitschritt;");
-                // fprintf(filepointer, "Jahr;");
+                // fprintf(filepointer, "Progress;");
+                // fprintf(filepointer, "Year;");
                 // tree variables
                 fprintf(filepointer, "X;");
                 fprintf(filepointer, "Y;");
                 // fprintf(filepointer, "Name;");
                 // fprintf(filepointer, "NameM;");
                 // fprintf(filepointer, "NameP;");
-                // fprintf(filepointer, "line;");
+                // fprintf(filepointer, "Line;");
                 // fprintf(filepointer, "Generation;");
-                // fprintf(filepointer, "Art;");
-                fprintf(filepointer, "height;");
+                // fprintf(filepointer, "Species;");
+                fprintf(filepointer, "Height;");
                 fprintf(filepointer, "Dbasal;");
                 fprintf(filepointer, "Dbreast;");
-                fprintf(filepointer, "age;");
-                // fprintf(filepointer, "cone;");
-                // fprintf(filepointer, "coneheight;");
-                // fprintf(filepointer, "seedprodAKT;");
-                // fprintf(filepointer, "seedprodSUM;");
-                // fprintf(filepointer, "Speicher;");
-                // fprintf(filepointer, "densitywert;");
-                // fprintf(filepointer, "Entfernung;");
-                // fprintf(filepointer, "thawing_depth_infl;");
+                fprintf(filepointer, "Age;");
+                // fprintf(filepointer, "Cone;");
+                // fprintf(filepointer, "Cone_height;");
+                // fprintf(filepointer, "Seeds_produced_currently;");
+                // fprintf(filepointer, "Seeds_produced_total;");
+                // fprintf(filepointer, "Buffer;");
+                // fprintf(filepointer, "Density_value;");
+                // fprintf(filepointer, "Distance;");
+                // fprintf(filepointer, "Thawing_depth_influence;");
                 fprintf(filepointer, "Elevation;");
                 fprintf(filepointer, "Envirgrowthimpact;");
                 fprintf(filepointer, "\n");
@@ -922,11 +888,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
 
             fclose(filepointer);
-
-            // -- -- -- -- --       individual  trees    -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        }  // individual tree output
+        }// individual tree output
 
         if (outputgriddedbiomass == true) {  // gridded tree biomass output
             // assemble file name
@@ -934,9 +896,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             s2 << parameter[0].weatherchoice;
             s3 << parameter[0].ivort;
             s4 << aktort;
-
             dateiname = "output/databiomassgrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
-
             s1.str("");
             s1.clear();
             s2.str("");
@@ -945,7 +905,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             s3.clear();
             s4.str("");
             s4.clear();
-
 			
 			// aggregate data on 30 m grid
 			int deminputdimension_y = treerows/parameter[0].demresolution; // matrix + 1 to avoid border effects
@@ -1125,9 +1084,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
 
             fclose(filepointer);
-        }  // gridded tree biomass output
+        }// gridded tree biomass output
 
-        if (outputtransects == true) {  // transect output
+        if (outputtransects == true) {// transect output
             // assemble file name
             s1 << parameter[0].repeati;
             s2 << parameter[0].weatherchoice;
@@ -1217,11 +1176,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             fclose(filepointer);
         }  // transect output
 
-        if (ausgabedensity == true) {  // tree density map output
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
-
+        if (ausgabedensity == true) {// tree density map output
             // assemble file name:
             s1 << parameter[0].ivort;
 			s2 << parameter[0].weatherchoice;
@@ -1230,7 +1185,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             s1.clear();
             s2.str("");
             s2.clear();
-
+			
             // trying to open the file for reading
             filepointer = fopen(dateiname.c_str(), "r+");
             // if fopen fails, open a new file + header output
@@ -1242,15 +1197,15 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 // fprintf(filepointer, "XPLOTPOS;");
                 fprintf(filepointer, "X;");
                 fprintf(filepointer, "Y;");
-                fprintf(filepointer, "Treedensityvalue;");
-                fprintf(filepointer, "Treenumber;");
-                // fprintf(filepointer, "Auflagenstaerke;");
-                // fprintf(filepointer, "AuflagenstaerkeMittel;");
-                fprintf(filepointer, "Maxthawing_depth;");
+                fprintf(filepointer, "Density_value;");
+                fprintf(filepointer, "N_trees;");
+                // fprintf(filepointer, "Litter_layer_height;");
+                // fprintf(filepointer, "Litter_layer_height_mean;");
+                fprintf(filepointer, "Max_thawing_depth;");
                 fprintf(filepointer, "Elevation;");
                 fprintf(filepointer, "Envirgrowthimpact;");
-                // fprintf(filepointer, "weatherchoice;");
-                // fprintf(filepointer, "thawing_depth;");
+                // fprintf(filepointer, "Weather_type;");
+                // fprintf(filepointer, "Thawing_depth;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -1262,20 +1217,16 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             fseek(filepointer, 0, SEEK_END);
 
             // data evaluation and output
-            // for (unsigned long long int  kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos = kartenpos+parameter[0].sizemagnif*parameter[0].demresolution) {
                 auto pEnvirgrid = plot_list[kartenpos];
 				double ycooi = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
 				double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
-                // if (parameter[0].demlandscape | 
                 if ( (parameter[0].demlandscape & ( (((xcooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(xcooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) & (((ycooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(ycooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) )) | 
 					( (pEnvirgrid->Treenumber > 0)
 						&& ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
                         && (ycooi >= yminwindow * parameter[0].sizemagnif)
                         && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))
 						) {  // output only if tree density values >0
-
-						
                     fprintf(filepointer, "%d;", parameter[0].repeati);
                     // fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
                     // fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
@@ -1295,11 +1246,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
 
             fclose(filepointer);
-
-            // -- -- -- -- -- -- -- --tree density -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-            // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-        }
-    }
+        }// tree density map output
+    } // world list
 }
 

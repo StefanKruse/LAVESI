@@ -4,17 +4,10 @@
 
 using namespace std;
 
-/****************************************************************************************/
-/**
- * \brief calculate tree mortality
- *
- * depends on abiotic factors (temperature and number of days with temperatures above 20 degrees)
- * and on biotic factors
- *
- *
- *******************************************************************************************/
-void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<Tree>& tree_list) {
-    // calculation of the factors in a function that adds a mortality rate impact
+void TreeMort(int yearposition_help, 
+			  vector<Weather*>& weather_list, 
+			  VectorList<Tree>& tree_list) {
+    // abiotic influence: calculation of the factors in a function that adds a mortality rate impact
     double anstiegweathermortg = 160;
     double anstiegweathermorts = 160;
     double anstiegweathermortgmin = 160;
@@ -27,7 +20,7 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
     anstiegweathermortsmin = (60 * weather_list[yearposition_help]->janisothermrestriktionsmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
 
 
-    // biotic influence:
+    // biotic influence
 	std::random_device random_dev;
 	
 // pragma omp initializing
@@ -44,9 +37,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		auto& tree = tree_list[tree_i];
 
         if (tree.growing == true) {
-            // if maximal age is exceeded an additional factor occurs
             double agesmort = 0.0;
-            if (tree.age > parameter[0].maximumage) {
+            if (tree.age > parameter[0].maximumage) {// if maximal age is exceeded an additional factor occurs
                 agesmort = 1.0;
             }
 
@@ -67,7 +59,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                        / parameter[0].densityvaluemaximumatheight);
             }
 
-			// TODO: merge gmel/sib sapl_mort calculations
+			// TODO: merge gmel/sib sapl_mort calculations and add functionality for multiple species representation
             double sapl_mort_gmel = parameter[0].mortyouth * pow(exp((-1.0 * tree.dbasal) + (double) tree.dbasalmax/1000), parameter[0].mortyouthinfluenceexp);
             double sapl_mort_sib = parameter[0].mortyouth * pow(exp((-1.0 * tree.dbasal) + (double) tree.dbasalmax/1000), parameter[0].mortyouthinfluenceexp);
             double age_mort = parameter[0].mortage * agesmort * (10.0 * parameter[0].mortbg);
@@ -156,7 +148,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
 
             double Treemorts = 0.0 + parameter[0].mortbg + sapl_mort_sib + age_mort + growth_mort + dens_mort + weather_mort_sib + dry_mort;
-// cout << (double)tree.height/100 << "; " << (double)tree.dbasalrel/1000 << " ; y/x coo=" << ((double)tree.ycoo/1000) << "/" << ((double)tree.xcoo/1000) <<  " | " << weathermortaddg << " => " << weather_mort_gmel << " === " << sapl_mort_gmel << "; " << age_mort << "; " << growth_mort << "; " << dens_mort << "; " << dry_mort << " => " << Treemortg << endl;
             if (Treemortg > 1.0) {
                 Treemortg = 1.0;
             } else if (Treemortg < 0.0) {
@@ -169,28 +160,18 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 Treemorts = 0.0;
             }
 
-            // Determine if a tree dies (deletion of said tree in the corresponding list)
-            // double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+            // determine if a tree dies (deletion of said tree in the corresponding list)
             double zufallsz = uniform(rng);
             if ( (((tree.species == 1) && (zufallsz < Treemortg)) || ((tree.species == 2) && (zufallsz < Treemorts))) | (tree.envirimpact<=0) ) {
 				tree.growing = false;
 				tree_list.remove(tree_i);
-				// alternatively set variables to dead and notgrowing negative ages will be used for rotting deadwood
+				// TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
             }
         }
     }
 } // pragma
-
 }
 
-/****************************************************************************************/
-/**
- * \brief calculate tree and seed mortality
- *
- * first create surviving seeds then call TreeMort()
- *
- *
- *******************************************************************************************/
 void Mortality(struct Parameter* parameter,
                int Jahr,
                int yearposition,
@@ -201,13 +182,10 @@ void Mortality(struct Parameter* parameter,
 
     for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather*>& weather_list = *posw;
-
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         VectorList<Tree>& tree_list = *world_positon_b;
-
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
-
         aktort++;
 
         // mortality of seeds
@@ -228,7 +206,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             if (seed.dead) {
                 continue;
             }
-            // double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
             double zufallsz = uniform(rng);
 
             if (zufallsz < seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort) {
@@ -270,13 +247,11 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			pe = 0.01;
 			C = parameter[0].pollengregoryc;
 			m = parameter[0].pollengregorym;
-
+			
 			int n_trees = 0;
-
 #pragma omp for
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
-
 				++n_trees;  // for calculating mean of computation times // TODO still necessary
 
 				if (tree.seednewly_produced > 0) {
@@ -310,7 +285,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 							if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
 								// int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
 								// seed.namep = Vname.at(iran);
-								// TODO: add here property that is passed down from the father tree 
+								// TODO: add here properties that are passed down from the father tree 
 								seed.thawing_depthinfluence = 100;
 							} else {
 								// seed.namep = 0;
@@ -329,8 +304,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						}
 					}
 				}
-			}  // main tree loop on each core
-		}      // parallel region
+			}// main tree loop on each core
+}// pragma
 
 		// Vname.clear();
 		// Vname.shrink_to_fit();
@@ -340,3 +315,4 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
         TreeMort(yearposition, weather_list, tree_list);
     }
 }
+

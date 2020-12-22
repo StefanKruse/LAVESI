@@ -11,7 +11,7 @@ class VectorList {
     openmp::Lock lock;
 
   public:
-    // reserve memory for `members` and `removed`
+    // reserve memory for 'members' and 'removed'
     void reserve(std::size_t for_members, std::size_t for_removed) {
         members.reserve(for_members);
         removed.reserve(for_removed);
@@ -25,10 +25,10 @@ class VectorList {
         removed.clear();
     }
 
-    // access member - must not be called while another thread might call `add`
+    // access member - must not be called while another thread might call 'add'
     T& operator[](std::size_t i) { return members[i]; }
 
-    // access member - must not be called while another thread might call `add`
+    // access member - must not be called while another thread might call 'add'
     const T& operator[](std::size_t i) const { return members[i]; }
 
     void remove_unsafe(std::size_t i) { removed.push_back(i); }
@@ -41,8 +41,8 @@ class VectorList {
             members[i] = T(std::forward<Args>(args)...);
         } else {
             members.emplace_back(std::forward<Args>(args)...);  // this might trigger a movement of memory, so
-                                                                // parallel access to `members` (e.g. via []) must be
-                                                                // avoided (`remove` is ok, though)
+                                                                // parallel access to 'members' (e.g. via []) must be
+                                                                // avoided ('remove' is ok, though)
         }
     }
 

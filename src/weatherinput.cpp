@@ -2,7 +2,7 @@
 
 using namespace std;
 
-// TODO temporary
+// TODO temporary here
 extern vector<vector<Weather*>> world_weather_list;
 extern vector<double> wdir, wspd;
 extern vector<vector<double>> windspd;
@@ -79,6 +79,7 @@ void getPrec(char dateinameprec[50], vector<Weather*>& weather_list, int maximal
 }
 
 void getTemp(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
+	// TODO: check whether this grid-based simulation setup is still necessary or can be removed
     // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
     // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -90,7 +91,6 @@ void getTemp(int aktort, char dateinametemp[50], vector<Weather*>& weather_list)
         // parameter[0].precdiffort = -5.3699 * (Nposakt - Nposcenter);
         // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
     // }
-
 
     FILE* f;
     f = fopen(dateinametemp, "r");
@@ -379,7 +379,6 @@ void passWeather() {
             }
 
 			// ndd for both																	  
-
             if (weather_list[iweather]->vegetationperiodlengthiso < 60.0) {
                 weather_list[iweather]->nddrestriktion = 1.0;
             } else {
@@ -390,11 +389,7 @@ void passWeather() {
             } else {
                 weather_list[iweather]->nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather]->vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
-        
-		
-		
-		
-		
+
 		// output to check weather
 		FILE* fdir;
 		char filenamechar[50];
@@ -404,10 +399,8 @@ void passWeather() {
 		
 		fprintf(fdir, 
 			"%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n", 
-			// "%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f;%4.4f\n". 
 			weather_list[iweather]->temp1monthmeaniso,
 			weather_list[iweather]->temp1monthmeanisomin,
-			// TODO: check why different values for jan temp iso vs. min when no difference is expected
 			weather_list[iweather]->temp7monthmeaniso,
 			weather_list[iweather]->temp7monthmeanisomin,
 			weather_list[iweather]->droughtmort,
@@ -427,11 +420,9 @@ void passWeather() {
             weather_list[iweather]->weatherfactorg,
             weather_list[iweather]->weatherfactorming,
             weather_list[iweather]->weatherfactors,
-            weather_list[iweather]->weatherfactormins
-		);
+            weather_list[iweather]->weatherfactormins );
 		
 		fclose(fdir);
-
         }
     }
 }
@@ -515,9 +506,6 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			foldername << "wind_Chukotka";
 		}
 		
-
-
-			
         for (int t = 0; t < parameter[0].simduration; t++) {
             cntr = 0;
 
@@ -535,7 +523,6 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
                 ss << jahr;
 
                 if (parameter[0].windsource == 1) {
-                    // filename = "input/winddata/winddata" + ss.str() + "_EraInterim.dat";
                     filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
                 }
 
@@ -613,21 +600,21 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
-// forcing with 501:1900 reconstruction, 1901:2018 CRU TS 4 reanalysis and 2019:3000 predictions CMIP5 until 2500 and remain at final sim years or back to 1901-2000 period until 3000, naming conventions
-// ... 501 == start year
-// ... ...3000 == final year
-// ... .......2 == Transect 2 Taimyr Peninsula
-// ... .......3 == Transect 3 Buor Khaya
-// ... .......4 == Transect 4 Kolyma
-// ... .......5 == Transect 5 Chukotka
-// ... ........1 == rcp2.6
-// ... ........2 == rcp4.5
-// ... ........3 == rcp8.5
-// ... ........4 == rcp2.6 half => 1.3
-// ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
-// ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
+		// forcing with 501:1900 reconstruction, 1901:2018 CRU TS 4 reanalysis and 2019:3000 CMIP5 predictions until 2500 and remain at final sim years or back to 1901-2000 period until 3000; naming conventions:
+		// ... 501 == start year
+		// ... ...3000 == final year
+		// ... .......2 == Transect 2 Taimyr Peninsula
+		// ... .......3 == Transect 3 Buor Khaya
+		// ... .......4 == Transect 4 Kolyma
+		// ... .......5 == Transect 5 Chukotka
+		// ... ........1 == rcp2.6
+		// ... ........2 == rcp4.5
+		// ... ........3 == rcp8.5
+		// ... ........4 == rcp2.6 half => 1.3
+		// ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
+		// ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
 
-// RCP2.6
+		// RCP2.6
         } else if (parameter[0].weatherchoice == 501300021) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP26temp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
@@ -648,7 +635,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-// RCP4.5
+		// RCP4.5
         } else if (parameter[0].weatherchoice == 501300022) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP45temp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
@@ -670,7 +657,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-// RCP8.5
+		// RCP8.5
         } else if (parameter[0].weatherchoice == 501300023) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP85temp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP85prec_501-3000.csv";
@@ -692,7 +679,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
-// RCP2.6 half as strong warming named 1.3
+		// RCP2.6 half as strong warming named 1.3
         } else if (parameter[0].weatherchoice == 501300024) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP13temp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
@@ -714,8 +701,8 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
-//  cooling back down to 1901:1987
-// RCP2.6 but with cooling back down to 1901:1987
+		//  cooling back down to 1901:1987
+		// RCP2.6 but with cooling back down to 1901:1987
         } else if (parameter[0].weatherchoice == 501300025) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP26cooltemp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
@@ -737,7 +724,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
-// RCP2.6 half as strong warming named 1.3 but with cooling back down to 1901:1987
+		// RCP2.6 half as strong warming named 1.3 but with cooling back down to 1901:1987
         } else if (parameter[0].weatherchoice == 501300026) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP13cooltemp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
@@ -759,7 +746,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
-// RCP4.5 but with cooling back down to 1901:1987
+		// RCP4.5 but with cooling back down to 1901:1987
         } else if (parameter[0].weatherchoice == 501300027) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP45cooltemp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
@@ -781,7 +768,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
-// RCP8.5 but with cooling back down to 1901:1987
+		// RCP8.5 but with cooling back down to 1901:1987
         } else if (parameter[0].weatherchoice == 501300028) {// last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP85cooltemp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP85prec_501-3000.csv";
@@ -812,7 +799,7 @@ extern void Weatherinput(struct Parameter* parameter, int stringlengthmax, vecto
 			double maxele=1300;
 			// calculate steps by the set number of plots
 			double stepele=(maxele-minele)/(parameter[0].mapylength-1);
-			// assume if >1 y simulation plots that elevation range will be tested
+			// assume if >1 y-simulation plots that elevation range will be tested
 			if(parameter[0].mapylength>1)
 				current_elevation=parameter[0].elevationoffset + minele+stepele*(aktort-1);
 			else

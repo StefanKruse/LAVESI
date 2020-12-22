@@ -17,21 +17,22 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=11;  						// (int) choice of data output files 
-										// 0=="full"
-										// 1=="normal, gridded"
-										// 3=="transect"
-										// 2=="OMP only => currencies + computation time"
+outputmode=11;  						// (int) choice of data output files=> all yearly output of currencies 
+										// 0=="full"						=> all each year
+										// 1=="normal, gridded" 			=> every 20 years grid output
+										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
+										// 2=="OMP" 						=> each year computation time
+										// 3=="transect" 					=> every 100 years transect output and year >2000 output every 10 years until the end of the simulation
 outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
 										// 1==output of all tree data on the plot
 
 // 0.3 -----> Submodules
-thawing_depth=1;					// (int 0,1) Active layer calculation
-vegetation=0;						// (int 0,1) Representation of an organic layer
+thawing_depth=1;					// (int 0,1) Active layer calculation switch
+vegetation=0;						// (int 0,1) Representation of an organic layer switch; currently not functional
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=30;					// (int) Resolution in m of DEM
-elevationoffset=-1600.0;				// in m adjust baselevel
+elevationoffset=-1600.0;			// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
@@ -56,88 +57,88 @@ omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=501300051;					// (int) Type of weather forcing series 
-										//  22==TY02
-										//  22==CH17
-										//  23==CH02
-										//  24==CH06
-										// 	    ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
-										// 2300451 1901-2300 RCP 4.5 (4) at climate Lake Ilirney, Chuktoka (5) increasing 2100-2300 (1) 
-										// 2300851 1901-2300 RCP 8.5 (4) at climate Lake Ilirney, Chuktoka (5) increasing 2100-2300 (1) 
-										// +
-										// forcing with 501:1900 reconstruction, 1901:2018 CRU TS 4 reanalysis and 2019:3000 predictions CMIP5 until 2500 and remain at final sim years or back to 1901-2000 period until 3000, naming conventions
-										// ... 501 == start year
-										// ... ...3000 == final year
-										// ... .......2 == Transect 2 Taimyr Peninsula
-										// ... .......3 == Transect 3 Buor Khaya
-										// ... .......4 == Transect 4 Kolyma
-										// ... .......5 == Transect 5 Chukotka
-										// ... ........1 == rcp2.6
-										// ... ........2 == rcp4.5
-										// ... ........3 == rcp8.5
-										// ... ........4 == rcp2.6 half => 1.3
-										// ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
-										// ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
+weatherchoice=501300051;			// (int) Type of weather forcing series 
+									// ... 22==TY02
+									// ... 22==CH17
+									// ... 23==CH02
+									// ... 24==CH06
+									// ... ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
+									// ... +++ 1901-2300 forcing at Lake Ilirney, Chuktoka; increasing 2100-2300 for RCPs
+									// ... 2300451== RCP 4.5
+									// ... 2300851== RCP 8.5
+									// ... +++ forcing with 501:1900 reconstruction, 1901:2018 CRU TS reanalysis and 2019:3000 CMIP5 predictions until 2500 and remain at final sim years or back to 1901-2000 period until 3000; naming conventions:
+									// ... ... 501 == start year
+									// ... ... ...3000 == final year
+									// ... ... .......2 == Transect 2 Taimyr Peninsula
+									// ... ... .......3 == Transect 3 Buor Khaya
+									// ... ... .......4 == Transect 4 Kolyma
+									// ... ... .......5 == Transect 5 Chukotka
+									// ... ... ........1 == rcp2.6
+									// ... ... ........2 == rcp4.5
+									// ... ... ........3 == rcp8.5
+									// ... ... ........4 == rcp2.6 half => 1.3
+									// ... ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
+									// ... ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
 
-temperaturelapse_jan=0.001722;				// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
-											// chukotka elevation:	0.001722
-											// .      . transect:	(-0.03304366/1000)=-0.00003304366 // ori per km
-											// Taimyr . transect:	(-0.007512627/1000)=-0.000007512627 // ori per km
-											// Buor Kh. transect:	(-0.0003467366/1000)=-0.0000003467366 // ori per km
-											// Kolyma . transect:	(-0.008957363/1000)=-0.000008957363 // ori per km
+temperaturelapse_jan=0.001722;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
+									// Chukotka elevation:	0.001722
+									// .      . transect:	(-0.03304366/1000)=-0.00003304366 // ori per km
+									// Taimyr . transect:	(-0.007512627/1000)=-0.000007512627 // ori per km
+									// Buor Kh. transect:	(-0.0003467366/1000)=-0.0000003467366 // ori per km
+									// Kolyma . transect:	(-0.008957363/1000)=-0.000008957363 // ori per km
 											
-temperaturelapse_jul=-0.004033;				// temperature lapse rate for januar (warmest month) in degree celsius per meter elevation
-											// chukotka elevation:	-0.004033
-											// .      . transect:	(-0.03185582/1000)=-0.00003185582
-											// Taimyr . transect:	(-0.005374418/1000)=-0.000005374418 // ori per km
-											// Buor Kh. transect:	(-0.0037563135/1000)=-0.0000037563135 // ori per km
-											// Kolyma . transect:	(-0.003582945/1000)=-0.000003582945 // ori per km
+temperaturelapse_jul=-0.004033;		// temperature lapse rate for januar (warmest month) in degree celsius per meter elevation
+									// Chukotka elevation:	-0.004033
+									// .      . transect:	(-0.03185582/1000)=-0.00003185582
+									// Taimyr . transect:	(-0.005374418/1000)=-0.000005374418 // ori per km
+									// Buor Kh. transect:	(-0.0037563135/1000)=-0.0000037563135 // ori per km
+									// Kolyma . transect:	(-0.003582945/1000)=-0.000003582945 // ori per km
 											
-precipitationlapse_year=0.01709;			// precipitation lapse rate for whole year in mm prec per meter elevation
-											// chukotka elevation:	0.01709
-											// .      . transect:	(-0.06041807/1000)=-0.00006041807
-											// Taimyr . transect:	(-0.03461587/1000)=-0.00003461587 // ori per km
-											// Buor Kh. transect:	(-0.0437466/1000)=-0.0000437466 // ori per km
-											// Kolyma . transect:	(-0.2445649/1000)=-0.0002445649 // ori per km
+precipitationlapse_year=0.01709;	// precipitation lapse rate for whole year in mm prec per meter elevation
+									// Chukotka elevation:	0.01709
+									// .      . transect:	(-0.06041807/1000)=-0.00006041807
+									// Taimyr . transect:	(-0.03461587/1000)=-0.00003461587 // ori per km
+									// Buor Kh. transect:	(-0.0437466/1000)=-0.0000437466 // ori per km
+									// Kolyma . transect:	(-0.2445649/1000)=-0.0002445649 // ori per km
 
 precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
-										// 0==not at all
-										// 1==linearly if smaller than threshold
-										// 2==parabola function with a global maximum at the optimum
+									// ... 0==not at all
+									// ... 1==linearly if smaller than threshold
+									// ... 2==parabola function with a global maximum at the optimum
 
 evapod=1.5;							// (double) Evapotranspiration based on Dolmann, 2004) 
 weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipitation values on a gradient depending on their latidudinal position
-										// 0==without a gradient
-										// 1==calculation of a linear gradient
+									// ... 0==without a gradient
+									// ... 1==calculation of a linear gradient
 nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northernmost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
 nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmost plot's position
 										// 111 km == 1 decimal degree
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
-										// 0==synchronous forcing per plot
-										// 1==linearly changing from south to north
-locationshift=0;				// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
+									// ... 0==synchronous forcing per plot
+									// ... 1==linearly changing from south to north
+locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=1;						// (int) source of wind data
-										// 0==random dispersal direction and not depending on wind speed
-										// 1==EraInterim
+									// ... 0==random dispersal direction and not depending on wind speed
+									// ... 1==EraInterim
 									
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=3000;			// (int) determined by the input data series
 simduration=2500;					// (int) duration of the simulation period depending on the available weather data series
 stopatyear=3000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
-ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
-										//   0==without spin up phase
-										// >10==with spin up phase
+ivortmax=0;							// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+									// ...   0==without spin up phase
+									// ... >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
-resetyear=-99999;						// (int) year to save all container for a later resume from this time point
+resetyear=-99999;					// (int) year to save all container for a later resume from this time point
 specpres=1;							// (int) which larch species should be present in the model
-										// 0==both Larix gmelinii and L. sibirica 
-										// 1==only Larix gmelinii
-										// 2==only Larix sibirica
+									// ... 0==both Larix gmelinii and L. sibirica 
+									// ... 1==only Larix gmelinii
+									// ... 2==only Larix sibirica
 
 // 1.3 -----> Plot number
 mapxlength=1;						// (int) number of parallel executed plots for each climate
@@ -147,79 +148,80 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
-yearswithseedintro=50; 			// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=100000;						// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+yearswithseedintro=50; 				// ... (int) years of seed introduction at the beginning of each simulation
+seedintronumber=100000;				// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=1000;				// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=1000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
-										// 0==into all plots along a transect
-										// 1==only southernmost plot
-seedwinddispersalmode=2;						// (int 1,2) positions for introduced seeds
-										// 1==neg. exp. from south border 
-										// 2==randomly into the plot
+									// ... 0==into all plots along a transect
+									// ... 1==only southernmost plot
+seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
+									// ... 1==neg. exp. from south border 
+									// ... 2==randomly into the plot
 seedintro_maxy=4000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
 seedintro_maxx=4000;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
-boundaryconditions=0;							// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
-										// 0==seeds passing the borders are removed
-										// 1==the western/eastern and northern/southern border turned in both directions 
-										// 2==dispersal connection only on the western to eastern border
-										// 3==only seeds leaving east-or-westwards get newly introduced
+boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
+									// ... 0==seeds passing the borders are removed
+									// ... 1==the western/eastern and northern/southern border turned in both directions 
+									// ... 2==dispersal connection only on the western to eastern border
+									// ... 3==only seeds leaving east-or-westwards get newly introduced
 starttrees=0;						// (int) type of initial tree set up
-										//  0==without initial trees
-										// 12==CH17
-										// and SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
-										// ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
-hinterland_maxlength=0; 		// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
+									// ... 0==without initial trees
+									// ... 12==CH17
+									// ... SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
+									// ... ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
+hinterland_maxlength=0; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
 										
 // 1.4.2 -----> Pollen dispersal
 pollination=0;						// (int 0,1,2) allow pollen dispersal
-										// 0==without pollination
-										// 1==pollination is computed during the simulation period (simduration)
-										// ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simduration==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
-										// 9==each year computation of pollination
-										// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
+									// ... 0==without pollination
+									// ... 1==pollination is computed during the simulation period (simduration)
+									// ... ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simduration==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
+									// ... 9==each year computation of pollination
+									// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
 
 pollendirectionvariance=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
 pollenfall=0.126;					// (double) pollen fall velocity
-pollengregoryc=0.6; 						// (double) pollen dispersal parameter
-pollengregorym=1.25;						// (double) pollen dispersal parameter
+pollengregoryc=0.6; 				// ... (double) pollen dispersal parameter
+pollengregorym=1.25;				// ... (double) pollen dispersal parameter
 
 // 1.5 -----> Growth function parameters and influences
 basalinfluenceoldyoung=0.0;			// (double) basal diameter influence for year's basal diameter growth
 relgrowthinfluence=1;				// (int 0,1) influence of current growth (reduced by density depending processes) on seed production and mortality estimation
 incfac=10;							// (int) factor for calculating area influenced by individual trees
 calcinfarea=1;						// (int) calculation mode for area size determination
-										// 1==linearly increasing (8 m at basal diameter of 80 cm)
-										// 2==logistically increasing with maximum value of 8 m (reaching at c. 35 cm basal diameter)
+									// ... 1==linearly increasing (8 m at basal diameter of 80 cm)
+									// ... 2==logistically increasing with maximum value of 8 m (reaching at c. 35 cm basal diameter)
+									// ... further modes see source code
 densityvaluemanipulatorexp=1;		// (double) exponent to scale the influence of a tree to the density tile
-										// 1== normal
-										// 2== parabolically i.e. smaller values reached faster
+									// ... 1== normal
+									// ... 2== parabolically i.e. smaller values reached faster
 densitysmallweighing=0;				// (double) exponent to scale the influence of individuals on the denstity tiles which are only influencing one tile
-										// 1==density is affected linearly with increasing basal diameter 
-										// 0==without weighing
+									// ... 1==density is affected linearly with increasing basal diameter 
+									// ... 0==without weighing
 densitytreetile=0.5;				// (double) exponent to change the density value input from each tree into the density grid
-										// 1==value equals basal diameter decreasing with distance from centre
-										// 0==value ranges from 1 to 0 with increasing distance
+									// ... 1==value equals basal diameter decreasing with distance from centre
+									// ... 0==value ranges from 1 to 0 with increasing distance
 densitymode=2;						// (int 1,2,3) mode of density calculation
-										// 1==without (densitywert of trees=0)
-										// 2==ZOI-kind of density calculation
-										// 3==random determination of surrounding fields
+									// ... 1==without (densitywert of trees=0)
+									// ... 2==ZOI-kind of density calculation
+									// ... 3==random determination of surrounding fields
 densitytilecalc=1;					// (int 1) mode for density value integrating of all trees for each tile as the sum within each tile
 densitytiletree=2;					// (int 1,2) mode for calculating the influence of density values within tiles for each tree
-										// 1==sum of all values weighed by distance
-										// 2==multiplied by the current values of the trees influence on each tile (as in densitytreetile=0)
+									// ... 1==sum of all values weighed by distance
+									// ... 2==multiplied by the current values of the trees influence on each tile (as in densitytreetile=0)
 desitymaxreduction=0.9;				// (double 0-1) maximum value the density value can reach
 densityvaluedbasalinfluence=0;		// (double) exponent to scale the influence of the tree's diameter to its influencing density value 
 dichtheightrel=12;					// (int) interaction modification mode of tree height and density influence strength
-										// 1==three different constant values for the three height classes
-										// 2==linearly decreasing from centre of the tree and influenced by the tree's age and additionally a minimum of value 0.1 is set
+									// ... 1==three different constant values for the three height classes
+									// ... 2==linearly decreasing from centre of the tree and influenced by the tree's age and additionally a minimum of value 0.1 is set
 										// 3==....
 precthreshold=371.717745;			// (double) precipitation optimum
-janthresholdtempgmel=-45;				// (double) number for January isotherm restriction
-weathervariablegmela=0.076;				// (double) determines curvature of the July index for L.gmelinii 
-weathervariablegmelb=14.568;			// (double) determines curvature of the July index for L.gmelinii 
-weathervariablegmelc=0.101;				// (double) determines curvature of the July index for L.gmelinii 
+janthresholdtempgmel=-45;			// (double) number for January isotherm restriction
+weathervariablegmela=0.076;			// (double) determines curvature of the July index for L.gmelinii 
+weathervariablegmelb=14.568;		// (double) determines curvature of the July index for L.gmelinii 
+weathervariablegmelc=0.101;			// (double) determines curvature of the July index for L.gmelinii 
 
 	//	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
@@ -235,12 +237,12 @@ weathervariablegmelc=0.101;				// (double) determines curvature of the July inde
 coneage=15;							// (int) minimum age trees begin to bear cones
 seedflightrate=0.63931;				// (double 0-1) chance a seed is released from the producing tree
 dispersalmode=5;					// (int 0,1,2,3,4) dispersal mode for seeds (95% of seeds distributed within 100 m)
-										// 0==random
-										// 1==negative exponential
-										// 2==fat tailed
-										// 3==gaussian
-										// 4==gaussian and fat tailed combined
-										// 5==gaussian and fat tailed combined plus maximum after Matlack
+									// ... 0==random
+									// ... 1==negative exponential
+									// ... 2==fat tailed
+									// ... 3==gaussian
+									// ... 4==gaussian and fat tailed combined
+									// ... 5==gaussian and fat tailed combined plus maximum after Matlack
 seedtravelbreezeg=60.1;				// (double) maximal flight distance for L. gmelinii seeds at 10 km/h (estimation: Matlack 1987)
 seedtravelbreezes=45.0;				// (double) maximal flight distance for L. sibirica seeds at 10 km/h (estimation: Matlack 1987)
 seeddescentg=0.86;					// (double) descent speed for L. gmelinii seeds (estimation: Matlack 1987)
@@ -257,18 +259,18 @@ gdbasalfacgmel=0.030;				// (double) factor for basal diameter growth rate of L.
 gdbasalconstgmel=-1.98;				// (double) basal diameter growth rate of L. gmelinii trees
 gdbreastfacqgmel=-0.003				// (double) factor for diameter growth rate at breast height of L. gmelinii trees
 gdbreastfacgmel=0.030;				// (double) factor for diameter growth rate at breast height of L. gmelinii trees
-gdbreastconstgmel=-1.98;				// (double) diameter growth rate at breast height of L. gmelinii trees
+gdbreastconstgmel=-1.98;			// (double) diameter growth rate at breast height of L. gmelinii trees
 gdbasalfacqsib=-0.0009;				// (double) factor for basal diameter growth rate of L. sibirica trees
 gdbasalfacsib=0.0056;				// (double) factor for basal diameter growth rate of L. sibirica trees
 gdbasalconstsib=-1.01;				// (double) basal diameter growth rate of L. sibirica trees
-gdbreastfacqsib=-0.0009;				// (double) factor for diameter growth rate at breast height of L. sibirica trees
+gdbreastfacqsib=-0.0009;			// (double) factor for diameter growth rate at breast height of L. sibirica trees
 gdbreastfacsib=0.0056;				// (double) factor for diameter growth rate at breast height of L. sibirica trees
 gdbreastconstsib=-1.01;				// (double) diameter growth rate at breast height of L. sibirica trees
 
 // 2.3 -----> Height estimation
 allometryfunctiontype=2;			// (int 1,2) allometric function mode
-										// 1==linear
-										// 2==non linear
+									// ... 1==linear
+									// ... 2==non linear
 dbasalheightalloslope=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from basal diameter
 dbasalheightalloexp=1.0;			// (double) (IF allometryfunctiontype == 1) exponent for height estimation from basal diameter
 dbreastheightalloslope=42.88;		// (double) (IF allometryfunctiontype == 1) slope for height estimation from breast height diameter
@@ -279,22 +281,22 @@ dbreastheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slop
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;						// (double 0-1) background mortality
 maximumage=609;						// (int) maximum tree age
-mortage=8.18785;						// (double) mortality factor if a tree exceeds the maximum age
+mortage=8.18785;					// (double) mortality factor if a tree exceeds the maximum age
 mortyouth=0.1;						// (double) mortality factor for young individuals
-mortyouthinfluenceexp=2.0;		// (double) exponent determining duration time of youth mortality
-										//  <1==longer
-										//  >1==shorter
+mortyouthinfluenceexp=2.0;			// (double) exponent determining duration time of youth mortality
+									//  ... <1==longer
+									//  ... >1==shorter
 mgrowth=0.1;						// (double) factor for adjusting the influence of current tree growth on mortality
 relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree growth on mortality
-										//  0==no influence of relative growth on mortality
-										//  1==linear influence of the relative growth on mortality
-										// >1==stronger
-										// <1==weaker
+									// ...  0==no influence of relative growth on mortality
+									// ...  1==linear influence of the relative growth on mortality
+									// ... >1==stronger
+									// ... <1==weaker
 mdensity=0.25;						// (double) mortality factor for density
 densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
 mweather=0.5;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
 heightweathermorteinflussexp=0.75;	// (double) exponent for determining an influence of the tree height on the climate mortality
-mdrought=0.1;				// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
+mdrought=0.1;						// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
 seedconemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees
 seedfloormort=0.55803;				// (double 0-1) mortality rate of seeds at the ground
 

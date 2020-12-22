@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// TODO temporary
+// TODO temporary here
 extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 extern vector<vector<Weather*>> world_weather_list;
@@ -14,27 +14,14 @@ extern vector<VectorList<Seed>> world_seed_list_copy;
 extern vector<vector<Envirgrid*>> world_plot_list_copy;
 extern vector<vector<Evaluation*>> world_evaluation_list_copy;
 
-/****************************************************************************************/
-/**
- * \brief
- *
- * backup all information about trees, seeds, maps and analysis
- *values at year of choice "resetyear"
- *
- *
- *
- *******************************************************************************************/
-
 void Savealllists() {
     // copy Trees
     int aktort = 0;
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-
         // opening the original tree list and the referring reset list ..._copy
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list_copy.begin() + aktort);
         VectorList<Tree>& tree_list_copy = *world_positon_b;
-
         aktort++;
 
         cout << endl;
@@ -94,11 +81,9 @@ void Savealllists() {
     aktort = 0;
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-
         // opening the original seed list and the referring reset list ..._copy
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
         VectorList<Seed>& seed_list_copy = *world_positon_s;
-
         aktort++;
 
         cout << endl;
@@ -116,18 +101,16 @@ void Savealllists() {
     aktort = 0;
     for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw) {
         vector<Envirgrid*>& plot_list = *posw;
-
         // opening the original plot list and the referring reset list ..._copy
         vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
         vector<Envirgrid*>& plot_list_copy = *posiweltk;
-
         aktort++;
 
         cout << endl;
         cout << "plot_list.size()=" << plot_list.size() << endl;
         cout << "plot_list_copy.size() vor Kopieren=" << plot_list_copy.size() << endl;
 
-        int counterkarten = 1;  // for displaying the first plot
+        int countertotalmaps = 1;  // for displaying the first plot
         for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
             auto pEnvirgrid = (*pos);
 
@@ -154,13 +137,13 @@ void Savealllists() {
             // pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
             plot_list_copy.push_back(pEnvirgrid_copy);
 
-            if (counterkarten == 1) {
+            if (countertotalmaps == 1) {
                 cout << pEnvirgrid->Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy-> " << pEnvirgrid_copy->Treedensityvalue
                      << endl;
             }
 
             ++pos;
-            ++counterkarten;
+            ++countertotalmaps;
         }
 
         cout << "plot_list_copy.size() after copying=" << plot_list_copy.size() << endl;
@@ -172,11 +155,9 @@ void Savealllists() {
     aktort = 0;
     for (vector<vector<Evaluation*>>::iterator posw = world_evaluation_list.begin(); posw != world_evaluation_list.end(); ++posw) {
         vector<Evaluation*>& EvaluationListe = *posw;
-
         // opening the original evaluation list and the referring reset list ..._copy
         vector<vector<Evaluation*>>::iterator posiwelta = (world_evaluation_list_copy.begin() + aktort);
         vector<Evaluation*>& EvaluationListe_copy = *posiwelta;
-
         aktort++;
 
         cout << endl;
@@ -186,7 +167,6 @@ void Savealllists() {
         int counterauswert = 1;  // for displaying the first evaluation list element
         for (vector<Evaluation*>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
             auto pEvaluation = (*pos);
-
             auto pEvaluation_copy = new Evaluation();
 
             // pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
@@ -283,32 +263,17 @@ void Savealllists() {
     }
 }
 
-/****************************************************************************************/
-/**
- * \brief
- *
- * //delete all information about trees, seeds, maps and analysis
- *values from current container
- *
- *
- *
- *******************************************************************************************/
-
 void Clearalllists(void) {
     int aktort = 0;
     for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         VectorList<Tree>& tree_list = *world_positon_b;
-
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
-
         vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list.begin() + aktort);
         vector<Envirgrid*>& plot_list = *posiweltk;
-
         vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
         vector<Evaluation*>& evaluation_list = *posiwelt;
-
         aktort++;
 
 		// remove elements
@@ -365,26 +330,13 @@ void Clearalllists(void) {
     }
 }
 
-/****************************************************************************************/
-/**
- * \brief
- *
- * restore all information about trees, seeds, maps and analysis
- *values from backup container
- *
- *
- *
- *******************************************************************************************/
-
 void Restorealllists(void) {
     // copying Trees
     int aktort = 0;
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         VectorList<Tree>& tree_list_copy = *world_positon_b;
-
         aktort++;
 
         cout << endl;
@@ -445,11 +397,9 @@ void Restorealllists(void) {
     aktort = 0;
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list_copy.begin(); posw != world_seed_list_copy.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-
         // opening the original seed list and the referring reset list ..._copy
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list_copy = *world_positon_s;
-
         aktort++;
 
         cout << endl;
@@ -468,18 +418,16 @@ void Restorealllists(void) {
     aktort = 0;
     for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list_copy.begin(); posw != world_plot_list_copy.end(); ++posw) {
         vector<Envirgrid*>& plot_list = *posw;
-
         // opening the original plot list and the referring reset list ..._copy
         vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list.begin() + aktort);
         vector<Envirgrid*>& plot_list_copy = *posiweltk;
-
         aktort++;
 
         cout << endl;
         cout << "plot_list.size() before copying =" << plot_list.size() << endl;
         cout << "plot_list_copy.size() before copying =" << plot_list_copy.size() << endl;
 
-        int counterkarten = 1;  // for displaying the first plot list element
+        int countertotalmaps = 1;  // for displaying the first plot list element
         for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
             auto pEnvirgrid = (*pos);
 
@@ -506,13 +454,13 @@ void Restorealllists(void) {
             // pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
             plot_list_copy.push_back(pEnvirgrid_copy);
 
-            if (counterkarten == 1) {
+            if (countertotalmaps == 1) {
                 cout << pEnvirgrid->Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy-> " << pEnvirgrid_copy->Treedensityvalue
                      << endl;
             }
 
             ++pos;
-            ++counterkarten;
+            ++countertotalmaps;
         }
 
         cout << "plot_list.size() after copying=" << plot_list.size() << endl;
@@ -525,11 +473,9 @@ void Restorealllists(void) {
     aktort = 0;
     for (vector<vector<Evaluation*>>::iterator posw = world_evaluation_list_copy.begin(); posw != world_evaluation_list_copy.end(); ++posw) {
         vector<Evaluation*>& EvaluationListe = *posw;
-
         // opening the standard list to push back elements to it from the reset list "..._copy"
         vector<vector<Evaluation*>>::iterator posiwelta = (world_evaluation_list.begin() + aktort);
         vector<Evaluation*>& EvaluationListe_copy = *posiwelta;
-
         aktort++;
 
         cout << endl;
@@ -637,31 +583,16 @@ void Restorealllists(void) {
     }
 }
 
-/****************************************************************************************/
-/**
- * \brief
- *
- * //delete all information about trees, seeds, maps and analysis
- *values from current container
- *
- *
- *
- *******************************************************************************************/
-
 void Clearalllists_copy(void) {
     int aktort = 0;
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list_copy.begin(); posw != world_tree_list_copy.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
-
         vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
         vector<Envirgrid*>& plot_list = *posiweltk;
-
         vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list_copy.begin() + aktort);
         vector<Evaluation*>& evaluation_list = *posiwelt;
-
         aktort++;
 		
 		// remove elements
@@ -697,3 +628,4 @@ void Clearalllists_copy(void) {
         evaluation_list.clear();
     }
 }
+

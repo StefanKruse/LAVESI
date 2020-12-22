@@ -4,22 +4,9 @@
 
 using namespace std;
 
-/****************************************************************************************/
-/**
- * \brief ageing of seeds and trees
- *
- * 1. seed ageing and mortality of seeds reach their maximum age
- * 2. ageing of trees
- * 3. calculate maturation height of trees, that don't have one yet
- * 4. if tree is taller than its maturation height it grows cones
- * 5. if tree has cones already
- *
- *******************************************************************************************/
-
 void Ageing(struct Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list) {
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -43,7 +30,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 } // pragma
 
     int mat_age_length = 183;  // length of array maturationheight
-    // height values in percent (0-99) computed using R
+    // height values in percent (0-99) computed externally
     unsigned short int maturationheight[] = {200,  201,  202,  203,  204,  205,  206,  207,  208,  209,  210,  211,  212,  213,   214,  215,  216,  217,  218,  219,  220,
                                  221,  222,  223,  224,  225,  226,  227,  228,  229,  230,  231,  232,  233,  234,   235,  236,  237,  238,  239,  240,  241,
                                  242,  243,  244,  245,  246,  248,  249,  250,  251,  252,  253,  254,  256,  257,   258,  259,  260,  262,  263,  264,  266,
@@ -56,9 +43,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-		
 			std::random_device random_dev;
-
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
@@ -105,3 +90,4 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		} // tree list
 	} // world list
 }
+

@@ -4,87 +4,82 @@
 
 using namespace std;
 
-struct Tree {//TODO: check variable types for memory improvements
-    double dbasal;							// 8-4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision
-    double dbreast;							// 8-4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision
-    double densitywert;						// 8-2	---> need to check range of values for improvement
-    double thawing_depthinfluence;			// 8-2	---> need to check range of values for improvement
-    unsigned int xcoo;						// 4	-> was double ---> only positive, max ~30000m or long transects ~600000m -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 4294 km simulations
-    unsigned int ycoo;						// 4	-> was double 
-    // double dispersaldistance;			// 8	-> deleted not in use right now
-    // int xworldcoo;						// 4	-> deleted not in use right now
-    // int yworldcoo;						// 4	-> deleted not in use right now
-    // int name;							// 4	-> deleted not in use right now
-    // int namem;							// 4	-> deleted not in use right now
-    // int namep;							// 4	-> deleted not in use right now
-    // int line;							// 4	-> deleted not in use right now
-    // int generation;						// 4	-> deleted not in use right now
-    // int yr_of_establishment;				// 4	-> deleted not in use anymore
-    // int yr_of_dying;						// 4	-> deleted not in use anymore
-    // unsigned int seedproduced;			// 4	-> deleted only for visualisation
-    // int buffer;							// 4	-> deleted not in use now
+struct Tree {								// sizeof variable //TODO: further could be replaced
+    double dbasal;							// 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision; could be replaced
+    double dbreast;							// 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision; could be replaced
+    double densitywert;						// 8->2	---> need to check range of values for replacment
+    double thawing_depthinfluence;			// 8->2	---> need to check range of values for replacment
+    unsigned int xcoo;						// 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 4294 km long/wide simulations
+    unsigned int ycoo;						// 4	---> was double 
+    // double dispersaldistance;			// 8	-> not in use right now
+    // int xworldcoo;						// 4	-> not in use right now
+    // int yworldcoo;						// 4	-> not in use right now
+    // int name;							// 4	-> not in use right now
+    // int namem;							// 4	-> not in use right now
+    // int namep;							// 4	-> not in use right now
+    // int line;							// 4	-> not in use right now
+    // int generation;						// 4	-> not in use right now
+    // int yr_of_establishment;				// 4	-> not in use anymore
+    // int yr_of_dying;						// 4	-> not in use anymore
+    // unsigned int seedproduced;			// 4	-> not in use right now; used only for visualisation
+    // int buffer;							// 4	-> not in use right now
     unsigned short int dbasalmax;			// 2	---> one year max probably few centimeters -> unsigned short int /1000 max 65cm
     unsigned short int dbasalrel;			// 2	---> one year max probably few centimeters -> unsigned short int /1000
     unsigned short int dbreastrel;			// 2	---> one year max probably few centimeters -> unsigned short int /1000
-    unsigned short int height;				// 2	-> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision 
-    unsigned short int coneheight;			// 2	-> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision 
-    unsigned short int age;					// 2 	-> was int
-    unsigned short int seednewly_produced;	// 2 	-> was int
-    signed short int species;				// 2 	-> was int
+    unsigned short int height;				// 2	---> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision 
+    unsigned short int coneheight;			// 2	---> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision 
+    unsigned short int age;					// 2 	---> was int
+    unsigned short int seednewly_produced;	// 2 	---> was int
+    signed short int species;				// 2 	---> was int
 	unsigned short int envirimpact;			// 2
 	short int elevation;					// 2
-    bool cone;								// 1	-> was int coudl be replaced by single use of coneheight, if limit then no cone if different then cone
+    bool cone;								// 1	---> was int; could be further replaced by single use of coneheight
     bool longdispersed;						// 1
     bool growing;							// 1
 };
 
-struct Seed {//TODO: check variable types for memory improvements
-    // double weight;					// 8	-> deleted not in use right now
-    // double dispersaldistance;		// 8
-    // double maxgrowth;				// 8
-    // double pollenfall;				// 8	-> deleted not in use right now
-    // double descent;					// 8	-> deleted not in use right now
+struct Seed {							// sizeof variable //TODO: further could be replaced
+    // double weight;					// 8	-> not in use right now
+    // double dispersaldistance;		// 8	-> not in use right now
+    // double maxgrowth;				// 8	-> not in use right now
+    // double pollenfall;				// 8	-> not in use right now
+    // double descent;					// 8	-> not in use right now
     double thawing_depthinfluence;		// 8
-    unsigned int xcoo;					// 4	-> was double ---> only positive, max ~30000m or long transects ~600000m -> ???
-    unsigned int ycoo;					// 4	-> was double ---> only positive, max ~30000m or long transects ~600000m -> ???
-    // int xworldcoo;					// 4	-> deleted not in use right now
-    // int yworldcoo;					// 4	-> deleted not in use right now
-    // int namem;						// 4	-> deleted not in use right now
-    // int namep;						// 4	-> deleted not in use right now
-    // int line;						// 4	-> deleted not in use right now
-    // int generation;					// 4	-> deleted not in use right now
-    unsigned short int releaseheight;	// 2	-> was double -> unsigned short in then /100 in cm 0 to 10000 so 65535 as max would be sufficient for trees up to 65m---> could use another double only for dispersal necessary
-    unsigned short int age;				// 2	-> was int
-    signed short int species;			// 2	-> was int
+    unsigned int xcoo;					// 4	---> was double ---> only positive
+    unsigned int ycoo;					// 4	---> was double ---> only positive
+    // int xworldcoo;					// 4	-> not in use right now
+    // int yworldcoo;					// 4	-> not in use right now
+    // int namem;						// 4	-> not in use right now
+    // int namep;						// 4	-> not in use right now
+    // int line;						// 4	-> not in use right now
+    // int generation;					// 4	-> not in use right now
+    unsigned short int releaseheight;	// 2	---> was double -> unsigned short in then /100 in cm 0 to 10000 so 65535 as max would be sufficient for trees up to 65m
+    unsigned short int age;				// 2	---> was int
+    signed short int species;			// 2	---> was int
     bool incone;						// 1
     bool longdispersed;					// 1
     bool dead = false;					// 1
 };
 
-struct Envirgrid {
-	// double xcoo; // TODO: max length*resolution is the highest resolution (e.g. 70000 for 14 km), check if double is necessary or signed int (8 -> 4 bytes)
-    // double ycoo; // TODO: max length*resolution is the highest resolution (e.g. 70000 for 14 km), check if double is necessary or signed int (8 -> 4 bytes)
-    // int xworldcoo; // TODO: check if necessary at all, use short int (4 -> 2 bytes)
-    // int yworldcoo; // TODO: check if necessary at all, use short int (4 -> 2 bytes)
-	short int elevation;					// 2	//TODO: double 8 bytes -> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km elevation range (8 -> 2 bytes)
-    unsigned short int Treedensityvalue; 	// 2	// values 0 to around 1 depending on setting, can be also 5-10 -> max 65535 factor 10000 allows values between 0 and 65.535 with precision of 1/10000 which is sufficient
-    unsigned short int Treenumber; 			// 2	// only for ouput and should in all cases below 65535
-    unsigned short maxthawing_depth;		// 2
-    // unsigned short litterheight;
-    // unsigned short litterheight0;
-    // unsigned short litterheight1;
-    // unsigned short litterheight2;
-    // unsigned short litterheight3;
-    // unsigned short litterheight4;
-    // unsigned short litterheight5;
-    // unsigned short litterheight6;
-    // unsigned short litterheight7;
-    // unsigned short litterheight8;
-    // unsigned short litterheight9;
-    // unsigned short litterheightmean;
-    // TODO std::array<unsigned short, 10> litterheight;
-	// double slope; //TODO: check use of unsigned short int as only between 0 and 45 *1000 possible, so 1/1000 degree precision (8 -> 2 bytes)
-	unsigned short int envirgrowthimpact; 	//2		//TODO: use unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000 units precision (8 -> 2 bytes)
+struct Envirgrid {										// sizeof variable //TODO: further could be replaced
+	short int elevation;								// 2	---> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km elevation range (8 -> 2 bytes)
+    unsigned short int Treedensityvalue; 				// 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0 and 65.535 with precision of 1/10000 which is sufficient
+    unsigned short int Treenumber; 						// 2	---> only for ouput; should in all cases below 65535
+    unsigned short maxthawing_depth;					// 2
+    // unsigned short litterheight;						// 2	-> not in use right now; TODO: replace litterheight with a more efficient way
+    // unsigned short litterheight0;					// 2	-> not in use right now
+    // unsigned short litterheight1;					// 2	-> not in use right now
+    // unsigned short litterheight2;					// 2	-> not in use right now
+    // unsigned short litterheight3;					// 2	-> not in use right now
+    // unsigned short litterheight4;					// 2	-> not in use right now
+    // unsigned short litterheight5;					// 2	-> not in use right now
+    // unsigned short litterheight6;					// 2	-> not in use right now
+    // unsigned short litterheight7;					// 2	-> not in use right now
+    // unsigned short litterheight8;					// 2	-> not in use right now
+    // unsigned short litterheight9;					// 2	-> not in use right now
+    // unsigned short litterheightmean;					// 2	-> not in use right now
+    // std::array<unsigned short, 10> litterheight;		// 2*10	-> not in use right now
+	unsigned short int envirgrowthimpact; 				// 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000 units precision (8 -> 2 bytes)
 	
 	// constructor
 	Envirgrid(short int elevation=0, unsigned short int Treedensityvalue=0, unsigned short int Treenumber=0, unsigned short maxthawing_depth=1000, unsigned short int envirgrowthimpact=1)

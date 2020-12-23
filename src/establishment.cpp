@@ -22,16 +22,8 @@ void Treeestablishment(struct Parameter* parameter,
         vector<Envirgrid*>& plot_list = *world_positon_k;
         aktort++;
 
-		
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-#pragma omp parallel
-{
     RandomNumber<double> uniform(0, 1);
-
-#pragma omp for
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
             auto& seed = seed_list[i_seed];
             if (seed.dead) {
@@ -297,7 +289,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 }
             }
 		}// seed_list loop
-}// pragma
         seed_list.consolidate();
         tree_list.consolidate();
     }

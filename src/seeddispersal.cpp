@@ -61,14 +61,8 @@ void Seeddispersal( int jahr,
         // variable for displaying seeds crossing the borders // TODO: move to only used when debugging mode
         int seedleftN = 0, seedleftE = 0, seedleftS = 0, seedleftW = 0;
 
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-#pragma omp parallel
-{
         RandomNumber<double> uniform(0, 1);
-#pragma omp for
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
 		for (unsigned int i = 0; i < seed_list.size(); ++i) {
 			auto& seed = seed_list[i];
 			if (seed.dead) {
@@ -238,7 +232,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				}
 			}
 		}
-}  // pragma
         seed_list.consolidate();
 	}
 }

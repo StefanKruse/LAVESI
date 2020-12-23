@@ -19,13 +19,8 @@ void TreeMort(int yearposition_help,
     anstiegweathermortgmin = (60 * weather_list[yearposition_help]->janisothermrestriktiongmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
     anstiegweathermortsmin = (60 * weather_list[yearposition_help]->janisothermrestriktionsmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
 
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-#pragma omp parallel
-{
 	RandomNumber<double> uniform(0, 1);
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
 	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 		auto& tree = tree_list[tree_i];
 
@@ -162,7 +157,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
         }
     }
-} // pragma
     tree_list.consolidate();
 }
 
@@ -182,15 +176,23 @@ void Mortality(struct Parameter* parameter,
         VectorList<Seed>& seed_list = *world_positon_s;
         aktort++;
 
-        // mortality of seeds
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
+#pragma omp parallel default(shared)
+        {
+            RandomNumber<double> uniform(0, 1);
+            double direction = 0.0;
+            double velocity = 0.0;
+            unsigned int ripm = 0, cntr = 0;
+            double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
+            double I0kappa = 0.0;
+            double pe = 0.01;
+            double C = parameter[0].pollengregoryc;
+            double m = parameter[0].pollengregorym;
+            vector<int> Vname;
+            vector<double> Vthdpth;
+			int n_trees = 0;
 
-#pragma omp parallel
-{
-    RandomNumber<double> uniform(0, 1);
-#pragma omp for
+            // mortality of seeds
+#pragma omp for schedule(guided)
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
             if (seed.dead) {
@@ -198,46 +200,12 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
             double zufallsz = uniform.draw();
 
-            if (zufallsz < seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort) {
+            if (zufallsz < (seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort)) {
                 seed.dead = true;
                 seed_list.remove(i);
             }
         }
-} // pragma
 
-        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
-        seed_list.consolidate();
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-
-		double direction = 0.0;
-		double velocity = 0.0;
-		unsigned int ripm = 0, cntr = 0;
-		double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
-		double I0kappa = 0.0;
-		double pe = 0.01;
-		double C = parameter[0].pollengregoryc;
-		double m = parameter[0].pollengregorym;
-		vector<int> Vname;
-		vector<double> Vthdpth;
-
-#pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
-{
-			RandomNumber<double> uniform(0, 1);
-			direction = 0.0;
-			velocity = 0.0;
-			ripm = 0, cntr = 0;
-			p = 0.0;
-			kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
-			phi = 0.0;
-			dr = 0.0;
-			dx = 0.0;
-			dy = 0.0;
-			I0kappa = 0.0;
-			pe = 0.01;
-			C = parameter[0].pollengregoryc;
-			m = parameter[0].pollengregorym;
-			
-			int n_trees = 0;
 #pragma omp for schedule(guided)
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
@@ -295,11 +263,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			}  // main tree loop on each core
 		}      // parallel region
         seed_list.consolidate();
-
-		// Vname.clear();
-		// Vname.shrink_to_fit();
-		Vthdpth.clear();
-		Vthdpth.shrink_to_fit();
 
         TreeMort(yearposition, weather_list, tree_list);
     }

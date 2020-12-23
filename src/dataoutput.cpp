@@ -75,12 +75,8 @@ void Dataoutput(int t,
         int breastdiametercount = 0;
         int stemcount = 0;
         double meantreeheight = 0.0, meantreeage = 0.0;
-		
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-		
-#pragma omp parallel
+
+#pragma omp parallel default(shared)
 {
 		// declarations for each thread
 		double local_basalarea = 0.0;
@@ -90,7 +86,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 		int local_stemcount = 0;
 		double local_meantreeheight = 0.0, local_meantreeage = 0.0;
 
-#pragma omp for
+#pragma omp for schedule(guided)
 		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 			auto& tree = tree_list[tree_i];
 		
@@ -944,12 +940,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			Indicount_2000.resize(deminputdimension_y*deminputdimension_x,0);
 			Indicount_larger2000.resize(deminputdimension_y*deminputdimension_x,0);
 
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-#pragma omp parallel
-{
-#pragma omp for
+#pragma omp parallel for default(shared) schedule(guided)
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
 				// calculate grid position from x/y coordinates
@@ -1016,8 +1007,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				}
 				
 			}
-}// pragma
-
 
             // trying to open the file for reading
             filepointer = fopen(dateiname.c_str(), "r+");
@@ -1133,14 +1122,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			Species2_stems.resize(treerows,0);
 			Species1_seedlings.resize(treerows,0);
 			Species2_seedlings.resize(treerows,0);
-			
-			// count specimen
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
-#pragma omp parallel
-{
-#pragma omp for
+#pragma omp parallel for default(shared) schedule(guided)
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
 				unsigned int yposi =  floor((double)tree.ycoo/1000);
@@ -1160,7 +1143,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						Species2_seedlings[yposi]++;					
 				}
 			}
-}// pragma
 
 			// add data to file
 			for(int yposi=0; yposi < treerows; yposi++)

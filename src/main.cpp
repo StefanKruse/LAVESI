@@ -511,13 +511,7 @@ void fillElevations(){
 		// interpolate to envirgrid		
 		for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
 			vector<Envirgrid*>& plot_list = *posw;
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-#pragma omp parallel
-{
-#pragma omp for
+#pragma omp parallel for schedule(guided)
 				for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
 					// determine position and distances to gridpoints in low resolution grid
 					double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
@@ -627,7 +621,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						plot_list[kartenpos]->envirgrowthimpact = 0;
 					}
 				}
-}//pragma
 		}
 	}
 cout << " ... end dem and slope input" << endl;
@@ -755,12 +748,11 @@ int main() {
         "\n");
     printf("\n<----\n");
 
-	// pragma omp initializing
-	omp_set_dynamic(1); //enable dynamic teams
-	omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
 	// read in all simulation parameters from parameters.txt
     Parameterinput();
+
+	// pragma omp initializing
+	omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
     // calculation of the starting year of the simulation
     parameter[0].startjahr = parameter[0].lastyearweatherdata - parameter[0].simduration;

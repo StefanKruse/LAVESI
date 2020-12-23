@@ -5,7 +5,7 @@
 using namespace std;
 
 void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot_list) {
-#pragma omp parallel for schedule(guided)
+#pragma omp parallel for default(shared) schedule(guided)
     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
         auto& tree = tree_list[tree_i];
 
@@ -76,7 +76,7 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot_list) 
 
 void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot_list) {
     RandomNumber<double> uniform(0, 1);
-#pragma omp parallel for private(uniform) schedule(guided)
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
         auto& tree = tree_list[tree_i];
 
@@ -350,7 +350,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot
 void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
-#pragma omp parallel for schedule(guided)
+#pragma omp parallel for default(shared) schedule(guided)
     for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
         auto* pEnvirgrid = plot_list[kartenpos];
         pEnvirgrid->Treedensityvalue = 0;

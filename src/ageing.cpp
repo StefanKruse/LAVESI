@@ -8,13 +8,8 @@ using namespace std;
 void Ageing(struct Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list) {
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
-#pragma omp parallel
-{
-#pragma omp for
+#pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
             if (seed.dead) {
@@ -28,7 +23,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 seed_list.remove(i);
             }
         }
-} // pragma
         seed_list.consolidate();
 
     int mat_age_length = 183;  // length of array maturationheight
@@ -45,15 +39,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
-#pragma omp parallel
-{
     RandomNumber<double> uniform(0, 1);
-
-#pragma omp for
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
 
@@ -86,7 +74,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 					tree.seednewly_produced = 0;
 				}
 			}
-} // pragma
 		} // tree list
 	} // world list
 }

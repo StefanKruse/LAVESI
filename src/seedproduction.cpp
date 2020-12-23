@@ -7,14 +7,8 @@ void Seedproduction(struct Parameter* parameter,
 				    vector<VectorList<Tree>>& world_tree_list) {
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-		
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
-#pragma omp parallel
-{	
-#pragma omp for
+#pragma omp parallel for default(shared) schedule(guided)
 		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 			auto& tree = tree_list[tree_i];
 
@@ -30,7 +24,6 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
                 }
             }
         }
-}  // pragma
     }
 }
 

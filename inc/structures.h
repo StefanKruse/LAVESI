@@ -10,8 +10,8 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     double densitywert;             // 8->2	---> need to check range of values for replacment
     double thawing_depthinfluence;  // 8->2	---> need to check range of values for replacment
     unsigned int xcoo;  // 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 4294
-                        // km long/wide simulations
-    unsigned int ycoo;  // 4	---> was double
+                        // km long/wide simulations // TODO really only positive? -> see compiler warnings
+    unsigned int ycoo;  // 4	---> was double // TODO really only positive? -> see compiler warnings
     // double dispersaldistance;			// 8	-> not in use right now
     // int xworldcoo;						// 4	-> not in use right now
     // int yworldcoo;						// 4	-> not in use right now

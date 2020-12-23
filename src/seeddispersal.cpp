@@ -1,5 +1,5 @@
-#include <random>
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -61,16 +61,13 @@ void Seeddispersal( int jahr,
         // variable for displaying seeds crossing the borders // TODO: move to only used when debugging mode
         int seedleftN = 0, seedleftE = 0, seedleftS = 0, seedleftW = 0;
 
-		std::random_device random_dev;
-		
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
-		std::mt19937 rng(random_dev());
-		std::uniform_real_distribution<double> uniform(0, 1);
+        RandomNumber<double> uniform(0, 1);
 #pragma omp for
 		for (unsigned int i = 0; i < seed_list.size(); ++i) {
 			auto& seed = seed_list[i];
@@ -79,10 +76,10 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			}
 
 			if (seed.incone == true) {
-				double flug = uniform(rng);
+				double flug = uniform.draw();
 
 				if (flug <= parameter[0].seedflightrate) {
-					double ratiorn = uniform(rng);
+					double ratiorn = uniform.draw();
 
 					if (ratiorn > 0.0) {
 						seed.incone = false;
@@ -94,7 +91,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						double jquer = 0.0;
 						double iquer = 0.0;
 
-						double randomnumberwind = uniform(rng);
+						double randomnumberwind = uniform.draw();
 						Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double) seed.releaseheight/100, seed.species, randomnumberwind);
 
 						// disperal limitation by elevation 
@@ -215,7 +212,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 								// seed.namep = 0;
 
 							} else if ((parameter[0].boundaryconditions == 2)
-									   && (rand() < 0.5 * RAND_MAX)) {  // Reducing seed introduction on the western border:
+									   && (uniform.draw() < 0.5)) {  // Reducing seed introduction on the western border:
 								seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)));
 							} else {
 								sameausserhalb = true;

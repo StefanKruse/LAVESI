@@ -1,6 +1,6 @@
-#include <random>
 #include <cassert>
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -22,7 +22,6 @@ void Treeestablishment(struct Parameter* parameter,
         vector<Envirgrid*>& plot_list = *world_positon_k;
         aktort++;
 
-		std::random_device random_dev;
 		
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
@@ -30,8 +29,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
-		std::mt19937 rng(random_dev());
-		std::uniform_real_distribution<double> uniform(0, 1);
+    RandomNumber<double> uniform(0, 1);
 
 #pragma omp for
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
@@ -170,7 +168,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 				}					
 				// update growth
 				double basalgrowth_help = maxbw_help * (1.0 - density_help);
-				double zufallsz = uniform(rng);
+				double zufallsz = uniform.draw();
 
 				// minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
 				double germgmel=0.0;

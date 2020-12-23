@@ -1,9 +1,11 @@
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
 
 Parameter parameter[1];
+std::random_device RandomNumber<double>::random_dev;
 
 int yearposition;
 
@@ -28,6 +30,7 @@ int cntr;
 vector<double> wdir, wspd;
 
 void vegetationDynamics(int yearposition, int jahr, int t) {
+    RandomNumber<double> uniform(0, 1);
 
 cout << " started vegetation dynamics / ivort=" << parameter[0].ivort << " / ";
 
@@ -53,7 +56,7 @@ cout << "Growth(" << elapsed.count() << ")+";
     }
 
     if (jahr < findyr1 or jahr > findyr2) {
-        yr = (findyr1 + (int)(rand() / (RAND_MAX + 1.0) * (findyr2 - findyr1)));
+        yr = (findyr1 + (int)(uniform.draw() * (findyr2 - findyr1)));
     } else {
         yr = jahr;
     }
@@ -117,18 +120,20 @@ time_start = chrono::high_resolution_clock::now();
     wdir.shrink_to_fit();
 time_end = chrono::high_resolution_clock::now();
 elapsed = time_end - time_start;
-cout << "Mortality(" << elapsed.count() << ")+";
+//cout << "Mortality(" << elapsed.count() << ")+";
 
 time_start = chrono::high_resolution_clock::now();
     Ageing(&parameter[0], world_tree_list, world_seed_list);
 time_end = chrono::high_resolution_clock::now();
 elapsed = time_end - time_start;
-cout << "Ageing(" << elapsed.count() << ")+";
+//cout << "Ageing(" << elapsed.count() << ")+";
 	
-cout << " /// done " << endl;
+//cout << " /// done " << endl;
 }
 
 void Spinupphase() {
+    RandomNumber<double> uniform(0, 1);
+
     int t = -1;
 
     if (parameter[0].ivortmax > 0 && parameter[0].stabilperiod == false) {
@@ -148,7 +153,7 @@ void Spinupphase() {
 			cout << "lastyear: " << lastyear << endl;
 
             // choose a random year for weather determination
-            double x = rand() / (RAND_MAX + 1.0);
+            double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
 
             // calculate current year position in list, according to first year in the Weather-List and the random year
@@ -178,7 +183,7 @@ void Spinupphase() {
             lastyear = world_weather_list[0][0]->jahr + 100;
 
             // take a random year for weather determination
-            double x = rand() / (RAND_MAX + 1.0);
+            double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
 
             int yearposition = (world_weather_list[0][0]->jahr - jahr)
@@ -736,9 +741,6 @@ void runSimulation() {
 /////////////			 			  /////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
-    // random number initialization ; TODO delete when all rand() are replaced
-    srand((unsigned)time(NULL));
-
     // console output of the version and general information
     printf("\n---->\tLAVESI\n");
     printf(

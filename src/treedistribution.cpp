@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -8,6 +9,7 @@ extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 
 void Seedin() {
+    RandomNumber<double> uniform(0, 1);
     int aktort = 0;
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
@@ -50,7 +52,7 @@ void Seedin() {
 				
                 // seedwinddispersalmode==1 => randomly from the south border.
                 if (parameter[0].seedwinddispersalmode == 1) {
-                    jseed = 0.0 + ((double)(maxx * rand() / (RAND_MAX + 1.0)));
+                    jseed = maxx * uniform.draw();
 
                     double dispersaldistance;
 
@@ -58,7 +60,7 @@ void Seedin() {
                         double fraction;
 
                         do {
-                            fraction = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                            fraction = uniform.draw();
 
                         } while (fraction <= 0.0);
                         dispersaldistance = (log(fraction) / (-0.2)) / parameter[0].distanceratio;
@@ -70,8 +72,8 @@ void Seedin() {
                 }
                 // seedwinddispersalmode==2 => randomly all over the plot
                 else if (parameter[0].seedwinddispersalmode == 2) {
-                    jseed = 0.0 + ((double)(maxx * rand() / (RAND_MAX + 1.0)));
-                    iseed = 0.0 + ((double)(maxy * rand() / (RAND_MAX + 1.0)));
+                    jseed = maxx * uniform.draw();
+                    iseed = maxy * uniform.draw();
 
                     seedeintragen = true;
                 } else {
@@ -84,7 +86,7 @@ void Seedin() {
                 double rn_seed = 0.0;
                 int rn_species = 0;
                 if (parameter[0].specpres == 0) {
-                    rn_seed = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                    rn_seed = uniform.draw();
                     if ((rn_seed >= 0.0) && (rn_seed <= 0.5)) {
                         rn_species = 1;
                     } else if ((rn_seed > 0.5) && (rn_seed <= 1.0)) {
@@ -229,6 +231,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
                          int yearposition,
                          vector<VectorList<Seed>>& world_seed_list,
                          vector<vector<Weather*>>& world_weather_list) {
+    RandomNumber<double> uniform(0, 1);
     // function parameters
     double logmodel_seeds_Po = 7.8997307;
     double logmodel_seeds_r = -0.6616466;
@@ -284,14 +287,14 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     double xseed, yseed;
                     bool introduceseed = true;
 
-                    xseed = 0.0 + ((double)(((double)(treecols - 1)) * rand() / (RAND_MAX + 1.0)));    // x coo start
-                    yseed = (yposhint - 10) + ((double)(((double)(20)) * rand() / (RAND_MAX + 1.0)));  // y coo start
+                    xseed = (treecols - 1) * uniform.draw();    // x coo start
+                    yseed = (yposhint - 10) + 20 * uniform.draw();  // y coo start
 
                     // define species
                     double seedzufall = 0.0;
                     int specieszufall = 0;
                     if (parameter[0].specpres == 0) {
-                        seedzufall = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                        seedzufall = uniform.draw();
                         if ((seedzufall >= 0.0) && (seedzufall <= 0.5)) {
                             specieszufall = 1;
                         } else if ((seedzufall > 0.5) && (seedzufall <= 1.0)) {
@@ -304,14 +307,14 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     }
 
                     // estimation of new positions
-                    double ratiorn = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                    double ratiorn = uniform.draw();
                     // double dispersaldistance = 0.0;
                     double velocity = 0.0;
                     double wdirection = 0.0;
                     double jquer = 0;
                     double iquer = 0;
 
-                    double randomnumberwind = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
+                    double randomnumberwind = uniform.draw();
                     Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, specieszufall, randomnumberwind);
 
                     xseed = xseed + jquer;
@@ -360,7 +363,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     } else if (xseed > (double)(treecols - 1)) {
                         if (parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3) {
                             xseed = fmod(xseed, (double)(treecols - 1));
-                        } else if ((parameter[0].boundaryconditions == 2) && (rand() < 0.5 * RAND_MAX)) {  // Reducing seed introduction on the western border:
+                        } else if ((parameter[0].boundaryconditions == 2) && (uniform.draw() < 0.5)) {  // Reducing seed introduction on the western border:
                             xseed = fmod(xseed, (double)(treecols - 1));
                         } else {
 #ifdef DEBUG

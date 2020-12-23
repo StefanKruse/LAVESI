@@ -1,5 +1,6 @@
 #include <random>
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -44,15 +45,13 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
-			std::random_device random_dev;
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
-			std::mt19937 rng(random_dev());
-			std::uniform_real_distribution<double> uniform(0, 1);
+    RandomNumber<double> uniform(0, 1);
 
 #pragma omp for
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
@@ -66,11 +65,11 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						if (tree.age > parameter[0].coneage) {
 							// calculate random position in the array of maturation heights defined earlier
 							// ... in this there are values between 0 and 182 (corresp. to (0,1) )
-							int fraction = 0 + (int)floor(((mat_age_length - 1) * uniform(rng)));
+							int fraction = (mat_age_length - 1) * uniform.draw();
 
 							// possibility for a tree <2m to maturate
 							if (fraction == 0) {
-								tree.coneheight = (unsigned short int) 100 + ((double)100 * uniform(rng));
+								tree.coneheight = (unsigned short int) 100 + ((double)100 * uniform.draw());
 							} else {
 								tree.coneheight = maturationheight[fraction];
 							}

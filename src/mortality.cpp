@@ -1,5 +1,5 @@
-﻿#include <random>
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -19,20 +19,13 @@ void TreeMort(int yearposition_help,
     anstiegweathermortgmin = (60 * weather_list[yearposition_help]->janisothermrestriktiongmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
     anstiegweathermortsmin = (60 * weather_list[yearposition_help]->janisothermrestriktionsmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin + 60 * weather_list[yearposition_help]->nddrestriktionmin);
 
-
-    // biotic influence
-	std::random_device random_dev;
-	
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
-	std::mt19937 rng(random_dev());
-	std::uniform_real_distribution<double> uniform(0, 1);
-		
-#pragma omp for
+	RandomNumber<double> uniform(0, 1);
 	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 		auto& tree = tree_list[tree_i];
 
@@ -161,8 +154,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
 
             // determine if a tree dies (deletion of said tree in the corresponding list)
-            double zufallsz = uniform(rng);
-            if ( (((tree.species == 1) && (zufallsz < Treemortg)) || ((tree.species == 2) && (zufallsz < Treemorts))) | (tree.envirimpact<=0) ) {
+            double zufallsz = uniform.draw();
+            if ( (((tree.species == 1) && (zufallsz < Treemortg)) || ((tree.species == 2) && (zufallsz < Treemorts))) || (tree.envirimpact<=0) ) {
 				tree.growing = false;
 				tree_list.remove(tree_i);
 				// TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
@@ -190,24 +183,20 @@ void Mortality(struct Parameter* parameter,
         aktort++;
 
         // mortality of seeds
-		std::random_device random_dev;
-		
 // pragma omp initializing
 omp_set_dynamic(1); //enable dynamic teams
 omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel
 {
-		std::mt19937 rng(random_dev());
-		std::uniform_real_distribution<double> uniform(0, 1);
-			
+    RandomNumber<double> uniform(0, 1);
 #pragma omp for
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
             if (seed.dead) {
                 continue;
             }
-            double zufallsz = uniform(rng);
+            double zufallsz = uniform.draw();
 
             if (zufallsz < seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort) {
                 seed.dead = true;
@@ -233,9 +222,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 #pragma omp parallel default(shared) private(direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth)
 {
-			std::mt19937 rng(random_dev());
-			std::uniform_real_distribution<double> uniform(0, 1);
-			
+			RandomNumber<double> uniform(0, 1);
 			direction = 0.0;
 			velocity = 0.0;
 			ripm = 0, cntr = 0;
@@ -251,16 +238,15 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			m = parameter[0].pollengregorym;
 			
 			int n_trees = 0;
-#pragma omp for
+#pragma omp for schedule(guided)
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
 				++n_trees;  // for calculating mean of computation times // TODO still necessary
 
 				if (tree.seednewly_produced > 0) {
-					int seedlebend = 0;
+					int seedlebend = 0; // TODO get rid of seedlebend and use only one loop
 					for (int sna = 0; sna < tree.seednewly_produced; sna++) {
-						// double zufallsz = 0.0 + ((double)1.0 * rand() / (RAND_MAX + 1.0));
-						double zufallsz = uniform(rng);
+						double zufallsz = uniform.draw();
 						if (zufallsz >= parameter[0].seedconemort) {
 							++seedlebend;
 						}
@@ -268,8 +254,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 					if (seedlebend > 0) {
 						if ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
-							double randomnumberwind = uniform(rng);
-							double randomnumberwindfather = uniform(rng);
+							double randomnumberwind = uniform.draw();
+							double randomnumberwindfather = uniform.draw();
 							Pollinationprobability((double)tree.xcoo/1000, (double)tree.ycoo/1000, &parameter[0], world_positon_b, direction, velocity, ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees, randomnumberwind, randomnumberwindfather);
 						}
 
@@ -285,7 +271,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 							// if chosen, determine the father by pollination out of available (matured) trees
 							if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
-								// int iran = (int)rand() / (RAND_MAX + 1.0) * Vname.size() - 1;
+								// int iran = uniform() * (Vname.size() - 1);
 								// seed.namep = Vname.at(iran);
 								// TODO: add here properties that are passed down from the father tree 
 								seed.thawing_depthinfluence = 100;

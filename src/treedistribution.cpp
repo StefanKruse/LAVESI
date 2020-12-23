@@ -14,7 +14,7 @@ void Seedin() {
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
         aktort++;
-        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         bool seedinput;
@@ -102,8 +102,8 @@ void Seedin() {
                     Seed seed;
                     // seed.yworldcoo = aktortyworldcoo;
                     // seed.xworldcoo = aktortxworldcoo;
-                    seed.xcoo = (unsigned int) floor(1000* jseed);
-                    seed.ycoo = (unsigned int) floor(1000* iseed);
+                    seed.xcoo = 1000* jseed;
+                    seed.ycoo = 1000* iseed;
                     // seed.namem = 0;
                     // seed.namep = 0;
                     // seed.line = ++parameter[0].lineakt;
@@ -135,7 +135,7 @@ void TreesIni(int maximal_word_length) {
         for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); posw++) {
             VectorList<Tree>& tree_list = *posw;
             aktort++;
-            // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+            // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
             // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
             if (parameter[0].starttrees == 12) {
@@ -185,8 +185,8 @@ void TreesIni(int maximal_word_length) {
 
                     // tree.yworldcoo = aktortyworldcoo;
                     // tree.xworldcoo = aktortxworldcoo;
-                    tree.xcoo = (unsigned int) floor(1000* (double) xcoobuf);
-                    tree.ycoo = (unsigned int) floor(1000* (double) ycoobuf);
+                    tree.xcoo = 1000 * xcoobuf;
+                    tree.ycoo = 1000 * ycoobuf;
                     // tree.name = ++parameter[0].nameakt;
                     // tree.namem = 0;
                     // tree.namep = 0;
@@ -194,10 +194,10 @@ void TreesIni(int maximal_word_length) {
                     // tree.generation = 0;
                     // tree.yr_of_establishment = 0;
                     tree.dbasal = dbasalbuf;
-                    tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                    tree.dbasalrel = 1000;
                     tree.dbreast = dbreastbuf;
-                    tree.dbreastrel = (unsigned short int) floor(1000*1.0);
-                    tree.height = (unsigned short int) floor(100*heightbuf);
+                    tree.dbreastrel = 1000;
+                    tree.height = 100*heightbuf;
                     tree.age = agebuf;
                     tree.cone = conebuf;
                     if (tree.cone == true) {
@@ -252,7 +252,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
         vector<vector<Weather*>>::iterator world_positon_weather = (world_weather_list.begin() + aktort);
         vector<Weather*>& weather_list = *world_positon_weather;
         aktort++;
-        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 #ifdef DEBUG
@@ -276,7 +276,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
 
                 double hinterheightsi = logmodel_heights_K / (1 + exp(logmodel_heights_Po + logmodel_heights_r * jultempi));
                 int hinterseedsi =
-                    (int)floor(parameter[0].seedflightrate * logmodel_seeds_K
+                    (parameter[0].seedflightrate * logmodel_seeds_K
                                / (1 + exp(logmodel_seeds_Po + logmodel_seeds_r * jultempi))  // determine number of seeds produced at this nucleus
                                )
                     * (double)treecols / 20;  // scaling to the witdth of the simulated area
@@ -382,8 +382,8 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         Seed seed;
                         // seed.yworldcoo = aktortyworldcoo;
                         // seed.xworldcoo = aktortxworldcoo;
-                        seed.xcoo = (unsigned int) floor(1000*xseed);
-                        seed.ycoo = (unsigned int) floor(1000*yseed);
+                        seed.xcoo = 1000*xseed;
+                        seed.ycoo = 1000*yseed;
                         // seed.namem = 0;
                         // seed.namep = 0;
                         // seed.line = ++parameter[0].lineakt;
@@ -393,7 +393,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         seed.age = 0;
                         seed.longdispersed = false;
                         seed.species = specieszufall;
-                        seed.releaseheight = (unsigned short int) floor(100*hinterheightsi);
+                        seed.releaseheight = 100*hinterheightsi;
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;

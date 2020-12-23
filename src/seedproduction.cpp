@@ -13,7 +13,7 @@ void Seedproduction(struct Parameter* parameter,
 			auto& tree = tree_list[tree_i];
 
             if (tree.cone == true) {
-                int newseedsproduced = (int)floor(parameter[0].seedprodfactor // seed production in dependence of a factor
+                int newseedsproduced = (parameter[0].seedprodfactor // seed production in dependence of a factor
                                                   * (double)tree.height/100 / 100                    // ... the tree's  height in m...
                                                   * (double)tree.dbasalrel/1000                      // ... the tree's current growth in cm...
                                                   * (1.0 - (1.0 / ((double)tree.height/100 / 50)))); // ... height.

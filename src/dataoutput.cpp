@@ -62,7 +62,7 @@ void Dataoutput(int t,
         aktort++;
 
         // calculation of the current location in a world grid // currently not used
-        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortyworldcoo = (aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 
@@ -178,7 +178,7 @@ void Dataoutput(int t,
             pEvaluation->nheight41b200runmeanliste.push_back(meannheight41b200);
             pEvaluation->nheight201b10000runmeanliste.push_back(meannheight201b10000);
             pEvaluation->meanbreastdiameterrunmeanliste.push_back(meanbreastdiameter);
-            pEvaluation->stemcountrunmeanliste.push_back((int)floor(meanstemcount));
+            pEvaluation->stemcountrunmeanliste.push_back(meanstemcount);
             pEvaluation->meantreeheightrunmeanliste.push_back(meanmeantreeheigth);
             pEvaluation->meantreeagerunmeanliste.push_back(meanmeantreeage);
         } else if (basalareaanzahl > (int)parameter[0].stabilmovingwindow) {  // if more than parameter[0].stabilmovingwindow values are set
@@ -213,7 +213,7 @@ void Dataoutput(int t,
             meanstemcount = (double)pEvaluation->stemcountrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
                             - (pEvaluation->stemcountliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
                             + (pEvaluation->stemcountliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->stemcountrunmeanliste.push_back((int)floor(meanstemcount));
+            pEvaluation->stemcountrunmeanliste.push_back(meanstemcount);
 
             meanmeantreeheigth =
                 pEvaluation->meantreeheightrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
@@ -1046,7 +1046,7 @@ void Dataoutput(int t,
             // data output for each tree
 			for (unsigned int grid_i = 0; grid_i < AGBneedleliving.size(); ++grid_i) {
 				// if(AGBneedleliving[grid_i]>0) {
-					unsigned int y = floor((double)grid_i / deminputdimension_x);
+					unsigned int y = grid_i / deminputdimension_x;
 					unsigned int x = (double)grid_i - y * deminputdimension_x;
 
 					fprintf(filepointer, "%d;", x);
@@ -1126,7 +1126,7 @@ void Dataoutput(int t,
 #pragma omp parallel for default(shared) schedule(guided)
 			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 				auto& tree = tree_list[tree_i];
-				unsigned int yposi =  floor((double)tree.ycoo/1000);
+				unsigned int yposi =  tree.ycoo / 1000;
 
 				// aggregate variables
 				if( ((double) tree.height/100) > 130 ) {
@@ -1201,7 +1201,7 @@ void Dataoutput(int t,
             // data evaluation and output
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos = kartenpos+parameter[0].sizemagnif*parameter[0].demresolution) {
                 auto pEnvirgrid = plot_list[kartenpos];
-				double ycooi = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+				double ycooi = (double)kartenpos / (treecols * parameter[0].sizemagnif);
 				double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
                 if ( (parameter[0].demlandscape & ( (((xcooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(xcooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) & (((ycooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(ycooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) )) | 
 					( (pEnvirgrid->Treenumber > 0)

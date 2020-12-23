@@ -32,8 +32,8 @@ void Treeestablishment(struct Parameter* parameter,
 			
             if (!seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
-                int i = (int)floor((double)seed.ycoo/1000 * parameter[0].sizemagnif);
-                int j = (int)floor((double)seed.xcoo/1000 * parameter[0].sizemagnif);
+                int i = seed.ycoo * parameter[0].sizemagnif / 1000;
+                int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
 				unsigned long long int curposi = (unsigned long long int) i * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) j;
 
@@ -210,15 +210,15 @@ void Treeestablishment(struct Parameter* parameter,
                             // tree.line = seed.line;
                             // tree.generation = seed.generation;
                             tree.dbasal = basalgrowth_help;
-                            tree.dbasalmax = (unsigned short int) floor(1000*maxbw_help);
-                            tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                            tree.dbasalmax = 1000*maxbw_help;
+                            tree.dbasalrel = 1000;
                             tree.dbreast = 0.0;
-                            tree.dbreastrel = (unsigned short int) floor(1000*1.0);
+                            tree.dbreastrel = 1000;
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
+                                tree.height = 100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
                             } else {
-                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
+                                tree.height = 100* parameter[0].dbasalheightslopenonlin * maxbw_help;
                             }
                             tree.age = 0;
                             tree.cone = false;
@@ -255,15 +255,15 @@ void Treeestablishment(struct Parameter* parameter,
                             // tree.line = seed.line;
                             // tree.generation = seed.generation;
                             tree.dbasal = basalgrowth_help;
-                            tree.dbasalmax = (unsigned short int) floor(1000*maxbw_help);
-							tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                            tree.dbasalmax = 1000*maxbw_help;
+							tree.dbasalrel = 1000;
                             tree.dbreast = 0.0;
-                            tree.dbreastrel = (unsigned short int) floor(1000*1.0);
+                            tree.dbreastrel = 1000;
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp));
+                                tree.height = 100* parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
                             } else {
-                                tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * maxbw_help);
+                                tree.height = 100* parameter[0].dbasalheightslopenonlin * maxbw_help;
                             }
 
                             tree.age = 0;

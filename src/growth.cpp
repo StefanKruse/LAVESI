@@ -188,7 +188,7 @@ void Growth(struct Parameter* parameter,
 			auto& tree = tree_list[tree_i];
             double maxbasalwachstum = 0.0;
             maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
-			tree.dbasalmax = (unsigned short int) floor(1000*maxbasalwachstum);
+			tree.dbasalmax = 1000*maxbasalwachstum;
 
             double basalwachstum = maxbasalwachstum * (1.0 - tree.densitywert);
             basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
@@ -206,12 +206,12 @@ void Growth(struct Parameter* parameter,
             }
 
             if (parameter[0].relgrowthinfluence == 0) {
-                tree.dbasalrel = (unsigned short int) floor(1000*1.0);
+                tree.dbasalrel = 1000;
             } else if (parameter[0].relgrowthinfluence == 1) {
 				if(maxbasalwachstum<=0.0)
 					tree.dbasalrel = 0;
 				else
-					tree.dbasalrel = (unsigned short int) floor(1000* (basalwachstum / (maxbasalwachstum + (maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal))) );
+					tree.dbasalrel = 1000* basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal);
             }
 
             double maxbreastwachstum = 0;
@@ -235,27 +235,27 @@ void Growth(struct Parameter* parameter,
                 }
 
                 if (parameter[0].relgrowthinfluence == 0) {
-                    tree.dbreastrel = (unsigned short int) floor(1000*1.0);
+                    tree.dbreastrel = 1000;
                 } else if (parameter[0].relgrowthinfluence == 1) {
 					if(maxbreastwachstum<=0.0)
 						tree.dbreastrel = 0;
 					else
-						tree.dbreastrel = (unsigned short int) floor(1000*breastwachstum / maxbreastwachstum);
+						tree.dbreastrel = 1000*breastwachstum / maxbreastwachstum;
                 }
             }
 
             // tree height update
             if ((double)tree.height/100 < 130) {
                 if (parameter[0].allometryfunctiontype == 1) {
-                    tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightalloslope * pow(tree.dbasal, parameter[0].dbasalheightalloexp));
+                    tree.height = 100* parameter[0].dbasalheightalloslope * pow(tree.dbasal, parameter[0].dbasalheightalloexp);
                 } else {
-                    tree.height = (unsigned short int) floor(100* parameter[0].dbasalheightslopenonlin * tree.dbasal);
+                    tree.height = 100* parameter[0].dbasalheightslopenonlin * tree.dbasal;
                 }
             } else if ((double)tree.height/100 >= 130) {
                 if (parameter[0].allometryfunctiontype == 1) {
-                    tree.height = (unsigned short int) floor(100* (parameter[0].dbreastheightalloslope * pow(tree.dbreast, parameter[0].dbreastheightalloexp) + 130.0) );
+                    tree.height = 100* (parameter[0].dbreastheightalloslope * pow(tree.dbreast, parameter[0].dbreastheightalloexp) + 130.0);
                 } else {
-                    tree.height = (unsigned short int) floor(100* (pow((parameter[0].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0) );
+                    tree.height = 100* (pow((parameter[0].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
                 }
             }
         }

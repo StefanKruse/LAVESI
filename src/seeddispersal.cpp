@@ -97,15 +97,15 @@ void Seeddispersal( int jahr,
 
 							// get start coordinates in elevation input grid
 								// bring to envirgrid resolution
-									int ycoostartdem = (int)floor((double)seed.ycoo/1000 * parameter[0].sizemagnif);
-									int xcoostartdem = (int)floor((double)seed.xcoo/1000 * parameter[0].sizemagnif);
+									int ycoostartdem = seed.ycoo * parameter[0].sizemagnif / 1000;
+									int xcoostartdem = seed.xcoo * parameter[0].sizemagnif / 1000;
 
 								// get elevation of release + releaseheight
 									double startele = (double)plot_list[(unsigned long long int) ycoostartdem * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif + (unsigned long long int) xcoostartdem]->elevation/10 + (double)seed.releaseheight/100;
 
 								// get target position on input grid
-									int ycootargetonelegrid = (int)floor(((double)seed.ycoo/1000 + iquer) * parameter[0].sizemagnif);
-									int xcootargetonelegrid = (int)floor(((double)seed.xcoo/1000 + jquer) * parameter[0].sizemagnif);
+									int ycootargetonelegrid = ((double)seed.ycoo/1000 + iquer) * parameter[0].sizemagnif;
+									int xcootargetonelegrid = ((double)seed.xcoo/1000 + jquer) * parameter[0].sizemagnif;
 
 								// go stepswise to next grid in direction of dispersal
 									double ysteps = ycootargetonelegrid-ycoostartdem;
@@ -156,18 +156,18 @@ void Seeddispersal( int jahr,
 									
 									// shorten when upslope dispersal
 									double upslopedispfact=1.0;
-									seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + upslopedispfact*dispfraction*jquer));
-									seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + upslopedispfact*dispfraction*iquer));
+									seed.xcoo = 1000* ((double)seed.xcoo/1000 + upslopedispfact*dispfraction*jquer);
+									seed.ycoo = 1000* ((double)seed.ycoo/1000 + upslopedispfact*dispfraction*iquer);
 						} else {
-							seed.xcoo = (unsigned int) floor(1000* ((double)seed.xcoo/1000 + jquer));
-							seed.ycoo = (unsigned int) floor(1000* ((double)seed.ycoo/1000 + iquer));
+							seed.xcoo = 1000* ((double)seed.xcoo/1000 + jquer);
+							seed.ycoo = 1000* ((double)seed.ycoo/1000 + iquer);
 						}
 
 						// check whether seed lands on plot or leaves the plot
 						bool sameausserhalb = false;
 						if ((double)seed.ycoo/1000 > (double)(treerows - 1)) {
 							if ((parameter[0].boundaryconditions == 1)) {
-								seed.ycoo = (unsigned int) floor(1000* fmod((double)seed.ycoo/1000, (double)(treerows - 1)));
+								seed.ycoo = 1000* fmod((double)seed.ycoo/1000, (double)(treerows - 1));
 								// seed.namem = 0;
 								// seed.namep = 0;
 							} else if ((parameter[0].boundaryconditions == 3)) {
@@ -179,7 +179,7 @@ void Seeddispersal( int jahr,
 							}
 						} else if (seed.ycoo < 0) {
 							if ((parameter[0].boundaryconditions == 1)) {
-								seed.ycoo = (unsigned int) floor(1000* ((double)(treerows - 1) + fmod((double)seed.ycoo/1000, (double)(treerows - 1))));
+								seed.ycoo = 1000* ((double)(treerows - 1) + fmod((double)seed.ycoo/1000, (double)(treerows - 1)));  // TODO fix
 								// seed.namem = 0;
 								// seed.namep = 0;
 							} else if ((parameter[0].boundaryconditions == 3)) {
@@ -192,7 +192,7 @@ void Seeddispersal( int jahr,
 						}
 						if (seed.xcoo < 0) {
 							if ((parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3)) {
-								seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)) + (double)(treecols - 1));
+								seed.xcoo = 1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)) + (double)(treecols - 1);  // TODO fix
 								// seed.namem = 0;
 								// seed.namep = 0;
 							} else {
@@ -201,13 +201,13 @@ void Seeddispersal( int jahr,
 							}
 						} else if ((double)seed.xcoo/1000 > (double)(treecols - 1)) {
 							if (parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3) {
-								seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)));
+								seed.xcoo = 1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1));  // TODO fix
 								// seed.namem = 0;
 								// seed.namep = 0;
 
 							} else if ((parameter[0].boundaryconditions == 2)
 									   && (uniform.draw() < 0.5)) {  // Reducing seed introduction on the western border:
-								seed.xcoo = (unsigned int) floor(1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1)));
+								seed.xcoo = 1000*fmod((double)seed.xcoo/1000, (double)(treecols - 1));  // TODO fix
 							} else {
 								sameausserhalb = true;
 								seedleftE++;

@@ -80,7 +80,7 @@ void getPrec(char dateinameprec[50], vector<Weather*>& weather_list, int maximal
 
 void getTemp(int aktort, char dateinametemp[50], vector<Weather*>& weather_list) {
 	// TODO: check whether this grid-based simulation setup is still necessary or can be removed
-    // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+    // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
     // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
     // if (parameter[0].mapylength > 1 && parameter[0].weathercalcgradient == true) {
@@ -293,8 +293,8 @@ void passWeather() {
             weather_list[iweather]->temp1monthmeanisomin = jantempsummin;
             weather_list[iweather]->temp7monthmeaniso = jultempsum;
             weather_list[iweather]->temp7monthmeanisomin = jultempsummin;
-            weather_list[iweather]->vegetationperiodlengthiso = (int)floor(nddsum);
-            weather_list[iweather]->vegetationperiodlengthisomin = (int)floor(nddsummin);
+            weather_list[iweather]->vegetationperiodlengthiso = nddsum;
+            weather_list[iweather]->vegetationperiodlengthisomin = nddsummin;
 
             // calculation of a drought influence
             double droughtmortbuf = 0.0;

@@ -4,22 +4,22 @@
 
 using namespace std;
 
-void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<Tree>& tree_list) {
+void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<Tree>& tree_list) {
     // abiotic influence: calculation of the factors in a function that adds a mortality rate impact
     double anstiegweathermortg = 160;
     double anstiegweathermorts = 160;
     double anstiegweathermortgmin = 160;
     double anstiegweathermortsmin = 160;
 
-    anstiegweathermortg = (60 * weather_list[yearposition_help]->janisothermrestriktiong + 60 * weather_list[yearposition_help]->julisothermrestriktion
-                           + 60 * weather_list[yearposition_help]->nddrestriktion);
-    anstiegweathermorts = (60 * weather_list[yearposition_help]->janisothermrestriktions + 60 * weather_list[yearposition_help]->julisothermrestriktion
-                           + 60 * weather_list[yearposition_help]->nddrestriktion);
+    anstiegweathermortg = (60 * weather_list[yearposition_help].janisothermrestriktiong + 60 * weather_list[yearposition_help].julisothermrestriktion
+                           + 60 * weather_list[yearposition_help].nddrestriktion);
+    anstiegweathermorts = (60 * weather_list[yearposition_help].janisothermrestriktions + 60 * weather_list[yearposition_help].julisothermrestriktion
+                           + 60 * weather_list[yearposition_help].nddrestriktion);
 
-    anstiegweathermortgmin = (60 * weather_list[yearposition_help]->janisothermrestriktiongmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin
-                              + 60 * weather_list[yearposition_help]->nddrestriktionmin);
-    anstiegweathermortsmin = (60 * weather_list[yearposition_help]->janisothermrestriktionsmin + 60 * weather_list[yearposition_help]->julisothermrestriktionmin
-                              + 60 * weather_list[yearposition_help]->nddrestriktionmin);
+    anstiegweathermortgmin = (60 * weather_list[yearposition_help].janisothermrestriktiongmin + 60 * weather_list[yearposition_help].julisothermrestriktionmin
+                              + 60 * weather_list[yearposition_help].nddrestriktionmin);
+    anstiegweathermortsmin = (60 * weather_list[yearposition_help].janisothermrestriktionsmin + 60 * weather_list[yearposition_help].julisothermrestriktionmin
+                              + 60 * weather_list[yearposition_help].nddrestriktionmin);
 
     RandomNumber<double> uniform(0, 1);
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
@@ -65,8 +65,8 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
                                         + (((1.0 - 0.5) / 0.5)
                                            * exp((anstiegweathermortg
                                                   - ((anstiegweathermortg - anstiegweathermortgmin) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                                 * (weather_list[yearposition_help]->weatherfactorg
-                                                    + ((weather_list[yearposition_help]->weatherfactorming - weather_list[yearposition_help]->weatherfactorg)
+                                                 * (weather_list[yearposition_help].weatherfactorg
+                                                    + ((weather_list[yearposition_help].weatherfactorming - weather_list[yearposition_help].weatherfactorg)
                                                        * ((double)tree.ycoo / 1000) / ((double)treerows)))
                                                  * exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * tree.dbasal
                                                        + parameter[0].gdbasalfacqgmel * tree.dbasal * tree.dbasal)))));
@@ -76,8 +76,8 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
                                         + (((1.0 - 0.5) / 0.5)
                                            * exp((anstiegweathermorts
                                                   - ((anstiegweathermorts - anstiegweathermortsmin) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                                 * (weather_list[yearposition_help]->weatherfactors
-                                                    + ((weather_list[yearposition_help]->weatherfactormins - weather_list[yearposition_help]->weatherfactors)
+                                                 * (weather_list[yearposition_help].weatherfactors
+                                                    + ((weather_list[yearposition_help].weatherfactormins - weather_list[yearposition_help].weatherfactors)
                                                        * ((double)tree.ycoo / 1000) / ((double)treerows)))  // scaled effect along transect
                                                  * exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * tree.dbasal
                                                        + parameter[0].gdbasalfacqsib * tree.dbasal * tree.dbasal)))));
@@ -89,9 +89,9 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
                           + (((1.0 - 0.5) / 0.5)
                              * exp((anstiegweathermortg
                                     - ((anstiegweathermortg - anstiegweathermortgmin) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                   * ((weather_list[yearposition_help]->weatherfactorg * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                   * ((weather_list[yearposition_help].weatherfactorg * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                        / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                                      + (weather_list[yearposition_help]->weatherfactorming
+                                      + (weather_list[yearposition_help].weatherfactorming
                                          * (1
                                             - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                                   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
@@ -104,9 +104,9 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
                           + (((1.0 - 0.5) / 0.5)
                              * exp((anstiegweathermorts
                                     - ((anstiegweathermorts - anstiegweathermortsmin) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                   * ((weather_list[yearposition_help]->weatherfactors * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                   * ((weather_list[yearposition_help].weatherfactors * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                        / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                                      + (weather_list[yearposition_help]->weatherfactormins
+                                      + (weather_list[yearposition_help].weatherfactormins
                                          * (1
                                             - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                                   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
@@ -117,14 +117,14 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
                                   - (1.0
                                      / (1.0
                                         + (((1.0 - 0.5) / 0.5)
-                                           * exp(anstiegweathermortg * weather_list[yearposition_help]->weatherfactorg
+                                           * exp(anstiegweathermortg * weather_list[yearposition_help].weatherfactorg
                                                  * exp(parameter[0].gdbasalconstgmel + parameter[0].gdbasalfacgmel * tree.dbasal
                                                        + parameter[0].gdbasalfacqgmel * tree.dbasal * tree.dbasal)))));
                 weathermortadds = 1.0
                                   - (1.0
                                      / (1.0
                                         + (((1.0 - 0.5) / 0.5)
-                                           * exp(anstiegweathermorts * weather_list[yearposition_help]->weatherfactors
+                                           * exp(anstiegweathermorts * weather_list[yearposition_help].weatherfactors
                                                  * exp(parameter[0].gdbasalconstsib + parameter[0].gdbasalfacsib * tree.dbasal
                                                        + parameter[0].gdbasalfacqsib * tree.dbasal * tree.dbasal)))));
             }
@@ -138,21 +138,21 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
             double dry_mort = 0.0;
             if (parameter[0].lineartransect) {
                 dry_mort = parameter[0].mdrought
-                           * (weather_list[yearposition_help]->droughtmort
-                              + ((weather_list[yearposition_help]->droughtmortmin - weather_list[yearposition_help]->droughtmort) * ((double)tree.ycoo / 1000)
+                           * (weather_list[yearposition_help].droughtmort
+                              + ((weather_list[yearposition_help].droughtmortmin - weather_list[yearposition_help].droughtmort) * ((double)tree.ycoo / 1000)
                                  / ((double)treerows)))
                            * pow((1.0 / (double)tree.height / 100), 0.5);
             } else if (parameter[0].demlandscape) {
                 dry_mort = parameter[0].mdrought
-                           * ((weather_list[yearposition_help]->droughtmort * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                           * ((weather_list[yearposition_help].droughtmort * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                              + (weather_list[yearposition_help]->droughtmortmin
+                              + (weather_list[yearposition_help].droughtmortmin
                                  * (1
                                     - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                           / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
                            * pow((1.0 / (double)tree.height / 100), 0.5);
             } else {
-                dry_mort = parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / (double)tree.height / 100), 0.5);
+                dry_mort = parameter[0].mdrought * weather_list[yearposition_help].droughtmort * pow((1.0 / (double)tree.height / 100), 0.5);
             }
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
@@ -182,16 +182,16 @@ void TreeMort(int yearposition_help, vector<Weather*>& weather_list, VectorList<
     tree_list.consolidate();
 }
 
-void Mortality(struct Parameter* parameter,
+void Mortality(Parameter* parameter,
                int Jahr,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
-               vector<vector<Weather*>>& world_weather_list) {
+               vector<vector<Weather>>& world_weather_list) {
     int aktort = 0;
 
-    for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
-        vector<Weather*>& weather_list = *posw;
+    for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
+        vector<Weather>& weather_list = *posw;
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         VectorList<Tree>& tree_list = *world_positon_b;
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);

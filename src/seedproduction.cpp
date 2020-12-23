@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void Seedproduction(struct Parameter* parameter, vector<VectorList<Tree>>& world_tree_list) {
+void Seedproduction(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list) {
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
 

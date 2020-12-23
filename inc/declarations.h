@@ -1,9 +1,5 @@
 #pragma once
 
-#include <vector>
-
-#include "structures.h"
-
 // plot dimensions rows==y, cols==x
 constexpr unsigned int treerows = 4020;  // 30m_Ilirney_647902x7481367m
 constexpr unsigned int treecols = 5010;
@@ -20,4 +16,5 @@ constexpr unsigned int treecols = 5010;
 constexpr unsigned int stringlengthmax = 255;
 constexpr char* divisionsign = "=;";
 
+class Parameter;
 extern Parameter parameter[1];

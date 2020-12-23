@@ -12,15 +12,15 @@ int yearposition;
 // lists and pointers
 vector<VectorList<Tree>> world_tree_list;
 vector<VectorList<Seed>> world_seed_list;
-vector<vector<Weather*>> world_weather_list;
-vector<vector<Envirgrid*>> world_plot_list;
-vector<vector<Evaluation*>> world_evaluation_list;
+vector<vector<Weather>> world_weather_list;
+vector<vector<Envirgrid>> world_plot_list;
+vector<vector<Evaluation>> world_evaluation_list;
 
 // lists for resetyear copies
 vector<VectorList<Tree>> world_tree_list_copy;
 vector<VectorList<Seed>> world_seed_list_copy;
-vector<vector<Envirgrid*>> world_plot_list_copy;
-vector<vector<Evaluation*>> world_evaluation_list_copy;
+vector<vector<Envirgrid>> world_plot_list_copy;
+vector<vector<Evaluation>> world_evaluation_list_copy;
 
 // wind data
 vector<int> globalyears;
@@ -147,9 +147,9 @@ void Spinupphase() {
             int lastyear = 0;
             int startlag = 5;
 
-            firstyear = world_weather_list[0][0]->jahr;
+            firstyear = world_weather_list[0][0].jahr;
             cout << "firstyear: " << firstyear << endl;
-            lastyear = world_weather_list[0][0]->jahr + 100;
+            lastyear = world_weather_list[0][0].jahr + 100;
             cout << "lastyear: " << lastyear << endl;
 
             // choose a random year for weather determination
@@ -157,7 +157,7 @@ void Spinupphase() {
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
 
             // calculate current year position in list, according to first year in the Weather-List and the random year
-            int yearposition = (world_weather_list[0][0]->jahr - jahr) * -1;
+            int yearposition = (world_weather_list[0][0].jahr - jahr) * -1;
             cout << "yearposition: " << yearposition << endl;
 
             // go through all functions for vegetation dynamics
@@ -179,16 +179,16 @@ void Spinupphase() {
             int firstyear = 0, lastyear = 0;
             int startlag = 5;
 
-            firstyear = world_weather_list[0][0]->jahr;
-            lastyear = world_weather_list[0][0]->jahr + 100;
+            firstyear = world_weather_list[0][0].jahr;
+            lastyear = world_weather_list[0][0].jahr + 100;
 
             // take a random year for weather determination
             double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
 
-            int yearposition = (world_weather_list[0][0]->jahr - jahr)
+            int yearposition = (world_weather_list[0][0].jahr - jahr)
                                * -1;  // calculate actual year position in list, according to first year in the Weather-List and the random year
-            cout << world_weather_list[0][0]->jahr << endl;
+            cout << world_weather_list[0][0].jahr << endl;
 
             // progress console output
             printf("==> N:%d/%d\t=>\tzYear=%d\tyearPos=%d\n", parameter[0].ivort, parameter[0].ivortmax, jahr, yearposition);
@@ -203,48 +203,47 @@ void Spinupphase() {
             if (stabilizationtype == 1) {  // is an equilibrium reached?
 
                 int aktort = 0;
-                for (vector<vector<Evaluation*>>::iterator posausw = world_evaluation_list.begin(); posausw != world_evaluation_list.end();
+                for (vector<vector<Evaluation>>::iterator posausw = world_evaluation_list.begin(); posausw != world_evaluation_list.end();
                      ++posausw) {  // world evaluation list begin
-                    vector<Evaluation*>& evaluation_list = *posausw;
-                    vector<Evaluation*>::iterator posauswakt = evaluation_list.begin();
-                    auto pEvaluation = (*posauswakt);
+                    vector<Evaluation>& evaluation_list = *posausw;
+                    vector<Evaluation>::iterator posauswakt = evaluation_list.begin();
+                    auto& pEvaluation = (*posauswakt);
 
                     aktort++;
 
-                    if (pEvaluation->basalarearunmeanlist.size() > 1) {
-                        cout << "BA" << endl << pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size() - 1] << endl;
+                    if (pEvaluation.basalarearunmeanlist.size() > 1) {
+                        cout << "BA" << endl << pEvaluation.basalarearunmeanlist[pEvaluation.basalarearunmeanlist.size() - 1] << endl;
 
-                        meanpercentchange += fabs((pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size() - 2]
-                                                   - pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size() - 1])
-                                                  / (pEvaluation->basalarearunmeanlist[pEvaluation->basalarearunmeanlist.size() - 1]));
+                        meanpercentchange += fabs((pEvaluation.basalarearunmeanlist[pEvaluation.basalarearunmeanlist.size() - 2]
+                                                   - pEvaluation.basalarearunmeanlist[pEvaluation.basalarearunmeanlist.size() - 1])
+                                                  / (pEvaluation.basalarearunmeanlist[pEvaluation.basalarearunmeanlist.size() - 1]));
                     }
                     cout << "Cumulative %Change = " << meanpercentchange << endl;
                     // + N_0-40
-                    if (pEvaluation->nheight0b40runmeanliste.size() > 1) {
-                        cout << "N_0-40" << endl << pEvaluation->nheight0b40runmeanliste[pEvaluation->nheight0b40runmeanliste.size() - 1] << endl;
+                    if (pEvaluation.nheight0b40runmeanliste.size() > 1) {
+                        cout << "N_0-40" << endl << pEvaluation.nheight0b40runmeanliste[pEvaluation.nheight0b40runmeanliste.size() - 1] << endl;
 
-                        meanpercentchange += fabs((pEvaluation->nheight0b40runmeanliste[pEvaluation->nheight0b40runmeanliste.size() - 2]
-                                                   - pEvaluation->nheight0b40runmeanliste[pEvaluation->nheight0b40runmeanliste.size() - 1])
-                                                  / (pEvaluation->nheight0b40runmeanliste[pEvaluation->nheight0b40runmeanliste.size() - 1]));
+                        meanpercentchange += fabs((pEvaluation.nheight0b40runmeanliste[pEvaluation.nheight0b40runmeanliste.size() - 2]
+                                                   - pEvaluation.nheight0b40runmeanliste[pEvaluation.nheight0b40runmeanliste.size() - 1])
+                                                  / (pEvaluation.nheight0b40runmeanliste[pEvaluation.nheight0b40runmeanliste.size() - 1]));
                     }
                     cout << "Cumulative %Change = " << meanpercentchange << endl;
                     // + N_40-200
-                    if (pEvaluation->nheight41b200runmeanliste.size() > 1) {
-                        cout << "N_40-200" << endl << pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size() - 1] << endl;
+                    if (pEvaluation.nheight41b200runmeanliste.size() > 1) {
+                        cout << "N_40-200" << endl << pEvaluation.nheight41b200runmeanliste[pEvaluation.nheight41b200runmeanliste.size() - 1] << endl;
 
-                        meanpercentchange += fabs((pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size() - 2]
-                                                   - pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size() - 1])
-                                                  / (pEvaluation->nheight41b200runmeanliste[pEvaluation->nheight41b200runmeanliste.size() - 1]));
+                        meanpercentchange += fabs((pEvaluation.nheight41b200runmeanliste[pEvaluation.nheight41b200runmeanliste.size() - 2]
+                                                   - pEvaluation.nheight41b200runmeanliste[pEvaluation.nheight41b200runmeanliste.size() - 1])
+                                                  / (pEvaluation.nheight41b200runmeanliste[pEvaluation.nheight41b200runmeanliste.size() - 1]));
                     }
                     cout << "Cumulative %Change = " << meanpercentchange << endl;
                     // + N_200+
-                    if (pEvaluation->nheight201b10000runmeanliste.size() > 1) {
-                        cout << "N_200-10000" << endl
-                             << pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size() - 1] << endl;
+                    if (pEvaluation.nheight201b10000runmeanliste.size() > 1) {
+                        cout << "N_200-10000" << endl << pEvaluation.nheight201b10000runmeanliste[pEvaluation.nheight201b10000runmeanliste.size() - 1] << endl;
 
-                        meanpercentchange += fabs((pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size() - 2]
-                                                   - pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size() - 1])
-                                                  / (pEvaluation->nheight201b10000runmeanliste[pEvaluation->nheight201b10000runmeanliste.size() - 1]));
+                        meanpercentchange += fabs((pEvaluation.nheight201b10000runmeanliste[pEvaluation.nheight201b10000runmeanliste.size() - 2]
+                                                   - pEvaluation.nheight201b10000runmeanliste[pEvaluation.nheight201b10000runmeanliste.size() - 1])
+                                                  / (pEvaluation.nheight201b10000runmeanliste[pEvaluation.nheight201b10000runmeanliste.size() - 1]));
                     }
                     cout << "Cumulative %Change = " << meanpercentchange << endl;
                 }
@@ -272,7 +271,7 @@ void Yearsteps() {
 
         // calculate current year and print a summary of the year
         int jahr = parameter[0].startjahr + t;
-        yearposition = ((world_weather_list[0][0]->jahr - parameter[0].startjahr) * -1)
+        yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
                        + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
 
         if (parameter[0].yearlyvis == true) {
@@ -309,13 +308,8 @@ void Yearsteps() {
         for (double tempdifforti = -0.5; tempdifforti < 0.9; tempdifforti = tempdifforti + 0.5) {
             parameter[0].tempdiffort = tempdifforti;
             // read in weather data with new tempdiffort parameter
-            for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
-                vector<Weather*>& weather_list = *posw;
-
-                for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-                    auto pWeather = weather_list[iweather];
-                    delete pWeather;
-                }
+            for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
+                vector<Weather>& weather_list = *posw;
                 weather_list.clear();
             }
             Weatherinput(&parameter[0], stringlengthmax, world_weather_list);
@@ -347,7 +341,7 @@ void Yearsteps() {
 
                     int jahr = parameter[0].startjahr + t;
 
-                    yearposition = ((world_weather_list[0][0]->jahr - parameter[0].startjahr) * -1)
+                    yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
                                    + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the startjahr
 
                     if (parameter[0].yearlyvis == true) {
@@ -389,12 +383,10 @@ void createLists() {
 
             world_seed_list.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
 
-            vector<Weather*> weather_list;                     // Creating new weather_list
-            world_weather_list.push_back(weather_list);        // include new weather_list in corresponding world list
-            vector<Envirgrid*> plot_list;                      // Creating new plot_list
-            world_plot_list.push_back(plot_list);              // include new plot_list in corresponding world list
-            vector<Evaluation*> evaluation_list;               // Creating new evaluation_list
-            world_evaluation_list.push_back(evaluation_list);  // include new evaluation_list in corresponding world list
+            // TODO use resize for the following
+            world_weather_list.emplace_back();     // include new weather_list in corresponding world list
+            world_plot_list.emplace_back();        // include new plot_list in corresponding world list
+            world_evaluation_list.emplace_back();  // include new evaluation_list in corresponding world list
 
             if (parameter[0].resetyear > 0) {
                 // Create lists for resetting to a certain year
@@ -402,10 +394,8 @@ void createLists() {
 
                 world_seed_list_copy.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
 
-                vector<Envirgrid*> plot_list;                           // Creating new plot_list
-                world_plot_list_copy.push_back(plot_list);              // include new plot_list in corresponding world list
-                vector<Evaluation*> evaluation_list;                    // Creating new evaluation_list
-                world_evaluation_list_copy.push_back(evaluation_list);  // include new evaluation_list in corresponding world list
+                world_plot_list_copy.emplace_back();        // include new plot_list in corresponding world list
+                world_evaluation_list_copy.emplace_back();  // include new evaluation_list in corresponding world list
             }
         }
     }
@@ -506,8 +496,8 @@ void fillElevations() {
         fclose(f);
 
         // interpolate to envirgrid
-        for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
-            vector<Envirgrid*>& plot_list = *posw;
+        for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
+            vector<Envirgrid>& plot_list = *posw;
 #pragma omp parallel for default(shared) schedule(guided)
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
                                                                     * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
@@ -587,7 +577,7 @@ void fillElevations() {
                     // in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
                     // 32767
                     if (countwatercells == 0) {
-                        plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + 10 * eleinter;
+                        plot_list[kartenpos].elevation += 10 * eleinter;
                         // plot_list[kartenpos]->slope = slopeinter;
 
                         // calculate environment-growth-impact (value between 0 and 1)
@@ -605,14 +595,14 @@ void fillElevations() {
 
                         // adjust by factor
                         double envirgrowthimpactfactor = 1.0;
-                        plot_list[kartenpos]->envirgrowthimpact = 10000 * envirgrowthimpactfactor * envirgrowthimpact;
+                        plot_list[kartenpos].envirgrowthimpact = 10000 * envirgrowthimpactfactor * envirgrowthimpact;
                     } else {
-                        plot_list[kartenpos]->elevation = 32767;
-                        plot_list[kartenpos]->envirgrowthimpact = 0;
+                        plot_list[kartenpos].elevation = 32767;
+                        plot_list[kartenpos].envirgrowthimpact = 0;
                     }
                 } else {
-                    plot_list[kartenpos]->elevation = 32767;
-                    plot_list[kartenpos]->envirgrowthimpact = 0;
+                    plot_list[kartenpos].elevation = 32767;
+                    plot_list[kartenpos].envirgrowthimpact = 0;
                 }
             }
         }
@@ -623,10 +613,10 @@ void fillElevations() {
 void initialiseMaps() {
     cout << " -> started initialise Maps " << endl;
     int aktort = 0;
-    for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
-        vector<Envirgrid*>& plot_list = *posw;
-        vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
-        vector<Evaluation*>& evaluation_list = *posiwelt;
+    for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
+        vector<Envirgrid>& plot_list = *posw;
+        vector<vector<Evaluation>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
+        vector<Evaluation>& evaluation_list = *posiwelt;
         aktort++;
         // calculation of a different position in coordinates:
         //		xworld= repeating the same position
@@ -635,71 +625,64 @@ void initialiseMaps() {
         // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
-        plot_list.reserve(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
-                           * (unsigned long long int)parameter[0].sizemagnif));
-
         short int initialelevation = 0;
         if (parameter[0].mapylength == 1)
             initialelevation = 10 * parameter[0].elevationoffset;
 
         auto time_start = chrono::high_resolution_clock::now();
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
-                                                                * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
-             kartenpos++) {
-            auto pEnvirgrid = new Envirgrid({initialelevation, 0, 0, 1000, 0});
-            plot_list.emplace_back(pEnvirgrid);
-        }
-
+        plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
+                          * (unsigned long long int)parameter[0].sizemagnif),
+                         {initialelevation, 0, 0, 1000, 0});
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
         elapsed = time_end - time_start;
         cout << "Elapsed time: " << elapsed.count() << " s\n";
 
         // create an evaluation element for each site
-        auto pEvaluation = new Evaluation();
-        // pEvaluation->yworldcoo = aktortyworldcoo;
-        // pEvaluation->xworldcoo = aktortxworldcoo;
-        pEvaluation->basalarealist.clear();
-        pEvaluation->basalarealist.shrink_to_fit();
-        pEvaluation->basalarearunmeanlist.clear();
-        pEvaluation->basalarearunmeanlist.shrink_to_fit();
+        Evaluation pEvaluation;
+        // pEvaluation.yworldcoo = aktortyworldcoo;
+        // pEvaluation.xworldcoo = aktortxworldcoo;
+        pEvaluation.basalarealist.clear();
+        pEvaluation.basalarealist.shrink_to_fit();
+        pEvaluation.basalarearunmeanlist.clear();
+        pEvaluation.basalarearunmeanlist.shrink_to_fit();
         // growth stage calculation
-        pEvaluation->maxincrementbasalarea = 0.0;
-        pEvaluation->countermaxincrementbasalarea = 0;
-        pEvaluation->yearofturningpoint = -9999;
-        pEvaluation->yearofequilibrium = -9999;
-        pEvaluation->postyearofturningpoint = false;
+        pEvaluation.maxincrementbasalarea = 0.0;
+        pEvaluation.countermaxincrementbasalarea = 0;
+        pEvaluation.yearofturningpoint = -9999;
+        pEvaluation.yearofequilibrium = -9999;
+        pEvaluation.postyearofturningpoint = false;
         // general values
-        pEvaluation->nheight0b40liste.clear();
-        pEvaluation->nheight0b40liste.shrink_to_fit();
-        pEvaluation->nheight0b40runmeanliste.clear();
-        pEvaluation->nheight0b40runmeanliste.shrink_to_fit();
-        pEvaluation->nheight41b200liste.clear();
-        pEvaluation->nheight41b200liste.shrink_to_fit();
-        pEvaluation->nheight41b200runmeanliste.clear();
-        pEvaluation->nheight41b200runmeanliste.shrink_to_fit();
-        pEvaluation->nheight201b10000liste.clear();
-        pEvaluation->nheight201b10000liste.shrink_to_fit();
-        pEvaluation->nheight201b10000runmeanliste.clear();
-        pEvaluation->nheight201b10000runmeanliste.shrink_to_fit();
-        pEvaluation->meanbreastdiameterliste.clear();
-        pEvaluation->meanbreastdiameterliste.shrink_to_fit();
-        pEvaluation->meanbreastdiameterrunmeanliste.clear();
-        pEvaluation->meanbreastdiameterrunmeanliste.shrink_to_fit();
-        pEvaluation->stemcountliste.clear();
-        pEvaluation->stemcountliste.shrink_to_fit();
-        pEvaluation->stemcountrunmeanliste.clear();
-        pEvaluation->stemcountrunmeanliste.shrink_to_fit();
-        pEvaluation->meantreeheightliste.clear();
-        pEvaluation->meantreeheightliste.shrink_to_fit();
-        pEvaluation->meantreeheightrunmeanliste.clear();
-        pEvaluation->meantreeheightrunmeanliste.shrink_to_fit();
-        pEvaluation->meantreeageliste.clear();
-        pEvaluation->meantreeageliste.shrink_to_fit();
-        pEvaluation->meantreeagerunmeanliste.clear();
-        pEvaluation->meantreeagerunmeanliste.shrink_to_fit();
+        pEvaluation.nheight0b40liste.clear();
+        pEvaluation.nheight0b40liste.shrink_to_fit();
+        pEvaluation.nheight0b40runmeanliste.clear();
+        pEvaluation.nheight0b40runmeanliste.shrink_to_fit();
+        pEvaluation.nheight41b200liste.clear();
+        pEvaluation.nheight41b200liste.shrink_to_fit();
+        pEvaluation.nheight41b200runmeanliste.clear();
+        pEvaluation.nheight41b200runmeanliste.shrink_to_fit();
+        pEvaluation.nheight201b10000liste.clear();
+        pEvaluation.nheight201b10000liste.shrink_to_fit();
+        pEvaluation.nheight201b10000runmeanliste.clear();
+        pEvaluation.nheight201b10000runmeanliste.shrink_to_fit();
+        pEvaluation.meanbreastdiameterliste.clear();
+        pEvaluation.meanbreastdiameterliste.shrink_to_fit();
+        pEvaluation.meanbreastdiameterrunmeanliste.clear();
+        pEvaluation.meanbreastdiameterrunmeanliste.shrink_to_fit();
+        pEvaluation.stemcountliste.clear();
+        pEvaluation.stemcountliste.shrink_to_fit();
+        pEvaluation.stemcountrunmeanliste.clear();
+        pEvaluation.stemcountrunmeanliste.shrink_to_fit();
+        pEvaluation.meantreeheightliste.clear();
+        pEvaluation.meantreeheightliste.shrink_to_fit();
+        pEvaluation.meantreeheightrunmeanliste.clear();
+        pEvaluation.meantreeheightrunmeanliste.shrink_to_fit();
+        pEvaluation.meantreeageliste.clear();
+        pEvaluation.meantreeageliste.shrink_to_fit();
+        pEvaluation.meantreeagerunmeanliste.clear();
+        pEvaluation.meantreeagerunmeanliste.shrink_to_fit();
 
-        evaluation_list.push_back(pEvaluation);
+        evaluation_list.emplace_back(std::move(pEvaluation));
     }
     cout << " ... ... ended initialise Maps " << endl;
 }

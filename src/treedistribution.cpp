@@ -227,10 +227,7 @@ void TreesIni(int maximal_word_length) {
     }
 }
 
-void Hinterlandseedintro(struct Parameter* parameter,
-                         int yearposition,
-                         vector<VectorList<Seed>>& world_seed_list,
-                         vector<vector<Weather*>>& world_weather_list) {
+void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorList<Seed>>& world_seed_list, vector<vector<Weather>>& world_weather_list) {
     RandomNumber<double> uniform(0, 1);
     // function parameters
     double logmodel_seeds_Po = 7.8997307;
@@ -249,8 +246,8 @@ void Hinterlandseedintro(struct Parameter* parameter,
         VectorList<Seed>& seed_list = *posw;
 
         // grant weather access
-        vector<vector<Weather*>>::iterator world_positon_weather = (world_weather_list.begin() + aktort);
-        vector<Weather*>& weather_list = *world_positon_weather;
+        vector<vector<Weather>>::iterator world_positon_weather = (world_weather_list.begin() + aktort);
+        vector<Weather>& weather_list = *world_positon_weather;
         aktort++;
         // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
@@ -272,7 +269,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
             // hinterland_maxlength is cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
             for (int yposhint = -10; yposhint > -1 * parameter[0].hinterland_maxlength; yposhint = yposhint - 20) {
                 double jultempi =
-                    weather_list[yearposition]->temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
+                    weather_list[yearposition].temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
 
                 double hinterheightsi = logmodel_heights_K / (1 + exp(logmodel_heights_Po + logmodel_heights_r * jultempi));
                 int hinterseedsi = (parameter[0].seedflightrate * logmodel_seeds_K
@@ -411,7 +408,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
     }
 }
 
-void Treedistribution(struct Parameter* parameter, int stringlengthmax) {
+void Treedistribution(Parameter* parameter, int stringlengthmax) {
     if ((parameter[0].starter == true)) {  // either seed introduction...
         Seedin();
     } else {  // ... or use initial tree input data files

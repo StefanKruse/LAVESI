@@ -8,7 +8,7 @@ extern vector<double> wdir, wspd;
 
 void Pollinationprobability(double x,
                             double y,
-                            struct Parameter* parameter,
+                            Parameter* parameter,
                             vector<VectorList<Tree>>::iterator world_positon_b,
                             double direction,
                             double velocity,

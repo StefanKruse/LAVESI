@@ -6,13 +6,13 @@ using namespace std;
 // TODO temporary here
 extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
-extern vector<vector<Weather*>> world_weather_list;
-extern vector<vector<Envirgrid*>> world_plot_list;
-extern vector<vector<Evaluation*>> world_evaluation_list;
+extern vector<vector<Weather>> world_weather_list;
+extern vector<vector<Envirgrid>> world_plot_list;
+extern vector<vector<Evaluation>> world_evaluation_list;
 extern vector<VectorList<Tree>> world_tree_list_copy;
 extern vector<VectorList<Seed>> world_seed_list_copy;
-extern vector<vector<Envirgrid*>> world_plot_list_copy;
-extern vector<vector<Evaluation*>> world_evaluation_list_copy;
+extern vector<vector<Envirgrid>> world_plot_list_copy;
+extern vector<vector<Evaluation>> world_evaluation_list_copy;
 
 void Savealllists() {
     // copy Trees
@@ -100,11 +100,11 @@ void Savealllists() {
 
     // copy Envirgrid
     aktort = 0;
-    for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw) {
-        vector<Envirgrid*>& plot_list = *posw;
+    for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); ++posw) {
+        vector<Envirgrid>& plot_list = *posw;
         // opening the original plot list and the referring reset list ..._copy
-        vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
-        vector<Envirgrid*>& plot_list_copy = *posiweltk;
+        vector<vector<Envirgrid>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
+        vector<Envirgrid>& plot_list_copy = *posiweltk;
         aktort++;
 
         cout << endl;
@@ -112,34 +112,34 @@ void Savealllists() {
         cout << "plot_list_copy.size() vor Kopieren=" << plot_list_copy.size() << endl;
 
         int countertotalmaps = 1;  // for displaying the first plot
-        for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
-            auto pEnvirgrid = (*pos);
+        for (vector<Envirgrid>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
+            auto& pEnvirgrid = (*pos);
 
-            auto pEnvirgrid_copy = new Envirgrid();
+            Envirgrid pEnvirgrid_copy;
 
-            // pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
-            // pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
-            // pEnvirgrid_copy->xcoo = pEnvirgrid->xcoo;
-            // pEnvirgrid_copy->ycoo = pEnvirgrid->ycoo;
-            pEnvirgrid_copy->Treedensityvalue = pEnvirgrid->Treedensityvalue;
-            pEnvirgrid_copy->Treenumber = pEnvirgrid->Treenumber;
-            pEnvirgrid_copy->maxthawing_depth = pEnvirgrid->maxthawing_depth;
-            // pEnvirgrid_copy->litterheight = pEnvirgrid->litterheight;
-            // pEnvirgrid_copy->litterheight0 = pEnvirgrid->litterheight0;
-            // pEnvirgrid_copy->litterheight1 = pEnvirgrid->litterheight1;
-            // pEnvirgrid_copy->litterheight2 = pEnvirgrid->litterheight2;
-            // pEnvirgrid_copy->litterheight3 = pEnvirgrid->litterheight3;
-            // pEnvirgrid_copy->litterheight4 = pEnvirgrid->litterheight4;
-            // pEnvirgrid_copy->litterheight5 = pEnvirgrid->litterheight5;
-            // pEnvirgrid_copy->litterheight6 = pEnvirgrid->litterheight6;
-            // pEnvirgrid_copy->litterheight7 = pEnvirgrid->litterheight7;
-            // pEnvirgrid_copy->litterheight8 = pEnvirgrid->litterheight8;
-            // pEnvirgrid_copy->litterheight9 = pEnvirgrid->litterheight9;
-            // pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
-            plot_list_copy.push_back(pEnvirgrid_copy);
+            // pEnvirgrid_copy.xworldcoo = pEnvirgrid.xworldcoo;
+            // pEnvirgrid_copy.yworldcoo = pEnvirgrid.yworldcoo;
+            // pEnvirgrid_copy.xcoo = pEnvirgrid.xcoo;
+            // pEnvirgrid_copy.ycoo = pEnvirgrid.ycoo;
+            pEnvirgrid_copy.Treedensityvalue = pEnvirgrid.Treedensityvalue;
+            pEnvirgrid_copy.Treenumber = pEnvirgrid.Treenumber;
+            pEnvirgrid_copy.maxthawing_depth = pEnvirgrid.maxthawing_depth;
+            // pEnvirgrid_copy.litterheight = pEnvirgrid.litterheight;
+            // pEnvirgrid_copy.litterheight0 = pEnvirgrid.litterheight0;
+            // pEnvirgrid_copy.litterheight1 = pEnvirgrid.litterheight1;
+            // pEnvirgrid_copy.litterheight2 = pEnvirgrid.litterheight2;
+            // pEnvirgrid_copy.litterheight3 = pEnvirgrid.litterheight3;
+            // pEnvirgrid_copy.litterheight4 = pEnvirgrid.litterheight4;
+            // pEnvirgrid_copy.litterheight5 = pEnvirgrid.litterheight5;
+            // pEnvirgrid_copy.litterheight6 = pEnvirgrid.litterheight6;
+            // pEnvirgrid_copy.litterheight7 = pEnvirgrid.litterheight7;
+            // pEnvirgrid_copy.litterheight8 = pEnvirgrid.litterheight8;
+            // pEnvirgrid_copy.litterheight9 = pEnvirgrid.litterheight9;
+            // pEnvirgrid_copy.litterheightmean = pEnvirgrid.litterheightmean;
+            plot_list_copy.emplace_back(std::move(pEnvirgrid_copy));
 
             if (countertotalmaps == 1) {
-                cout << pEnvirgrid->Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy-> " << pEnvirgrid_copy->Treedensityvalue
+                cout << pEnvirgrid.Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy. " << pEnvirgrid_copy.Treedensityvalue
                      << endl;
             }
 
@@ -154,11 +154,11 @@ void Savealllists() {
 
     // copy Evaluation
     aktort = 0;
-    for (vector<vector<Evaluation*>>::iterator posw = world_evaluation_list.begin(); posw != world_evaluation_list.end(); ++posw) {
-        vector<Evaluation*>& EvaluationListe = *posw;
+    for (vector<vector<Evaluation>>::iterator posw = world_evaluation_list.begin(); posw != world_evaluation_list.end(); ++posw) {
+        vector<Evaluation>& EvaluationListe = *posw;
         // opening the original evaluation list and the referring reset list ..._copy
-        vector<vector<Evaluation*>>::iterator posiwelta = (world_evaluation_list_copy.begin() + aktort);
-        vector<Evaluation*>& EvaluationListe_copy = *posiwelta;
+        vector<vector<Evaluation>>::iterator posiwelta = (world_evaluation_list_copy.begin() + aktort);
+        vector<Evaluation>& EvaluationListe_copy = *posiwelta;
         aktort++;
 
         cout << endl;
@@ -166,92 +166,91 @@ void Savealllists() {
         cout << "EvaluationListe_copy.size() before copying=" << EvaluationListe_copy.size() << endl;
 
         int counterauswert = 1;  // for displaying the first evaluation list element
-        for (vector<Evaluation*>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
-            auto pEvaluation = (*pos);
-            auto pEvaluation_copy = new Evaluation();
+        for (vector<Evaluation>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
+            auto& pEvaluation = (*pos);
+            Evaluation pEvaluation_copy;
 
             // pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
             // pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
-            for (vector<double>::iterator posval = pEvaluation->basalarealist.begin(); posval < pEvaluation->basalarealist.end();) {
-                pEvaluation_copy->basalarealist.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.basalarealist.begin(); posval < pEvaluation.basalarealist.end();) {
+                pEvaluation_copy.basalarealist.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->basalarearunmeanlist.begin(); posval < pEvaluation->basalarearunmeanlist.end();) {
-                pEvaluation_copy->basalarearunmeanlist.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.basalarearunmeanlist.begin(); posval < pEvaluation.basalarearunmeanlist.end();) {
+                pEvaluation_copy.basalarearunmeanlist.push_back((*posval));
                 ++posval;
             }
-            pEvaluation_copy->maxincrementbasalarea = pEvaluation->maxincrementbasalarea;
-            pEvaluation_copy->countermaxincrementbasalarea = pEvaluation->countermaxincrementbasalarea;
-            pEvaluation_copy->yearofturningpoint = pEvaluation->yearofturningpoint;
-            pEvaluation_copy->yearofequilibrium = pEvaluation->yearofequilibrium;
-            pEvaluation_copy->postyearofturningpoint = pEvaluation->postyearofturningpoint;
-            for (vector<int>::iterator posval = pEvaluation->nheight0b40liste.begin(); posval < pEvaluation->nheight0b40liste.end();) {
-                pEvaluation_copy->nheight0b40liste.push_back((*posval));
+            pEvaluation_copy.maxincrementbasalarea = pEvaluation.maxincrementbasalarea;
+            pEvaluation_copy.countermaxincrementbasalarea = pEvaluation.countermaxincrementbasalarea;
+            pEvaluation_copy.yearofturningpoint = pEvaluation.yearofturningpoint;
+            pEvaluation_copy.yearofequilibrium = pEvaluation.yearofequilibrium;
+            pEvaluation_copy.postyearofturningpoint = pEvaluation.postyearofturningpoint;
+            for (vector<int>::iterator posval = pEvaluation.nheight0b40liste.begin(); posval < pEvaluation.nheight0b40liste.end();) {
+                pEvaluation_copy.nheight0b40liste.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->nheight0b40runmeanliste.begin(); posval < pEvaluation->nheight0b40runmeanliste.end();) {
-                pEvaluation_copy->nheight0b40runmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.nheight0b40runmeanliste.begin(); posval < pEvaluation.nheight0b40runmeanliste.end();) {
+                pEvaluation_copy.nheight0b40runmeanliste.push_back((*posval));
                 ++posval;
             }
-            for (vector<int>::iterator posval = pEvaluation->nheight41b200liste.begin(); posval < pEvaluation->nheight41b200liste.end();) {
-                pEvaluation_copy->nheight41b200liste.push_back((*posval));
+            for (vector<int>::iterator posval = pEvaluation.nheight41b200liste.begin(); posval < pEvaluation.nheight41b200liste.end();) {
+                pEvaluation_copy.nheight41b200liste.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->nheight41b200runmeanliste.begin(); posval < pEvaluation->nheight41b200runmeanliste.end();) {
-                pEvaluation_copy->nheight41b200runmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.nheight41b200runmeanliste.begin(); posval < pEvaluation.nheight41b200runmeanliste.end();) {
+                pEvaluation_copy.nheight41b200runmeanliste.push_back((*posval));
                 ++posval;
             }
-            for (vector<int>::iterator posval = pEvaluation->nheight201b10000liste.begin(); posval < pEvaluation->nheight201b10000liste.end();) {
-                pEvaluation_copy->nheight201b10000liste.push_back((*posval));
+            for (vector<int>::iterator posval = pEvaluation.nheight201b10000liste.begin(); posval < pEvaluation.nheight201b10000liste.end();) {
+                pEvaluation_copy.nheight201b10000liste.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->nheight201b10000runmeanliste.begin();
-                 posval < pEvaluation->nheight201b10000runmeanliste.end();) {
-                pEvaluation_copy->nheight201b10000runmeanliste.push_back((*posval));
-                ++posval;
-            }
-
-            for (vector<double>::iterator posval = pEvaluation->meanbreastdiameterliste.begin(); posval < pEvaluation->meanbreastdiameterliste.end();) {
-                pEvaluation_copy->meanbreastdiameterliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meanbreastdiameterrunmeanliste.begin();
-                 posval < pEvaluation->meanbreastdiameterrunmeanliste.end();) {
-                pEvaluation_copy->meanbreastdiameterrunmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.nheight201b10000runmeanliste.begin(); posval < pEvaluation.nheight201b10000runmeanliste.end();) {
+                pEvaluation_copy.nheight201b10000runmeanliste.push_back((*posval));
                 ++posval;
             }
 
-            for (vector<int>::iterator posval = pEvaluation->stemcountliste.begin(); posval < pEvaluation->stemcountliste.end();) {
-                pEvaluation_copy->stemcountliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.meanbreastdiameterliste.begin(); posval < pEvaluation.meanbreastdiameterliste.end();) {
+                pEvaluation_copy.meanbreastdiameterliste.push_back((*posval));
                 ++posval;
             }
-            for (vector<int>::iterator posval = pEvaluation->stemcountrunmeanliste.begin(); posval < pEvaluation->stemcountrunmeanliste.end();) {
-                pEvaluation_copy->stemcountrunmeanliste.push_back((*posval));
-                ++posval;
-            }
-
-            for (vector<double>::iterator posval = pEvaluation->meantreeheightliste.begin(); posval < pEvaluation->meantreeheightliste.end();) {
-                pEvaluation_copy->meantreeheightliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meantreeheightrunmeanliste.begin(); posval < pEvaluation->meantreeheightrunmeanliste.end();) {
-                pEvaluation_copy->meantreeheightrunmeanliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meantreeageliste.begin(); posval < pEvaluation->meantreeageliste.end();) {
-                pEvaluation_copy->meantreeageliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meantreeagerunmeanliste.begin(); posval < pEvaluation->meantreeagerunmeanliste.end();) {
-                pEvaluation_copy->meantreeagerunmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.meanbreastdiameterrunmeanliste.begin();
+                 posval < pEvaluation.meanbreastdiameterrunmeanliste.end();) {
+                pEvaluation_copy.meanbreastdiameterrunmeanliste.push_back((*posval));
                 ++posval;
             }
 
-            EvaluationListe_copy.push_back(pEvaluation_copy);
+            for (vector<int>::iterator posval = pEvaluation.stemcountliste.begin(); posval < pEvaluation.stemcountliste.end();) {
+                pEvaluation_copy.stemcountliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<int>::iterator posval = pEvaluation.stemcountrunmeanliste.begin(); posval < pEvaluation.stemcountrunmeanliste.end();) {
+                pEvaluation_copy.stemcountrunmeanliste.push_back((*posval));
+                ++posval;
+            }
+
+            for (vector<double>::iterator posval = pEvaluation.meantreeheightliste.begin(); posval < pEvaluation.meantreeheightliste.end();) {
+                pEvaluation_copy.meantreeheightliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<double>::iterator posval = pEvaluation.meantreeheightrunmeanliste.begin(); posval < pEvaluation.meantreeheightrunmeanliste.end();) {
+                pEvaluation_copy.meantreeheightrunmeanliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<double>::iterator posval = pEvaluation.meantreeageliste.begin(); posval < pEvaluation.meantreeageliste.end();) {
+                pEvaluation_copy.meantreeageliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<double>::iterator posval = pEvaluation.meantreeagerunmeanliste.begin(); posval < pEvaluation.meantreeagerunmeanliste.end();) {
+                pEvaluation_copy.meantreeagerunmeanliste.push_back((*posval));
+                ++posval;
+            }
+
+            EvaluationListe_copy.emplace_back(std::move(pEvaluation_copy));
 
             if (counterauswert == 1) {
-                cout << pEvaluation->maxincrementbasalarea << " <-pEvaluation ... Evaluationmaxincrementbasalarea ... pEvaluation_copy-> "
-                     << pEvaluation_copy->maxincrementbasalarea << endl;
+                cout << pEvaluation.maxincrementbasalarea << " <-pEvaluation ... Evaluationmaxincrementbasalarea ... pEvaluation_copy. "
+                     << pEvaluation_copy.maxincrementbasalarea << endl;
             }
 
             ++pos;
@@ -266,68 +265,22 @@ void Savealllists() {
 
 void Clearalllists(void) {
     int aktort = 0;
-    for (vector<vector<Weather*>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
+    for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
         VectorList<Tree>& tree_list = *world_positon_b;
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
-        vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list.begin() + aktort);
-        vector<Envirgrid*>& plot_list = *posiweltk;
-        vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
-        vector<Evaluation*>& evaluation_list = *posiwelt;
+        vector<vector<Envirgrid>>::iterator posiweltk = (world_plot_list.begin() + aktort);
+        vector<Envirgrid>& plot_list = *posiweltk;
+        vector<vector<Evaluation>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
+        vector<Evaluation>& evaluation_list = *posiwelt;
         aktort++;
 
         // remove elements
         tree_list.clear();
         seed_list.clear();
-
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
-                                                                * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
-             kartenpos++) {
-            auto pEnvirgrid = plot_list.at(kartenpos);
-            delete pEnvirgrid;
-        }
         plot_list.clear();
         plot_list.shrink_to_fit();
-
-        for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos) {
-            auto pEvaluation = (*pos);
-
-            pEvaluation->basalarealist.clear();
-            pEvaluation->basalarealist.shrink_to_fit();
-            pEvaluation->basalarearunmeanlist.clear();
-            pEvaluation->basalarearunmeanlist.shrink_to_fit();
-            pEvaluation->nheight0b40liste.clear();
-            pEvaluation->nheight0b40liste.shrink_to_fit();
-            pEvaluation->nheight0b40runmeanliste.clear();
-            pEvaluation->nheight0b40runmeanliste.shrink_to_fit();
-            pEvaluation->nheight41b200liste.clear();
-            pEvaluation->nheight41b200liste.shrink_to_fit();
-            pEvaluation->nheight41b200runmeanliste.clear();
-            pEvaluation->nheight41b200runmeanliste.shrink_to_fit();
-            pEvaluation->nheight201b10000liste.clear();
-            pEvaluation->nheight201b10000liste.shrink_to_fit();
-            pEvaluation->nheight201b10000runmeanliste.clear();
-            pEvaluation->nheight201b10000runmeanliste.shrink_to_fit();
-            pEvaluation->meanbreastdiameterliste.clear();
-            pEvaluation->meanbreastdiameterliste.shrink_to_fit();
-            pEvaluation->meanbreastdiameterrunmeanliste.clear();
-            pEvaluation->meanbreastdiameterrunmeanliste.shrink_to_fit();
-            pEvaluation->stemcountliste.clear();
-            pEvaluation->stemcountliste.shrink_to_fit();
-            pEvaluation->stemcountrunmeanliste.clear();
-            pEvaluation->stemcountrunmeanliste.shrink_to_fit();
-            pEvaluation->meantreeheightliste.clear();
-            pEvaluation->meantreeheightliste.shrink_to_fit();
-            pEvaluation->meantreeheightrunmeanliste.clear();
-            pEvaluation->meantreeheightrunmeanliste.shrink_to_fit();
-            pEvaluation->meantreeageliste.clear();
-            pEvaluation->meantreeageliste.shrink_to_fit();
-            pEvaluation->meantreeagerunmeanliste.clear();
-            pEvaluation->meantreeagerunmeanliste.shrink_to_fit();
-
-            delete pEvaluation;
-        }
         evaluation_list.clear();
         evaluation_list.shrink_to_fit();
     }
@@ -420,11 +373,11 @@ void Restorealllists(void) {
 
     // copying Envirgrid
     aktort = 0;
-    for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list_copy.begin(); posw != world_plot_list_copy.end(); ++posw) {
-        vector<Envirgrid*>& plot_list = *posw;
+    for (vector<vector<Envirgrid>>::iterator posw = world_plot_list_copy.begin(); posw != world_plot_list_copy.end(); ++posw) {
+        vector<Envirgrid>& plot_list = *posw;
         // opening the original plot list and the referring reset list ..._copy
-        vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list.begin() + aktort);
-        vector<Envirgrid*>& plot_list_copy = *posiweltk;
+        vector<vector<Envirgrid>>::iterator posiweltk = (world_plot_list.begin() + aktort);
+        vector<Envirgrid>& plot_list_copy = *posiweltk;
         aktort++;
 
         cout << endl;
@@ -432,34 +385,34 @@ void Restorealllists(void) {
         cout << "plot_list_copy.size() before copying =" << plot_list_copy.size() << endl;
 
         int countertotalmaps = 1;  // for displaying the first plot list element
-        for (vector<Envirgrid*>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
-            auto pEnvirgrid = (*pos);
+        for (vector<Envirgrid>::iterator pos = plot_list.begin(); pos != plot_list.end();) {
+            auto& pEnvirgrid = (*pos);
 
-            auto pEnvirgrid_copy = new Envirgrid();
+            Envirgrid pEnvirgrid_copy;
 
-            // pEnvirgrid_copy->xworldcoo = pEnvirgrid->xworldcoo;
-            // pEnvirgrid_copy->yworldcoo = pEnvirgrid->yworldcoo;
-            // pEnvirgrid_copy->xcoo = pEnvirgrid->xcoo;
-            // pEnvirgrid_copy->ycoo = pEnvirgrid->ycoo;
-            pEnvirgrid_copy->Treedensityvalue = pEnvirgrid->Treedensityvalue;
-            pEnvirgrid_copy->Treenumber = pEnvirgrid->Treenumber;
-            pEnvirgrid_copy->maxthawing_depth = pEnvirgrid->maxthawing_depth;
-            // pEnvirgrid_copy->litterheight = pEnvirgrid->litterheight;
-            // pEnvirgrid_copy->litterheight0 = pEnvirgrid->litterheight0;
-            // pEnvirgrid_copy->litterheight1 = pEnvirgrid->litterheight1;
-            // pEnvirgrid_copy->litterheight2 = pEnvirgrid->litterheight2;
-            // pEnvirgrid_copy->litterheight3 = pEnvirgrid->litterheight3;
-            // pEnvirgrid_copy->litterheight4 = pEnvirgrid->litterheight4;
-            // pEnvirgrid_copy->litterheight5 = pEnvirgrid->litterheight5;
-            // pEnvirgrid_copy->litterheight6 = pEnvirgrid->litterheight6;
-            // pEnvirgrid_copy->litterheight7 = pEnvirgrid->litterheight7;
-            // pEnvirgrid_copy->litterheight8 = pEnvirgrid->litterheight8;
-            // pEnvirgrid_copy->litterheight9 = pEnvirgrid->litterheight9;
-            // pEnvirgrid_copy->litterheightmean = pEnvirgrid->litterheightmean;
-            plot_list_copy.push_back(pEnvirgrid_copy);
+            // pEnvirgrid_copy.xworldcoo = pEnvirgrid.xworldcoo;
+            // pEnvirgrid_copy.yworldcoo = pEnvirgrid.yworldcoo;
+            // pEnvirgrid_copy.xcoo = pEnvirgrid.xcoo;
+            // pEnvirgrid_copy.ycoo = pEnvirgrid.ycoo;
+            pEnvirgrid_copy.Treedensityvalue = pEnvirgrid.Treedensityvalue;
+            pEnvirgrid_copy.Treenumber = pEnvirgrid.Treenumber;
+            pEnvirgrid_copy.maxthawing_depth = pEnvirgrid.maxthawing_depth;
+            // pEnvirgrid_copy.litterheight = pEnvirgrid.litterheight;
+            // pEnvirgrid_copy.litterheight0 = pEnvirgrid.litterheight0;
+            // pEnvirgrid_copy.litterheight1 = pEnvirgrid.litterheight1;
+            // pEnvirgrid_copy.litterheight2 = pEnvirgrid.litterheight2;
+            // pEnvirgrid_copy.litterheight3 = pEnvirgrid.litterheight3;
+            // pEnvirgrid_copy.litterheight4 = pEnvirgrid.litterheight4;
+            // pEnvirgrid_copy.litterheight5 = pEnvirgrid.litterheight5;
+            // pEnvirgrid_copy.litterheight6 = pEnvirgrid.litterheight6;
+            // pEnvirgrid_copy.litterheight7 = pEnvirgrid.litterheight7;
+            // pEnvirgrid_copy.litterheight8 = pEnvirgrid.litterheight8;
+            // pEnvirgrid_copy.litterheight9 = pEnvirgrid.litterheight9;
+            // pEnvirgrid_copy.litterheightmean = pEnvirgrid.litterheightmean;
+            plot_list_copy.emplace_back(std::move(pEnvirgrid_copy));
 
             if (countertotalmaps == 1) {
-                cout << pEnvirgrid->Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy-> " << pEnvirgrid_copy->Treedensityvalue
+                cout << pEnvirgrid.Treedensityvalue << " <-pEnvirgrid ... EnvirgridTreedensity ... pEnvirgrid_copy. " << pEnvirgrid_copy.Treedensityvalue
                      << endl;
             }
 
@@ -475,11 +428,11 @@ void Restorealllists(void) {
 
     // copying Evaluation
     aktort = 0;
-    for (vector<vector<Evaluation*>>::iterator posw = world_evaluation_list_copy.begin(); posw != world_evaluation_list_copy.end(); ++posw) {
-        vector<Evaluation*>& EvaluationListe = *posw;
+    for (vector<vector<Evaluation>>::iterator posw = world_evaluation_list_copy.begin(); posw != world_evaluation_list_copy.end(); ++posw) {
+        vector<Evaluation>& EvaluationListe = *posw;
         // opening the standard list to push back elements to it from the reset list "..._copy"
-        vector<vector<Evaluation*>>::iterator posiwelta = (world_evaluation_list.begin() + aktort);
-        vector<Evaluation*>& EvaluationListe_copy = *posiwelta;
+        vector<vector<Evaluation>>::iterator posiwelta = (world_evaluation_list.begin() + aktort);
+        vector<Evaluation>& EvaluationListe_copy = *posiwelta;
         aktort++;
 
         cout << endl;
@@ -487,93 +440,92 @@ void Restorealllists(void) {
         cout << "EvaluationListe_copy.size() before copying=" << EvaluationListe_copy.size() << endl;
 
         int counterauswert = 1;
-        for (vector<Evaluation*>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
-            auto pEvaluation = (*pos);
+        for (vector<Evaluation>::iterator pos = EvaluationListe.begin(); pos != EvaluationListe.end();) {
+            auto& pEvaluation = (*pos);
 
-            auto pEvaluation_copy = new Evaluation();
+            Evaluation pEvaluation_copy;
 
-            // pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
-            // pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
-            for (vector<double>::iterator posval = pEvaluation->basalarealist.begin(); posval < pEvaluation->basalarealist.end();) {
-                pEvaluation_copy->basalarealist.push_back((*posval));
+            // pEvaluation_copy.xworldcoo = pEvaluation.xworldcoo;
+            // pEvaluation_copy.yworldcoo = pEvaluation.yworldcoo;
+            for (vector<double>::iterator posval = pEvaluation.basalarealist.begin(); posval < pEvaluation.basalarealist.end();) {
+                pEvaluation_copy.basalarealist.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->basalarearunmeanlist.begin(); posval < pEvaluation->basalarearunmeanlist.end();) {
-                pEvaluation_copy->basalarearunmeanlist.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.basalarearunmeanlist.begin(); posval < pEvaluation.basalarearunmeanlist.end();) {
+                pEvaluation_copy.basalarearunmeanlist.push_back((*posval));
                 ++posval;
             }
-            pEvaluation_copy->maxincrementbasalarea = pEvaluation->maxincrementbasalarea;
-            pEvaluation_copy->countermaxincrementbasalarea = pEvaluation->countermaxincrementbasalarea;
-            pEvaluation_copy->yearofturningpoint = pEvaluation->yearofturningpoint;
-            pEvaluation_copy->yearofequilibrium = pEvaluation->yearofequilibrium;
-            pEvaluation_copy->postyearofturningpoint = pEvaluation->postyearofturningpoint;
-            for (vector<int>::iterator posval = pEvaluation->nheight0b40liste.begin(); posval < pEvaluation->nheight0b40liste.end();) {
-                pEvaluation_copy->nheight0b40liste.push_back((*posval));
+            pEvaluation_copy.maxincrementbasalarea = pEvaluation.maxincrementbasalarea;
+            pEvaluation_copy.countermaxincrementbasalarea = pEvaluation.countermaxincrementbasalarea;
+            pEvaluation_copy.yearofturningpoint = pEvaluation.yearofturningpoint;
+            pEvaluation_copy.yearofequilibrium = pEvaluation.yearofequilibrium;
+            pEvaluation_copy.postyearofturningpoint = pEvaluation.postyearofturningpoint;
+            for (vector<int>::iterator posval = pEvaluation.nheight0b40liste.begin(); posval < pEvaluation.nheight0b40liste.end();) {
+                pEvaluation_copy.nheight0b40liste.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->nheight0b40runmeanliste.begin(); posval < pEvaluation->nheight0b40runmeanliste.end();) {
-                pEvaluation_copy->nheight0b40runmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.nheight0b40runmeanliste.begin(); posval < pEvaluation.nheight0b40runmeanliste.end();) {
+                pEvaluation_copy.nheight0b40runmeanliste.push_back((*posval));
                 ++posval;
             }
-            for (vector<int>::iterator posval = pEvaluation->nheight41b200liste.begin(); posval < pEvaluation->nheight41b200liste.end();) {
-                pEvaluation_copy->nheight41b200liste.push_back((*posval));
+            for (vector<int>::iterator posval = pEvaluation.nheight41b200liste.begin(); posval < pEvaluation.nheight41b200liste.end();) {
+                pEvaluation_copy.nheight41b200liste.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->nheight41b200runmeanliste.begin(); posval < pEvaluation->nheight41b200runmeanliste.end();) {
-                pEvaluation_copy->nheight41b200runmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.nheight41b200runmeanliste.begin(); posval < pEvaluation.nheight41b200runmeanliste.end();) {
+                pEvaluation_copy.nheight41b200runmeanliste.push_back((*posval));
                 ++posval;
             }
-            for (vector<int>::iterator posval = pEvaluation->nheight201b10000liste.begin(); posval < pEvaluation->nheight201b10000liste.end();) {
-                pEvaluation_copy->nheight201b10000liste.push_back((*posval));
+            for (vector<int>::iterator posval = pEvaluation.nheight201b10000liste.begin(); posval < pEvaluation.nheight201b10000liste.end();) {
+                pEvaluation_copy.nheight201b10000liste.push_back((*posval));
                 ++posval;
             }
-            for (vector<double>::iterator posval = pEvaluation->nheight201b10000runmeanliste.begin();
-                 posval < pEvaluation->nheight201b10000runmeanliste.end();) {
-                pEvaluation_copy->nheight201b10000runmeanliste.push_back((*posval));
-                ++posval;
-            }
-
-            for (vector<double>::iterator posval = pEvaluation->meanbreastdiameterliste.begin(); posval < pEvaluation->meanbreastdiameterliste.end();) {
-                pEvaluation_copy->meanbreastdiameterliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meanbreastdiameterrunmeanliste.begin();
-                 posval < pEvaluation->meanbreastdiameterrunmeanliste.end();) {
-                pEvaluation_copy->meanbreastdiameterrunmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.nheight201b10000runmeanliste.begin(); posval < pEvaluation.nheight201b10000runmeanliste.end();) {
+                pEvaluation_copy.nheight201b10000runmeanliste.push_back((*posval));
                 ++posval;
             }
 
-            for (vector<int>::iterator posval = pEvaluation->stemcountliste.begin(); posval < pEvaluation->stemcountliste.end();) {
-                pEvaluation_copy->stemcountliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.meanbreastdiameterliste.begin(); posval < pEvaluation.meanbreastdiameterliste.end();) {
+                pEvaluation_copy.meanbreastdiameterliste.push_back((*posval));
                 ++posval;
             }
-            for (vector<int>::iterator posval = pEvaluation->stemcountrunmeanliste.begin(); posval < pEvaluation->stemcountrunmeanliste.end();) {
-                pEvaluation_copy->stemcountrunmeanliste.push_back((*posval));
-                ++posval;
-            }
-
-            for (vector<double>::iterator posval = pEvaluation->meantreeheightliste.begin(); posval < pEvaluation->meantreeheightliste.end();) {
-                pEvaluation_copy->meantreeheightliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meantreeheightrunmeanliste.begin(); posval < pEvaluation->meantreeheightrunmeanliste.end();) {
-                pEvaluation_copy->meantreeheightrunmeanliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meantreeageliste.begin(); posval < pEvaluation->meantreeageliste.end();) {
-                pEvaluation_copy->meantreeageliste.push_back((*posval));
-                ++posval;
-            }
-            for (vector<double>::iterator posval = pEvaluation->meantreeagerunmeanliste.begin(); posval < pEvaluation->meantreeagerunmeanliste.end();) {
-                pEvaluation_copy->meantreeagerunmeanliste.push_back((*posval));
+            for (vector<double>::iterator posval = pEvaluation.meanbreastdiameterrunmeanliste.begin();
+                 posval < pEvaluation.meanbreastdiameterrunmeanliste.end();) {
+                pEvaluation_copy.meanbreastdiameterrunmeanliste.push_back((*posval));
                 ++posval;
             }
 
-            EvaluationListe_copy.push_back(pEvaluation_copy);
+            for (vector<int>::iterator posval = pEvaluation.stemcountliste.begin(); posval < pEvaluation.stemcountliste.end();) {
+                pEvaluation_copy.stemcountliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<int>::iterator posval = pEvaluation.stemcountrunmeanliste.begin(); posval < pEvaluation.stemcountrunmeanliste.end();) {
+                pEvaluation_copy.stemcountrunmeanliste.push_back((*posval));
+                ++posval;
+            }
+
+            for (vector<double>::iterator posval = pEvaluation.meantreeheightliste.begin(); posval < pEvaluation.meantreeheightliste.end();) {
+                pEvaluation_copy.meantreeheightliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<double>::iterator posval = pEvaluation.meantreeheightrunmeanliste.begin(); posval < pEvaluation.meantreeheightrunmeanliste.end();) {
+                pEvaluation_copy.meantreeheightrunmeanliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<double>::iterator posval = pEvaluation.meantreeageliste.begin(); posval < pEvaluation.meantreeageliste.end();) {
+                pEvaluation_copy.meantreeageliste.push_back((*posval));
+                ++posval;
+            }
+            for (vector<double>::iterator posval = pEvaluation.meantreeagerunmeanliste.begin(); posval < pEvaluation.meantreeagerunmeanliste.end();) {
+                pEvaluation_copy.meantreeagerunmeanliste.push_back((*posval));
+                ++posval;
+            }
+
+            EvaluationListe_copy.emplace_back(std::move(pEvaluation_copy));
 
             if (counterauswert == 1) {
-                cout << pEvaluation->maxincrementbasalarea << " <-pEvaluation ... Evaluationmaxincrementbasalarea ... pEvaluation_copy-> "
-                     << pEvaluation_copy->maxincrementbasalarea << endl;
+                cout << pEvaluation.maxincrementbasalarea << " <-pEvaluation ... Evaluationmaxincrementbasalarea ... pEvaluation_copy. "
+                     << pEvaluation_copy.maxincrementbasalarea << endl;
             }
 
             ++pos;
@@ -593,44 +545,16 @@ void Clearalllists_copy(void) {
         VectorList<Tree>& tree_list = *posw;
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list_copy.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
-        vector<vector<Envirgrid*>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
-        vector<Envirgrid*>& plot_list = *posiweltk;
-        vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list_copy.begin() + aktort);
-        vector<Evaluation*>& evaluation_list = *posiwelt;
+        vector<vector<Envirgrid>>::iterator posiweltk = (world_plot_list_copy.begin() + aktort);
+        vector<Envirgrid>& plot_list = *posiweltk;
+        vector<vector<Evaluation>>::iterator posiwelt = (world_evaluation_list_copy.begin() + aktort);
+        vector<Evaluation>& evaluation_list = *posiwelt;
         aktort++;
 
         // remove elements
         tree_list.clear();
         seed_list.clear();
-
-        // delete plot list elements
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
-                                                                * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
-             kartenpos++) {
-            auto pEnvirgrid = plot_list[kartenpos];
-            delete pEnvirgrid;
-        }
         plot_list.clear();
-
-        for (vector<Evaluation*>::iterator pos = evaluation_list.begin(); pos != evaluation_list.end(); ++pos) {
-            auto pEvaluation = (*pos);
-            pEvaluation->basalarealist.clear();
-            pEvaluation->basalarearunmeanlist.clear();
-            pEvaluation->nheight0b40liste.clear();
-            pEvaluation->nheight0b40runmeanliste.clear();
-            pEvaluation->nheight41b200liste.clear();
-            pEvaluation->nheight41b200runmeanliste.clear();
-            pEvaluation->nheight201b10000liste.clear();
-            pEvaluation->nheight201b10000runmeanliste.clear();
-            pEvaluation->meanbreastdiameterliste.clear();
-            pEvaluation->meanbreastdiameterrunmeanliste.clear();
-            pEvaluation->stemcountliste.clear();
-            pEvaluation->stemcountrunmeanliste.clear();
-            pEvaluation->meantreeheightliste.clear();
-            pEvaluation->meantreeheightrunmeanliste.clear();
-            pEvaluation->meantreeageliste.clear();
-            pEvaluation->meantreeagerunmeanliste.clear();
-        }
         evaluation_list.clear();
     }
 }

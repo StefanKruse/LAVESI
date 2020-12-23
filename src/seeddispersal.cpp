@@ -43,14 +43,14 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
     fclose(filepointer);
 }
 
-void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed>>& world_seed_list, vector<vector<Envirgrid*>>& world_plot_list) {
+void Seeddispersal(int jahr, Parameter* parameter, vector<VectorList<Seed>>& world_seed_list, vector<vector<Envirgrid>>& world_plot_list) {
     int aktort = 0;
 
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
 
-        vector<vector<Envirgrid*>>::iterator world_positon_b = (world_plot_list.begin() + aktort);
-        vector<Envirgrid*>& plot_list = *world_positon_b;
+        vector<vector<Envirgrid>>::iterator world_positon_b = (world_plot_list.begin() + aktort);
+        vector<Envirgrid>& plot_list = *world_positon_b;
 
         // determine the current location, so that in long distance dispersal the target can be determined
         aktort++;
@@ -101,7 +101,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                             double startele = (double)plot_list[(unsigned long long int)ycoostartdem * (unsigned long long int)treecols
                                                                     * (unsigned long long int)parameter[0].sizemagnif
                                                                 + (unsigned long long int)xcoostartdem]
-                                                      ->elevation
+                                                      .elevation
                                                   / 10
                                               + (double)seed.releaseheight / 100;
 
@@ -137,7 +137,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                                     double actele = (double)plot_list[(unsigned long long int)ycoostartdem * (unsigned long long int)treecols
                                                                           * (unsigned long long int)parameter[0].sizemagnif
                                                                       + (unsigned long long int)xcoostartdem]
-                                                        ->elevation
+                                                        .elevation
                                                     / 10;
 
                                     if ((actele > startele) & (actele != 32767 / 10)) {  // treat NA values (water areas) as last elevation values

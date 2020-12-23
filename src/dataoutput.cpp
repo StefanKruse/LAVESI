@@ -5,13 +5,13 @@ using namespace std;
 
 void Dataoutput(int t,
                 int jahr,
-                struct Parameter* parameter,
+                Parameter* parameter,
                 int yearposition,
                 vector<VectorList<Tree>>& world_tree_list,
                 vector<VectorList<Seed>>& world_seed_list,
-                vector<vector<Weather*>>& world_weather_list,
-                vector<vector<Envirgrid*>>& world_plot_list,
-                vector<vector<Evaluation*>>& world_evaluation_list) {
+                vector<vector<Weather>>& world_weather_list,
+                vector<vector<Envirgrid>>& world_plot_list,
+                vector<vector<Evaluation>>& world_evaluation_list) {
     double xminwindow = 0.0;
     double xmaxwindow = 0.0;
     double yminwindow = 0.0;
@@ -48,16 +48,16 @@ void Dataoutput(int t,
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
 
-        vector<vector<Envirgrid*>>::iterator poskarten = (world_plot_list.begin() + aktort);
-        vector<Envirgrid*>& plot_list = *poskarten;
+        vector<vector<Envirgrid>>::iterator poskarten = (world_plot_list.begin() + aktort);
+        vector<Envirgrid>& plot_list = *poskarten;
 
-        vector<vector<Weather*>>::iterator posiwelt = (world_weather_list.begin() + aktort);
-        vector<Weather*>& weather_list = *posiwelt;
+        vector<vector<Weather>>::iterator posiwelt = (world_weather_list.begin() + aktort);
+        vector<Weather>& weather_list = *posiwelt;
 
-        vector<vector<Evaluation*>>::iterator posiweltausw = (world_evaluation_list.begin() + aktort);
-        vector<Evaluation*>& evaluation_list = *posiweltausw;
-        vector<Evaluation*>::iterator posausw = evaluation_list.begin();
-        auto pEvaluation = (*posausw);
+        vector<vector<Evaluation>>::iterator posiweltausw = (world_evaluation_list.begin() + aktort);
+        vector<Evaluation>& evaluation_list = *posiweltausw;
+        vector<Evaluation>::iterator posausw = evaluation_list.begin();
+        auto& pEvaluation = (*posausw);
 
         aktort++;
 
@@ -130,29 +130,29 @@ void Dataoutput(int t,
         }  // pragma
 
         // push back values in evaluation list
-        pEvaluation->basalarealist.push_back(basalarea);
-        pEvaluation->nheight0b40liste.push_back(nheight0b40);
-        pEvaluation->nheight41b200liste.push_back(nheight41b200);
-        pEvaluation->nheight201b10000liste.push_back(nheight201b10000);
+        pEvaluation.basalarealist.push_back(basalarea);
+        pEvaluation.nheight0b40liste.push_back(nheight0b40);
+        pEvaluation.nheight41b200liste.push_back(nheight41b200);
+        pEvaluation.nheight201b10000liste.push_back(nheight201b10000);
 
         if (breastdiametercount > 0) {
-            pEvaluation->meanbreastdiameterliste.push_back((breastdiameter / ((double)breastdiametercount)));
+            pEvaluation.meanbreastdiameterliste.push_back((breastdiameter / ((double)breastdiametercount)));
         } else {
-            pEvaluation->meanbreastdiameterliste.push_back(0.0);
+            pEvaluation.meanbreastdiameterliste.push_back(0.0);
         }
 
-        pEvaluation->stemcountliste.push_back(stemcount);
+        pEvaluation.stemcountliste.push_back(stemcount);
 
         if (nheight201b10000 > 0) {
-            pEvaluation->meantreeheightliste.push_back(meantreeheight / (double)nheight201b10000);
-            pEvaluation->meantreeageliste.push_back(meantreeage / (double)nheight201b10000);
+            pEvaluation.meantreeheightliste.push_back(meantreeheight / (double)nheight201b10000);
+            pEvaluation.meantreeageliste.push_back(meantreeage / (double)nheight201b10000);
         } else {
-            pEvaluation->meantreeheightliste.push_back(0.0);
-            pEvaluation->meantreeageliste.push_back(0.0);
+            pEvaluation.meantreeheightliste.push_back(0.0);
+            pEvaluation.meantreeageliste.push_back(0.0);
         }
 
         // mean value calculation
-        int basalareaanzahl = pEvaluation->basalarealist.size();
+        int basalareaanzahl = pEvaluation.basalarealist.size();
 
         double meanbasalarea = 0;
         double meannheight0b40 = 0, meannheight41b200 = 0, meannheight201b10000 = 0;
@@ -162,92 +162,92 @@ void Dataoutput(int t,
         double meanmeantreeage = 0;
         if (basalareaanzahl == (int)parameter[0].stabilmovingwindow) {  // if exactly parameter[0].stabilmovingwindow values are set
             for (int position = basalareaanzahl - (int)parameter[0].stabilmovingwindow; position < basalareaanzahl; ++position) {
-                meanbasalarea += pEvaluation->basalarealist[position] / parameter[0].stabilmovingwindow;
-                meannheight0b40 += pEvaluation->nheight0b40liste[position] / parameter[0].stabilmovingwindow;
-                meannheight41b200 += pEvaluation->nheight41b200liste[position] / parameter[0].stabilmovingwindow;
-                meannheight201b10000 += pEvaluation->nheight201b10000liste[position] / parameter[0].stabilmovingwindow;
-                meanbreastdiameter += pEvaluation->meanbreastdiameterliste[position] / parameter[0].stabilmovingwindow;
-                meanstemcount += pEvaluation->stemcountliste[position] / parameter[0].stabilmovingwindow;
-                meanmeantreeheigth += pEvaluation->meantreeheightliste[position] / parameter[0].stabilmovingwindow;
-                meanmeantreeage += pEvaluation->meantreeageliste[position] / parameter[0].stabilmovingwindow;
+                meanbasalarea += pEvaluation.basalarealist[position] / parameter[0].stabilmovingwindow;
+                meannheight0b40 += pEvaluation.nheight0b40liste[position] / parameter[0].stabilmovingwindow;
+                meannheight41b200 += pEvaluation.nheight41b200liste[position] / parameter[0].stabilmovingwindow;
+                meannheight201b10000 += pEvaluation.nheight201b10000liste[position] / parameter[0].stabilmovingwindow;
+                meanbreastdiameter += pEvaluation.meanbreastdiameterliste[position] / parameter[0].stabilmovingwindow;
+                meanstemcount += pEvaluation.stemcountliste[position] / parameter[0].stabilmovingwindow;
+                meanmeantreeheigth += pEvaluation.meantreeheightliste[position] / parameter[0].stabilmovingwindow;
+                meanmeantreeage += pEvaluation.meantreeageliste[position] / parameter[0].stabilmovingwindow;
             }
-            pEvaluation->basalarearunmeanlist.push_back(meanbasalarea);
-            pEvaluation->nheight0b40runmeanliste.push_back(meannheight0b40);
-            pEvaluation->nheight41b200runmeanliste.push_back(meannheight41b200);
-            pEvaluation->nheight201b10000runmeanliste.push_back(meannheight201b10000);
-            pEvaluation->meanbreastdiameterrunmeanliste.push_back(meanbreastdiameter);
-            pEvaluation->stemcountrunmeanliste.push_back(meanstemcount);
-            pEvaluation->meantreeheightrunmeanliste.push_back(meanmeantreeheigth);
-            pEvaluation->meantreeagerunmeanliste.push_back(meanmeantreeage);
+            pEvaluation.basalarearunmeanlist.push_back(meanbasalarea);
+            pEvaluation.nheight0b40runmeanliste.push_back(meannheight0b40);
+            pEvaluation.nheight41b200runmeanliste.push_back(meannheight41b200);
+            pEvaluation.nheight201b10000runmeanliste.push_back(meannheight201b10000);
+            pEvaluation.meanbreastdiameterrunmeanliste.push_back(meanbreastdiameter);
+            pEvaluation.stemcountrunmeanliste.push_back(meanstemcount);
+            pEvaluation.meantreeheightrunmeanliste.push_back(meanmeantreeheigth);
+            pEvaluation.meantreeagerunmeanliste.push_back(meanmeantreeage);
         } else if (basalareaanzahl > (int)parameter[0].stabilmovingwindow) {  // if more than parameter[0].stabilmovingwindow values are set
-            meanbasalarea = pEvaluation->basalarearunmeanlist[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                            - (pEvaluation->basalarealist[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                            + (pEvaluation->basalarealist[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->basalarearunmeanlist.push_back(meanbasalarea);
+            meanbasalarea = pEvaluation.basalarearunmeanlist[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                            - (pEvaluation.basalarealist[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                            + (pEvaluation.basalarealist[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.basalarearunmeanlist.push_back(meanbasalarea);
 
-            meannheight0b40 = pEvaluation->nheight0b40runmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                              - (pEvaluation->nheight0b40liste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                              + (pEvaluation->nheight0b40liste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->nheight0b40runmeanliste.push_back(meannheight0b40);
+            meannheight0b40 = pEvaluation.nheight0b40runmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                              - (pEvaluation.nheight0b40liste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                              + (pEvaluation.nheight0b40liste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.nheight0b40runmeanliste.push_back(meannheight0b40);
 
             meannheight41b200 =
-                pEvaluation->nheight41b200runmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                - (pEvaluation->nheight41b200liste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                + (pEvaluation->nheight41b200liste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->nheight41b200runmeanliste.push_back(meannheight41b200);
+                pEvaluation.nheight41b200runmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                - (pEvaluation.nheight41b200liste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                + (pEvaluation.nheight41b200liste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.nheight41b200runmeanliste.push_back(meannheight41b200);
 
             meannheight201b10000 =
-                pEvaluation->nheight201b10000runmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                - (pEvaluation->nheight201b10000liste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                + (pEvaluation->nheight201b10000liste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->nheight201b10000runmeanliste.push_back(meannheight201b10000);
+                pEvaluation.nheight201b10000runmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                - (pEvaluation.nheight201b10000liste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                + (pEvaluation.nheight201b10000liste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.nheight201b10000runmeanliste.push_back(meannheight201b10000);
 
             meanbreastdiameter =
-                pEvaluation->meanbreastdiameterrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                - (pEvaluation->meanbreastdiameterliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                + (pEvaluation->meanbreastdiameterliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->meanbreastdiameterrunmeanliste.push_back(meanbreastdiameter);
+                pEvaluation.meanbreastdiameterrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                - (pEvaluation.meanbreastdiameterliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                + (pEvaluation.meanbreastdiameterliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.meanbreastdiameterrunmeanliste.push_back(meanbreastdiameter);
 
-            meanstemcount = (double)pEvaluation->stemcountrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                            - (pEvaluation->stemcountliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                            + (pEvaluation->stemcountliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->stemcountrunmeanliste.push_back(meanstemcount);
+            meanstemcount = (double)pEvaluation.stemcountrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                            - (pEvaluation.stemcountliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                            + (pEvaluation.stemcountliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.stemcountrunmeanliste.push_back(meanstemcount);
 
             meanmeantreeheigth =
-                pEvaluation->meantreeheightrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                - (pEvaluation->meantreeheightliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                + (pEvaluation->meantreeheightliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->meantreeheightrunmeanliste.push_back(meanmeantreeheigth);
+                pEvaluation.meantreeheightrunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                - (pEvaluation.meantreeheightliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                + (pEvaluation.meantreeheightliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.meantreeheightrunmeanliste.push_back(meanmeantreeheigth);
 
-            meanmeantreeage = pEvaluation->meantreeagerunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
-                              - (pEvaluation->meantreeageliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
-                              + (pEvaluation->meantreeageliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
-            pEvaluation->meantreeagerunmeanliste.push_back(meanmeantreeage);
+            meanmeantreeage = pEvaluation.meantreeagerunmeanliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)]
+                              - (pEvaluation.meantreeageliste[basalareaanzahl - ((int)parameter[0].stabilmovingwindow + 1)] / parameter[0].stabilmovingwindow)
+                              + (pEvaluation.meantreeageliste[basalareaanzahl - 1] / parameter[0].stabilmovingwindow);
+            pEvaluation.meantreeagerunmeanliste.push_back(meanmeantreeage);
         }
 
         // processing basal area mean values
-        int runmeanbasalareaanzahl = pEvaluation->basalarearunmeanlist.size();
+        int runmeanbasalareaanzahl = pEvaluation.basalarearunmeanlist.size();
         if (runmeanbasalareaanzahl > 1) {  // if more than 2 parameter[0].stabilmovingwindow yearly mean values
 
             // calculation of the slope
-            double slopediff = pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl - 1] - pEvaluation->basalarearunmeanlist[runmeanbasalareaanzahl - 2];
-            if (pEvaluation->postyearofturningpoint != true) {
+            double slopediff = pEvaluation.basalarearunmeanlist[runmeanbasalareaanzahl - 1] - pEvaluation.basalarearunmeanlist[runmeanbasalareaanzahl - 2];
+            if (pEvaluation.postyearofturningpoint != true) {
                 // if a maximal slope is not surpassed in 50 years, the turning point of growth is reached
-                if (slopediff >= pEvaluation->maxincrementbasalarea) {
-                    pEvaluation->maxincrementbasalarea = slopediff;
-                    pEvaluation->countermaxincrementbasalarea = 50;
+                if (slopediff >= pEvaluation.maxincrementbasalarea) {
+                    pEvaluation.maxincrementbasalarea = slopediff;
+                    pEvaluation.countermaxincrementbasalarea = 50;
                 } else {
-                    --pEvaluation->countermaxincrementbasalarea;
+                    --pEvaluation.countermaxincrementbasalarea;
                 }
-                if (pEvaluation->countermaxincrementbasalarea == 0) {
-                    pEvaluation->yearofturningpoint = jahr;
-                    pEvaluation->postyearofturningpoint = true;
+                if (pEvaluation.countermaxincrementbasalarea == 0) {
+                    pEvaluation.yearofturningpoint = jahr;
+                    pEvaluation.postyearofturningpoint = true;
                 }
             }
             // after the turning point is reached, the saturation of the system is reached as soon as the slope becomes negative
             else {
-                if ((slopediff < 0.0) && (pEvaluation->yearofequilibrium == -9999)) {
-                    pEvaluation->yearofequilibrium = jahr;
+                if ((slopediff < 0.0) && (pEvaluation.yearofequilibrium == -9999)) {
+                    pEvaluation.yearofequilibrium = jahr;
                 }
             }
         }
@@ -567,17 +567,17 @@ void Dataoutput(int t,
             } else {
                 fprintf(filepointer, "%4.4f;", 0.0);
             }
-            fprintf(filepointer, "%4.4f;", pEvaluation->meanbreastdiameterliste[pEvaluation->meanbreastdiameterliste.size() - 1]);
+            fprintf(filepointer, "%4.4f;", pEvaluation.meanbreastdiameterliste[pEvaluation.meanbreastdiameterliste.size() - 1]);
             fprintf(filepointer, "%4.2f;", (xmaxwindow - xminwindow) * (ymaxwindow - yminwindow));
-            fprintf(filepointer, "%d;", pEvaluation->nheight0b40liste[pEvaluation->nheight0b40liste.size() - 1]);
-            fprintf(filepointer, "%d;", pEvaluation->nheight41b200liste[pEvaluation->nheight41b200liste.size() - 1]);
-            fprintf(filepointer, "%d;", pEvaluation->nheight201b10000liste[pEvaluation->nheight201b10000liste.size() - 1]);
-            fprintf(filepointer, "%6.4f;", pEvaluation->basalarealist[pEvaluation->basalarealist.size() - 1]);
-            fprintf(filepointer, "%d;", pEvaluation->stemcountliste[pEvaluation->stemcountliste.size() - 1]);
-            fprintf(filepointer, "%6.4f;", pEvaluation->meantreeheightliste[pEvaluation->meantreeheightliste.size() - 1]);
-            fprintf(filepointer, "%6.4f;", pEvaluation->meantreeageliste[pEvaluation->meantreeageliste.size() - 1]);
-            fprintf(filepointer, "%d;", pEvaluation->yearofturningpoint);
-            fprintf(filepointer, "%d;", pEvaluation->yearofequilibrium);
+            fprintf(filepointer, "%d;", pEvaluation.nheight0b40liste[pEvaluation.nheight0b40liste.size() - 1]);
+            fprintf(filepointer, "%d;", pEvaluation.nheight41b200liste[pEvaluation.nheight41b200liste.size() - 1]);
+            fprintf(filepointer, "%d;", pEvaluation.nheight201b10000liste[pEvaluation.nheight201b10000liste.size() - 1]);
+            fprintf(filepointer, "%6.4f;", pEvaluation.basalarealist[pEvaluation.basalarealist.size() - 1]);
+            fprintf(filepointer, "%d;", pEvaluation.stemcountliste[pEvaluation.stemcountliste.size() - 1]);
+            fprintf(filepointer, "%6.4f;", pEvaluation.meantreeheightliste[pEvaluation.meantreeheightliste.size() - 1]);
+            fprintf(filepointer, "%6.4f;", pEvaluation.meantreeageliste[pEvaluation.meantreeageliste.size() - 1]);
+            fprintf(filepointer, "%d;", pEvaluation.yearofturningpoint);
+            fprintf(filepointer, "%d;", pEvaluation.yearofequilibrium);
             fprintf(filepointer, "%d;", ageg0);
             fprintf(filepointer, "%d;", ages0);
             fprintf(filepointer, "%d;", ageg1);
@@ -626,15 +626,15 @@ void Dataoutput(int t,
             // weather
             fprintf(filepointer, "%d;", parameter[0].weatherchoice);
             // fprintf(filepointer, "%d;", parameter[0].starttrees);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->tempyearmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp1monthmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp7monthmean);
-            fprintf(filepointer, "%d;", weather_list[yearposition]->vegetationperiodlength);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->activeairtemp);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->degreday_sqrt * weather_list[yearposition]->degreday_sqrt);
-            fprintf(filepointer, "%4.2f;", weather_list[yearposition]->precipitationsum);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactorg);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactors);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempyearmean);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp1monthmean);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp7monthmean);
+            fprintf(filepointer, "%d;", weather_list[yearposition].vegetationperiodlength);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday_sqrt * weather_list[yearposition].degreday_sqrt);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactorg);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactors);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 
             fprintf(filepointer, "\n");
@@ -642,7 +642,7 @@ void Dataoutput(int t,
             fclose(filepointer);
 
             if (parameter[0].yearlyvis == true) {
-                cout << endl << "\tBasalarea = " << pEvaluation->basalarealist[pEvaluation->basalarealist.size() - 1] << endl;
+                cout << endl << "\tBasalarea = " << pEvaluation.basalarealist[pEvaluation.basalarealist.size() - 1] << endl;
                 cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
                 cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;
             }
@@ -1173,7 +1173,7 @@ void Dataoutput(int t,
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
                                                                     * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
                  kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
-                auto pEnvirgrid = plot_list[kartenpos];
+                auto& pEnvirgrid = plot_list[kartenpos];
                 double ycooi = (double)kartenpos / (treecols * parameter[0].sizemagnif);
                 double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
                 if ((parameter[0].demlandscape
@@ -1182,22 +1182,22 @@ void Dataoutput(int t,
                          && (((ycooi / parameter[0].sizemagnif / parameter[0].demresolution)
                               - floor(ycooi / parameter[0].sizemagnif / parameter[0].demresolution))
                              == 0)))
-                    || ((pEnvirgrid->Treenumber > 0)
+                    || ((pEnvirgrid.Treenumber > 0)
                         && ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
                             && (ycooi >= yminwindow * parameter[0].sizemagnif)
                             && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))) {  // output only if tree density values >0
                     fprintf(filepointer, "%d;", parameter[0].repeati);
-                    // fprintf(filepointer, "%d;", pEnvirgrid->yworldcoo);
-                    // fprintf(filepointer, "%d;", pEnvirgrid->xworldcoo);
+                    // fprintf(filepointer, "%d;", pEnvirgrid.yworldcoo);
+                    // fprintf(filepointer, "%d;", pEnvirgrid.xworldcoo);
                     fprintf(filepointer, "%4.4f;", xcooi);
                     fprintf(filepointer, "%4.4f;", ycooi);
-                    fprintf(filepointer, "%4.5f;", (double)pEnvirgrid->Treedensityvalue / 10000);
-                    fprintf(filepointer, "%d;", pEnvirgrid->Treenumber);
-                    // fprintf(filepointer, "%u;", pEnvirgrid->litterheight);
-                    // fprintf(filepointer, "%u;", pEnvirgrid->litterheightmean);
-                    fprintf(filepointer, "%u;", pEnvirgrid->maxthawing_depth);
-                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid->elevation / 10);
-                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid->envirgrowthimpact / 10000);
+                    fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);
+                    fprintf(filepointer, "%d;", pEnvirgrid.Treenumber);
+                    // fprintf(filepointer, "%u;", pEnvirgrid.litterheight);
+                    // fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean);
+                    fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth);
+                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.elevation / 10);
+                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                     // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
                     fprintf(filepointer, "\n");

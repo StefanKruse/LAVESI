@@ -22,9 +22,9 @@ void Seedin() {
         // seedinput on all sites
         if (parameter[0].realseedconnect == false) {
             seedinput = true;
-        } else if (parameter[0].realseedconnect == true && aktort == 1) {// seedinput on southern site only
+        } else if (parameter[0].realseedconnect == true && aktort == 1) {  // seedinput on southern site only
             seedinput = true;
-        } else {// no seedinput
+        } else {  // no seedinput
             seedinput = false;
         }
 
@@ -41,15 +41,15 @@ void Seedin() {
                 double jseed, iseed;
                 bool seedeintragen = false;
 
-				// set limits
-				double maxx = (double)(treecols - 1);
-				if(parameter[0].seedintro_maxx > 0)
-					maxx = (double) parameter[0].seedintro_maxx;
+                // set limits
+                double maxx = (double)(treecols - 1);
+                if (parameter[0].seedintro_maxx > 0)
+                    maxx = (double)parameter[0].seedintro_maxx;
 
-				double maxy = (double)(treerows - 1);
-				if(parameter[0].seedintro_maxy > 0)
-					maxy = (double) parameter[0].seedintro_maxy;
-				
+                double maxy = (double)(treerows - 1);
+                if (parameter[0].seedintro_maxy > 0)
+                    maxy = (double)parameter[0].seedintro_maxy;
+
                 // seedwinddispersalmode==1 => randomly from the south border.
                 if (parameter[0].seedwinddispersalmode == 1) {
                     jseed = maxx * uniform.draw();
@@ -102,8 +102,8 @@ void Seedin() {
                     Seed seed;
                     // seed.yworldcoo = aktortyworldcoo;
                     // seed.xworldcoo = aktortxworldcoo;
-                    seed.xcoo = 1000* jseed;
-                    seed.ycoo = 1000* iseed;
+                    seed.xcoo = 1000 * jseed;
+                    seed.ycoo = 1000 * iseed;
                     // seed.namem = 0;
                     // seed.namep = 0;
                     // seed.line = ++parameter[0].lineakt;
@@ -197,7 +197,7 @@ void TreesIni(int maximal_word_length) {
                     tree.dbasalrel = 1000;
                     tree.dbreast = dbreastbuf;
                     tree.dbreastrel = 1000;
-                    tree.height = 100*heightbuf;
+                    tree.height = 100 * heightbuf;
                     tree.age = agebuf;
                     tree.cone = conebuf;
                     if (tree.cone == true) {
@@ -275,11 +275,10 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     weather_list[yearposition]->temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
 
                 double hinterheightsi = logmodel_heights_K / (1 + exp(logmodel_heights_Po + logmodel_heights_r * jultempi));
-                int hinterseedsi =
-                    (parameter[0].seedflightrate * logmodel_seeds_K
-                               / (1 + exp(logmodel_seeds_Po + logmodel_seeds_r * jultempi))  // determine number of seeds produced at this nucleus
-                               )
-                    * (double)treecols / 20;  // scaling to the witdth of the simulated area
+                int hinterseedsi = (parameter[0].seedflightrate * logmodel_seeds_K
+                                    / (1 + exp(logmodel_seeds_Po + logmodel_seeds_r * jultempi))  // determine number of seeds produced at this nucleus
+                                    )
+                                   * (double)treecols / 20;  // scaling to the witdth of the simulated area
                 for (int n = 0; n < hinterseedsi; n++) {
                     // calculate post-dispersal position with the parameters set for the simulation run using the wind-dependent seed dispersal function
 
@@ -287,7 +286,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     double xseed, yseed;
                     bool introduceseed = true;
 
-                    xseed = (treecols - 1) * uniform.draw();    // x coo start
+                    xseed = (treecols - 1) * uniform.draw();        // x coo start
                     yseed = (yposhint - 10) + 20 * uniform.draw();  // y coo start
 
                     // define species
@@ -382,8 +381,8 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         Seed seed;
                         // seed.yworldcoo = aktortyworldcoo;
                         // seed.xworldcoo = aktortxworldcoo;
-                        seed.xcoo = 1000*xseed;
-                        seed.ycoo = 1000*yseed;
+                        seed.xcoo = 1000 * xseed;
+                        seed.ycoo = 1000 * yseed;
                         // seed.namem = 0;
                         // seed.namep = 0;
                         // seed.line = ++parameter[0].lineakt;
@@ -393,7 +392,7 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         seed.age = 0;
                         seed.longdispersed = false;
                         seed.species = specieszufall;
-                        seed.releaseheight = 100*hinterheightsi;
+                        seed.releaseheight = 100 * hinterheightsi;
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;
@@ -412,12 +411,10 @@ void Hinterlandseedintro(struct Parameter* parameter,
     }
 }
 
-void Treedistribution(struct Parameter* parameter, 
-					  int stringlengthmax) {
-    if ((parameter[0].starter == true)) {// either seed introduction...
+void Treedistribution(struct Parameter* parameter, int stringlengthmax) {
+    if ((parameter[0].starter == true)) {  // either seed introduction...
         Seedin();
-    } else {// ... or use initial tree input data files
+    } else {  // ... or use initial tree input data files
         TreesIni(stringlengthmax);
     }
 }
-

@@ -29,11 +29,11 @@ void Savealllists() {
         cout << "tree_list_copy.size() before copying =" << tree_list_copy.size() << endl;
 
         int countertree = 1;
-		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
-			auto& tree = tree_list[tree_i];
-			Tree newtree;
-			
-			// copy
+        for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            auto& tree = tree_list[tree_i];
+            Tree newtree;
+
+            // copy
             // newtree.yworldcoo = tree.yworldcoo;
             // newtree.xworldcoo = tree.xworldcoo;
             newtree.xcoo = tree.xcoo;
@@ -61,9 +61,9 @@ void Savealllists() {
             newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
             newtree.longdispersed = tree.longdispersed;
             newtree.growing = tree.growing;
-			
-			// add
-			tree_list_copy.add(newtree);
+
+            // add
+            tree_list_copy.add(newtree);
 
             if (countertree == 1) {
                 cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
@@ -277,11 +277,13 @@ void Clearalllists(void) {
         vector<Evaluation*>& evaluation_list = *posiwelt;
         aktort++;
 
-		// remove elements
+        // remove elements
         tree_list.clear();
         seed_list.clear();
 
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
+        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
+                                                                * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
+             kartenpos++) {
             auto pEnvirgrid = plot_list.at(kartenpos);
             delete pEnvirgrid;
         }
@@ -345,11 +347,11 @@ void Restorealllists(void) {
         cout << "tree_list_copy.size() before copying =" << tree_list_copy.size() << endl;
 
         int countertree = 1;  // for displaying the first tree
-		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
-			auto& tree = tree_list[tree_i];
-			Tree newtree;
-			
-			// copy
+        for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            auto& tree = tree_list[tree_i];
+            Tree newtree;
+
+            // copy
             // newtree.yworldcoo = tree.yworldcoo;
             // newtree.xworldcoo = tree.xworldcoo;
             newtree.xcoo = tree.xcoo;
@@ -377,9 +379,9 @@ void Restorealllists(void) {
             newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
             newtree.longdispersed = tree.longdispersed;
             newtree.growing = tree.growing;
-			
-			// add
-			tree_list_copy.add(newtree);
+
+            // add
+            tree_list_copy.add(newtree);
 
             if (countertree == 1) {
                 cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
@@ -596,13 +598,15 @@ void Clearalllists_copy(void) {
         vector<vector<Evaluation*>>::iterator posiwelt = (world_evaluation_list_copy.begin() + aktort);
         vector<Evaluation*>& evaluation_list = *posiwelt;
         aktort++;
-		
-		// remove elements
+
+        // remove elements
         tree_list.clear();
         seed_list.clear();
 
         // delete plot list elements
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
+        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
+                                                                * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
+             kartenpos++) {
             auto pEnvirgrid = plot_list[kartenpos];
             delete pEnvirgrid;
         }
@@ -630,4 +634,3 @@ void Clearalllists_copy(void) {
         evaluation_list.clear();
     }
 }
-

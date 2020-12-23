@@ -120,13 +120,13 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].elevationoffset);
     }
-	
+
     strcpy(uebergabestring, "slopetwiratio");
     parameter[0].slopetwiratio = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].slopetwiratio);
     }
-	
+
     strcpy(uebergabestring, "temperaturelapse_jan");
     parameter[0].temperaturelapse_jan = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -170,7 +170,7 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth) ? "true" : "false");
     }
-	
+
     strcpy(uebergabestring, "demlandscape");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0])) == 1) {
         parameter[0].demlandscape = true;
@@ -180,13 +180,12 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].demlandscape) ? "true" : "false");
     }
-	
+
     strcpy(uebergabestring, "demresolution");
     parameter[0].demresolution = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].demresolution);
     }
-
 
     strcpy(uebergabestring, "vegetation");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0])) == 1) {
@@ -219,7 +218,7 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].lastyearweatherdata);
     }
-	
+
     strcpy(uebergabestring, "simduration");
     parameter[0].simduration = (int)Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -308,7 +307,7 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].lineartransect) ? "true" : "false");
     }
-	
+
     strcpy(uebergabestring, "locationshift");
     parameter[0].locationshift = Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -834,4 +833,3 @@ void Parameterinput(void) {
     parameter[0].tempdiffort = 0.0;
     parameter[0].precdiffort = 0.0;
 }
-

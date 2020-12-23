@@ -27,8 +27,8 @@ void Pollinationprobability(double x,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
                             int outputtreesiter,
-							double randomnumberwind,
-							double randomnumberwindfather) {
+                            double randomnumberwind,
+                            double randomnumberwindfather) {
     VectorList<Tree>& tree_list = *world_positon_b;
     direction = 0.0;
     velocity = 0.0;
@@ -49,11 +49,11 @@ void Pollinationprobability(double x,
     thdpthinfl.clear();
     thdpthinfl.shrink_to_fit();
 
-    if (parameter[0].windsource == 1) {// EraInterim
+    if (parameter[0].windsource == 1) {  // EraInterim
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = wspd.at(ripm);
-	} else {// random
+    } else {  // random
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.777;
     }
@@ -62,11 +62,11 @@ void Pollinationprobability(double x,
     // Simpson integration + https://elec424.fandom.com/wiki/Modified_Bessel_Functions
     I0kappa = 0.16666 * (exp(kappa) + 4.0 + exp(-1.0 * kappa));
 
-	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
-		auto& tree_copy = tree_list[tree_i];
-		if (tree_copy.cone == true) {// only if the pollinating tree has cones:
-            dx = ((double)tree_copy.xcoo/1000) - x;
-            dy = ((double)tree_copy.ycoo/1000) - y;
+    for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+        auto& tree_copy = tree_list[tree_i];
+        if (tree_copy.cone == true) {  // only if the pollinating tree has cones:
+            dx = ((double)tree_copy.xcoo / 1000) - x;
+            dy = ((double)tree_copy.ycoo / 1000) - y;
             dr = sqrt(dx * dx + dy * dy);
 
             if ((dr != 0)) {
@@ -92,7 +92,8 @@ void Pollinationprobability(double x,
                 sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
                 string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
                 fdir = fopen(output.c_str(), "a+");
-                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo/1000, (double)tree_copy.ycoo/1000, x, y);
+                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo / 1000,
+                        (double)tree_copy.ycoo / 1000, x, y);
                 fclose(fdir);
             }
         }
@@ -129,26 +130,19 @@ double getEntfernung(double D, double ratiorn_help) {
     return (entf_help);
 }
 
-void Seedwinddispersal(double rn, 
-						double& dx, 
-						double& dy, 
-						double& windspeed, 
-						double& winddirection, 
-						double parhei, 
-						int seedspec, 
-						double randomnumberwind) {
+void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec, double randomnumberwind) {
     int ripm = 0;
     double dispersaldistance = 0;
     double maxdispersaldistance = 0;
     double direction = 0.0;
     double velocity = 0.0;
 
-    if (parameter[0].windsource == 1) {// EraInterim
+    if (parameter[0].windsource == 1) {  // EraInterim
         // choose a month between May and September:
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = (wspd.at(ripm));
-    } else {// random
+    } else {  // random
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.7777;
     }
@@ -165,10 +159,9 @@ void Seedwinddispersal(double rn,
         dispersaldistance = getEntfernung(maxdispersaldistance, rn);
     }
 
-	// set return variables
+    // set return variables
     dy = cos(direction) * dispersaldistance;
     dx = sin(direction) * dispersaldistance;
     windspeed = velocity;
     winddirection = direction;
 }
-

@@ -3,6 +3,8 @@
 
 using namespace std;
 
+Parameter parameter[1];
+
 int yearposition;
 
 // lists and pointers

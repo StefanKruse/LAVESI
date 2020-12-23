@@ -637,7 +637,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->temp7monthmean);
             fprintf(filepointer, "%d;", weather_list[yearposition]->vegetationperiodlength);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->activeairtemp);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->degreday);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition]->degreday_sqrt * weather_list[yearposition]->degreday_sqrt);
             fprintf(filepointer, "%4.2f;", weather_list[yearposition]->precipitationsum);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactorg);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactors);

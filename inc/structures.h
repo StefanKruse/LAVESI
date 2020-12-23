@@ -313,7 +313,7 @@ struct Weather {
     int vegetationperiodlengthisomin;
     double activeairtemp;
     double activeairtempmin;
-    double degreday;
+    double degreday_sqrt;
     double degredaymin;
     double precipitationsum;
     double precipitationsummin;

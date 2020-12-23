@@ -215,7 +215,7 @@ void getTemp(int aktort, char dateinametemp[50], vector<Weather*>& weather_list)
             pWeather->activeairtempmin = (int)round(sumacttempmin * 0.84630);
             pWeather->vegetationperiodlength = (int)round(ndegreday * 0.88432);
             pWeather->vegetationperiodlengthmin = (int)round(ndegredaymin * 0.88432);
-            pWeather->degreday = (int)round(sumdegreday * 0.87583);
+            pWeather->degreday_sqrt = std::sqrt((int)round(sumdegreday * 0.87583));  // TODO does (int) make sense??
             pWeather->degredaymin = (int)round(sumdegredaymin * 0.87583);
 
             weather_list.push_back(pWeather);

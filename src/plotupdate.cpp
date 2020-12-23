@@ -348,107 +348,26 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot
  *******************************************************************************************/
 
 void ResetMaps(int yearposition, vector<Envirgrid*>& plot_list, vector<Weather*>& weather_list) {
-    if (parameter[0].omp_num_threads == 1) {  // only one core
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
-            auto pEnvirgrid = plot_list[kartenpos];
-            pEnvirgrid->Treedensityvalue = 0;
-            pEnvirgrid->Treenumber = 0;
+    const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
+                           * static_cast<std::size_t>(parameter[0].sizemagnif);
+#pragma omp parallel for schedule(guided)
+    for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+        auto* pEnvirgrid = plot_list[kartenpos];
+        pEnvirgrid->Treedensityvalue = 0;
+        pEnvirgrid->Treenumber = 0;
 
-			/*
-            if (parameter[0].vegetation == true && parameter[0].spinupphase == false) {
-                double auflagenwachstumsrate =
-                    0.05 + (1.0 / (((1.0 / 0.01) - (1.0 / 0.95)) * exp(-(1.0 / 200.0) * (double)pEnvirgrid->maxthawing_depth) + (1 / 0.95)));
+        if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
+            double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
+            // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid->litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
 
-                pEnvirgrid->litterheight += (unsigned short)(auflagenwachstumsrate * 60.0);
+            if (daempfung >= 0.9)
+                daempfung = 0.9;
 
-                pEnvirgrid->litterheightmean =
-                    (unsigned short)((double)(pEnvirgrid->litterheight8 + pEnvirgrid->litterheight7 + pEnvirgrid->litterheight6 + pEnvirgrid->litterheight5
-                                              + pEnvirgrid->litterheight4 + pEnvirgrid->litterheight3 + pEnvirgrid->litterheight2 + pEnvirgrid->litterheight1
-                                              + pEnvirgrid->litterheight0 + pEnvirgrid->litterheight)
-                                     / 10.0);
-
-                pEnvirgrid->litterheight8 = pEnvirgrid->litterheight7;
-                pEnvirgrid->litterheight7 = pEnvirgrid->litterheight6;
-                pEnvirgrid->litterheight6 = pEnvirgrid->litterheight5;
-                pEnvirgrid->litterheight5 = pEnvirgrid->litterheight4;
-                pEnvirgrid->litterheight4 = pEnvirgrid->litterheight3;
-                pEnvirgrid->litterheight3 = pEnvirgrid->litterheight2;
-                pEnvirgrid->litterheight2 = pEnvirgrid->litterheight1;
-                pEnvirgrid->litterheight1 = pEnvirgrid->litterheight0;
-                pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
-            }
-			*/
-			
-            if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
-                // calculation of an insulation by organic material (damping reduces thawing_depth, formula taken from literature)
-                double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
-                // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid->litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-
-                if (daempfung >= 0.9)
-                    daempfung = 0.9;
-
-                pEnvirgrid->maxthawing_depth =
-                    (unsigned short)(1000.0 * (1.0 - daempfung) * 0.050
-                                     * sqrt(weather_list[yearposition]->degreday));  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
-            }
+            pEnvirgrid->maxthawing_depth =
+                (unsigned short)(1000.0 * (1.0 - daempfung) * 0.050
+                                 * weather_list[yearposition]->degreday_sqrt);  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
         }
-    }  // only one core
-
-    if (parameter[0].omp_num_threads > 1) {  // more than one core
-	
-// pragma omp initializing
-omp_set_dynamic(1); //enable dynamic teams
-omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
-
-#pragma omp parallel
-{
-#pragma omp for
-        for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
-            auto pEnvirgrid = plot_list[kartenpos];
-            pEnvirgrid->Treedensityvalue = 0;
-            pEnvirgrid->Treenumber = 0;
-
-			/*
-            if (parameter[0].vegetation == true && parameter[0].spinupphase == false) {
-                double auflagenwachstumsrate =
-                    0.05 + (1.0 / (((1.0 / 0.01) - (1.0 / 0.95)) * exp(-(1.0 / 200.0) * (double)pEnvirgrid->maxthawing_depth) + (1 / 0.95)));
-                // logistic growth: capacity=0.95; N0=0.01; r=1/200; offset= 0.05
-
-                pEnvirgrid->litterheight += (unsigned short)(auflagenwachstumsrate * 60.0);
-                // in 0.1 mm steps; 6mm growth annualy from 30 cm growth in 50 years (literature value)
-
-                pEnvirgrid->litterheightmean =
-                    (unsigned short)((double)(pEnvirgrid->litterheight8 + pEnvirgrid->litterheight7 + pEnvirgrid->litterheight6 + pEnvirgrid->litterheight5
-                                              + pEnvirgrid->litterheight4 + pEnvirgrid->litterheight3 + pEnvirgrid->litterheight2 + pEnvirgrid->litterheight1
-                                              + pEnvirgrid->litterheight0 + pEnvirgrid->litterheight)
-                                     / 10.0);
-
-                pEnvirgrid->litterheight8 = pEnvirgrid->litterheight7;
-                pEnvirgrid->litterheight7 = pEnvirgrid->litterheight6;
-                pEnvirgrid->litterheight6 = pEnvirgrid->litterheight5;
-                pEnvirgrid->litterheight5 = pEnvirgrid->litterheight4;
-                pEnvirgrid->litterheight4 = pEnvirgrid->litterheight3;
-                pEnvirgrid->litterheight3 = pEnvirgrid->litterheight2;
-                pEnvirgrid->litterheight2 = pEnvirgrid->litterheight1;
-                pEnvirgrid->litterheight1 = pEnvirgrid->litterheight0;
-                pEnvirgrid->litterheight0 = pEnvirgrid->litterheight;
-            } 
-			*/
-
-            if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
-                double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
-                // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid->litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-
-                if (daempfung >= 0.9)
-                    daempfung = 0.9;
-
-                pEnvirgrid->maxthawing_depth =
-                    (unsigned short)(1000.0 * (1.0 - daempfung) * 0.050
-                                     * sqrt(weather_list[yearposition]->degreday));  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
-            }
-        }
-} // pragma
-    }  // more than one core
+    }
 }
 
 /****************************************************************************************/

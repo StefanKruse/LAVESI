@@ -215,8 +215,8 @@ void Seeddispersal( int jahr,
 						}
 
 						if ((sameausserhalb == false)
-							&& ((seed.ycoo < 0) | ((double)seed.ycoo/1000 > (double)(treerows - 1)) | (seed.xcoo < 0)
-								| ((double)seed.xcoo/1000 > (double)(treecols - 1)))) {
+							&& ((seed.ycoo < 0) || ((double)seed.ycoo/1000 > (double)(treerows - 1)) || (seed.xcoo < 0)
+								|| ((double)seed.xcoo/1000 > (double)(treecols - 1)))) {
 							printf("\n\nLaVeSi was exited ");
 							printf("in Seeddispersal.cpp\n");
 							printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n",

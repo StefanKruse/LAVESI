@@ -283,7 +283,7 @@ void Dataoutput(int t,
 					ausgabedensity = true;
 
                 if ( 	(parameter[0].ivort % 100 == 0)
-						| ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) )
+						|| ( (parameter[0].ivort>=1500) && (parameter[0].ivort%10==0) )
 					) {
 					outputgriddedbiomass = true;
                 }
@@ -293,7 +293,7 @@ void Dataoutput(int t,
                 outputcurrencies = true;
 				
                 if ( 	(parameter[0].ivort%100==0) 
-						| ( (parameter[0].ivort>=1500) & (parameter[0].ivort%10==0) )) {
+						|| ( (parameter[0].ivort>=1500) && (parameter[0].ivort%10==0) )) {
 					outputtransects = true;
 				}
             }
@@ -1203,7 +1203,7 @@ void Dataoutput(int t,
                 auto pEnvirgrid = plot_list[kartenpos];
 				double ycooi = (double)kartenpos / (treecols * parameter[0].sizemagnif);
 				double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
-                if ( (parameter[0].demlandscape & ( (((xcooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(xcooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) & (((ycooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(ycooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) )) | 
+                if ( (parameter[0].demlandscape && ( (((xcooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(xcooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) && (((ycooi/parameter[0].sizemagnif/parameter[0].demresolution)-floor(ycooi/parameter[0].sizemagnif/parameter[0].demresolution))==0) )) || 
 					( (pEnvirgrid->Treenumber > 0)
 						&& ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
                         && (ycooi >= yminwindow * parameter[0].sizemagnif)

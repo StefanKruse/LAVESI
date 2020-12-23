@@ -39,7 +39,7 @@ void Treeestablishment(struct Parameter* parameter,
 
                 assert(curposi >= 0);
 
-				if( (parameter[0].demlandscape) & (plot_list[curposi]->elevation==32767) ){
+				if( (parameter[0].demlandscape) && (plot_list[curposi]->elevation==32767) ){
 					seed.dead = true;
                     seed_list.remove(i_seed);
 					continue;
@@ -142,7 +142,7 @@ void Treeestablishment(struct Parameter* parameter,
 					parameter[0].densityvaluemanipulatorexp);
 				// get gridcell
 				if (parameter[0].densitymode == 2) {
-					if (((double) plot_list[curposi]->Treedensityvalue/10000) > 0.0) {
+					if (plot_list[curposi]->Treedensityvalue > 0) {
 						if (parameter[0].densitytiletree == 1)  // sum of values
 						{
 							density_help = (1.0 - (density_help / ((double) plot_list[curposi]->Treedensityvalue/10000)));

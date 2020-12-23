@@ -63,10 +63,10 @@ cout << "Growth(" << elapsed.count() << ")+";
 
     for (int i = 0; i < (signed)globalyears.size(); i++) {
         if (globalyears[i] == yr) {
-            for (int pos = 0; pos < (signed)winddir.at(i).size(); pos++) {
-                wdir.push_back(winddir.at(i).at(pos));
-                wspd.push_back(windspd.at(i).at(pos));
-            }
+            const auto& winddir_p = winddir[i];
+            std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
+            const auto& windspd_p = windspd[i];
+            std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
         }
     }
 time_start = chrono::high_resolution_clock::now();
@@ -511,10 +511,10 @@ void fillElevations(){
 		// interpolate to envirgrid		
 		for (vector<vector<Envirgrid*>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
 			vector<Envirgrid*>& plot_list = *posw;
-#pragma omp parallel for schedule(guided)
+#pragma omp parallel for default(shared) schedule(guided)
 				for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {
 					// determine position and distances to gridpoints in low resolution grid
-					double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+					double ycoo = (double)kartenpos / (treecols * parameter[0].sizemagnif);
 					double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
 					double ycoodem = ycoo/parameter[0].sizemagnif/parameter[0].demresolution;
 					double xcoodem = xcoo/parameter[0].sizemagnif/parameter[0].demresolution;
@@ -524,7 +524,7 @@ void fillElevations(){
 					xcoodem = floor(xcoodem);
 
 					// elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
-					if( (ycoodem<(deminputdimension_y-1)) & (xcoodem<(deminputdimension_x-1)) )// only if in range leaving out border
+					if( (ycoodem<(deminputdimension_y-1)) && (xcoodem<(deminputdimension_x-1)) )// only if in range leaving out border
 					{
 						double eleinter = (
 							// upper left
@@ -571,28 +571,28 @@ void fillElevations(){
 
 						int countwatercells = 0;
 						if( (elevationinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
-								| (slopeinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
-								| (twiinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
+								|| (slopeinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
+								|| (twiinput[ycoodem * deminputdimension_x + xcoodem]==9999) 
 								)
 							countwatercells++;
 						if( (elevationinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999)
-								| (slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
-								| (twiinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
+								|| (slopeinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
+								|| (twiinput[(ycoodem+1) * deminputdimension_x + xcoodem]==9999) 
 								)
 							countwatercells++;
 						if( (elevationinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999)
-								| (slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
-								| (twiinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
+								|| (slopeinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
+								|| (twiinput[ycoodem * deminputdimension_x + (xcoodem+1)]==9999) 
 								)
 							countwatercells++;
 						if( (elevationinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999)
-								| (slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999) 
-								| (twiinput[(ycoodem +1)* deminputdimension_x + (xcoodem+1)]==9999) 
+								|| (slopeinput[(ycoodem+1) * deminputdimension_x + (xcoodem+1)]==9999) 
+								|| (twiinput[(ycoodem +1)* deminputdimension_x + (xcoodem+1)]==9999) 
 								)
 							countwatercells++;
 						// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to 32767
 						if(countwatercells==0) {
-							plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + (short int) floor(10*eleinter);
+							plot_list[kartenpos]->elevation = plot_list[kartenpos]->elevation + 10*eleinter;
 							// plot_list[kartenpos]->slope = slopeinter;
 							
 							// calculate environment-growth-impact (value between 0 and 1)
@@ -611,7 +611,7 @@ void fillElevations(){
 
 							// adjust by factor
 							double envirgrowthimpactfactor=1.0;
-							plot_list[kartenpos]->envirgrowthimpact = (unsigned short int) floor(10000* envirgrowthimpactfactor * envirgrowthimpact);
+							plot_list[kartenpos]->envirgrowthimpact = 10000* envirgrowthimpactfactor * envirgrowthimpact;
 						} else {
 							plot_list[kartenpos]->elevation = 32767;
 							plot_list[kartenpos]->envirgrowthimpact = 0;
@@ -638,14 +638,14 @@ cout << " -> started initialise Maps " << endl;
         //		xworld= repeating the same position
         //		yworld= different position along the transect
         // necessary for the global lists
-        // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 		plot_list.reserve(((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif)); 
 
 		short int initialelevation = 0;
 		if(parameter[0].mapylength==1)
-			initialelevation = (short int) floor(10*parameter[0].elevationoffset);
+			initialelevation = 10*parameter[0].elevationoffset;
 
 		auto time_start = chrono::high_resolution_clock::now();
 		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int) treerows * (unsigned long long int) parameter[0].sizemagnif * (unsigned long long int) treecols * (unsigned long long int) parameter[0].sizemagnif); kartenpos++) {

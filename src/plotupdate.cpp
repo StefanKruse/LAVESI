@@ -341,7 +341,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid*>& plot
  * \brief reset Maps "Envirgrid"
  *
  * reset Treedensity und Treenumber \n
- * calculate vegetation density (auflagenstärke) if vegetation==true
+ * calculate vegetation density (auflagenstaerke) if vegetation==true
  *\n calculate max active layer depth
  *
  *
@@ -403,6 +403,6 @@ void Environmentupdate(struct Parameter* parameter,
 
         IndividualTreeDensity(tree_list, plot_list);
     }
-	
-// cout << " ... envir update done!" << endl;
+
+    // cout << " ... envir update done!" << endl;
 }

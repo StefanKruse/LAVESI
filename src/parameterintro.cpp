@@ -2,7 +2,7 @@
 
 using namespace std;
 
-double Parameterinput(char* uebergabestring, int stringlengthmax, char* divisionsign, struct Parameter* parameter) {
+double Parameterinput(char* uebergabestring, int stringlengthmax, char* divisionsign, Parameter* parameter) {
     FILE* f;
     f = fopen("parameters.txt", "r");
     if (f == NULL) {

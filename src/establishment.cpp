@@ -25,11 +25,7 @@ void Treeestablishment(Parameter* parameter,
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
             auto& seed = seed_list[i_seed];
-            if (seed.dead) {
-                continue;
-            }
-
-            if (!seed.incone) {
+            if (!seed.dead && !seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
@@ -264,7 +260,7 @@ void Treeestablishment(Parameter* parameter,
                             tree.thawing_depthinfluence = thawing_depthinfluence_help;
                             tree.envirimpact = 10000;
 
-                            tree_list.add(tree);
+                            tree_list.add(std::move(tree));
 
                             seed.dead = true;
                             seed_list.remove(i_seed);
@@ -308,7 +304,7 @@ void Treeestablishment(Parameter* parameter,
                             // tree.dispersaldistance = seed.dispersaldistance;
                             tree.growing = true;
                             tree.species = seed.species;
-                            tree_list.add(tree);
+                            tree_list.add(std::move(tree));
 
                             seed.dead = true;
                             seed_list.remove(i_seed);

@@ -117,7 +117,7 @@ void Seedin() {
                     seed.thawing_depthinfluence = 100;
                     seed.dead = false;
 
-                    seed_list.add_directly(seed);
+                    seed_list.add_directly(std::move(seed));
                 }
             }
             seed_list.consolidate();
@@ -216,7 +216,7 @@ void TreesIni(int maximal_word_length) {
                         tree.species = 2;
                     }
 
-                    tree_list.add_directly(tree);
+                    tree_list.add_directly(std::move(tree));
                 }
                 counter++;
             }
@@ -394,7 +394,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;
 
-                        seed_list.add_directly(seed);
+                        seed_list.add_directly(std::move(seed));
                     }
                 }
             }

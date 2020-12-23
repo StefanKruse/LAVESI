@@ -217,14 +217,11 @@ void Mortality(Parameter* parameter,
 #pragma omp for schedule(guided)
             for (unsigned int i = 0; i < seed_list.size(); ++i) {
                 auto& seed = seed_list[i];
-                if (seed.dead) {
-                    continue;
-                }
-                double zufallsz = uniform.draw();
-
-                if (zufallsz < (seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort)) {
-                    seed.dead = true;
-                    seed_list.remove(i);
+                if (!seed.dead) {
+                    if (uniform.draw() < (seed.incone ? parameter[0].seedconemort : parameter[0].seedfloormort)) {
+                        seed.dead = true;
+                        seed_list.remove(i);
+                    }
                 }
             }
 
@@ -234,24 +231,18 @@ void Mortality(Parameter* parameter,
                 ++n_trees;  // for calculating mean of computation times // TODO still necessary
 
                 if (tree.seednewly_produced > 0) {
-                    int seedlebend = 0;  // TODO get rid of seedlebend and use only one loop
+                    bool pollinated = false;
                     for (int sna = 0; sna < tree.seednewly_produced; sna++) {
-                        double zufallsz = uniform.draw();
-                        if (zufallsz >= parameter[0].seedconemort) {
-                            ++seedlebend;
-                        }
-                    }
+                        if (uniform.draw() >= parameter[0].seedconemort) {
+                            if (!pollinated && (parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
+                                double randomnumberwind = uniform.draw();
+                                double randomnumberwindfather = uniform.draw();
+                                Pollinationprobability((double)tree.xcoo / 1000, (double)tree.ycoo / 1000, &parameter[0], world_positon_b, direction, velocity,
+                                                       ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees, randomnumberwind,
+                                                       randomnumberwindfather);
+                                pollinated = true;
+                            }
 
-                    if (seedlebend > 0) {
-                        if ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
-                            double randomnumberwind = uniform.draw();
-                            double randomnumberwindfather = uniform.draw();
-                            Pollinationprobability((double)tree.xcoo / 1000, (double)tree.ycoo / 1000, &parameter[0], world_positon_b, direction, velocity,
-                                                   ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees, randomnumberwind,
-                                                   randomnumberwindfather);
-                        }
-
-                        for (int sl = 0; sl < seedlebend; sl++) {
                             Seed seed;
 
                             // seed.yworldcoo = aktortyworldcoo;
@@ -280,7 +271,7 @@ void Mortality(Parameter* parameter,
                             seed.species = tree.species;
                             seed.releaseheight = tree.height;
 
-                            seed_list.add(seed);
+                            seed_list.add(std::move(seed));
                         }
                     }
                 }

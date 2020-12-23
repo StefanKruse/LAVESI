@@ -32,20 +32,30 @@ vector<double> wdir, wspd;
 void vegetationDynamics(int yearposition, int jahr, int t) {
     RandomNumber<double> uniform(0, 1);
 
+#ifdef OUTPUT_COMP_DURATION
     cout << " started vegetation dynamics / ivort=" << parameter[0].ivort << " / ";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     auto time_start = chrono::high_resolution_clock::now();
+#endif
     Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+#ifdef OUTPUT_COMP_DURATION
     auto time_end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed;
     elapsed = time_end - time_start;
     cout << "envirupdate(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Growth(&parameter[0], yearposition, world_tree_list, world_weather_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Growth(" << elapsed.count() << ")+";
+#endif
 
     int findyr1 = 0, findyr2 = 0, yr = 0;
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
@@ -69,19 +79,29 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
             std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
         }
     }
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Seeddispersal(yr, &parameter[0], world_seed_list, world_plot_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Seeddispersal(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Seedproduction(&parameter[0], world_tree_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Seedproduction(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     if (parameter[0].seedintro == true && parameter[0].yearswithseedintro > 0) {
         parameter[0].starter = true;
         Treedistribution(&parameter[0], stringlengthmax);
@@ -90,45 +110,69 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
         parameter[0].starter = true;
         Treedistribution(&parameter[0], stringlengthmax);
     }
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Treedistribution(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Hinterlandseedintro(&parameter[0], yearposition, world_seed_list, world_weather_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Hinterlandseedintro(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Treeestablishment(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Treeestablishment(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
     cout << "Dataoutput(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Mortality(&parameter[0], yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
     wspd.clear();
     wdir.clear();
     wspd.shrink_to_fit();
     wdir.shrink_to_fit();
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
-    // cout << "Mortality(" << elapsed.count() << ")+";
+    cout << "Mortality(" << elapsed.count() << ")+";
+#endif
 
+#ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
+#endif
     Ageing(&parameter[0], world_tree_list, world_seed_list);
+#ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
-    // cout << "Ageing(" << elapsed.count() << ")+";
+    cout << "Ageing(" << elapsed.count() << ")+";
+#endif
 
-    // cout << " /// done " << endl;
+#ifdef OUTPUT_COMP_DURATION
+    cout << " /// done " << endl;
+#endif
 }
 
 void Spinupphase() {

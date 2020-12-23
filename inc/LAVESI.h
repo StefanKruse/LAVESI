@@ -21,3 +21,7 @@
 // TODO use reference instead of pointer as parameters
 // TODO use smart pointers
 // TODO get rid of globals
+// TODO get rid of world_*_lists
+// TODO use += *= etc more
+// TODO reduce array lookups, e.g. plot_list[curposi] in plotupdate.cpp:109
+// TODO use ofstream instead of FILE

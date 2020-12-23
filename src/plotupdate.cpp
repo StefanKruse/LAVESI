@@ -9,8 +9,8 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
         auto& tree = tree_list[tree_i];
 
-        int i = (double)tree.ycoo / 1000 * parameter[0].sizemagnif;
-        int j = (double)tree.xcoo / 1000 * parameter[0].sizemagnif;
+        int i = tree.ycoo * parameter[0].sizemagnif / 1000;
+        int j = tree.xcoo * parameter[0].sizemagnif / 1000;
 
         // assess the size of the area the current tree influences
         double impactareasize = 0.0;
@@ -28,15 +28,16 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
             impactareasize = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * tree.dbasal)))) - 1;
 
         if (impactareasize < (1.0 / parameter[0].sizemagnif)) {  // if the trees influences only one density grid cell
-            unsigned long long int curposi =
-                (unsigned long long int)i * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif + (unsigned long long int)j;
+            const std::size_t curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+                                        + static_cast<std::size_t>(j);
+            auto& cur_plot = plot_list[curposi];
 
-            plot_list[curposi].Treedensityvalue += 10000
-                                                   * pow(pow(impactareasize / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing)
-                                                             // weighing with diameter
-                                                             * pow(tree.dbasal, parameter[0].densitytreetile),
-                                                         parameter[0].densityvaluemanipulatorexp);
-            plot_list[curposi].Treenumber++;
+            cur_plot.Treedensityvalue += 10000
+                                         * pow(pow(impactareasize / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing)
+                                                   // weighing with diameter
+                                                   * pow(tree.dbasal, parameter[0].densitytreetile),
+                                               parameter[0].densityvaluemanipulatorexp);
+            ++cur_plot.Treenumber;
             tree.densitywert =
                 pow(pow(tree.dbasal, parameter[0].densitytreetile) * pow(impactareasize / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
                     parameter[0].densityvaluemanipulatorexp);
@@ -48,7 +49,7 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
             for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
                 for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
                     if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-                        && (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
+                        && (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  // TODO directly use in for loop boundaries
                         // distance calculation to determine the influence of the density value in spatial units ...
                         // ... and inserting the value at every position
                         double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
@@ -102,18 +103,19 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 
             // if the tree only influences one grid cell
             if (impactareasize < (1.0 / parameter[0].sizemagnif)) {
-                unsigned long long int curposi =
-                    (unsigned long long int)i * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif + (unsigned long long int)j;
+                const std::size_t curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+                                            + static_cast<std::size_t>(j);
+                auto& cur_plot = plot_list[curposi];
 
                 if (parameter[0].densitymode == 2) {
-                    if (plot_list[curposi].Treedensityvalue > 0) {
+                    if (cur_plot.Treedensityvalue > 0) {
                         if (parameter[0].densitytiletree == 1)  // sum of values
                         {
-                            tree.densitywert = (1.0 - (tree.densitywert / ((double)plot_list[curposi].Treedensityvalue / 10000)));
+                            tree.densitywert = (1.0 - (tree.densitywert / ((double)cur_plot.Treedensityvalue / 10000)));
                             //                           density_desired(at position) / density_currently(at position)
                         } else if (parameter[0].densitytiletree == 2)  // multiplication of values
                         {
-                            tree.densitywert = (1.0 - (tree.densitywert / (((double)plot_list[curposi].Treedensityvalue / 10000) * tree.densitywert)));
+                            tree.densitywert = (1.0 - (tree.densitywert / (((double)cur_plot.Treedensityvalue / 10000) * tree.densitywert)));
                             //                         density_desired(at position) / density_currently(at position)
                         }
                     } else {
@@ -122,8 +124,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 
                     // dem sensing
                     if (parameter[0].demlandscape) {
-                        tree.elevation = plot_list[curposi].elevation;
-                        tree.envirimpact = plot_list[curposi].envirgrowthimpact;
+                        tree.elevation = cur_plot.elevation;
+                        tree.envirimpact = cur_plot.envirgrowthimpact;
                     }
                 } else if (parameter[0].densitymode == 3) {
                     // determine the grid position randomly
@@ -149,8 +151,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
                 }
 
                 // calculate the influence of the thawing depth on the tree growth
-                if ((plot_list[curposi].maxthawing_depth < 2000) && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
-                    tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * (double)plot_list[curposi].maxthawing_depth);
+                if ((cur_plot.maxthawing_depth < 2000) && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
+                    tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * (double)cur_plot.maxthawing_depth);
                 } else {
                     tree.thawing_depthinfluence = 100;
                 }
@@ -350,22 +352,31 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
+    if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
+        double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
+        // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
+
+        if (daempfung >= 0.9) {
+            daempfung = 0.9;
+        }
+
+        const unsigned short maxthawing_depth =
+            1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+
 #pragma omp parallel for default(shared) schedule(guided)
-    for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
-        auto& pEnvirgrid = plot_list[kartenpos];
-        pEnvirgrid.Treedensityvalue = 0;
-        pEnvirgrid.Treenumber = 0;
+        for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+            auto& pEnvirgrid = plot_list[kartenpos];
+            pEnvirgrid.Treedensityvalue = 0;
+            pEnvirgrid.Treenumber = 0;
+            pEnvirgrid.maxthawing_depth = maxthawing_depth;
+        }
 
-        if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
-            double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
-            // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-
-            if (daempfung >= 0.9)
-                daempfung = 0.9;
-
-            pEnvirgrid.maxthawing_depth =
-                (unsigned short)(1000.0 * (1.0 - daempfung) * 0.050
-                                 * weather_list[yearposition].degreday_sqrt);  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+    } else {
+#pragma omp parallel for default(shared) schedule(guided)
+        for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+            auto& pEnvirgrid = plot_list[kartenpos];
+            pEnvirgrid.Treedensityvalue = 0;
+            pEnvirgrid.Treenumber = 0;
         }
     }
 }

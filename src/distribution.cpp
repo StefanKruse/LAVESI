@@ -78,23 +78,20 @@ void Pollinationprobability(double x,
             p = exp(kappa * (cos(phi - direction) * -1)) / (2 * I0kappa) * (exp(-2 * pe * pow(dr, 1 - 0.5 * m) / (sqrt(M_PI) * C * (1 - 0.5 * m))));
             // f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
 
-            if (randomnumberwindfather > p) {
-                continue;
-            } else {
+            if (randomnumberwindfather <= p) {
                 // pName.push_back(tree_copy.name);
                 thdpthinfl.push_back(100);
-            }
-
-            // data output for pollen flight analysis
-            if (parameter[0].pollination == 1 && parameter[0].omp_num_threads == 1 && outputtreesiter <= 5 && parameter[0].ivort >= 1046) {
-                FILE* fdir;
-                char filenamechar[25];
-                sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
-                string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
-                fdir = fopen(output.c_str(), "a+");
-                fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo / 1000,
-                        (double)tree_copy.ycoo / 1000, x, y);
-                fclose(fdir);
+                // data output for pollen flight analysis
+                if (parameter[0].pollination == 1 && parameter[0].omp_num_threads == 1 && outputtreesiter <= 5 && parameter[0].ivort >= 1046) {
+                    FILE* fdir;
+                    char filenamechar[25];
+                    sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
+                    string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
+                    fdir = fopen(output.c_str(), "a+");
+                    fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo / 1000,
+                            (double)tree_copy.ycoo / 1000, x, y);
+                    fclose(fdir);
+                }
             }
         }
     }

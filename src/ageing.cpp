@@ -12,15 +12,13 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 #pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
-            if (seed.dead) {
-                continue;
-            }
-            seed.age++;
-
-            // seeds older than gmelseedmaxage years (L.gmelinii) and 10 years (L.sibirica) die
-            if (((seed.species == 1) && (seed.age > parameter[0].gmelseedmaxage)) || ((seed.species == 2) && (seed.age > 10))) {
-                seed.dead = true;
-                seed_list.remove(i);
+            if (!seed.dead) {
+                seed.age++;
+                // seeds older than gmelseedmaxage years (L.gmelinii) and 10 years (L.sibirica) die
+                if (((seed.species == 1) && (seed.age > parameter[0].gmelseedmaxage)) || ((seed.species == 2) && (seed.age > 10))) {
+                    seed.dead = true;
+                    seed_list.remove(i);
+                }
             }
         }
         seed_list.consolidate();

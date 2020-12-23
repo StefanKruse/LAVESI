@@ -55,17 +55,15 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
                         double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
                         // only if the current grid cell is part of the influence area, a value is assigned
                         if (entfrastpos <= (double)xyquerrastpos) {
-                            unsigned long long int curposii =
-                                (unsigned long long int)rastposi * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif
-                                + (unsigned long long int)rastposj;
-
-                            plot_list[curposii].Treedensityvalue +=
-                                10000 * pow(pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
-
-                            plot_list[curposii].Treenumber++;
-
-                            sumdensitywert +=
-                                pow(pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
+                            std::size_t curposii =
+                                static_cast<std::size_t>(rastposi) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+                                + static_cast<std::size_t>(rastposj);
+                            auto& cur_plot = plot_list[curposii];
+                            const auto density =
+                                std::pow(std::pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
+                            cur_plot.Treedensityvalue += 10000 * density;
+                            ++cur_plot.Treenumber;
+                            sumdensitywert += density;
                         }
                     }
                 }
@@ -132,18 +130,19 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
                     int izuf = (treerows - 1) * parameter[0].sizemagnif * uniform.draw();
                     int jzuf = (treecols - 1) * parameter[0].sizemagnif * uniform.draw();
 
-                    unsigned long long int curposii =
-                        (unsigned long long int)izuf * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif
-                        + (unsigned long long int)jzuf;
+                    std::size_t curposii =
+                        static_cast<std::size_t>(izuf) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+                        + static_cast<std::size_t>(jzuf);
+                    auto& cur_plot = plot_list[curposii];
 
-                    if (plot_list[curposii].Treedensityvalue > 0) {
+                    if (cur_plot.Treedensityvalue > 0) {
                         if (parameter[0].densitytiletree == 1)  // sum of values
                         {
-                            tree.densitywert = (1.0 - (tree.densitywert / ((double)plot_list[curposii].Treedensityvalue / 10000)));
+                            tree.densitywert = (1.0 - (tree.densitywert / ((double)cur_plot.Treedensityvalue / 10000)));
                             //                           density_desired(at position) / density_currently(at position)
                         } else if (parameter[0].densitytiletree == 2)  // multiplication of values
                         {
-                            tree.densitywert = (1.0 - (tree.densitywert / (((double)plot_list[curposii].Treedensityvalue / 10000) * tree.densitywert)));
+                            tree.densitywert = (1.0 - (tree.densitywert / (((double)cur_plot.Treedensityvalue / 10000) * tree.densitywert)));
                         }
                     } else {
                         tree.densitywert = 0.0;
@@ -185,28 +184,29 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
                                     jcurr = (treecols - 1) * parameter[0].sizemagnif * uniform.draw();
                                 }
 
-                                unsigned long long int curposii =
-                                    (unsigned long long int)icurr * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif
-                                    + (unsigned long long int)jcurr;
+                                std::size_t curposii =
+                                    static_cast<std::size_t>(icurr) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+                                    + static_cast<std::size_t>(jcurr);
+                                auto& cur_plot = plot_list[curposii];
 
                                 if (parameter[0].densitytiletree == 1) {
-                                    sumdensitywert += ((double)plot_list[curposii].Treedensityvalue / 10000) * (1 - entfrastpos / maxdist);
+                                    sumdensitywert += ((double)cur_plot.Treedensityvalue / 10000) * (1 - entfrastpos / maxdist);
                                     // added the values influence as becoming weaker in the periphery, otherwise the density value influence would be
                                     // overestimated
                                 } else if (parameter[0].densitytiletree == 2) {
                                     // after weighting the additional values by the individual influence values the offset is added
-                                    sumdensitywert += (((double)plot_list[curposii].Treedensityvalue / 10000)
-                                                       - pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0))
-                                                          * pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0)
-                                                      + pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0);
+                                    sumdensitywert +=
+                                        (((double)cur_plot.Treedensityvalue / 10000) - pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0))
+                                            * pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0)
+                                        + pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0);
                                 }
 
-                                sumthawing_depth += (double)plot_list[curposii].maxthawing_depth;
+                                sumthawing_depth += (double)cur_plot.maxthawing_depth;
                                 anzahlflaechen++;
 
-                                if (parameter[0].demlandscape && (plot_list[curposii].elevation < 32767)) {  // dem sensing
-                                    sumelevation += (double)plot_list[curposii].elevation / 10;
-                                    sumenvirgrowthimpact += (double)plot_list[curposii].envirgrowthimpact / 10000;
+                                if (parameter[0].demlandscape && (cur_plot.elevation < 32767)) {  // dem sensing
+                                    sumelevation += (double)cur_plot.elevation / 10;
+                                    sumenvirgrowthimpact += (double)cur_plot.envirgrowthimpact / 10000;
                                     countelevation++;
                                 }
                             }
@@ -219,7 +219,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
                 else
                     tree.densitywert = 0.0;
 
-                sumthawing_depth = (sumthawing_depth / (double)anzahlflaechen);
+                sumthawing_depth /= anzahlflaechen;
 
                 if (sumthawing_depth < 2000)
                     tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
@@ -414,6 +414,4 @@ void Environmentupdate(Parameter* parameter,
 
         IndividualTreeDensity(tree_list, plot_list);
     }
-
-    // cout << " ... envir update done!" << endl;
 }

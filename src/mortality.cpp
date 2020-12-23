@@ -234,7 +234,7 @@ void Mortality(Parameter* parameter,
                     bool pollinated = false;
                     for (int sna = 0; sna < tree.seednewly_produced; sna++) {
                         if (uniform.draw() >= parameter[0].seedconemort) {
-                            if (!pollinated && (parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9)) {
+                            if (!pollinated && ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9))) {
                                 double randomnumberwind = uniform.draw();
                                 double randomnumberwindfather = uniform.draw();
                                 Pollinationprobability((double)tree.xcoo / 1000, (double)tree.ycoo / 1000, &parameter[0], world_positon_b, direction, velocity,

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-double Parameterinput(char* uebergabestring, int stringlengthmax, char* divisionsign, Parameter* parameter);
+double Parameterinput(const char* uebergabestring, int stringlengthmax, const char* divisionsign, Parameter* parameter);
 void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vector<Weather>>& world_weather_list);
 void Dataoutput(int t,
                 int jahr,

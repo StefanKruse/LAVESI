@@ -19,3 +19,6 @@ class RandomNumber {
     T draw() { return distribution(rng); }
     T operator()() { return draw(); }
 };
+
+template<typename T, typename RNG>
+std::random_device RandomNumber<T, RNG>::random_dev;

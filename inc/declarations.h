@@ -14,7 +14,7 @@ constexpr unsigned int treecols = 5010;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;
-constexpr char* divisionsign = "=;";
+constexpr const char* divisionsign = "=;";
 
 class Parameter;
 extern Parameter parameter[1];

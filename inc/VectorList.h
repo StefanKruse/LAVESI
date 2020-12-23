@@ -17,14 +17,14 @@ class VectorList {
     std::vector<T> members;
     std::vector<std::unique_ptr<std::vector<std::size_t>>> removed;
     std::vector<std::unique_ptr<std::vector<T>>> additional;
-    unsigned int thread_used = 0;
+    std::size_t thread_used = 0;
     std::mt19937_64 rng;
 
   public:
-    explicit VectorList(unsigned int threads_count) : rng(1234) {
+    explicit VectorList(std::size_t threads_count) : rng(1234) {
         additional.resize(threads_count);
         removed.resize(threads_count);
-        for (int i = 0; i < threads_count; ++i) {
+        for (std::size_t i = 0; i < threads_count; ++i) {
             additional[i].reset(new std::vector<T>());
             removed[i].reset(new std::vector<std::size_t>());
         }
@@ -34,7 +34,7 @@ class VectorList {
         const auto threads_count = other.additional.size();
         additional.resize(threads_count);
         removed.resize(threads_count);
-        for (int i = 0; i < threads_count; ++i) {
+        for (std::size_t i = 0; i < threads_count; ++i) {
             additional[i].reset(new std::vector<T>(*other.additional[i]));
             removed[i].reset(new std::vector<std::size_t>(*other.removed[i]));
         }
@@ -47,7 +47,7 @@ class VectorList {
         members = other.members;
         additional.resize(threads_count);
         removed.resize(threads_count);
-        for (int i = 0; i < threads_count; ++i) {
+        for (std::size_t i = 0; i < threads_count; ++i) {
             additional[i].reset(new std::vector<T>(*other.additional[i]));
             removed[i].reset(new std::vector<std::size_t>(*other.removed[i]));
         }
@@ -60,7 +60,7 @@ class VectorList {
 
     void clear() {
         members.clear();
-        for (int i = 0; i < removed.size(); ++i) {
+        for (std::size_t i = 0; i < removed.size(); ++i) {
             removed[i]->clear();
             additional[i]->clear();
         }
@@ -115,7 +115,7 @@ class VectorList {
 #ifdef DEBUG
         std::cout << "\n\n";
 #endif
-        for (int i = 0; i < threads_count; ++i) {
+        for (std::size_t i = 0; i < threads_count; ++i) {
 #ifdef DEBUG
             std::cout << "Thread " << i << ": additional=" << additional[i]->size() << "/" << additional[i]->capacity() << " removed=" << removed[i]->size()
                       << "/" << removed[i]->capacity() << "\n";

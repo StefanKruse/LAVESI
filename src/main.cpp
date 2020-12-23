@@ -5,7 +5,6 @@
 using namespace std;
 
 Parameter parameter[1];
-std::random_device RandomNumber<double>::random_dev;
 
 int yearposition;
 

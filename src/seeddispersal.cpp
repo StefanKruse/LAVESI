@@ -167,7 +167,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
 
                         // check whether seed lands on plot or leaves the plot
                         bool sameausserhalb = false;
-                        if ((double)seed.ycoo / 1000 > (double)(treerows - 1)) {
+                        if (seed.ycoo > 1000 * (treerows - 1)) {
                             if ((parameter[0].boundaryconditions == 1)) {
                                 seed.ycoo = 1000 * fmod((double)seed.ycoo / 1000, (double)(treerows - 1));
                                 // seed.namem = 0;
@@ -216,8 +216,7 @@ void Seeddispersal(int jahr, struct Parameter* parameter, vector<VectorList<Seed
                         }
 
                         if ((sameausserhalb == false)
-                            && ((seed.ycoo < 0) || ((double)seed.ycoo / 1000 > (double)(treerows - 1)) || (seed.xcoo < 0)
-                                || ((double)seed.xcoo / 1000 > (double)(treecols - 1)))) {
+                            && ((seed.ycoo < 0) || (seed.ycoo > 1000 * (treerows - 1)) || (seed.xcoo < 0) || (seed.xcoo > 1000 * (treecols - 1)))) {
                             printf("\n\nLaVeSi was exited ");
                             printf("in Seeddispersal.cpp\n");
                             printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n",

@@ -1,4 +1,3 @@
-#include <cassert>
 #include "LAVESI.h"
 #include "RandomNumber.h"
 #include "VectorList.h"
@@ -35,10 +34,8 @@ void Treeestablishment(struct Parameter* parameter,
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
-                unsigned long long int curposi =
-                    (unsigned long long int)i * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif + (unsigned long long int)j;
-
-                assert(curposi >= 0);
+                const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+                                     + static_cast<std::size_t>(j);
 
                 if ((parameter[0].demlandscape) && (plot_list[curposi]->elevation == 32767)) {
                     seed.dead = true;

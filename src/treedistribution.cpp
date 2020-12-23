@@ -87,9 +87,9 @@ void Seedin() {
                 int rn_species = 0;
                 if (parameter[0].specpres == 0) {
                     rn_seed = uniform.draw();
-                    if ((rn_seed >= 0.0) && (rn_seed <= 0.5)) {
+                    if (rn_seed <= 0.5) {
                         rn_species = 1;
-                    } else if ((rn_seed > 0.5) && (rn_seed <= 1.0)) {
+                    } else {
                         rn_species = 2;
                     }
                 } else if (parameter[0].specpres == 1) {
@@ -294,9 +294,9 @@ void Hinterlandseedintro(struct Parameter* parameter,
                     int specieszufall = 0;
                     if (parameter[0].specpres == 0) {
                         seedzufall = uniform.draw();
-                        if ((seedzufall >= 0.0) && (seedzufall <= 0.5)) {
+                        if (seedzufall <= 0.5) {
                             specieszufall = 1;
-                        } else if ((seedzufall > 0.5) && (seedzufall <= 1.0)) {
+                        } else {
                             specieszufall = 2;
                         }
                     } else if (parameter[0].specpres == 1) {

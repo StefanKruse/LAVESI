@@ -242,6 +242,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 			}
 		}
 }  // pragma
+        seed_list.consolidate();
 	}
 }
 

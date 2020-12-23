@@ -382,8 +382,10 @@ void Yearsteps() {
 void createLists() {
     for (int i = 0; i < parameter[0].mapylength; i++) {
         for (int j = 0; j < parameter[0].mapxlength; j++) {
-            world_tree_list.emplace_back();  // include new tree_list in corresponding world list
-            world_seed_list.emplace_back();  // include new seed_list in corresponding world list
+            world_tree_list.emplace_back(parameter[0].omp_num_threads);  // include new tree_list in corresponding world list
+
+            world_seed_list.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
+
             vector<Weather*> weather_list;               // Creating new weather_list
             world_weather_list.push_back(weather_list);  // include new weather_list in corresponding world list
             vector<Envirgrid*> plot_list;          // Creating new plot_list
@@ -391,9 +393,12 @@ void createLists() {
             vector<Evaluation*> evaluation_list;               // Creating new evaluation_list
             world_evaluation_list.push_back(evaluation_list);  // include new evaluation_list in corresponding world list
 
-            if (parameter[0].resetyear > 0) {// create lists for resetting to a certain year
-                world_tree_list_copy.emplace_back();  // include new seed_list in corresponding world list
-				world_seed_list_copy.emplace_back();  // include new seed_list in corresponding world list
+            if (parameter[0].resetyear > 0) {
+                // Create lists for resetting to a certain year
+                world_tree_list_copy.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
+				
+                world_seed_list_copy.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
+
                 vector<Envirgrid*> plot_list;               // Creating new plot_list
                 world_plot_list_copy.push_back(plot_list);  // include new plot_list in corresponding world list
                 vector<Evaluation*> evaluation_list;                    // Creating new evaluation_list

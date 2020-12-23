@@ -115,9 +115,10 @@ void Seedin() {
                     seed.thawing_depthinfluence = 100;
                     seed.dead = false;
 
-                    seed_list.add(seed);
+                    seed_list.add_directly(seed);
                 }
             }
+            seed_list.consolidate();
         }
     }
 }
@@ -213,10 +214,11 @@ void TreesIni(int maximal_word_length) {
                         tree.species = 2;
                     }
 
-                    tree_list.add(tree);
+                    tree_list.add_directly(tree);
                 }
                 counter++;
             }
+            tree_list.consolidate();
 
             fclose(f);
         }
@@ -393,10 +395,11 @@ void Hinterlandseedintro(struct Parameter* parameter,
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;
 
-                        seed_list.add(seed);
+                        seed_list.add_directly(seed);
                     }
                 }
             }
+            seed_list.consolidate();
 
 #ifdef DEBUG
             cout << "C: introduced seeds=" << introduced << " ----> N=" << exceedstoN << "  E=" << exceedstoE << "  S=" << exceedstoS << "  W=" << exceedstoW

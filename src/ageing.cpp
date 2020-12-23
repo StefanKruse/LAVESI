@@ -28,6 +28,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
         }
 } // pragma
+        seed_list.consolidate();
 
     int mat_age_length = 183;  // length of array maturationheight
     // height values in percent (0-99) computed externally

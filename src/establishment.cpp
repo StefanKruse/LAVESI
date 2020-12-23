@@ -51,6 +51,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 
 				if( (parameter[0].demlandscape) & (plot_list[curposi]->elevation==32767) ){
 					seed.dead = true;
+                    seed_list.remove(i_seed);
 					continue;
 				}
 
@@ -299,6 +300,8 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
             }
 		}// seed_list loop
 }// pragma
+        seed_list.consolidate();
+        tree_list.consolidate();
     }
 }
 

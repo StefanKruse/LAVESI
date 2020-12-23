@@ -71,6 +71,7 @@ void Savealllists() {
 
             ++countertree;
         }
+        tree_list_copy.consolidate();
 
         cout << "tree_list_copy.size() after copying=" << tree_list_copy.size() << endl;
         cout << endl;
@@ -386,6 +387,7 @@ void Restorealllists(void) {
 
             ++countertree;
         }
+        tree_list_copy.consolidate();
 
         cout << "tree_list.size() after copying=" << tree_list.size() << endl;
         cout << "tree_list_copy.size() after copying=" << tree_list_copy.size() << endl;

@@ -170,6 +170,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
         }
     }
 } // pragma
+    tree_list.consolidate();
 }
 
 void Mortality(struct Parameter* parameter,
@@ -216,6 +217,7 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 } // pragma
 
         // int aktortyworldcoo = (int)floor((double)(aktort - 1) / parameter[0].mapxlength);
+        seed_list.consolidate();
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 		double direction = 0.0;
@@ -304,8 +306,9 @@ omp_set_num_threads(parameter[0].omp_num_threads); //set the number of helpers
 						}
 					}
 				}
-			}// main tree loop on each core
-}// pragma
+			}  // main tree loop on each core
+		}      // parallel region
+        seed_list.consolidate();
 
 		// Vname.clear();
 		// Vname.shrink_to_fit();

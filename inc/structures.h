@@ -45,9 +45,9 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     // double maxgrowth;				// 8	-> not in use right now
     // double pollenfall;				// 8	-> not in use right now
     // double descent;					// 8	-> not in use right now
-    double thawing_depthinfluence;  // 8
-    unsigned int xcoo;              // 4	---> was double ---> only positive
-    unsigned int ycoo;              // 4	---> was double ---> only positive
+    double thawing_depthinfluence;  	// 8
+    int xcoo;              				// 4	---> was double -> int with /1000 precision
+    int ycoo;              				// 4	---> was double -> int with /1000 precision
     // int xworldcoo;					// 4	-> not in use right now
     // int yworldcoo;					// 4	-> not in use right now
     // int namem;						// 4	-> not in use right now

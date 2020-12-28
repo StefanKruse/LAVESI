@@ -38,7 +38,11 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     auto time_start = chrono::high_resolution_clock::now();
 #endif
-    Environmentupdate(&parameter[0], yearposition, world_plot_list, world_tree_list, world_weather_list);
+    Environmentupdate(//&parameter[0], 
+					  yearposition, 
+					  world_plot_list, 
+					  world_tree_list, 
+					  world_weather_list);
 #ifdef OUTPUT_COMP_DURATION
     auto time_end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed;
@@ -81,7 +85,10 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Seeddispersal(yr, &parameter[0], world_seed_list, world_plot_list);
+    Seeddispersal(//yr, 
+				  &parameter[0], 
+				  world_seed_list, 
+				  world_plot_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -148,7 +155,12 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Mortality(&parameter[0], yr, yearposition, world_tree_list, world_seed_list, world_weather_list);
+    Mortality(&parameter[0], 
+			  // yr, 
+			  yearposition, 
+			  world_tree_list, 
+			  world_seed_list, 
+			  world_weather_list);
     wspd.clear();
     wdir.clear();
     wspd.shrink_to_fit();

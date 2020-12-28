@@ -13,7 +13,7 @@ void Pollinationprobability(double x,
                             double direction,
                             double velocity,
                             unsigned int ripm,
-                            unsigned int cntr,
+                            // unsigned int cntr,
                             double p,
                             double kappa,
                             double phi,
@@ -33,7 +33,7 @@ void Pollinationprobability(double x,
     direction = 0.0;
     velocity = 0.0;
     ripm = 0;
-    cntr = 0;
+    // cntr = 0;
     p = 0.0;
     kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
     phi = 0.0;

@@ -48,8 +48,8 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
             double sumdensitywert = 0;
             for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
                 for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
-                    if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-                        && (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  // TODO directly use in for loop boundaries
+                    if ((rastposi <= (int)((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
+                        && (rastposj <= (int)((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  // TODO directly use in for loop boundaries
                         // distance calculation to determine the influence of the density value in spatial units ...
                         // ... and inserting the value at every position
                         double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
@@ -171,8 +171,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 
                 for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
                     for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
-                        if ((rastposi <= ((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-                            && (rastposj <= ((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
+                        if ((rastposi <= ((int)(treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
+                            && (rastposj <= ((int)(treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
                             double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
 
                             if (entfrastpos <= (double)xyquerrastpos) {
@@ -390,7 +390,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
  *
  *******************************************************************************************/
 
-void Environmentupdate(Parameter* parameter,
+void Environmentupdate(//Parameter* parameter,
                        int yearposition,
                        vector<vector<Envirgrid>>& world_plot_list,
                        vector<VectorList<Tree>>& world_tree_list,

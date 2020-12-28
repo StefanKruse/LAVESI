@@ -79,7 +79,9 @@ void getPrec(char dateinameprec[50], vector<Weather>& weather_list, int maximal_
     fclose(fp);
 }
 
-void getTemp(int aktort, char dateinametemp[50], vector<Weather>& weather_list) {
+void getTemp(	//int aktort, 
+				char dateinametemp[50], 
+				vector<Weather>& weather_list) {
     // TODO: check whether this grid-based simulation setup is still necessary or can be removed
     // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
     // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
@@ -785,7 +787,9 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (parameter[0].locationshift + (double)treerows);
         }
 
-        getTemp(aktort, dateinametemp, weather_list);
+        getTemp(	//aktort, 
+					dateinametemp, 
+					weather_list);
         getPrec(dateinameprec, weather_list, stringlengthmax);
     }
 

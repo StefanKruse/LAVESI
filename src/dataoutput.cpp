@@ -1118,7 +1118,7 @@ void Dataoutput(int t,
 
             // add data to file
             for (std::size_t yposi = 0; yposi < treerows; ++yposi) {
-                fprintf(filepointer, "%d;", yposi);
+                fprintf(filepointer, "%ld;", yposi);
                 fprintf(filepointer, "%d;", Species1_stems[yposi]);
                 fprintf(filepointer, "%d;", Species2_stems[yposi]);
                 fprintf(filepointer, "%d;", Species1_seedlings[yposi]);

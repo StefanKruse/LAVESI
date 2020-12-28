@@ -183,7 +183,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 }
 
 void Mortality(Parameter* parameter,
-               int Jahr,
+               // int Jahr,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
@@ -203,7 +203,7 @@ void Mortality(Parameter* parameter,
             RandomNumber<double> uniform(0, 1);
             double direction = 0.0;
             double velocity = 0.0;
-            unsigned int ripm = 0, cntr = 0;
+            unsigned int ripm = 0;//, cntr = 0;
             double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
             double I0kappa = 0.0;
             double pe = 0.01;
@@ -237,8 +237,28 @@ void Mortality(Parameter* parameter,
                             if (!pollinated && ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9))) {
                                 double randomnumberwind = uniform.draw();
                                 double randomnumberwindfather = uniform.draw();
-                                Pollinationprobability((double)tree.xcoo / 1000, (double)tree.ycoo / 1000, &parameter[0], world_positon_b, direction, velocity,
-                                                       ripm, cntr, p, kappa, phi, dr, dx, dy, I0kappa, pe, C, m, Vname, Vthdpth, n_trees, randomnumberwind,
+                                Pollinationprobability((double)tree.xcoo / 1000, 
+													   (double)tree.ycoo / 1000, 
+													   &parameter[0], 
+													   world_positon_b, 
+													   direction, 
+													   velocity,
+                                                       ripm, 
+													   // cntr, 
+													   p, 
+													   kappa, 
+													   phi, 
+													   dr, 
+													   dx, 
+													   dy, 
+													   I0kappa, 
+													   pe, 
+													   C, 
+													   m, 
+													   Vname, 
+													   Vthdpth, 
+													   n_trees, 
+													   randomnumberwind,
                                                        randomnumberwindfather);
                                 pollinated = true;
                             }

@@ -19,13 +19,16 @@ void Dataoutput(int t,
                 vector<vector<Evaluation>>& world_evaluation_list);
 void Treedistribution(Parameter* parameter, int stringlengthmax);
 void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorList<Seed>>& world_seed_list, vector<vector<Weather>>& world_weather_list);
-void Environmentupdate(Parameter* parameter,
+void Environmentupdate(//Parameter* parameter,
                        int yearposition,
                        vector<vector<Envirgrid>>& world_plot_list,
                        vector<VectorList<Tree>>& world_tree_list,
                        vector<vector<Weather>>& world_weather_list);
 void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& world_tree_list, vector<vector<Weather>>& world_weather_list);
-void Seeddispersal(int Jahr, Parameter* parameter, vector<VectorList<Seed>>& world_seed_list, vector<vector<Envirgrid>>& world_plot_list);
+void Seeddispersal(//int Jahr, 
+				   Parameter* parameter, 
+				   vector<VectorList<Seed>>& world_seed_list, 
+				   vector<vector<Envirgrid>>& world_plot_list);
 void Seedproduction(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list);
 void Treeestablishment(Parameter* parameter,
                        int yearposition,
@@ -34,7 +37,7 @@ void Treeestablishment(Parameter* parameter,
                        vector<vector<Weather>>& world_weather_list,
                        vector<vector<Envirgrid>>& world_plot_list);
 void Mortality(Parameter* parameter,
-               int Jahr,
+               // int Jahr,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
@@ -47,7 +50,7 @@ void Pollinationprobability(double x,
                             double direction,
                             double velocity,
                             unsigned int ripm,
-                            unsigned int cntr,
+                            // unsigned int cntr,
                             double p,
                             double kappa,
                             double phi,

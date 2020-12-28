@@ -43,7 +43,10 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
     fclose(filepointer);
 }
 
-void Seeddispersal(int jahr, Parameter* parameter, vector<VectorList<Seed>>& world_seed_list, vector<vector<Envirgrid>>& world_plot_list) {
+void Seeddispersal(//int jahr, 
+				   Parameter* parameter, 
+				   vector<VectorList<Seed>>& world_seed_list, 
+				   vector<vector<Envirgrid>>& world_plot_list) {
     int aktort = 0;
 
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
@@ -124,7 +127,7 @@ void Seeddispersal(int jahr, Parameter* parameter, vector<VectorList<Seed>>& wor
                             }
 
                             // only if still in plot
-                            if ((ycoostartdem < (parameter[0].sizemagnif * (treerows - 1))) & (xcoostartdem < (parameter[0].sizemagnif * treecols - 1))
+                            if ((ycoostartdem < (int)(parameter[0].sizemagnif * (treerows - 1))) & (xcoostartdem < (int)(parameter[0].sizemagnif * treecols - 1))
                                 & (ycoostartdem >= 0) & (xcoostartdem >= 0)) {
                                 // assess current elevation
                                 double actele = (double)plot_list[(unsigned long long int)ycoostartdem * (unsigned long long int)treecols
@@ -160,7 +163,7 @@ void Seeddispersal(int jahr, Parameter* parameter, vector<VectorList<Seed>>& wor
 
                     // check whether seed lands on plot or leaves the plot
                     bool sameausserhalb = false;
-                    if (seed.ycoo > 1000 * (treerows - 1)) {
+                    if (seed.ycoo > 1000 * ((int)treerows - 1)) {
                         if ((parameter[0].boundaryconditions == 1)) {
                             seed.ycoo = 1000 * fmod((double)seed.ycoo / 1000, (double)(treerows - 1));
                             // seed.namem = 0;
@@ -209,7 +212,7 @@ void Seeddispersal(int jahr, Parameter* parameter, vector<VectorList<Seed>>& wor
                     }
 
                     if ((sameausserhalb == false)
-                        && ((seed.ycoo < 0) || (seed.ycoo > 1000 * (treerows - 1)) || (seed.xcoo < 0) || (seed.xcoo > 1000 * (treecols - 1)))) {
+                        && ((seed.ycoo < 0) || (seed.ycoo > 1000 * ((int)treerows - 1)) || (seed.xcoo < 0) || (seed.xcoo > 1000 * ((int)treecols - 1)))) {
                         printf("\n\nLaVeSi was exited ");
                         printf("in Seeddispersal.cpp\n");
                         printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n",

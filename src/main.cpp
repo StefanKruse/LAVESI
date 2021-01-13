@@ -554,11 +554,10 @@ void fillElevations() {
         for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
             vector<Envirgrid>& plot_list = *posw;
 #pragma omp parallel for default(shared) schedule(guided)
-            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
-                                                                    * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
+            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
                  kartenpos++) {
                 // determine position and distances to gridpoints in low resolution grid
-                double ycoo = (double)kartenpos / (treecols * parameter[0].sizemagnif);
+                double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
                 double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
                 double ycoodem = ycoo / parameter[0].sizemagnif / parameter[0].demresolution;
                 double xcoodem = xcoo / parameter[0].sizemagnif / parameter[0].demresolution;

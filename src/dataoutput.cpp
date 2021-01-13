@@ -1170,12 +1170,11 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // data evaluation and output
-            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif
-                                                                    * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
+            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
                  kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
                 auto& pEnvirgrid = plot_list[kartenpos];
-                double ycooi = (double)kartenpos / (treecols * parameter[0].sizemagnif);
-                double xcooi = (double)kartenpos - (ycooi * (treecols * parameter[0].sizemagnif));
+                double ycooi = floor((double)kartenpos / ((double)treecols * parameter[0].sizemagnif));
+                double xcooi = (double)kartenpos - ((ycooi-1) * ((double)treecols * parameter[0].sizemagnif));
                 if ((parameter[0].demlandscape
                      && ((((xcooi / parameter[0].sizemagnif / parameter[0].demresolution) - floor(xcooi / parameter[0].sizemagnif / parameter[0].demresolution))
                           == 0)

@@ -337,7 +337,19 @@ struct Weather {
     double nddrestriktion;
     double nddrestriktionmin;
     double janmorttemp;
+	double fireindex1;
+	double fireindex2;
+	double fireindex3;
+	double fireindex4;
+	double fireindex5;
+	double fireindex6;
 	double fireindex7;
+	double fireindex8;
+	double fireindex9;
+	double fireindex10;
+	double fireindex11;
+	double fireindex12;
+	double fireweatherindex;
 };
 
 struct Evaluation {

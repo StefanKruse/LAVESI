@@ -151,7 +151,8 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     elapsed = time_end - time_start;
     cout << "Dataoutput(" << elapsed.count() << ")+";
 #endif
-
+	Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+	
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif

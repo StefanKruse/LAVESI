@@ -395,6 +395,13 @@ void passWeather() {
                 weather_list[iweather].nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
 
+			// fire index calculation
+			double T = weather_list[iweather].temp7monthmean;
+			double P = weather_list[iweather].prec7monthmean;
+			weather_list[iweather].fireindex7 = 0.10336*(((T + 6.19) * 0.6291112) + ((P - 34.99) * 0.7773153)) + (-0.17637*(((T + 6.19) * -0.7773153) + ((P - 34.99) * 0.6291112)))+0.69034;
+			// cout << "Feuerindex =" << weather_list[iweather].fireindex7  << endl;
+			
+
             // output to check weather
             FILE* fdir;
             char filenamechar[50];

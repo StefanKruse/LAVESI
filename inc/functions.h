@@ -36,6 +36,12 @@ void Treeestablishment(Parameter* parameter,
                        vector<VectorList<Seed>>& world_seed_list,
                        vector<vector<Weather>>& world_weather_list,
                        vector<vector<Envirgrid>>& world_plot_list);
+void Fire(Parameter* parameter,
+                       int yearposition,
+                       vector<VectorList<Tree>>& world_tree_list,
+                       vector<VectorList<Seed>>& world_seed_list,
+                       vector<vector<Weather>>& world_weather_list,
+                       vector<vector<Envirgrid>>& world_plot_list);
 void Mortality(Parameter* parameter,
                // int Jahr,
                int yearposition,

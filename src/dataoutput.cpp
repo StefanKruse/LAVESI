@@ -275,13 +275,22 @@ void Dataoutput(int t,
                     outputgriddedbiomass = true;
                 }
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
+               
                 outputcurrencies = true;
+				
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
+					
+				if(parameter[0].ivort == 2)// test
+					outputgriddedbiomass = true;
 
-                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
-                    ausgabedensity = true;
-
-                if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 10 == 0))) {
-                    outputgriddedbiomass = true;
+                // if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 10 == 0))) {
+                    // outputgriddedbiomass = true;
+                // }
+                if ( (parameter[0].ivort == 1400)
+						| (parameter[0].ivort >= 1500)
+					) {
+					outputgriddedbiomass = true;
                 }
             } else if (parameter[0].outputmode == 2) {  // "OMP"
                 outputcurrencies = true;

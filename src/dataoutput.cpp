@@ -301,7 +301,15 @@ void Dataoutput(int t,
 						| (parameter[0].ivort >= 1500)) {
 					outputtestarea=true; // area of 200x200 m with full tree output 
                 }
+            } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area Khamra"
+                outputcurrencies = true;
+
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
+					
+				outputgriddedbiomass = true; // each sim step!
 				
+ 
             } else if (parameter[0].outputmode == 2) {  // "OMP"
                 outputcurrencies = true;
             } else if (parameter[0].outputmode == 3) {  // "transect"

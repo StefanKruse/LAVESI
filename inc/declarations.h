@@ -11,8 +11,12 @@
 // constexpr unsigned int treecols = 7860;
 // constexpr unsigned int treerows = 14310;  // 30m_Ilirney_x641989-649489m_y7476026-7490336m
 // constexpr unsigned int treecols = 7500;
-constexpr unsigned int treerows = 24720; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
-constexpr unsigned int treecols = 18000;
+// constexpr unsigned int treerows = 24720; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
+// constexpr unsigned int treecols = 18000;
+// constexpr unsigned int treerows = 10080; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
+// constexpr unsigned int treecols = 9990;
+constexpr unsigned int treerows = 9990; //x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
+constexpr unsigned int treecols = 9990;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

@@ -464,6 +464,7 @@ void fillElevations() {
     // TODO: add fileinput to be set by parameter.txt
 
     if (parameter[0].mapylength == 1) {
+
         // ... read dem data
         FILE* f;
         char demfilename[250];
@@ -472,7 +473,9 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
-		char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char deminputbuf[] = "input/dem_30m_khamra_x271389.9-281389.8m_y6651969.54-6661969m.csv"; //x=9990, y=10080
+		char deminputbuf[] = "input/dem_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -489,12 +492,12 @@ void fillElevations() {
         // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000
         // entries)
         while (fgets(puffer, 6000, f) != NULL) {
-            counter++;
-            elevationinput[counter] = strtod(strtok(puffer, " "), NULL);
-            for (int i = 1; i < deminputdimension_x; ++i) {
+			char * allelements = strtok(puffer, " "); // separate into single tokens
+			while(allelements != NULL) {
                 counter++;  // rows
-                elevationinput[counter] = strtod(strtok(NULL, " "), NULL);
-            }
+                elevationinput[counter] = strtod(allelements, NULL);
+				allelements = strtok(NULL, " "); // set to next
+			}
         }
         fclose(f);
 
@@ -505,7 +508,9 @@ void fillElevations() {
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
-		char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char slopeinputbuf[] = "input/slope_30m_khamra_x271389.9-281389.8m_y6651969.54-6661969m"; //x=18000, y=24720
+		char slopeinputbuf[] = "input/slope_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
         strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
         if (f == NULL) {
@@ -517,23 +522,25 @@ void fillElevations() {
         slopeinput.resize(deminputdimension_y * deminputdimension_x, 0);
         counter = -1;
         while (fgets(puffer, 6000, f) != NULL) {
-            counter++;
-            slopeinput[counter] = strtod(strtok(puffer, " "), NULL);
-            for (int i = 1; i < deminputdimension_x; ++i) {
-                counter++;
-                slopeinput[counter] = strtod(strtok(NULL, " "), NULL);
-            }
+			char * allelements = strtok(puffer, " "); // separate into single tokens
+			while(allelements != NULL) {
+                counter++;  // rows
+                slopeinput[counter] = strtod(allelements, NULL);
+				allelements = strtok(NULL, " "); // set to next
+			}
         }
         fclose(f);
 
-        // ... read slope data
+        // ... read twi data
         char twifilename[250];
         // char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
-		char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char twiinputbuf[] = "input/twi_30m_khamra_x271389.9-281389.8m_y6651969.54-6661969m.csv"; //x=18000, y=24720
+		char twiinputbuf[] = "input/twi_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
         strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
         if (f == NULL) {
@@ -545,12 +552,12 @@ void fillElevations() {
         twiinput.resize(deminputdimension_y * deminputdimension_x, 0);
         counter = -1;
         while (fgets(puffer, 6000, f) != NULL) {
-            counter++;
-            twiinput[counter] = strtod(strtok(puffer, " "), NULL);
-            for (int i = 1; i < deminputdimension_x; ++i) {
-                counter++;
-                twiinput[counter] = strtod(strtok(NULL, " "), NULL);
-            }
+			char * allelements = strtok(puffer, " "); // separate into single tokens
+			while(allelements != NULL) {
+                counter++;  // rows
+                twiinput[counter] = strtod(allelements, NULL);
+				allelements = strtok(NULL, " "); // set to next
+			}
         }
         fclose(f);
 

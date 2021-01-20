@@ -31,3 +31,6 @@ postprocessing/*.png
 
 # exclude Windows-files
 Thumbs.db
+
+# exclude core dump files
+core

@@ -518,7 +518,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             || (parameter[0].weatherchoice == 501300057) || (parameter[0].weatherchoice == 501300058) || (parameter[0].weatherchoice == 2300451)
             || (parameter[0].weatherchoice == 2300851)) {
             foldername << "wind_Chukotka";
-        }
+        } else {
+			cout << "WARNING: There is no wind data for this climate scenario!" << endl;
+            foldername << "wind_Taimyr";
+		}
 
         for (int t = 0; t < parameter[0].simduration; t++) {
             cntr = 0;

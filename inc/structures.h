@@ -262,9 +262,83 @@ struct Parameter {
     // ancestry
     int nameakt;
     int lineakt;
-};
+}; */
 
 struct Weather {
+	std::array<int, 70> xworldcoo;
+    std::array<int, 70> yworldcoo;
+    std::array<int, 70> jahr;
+    std::array<double, 70> temp1monthmean;
+    std::array<double, 70> temp1monthmeanmin;
+    std::array<double, 70> temp1monthmeaniso;
+    std::array<double, 70> temp1monthmeanisomin;
+    std::array<double, 70> temp2monthmean;
+    std::array<double, 70> temp3monthmean;
+    std::array<double, 70> temp4monthmean;
+    std::array<double, 70> temp5monthmean;
+    std::array<double, 70> temp6monthmean;
+    std::array<double, 70> temp7monthmean;
+    std::array<double, 70> temp7monthmeanmin;
+    std::array<double, 70> temp7monthmeaniso;
+    std::array<double, 70> temp7monthmeanisomin;
+    std::array<double, 70> temp8monthmean;
+    std::array<double, 70> temp9monthmean;
+    std::array<double, 70> temp10monthmean;
+    std::array<double, 70> temp11monthmean;
+    std::array<double, 70> temp12monthmean;
+    std::array<double, 70> tempyearmean;
+    std::array<double, 70> tempyearmeanmin;
+    std::array<double, 70> prec1monthmean;
+    std::array<double, 70> prec2monthmean;
+    std::array<double, 70> prec3monthmean;
+    std::array<double, 70> prec4monthmean;
+    std::array<double, 70> prec5monthmean;
+    std::array<double, 70> prec6monthmean;
+    std::array<double, 70> prec7monthmean;
+    std::array<double, 70> prec8monthmean;
+    std::array<double, 70> prec9monthmean;
+    std::array<double, 70> prec10monthmean;
+    std::array<double, 70> prec11monthmean;
+    std::array<double, 70> prec12monthmean;
+    std::array<double, 70> prec1monthmeanmin;
+    std::array<double, 70> prec2monthmeanmin;
+    std::array<double, 70> prec3monthmeanmin;
+    std::array<double, 70> prec4monthmeanmin;
+    std::array<double, 70> prec5monthmeanmin;
+    std::array<double, 70> prec6monthmeanmin;
+    std::array<double, 70> prec7monthmeanmin;
+    std::array<double, 70> prec8monthmeanmin;
+    std::array<double, 70> prec9monthmeanmin;
+    std::array<double, 70> prec10monthmeanmin;
+    std::array<double, 70> prec11monthmeanmin;
+    std::array<double, 70> prec12monthmeanmin;
+    std::array<int, 70> vegetationperiodlength;
+    std::array<int, 70> vegetationperiodlengthmin;
+    std::array<int, 70> vegetationperiodlengthiso;
+    std::array<int, 70> vegetationperiodlengthisomin;
+    std::array<double, 70> activeairtemp;
+    std::array<double, 70> activeairtempmin;
+    std::array<double, 70> degreday_sqrt;
+    std::array<double, 70> degredaymin;
+    std::array<double, 70> precipitationsum;
+    std::array<double, 70> precipitationsummin;
+    std::array<double, 70> weatherfactorg;
+    std::array<double, 70> weatherfactorming;
+    std::array<double, 70> weatherfactors;
+    std::array<double, 70> weatherfactormins;
+    std::array<double, 70> droughtmort;
+    std::array<double, 70> droughtmortmin;
+    std::array<double, 70> janisothermrestriktions;
+    std::array<double, 70> janisothermrestriktionsmin;
+    std::array<double, 70> janisothermrestriktiong;
+    std::array<double, 70> janisothermrestriktiongmin;
+    std::array<double, 70> julisothermrestriktion;
+    std::array<double, 70> julisothermrestriktionmin;
+    std::array<double, 70> nddrestriktion;
+    std::array<double, 70> nddrestriktionmin;
+    std::array<double, 70> janmorttemp;
+};
+/* superseeded by preceding struct Weather {
     int xworldcoo;
     int yworldcoo;
     int jahr;
@@ -338,7 +412,7 @@ struct Weather {
     double nddrestriktionmin;
     double janmorttemp;
 };
-
+*/
 struct Evaluation {
     int xworldcoo;
     int yworldcoo;

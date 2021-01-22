@@ -95,6 +95,11 @@ void getTemp(	//int aktort,
     // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
     // }
 
+	// for all available files either only 00up or if in parameter 				n_weather_along_grids>0 then use this plus more to fill the 
+	for(int i = 0; i < n_weather_along_grids; i++ ){
+		...
+	}
+
     FILE* f;
     f = fopen(dateinametemp, "r");
     if (f == NULL) {

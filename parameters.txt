@@ -17,7 +17,7 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=11;  						// (int) choice of data output files=> all yearly output of currencies 
+outputmode=13;  						// (int) choice of data output files=> all yearly output of currencies 
 										// 0=="full"						=> all each year
 										// 1=="normal, gridded" 			=> every 20 years grid output
 										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
@@ -36,7 +36,7 @@ elevationoffset=-1800.0;			// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
-omp_num_threads=72;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=80;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -57,7 +57,7 @@ omp_num_threads=72;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=501300051;			// (int) Type of weather forcing series 
+weatherchoice=2500511;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -79,6 +79,7 @@ weatherchoice=501300051;			// (int) Type of weather forcing series
 									// ... ... ........4 == rcp2.6 half => 1.3
 									// ... ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
 									// ... ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
+									// ... ... 2500511 == for simulation of repeat 2076:2125 time slice for 2500 years of the according climate scenario (currently 2.6 4.5 and 8.5 implemented) similar to above
 
 temperaturelapse_jan=0.001722;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 									// Chukotka elevation:	0.001722
@@ -158,8 +159,8 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=12000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=15000;
+seedintro_maxy=14000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=11000;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed

@@ -466,9 +466,12 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             (parameter[0].weatherchoice == 501300051) || (parameter[0].weatherchoice == 501300052) || (parameter[0].weatherchoice == 501300053)
             || (parameter[0].weatherchoice == 501300054) || (parameter[0].weatherchoice == 501300055) || (parameter[0].weatherchoice == 501300056)
             || (parameter[0].weatherchoice == 501300057) || (parameter[0].weatherchoice == 501300058) || (parameter[0].weatherchoice == 2300451)
-            || (parameter[0].weatherchoice == 2300851)) {
+            || (parameter[0].weatherchoice == 2300851)
+            || (parameter[0].weatherchoice == 2500511)|| (parameter[0].weatherchoice == 2500521)|| (parameter[0].weatherchoice == 2500521)) {
             foldername << "wind_Chukotka";
-        }
+        } else {
+			cout << " no wind read!" << endl;
+		}
 
         for (int t = 0; t < parameter[0].simduration; t++) {
             cntr = 0;
@@ -600,13 +603,18 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 2500511) {  // new last number == for simulation of repeat 2076:2125 time slice
+            char tempbuf[] = "input/transectChukotka_RCP26temp_2076-2125repeated_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP26prec_2076-2125repeated_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
             // RCP4.5
         } else if (parameter[0].weatherchoice == 501300022) {  // last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP45temp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-
         } else if (parameter[0].weatherchoice == 501300032) {  // last number added
             char tempbuf[] = "input/transectBuor Khaya_RCP45temp_501-3000.csv";
             char precbuf[] = "input/transectBuor Khaya_RCP45prec_501-3000.csv";
@@ -622,6 +630,12 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 2500521) {  // new last number == for simulation of repeat 2076:2125 time slice
+            char tempbuf[] = "input/transectChukotka_RCP45temp_2076-2125repeated_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP45prec_2076-2125repeated_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
             // RCP8.5
         } else if (parameter[0].weatherchoice == 501300023) {  // last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP85temp_501-3000.csv";
@@ -641,6 +655,11 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         } else if (parameter[0].weatherchoice == 501300053) {  // last number added
             char tempbuf[] = "input/transectChukotka_RCP85temp_501-3000.csv";
             char precbuf[] = "input/transectChukotka_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 2500531) {  // new last number == for simulation of repeat 2076:2125 time slice
+            char tempbuf[] = "input/transectChukotka_RCP85temp_2076-2125repeated_501-3000.csv";
+            char precbuf[] = "input/transectChukotka_RCP85prec_2076-2125repeated_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 

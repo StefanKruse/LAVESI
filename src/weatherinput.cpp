@@ -467,7 +467,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             || (parameter[0].weatherchoice == 501300054) || (parameter[0].weatherchoice == 501300055) || (parameter[0].weatherchoice == 501300056)
             || (parameter[0].weatherchoice == 501300057) || (parameter[0].weatherchoice == 501300058) || (parameter[0].weatherchoice == 2300451)
             || (parameter[0].weatherchoice == 2300851)
-            || (parameter[0].weatherchoice == 2500511)|| (parameter[0].weatherchoice == 2500521)|| (parameter[0].weatherchoice == 2500521)) {
+            || (parameter[0].weatherchoice == 2500511)|| (parameter[0].weatherchoice == 2500521)|| (parameter[0].weatherchoice == 2500531)) {
             foldername << "wind_Chukotka";
         } else {
 			cout << " no wind read!" << endl;

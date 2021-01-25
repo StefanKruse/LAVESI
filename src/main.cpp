@@ -49,6 +49,7 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     elapsed = time_end - time_start;
     cout << "envirupdate(" << elapsed.count() << ")+";
 #endif
+	Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
@@ -151,7 +152,7 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     elapsed = time_end - time_start;
     cout << "Dataoutput(" << elapsed.count() << ")+";
 #endif
-	Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+	
 	
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
@@ -474,7 +475,6 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		// char deminputbuf[] = "input/dem_30m_khamra_x271389.9-281389.8m_y6651969.54-6661969m.csv"; //x=9990, y=10080
 		char deminputbuf[] = "input/dem_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
@@ -509,7 +509,6 @@ void fillElevations() {
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		// char slopeinputbuf[] = "input/slope_30m_khamra_x271389.9-281389.8m_y6651969.54-6661969m"; //x=18000, y=24720
 		char slopeinputbuf[] = "input/slope_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
         strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
@@ -539,7 +538,6 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		// char twiinputbuf[] = "input/twi_30m_khamra_x271389.9-281389.8m_y6651969.54-6661969m.csv"; //x=18000, y=24720
 		char twiinputbuf[] = "input/twi_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
         strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
@@ -697,7 +695,7 @@ void initialiseMaps() {
         auto time_start = chrono::high_resolution_clock::now();
         plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
                           * (unsigned long long int)parameter[0].sizemagnif),
-                         {initialelevation, 0, 0, 1000, 0});
+                         {initialelevation, 0, 0, 1000, 0, 0}); // ###Fire### Last digit resembles initial fire counter, put to "false" for bool variant
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
         elapsed = time_end - time_start;

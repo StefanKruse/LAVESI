@@ -82,18 +82,23 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     // litterheight;		// 2*10	-> not in use right now
     unsigned short int envirgrowthimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
                                            // units precision (8 -> 2 bytes)
-
+	//bool fire; //###FIRE### bool variant
+	unsigned short int fire;	//###FIRE### changed int variant
+	
     // constructor
     Envirgrid(short int elevation = 0,
               unsigned short int Treedensityvalue = 0,
               unsigned short int Treenumber = 0,
               unsigned short maxthawing_depth = 1000,
-              unsigned short int envirgrowthimpact = 1)
+              unsigned short int envirgrowthimpact = 1,
+			  //bool fire = false)	// ###FIRE### bool variant
+			  unsigned short int fire = 0)	//###FIRE### int variant
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
           Treenumber(Treenumber),
           maxthawing_depth(maxthawing_depth),
-          envirgrowthimpact(envirgrowthimpact) {}
+          envirgrowthimpact(envirgrowthimpact),
+		  fire(fire) {}
 };
 
 struct Parameter {
@@ -349,7 +354,6 @@ struct Weather {
 	double fireindex10;
 	double fireindex11;
 	double fireindex12;
-	double fireweatherindex;
 };
 
 struct Evaluation {

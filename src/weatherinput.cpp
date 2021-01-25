@@ -395,7 +395,7 @@ void passWeather() {
                 weather_list[iweather].nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
 
-			// fire index calculation for each month
+			// Fire index calculation for each month
 			double T1 = weather_list[iweather].temp1monthmean;
 			double P1 = weather_list[iweather].prec1monthmean;
 			weather_list[iweather].fireindex1 = 0.10336*(((T1 + 6.19) * 0.6291112) + ((P1 - 34.99) * 0.7773153)) + (-0.17637*(((T1 + 6.19) * -0.7773153) + ((P1 - 34.99) * 0.6291112)))+0.69034;
@@ -443,7 +443,6 @@ void passWeather() {
 			double T12 = weather_list[iweather].temp12monthmean;
 			double P12 = weather_list[iweather].prec12monthmean;
 			weather_list[iweather].fireindex12 = 0.10336*(((T12 + 6.19) * 0.6291112) + ((P12 - 34.99) * 0.7773153)) + (-0.17637*(((T12 + 6.19) * -0.7773153) + ((P12 - 34.99) * 0.6291112)))+0.69034;
-			// cout << "Feuerindex =" << weather_list[iweather].fireindex7  << endl;
 
             // output to check weather
             FILE* fdir;
@@ -519,7 +518,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             || (parameter[0].weatherchoice == 2300851)) {
             foldername << "wind_Chukotka";
         } else {
-			cout << "WARNING: There is no wind data for this climate scenario!" << endl;
+			cout << "WARNING: There is no wind data for this climate scenario! Using Taimyr data!" << endl;
             foldername << "wind_Taimyr";
 		}
 
@@ -808,7 +807,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 			
-			// Lake Khamra fire module test
+			// For Lake Khamra fire module test
         } else if (parameter[0].weatherchoice == 18232) {
             char tempbuf[] = "input/18232_khamra_temp.csv";
             char precbuf[] = "input/18232_khamra_prec.csv";

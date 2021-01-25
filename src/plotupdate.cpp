@@ -369,6 +369,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
             pEnvirgrid.Treedensityvalue = 0;
             pEnvirgrid.Treenumber = 0;
             pEnvirgrid.maxthawing_depth = maxthawing_depth;
+			//pEnvirgrid.fire = false; // ###FIRE### bool variant
+			//pEnvirgrid.fire = 0; 		// ###FIRE### int variant
         }
 
     } else {
@@ -377,6 +379,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
             auto& pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid.Treedensityvalue = 0;
             pEnvirgrid.Treenumber = 0;
+			//pEnvirgrid.fire = false; // ###FIRE### bool variant
+			//pEnvirgrid.fire = 0; 		// ###FIRE### int variant
         }
     }
 }

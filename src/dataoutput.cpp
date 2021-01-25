@@ -304,10 +304,11 @@ void Dataoutput(int t,
             } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area Khamra"
                 outputcurrencies = true;
 
-				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+				if(parameter[0].ivort % 10 == 0) {// write full Envirgrid once on sim start
 					ausgabedensity = true;
 					
-				outputgriddedbiomass = true; // each sim step!
+					outputgriddedbiomass = true; // each sim step!
+				}
 				
  
             } else if (parameter[0].outputmode == 2) {  // "OMP"
@@ -1082,7 +1083,7 @@ void Dataoutput(int t,
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
                 // calculate grid position from x/y coordinates
-                unsigned int grid_i = floor((double)tree.ycoo / 1000 / 30) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 30);
+                unsigned int grid_i = floor((double)tree.ycoo / 1000 / parameter[0].demresolution) * deminputdimension_x + floor((double)tree.xcoo / 1000 / parameter[0].demresolution);
 
                 // calculate biomass values for each tree
                 AGBneedleliving[grid_i] += 703.6207 / (1 + exp(-1.0 * ((double)tree.height / 100 - 579.4998) / 208.687));
@@ -1166,23 +1167,23 @@ void Dataoutput(int t,
 
                 fprintf(filepointer, "%d;", x);
                 fprintf(filepointer, "%d;", y);
-                fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i] / 1000 / (30 * 30));    // in kg/sq.m.
-                fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i] / 1000 / (30 * 30));      // in kg/sq.m.
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Stemcount[grid_i]);  // in stems/ha
-                fprintf(filepointer, "%4.8f;", ((100 * 100) / (30 * 30)) * Basalarea[grid_i]);
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_10[grid_i]);          // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_40[grid_i]);          // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_100[grid_i]);         // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_200[grid_i]);         // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_300[grid_i]);         // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_400[grid_i]);         // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_500[grid_i]);         // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_750[grid_i]);         // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_1000[grid_i]);        // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_1250[grid_i]);        // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_1500[grid_i]);        // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_2000[grid_i]);        // in individuals/ha
-                fprintf(filepointer, "%d;", (((100 * 100) / (30 * 30))) * Indicount_larger2000[grid_i]);  // in individuals/ha
+                fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i] / 1000 / (parameter[0].demresolution * parameter[0].demresolution));    // in kg/sq.m.
+                fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i] / 1000 / (parameter[0].demresolution * parameter[0].demresolution));      // in kg/sq.m.
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Stemcount[grid_i]);  // in stems/ha
+                fprintf(filepointer, "%4.8f;", ((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution)) * Basalarea[grid_i]);
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_10[grid_i]);          // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_40[grid_i]);          // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_100[grid_i]);         // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_200[grid_i]);         // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_300[grid_i]);         // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_400[grid_i]);         // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_500[grid_i]);         // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_750[grid_i]);         // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_1000[grid_i]);        // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_1250[grid_i]);        // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_1500[grid_i]);        // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_2000[grid_i]);        // in individuals/ha
+                fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_larger2000[grid_i]);  // in individuals/ha
                 fprintf(filepointer, "\n");
                 // }
             }
@@ -1300,6 +1301,8 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Envirgrowthimpact;");
                 // fprintf(filepointer, "Weather_type;");
                 // fprintf(filepointer, "Thawing_depth;");
+                // fprintf(filepointer, "Pixels_with_fire;");	// ###FIRE### bool variant
+                fprintf(filepointer, "N_fire;");	// ###FIRE### int variant
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -1314,18 +1317,25 @@ void Dataoutput(int t,
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
                  kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
                 auto& pEnvirgrid = plot_list[kartenpos];
-                double ycooi = floor((double)kartenpos / ((double)treecols * parameter[0].sizemagnif));
-                double xcooi = (double)kartenpos - ((ycooi-1) * ((double)treecols * parameter[0].sizemagnif));
-                if ((parameter[0].demlandscape
-                     && ((((xcooi / parameter[0].sizemagnif / parameter[0].demresolution) - floor(xcooi / parameter[0].sizemagnif / parameter[0].demresolution))
+                double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+                double xcooi = (double)kartenpos - (ycooi * ((double)treecols * (double)parameter[0].sizemagnif));
+                /*
+					if ((parameter[0].demlandscape
+                     & ((((xcooi / parameter[0].sizemagnif / parameter[0].demresolution) - floor(xcooi / parameter[0].sizemagnif / parameter[0].demresolution))
                           == 0)
-                         && (((ycooi / parameter[0].sizemagnif / parameter[0].demresolution)
+                         & (((ycooi / parameter[0].sizemagnif / parameter[0].demresolution)
                               - floor(ycooi / parameter[0].sizemagnif / parameter[0].demresolution))
                              == 0)))
-                    || ((pEnvirgrid.Treenumber > 0)
-                        && ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
-                            && (ycooi >= yminwindow * parameter[0].sizemagnif)
-                            && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))) {  // output only if tree density values >0
+                    | ((pEnvirgrid.Treenumber > 0)
+                        & ((xcooi >= xminwindow * parameter[0].sizemagnif) & (xcooi <= xmaxwindow * parameter[0].sizemagnif)
+                            & (ycooi >= yminwindow * parameter[0].sizemagnif)
+                            & (ycooi <= ymaxwindow * parameter[0].sizemagnif)))) {  // output only if tree density values >0
+							
+				*/
+				if(parameter[0].demlandscape & 
+					(((int)xcooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0) &	// xcooi is gridcell resolution in envirgrid == 20 cm steps // => every 90 m/demresolution output
+					(((int)ycooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0)) {
+							
                     fprintf(filepointer, "%d;", parameter[0].repeati);
                     // fprintf(filepointer, "%d;", pEnvirgrid.yworldcoo);
                     // fprintf(filepointer, "%d;", pEnvirgrid.xworldcoo);
@@ -1340,6 +1350,11 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                     // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+					//if (pEnvirgrid.fire == true) 		// ###FIRE### bool variant
+						//fprintf(filepointer, "1;");	// ###FIRE### bool variant
+					//else								// ###FIRE### bool variant
+						//fprintf(filepointer, "0;");	// ###FIRE### bool variant
+                    fprintf(filepointer, "%d;", pEnvirgrid.fire);
                     fprintf(filepointer, "\n");
                 }
             }

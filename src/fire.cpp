@@ -23,145 +23,255 @@ void Fire(Parameter* parameter,
 		
 		RandomNumber<double> uniform(0, 1);
 				
-		// fire weather translation
-		// Obtain fire index for each month (likely not how it should be done!)
-		cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
-		if (weather_list[yearposition].fireindex1 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex1 >= 3.48) && (weather_list[yearposition].fireindex1 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex1 > 5) && (weather_list[yearposition].fireindex1 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex1 > 7){
-			cout << "Extreme fire weather" << endl;
+		// ##### Fire weather #####
+		// Based on fire probability rating (FPR) assigned to each month from linear model between T/P and observed MODIS fire pixels
+		// FPR is basically the logarithmic predicted amount of MODIS pixels burning under the respective T/P conditions during a given month
+		
+		unsigned short int n_mildweather = 0;	// holding the number of occurences of mild/severe/extreme monthly fire weather
+		unsigned short int n_severeweather = 0;
+		unsigned short int n_extremeweather = 0;
+		
+		unsigned short int firethresh1 = 3.48;	// determine thresholds that decide fire weather severity (previous values: 3.48, 5, 7)
+		unsigned short int firethresh2 = 6.9;
+		unsigned short int firethresh3 = 8.3;
+		
+		
+		// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
+		if (weather_list[yearposition].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex1 >= firethresh1) && (weather_list[yearposition].fireindex1 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex1 > firethresh2) && (weather_list[yearposition].fireindex1 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex1 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 			
-			cout << "February fire index =" << weather_list[yearposition].fireindex2  << endl;
-		if (weather_list[yearposition].fireindex2 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex2 >= 3.48) && (weather_list[yearposition].fireindex2 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex2 > 5) && (weather_list[yearposition].fireindex2 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex2 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "February fire index =" << weather_list[yearposition].fireindex2  << endl;
+		if (weather_list[yearposition].fireindex2 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex2 >= firethresh1) && (weather_list[yearposition].fireindex2 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex2 > firethresh2) && (weather_list[yearposition].fireindex2 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex2 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 			
-			cout << "March fire index =" << weather_list[yearposition].fireindex3  << endl;
-		if (weather_list[yearposition].fireindex3 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex3 >= 3.48) && (weather_list[yearposition].fireindex3 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex3 > 5) && (weather_list[yearposition].fireindex3 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex3 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "March fire index =" << weather_list[yearposition].fireindex3  << endl;
+		if (weather_list[yearposition].fireindex3 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex3 >= firethresh1) && (weather_list[yearposition].fireindex3 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex3 > firethresh2) && (weather_list[yearposition].fireindex3 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex3 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 			
-			cout << "April fire index =" << weather_list[yearposition].fireindex4  << endl;
-		if (weather_list[yearposition].fireindex4 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex4 >= 3.48) && (weather_list[yearposition].fireindex4 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex4 > 5) && (weather_list[yearposition].fireindex4 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex4 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "April fire index =" << weather_list[yearposition].fireindex4  << endl;
+		if (weather_list[yearposition].fireindex4 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex4 >= firethresh1) && (weather_list[yearposition].fireindex4 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex4 > firethresh2) && (weather_list[yearposition].fireindex4 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex4 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 			
-			cout << "May fire index =" << weather_list[yearposition].fireindex5  << endl;
-		if (weather_list[yearposition].fireindex5 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex5 >= 3.48) && (weather_list[yearposition].fireindex5 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex5 > 5) && (weather_list[yearposition].fireindex5 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex5 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "May fire index =" << weather_list[yearposition].fireindex5  << endl;
+		if (weather_list[yearposition].fireindex5 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex5 >= firethresh1) && (weather_list[yearposition].fireindex5 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex5 > firethresh2) && (weather_list[yearposition].fireindex5 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex5 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-			cout << "June fire index =" << weather_list[yearposition].fireindex6  << endl;
-		if (weather_list[yearposition].fireindex6 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex6 >= 3.48) && (weather_list[yearposition].fireindex6 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex6 > 5) && (weather_list[yearposition].fireindex6 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex6 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "June fire index =" << weather_list[yearposition].fireindex6  << endl;
+		if (weather_list[yearposition].fireindex6 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex6 >= firethresh1) && (weather_list[yearposition].fireindex6 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex6 > firethresh2) && (weather_list[yearposition].fireindex6 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex6 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-			cout << "July fire index =" << weather_list[yearposition].fireindex7  << endl;
-		if (weather_list[yearposition].fireindex7 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex7 >= 3.48) && (weather_list[yearposition].fireindex7 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex7 > 5) && (weather_list[yearposition].fireindex7 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex7 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "July fire index =" << weather_list[yearposition].fireindex7  << endl;
+		if (weather_list[yearposition].fireindex7 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex7 >= firethresh1) && (weather_list[yearposition].fireindex7 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex7 > firethresh2) && (weather_list[yearposition].fireindex7 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex7 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-			cout << "August fire index =" << weather_list[yearposition].fireindex8  << endl;
-		if (weather_list[yearposition].fireindex8 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex8 >= 3.48) && (weather_list[yearposition].fireindex8 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex8 > 5) && (weather_list[yearposition].fireindex8 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex8 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "August fire index =" << weather_list[yearposition].fireindex8  << endl;
+		if (weather_list[yearposition].fireindex8 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex8 >= firethresh1) && (weather_list[yearposition].fireindex8 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex8 > firethresh2) && (weather_list[yearposition].fireindex8 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex8 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-			cout << "September fire index =" << weather_list[yearposition].fireindex9  << endl;
-		if (weather_list[yearposition].fireindex9 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex9 >= 3.48) && (weather_list[yearposition].fireindex9 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex9 > 5) && (weather_list[yearposition].fireindex9 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex9 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "September fire index =" << weather_list[yearposition].fireindex9  << endl;
+		if (weather_list[yearposition].fireindex9 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex9 >= firethresh1) && (weather_list[yearposition].fireindex9 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex9 > firethresh2) && (weather_list[yearposition].fireindex9 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex9 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-			cout << "October fire index =" << weather_list[yearposition].fireindex10  << endl;
-		if (weather_list[yearposition].fireindex10 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex10 >= 3.48) && (weather_list[yearposition].fireindex10 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex10 > 5) && (weather_list[yearposition].fireindex10 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex10 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "October fire index =" << weather_list[yearposition].fireindex10  << endl;
+		if (weather_list[yearposition].fireindex10 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex10 >= firethresh1) && (weather_list[yearposition].fireindex10 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex10 > firethresh2) && (weather_list[yearposition].fireindex10 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex10 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-			cout << "November fire index =" << weather_list[yearposition].fireindex11  << endl;
-		if (weather_list[yearposition].fireindex11 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex11 >= 3.48) && (weather_list[yearposition].fireindex11 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex11 > 5) && (weather_list[yearposition].fireindex11 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex11 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "November fire index =" << weather_list[yearposition].fireindex11  << endl;
+		if (weather_list[yearposition].fireindex11 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex11 >= firethresh1) && (weather_list[yearposition].fireindex11 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex11 > firethresh2) && (weather_list[yearposition].fireindex11 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex11 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
 
-		cout << "December fire index =" << weather_list[yearposition].fireindex12  << endl;
-		if (weather_list[yearposition].fireindex12 < 3.48){
-			cout << "No fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex12 >= 3.48) && (weather_list[yearposition].fireindex12 <= 5)){
-			cout << "Mild fire weather" << endl;
-		} else if ((weather_list[yearposition].fireindex12 > 5) && (weather_list[yearposition].fireindex12 <= 7)){
-			cout << "Severe fire weather" << endl;
-		} else if (weather_list[yearposition].fireindex12 > 7){
-			cout << "Extreme fire weather" << endl;
+		// cout << "December fire index =" << weather_list[yearposition].fireindex12  << endl;
+		if (weather_list[yearposition].fireindex12 < firethresh1){
+			// cout << "No fire weather" << endl;
+		} else if ((weather_list[yearposition].fireindex12 >= firethresh1) && (weather_list[yearposition].fireindex12 <= firethresh2)){
+			// cout << "Mild fire weather" << endl;
+			n_mildweather++;
+		} else if ((weather_list[yearposition].fireindex12 > firethresh2) && (weather_list[yearposition].fireindex12 <= firethresh3)){
+			// cout << "Severe fire weather" << endl;
+			n_severeweather++;
+		} else if (weather_list[yearposition].fireindex12 > firethresh3){
+			// cout << "Extreme fire weather" << endl;
+			n_extremeweather++;
 		}
+		
+		// Calculation of annual FPR based on weather conditions
+		double fireprobabilityrating = (n_mildweather*0.05 + n_severeweather*0.33 + n_extremeweather*0.66); // tried to include: / std::max(n_mildweather*0.005 + n_severeweather*0.01 + n_extremeweather*0.03);
+		cout << "n_mildweather:" << (n_mildweather) << endl;	// can be removed
+		cout << "n_severeweather:" << (n_severeweather) << endl;	// can be removed
+		cout << "n_extremeweather:" << (n_extremeweather) << endl;	// can be removed
+		cout << "Annual FPR:" << fireprobabilityrating << endl;
+		
+		
+		
+		
+		
+		// ##### Fire occurrence #####
+		// 
+		
+		if (uniform.draw() < fireprobabilityrating) {	// if random number drawn between 0 and 1 is larger than the annual FPR, impact area is calculated
+			cout << "+++ A wildfire occurs! +++" << endl;
+			double xfirecenter = uniform.draw()*treecols;
+			double yfirecenter = uniform.draw()*treerows;
+			
+			int i = yfirecenter*4; //* parameter[0].sizemagnif / 1000; CHANGED *4
+			int j = xfirecenter*3; //* parameter[0].sizemagnif / 1000; CHANGED *3
+			double impactareasize = fireprobabilityrating*10000; // determines affected area
+			cout << "Fire X coordinate:" << j << endl;	// can be removed
+			cout << "Fire Y coordinate:" << i << endl;	// can be removed
+			cout << "Impacted area:" << impactareasize << endl; // can be removed
+
+			
+			if (impactareasize > 0) {  // if there is an impacted area
+				// determine dimensions of the grid
+				int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
+				// determine shifted coordinates and adding up the density value
+				for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
+					for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
+						if ((rastposi <= (int)((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
+							&& (rastposj <= (int)((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  // TODO directly use in for loop boundaries
+							// distance calculation to determine the influence of the density value in spatial units ...
+							// ... and inserting the value at every position
+							double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+							// only if the current grid cell is part of the influence area, a value is assigned
+							if (entfrastpos <= (double)xyquerrastpos) {
+								std::size_t curposii =
+									static_cast<std::size_t>(rastposi) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+									+ static_cast<std::size_t>(rastposj);
+								auto& cur_plot = plot_list[curposii];
+								//cur_plot.fire == true;	// bool variant
+								cur_plot.fire++;	// int variant
+																
+							}
+						}
+					}
+				}
+			
+			}
+
+		}
+		
+
+
+
+
+		// ##### Fire impact #####
+		
+		// if
+		
+		
 		
 	}
 		
-		// Update code above so that it properly assigns a fire probability rating (FPR) to each month
-			// e.g.: No = 0, Mild = 0.05, Severe = 0.12, Extreme = 0.25
-			// For "tuning": Check observed ratio of fire pixels / total pixels
 			
 		// FPR decides area burned, randomly distributed in plot area (already burning areas count towards new month's fire distribution)
 			// Altertantive: FPR is scaled by "ignition probability rating" (IPR) that is a similar index for ground cells, depending on fuel and moisture. Random number decides whether cell ignites.

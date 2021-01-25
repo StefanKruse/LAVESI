@@ -79,7 +79,7 @@ weatherchoice=18232;			// (int) Type of weather forcing series
 									// ... ... ........4 == rcp2.6 half => 1.3
 									// ... ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
 									// ... ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
-									// ... 18232== Lake Khamra (for fire module test)
+									// ... 18232== Lake Khamra (for fire module test => currently no wind data!)
 
 temperaturelapse_jan=0.001722;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 									// Chukotka elevation:	0.001722

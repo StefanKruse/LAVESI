@@ -37,6 +37,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     bool cone;                              // 1	---> was int; could be further replaced by single use of coneheight
     bool longdispersed;                     // 1
     bool growing;                           // 1
+	unsigned short int firedamage;			// 2
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced
@@ -81,6 +82,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     // -> not in use right now unsigned short litterheightmean;					// 2	-> not in use right now std::array<unsigned short, 10>
     // litterheight;		// 2*10	-> not in use right now
     unsigned short int envirgrowthimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
+    unsigned short int envirfireimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
                                            // units precision (8 -> 2 bytes)
 	//bool fire; //###FIRE### bool variant
 	unsigned short int fire;	//###FIRE### changed int variant
@@ -91,6 +93,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
               unsigned short int Treenumber = 0,
               unsigned short maxthawing_depth = 1000,
               unsigned short int envirgrowthimpact = 1,
+              unsigned short int envirfireimpact = 0,
 			  //bool fire = false)	// ###FIRE### bool variant
 			  unsigned short int fire = 0)	//###FIRE### int variant
         : elevation(elevation),
@@ -98,6 +101,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
           Treenumber(Treenumber),
           maxthawing_depth(maxthawing_depth),
           envirgrowthimpact(envirgrowthimpact),
+          envirfireimpact(envirfireimpact),
 		  fire(fire) {}
 };
 

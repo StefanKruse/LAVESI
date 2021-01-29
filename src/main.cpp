@@ -49,7 +49,8 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     elapsed = time_end - time_start;
     cout << "envirupdate(" << elapsed.count() << ")+";
 #endif
-	Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+	if(parameter[0].ivort > parameter[0].ivortmax)
+		Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
 
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
@@ -475,7 +476,8 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		char deminputbuf[] = "input/dem_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
+		// char deminputbuf[] = "input/dem_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
+		char deminputbuf[] = "input/dem_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -509,7 +511,8 @@ void fillElevations() {
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		char slopeinputbuf[] = "input/slope_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
+		// char slopeinputbuf[] = "input/slope_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
+		char slopeinputbuf[] = "input/slope_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
         strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
         if (f == NULL) {
@@ -538,7 +541,8 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		char twiinputbuf[] = "input/twi_90m_khamra_x271389.9-281379.9m_y6651969.54-6661959.54m.csv"; //x=9990, y=9990
+		// char twiinputbuf[] = "input/twi_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
+		char twiinputbuf[] = "input/twi_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
         strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
         if (f == NULL) {
@@ -649,6 +653,8 @@ void fillElevations() {
                         double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
                                                    + (1 - parameter[0].slopetwiratio)
                                                          * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
+														 
+						// envirgrowthimpact = sqrt(envirgrowthimpact); //added to tune low envirgrowthimpact values at Khamra
 
                         // plausibility check
                         if (envirgrowthimpact > 1.0)
@@ -659,6 +665,9 @@ void fillElevations() {
                         // adjust by factor
                         double envirgrowthimpactfactor = 1.0;
                         plot_list[kartenpos].envirgrowthimpact = 10000 * envirgrowthimpactfactor * envirgrowthimpact;
+						
+						
+                        plot_list[kartenpos].envirfireimpact = 1-(twiinter/25) * 10000;// scale: 10000 meaning value ==1 ... 10000 == very dry places
                     } else {
                         plot_list[kartenpos].elevation = 32767;
                         plot_list[kartenpos].envirgrowthimpact = 0;
@@ -695,7 +704,7 @@ void initialiseMaps() {
         auto time_start = chrono::high_resolution_clock::now();
         plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
                           * (unsigned long long int)parameter[0].sizemagnif),
-                         {initialelevation, 0, 0, 1000, 0, 0}); // ###Fire### Last digit resembles initial fire counter, put to "false" for bool variant
+                         {initialelevation, 0, 0, 1000, 1, 0, 0}); // ###Fire### Last digit resembles initial fire counter, put to "false" for bool variant
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
         elapsed = time_end - time_start;

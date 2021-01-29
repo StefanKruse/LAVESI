@@ -205,11 +205,11 @@ void Fire(Parameter* parameter,
 		}
 		
 		// Calculation of annual FPR based on weather conditions
-		double fireprobabilityrating = (n_mildweather*0.05 + n_severeweather*0.33 + n_extremeweather*0.66); // tried to include: / std::max(n_mildweather*0.005 + n_severeweather*0.01 + n_extremeweather*0.03);
-		cout << "n_mildweather:" << (n_mildweather) << endl;	// can be removed
-		cout << "n_severeweather:" << (n_severeweather) << endl;	// can be removed
-		cout << "n_extremeweather:" << (n_extremeweather) << endl;	// can be removed
-		cout << "Annual FPR:" << fireprobabilityrating << endl;
+		double fireprobabilityrating = (n_mildweather*0.03 + n_severeweather*0.15 + n_extremeweather*0.66); // tried to include: / std::max(n_mildweather*0.005 + n_severeweather*0.01 + n_extremeweather*0.03);
+		// cout << "n_mildweather:" << (n_mildweather) << endl;	// can be removed
+		// cout << "n_severeweather:" << (n_severeweather) << endl;	// can be removed
+		// cout << "n_extremeweather:" << (n_extremeweather) << endl;	// can be removed
+		cout << "Annual FPR:" << fireprobabilityrating << endl;	// can be removed
 		
 		
 		
@@ -223,17 +223,18 @@ void Fire(Parameter* parameter,
 			double xfirecenter = uniform.draw()*treecols;
 			double yfirecenter = uniform.draw()*treerows;
 			
-			int i = yfirecenter*4; //* parameter[0].sizemagnif / 1000; CHANGED *4
-			int j = xfirecenter*3; //* parameter[0].sizemagnif / 1000; CHANGED *3
-			double impactareasize = fireprobabilityrating*10000; // determines affected area
-			cout << "Fire X coordinate:" << j << endl;	// can be removed
-			cout << "Fire Y coordinate:" << i << endl;	// can be removed
-			cout << "Impacted area:" << impactareasize << endl; // can be removed
+			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
+			int j = xfirecenter* parameter[0].sizemagnif; 
+			double fireimpactareasize = fireprobabilityrating*1000; // determines affected area
+			// cout << "Fire X coordinate:" << j << endl;	// can be removed
+			// cout << "Fire Y coordinate:" << i << endl;	// can be removed
+			cout << "Impacted area:" << fireimpactareasize << endl; // can be removed
 
 			
-			if (impactareasize > 0) {  // if there is an impacted area
+			// check which gridcells fall into fire scar
+			if (fireimpactareasize > 0) {  // if there is an impacted area
 				// determine dimensions of the grid
-				int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
+				int xyquerrastpos = fireimpactareasize * parameter[0].sizemagnif;
 				// determine shifted coordinates and adding up the density value
 				for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
 					for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
@@ -249,8 +250,32 @@ void Fire(Parameter* parameter,
 									+ static_cast<std::size_t>(rastposj);
 								auto& cur_plot = plot_list[curposii];
 								//cur_plot.fire == true;	// bool variant
-								cur_plot.fire++;	// int variant
-																
+								
+								// ##### Fire impact #####
+								// fire impact on grid cell
+								//fireprobabilityrating // 0 to 1 .. 1 fire occurs definitely
+								// cur_plot.Treedensityvalue // 0 to 10000 ... 10000 is very dense
+								// cur_plot.envirfireimpact // 0 to 10000 ... 10000 is very dry
+								
+								if ((fireprobabilityrating < 1/3) & 	// <--- This block needs update 
+									(cur_plot.Treedensityvalue < 3333) &
+									(cur_plot.envirfireimpact < 3333)) {
+									cur_plot.fire = 1;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
+								} else if (((fireprobabilityrating >= 1/3) & (fireprobabilityrating < 2/3)) & 
+									((cur_plot.Treedensityvalue >= 3333)&(cur_plot.Treedensityvalue < 6666)) &
+									((cur_plot.envirfireimpact >= 3333)&(cur_plot.envirfireimpact < 6666))) {
+									cur_plot.fire = 2;	
+								} else {
+									cur_plot.fire = 3;	
+								}
+								
+								// if (fireprobabilityrating < 0.1) {
+									// cur_plot.fire=1;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
+								// } else if ((fireprobabilityrating >= 0.1)&(fireprobabilityrating < 0.3)) {
+									// cur_plot.fire=2;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
+								// } else {
+									// cur_plot.fire=3;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
+								// }
 							}
 						}
 					}
@@ -258,18 +283,87 @@ void Fire(Parameter* parameter,
 			
 			}
 
+		
+		
+
+
+
+
+					// tree's sensing of fire
+			// code from plotupdate
+		#pragma omp parallel for default(shared) private(uniform) schedule(guided)
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+
+				if(tree.growing == true) {
+					int i = tree.ycoo * parameter[0].sizemagnif / 1000;
+					int j = tree.xcoo * parameter[0].sizemagnif / 1000;
+
+					if (parameter[0].densitymode == 1) {
+						tree.densitywert = 0.0;
+					} else {
+						double impactareasize = 0.0;
+						if (parameter[0].calcinfarea == 1)  // linearly increasing
+							impactareasize = tree.dbasal * parameter[0].incfac / 100.0;
+						else if (parameter[0].calcinfarea == 2)  // linearly increasing
+							impactareasize = tree.dbasal * (2 / 3) * parameter[0].incfac / 100.0;
+						else if (parameter[0].calcinfarea == 3)  // linearly increasing
+							impactareasize = tree.dbasal * (4 / 3) * parameter[0].incfac / 100.0;
+						else if (parameter[0].calcinfarea == 4)  // logistic growth function with maximum at 8 m
+							impactareasize = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.1 * tree.dbasal)))) - 1;
+						else if (parameter[0].calcinfarea == 5)  // logistic growth function with maximum at 8 m
+							impactareasize = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.2 * tree.dbasal)))) - 1;
+						else if (parameter[0].calcinfarea == 6)  // logistic growth function with maximum at 8 m
+							impactareasize = (9 / (1 + (((1 / 0.1) - 1) * exp(-0.5 * tree.dbasal)))) - 1;
+
+						// if the tree only influences one grid cell
+						if (impactareasize < (1.0 / parameter[0].sizemagnif)) {
+							const std::size_t curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+														+ static_cast<std::size_t>(j);
+							auto& cur_plot = plot_list[curposi];
+
+							// fire sensing
+							tree.firedamage=cur_plot.fire;	//Since tree is within one gridcell, it can take that cell's value directly (needs to be divided by 3)
+						} else {  // ... if the tree influences more than one section
+							// determine dimensions of the considered grid around a tree
+							int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
+
+							// fire sensing
+							unsigned int firedamage = 0;
+
+							for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
+								for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
+									if ((rastposi <= ((int)(treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
+										&& (rastposj <= ((int)(treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
+										double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+										if (entfrastpos <= (double)xyquerrastpos) {
+											int icurr = rastposi;
+											int jcurr = rastposj;
+
+											std::size_t curposii =
+												static_cast<std::size_t>(icurr) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+												+ static_cast<std::size_t>(jcurr);
+											auto& cur_plot = plot_list[curposii];
+
+											// fire sensing
+											if(cur_plot.fire > firedamage)
+												firedamage = cur_plot.fire;	// If tree covers multiple gridcells, it will take the highest cur_plot.fire value from these for now
+										}
+									}
+								}
+							}
+							
+							// fire sensing
+							tree.firedamage=firedamage;
+							
+							// if (tree.firedamage > 0) {
+								// cout <<  " | firedamage baum von cur_plot.fire = " << tree.firedamage << "  ";
+							// }
+						}
+					}
+				}
+			}
 		}
-		
-
-
-
-
-		// ##### Fire impact #####
-		
-		// if
-		
-		
-		
 	}
 		
 			

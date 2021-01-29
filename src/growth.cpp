@@ -224,78 +224,77 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 #pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
             auto& tree = tree_list[tree_i];
-            double maxbasalwachstum = 0.0;
-            maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
-            tree.dbasalmax = 1000 * maxbasalwachstum;
+			
+			if(tree.growing == true) {
+				double maxbasalwachstum = 0.0;
+				maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
+				tree.dbasalmax = 1000 * maxbasalwachstum;
 
-            double basalwachstum = maxbasalwachstum * (1.0 - tree.densitywert);
-            basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
+				double basalwachstum = maxbasalwachstum * (1.0 - tree.densitywert);
+				basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
 
-            if (parameter[0].demlandscape) {
-                basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
-            }
+				if (parameter[0].demlandscape) {
+					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
+				}
 
-            if (basalwachstum < 0.0) {
-                basalwachstum = 0.0;
-            }
+				if (basalwachstum < 0.0) {
+					basalwachstum = 0.0;
+				}
 
-            if (tree.growing == true) {
-                tree.dbasal += basalwachstum;
-            }
+				tree.dbasal += basalwachstum;
 
-            if (parameter[0].relgrowthinfluence == 0) {
-                tree.dbasalrel = 1000;
-            } else if (parameter[0].relgrowthinfluence == 1) {
-                if (maxbasalwachstum <= 0.0)
-                    tree.dbasalrel = 0;
-                else
-                    tree.dbasalrel = 1000 * basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal);
-            }
+				if (parameter[0].relgrowthinfluence == 0) {
+					tree.dbasalrel = 1000;
+				} else if (parameter[0].relgrowthinfluence == 1) {
+					if (maxbasalwachstum <= 0.0)
+						tree.dbasalrel = 0;
+					else
+						tree.dbasalrel = 1000 * basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal);
+				}
 
-            double maxbreastwachstum = 0;
-            double breastwachstum = 0;
+				double maxbreastwachstum = 0;
+				double breastwachstum = 0;
 
-            if ((double)tree.height / 100 >= 130) {
-                maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
+				if ((double)tree.height / 100 >= 130) {
+					maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
 
-                breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
+					breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
 
-                if (parameter[0].demlandscape) {
-                    breastwachstum = breastwachstum * (double)tree.envirimpact / 10000;
-                }
+					if (parameter[0].demlandscape) {
+						breastwachstum = breastwachstum * (double)tree.envirimpact / 10000;
+					}
 
-                if (breastwachstum < 0.0) {
-                    breastwachstum = 0.0;
-                }
+					if (breastwachstum < 0.0) {
+						breastwachstum = 0.0;
+					}
 
-                if (tree.growing == true) {
-                    tree.dbreast += breastwachstum;
-                }
+					tree.dbreast += breastwachstum;
 
-                if (parameter[0].relgrowthinfluence == 0) {
-                    tree.dbreastrel = 1000;
-                } else if (parameter[0].relgrowthinfluence == 1) {
-                    if (maxbreastwachstum <= 0.0)
-                        tree.dbreastrel = 0;
-                    else
-                        tree.dbreastrel = 1000 * breastwachstum / maxbreastwachstum;
-                }
-            }
+					if (parameter[0].relgrowthinfluence == 0) {
+						tree.dbreastrel = 1000;
+					} else if (parameter[0].relgrowthinfluence == 1) {
+						if (maxbreastwachstum <= 0.0)
+							tree.dbreastrel = 0;
+						else
+							tree.dbreastrel = 1000 * breastwachstum / maxbreastwachstum;
+					}
+				}
 
-            // tree height update
-            if ((double)tree.height / 100 < 130) {
-                if (parameter[0].allometryfunctiontype == 1) {
-                    tree.height = 100 * parameter[0].dbasalheightalloslope * pow(tree.dbasal, parameter[0].dbasalheightalloexp);
-                } else {
-                    tree.height = 100 * parameter[0].dbasalheightslopenonlin * tree.dbasal;
-                }
-            } else if ((double)tree.height / 100 >= 130) {
-                if (parameter[0].allometryfunctiontype == 1) {
-                    tree.height = 100 * (parameter[0].dbreastheightalloslope * pow(tree.dbreast, parameter[0].dbreastheightalloexp) + 130.0);
-                } else {
-                    tree.height = 100 * (pow((parameter[0].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
-                }
-            }
-        }
+				// tree height update
+				if ((double)tree.height / 100 < 130) {
+					if (parameter[0].allometryfunctiontype == 1) {
+						tree.height = 100 * parameter[0].dbasalheightalloslope * pow(tree.dbasal, parameter[0].dbasalheightalloexp);
+					} else {
+						tree.height = 100 * parameter[0].dbasalheightslopenonlin * tree.dbasal;
+					}
+				} else if ((double)tree.height / 100 >= 130) {
+					if (parameter[0].allometryfunctiontype == 1) {
+						tree.height = 100 * (parameter[0].dbreastheightalloslope * pow(tree.dbreast, parameter[0].dbreastheightalloexp) + 130.0);
+					} else {
+						tree.height = 100 * (pow((parameter[0].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
+					}
+				}
+			}
+		}
     }
 }

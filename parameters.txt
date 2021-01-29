@@ -36,7 +36,7 @@ elevationoffset=0;					// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
-omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=1;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -129,7 +129,7 @@ lastyearweatherdata=2018;			// (int) determined by the input data series
 simduration=117;					// (int) duration of the simulation period depending on the available weather data series
 stopatyear=3000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
-ivortmax=0;							// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=200;							// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 									// ...   0==without spin up phase
 									// ... >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
@@ -149,7 +149,7 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
-yearswithseedintro=50; 				// ... (int) years of seed introduction at the beginning of each simulation
+yearswithseedintro=10; 				// ... (int) years of seed introduction at the beginning of each simulation //(prev. 50)
 seedintronumber=10000;				// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
 seedintronumberpermanent=1000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
@@ -159,8 +159,8 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=3000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=3000;
+seedintro_maxy=990;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=990;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed
@@ -280,26 +280,26 @@ dbasalheightslopenonlin=44.43163;	// (double) (IF allometryfunctiontype == 2) sl
 dbreastheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slope for height estimation from breast height diameter
 
 // 2.4 -----> Mortality estimation
-mortbg=0.0001;						// (double 0-1) background mortality
-maximumage=609;						// (int) maximum tree age
-mortage=8.18785;					// (double) mortality factor if a tree exceeds the maximum age
-mortyouth=0.1;						// (double) mortality factor for young individuals
-mortyouthinfluenceexp=2.0;			// (double) exponent determining duration time of youth mortality
+mortbg=0.0001;						// (double 0-1) background mortality	//default = 0.0001
+maximumage=609;						// (int) maximum tree age	//default = 609
+mortage=8.18785;					// (double) mortality factor if a tree exceeds the maximum age	//default = 8.18785
+mortyouth=0.1;						// (double) mortality factor for young individuals	//default = 0.1 ###changed to 0.05
+mortyouthinfluenceexp=2.0;			// (double) exponent determining duration time of youth mortality	//default = 2.0
 									//  ... <1==longer
 									//  ... >1==shorter
-mgrowth=0.1;						// (double) factor for adjusting the influence of current tree growth on mortality
-relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree growth on mortality
+mgrowth=0.1;						// (double) factor for adjusting the influence of current tree growth on mortality	//default = 0.1 ###changed to 0.05
+relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree growth on mortality	//default = 1.0
 									// ...  0==no influence of relative growth on mortality
 									// ...  1==linear influence of the relative growth on mortality
 									// ... >1==stronger
 									// ... <1==weaker
-mdensity=0.25;						// (double) mortality factor for density
-densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function
+mdensity=0.25;						// (double) mortality factor for density	//default = 0.25 ###changed to 0.1
+densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function	//default = 0.0
 mweather=0.5;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
-heightweathermorteinflussexp=0.75;	// (double) exponent for determining an influence of the tree height on the climate mortality
-mdrought=0.1;						// (double) mortalitaetsfaktor_Trockenheit (0-+oo)
-seedconemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees
-seedfloormort=0.55803;				// (double 0-1) mortality rate of seeds at the ground
+heightweathermorteinflussexp=0.75;	// (double) exponent for determining an influence of the tree height on the climate mortality	//default = 0.75
+mdrought=0.1;						// (double) mortalitaetsfaktor_Trockenheit (0-+oo)	//default = 0.1 ###changed to 0.05
+seedconemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees	//default = 0.44724 ###changed to 0.4
+seedfloormort=0.55803;				// (double 0-1) mortality rate of seeds at the ground	//default = 0.55803 ###changed to 0.5
 
 
 

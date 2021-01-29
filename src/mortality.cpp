@@ -158,6 +158,16 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
 
             double Treemorts = 0.0 + parameter[0].mortbg + sapl_mort_sib + age_mort + growth_mort + dens_mort + weather_mort_sib + dry_mort;
+			
+			// Treemortg = Treemortg + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 200)); //fire damage
+			Treemortg = Treemortg + ((double)tree.firedamage); // <--- high fire damage for testing
+			
+			Treemorts = Treemorts + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 200)); //fire damage
+			
+			// if (tree.firedamage > 0){
+			// cout << " ###### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | Treemortg=" << Treemortg << " | +++++tree.firedamage=" << ((double)tree.firedamage) << endl;
+			// }
+			
             if (Treemortg > 1.0) {
                 Treemortg = 1.0;
             } else if (Treemortg < 0.0) {
@@ -174,8 +184,13 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             double zufallsz = uniform.draw();
             if ((((tree.species == 1) && (zufallsz < Treemortg)) || ((tree.species == 2) && (zufallsz < Treemorts))) || (tree.envirimpact <= 0)) {
                 tree.growing = false;
+				
+				// if (tree.firedamage > 0)
+					// cout << "tree_list[tree_i].growing = " << tree_list[tree_i].growing;
                 tree_list.remove(tree_i);
                 // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
+				// if (tree.firedamage > 0)
+					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;
             }
         }
     }
@@ -228,74 +243,77 @@ void Mortality(Parameter* parameter,
 #pragma omp for schedule(guided)
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
-                ++n_trees;  // for calculating mean of computation times // TODO still necessary
+				
+				if(tree.growing == true) {
+					++n_trees;  // for calculating mean of computation times // TODO still necessary
 
-                if (tree.seednewly_produced > 0) {
-                    bool pollinated = false;
-                    for (int sna = 0; sna < tree.seednewly_produced; sna++) {
-                        if (uniform.draw() >= parameter[0].seedconemort) {
-                            if (!pollinated && ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9))) {
-                                double randomnumberwind = uniform.draw();
-                                double randomnumberwindfather = uniform.draw();
-                                Pollinationprobability((double)tree.xcoo / 1000, 
-													   (double)tree.ycoo / 1000, 
-													   &parameter[0], 
-													   world_positon_b, 
-													   direction, 
-													   velocity,
-                                                       ripm, 
-													   // cntr, 
-													   p, 
-													   kappa, 
-													   phi, 
-													   dr, 
-													   dx, 
-													   dy, 
-													   I0kappa, 
-													   pe, 
-													   C, 
-													   m, 
-													   Vname, 
-													   Vthdpth, 
-													   n_trees, 
-													   randomnumberwind,
-                                                       randomnumberwindfather);
-                                pollinated = true;
-                            }
+					if (tree.seednewly_produced > 0) {
+						bool pollinated = false;
+						for (int sna = 0; sna < tree.seednewly_produced; sna++) {
+							if (uniform.draw() >= parameter[0].seedconemort) {
+								if (!pollinated && ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9))) {
+									double randomnumberwind = uniform.draw();
+									double randomnumberwindfather = uniform.draw();
+									Pollinationprobability((double)tree.xcoo / 1000, 
+														   (double)tree.ycoo / 1000, 
+														   &parameter[0], 
+														   world_positon_b, 
+														   direction, 
+														   velocity,
+														   ripm, 
+														   // cntr, 
+														   p, 
+														   kappa, 
+														   phi, 
+														   dr, 
+														   dx, 
+														   dy, 
+														   I0kappa, 
+														   pe, 
+														   C, 
+														   m, 
+														   Vname, 
+														   Vthdpth, 
+														   n_trees, 
+														   randomnumberwind,
+														   randomnumberwindfather);
+									pollinated = true;
+								}
 
-                            Seed seed;
+								Seed seed;
 
-                            // seed.yworldcoo = aktortyworldcoo;
-                            // seed.xworldcoo = aktortxworldcoo;
-                            seed.xcoo = tree.xcoo;
-                            seed.ycoo = tree.ycoo;
-                            // seed.namem = tree.name;
-                            seed.dead = false;
+								// seed.yworldcoo = aktortyworldcoo;
+								// seed.xworldcoo = aktortxworldcoo;
+								seed.xcoo = tree.xcoo;
+								seed.ycoo = tree.ycoo;
+								// seed.namem = tree.name;
+								seed.dead = false;
 
-                            // if chosen, determine the father by pollination out of available (matured) trees
-                            if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
-                                // int iran = uniform() * (Vname.size() - 1);
-                                // seed.namep = Vname.at(iran);
-                                // TODO: add here properties that are passed down from the father tree
-                                seed.thawing_depthinfluence = 100;
-                            } else {
-                                // seed.namep = 0;
-                                seed.thawing_depthinfluence = 100;
-                            }
+								// if chosen, determine the father by pollination out of available (matured) trees
+								if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
+									// int iran = uniform() * (Vname.size() - 1);
+									// seed.namep = Vname.at(iran);
+									// TODO: add here properties that are passed down from the father tree
+									seed.thawing_depthinfluence = 100;
+								} else {
+									// seed.namep = 0;
+									seed.thawing_depthinfluence = 100;
+								}
 
-                            // seed.line = tree.line;
-                            // seed.generation = tree.generation + 1;
-                            seed.incone = true;
-                            // seed.weight = 1;
-                            seed.age = 0;
-                            seed.species = tree.species;
-                            seed.releaseheight = tree.height;
+								// seed.line = tree.line;
+								// seed.generation = tree.generation + 1;
+								seed.incone = true;
+								// seed.weight = 1;
+								seed.age = 0;
+								seed.species = tree.species;
+								seed.releaseheight = tree.height;
 
-                            seed_list.add(std::move(seed));
-                        }
-                    }
-                }
-            }  // main tree loop on each core
+								seed_list.add(std::move(seed));
+							}
+						}
+					}
+				}
+			}  // main tree loop on each core
         }      // parallel region
         seed_list.consolidate();
 

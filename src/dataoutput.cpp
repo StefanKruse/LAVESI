@@ -89,32 +89,34 @@ void Dataoutput(int t,
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
-                if (((double)tree.xcoo / 1000 >= xminwindow) && ((double)tree.xcoo / 1000 <= xmaxwindow) && ((double)tree.ycoo / 1000 >= yminwindow)
-                    && ((double)tree.ycoo / 1000 <= ymaxwindow)) {  // loop over reduced plot
-                    // basal area as population size identifier
-                    if ((double)tree.height / 100 >= 130) {
-                        local_basalarea += (M_PI * pow((tree.dbreast / 2), 2));
-                        local_stemcount++;
-                    }
+				if (tree.growing == true) {
+					if (((double)tree.xcoo / 1000 >= xminwindow) && ((double)tree.xcoo / 1000 <= xmaxwindow) && ((double)tree.ycoo / 1000 >= yminwindow)
+						&& ((double)tree.ycoo / 1000 <= ymaxwindow)) {  // loop over reduced plot
+						// basal area as population size identifier
+						if ((double)tree.height / 100 >= 130) {
+							local_basalarea += (M_PI * pow((tree.dbreast / 2), 2));
+							local_stemcount++;
+						}
 
-                    // population sizes in height classes
-                    if ((double)tree.height / 100 <= 40) {
-                        local_nheight0b40++;
-                    } else if (((double)tree.height / 100 > 40) && ((double)tree.height / 100 <= 200)) {
-                        local_nheight41b200++;
-                    } else if ((double)tree.height / 100 > 200) {
-                        local_nheight201b10000++;
-                        local_meantreeheight += (double)tree.height / 100;
-                        local_meantreeage += (double)tree.age;
-                    }
+						// population sizes in height classes
+						if ((double)tree.height / 100 <= 40) {
+							local_nheight0b40++;
+						} else if (((double)tree.height / 100 > 40) && ((double)tree.height / 100 <= 200)) {
+							local_nheight41b200++;
+						} else if ((double)tree.height / 100 > 200) {
+							local_nheight201b10000++;
+							local_meantreeheight += (double)tree.height / 100;
+							local_meantreeage += (double)tree.age;
+						}
 
-                    if (tree.dbreast > 0) {
-                        local_breastdiameter += tree.dbreast;
-                        local_breastdiametercount++;
-                    }
-                }
-            }
-
+						if (tree.dbreast > 0) {
+							local_breastdiameter += tree.dbreast;
+							local_breastdiametercount++;
+						}
+					}
+				}
+			}
+			
 #pragma omp critical
             {
                 basalarea += local_basalarea;
@@ -316,16 +318,6 @@ void Dataoutput(int t,
         ostringstream s1, s2, s3, s4, s5, s6, s7, s8;
 
         if (outputcurrencies == true) {  // currencies output
-            // declarations
-            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0,
-                ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
-            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0,
-                ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
-            int gesamtseedAKT = 0, gesamtseedSUM = 0;
-            int spectree1 = 0, spectree2 = 0;
-            double yposmax = 0.0;
-            double meanbas = 0.0;
-            int h = 0;
 
             // assemble file name
             if (parameter[0].spinupphase == true) {
@@ -452,134 +444,227 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", parameter[0].ivort);
             fprintf(filepointer, "%d;", t);
             fprintf(filepointer, "%d;", jahr);
+			
+            // declarations
+            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0,
+                ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
+            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0,
+                ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
+            int gesamtseedAKT = 0, gesamtseedSUM = 0;
+            int spectree1 = 0, spectree2 = 0;
+            double yposmax = 0.0;
+            double meanbas = 0.0;
+            int h = 0;
+			
+		#pragma omp parallel default(shared)
+        {
+            // declarations
+            int localageg0 = 0, localageg1 = 0, localageg2 = 0, localageg3 = 0, localageg4 = 0, localageg5 = 0, localageg6b10 = 0, localageg11b20 = 0, localageg21b50 = 0, localageg51b100 = 0, localageg101b150 = 0,
+                localageg151b200 = 0, localageg201b300 = 0, localageg301b400 = 0, localageg401b500 = 0, localageg501b600 = 0, localageg601b700 = 0, localageg701plus = 0;
+            int localages0 = 0, localages1 = 0, localages2 = 0, localages3 = 0, localages4 = 0, localages5 = 0, localages6b10 = 0, localages11b20 = 0, localages21b50 = 0, localages51b100 = 0, localages101b150 = 0,
+                localages151b200 = 0, localages201b300 = 0, localages301b400 = 0, localages401b500 = 0, localages501b600 = 0, localages601b700 = 0, localages701plus = 0;
+            int localgesamtseedAKT = 0, localgesamtseedSUM = 0;
+            int localspectree1 = 0, localspectree2 = 0;
+            double localyposmax = 0.0;
+            double localmeanbas = 0.0;
+            int localh = 0;
 
+		#pragma omp for schedule(guided)
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
-                if (((double)tree.xcoo / 1000 >= xminwindow) && ((double)tree.xcoo / 1000 <= xmaxwindow) && ((double)tree.ycoo / 1000 >= yminwindow)
-                    && ((double)tree.ycoo / 1000 <= ymaxwindow)) {
-                    if (tree.species == 1) {
-                        // bin trees by age
-                        if (tree.age == 0) {
-                            ageg0++;
-                        } else if (tree.age == 1) {
-                            ageg1++;
-                        } else if (tree.age == 2) {
-                            ageg2++;
-                        } else if (tree.age == 3) {
-                            ageg3++;
-                        } else if (tree.age == 4) {
-                            ageg4++;
-                        } else if (tree.age == 5) {
-                            ageg5++;
-                        } else if ((tree.age > 5) && (tree.age <= 10)) {
-                            ageg6b10++;
-                        } else if ((tree.age > 10) && (tree.age <= 20)) {
-                            ageg11b20++;
-                        } else if ((tree.age > 20) && (tree.age <= 50)) {
-                            ageg21b50++;
-                        } else if ((tree.age > 50) && (tree.age <= 100)) {
-                            ageg51b100++;
-                        } else if ((tree.age > 100) && (tree.age <= 150)) {
-                            ageg101b150++;
-                        } else if ((tree.age > 150) && (tree.age <= 200)) {
-                            ageg151b200++;
-                        } else if ((tree.age > 200) && (tree.age <= 300)) {
-                            ageg201b300++;
-                        } else if ((tree.age > 300) && (tree.age <= 400)) {
-                            ageg301b400++;
-                        } else if ((tree.age > 400) && (tree.age <= 500)) {
-                            ageg401b500++;
-                        } else if ((tree.age > 500) && (tree.age <= 600)) {
-                            ageg501b600++;
-                        } else if ((tree.age > 600) && (tree.age <= 700)) {
-                            ageg601b700++;
-                        } else if (tree.age > 700) {
-                            ageg701plus++;
-                        }
-                    } else if (tree.species == 2) {
-                        if (tree.age == 0) {
-                            ages0++;
-                        } else if (tree.age == 1) {
-                            ages1++;
-                        } else if (tree.age == 2) {
-                            ages2++;
-                        } else if (tree.age == 3) {
-                            ages3++;
-                        } else if (tree.age == 4) {
-                            ages4++;
-                        } else if (tree.age == 5) {
-                            ages5++;
-                        } else if ((tree.age > 5) && (tree.age <= 10)) {
-                            ages6b10++;
-                        } else if ((tree.age > 10) && (tree.age <= 20)) {
-                            ages11b20++;
-                        } else if ((tree.age > 20) && (tree.age <= 50)) {
-                            ages21b50++;
-                        } else if ((tree.age > 50) && (tree.age <= 100)) {
-                            ages51b100++;
-                        } else if ((tree.age > 100) && (tree.age <= 150)) {
-                            ages101b150++;
-                        } else if ((tree.age > 150) && (tree.age <= 200)) {
-                            ages151b200++;
-                        } else if ((tree.age > 200) && (tree.age <= 300)) {
-                            ages201b300++;
-                        } else if ((tree.age > 300) && (tree.age <= 400)) {
-                            ages301b400++;
-                        } else if ((tree.age > 400) && (tree.age <= 500)) {
-                            ages401b500++;
-                        } else if ((tree.age > 500) && (tree.age <= 600)) {
-                            ages501b600++;
-                        } else if ((tree.age > 600) && (tree.age <= 700)) {
-                            ages601b700++;
-                        } else if (tree.age > 700) {
-                            ages701plus++;
-                        }
-                    }
+				if (tree.growing == true) {
+					if (((double)tree.xcoo / 1000 >= xminwindow) && ((double)tree.xcoo / 1000 <= xmaxwindow) && ((double)tree.ycoo / 1000 >= yminwindow)
+						&& ((double)tree.ycoo / 1000 <= ymaxwindow)) {
+						if (tree.species == 1) {
+							// bin trees by age
+							if (tree.age == 0) {
+								localageg0++;
+							} else if (tree.age == 1) {
+								localageg1++;
+							} else if (tree.age == 2) {
+								localageg2++;
+							} else if (tree.age == 3) {
+								localageg3++;
+							} else if (tree.age == 4) {
+								localageg4++;
+							} else if (tree.age == 5) {
+								localageg5++;
+							} else if ((tree.age > 5) && (tree.age <= 10)) {
+								localageg6b10++;
+							} else if ((tree.age > 10) && (tree.age <= 20)) {
+								localageg11b20++;
+							} else if ((tree.age > 20) && (tree.age <= 50)) {
+								localageg21b50++;
+							} else if ((tree.age > 50) && (tree.age <= 100)) {
+								localageg51b100++;
+							} else if ((tree.age > 100) && (tree.age <= 150)) {
+								localageg101b150++;
+							} else if ((tree.age > 150) && (tree.age <= 200)) {
+								localageg151b200++;
+							} else if ((tree.age > 200) && (tree.age <= 300)) {
+								localageg201b300++;
+							} else if ((tree.age > 300) && (tree.age <= 400)) {
+								localageg301b400++;
+							} else if ((tree.age > 400) && (tree.age <= 500)) {
+								localageg401b500++;
+							} else if ((tree.age > 500) && (tree.age <= 600)) {
+								localageg501b600++;
+							} else if ((tree.age > 600) && (tree.age <= 700)) {
+								localageg601b700++;
+							} else if (tree.age > 700) {
+								localageg701plus++;
+							}
+						} else if (tree.species == 2) {
+							if (tree.age == 0) {
+								localages0++;
+							} else if (tree.age == 1) {
+								localages1++;
+							} else if (tree.age == 2) {
+								localages2++;
+							} else if (tree.age == 3) {
+								localages3++;
+							} else if (tree.age == 4) {
+								localages4++;
+							} else if (tree.age == 5) {
+								localages5++;
+							} else if ((tree.age > 5) && (tree.age <= 10)) {
+								localages6b10++;
+							} else if ((tree.age > 10) && (tree.age <= 20)) {
+								localages11b20++;
+							} else if ((tree.age > 20) && (tree.age <= 50)) {
+								localages21b50++;
+							} else if ((tree.age > 50) && (tree.age <= 100)) {
+								localages51b100++;
+							} else if ((tree.age > 100) && (tree.age <= 150)) {
+								localages101b150++;
+							} else if ((tree.age > 150) && (tree.age <= 200)) {
+								localages151b200++;
+							} else if ((tree.age > 200) && (tree.age <= 300)) {
+								localages201b300++;
+							} else if ((tree.age > 300) && (tree.age <= 400)) {
+								localages301b400++;
+							} else if ((tree.age > 400) && (tree.age <= 500)) {
+								localages401b500++;
+							} else if ((tree.age > 500) && (tree.age <= 600)) {
+								localages501b600++;
+							} else if ((tree.age > 600) && (tree.age <= 700)) {
+								localages601b700++;
+							} else if (tree.age > 700) {
+								localages701plus++;
+							}
+						}
 
-                    if (tree.dbasal > 0) {
-                        meanbas = meanbas + tree.dbasal;
-                        h++;
-                    }
+						if (tree.dbasal > 0) {
+							localmeanbas = localmeanbas + tree.dbasal;
+							localh++;
+						}
 
-                    // counting seeds
-                    gesamtseedAKT += tree.seednewly_produced;
-                    // gesamtseedSUM += tree.seedproduced;
+						// counting seeds
+						localgesamtseedAKT += tree.seednewly_produced;
+						// gesamtseedSUM += tree.seedproduced;
 
-                    // counting species
-                    if (tree.species == 1) {
-                        spectree1++;
-                    } else if (tree.species == 2) {
-                        spectree2++;
-                    }
+						// counting species
+						if (tree.species == 1) {
+							localspectree1++;
+						} else if (tree.species == 2) {
+							localspectree2++;
+						}
 
-                    if ((double)tree.ycoo / 1000 > yposmax) {
-                        yposmax = (double)tree.ycoo / 1000;
-                    }
-                }
+						if ((double)tree.ycoo / 1000 > localyposmax) {
+							localyposmax = (double)tree.ycoo / 1000;
+						}
+					}
+				}
             }
+		#pragma omp critical
+            {
+				ageg0 += localageg0; 
+				ageg1 += localageg1; 
+				ageg2 += localageg2; 
+				ageg3 += localageg3; 
+				ageg4 += localageg4; 
+				ageg5 += localageg5; 
+				ageg6b10 += localageg6b10; 
+				ageg11b20 += localageg11b20; 
+				ageg21b50 += localageg21b50; 
+				ageg51b100 += localageg51b100; 
+				ageg101b150 += localageg101b150;
+                ageg151b200 += localageg151b200; 
+				ageg201b300 += localageg201b300; 
+				ageg301b400 += localageg301b400; 
+				ageg401b500 += localageg401b500; 
+				ageg501b600 += localageg501b600; 
+				ageg601b700 += localageg601b700; 
+				ageg701plus += localageg701plus;
+				ages0 += localages0 ; 
+				ages1 += localages1; 
+				ages2 += localages2; 
+				ages3 += localages3; 
+				ages4 += localages4; 
+				ages5 += localages5; 
+				ages6b10 += localages6b10; 
+				ages11b20 += localages11b20; 
+				ages21b50 += localages21b50; 
+				ages51b100 += localages51b100; 
+				ages101b150 += localages101b150;
+                ages151b200 += localages151b200; 
+				ages201b300 += localages201b300; 
+				ages301b400 += localages301b400; 
+				ages401b500 += localages401b500; 
+				ages501b600 += localages501b600; 
+				ages601b700 += localages601b700; 
+				ages701plus += localages701plus;
+				gesamtseedAKT += localgesamtseedAKT; 
+				gesamtseedSUM += localgesamtseedSUM;
+				spectree1 += localspectree1; 
+				spectree2 += localspectree2;
+				meanbas += localmeanbas;
+				h += localh;
+			
+				if (localyposmax > yposmax) {
+					yposmax = localyposmax;
+				}
+            }
+		}
 
             // for counting seeds:
             int seedconezahl = 0, seedbodenzahl = 0;
             // for counting species:
             int specseed1 = 0, specseed2 = 0;
+	#pragma omp parallel default(shared)
+        {
+            int localseedconezahl = 0;
+			int localseedbodenzahl = 0;
+            int localspecseed1 = 0;			
+			int localspecseed2 = 0;
+			
+	#pragma omp for schedule(guided)
             for (unsigned int i = 0; i < seed_list.size(); ++i) {
                 const auto& seed = seed_list[i];
                 if (((double)seed.xcoo / 1000 >= xminwindow) && ((double)seed.xcoo / 1000 <= xmaxwindow) && ((double)seed.ycoo / 1000 >= yminwindow)
                     && ((double)seed.ycoo / 1000 <= ymaxwindow)) {
                     if (seed.incone) {
-                        seedconezahl++;
+                        localseedconezahl++;
                     } else {
-                        seedbodenzahl++;
+                        localseedbodenzahl++;
                     }
                     // counting species:
                     if (seed.species == 1) {
-                        specseed1 = specseed1 + 1;
+                        localspecseed1++;
                     } else if (seed.species == 2) {
-                        specseed2 = specseed2 + 1;
+                        localspecseed2++;
                     }
                 }
             }
+		#pragma omp critical
+            {
+				seedconezahl += localseedconezahl;
+				seedbodenzahl +=  localseedbodenzahl;
+				specseed1 +=  localspecseed1;			
+				specseed2 +=  localspecseed2;			
+			}
+		}// pragma
 
             if (h > 0) {
                 fprintf(filepointer, "%4.4f;", meanbas / ((double)h));
@@ -645,15 +730,15 @@ void Dataoutput(int t,
             // weather
             fprintf(filepointer, "%d;", parameter[0].weatherchoice);
             // fprintf(filepointer, "%d;", parameter[0].starttrees);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempyearmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp1monthmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp7monthmean);
-            fprintf(filepointer, "%d;", weather_list[yearposition].vegetationperiodlength);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday_sqrt * weather_list[yearposition].degreday_sqrt);
-            fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactorg);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactors);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempyearmean[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp1monthmean[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp7monthmean[0]);
+            fprintf(filepointer, "%d;", weather_list[yearposition].vegetationperiodlength[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday_sqrt[0] * weather_list[yearposition].degreday_sqrt[0]);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactorg[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactors[0]);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 
             fprintf(filepointer, "\n");
@@ -717,19 +802,21 @@ void Dataoutput(int t,
                     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                         auto& tree = tree_list[tree_i];
 
-                        // fprintf(filepointer, "%d;", tree.name);
-                        // fprintf(filepointer, "%d;", tree.namem);
-                        fprintf(filepointer, "%4.4f;", tree.dbasal);
-                        fprintf(filepointer, "%4.4f;", tree.dbreast);
-                        fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
-                        fprintf(filepointer, "%d;", tree.age);
-                        fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
-                        fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
-                        fprintf(filepointer, "%4.5f;", tree.densitywert);
-                        // fprintf(filepointer, "%d;", tree.generation);
-                        fprintf(filepointer, "%d;", tree.seednewly_produced);
-                        // fprintf(filepointer, "%d;", tree.seedproduced);
-                        fprintf(filepointer, "\n");
+						if (tree.growing == true) {
+							// fprintf(filepointer, "%d;", tree.name);
+							// fprintf(filepointer, "%d;", tree.namem);
+							fprintf(filepointer, "%4.4f;", tree.dbasal);
+							fprintf(filepointer, "%4.4f;", tree.dbreast);
+							fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+							fprintf(filepointer, "%d;", tree.age);
+							fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
+							fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
+							fprintf(filepointer, "%4.5f;", tree.densitywert);
+							// fprintf(filepointer, "%d;", tree.generation);
+							fprintf(filepointer, "%d;", tree.seednewly_produced);
+							// fprintf(filepointer, "%d;", tree.seedproduced);
+							fprintf(filepointer, "\n");
+						}
                     }
 
                     fclose(filepointer);
@@ -770,26 +857,28 @@ void Dataoutput(int t,
 
                     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                         auto& tree = tree_list[tree_i];
-
-                        fprintf(filepointer, "%d;", parameter[0].repeati);
-                        // fprintf(filepointer, "%d;", tree.yworldcoo);
-                        // fprintf(filepointer, "%d;", tree.xworldcoo);
-                        fprintf(filepointer, "%d;", parameter[0].ivort);
-                        fprintf(filepointer, "%d;", jahr);
-                        fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                        fprintf(filepointer, "%4.4f;", tree.dbasal);
-                        fprintf(filepointer, "%4.4f;", tree.dbreast);
-                        fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
-                        fprintf(filepointer, "%d;", tree.age);
-                        fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
-                        fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
-                        fprintf(filepointer, "%4.5f;", tree.densitywert);
-                        // fprintf(filepointer, "%d;", tree.generation);
-                        fprintf(filepointer, "%4.4f;", (double)tree.coneheight / 100);
-                        fprintf(filepointer, "%d;", tree.seednewly_produced);
-                        // fprintf(filepointer, "%d;", tree.seedproduced);
-                        fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
-                        fprintf(filepointer, "\n");
+						
+						if (tree.growing == true) {
+							fprintf(filepointer, "%d;", parameter[0].repeati);
+							// fprintf(filepointer, "%d;", tree.yworldcoo);
+							// fprintf(filepointer, "%d;", tree.xworldcoo);
+							fprintf(filepointer, "%d;", parameter[0].ivort);
+							fprintf(filepointer, "%d;", jahr);
+							fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+							fprintf(filepointer, "%4.4f;", tree.dbasal);
+							fprintf(filepointer, "%4.4f;", tree.dbreast);
+							fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+							fprintf(filepointer, "%d;", tree.age);
+							fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
+							fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
+							fprintf(filepointer, "%4.5f;", tree.densitywert);
+							// fprintf(filepointer, "%d;", tree.generation);
+							fprintf(filepointer, "%4.4f;", (double)tree.coneheight / 100);
+							fprintf(filepointer, "%d;", tree.seednewly_produced);
+							// fprintf(filepointer, "%d;", tree.seedproduced);
+							fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
+							fprintf(filepointer, "\n");
+						}
                     }
 
                     fclose(filepointer);
@@ -865,41 +954,43 @@ void Dataoutput(int t,
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
-                // parameters
-                // fprintf(filepointer, "%d;", parameter[0].repeati);
-                // fprintf(filepointer, "%d;", tree.yworldcoo);
-                // fprintf(filepointer, "%d;", tree.xworldcoo);
-                // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                // time variables
-                // fprintf(filepointer, "%d;", t);
-                // fprintf(filepointer, "%d;", jahr);
-                // tree variables
-                fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
-                fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
-                // fprintf(filepointer, "%d;", tree.name);
-                // fprintf(filepointer, "%d;", tree.namem);
-                // fprintf(filepointer, "%d;", tree.namep);
-                // fprintf(filepointer, "%d;", tree.line);
-                // fprintf(filepointer, "%d;", tree.generation);
-                // fprintf(filepointer, "%d;", tree.species);
-                fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
-                fprintf(filepointer, "%4.4f;", tree.dbasal);
-                fprintf(filepointer, "%4.4f;", tree.dbreast);
-                fprintf(filepointer, "%d;", tree.age);
-                // fprintf(filepointer, "%d;", tree.cone);
-                // fprintf(filepointer, "%4.4f;", tree.coneheight);
-                // fprintf(filepointer, "%d;", tree.seednewly_produced);
-                // fprintf(filepointer, "%d;", tree.seedproduced);
-                // fprintf(filepointer, "%d;", tree.buffer);
-                // fprintf(filepointer, "%4.5f;", tree.densitywert);
-                // fprintf(filepointer, "%4.5f;", tree.dispersaldistance);
-                // fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
-                fprintf(filepointer, "%4.4f;", (double)tree.elevation / 10);
-                fprintf(filepointer, "%4.4f;", (double)tree.envirimpact / 10000);
-                fprintf(filepointer, "\n");
-            }
+				if (tree.growing == true) {
+					// parameters
+					// fprintf(filepointer, "%d;", parameter[0].repeati);
+					// fprintf(filepointer, "%d;", tree.yworldcoo);
+					// fprintf(filepointer, "%d;", tree.xworldcoo);
+					// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+					// time variables
+					// fprintf(filepointer, "%d;", t);
+					// fprintf(filepointer, "%d;", jahr);
+					// tree variables
+					fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
+					fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
+					// fprintf(filepointer, "%d;", tree.name);
+					// fprintf(filepointer, "%d;", tree.namem);
+					// fprintf(filepointer, "%d;", tree.namep);
+					// fprintf(filepointer, "%d;", tree.line);
+					// fprintf(filepointer, "%d;", tree.generation);
+					// fprintf(filepointer, "%d;", tree.species);
+					fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+					fprintf(filepointer, "%4.4f;", tree.dbasal);
+					fprintf(filepointer, "%4.4f;", tree.dbreast);
+					fprintf(filepointer, "%d;", tree.age);
+					// fprintf(filepointer, "%d;", tree.cone);
+					// fprintf(filepointer, "%4.4f;", tree.coneheight);
+					// fprintf(filepointer, "%d;", tree.seednewly_produced);
+					// fprintf(filepointer, "%d;", tree.seedproduced);
+					// fprintf(filepointer, "%d;", tree.buffer);
+					// fprintf(filepointer, "%4.5f;", tree.densitywert);
+					// fprintf(filepointer, "%4.5f;", tree.dispersaldistance);
+					// fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
+					fprintf(filepointer, "%4.4f;", (double)tree.elevation / 10);
+					fprintf(filepointer, "%4.4f;", (double)tree.envirimpact / 10000);
+					fprintf(filepointer, "\n");
+				}
 
-            fclose(filepointer);
+				fclose(filepointer);
+			}
         }  // individual tree output
         
 		if (outputtestarea == true) {  // individual tree output only in a specified area
@@ -969,47 +1060,49 @@ void Dataoutput(int t,
             // data output for each tree
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
-			
-				if (   ((double)tree.xcoo / 1000 >= (643515-637008.2)) // currently for Site EN18022 30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-						// ... x 643515
-						// ... y 7479959
-						// as 100-m wide transect starting here in tundra and going south into forest for 400 m
-					&& ((double)tree.xcoo / 1000 <= (643515+100-637008.2))
-					&& ((double)tree.ycoo / 1000 >= (7479959-400-7469996))
-					&& ((double)tree.ycoo / 1000 <= (7479959-7469996))) {
-					// parameters
-					// fprintf(filepointer, "%d;", parameter[0].repeati);
-					// fprintf(filepointer, "%d;", tree.yworldcoo);
-					// fprintf(filepointer, "%d;", tree.xworldcoo);
-					// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-					// time variables
-					// fprintf(filepointer, "%d;", t);
-					// fprintf(filepointer, "%d;", jahr);
-					// tree variables
-					fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
-					fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
-					// fprintf(filepointer, "%d;", tree.name);
-					// fprintf(filepointer, "%d;", tree.namem);
-					// fprintf(filepointer, "%d;", tree.namep);
-					// fprintf(filepointer, "%d;", tree.line);
-					// fprintf(filepointer, "%d;", tree.generation);
-					// fprintf(filepointer, "%d;", tree.species);
-					fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
-					fprintf(filepointer, "%4.4f;", tree.dbasal);
-					fprintf(filepointer, "%4.4f;", tree.dbreast);
-					fprintf(filepointer, "%d;", tree.age);
-					// fprintf(filepointer, "%d;", tree.cone);
-					// fprintf(filepointer, "%4.4f;", tree.coneheight);
-					// fprintf(filepointer, "%d;", tree.seednewly_produced);
-					// fprintf(filepointer, "%d;", tree.seedproduced);
-					// fprintf(filepointer, "%d;", tree.buffer);
-					// fprintf(filepointer, "%4.5f;", tree.densitywert);
-					// fprintf(filepointer, "%4.5f;", tree.dispersaldistance);
-					// fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
-					// fprintf(filepointer, "%4.4f;", (double)tree.elevation / 10);
-					// fprintf(filepointer, "%4.4f;", (double)tree.envirimpact / 10000);
 
-					fprintf(filepointer, "\n");
+				if (tree.growing == true) {
+					if (   ((double)tree.xcoo / 1000 >= (643515-637008.2)) // currently for Site EN18022 30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+							// ... x 643515
+							// ... y 7479959
+							// as 100-m wide transect starting here in tundra and going south into forest for 400 m
+						&& ((double)tree.xcoo / 1000 <= (643515+100-637008.2))
+						&& ((double)tree.ycoo / 1000 >= (7479959-400-7469996))
+						&& ((double)tree.ycoo / 1000 <= (7479959-7469996))) {
+						// parameters
+						// fprintf(filepointer, "%d;", parameter[0].repeati);
+						// fprintf(filepointer, "%d;", tree.yworldcoo);
+						// fprintf(filepointer, "%d;", tree.xworldcoo);
+						// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+						// time variables
+						// fprintf(filepointer, "%d;", t);
+						// fprintf(filepointer, "%d;", jahr);
+						// tree variables
+						fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
+						fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
+						// fprintf(filepointer, "%d;", tree.name);
+						// fprintf(filepointer, "%d;", tree.namem);
+						// fprintf(filepointer, "%d;", tree.namep);
+						// fprintf(filepointer, "%d;", tree.line);
+						// fprintf(filepointer, "%d;", tree.generation);
+						// fprintf(filepointer, "%d;", tree.species);
+						fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+						fprintf(filepointer, "%4.4f;", tree.dbasal);
+						fprintf(filepointer, "%4.4f;", tree.dbreast);
+						fprintf(filepointer, "%d;", tree.age);
+						// fprintf(filepointer, "%d;", tree.cone);
+						// fprintf(filepointer, "%4.4f;", tree.coneheight);
+						// fprintf(filepointer, "%d;", tree.seednewly_produced);
+						// fprintf(filepointer, "%d;", tree.seedproduced);
+						// fprintf(filepointer, "%d;", tree.buffer);
+						// fprintf(filepointer, "%4.5f;", tree.densitywert);
+						// fprintf(filepointer, "%4.5f;", tree.dispersaldistance);
+						// fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
+						// fprintf(filepointer, "%4.4f;", (double)tree.elevation / 10);
+						// fprintf(filepointer, "%4.4f;", (double)tree.envirimpact / 10000);
+
+						fprintf(filepointer, "\n");
+					}
 				}
             }
 
@@ -1073,46 +1166,49 @@ void Dataoutput(int t,
 #pragma omp parallel for default(shared) schedule(guided)
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
-                // calculate grid position from x/y coordinates
-                unsigned int grid_i = floor((double)tree.ycoo / 1000 / 30) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 30);
+				
+				if (tree.growing == true) {
+					// calculate grid position from x/y coordinates
+					unsigned int grid_i = floor((double)tree.ycoo / 1000 / 30) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 30);
 
-                // calculate biomass values for each tree
-                AGBneedleliving[grid_i] += 703.6207 / (1 + exp(-1.0 * ((double)tree.height / 100 - 579.4998) / 208.687));
-                AGBwoodliving[grid_i] += 78713.62675 / (1 + exp(-1.0 * ((double)tree.height / 100 - 793.64156) / 73.91302));
+					// calculate biomass values for each tree
+					AGBneedleliving[grid_i] += 703.6207 / (1 + exp(-1.0 * ((double)tree.height / 100 - 579.4998) / 208.687));
+					AGBwoodliving[grid_i] += 78713.62675 / (1 + exp(-1.0 * ((double)tree.height / 100 - 793.64156) / 73.91302));
 
-                // aggregate stand level variables
-                if (((double)tree.height / 100) > 130) {
-                    Stemcount[grid_i]++;
-                    Basalarea[grid_i] += (M_PI * pow((tree.dbreast / 100 / 2), 2));  // in sq.m so here conversion from cm to m
-                }
-                // aggregate further stand structure variables
-                if (((double)tree.height / 100) < 10) {
-                    Indicount_10[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 10) & (((double)tree.height / 100) < 40)) {
-                    Indicount_40[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 40) & (((double)tree.height / 100) < 100)) {
-                    Indicount_100[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 100) & (((double)tree.height / 100) < 200)) {
-                    Indicount_200[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 200) & (((double)tree.height / 100) < 300)) {
-                    Indicount_300[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 300) & (((double)tree.height / 100) < 400)) {
-                    Indicount_400[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 400) & (((double)tree.height / 100) < 500)) {
-                    Indicount_500[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 500) & (((double)tree.height / 100) < 750)) {
-                    Indicount_750[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 750) & (((double)tree.height / 100) < 1000)) {
-                    Indicount_1000[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 1000) & (((double)tree.height / 100) < 1250)) {
-                    Indicount_1250[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 1250) & (((double)tree.height / 100) < 1500)) {
-                    Indicount_1500[grid_i]++;
-                } else if ((((double)tree.height / 100) >= 1500) & (((double)tree.height / 100) < 2000)) {
-                    Indicount_2000[grid_i]++;
-                } else if (((double)tree.height / 100) >= 2000) {
-                    Indicount_larger2000[grid_i]++;
-                }
+					// aggregate stand level variables
+					if (((double)tree.height / 100) > 130) {
+						Stemcount[grid_i]++;
+						Basalarea[grid_i] += (M_PI * pow((tree.dbreast / 100 / 2), 2));  // in sq.m so here conversion from cm to m
+					}
+					// aggregate further stand structure variables
+					if (((double)tree.height / 100) < 10) {
+						Indicount_10[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 10) & (((double)tree.height / 100) < 40)) {
+						Indicount_40[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 40) & (((double)tree.height / 100) < 100)) {
+						Indicount_100[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 100) & (((double)tree.height / 100) < 200)) {
+						Indicount_200[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 200) & (((double)tree.height / 100) < 300)) {
+						Indicount_300[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 300) & (((double)tree.height / 100) < 400)) {
+						Indicount_400[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 400) & (((double)tree.height / 100) < 500)) {
+						Indicount_500[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 500) & (((double)tree.height / 100) < 750)) {
+						Indicount_750[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 750) & (((double)tree.height / 100) < 1000)) {
+						Indicount_1000[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 1000) & (((double)tree.height / 100) < 1250)) {
+						Indicount_1250[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 1250) & (((double)tree.height / 100) < 1500)) {
+						Indicount_1500[grid_i]++;
+					} else if ((((double)tree.height / 100) >= 1500) & (((double)tree.height / 100) < 2000)) {
+						Indicount_2000[grid_i]++;
+					} else if (((double)tree.height / 100) >= 2000) {
+						Indicount_larger2000[grid_i]++;
+					}
+				}
             }
 
             // trying to open the file for reading
@@ -1233,20 +1329,23 @@ void Dataoutput(int t,
 #pragma omp parallel for default(shared) schedule(guided)
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
-                unsigned int yposi = tree.ycoo / 1000;
+				
+				if (tree.growing == true) {
+					unsigned int yposi = tree.ycoo / 1000;
 
-                // aggregate variables
-                if (((double)tree.height / 100) > 130) {
-                    if (tree.species == 1)
-                        Species1_stems[yposi]++;
-                    else
-                        Species2_stems[yposi]++;
-                } else {
-                    if (tree.species == 1)
-                        Species1_seedlings[yposi]++;
-                    else
-                        Species2_seedlings[yposi]++;
-                }
+					// aggregate variables
+					if (((double)tree.height / 100) > 130) {
+						if (tree.species == 1)
+							Species1_stems[yposi]++;
+						else
+							Species2_stems[yposi]++;
+					} else {
+						if (tree.species == 1)
+							Species1_seedlings[yposi]++;
+						else
+							Species2_seedlings[yposi]++;
+					}
+				}
             }
 
             // add data to file

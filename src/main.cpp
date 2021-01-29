@@ -28,6 +28,38 @@ vector<vector<double>> winddir;
 int cntr;
 vector<double> wdir, wspd;
 
+double weighmeanweathervar(array<double, 70>& data, double posongrid) {// weighted mean value along grid
+	int firstgrid = floor(posongrid/10000);// steps of 10 km; variable posongrid in m
+	double posbetweenfirstandsecondgrid = (posongrid/10000)-firstgrid;
+	double meanval = 0;
+	if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
+	   (firstgrid >= 0)) {// take values of closest weather data and calculate weighted mean
+		meanval = data[firstgrid]*(1-posbetweenfirstandsecondgrid) + data[firstgrid+1]*posbetweenfirstandsecondgrid;
+	} else if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
+			  (firstgrid < 0)) {// linear extrapolation below transect
+		meanval = (data[0] - data[1]) * (-1 * posongrid / 10000) + data[0];
+// std::cout << "posongrid=" << posongrid << " + meanval=" << meanval << " + interpol=" << ((data[0] + data[1]) / 2)<< endl;
+	} else {
+		meanval = data[firstgrid];
+	}
+	return(meanval);
+}
+
+/*
+# r code for testing sims
+
+ri=read.csv2("//dmawi/potsdam/data/bioing/user/stkruse/TransectSims2020/LAVESI_crugrids/output/datatransects_1_501300041_1500.csv")
+str(ri)
+riagg=with(ri, aggregate(Species1_stems,list(floor(Y/20)*20), sum))
+riagg2=with(ri, aggregate(Species1_seedlings,list(floor(Y/20)*20), sum))
+
+par(mfrow=c(2,1))
+with(riagg, plot(c((100*100)*x/(20*20))~Group.1))
+with(riagg2, plot(c((100*100)*x/(20*20))~Group.1))
+
+
+
+*/
 void vegetationDynamics(int yearposition, int jahr, int t) {
     RandomNumber<double> uniform(0, 1);
 
@@ -202,9 +234,9 @@ void Spinupphase() {
             int lastyear = 0;
             int startlag = 5;
 
-            firstyear = world_weather_list[0][0].jahr;
+            firstyear = world_weather_list[0][0].jahr[0];
             cout << "firstyear: " << firstyear << endl;
-            lastyear = world_weather_list[0][0].jahr + 100;
+            lastyear = world_weather_list[0][0].jahr[0] + 100;
             cout << "lastyear: " << lastyear << endl;
 
             // choose a random year for weather determination
@@ -212,7 +244,7 @@ void Spinupphase() {
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
 
             // calculate current year position in list, according to first year in the Weather-List and the random year
-            int yearposition = (world_weather_list[0][0].jahr - jahr) * -1;
+            int yearposition = (world_weather_list[0][0].jahr[0] - jahr) * -1;
             cout << "yearposition: " << yearposition << endl;
 
             // go through all functions for vegetation dynamics
@@ -234,16 +266,16 @@ void Spinupphase() {
             int firstyear = 0, lastyear = 0;
             int startlag = 5;
 
-            firstyear = world_weather_list[0][0].jahr;
-            lastyear = world_weather_list[0][0].jahr + 100;
+            firstyear = world_weather_list[0][0].jahr[0];
+            lastyear = world_weather_list[0][0].jahr[0] + 100;
 
             // take a random year for weather determination
             double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
 
-            int yearposition = (world_weather_list[0][0].jahr - jahr)
+            int yearposition = (world_weather_list[0][0].jahr[0] - jahr)
                                * -1;  // calculate actual year position in list, according to first year in the Weather-List and the random year
-            cout << world_weather_list[0][0].jahr << endl;
+            cout << world_weather_list[0][0].jahr[0] << endl;
 
             // progress console output
             printf("==> N:%d/%d\t=>\tzYear=%d\tyearPos=%d\n", parameter[0].ivort, parameter[0].ivortmax, jahr, yearposition);
@@ -326,7 +358,7 @@ void Yearsteps() {
 
         // calculate current year and print a summary of the year
         int jahr = parameter[0].startjahr + t;
-        yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
+        yearposition = ((world_weather_list[0][0].jahr[0] - parameter[0].startjahr) * -1)
                        + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
 
         if (parameter[0].yearlyvis == true) {
@@ -396,7 +428,7 @@ void Yearsteps() {
 
                     int jahr = parameter[0].startjahr + t;
 
-                    yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
+                    yearposition = ((world_weather_list[0][0].jahr[0] - parameter[0].startjahr) * -1)
                                    + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the startjahr
 
                     if (parameter[0].yearlyvis == true) {

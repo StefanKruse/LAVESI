@@ -308,6 +308,12 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].lineartransect) ? "true" : "false");
     }
 
+    strcpy(uebergabestring, "n_weather_along_grid");
+    parameter[0].n_weather_along_grid = (unsigned int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].n_weather_along_grid);
+    }
+
     strcpy(uebergabestring, "locationshift");
     parameter[0].locationshift = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

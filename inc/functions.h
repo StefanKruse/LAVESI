@@ -5,7 +5,7 @@
 #include "structures.h"
 
 using namespace std;
-
+double weighmeanweathervar(array<double, 70>& data, double posongrid);
 double Parameterinput(const char* uebergabestring, int stringlengthmax, const char* divisionsign, Parameter* parameter);
 void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vector<Weather>>& world_weather_list);
 void Dataoutput(int t,

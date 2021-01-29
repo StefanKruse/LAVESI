@@ -65,6 +65,7 @@ void Seeddispersal(//int jahr,
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
+			
             if (!seed.dead && seed.incone) {
                 if (uniform.draw() <= parameter[0].seedflightrate) {
                     double ratiorn = uniform.draw();
@@ -189,8 +190,13 @@ void Seeddispersal(//int jahr,
                         }
                     }
                     if (seed.xcoo < 0) {
+// cout << " ... seed.xcoo before = " << seed.xcoo;
                         if ((parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3)) {
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1);  // TODO fix
+                            // seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1);  // TODO fix
+                            int displacement = floor((double)seed.xcoo/(1000 * ((double)treecols - 1)));
+// cout << " ... displacement = " << displacement;
+							seed.xcoo = seed.xcoo - (displacement * (1000 * ((int)treecols - 1)));//dipl-1 to shift to plot region
+// cout << " ... seed.xcoo after = " << seed.xcoo << endl;
                             // seed.namem = 0;
                             // seed.namep = 0;
                         } else {
@@ -213,11 +219,12 @@ void Seeddispersal(//int jahr,
 
                     if ((sameausserhalb == false)
                         && ((seed.ycoo < 0) || (seed.ycoo > 1000 * ((int)treerows - 1)) || (seed.xcoo < 0) || (seed.xcoo > 1000 * ((int)treecols - 1)))) {
-                        printf("\n\nLaVeSi was exited ");
-                        printf("in Seeddispersal.cpp\n");
+                        // printf("\n\nLaVeSi was exited ");
+                        // printf("in Seeddispersal.cpp\n");
                         printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n",
                                (double)seed.ycoo / 1000, (double)seed.xcoo / 1000);
-                        exit(1);
+						sameausserhalb = true;
+                        // exit(1);
                     }
 
                     if (sameausserhalb) {

@@ -138,6 +138,7 @@ struct Parameter {
     int mapylength;
     bool weathercalcgradient;
     bool lineartransect;
+    unsigned int n_weather_along_grid;
     double locationshift;
     double nposmax;
     double nposmin;
@@ -262,7 +263,7 @@ struct Parameter {
     // ancestry
     int nameakt;
     int lineakt;
-}; */
+};
 
 struct Weather {
 	std::array<int, 70> xworldcoo;
@@ -337,6 +338,10 @@ struct Weather {
     std::array<double, 70> nddrestriktion;
     std::array<double, 70> nddrestriktionmin;
     std::array<double, 70> janmorttemp;
+    std::array<double, 70> anstiegweathermortg;
+    std::array<double, 70> anstiegweathermorts;
+    std::array<double, 70> anstiegweathermortgmin;
+    std::array<double, 70> anstiegweathermortsmin;
 };
 /* superseeded by preceding struct Weather {
     int xworldcoo;

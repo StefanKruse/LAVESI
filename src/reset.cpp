@@ -31,45 +31,48 @@ void Savealllists() {
         int countertree = 1;
         for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
             auto& tree = tree_list[tree_i];
-            Tree newtree;
+			
+			if (tree.growing == true) {
+				Tree newtree;
 
-            // copy
-            // newtree.yworldcoo = tree.yworldcoo;
-            // newtree.xworldcoo = tree.xworldcoo;
-            newtree.xcoo = tree.xcoo;
-            newtree.ycoo = tree.ycoo;
-            // newtree.name = tree.name;
-            // newtree.namem = tree.namem;
-            // newtree.namep = tree.namep;
-            // newtree.line = tree.line;
-            // newtree.generation = tree.generation;
-            newtree.species = tree.species;
-            // newtree.yr_of_establishment = tree.yr_of_establishment;
-            // newtree.yr_of_dying = tree.yr_of_dying;
-            newtree.dbasal = tree.dbasal;
-            newtree.dbasalrel = tree.dbasalrel;
-            newtree.dbreast = tree.dbreast;
-            newtree.dbreastrel = tree.dbreastrel;
-            newtree.height = tree.height;
-            newtree.age = tree.age;
-            newtree.cone = tree.cone;
-            newtree.coneheight = tree.coneheight;
-            newtree.seednewly_produced = tree.seednewly_produced;
-            // newtree.seedproduced = tree.seedproduced;
-            // newtree.buffer = tree.buffer;
-            newtree.densitywert = tree.densitywert;
-            newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
-            newtree.longdispersed = tree.longdispersed;
-            newtree.growing = tree.growing;
+				// copy
+				// newtree.yworldcoo = tree.yworldcoo;
+				// newtree.xworldcoo = tree.xworldcoo;
+				newtree.xcoo = tree.xcoo;
+				newtree.ycoo = tree.ycoo;
+				// newtree.name = tree.name;
+				// newtree.namem = tree.namem;
+				// newtree.namep = tree.namep;
+				// newtree.line = tree.line;
+				// newtree.generation = tree.generation;
+				newtree.species = tree.species;
+				// newtree.yr_of_establishment = tree.yr_of_establishment;
+				// newtree.yr_of_dying = tree.yr_of_dying;
+				newtree.dbasal = tree.dbasal;
+				newtree.dbasalrel = tree.dbasalrel;
+				newtree.dbreast = tree.dbreast;
+				newtree.dbreastrel = tree.dbreastrel;
+				newtree.height = tree.height;
+				newtree.age = tree.age;
+				newtree.cone = tree.cone;
+				newtree.coneheight = tree.coneheight;
+				newtree.seednewly_produced = tree.seednewly_produced;
+				// newtree.seedproduced = tree.seedproduced;
+				// newtree.buffer = tree.buffer;
+				newtree.densitywert = tree.densitywert;
+				newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
+				newtree.longdispersed = tree.longdispersed;
+				newtree.growing = tree.growing;
 
-            // add
-            tree_list_copy.add(newtree);
+				// add
+				tree_list_copy.add(newtree);
 
-            if (countertree == 1) {
-                cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
-            }
+				if (countertree == 1) {
+					cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
+				}
 
-            ++countertree;
+				++countertree;
+			}
         }
         tree_list_copy.consolidate();
 
@@ -302,45 +305,48 @@ void Restorealllists(void) {
         int countertree = 1;  // for displaying the first tree
         for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
             auto& tree = tree_list[tree_i];
-            Tree newtree;
 
-            // copy
-            // newtree.yworldcoo = tree.yworldcoo;
-            // newtree.xworldcoo = tree.xworldcoo;
-            newtree.xcoo = tree.xcoo;
-            newtree.ycoo = tree.ycoo;
-            // newtree.name = tree.name;
-            // newtree.namem = tree.namem;
-            // newtree.namep = tree.namep;
-            // newtree.line = tree.line;
-            // newtree.generation = tree.generation;
-            newtree.species = tree.species;
-            // newtree.yr_of_establishment = tree.yr_of_establishment;
-            // newtree.yr_of_dying = tree.yr_of_dying;
-            newtree.dbasal = tree.dbasal;
-            newtree.dbasalrel = tree.dbasalrel;
-            newtree.dbreast = tree.dbreast;
-            newtree.dbreastrel = tree.dbreastrel;
-            newtree.height = tree.height;
-            newtree.age = tree.age;
-            newtree.cone = tree.cone;
-            newtree.coneheight = tree.coneheight;
-            newtree.seednewly_produced = tree.seednewly_produced;
-            // newtree.seedproduced = tree.seedproduced;
-            // newtree.buffer = tree.buffer;
-            newtree.densitywert = tree.densitywert;
-            newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
-            newtree.longdispersed = tree.longdispersed;
-            newtree.growing = tree.growing;
+			if (tree.growing == true) {
+				Tree newtree;
 
-            // add
-            tree_list_copy.add(newtree);
+				// copy
+				// newtree.yworldcoo = tree.yworldcoo;
+				// newtree.xworldcoo = tree.xworldcoo;
+				newtree.xcoo = tree.xcoo;
+				newtree.ycoo = tree.ycoo;
+				// newtree.name = tree.name;
+				// newtree.namem = tree.namem;
+				// newtree.namep = tree.namep;
+				// newtree.line = tree.line;
+				// newtree.generation = tree.generation;
+				newtree.species = tree.species;
+				// newtree.yr_of_establishment = tree.yr_of_establishment;
+				// newtree.yr_of_dying = tree.yr_of_dying;
+				newtree.dbasal = tree.dbasal;
+				newtree.dbasalrel = tree.dbasalrel;
+				newtree.dbreast = tree.dbreast;
+				newtree.dbreastrel = tree.dbreastrel;
+				newtree.height = tree.height;
+				newtree.age = tree.age;
+				newtree.cone = tree.cone;
+				newtree.coneheight = tree.coneheight;
+				newtree.seednewly_produced = tree.seednewly_produced;
+				// newtree.seedproduced = tree.seedproduced;
+				// newtree.buffer = tree.buffer;
+				newtree.densitywert = tree.densitywert;
+				newtree.thawing_depthinfluence = tree.thawing_depthinfluence;
+				newtree.longdispersed = tree.longdispersed;
+				newtree.growing = tree.growing;
 
-            if (countertree == 1) {
-                cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
-            }
+				// add
+				tree_list_copy.add(newtree);
 
-            ++countertree;
+				if (countertree == 1) {
+					cout << tree.height << " <-tree ... Treeheight ... newtree. " << newtree.height << endl;
+				}
+
+				++countertree;
+			}
         }
         tree_list_copy.consolidate();
 

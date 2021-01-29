@@ -11,8 +11,11 @@
 // constexpr unsigned int treecols = 7860;
 // constexpr unsigned int treerows = 14310;  // 30m_Ilirney_x641989-649489m_y7476026-7490336m
 // constexpr unsigned int treecols = 7500;
-constexpr unsigned int treerows = 24720; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
-constexpr unsigned int treecols = 18000;
+// constexpr unsigned int treerows = 24720; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
+// constexpr unsigned int treecols = 18000;
+// constexpr unsigned int treerows = 800000; //transect sim Chukotka
+constexpr unsigned int treerows = 300000; //transect sim Kolyma
+constexpr unsigned int treecols = 20;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

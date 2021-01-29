@@ -9,78 +9,148 @@ extern vector<vector<double>> windspd;
 extern vector<vector<double>> winddir;
 extern vector<int> globalyears;
 
-void getPrec(char dateinameprec[50], vector<Weather>& weather_list, int maximal_word_length) {
-    FILE* fp;
-    fp = fopen(dateinameprec, "r");
+void getPrec(char dateinameprec[150], vector<Weather>& weather_list, int maximal_word_length) {
+// unsigned int n_weather_along_grid=61;// move to parameter input
+	for(unsigned int i=0; i<=parameter[0].n_weather_along_grid; i++) { // new code for reading  1 to n_weather_along_grid=61 e.g. for chukotka
+// cout << "... weather file input i= " << i << endl;
+		ostringstream crugridnumber, transectname, rcpscenario, s4, s5, s6, s7, s8;
+		// sprintf(crugridnumber,"%02d",i);
+		// crugridnumber << setw(2) << setfill('0') << i;
+		char str[3];
+		snprintf(str, 3, "%02d", i);
+		crugridnumber << str;
+// cout << " crugridnumber = " << crugridnumber.str() << endl;
+            // ... 501 == start year
+            // ... ...3000 == final year
+            // ... .......2 == Transect 2 Taimyr Peninsula
+            // ... .......3 == Transect 3 Buor Khaya
+            // ... .......4 == Transect 4 Kolyma
+            // ... .......5 == Transect 5 Chukotka
+            // ... ........1 == rcp2.6
+            // ... ........2 == rcp4.5
+            // ... ........3 == rcp8.5
+		if(parameter[0].weatherchoice == 501300021 || parameter[0].weatherchoice == 501300022 || parameter[0].weatherchoice == 501300023) { 
+			transectname << "Taimyr Peninsula";
+			parameter[0].tempjandiffort = -0.9015152;
+			parameter[0].tempjuldiffort = -0.6449302;
+            parameter[0].precdiffort = -4.153904;
+		} else if(parameter[0].weatherchoice == 501300031 || parameter[0].weatherchoice == 501300032 || parameter[0].weatherchoice == 501300033) {
+			transectname << "Buor Khaya";
+			parameter[0].tempjandiffort = -0.1907051;
+			parameter[0].tempjuldiffort = -2.065972;
+            parameter[0].precdiffort = -24.06063;
+		} else if(parameter[0].weatherchoice == 501300041 || parameter[0].weatherchoice == 501300042 || parameter[0].weatherchoice == 501300043) {
+			transectname << "Kolyma";
+			parameter[0].tempjandiffort = 3.582945;
+			parameter[0].tempjuldiffort = 1.433178;
+            parameter[0].precdiffort = 97.82596;
+		} else if(parameter[0].weatherchoice == 501300051 || parameter[0].weatherchoice == 501300052 || parameter[0].weatherchoice == 501300053) {
+			transectname << "Chukotka";
+			parameter[0].tempjandiffort = 4.460894;
+			parameter[0].tempjuldiffort = 4.300536;
+            parameter[0].precdiffort = 8.156439;
+		}
+			
+		if(parameter[0].weatherchoice == 501300021 || 
+		   parameter[0].weatherchoice == 501300031 || 
+		   parameter[0].weatherchoice == 501300041 || 
+		   parameter[0].weatherchoice == 501300051) 
+			rcpscenario << "26";
+		if(parameter[0].weatherchoice == 501300022 || 
+		   parameter[0].weatherchoice == 501300032 || 
+		   parameter[0].weatherchoice == 501300042 || 
+		   parameter[0].weatherchoice == 501300052) 
+			rcpscenario << "45";
+		if(parameter[0].weatherchoice == 501300023 || 
+		   parameter[0].weatherchoice == 501300033 || 
+		   parameter[0].weatherchoice == 501300043 || 
+		   parameter[0].weatherchoice == 501300053) 
+			rcpscenario << "85";
 
-    if (fp == NULL) {
-        printf("Precipitation file not available!\n");
-        exit(1);
-    }
+        string inputcrugridname = "input/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "prec_501-3000.csv";
 
-    int counter = 1;
-    char puffer[255];
-    double precipitationsumbuf;
-    double prec1monthmeanbuf, prec2monthmeanbuf, prec3monthmeanbuf, prec4monthmeanbuf, prec5monthmeanbuf, prec6monthmeanbuf, prec7monthmeanbuf,
-        prec8monthmeanbuf, prec9monthmeanbuf, prec10monthmeanbuf, prec11monthmeanbuf, prec12monthmeanbuf;
+		if(parameter[0].n_weather_along_grid > 0)
+			strcpy(dateinameprec, inputcrugridname.c_str());
 
-    while (fgets(puffer, maximal_word_length, fp) != NULL) {
-        if (counter >= 2) {
-            prec1monthmeanbuf = strtod(strtok(puffer, " "), NULL);
-            prec2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec4monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec5monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec6monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec7monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec8monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec9monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec10monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec11monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            prec12monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+cout << endl << "dateinameprec = " << dateinameprec;
 
-            precipitationsumbuf = (prec1monthmeanbuf + prec2monthmeanbuf + prec3monthmeanbuf + prec4monthmeanbuf + prec5monthmeanbuf + prec6monthmeanbuf
-                                   + prec7monthmeanbuf + prec8monthmeanbuf + prec9monthmeanbuf + prec10monthmeanbuf + prec11monthmeanbuf + prec12monthmeanbuf);
 
-            auto& pWeather = weather_list[counter - 2];
 
-            pWeather.prec1monthmean = prec1monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec2monthmean = prec2monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec3monthmean = prec3monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec4monthmean = prec4monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec5monthmean = prec5monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec6monthmean = prec6monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec7monthmean = prec7monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec8monthmean = prec8monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec9monthmean = prec9monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec10monthmean = prec10monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec11monthmean = prec11monthmeanbuf + parameter[0].precdiffort / 12;
-            pWeather.prec12monthmean = prec12monthmeanbuf + parameter[0].precdiffort / 12;
 
-            pWeather.prec1monthmeanmin = prec1monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec2monthmeanmin = prec2monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec3monthmeanmin = prec3monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec4monthmeanmin = prec4monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec5monthmeanmin = prec5monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec6monthmeanmin = prec6monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec7monthmeanmin = prec7monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec8monthmeanmin = prec8monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec9monthmeanmin = prec9monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec10monthmeanmin = prec10monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec11monthmeanmin = prec11monthmeanbuf + parameter[0].precdiffortmin / 12;
-            pWeather.prec12monthmeanmin = prec12monthmeanbuf + parameter[0].precdiffortmin / 12;
 
-            pWeather.precipitationsum = precipitationsumbuf + parameter[0].precdiffort;
-            pWeather.precipitationsummin = precipitationsumbuf + parameter[0].precdiffortmin;
-        }
-        counter++;
-    }
 
-    fclose(fp);
+
+		FILE* fp;
+		fp = fopen(dateinameprec, "r");
+
+		if (fp == NULL) {
+			printf("Precipitation file not available!\n");
+			exit(1);
+		}
+
+		int counter = 1;
+		char puffer[255];
+		double precipitationsumbuf;
+		double prec1monthmeanbuf, prec2monthmeanbuf, prec3monthmeanbuf, prec4monthmeanbuf, prec5monthmeanbuf, prec6monthmeanbuf, prec7monthmeanbuf,
+			prec8monthmeanbuf, prec9monthmeanbuf, prec10monthmeanbuf, prec11monthmeanbuf, prec12monthmeanbuf;
+
+		while (fgets(puffer, maximal_word_length, fp) != NULL) {
+			if (counter >= 2) {
+				prec1monthmeanbuf = strtod(strtok(puffer, " "), NULL);
+				prec2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec4monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec5monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec6monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec7monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec8monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec9monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec10monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec11monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				prec12monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+
+				precipitationsumbuf = (prec1monthmeanbuf + prec2monthmeanbuf + prec3monthmeanbuf + prec4monthmeanbuf + prec5monthmeanbuf + prec6monthmeanbuf
+									   + prec7monthmeanbuf + prec8monthmeanbuf + prec9monthmeanbuf + prec10monthmeanbuf + prec11monthmeanbuf + prec12monthmeanbuf);
+
+				auto& pWeather = weather_list[counter - 2];
+
+				pWeather.prec1monthmean[i] = prec1monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec2monthmean[i] = prec2monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec3monthmean[i] = prec3monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec4monthmean[i] = prec4monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec5monthmean[i] = prec5monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec6monthmean[i] = prec6monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec7monthmean[i] = prec7monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec8monthmean[i] = prec8monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec9monthmean[i] = prec9monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec10monthmean[i] = prec10monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec11monthmean[i] = prec11monthmeanbuf + parameter[0].precdiffort / 12;
+				pWeather.prec12monthmean[i] = prec12monthmeanbuf + parameter[0].precdiffort / 12;
+
+				pWeather.prec1monthmeanmin[i] = prec1monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec2monthmeanmin[i] = prec2monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec3monthmeanmin[i] = prec3monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec4monthmeanmin[i] = prec4monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec5monthmeanmin[i] = prec5monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec6monthmeanmin[i] = prec6monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec7monthmeanmin[i] = prec7monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec8monthmeanmin[i] = prec8monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec9monthmeanmin[i] = prec9monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec10monthmeanmin[i] = prec10monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec11monthmeanmin[i] = prec11monthmeanbuf + parameter[0].precdiffortmin / 12;
+				pWeather.prec12monthmeanmin[i] = prec12monthmeanbuf + parameter[0].precdiffortmin / 12;
+
+				pWeather.precipitationsum[i] = precipitationsumbuf + parameter[0].precdiffort;
+				pWeather.precipitationsummin[i] = precipitationsumbuf + parameter[0].precdiffortmin;
+			}
+			counter++;
+		}
+		fclose(fp);
+	}
 }
 
 void getTemp(	//int aktort, 
-				char dateinametemp[50], 
+				char dateinametemp[150], 
 				vector<Weather>& weather_list) {
     // TODO: check whether this grid-based simulation setup is still necessary or can be removed
     // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
@@ -95,164 +165,327 @@ void getTemp(	//int aktort,
     // parameter[0].tempdiffort = -0.3508 * (Nposakt - Nposcenter);
     // }
 
-	// for all available files either only 00up or if in parameter 				n_weather_along_grids>0 then use this plus more to fill the 
-	for(int i = 0; i < n_weather_along_grids; i++ ){
-		...
+
+	for(unsigned int i=0; i<=parameter[0].n_weather_along_grid; i++) { // new code for reading  1 to n_weather_along_grid=61 e.g. for chukotka
+// cout << "... weather file input i= " << i << endl;
+		ostringstream crugridnumber, transectname, rcpscenario, s4, s5, s6, s7, s8;
+		// sprintf(crugridnumber,"%02d",i);
+		// crugridnumber << setw(2) << setfill('0') << i;
+		char str[3];
+		snprintf(str, 3, "%02d", i);
+		crugridnumber << str;
+// cout << " crugridnumber = " << crugridnumber.str() << endl;
+            // ... 501 == start year
+            // ... ...3000 == final year
+            // ... .......2 == Transect 2 Taimyr Peninsula
+            // ... .......3 == Transect 3 Buor Khaya
+            // ... .......4 == Transect 4 Kolyma
+            // ... .......5 == Transect 5 Chukotka
+            // ... ........1 == rcp2.6
+            // ... ........2 == rcp4.5
+            // ... ........3 == rcp8.5
+		if(parameter[0].weatherchoice == 501300021 || parameter[0].weatherchoice == 501300022 || parameter[0].weatherchoice == 501300023) { 
+			transectname << "Taimyr Peninsula";
+			parameter[0].tempjandiffort = -0.9015152;
+			parameter[0].tempjuldiffort = -0.6449302;
+            parameter[0].precdiffort = -4.153904;
+		} else if(parameter[0].weatherchoice == 501300031 || parameter[0].weatherchoice == 501300032 || parameter[0].weatherchoice == 501300033) {
+			transectname << "Buor Khaya";
+			parameter[0].tempjandiffort = -0.1907051;
+			parameter[0].tempjuldiffort = -2.065972;
+            parameter[0].precdiffort = -24.06063;
+		} else if(parameter[0].weatherchoice == 501300041 || parameter[0].weatherchoice == 501300042 || parameter[0].weatherchoice == 501300043) {
+			transectname << "Kolyma";
+			parameter[0].tempjandiffort = 3.582945;
+			parameter[0].tempjuldiffort = 1.433178;
+            parameter[0].precdiffort = 97.82596;
+		} else if(parameter[0].weatherchoice == 501300051 || parameter[0].weatherchoice == 501300052 || parameter[0].weatherchoice == 501300053) {
+			transectname << "Chukotka";
+			parameter[0].tempjandiffort = 4.460894;
+			parameter[0].tempjuldiffort = 4.300536;
+            parameter[0].precdiffort = 8.156439;
+		}
+			
+		if(parameter[0].weatherchoice == 501300021 || 
+		   parameter[0].weatherchoice == 501300031 || 
+		   parameter[0].weatherchoice == 501300041 || 
+		   parameter[0].weatherchoice == 501300051) 
+			rcpscenario << "26";
+		if(parameter[0].weatherchoice == 501300022 || 
+		   parameter[0].weatherchoice == 501300032 || 
+		   parameter[0].weatherchoice == 501300042 || 
+		   parameter[0].weatherchoice == 501300052) 
+			rcpscenario << "45";
+		if(parameter[0].weatherchoice == 501300023 || 
+		   parameter[0].weatherchoice == 501300033 || 
+		   parameter[0].weatherchoice == 501300043 || 
+		   parameter[0].weatherchoice == 501300053) 
+			rcpscenario << "85";
+
+        string inputcrugridname = "input/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
+
+		if(parameter[0].n_weather_along_grid > 0)
+			strcpy(dateinametemp, inputcrugridname.c_str());
+
+cout << endl << "dateinametemp = " << dateinametemp;
+
+		FILE* f;
+		f = fopen(dateinametemp, "r");
+		if (f == NULL) {
+			printf("Temperature file not available!\n");
+			exit(1);
+		}
+
+		char puffer[255];
+		int counter = 1;
+		double tempyearmeanbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf,
+			temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
+
+		// read in line by line, partially preprocess data
+		while (fgets(puffer, 255, f) != NULL) {
+			if (counter >= 2) {
+				temp1monthmeanbuf = strtod(strtok(puffer, " "), NULL);
+				temp2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp4monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp5monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp6monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp7monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp8monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp9monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp10monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp11monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+				temp12monthmeanbuf = strtod(strtok(NULL, " "), NULL);
+
+				tempyearmeanbuf = (temp1monthmeanbuf + temp2monthmeanbuf + temp3monthmeanbuf + temp4monthmeanbuf + temp5monthmeanbuf + temp6monthmeanbuf
+								   + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
+								  / 12;
+				
+				if(str==string("00")) {//weather not exists then create new otherwise fill vector per variable with grid information
+					Weather pWeather;
+					
+					// pWeather.yworldcoo = aktortyworldcoo;
+					// pWeather.xworldcoo = aktortxworldcoo;
+					pWeather.jahr[i] = counter + parameter[0].startjahr - 2;
+					pWeather.tempyearmean[i] = tempyearmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjandiffort != 0.0)
+						pWeather.temp1monthmean[i] = temp1monthmeanbuf + parameter[0].tempjandiffort;
+					else
+						pWeather.temp1monthmean[i] = temp1monthmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjandiffortmin != 0.0)
+						pWeather.temp1monthmeanmin[i] = temp1monthmeanbuf + parameter[0].tempjandiffortmin;
+					else
+						pWeather.temp1monthmeanmin[i] = temp1monthmeanbuf + parameter[0].tempdiffortmin;
+					pWeather.temp2monthmean[i] = temp2monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp3monthmean[i] = temp3monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp4monthmean[i] = temp4monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp5monthmean[i] = temp5monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp6monthmean[i] = temp6monthmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjuldiffort != 0.0)
+						pWeather.temp7monthmean[i] = temp7monthmeanbuf + parameter[0].tempjuldiffort;
+					else
+						pWeather.temp7monthmean[i] = temp7monthmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjuldiffortmin != 0.0)
+						pWeather.temp7monthmeanmin[i] = temp7monthmeanbuf + parameter[0].tempjuldiffortmin;
+					else
+						pWeather.temp7monthmeanmin[i] = temp7monthmeanbuf + parameter[0].tempdiffortmin;
+					pWeather.temp8monthmean[i] = temp8monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp9monthmean[i] = temp9monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp10monthmean[i] = temp10monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp11monthmean[i] = temp11monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp12monthmean[i] = temp12monthmeanbuf + parameter[0].tempdiffort;
+
+					double sumacttemp = 0;
+					double sumacttempmin = 0;
+					double sumdegreday = 0;
+					double sumdegredaymin = 0;
+					int ndegreday = 0;
+					int ndegredaymin = 0;
+					double jantemp = pWeather.temp1monthmean[i];
+					double jantempmin = pWeather.temp1monthmeanmin[i];
+					double julitemp = pWeather.temp7monthmean[i];
+					double julitempmin = pWeather.temp7monthmeanmin[i];
+
+					for (int i = 1; i <= 365; i++) {
+						// calculate each day once for each January or July temperature oriented function
+						double tagestempjan = 0.0;
+						double tagestempjanmin = 0.0;
+						double tagestempjul = 0.0;
+						double tagestempjulmin = 0.0;
+						double tagestemp = 0.0;
+						double tagestempmin = 0.0;
+
+						tagestempjan = ((22.55131 * sin(0.49102 * ((double)i / (365.0 / 12.0)) + 4.62730)) + 22.04378 + jantemp);
+						tagestempjul = ((22.55261 * sin(0.49063 * ((double)i / (365.0 / 12.0)) + 4.62760)) - 22.27861 + julitemp);
+						tagestempjanmin = ((22.55131 * sin(0.49102 * ((double)i / (365.0 / 12.0)) + 4.62730)) + 22.04378 + jantempmin);
+						tagestempjulmin = ((22.55261 * sin(0.49063 * ((double)i / (365.0 / 12.0)) + 4.62760)) - 22.27861 + julitempmin);
+
+						// merge daily temperatures of January and July year-functions
+						double weight = 0.0;
+						if ((i >= 1) && (i <= 15)) {
+							weight = ((double)1.0 * ((15.0 - i) / 184.0));
+						}
+						if ((i >= 16) && (i <= 196)) {
+							weight = ((double)1.0 * ((i - 15.0) / 181.0));
+						}
+						if ((i >= 197) && (i <= 365)) {
+							weight = ((double)1.0 * ((365.0 + 15.0 - i) / 184.0));
+						}
+
+						tagestemp = tagestempjan * (1 - weight) + tagestempjul * weight;
+
+						if (tagestemp > 0) {
+							ndegreday++;
+							sumdegreday += tagestemp;
+							if (tagestemp > 10) {
+								sumacttemp = sumacttemp + tagestemp;
+							}
+						}
+						tagestempmin = tagestempjanmin * (1 - weight) + tagestempjulmin * weight;
+						if (tagestempmin > 0) {
+							ndegredaymin++;
+							sumdegredaymin += tagestempmin;
+							if (tagestempmin > 10) {
+								sumacttempmin = sumacttempmin + tagestempmin;
+							}
+						}
+					}
+
+					pWeather.activeairtemp[i] = (int)round(sumacttemp * 0.84630);
+					pWeather.activeairtempmin[i] = (int)round(sumacttempmin * 0.84630);
+					pWeather.vegetationperiodlength[i] = (int)round(ndegreday * 0.88432);
+					pWeather.vegetationperiodlengthmin[i] = (int)round(ndegredaymin * 0.88432);
+					pWeather.degreday_sqrt[i] = std::sqrt((int)round(sumdegreday * 0.87583));  // TODO does (int) make sense??
+					pWeather.degredaymin[i] = (int)round(sumdegredaymin * 0.87583);
+					
+					weather_list.emplace_back(std::move(pWeather));
+				} else {// 0 should be the first element
+					auto& pWeather = weather_list[counter-2];
+
+					// pWeather.yworldcoo = aktortyworldcoo;
+					// pWeather.xworldcoo = aktortxworldcoo;
+					pWeather.jahr[i] = counter + parameter[0].startjahr - 2;
+					pWeather.tempyearmean[i] = tempyearmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjandiffort != 0.0)
+						pWeather.temp1monthmean[i] = temp1monthmeanbuf + parameter[0].tempjandiffort;
+					else
+						pWeather.temp1monthmean[i] = temp1monthmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjandiffortmin != 0.0)
+						pWeather.temp1monthmeanmin[i] = temp1monthmeanbuf + parameter[0].tempjandiffortmin;
+					else
+						pWeather.temp1monthmeanmin[i] = temp1monthmeanbuf + parameter[0].tempdiffortmin;
+					pWeather.temp2monthmean[i] = temp2monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp3monthmean[i] = temp3monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp4monthmean[i] = temp4monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp5monthmean[i] = temp5monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp6monthmean[i] = temp6monthmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjuldiffort != 0.0)
+						pWeather.temp7monthmean[i] = temp7monthmeanbuf + parameter[0].tempjuldiffort;
+					else
+						pWeather.temp7monthmean[i] = temp7monthmeanbuf + parameter[0].tempdiffort;
+					if (parameter[0].tempjuldiffortmin != 0.0)
+						pWeather.temp7monthmeanmin[i] = temp7monthmeanbuf + parameter[0].tempjuldiffortmin;
+					else
+						pWeather.temp7monthmeanmin[i] = temp7monthmeanbuf + parameter[0].tempdiffortmin;
+					pWeather.temp8monthmean[i] = temp8monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp9monthmean[i] = temp9monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp10monthmean[i] = temp10monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp11monthmean[i] = temp11monthmeanbuf + parameter[0].tempdiffort;
+					pWeather.temp12monthmean[i] = temp12monthmeanbuf + parameter[0].tempdiffort;
+
+					double sumacttemp = 0;
+					double sumacttempmin = 0;
+					double sumdegreday = 0;
+					double sumdegredaymin = 0;
+					int ndegreday = 0;
+					int ndegredaymin = 0;
+					double jantemp = pWeather.temp1monthmean[i];
+					double jantempmin = pWeather.temp1monthmeanmin[i];
+					double julitemp = pWeather.temp7monthmean[i];
+					double julitempmin = pWeather.temp7monthmeanmin[i];
+
+					for (int i = 1; i <= 365; i++) {
+						// calculate each day once for each January or July temperature oriented function
+						double tagestempjan = 0.0;
+						double tagestempjanmin = 0.0;
+						double tagestempjul = 0.0;
+						double tagestempjulmin = 0.0;
+						double tagestemp = 0.0;
+						double tagestempmin = 0.0;
+
+						tagestempjan = ((22.55131 * sin(0.49102 * ((double)i / (365.0 / 12.0)) + 4.62730)) + 22.04378 + jantemp);
+						tagestempjul = ((22.55261 * sin(0.49063 * ((double)i / (365.0 / 12.0)) + 4.62760)) - 22.27861 + julitemp);
+						tagestempjanmin = ((22.55131 * sin(0.49102 * ((double)i / (365.0 / 12.0)) + 4.62730)) + 22.04378 + jantempmin);
+						tagestempjulmin = ((22.55261 * sin(0.49063 * ((double)i / (365.0 / 12.0)) + 4.62760)) - 22.27861 + julitempmin);
+
+						// merge daily temperatures of January and July year-functions
+						double weight = 0.0;
+						if ((i >= 1) && (i <= 15)) {
+							weight = ((double)1.0 * ((15.0 - i) / 184.0));
+						}
+						if ((i >= 16) && (i <= 196)) {
+							weight = ((double)1.0 * ((i - 15.0) / 181.0));
+						}
+						if ((i >= 197) && (i <= 365)) {
+							weight = ((double)1.0 * ((365.0 + 15.0 - i) / 184.0));
+						}
+
+						tagestemp = tagestempjan * (1 - weight) + tagestempjul * weight;
+
+						if (tagestemp > 0) {
+							ndegreday++;
+							sumdegreday += tagestemp;
+							if (tagestemp > 10) {
+								sumacttemp = sumacttemp + tagestemp;
+							}
+						}
+						tagestempmin = tagestempjanmin * (1 - weight) + tagestempjulmin * weight;
+						if (tagestempmin > 0) {
+							ndegredaymin++;
+							sumdegredaymin += tagestempmin;
+							if (tagestempmin > 10) {
+								sumacttempmin = sumacttempmin + tagestempmin;
+							}
+						}
+					}
+
+					pWeather.activeairtemp[i] = (int)round(sumacttemp * 0.84630);
+					pWeather.activeairtempmin[i] = (int)round(sumacttempmin * 0.84630);
+					pWeather.vegetationperiodlength[i] = (int)round(ndegreday * 0.88432);
+					pWeather.vegetationperiodlengthmin[i] = (int)round(ndegredaymin * 0.88432);
+					pWeather.degreday_sqrt[i] = std::sqrt((int)round(sumdegreday * 0.87583));  // TODO does (int) make sense??
+					pWeather.degredaymin[i] = (int)round(sumdegredaymin * 0.87583);
+				}
+
+			}
+			counter++;
+		}
+		fclose(f);
 	}
-
-    FILE* f;
-    f = fopen(dateinametemp, "r");
-    if (f == NULL) {
-        printf("Temperature file not available!\n");
-        exit(1);
-    }
-
-    char puffer[255];
-    int counter = 1;
-    double tempyearmeanbuf, temp1monthmeanbuf, temp2monthmeanbuf, temp3monthmeanbuf, temp4monthmeanbuf, temp5monthmeanbuf, temp6monthmeanbuf, temp7monthmeanbuf,
-        temp8monthmeanbuf, temp9monthmeanbuf, temp10monthmeanbuf, temp11monthmeanbuf, temp12monthmeanbuf;
-
-    // read in line by line, partially preprocess data
-    while (fgets(puffer, 255, f) != NULL) {
-        if (counter >= 2) {
-            temp1monthmeanbuf = strtod(strtok(puffer, " "), NULL);
-            temp2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp4monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp5monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp6monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp7monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp8monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp9monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp10monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp11monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-            temp12monthmeanbuf = strtod(strtok(NULL, " "), NULL);
-
-            tempyearmeanbuf = (temp1monthmeanbuf + temp2monthmeanbuf + temp3monthmeanbuf + temp4monthmeanbuf + temp5monthmeanbuf + temp6monthmeanbuf
-                               + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
-                              / 12;
-
-            Weather pWeather;
-
-            // pWeather.yworldcoo = aktortyworldcoo;
-            // pWeather.xworldcoo = aktortxworldcoo;
-            pWeather.jahr = counter + parameter[0].startjahr - 2;
-            pWeather.tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
-            if (parameter[0].tempjandiffort != 0.0)
-                pWeather.temp1monthmean = temp1monthmeanbuf + parameter[0].tempjandiffort;
-            else
-                pWeather.temp1monthmean = temp1monthmeanbuf + parameter[0].tempdiffort;
-            if (parameter[0].tempjandiffortmin != 0.0)
-                pWeather.temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempjandiffortmin;
-            else
-                pWeather.temp1monthmeanmin = temp1monthmeanbuf + parameter[0].tempdiffortmin;
-            pWeather.temp2monthmean = temp2monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp3monthmean = temp3monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp4monthmean = temp4monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp5monthmean = temp5monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp6monthmean = temp6monthmeanbuf + parameter[0].tempdiffort;
-            if (parameter[0].tempjuldiffort != 0.0)
-                pWeather.temp7monthmean = temp7monthmeanbuf + parameter[0].tempjuldiffort;
-            else
-                pWeather.temp7monthmean = temp7monthmeanbuf + parameter[0].tempdiffort;
-            if (parameter[0].tempjuldiffortmin != 0.0)
-                pWeather.temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempjuldiffortmin;
-            else
-                pWeather.temp7monthmeanmin = temp7monthmeanbuf + parameter[0].tempdiffortmin;
-            pWeather.temp8monthmean = temp8monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp9monthmean = temp9monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp10monthmean = temp10monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp11monthmean = temp11monthmeanbuf + parameter[0].tempdiffort;
-            pWeather.temp12monthmean = temp12monthmeanbuf + parameter[0].tempdiffort;
-
-            double sumacttemp = 0;
-            double sumacttempmin = 0;
-            double sumdegreday = 0;
-            double sumdegredaymin = 0;
-            int ndegreday = 0;
-            int ndegredaymin = 0;
-            double jantemp = pWeather.temp1monthmean;
-            double jantempmin = pWeather.temp1monthmeanmin;
-            double julitemp = pWeather.temp7monthmean;
-            double julitempmin = pWeather.temp7monthmeanmin;
-
-            for (int i = 1; i <= 365; i++) {
-                // calculate each day once for each January or July temperature oriented function
-                double tagestempjan = 0.0;
-                double tagestempjanmin = 0.0;
-                double tagestempjul = 0.0;
-                double tagestempjulmin = 0.0;
-                double tagestemp = 0.0;
-                double tagestempmin = 0.0;
-
-                tagestempjan = ((22.55131 * sin(0.49102 * ((double)i / (365.0 / 12.0)) + 4.62730)) + 22.04378 + jantemp);
-                tagestempjul = ((22.55261 * sin(0.49063 * ((double)i / (365.0 / 12.0)) + 4.62760)) - 22.27861 + julitemp);
-                tagestempjanmin = ((22.55131 * sin(0.49102 * ((double)i / (365.0 / 12.0)) + 4.62730)) + 22.04378 + jantempmin);
-                tagestempjulmin = ((22.55261 * sin(0.49063 * ((double)i / (365.0 / 12.0)) + 4.62760)) - 22.27861 + julitempmin);
-
-                // merge daily temperatures of January and July year-functions
-                double weight = 0.0;
-                if ((i >= 1) && (i <= 15)) {
-                    weight = ((double)1.0 * ((15.0 - i) / 184.0));
-                }
-                if ((i >= 16) && (i <= 196)) {
-                    weight = ((double)1.0 * ((i - 15.0) / 181.0));
-                }
-                if ((i >= 197) && (i <= 365)) {
-                    weight = ((double)1.0 * ((365.0 + 15.0 - i) / 184.0));
-                }
-
-                tagestemp = tagestempjan * (1 - weight) + tagestempjul * weight;
-
-                if (tagestemp > 0) {
-                    ndegreday++;
-                    sumdegreday += tagestemp;
-                    if (tagestemp > 10) {
-                        sumacttemp = sumacttemp + tagestemp;
-                    }
-                }
-                tagestempmin = tagestempjanmin * (1 - weight) + tagestempjulmin * weight;
-                if (tagestempmin > 0) {
-                    ndegredaymin++;
-                    sumdegredaymin += tagestempmin;
-                    if (tagestempmin > 10) {
-                        sumacttempmin = sumacttempmin + tagestempmin;
-                    }
-                }
-            }
-
-            pWeather.activeairtemp = (int)round(sumacttemp * 0.84630);
-            pWeather.activeairtempmin = (int)round(sumacttempmin * 0.84630);
-            pWeather.vegetationperiodlength = (int)round(ndegreday * 0.88432);
-            pWeather.vegetationperiodlengthmin = (int)round(ndegredaymin * 0.88432);
-            pWeather.degreday_sqrt = std::sqrt((int)round(sumdegreday * 0.87583));  // TODO does (int) make sense??
-            pWeather.degredaymin = (int)round(sumdegredaymin * 0.87583);
-
-            weather_list.emplace_back(std::move(pWeather));
-        }
-        counter++;
-    }
-    fclose(f);
 }
 
 void passWeather() {
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++) {
         vector<Weather>& weather_list = *posw;
 
+// cout << "... weather_list.size() = " << weather_list.size() << endl;
+#pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
+// cout << " now at .... iweather= " << iweather << endl;
+		for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
             double julindexs = 0;
             double julindexmins = 0;
             double julindexg = 0;
             double julindexming = 0;
-            julindexs = (0.163 / (1 + exp(12.319 - weather_list[iweather].temp7monthmean))) + 0.168;
-            julindexmins = (0.163 / (1 + exp(12.319 - weather_list[iweather].temp7monthmeanmin))) + 0.168;
-            julindexg = (0.078 / (1 + exp(14.825 - weather_list[iweather].temp7monthmean))) + 0.108;
-            julindexming = (0.078 / (1 + exp(14.825 - weather_list[iweather].temp7monthmeanmin))) + 0.108;
+            julindexs = (0.163 / (1 + exp(12.319 - weather_list[iweather].temp7monthmean[i]))) + 0.168;
+            julindexmins = (0.163 / (1 + exp(12.319 - weather_list[iweather].temp7monthmeanmin[i]))) + 0.168;
+            julindexg = (0.078 / (1 + exp(14.825 - weather_list[iweather].temp7monthmean[i]))) + 0.108;
+            julindexming = (0.078 / (1 + exp(14.825 - weather_list[iweather].temp7monthmeanmin[i]))) + 0.108;
 
-            weather_list[iweather].weatherfactorg = (double)(julindexg - 0.108) / (0.1771 - 0.108);
-            weather_list[iweather].weatherfactorming = (double)(julindexming - 0.108) / (0.1771 - 0.108);
-            weather_list[iweather].weatherfactors = (double)(julindexs - 0.168) / (0.305 - 0.168);
-            weather_list[iweather].weatherfactormins = (double)(julindexmins - 0.168) / (0.305 - 0.168);
+            weather_list[iweather].weatherfactorg[i] = (double)(julindexg - 0.108) / (0.1771 - 0.108);
+            weather_list[iweather].weatherfactorming[i] = (double)(julindexming - 0.108) / (0.1771 - 0.108);
+            weather_list[iweather].weatherfactors[i] = (double)(julindexs - 0.168) / (0.305 - 0.168);
+            weather_list[iweather].weatherfactormins[i] = (double)(julindexmins - 0.168) / (0.305 - 0.168);
 
             double jantempsum = 0;
             double jantempsummin = 0;
@@ -263,12 +496,12 @@ void passWeather() {
 
             if (iweather > 9) {
                 for (int i = 1; i < (10 + 1); ++i) {
-                    jantempsum += weather_list[iweather + i - 10].temp1monthmean;
-                    jantempsummin += weather_list[iweather + i - 10].temp1monthmeanmin;
-                    jultempsum += weather_list[iweather + i - 10].temp7monthmean;
-                    jultempsummin += weather_list[iweather + i - 10].temp7monthmeanmin;
-                    nddsum += weather_list[iweather + i - 10].vegetationperiodlength;
-                    nddsummin += weather_list[iweather + i - 10].vegetationperiodlengthmin;
+                    jantempsum += weather_list[iweather + i - 10].temp1monthmean[i];
+                    jantempsummin += weather_list[iweather + i - 10].temp1monthmeanmin[i];
+                    jultempsum += weather_list[iweather + i - 10].temp7monthmean[i];
+                    jultempsummin += weather_list[iweather + i - 10].temp7monthmeanmin[i];
+                    nddsum += weather_list[iweather + i - 10].vegetationperiodlength[i];
+                    nddsummin += weather_list[iweather + i - 10].vegetationperiodlengthmin[i];
                 }
                 jantempsum = jantempsum / 10;
                 jantempsummin = jantempsummin / 10;
@@ -278,12 +511,12 @@ void passWeather() {
                 nddsummin = nddsummin / 10;
             } else if (iweather > 0 && iweather <= 9) {
                 for (unsigned int i = 0; i < (iweather + 1); ++i) {
-                    jantempsum += weather_list[i].temp1monthmean;
-                    jantempsummin += weather_list[i].temp1monthmeanmin;
-                    jultempsum += weather_list[i].temp7monthmean;
-                    jultempsummin += weather_list[i].temp7monthmeanmin;
-                    nddsum += weather_list[i].vegetationperiodlength;
-                    nddsummin += weather_list[i].vegetationperiodlengthmin;
+                    jantempsum += weather_list[i].temp1monthmean[i];
+                    jantempsummin += weather_list[i].temp1monthmeanmin[i];
+                    jultempsum += weather_list[i].temp7monthmean[i];
+                    jultempsummin += weather_list[i].temp7monthmeanmin[i];
+                    nddsum += weather_list[i].vegetationperiodlength[i];
+                    nddsummin += weather_list[i].vegetationperiodlengthmin[i];
                 }
                 jantempsum = jantempsum / (iweather + 1);
                 jantempsummin = jantempsummin / (iweather + 1);
@@ -292,113 +525,127 @@ void passWeather() {
                 nddsum = nddsum / (iweather + 1);
                 nddsummin = nddsummin / (iweather + 1);
             } else {
-                jantempsum = weather_list[iweather].temp1monthmean;
-                jantempsummin = weather_list[iweather].temp1monthmeanmin;
-                jultempsum = weather_list[iweather].temp7monthmean;
-                jultempsummin = weather_list[iweather].temp7monthmeanmin;
-                nddsum = weather_list[iweather].vegetationperiodlength;
-                nddsummin = weather_list[iweather].vegetationperiodlengthmin;
+                jantempsum = weather_list[iweather].temp1monthmean[i];
+                jantempsummin = weather_list[iweather].temp1monthmeanmin[i];
+                jultempsum = weather_list[iweather].temp7monthmean[i];
+                jultempsummin = weather_list[iweather].temp7monthmeanmin[i];
+                nddsum = weather_list[iweather].vegetationperiodlength[i];
+                nddsummin = weather_list[iweather].vegetationperiodlengthmin[i];
             }
-            weather_list[iweather].temp1monthmeaniso = jantempsum;
-            weather_list[iweather].temp1monthmeanisomin = jantempsummin;
-            weather_list[iweather].temp7monthmeaniso = jultempsum;
-            weather_list[iweather].temp7monthmeanisomin = jultempsummin;
-            weather_list[iweather].vegetationperiodlengthiso = nddsum;
-            weather_list[iweather].vegetationperiodlengthisomin = nddsummin;
+            weather_list[iweather].temp1monthmeaniso[i] = jantempsum;
+            weather_list[iweather].temp1monthmeanisomin[i] = jantempsummin;
+            weather_list[iweather].temp7monthmeaniso[i] = jultempsum;
+            weather_list[iweather].temp7monthmeanisomin[i] = jultempsummin;
+            weather_list[iweather].vegetationperiodlengthiso[i] = nddsum;
+            weather_list[iweather].vegetationperiodlengthisomin[i] = nddsummin;
 
             // calculation of a drought influence
             double droughtmortbuf = 0.0;
             double droughtmortbufmin = 0.0;
-            double precgs = weather_list[iweather].prec5monthmean + weather_list[iweather].prec6monthmean + weather_list[iweather].prec7monthmean
-                            + weather_list[iweather].prec8monthmean;
-            double precgsmin = weather_list[iweather].prec5monthmeanmin + weather_list[iweather].prec6monthmeanmin + weather_list[iweather].prec7monthmeanmin
-                               + weather_list[iweather].prec8monthmeanmin;
-            double duerreindex = parameter[0].evapod * weather_list[iweather].vegetationperiodlength / precgs;
-            double duerreindexmin = parameter[0].evapod * weather_list[iweather].vegetationperiodlengthmin / precgsmin;
+            double precgs = weather_list[iweather].prec5monthmean[i] + weather_list[iweather].prec6monthmean[i] + weather_list[iweather].prec7monthmean[i]
+                            + weather_list[iweather].prec8monthmean[i];
+            double precgsmin = weather_list[iweather].prec5monthmeanmin[i] + weather_list[iweather].prec6monthmeanmin[i] + weather_list[iweather].prec7monthmeanmin[i]
+                               + weather_list[iweather].prec8monthmeanmin[i];
+            double duerreindex = parameter[0].evapod * weather_list[iweather].vegetationperiodlength[i] / precgs;
+            double duerreindexmin = parameter[0].evapod * weather_list[iweather].vegetationperiodlengthmin[i] / precgsmin;
             if (duerreindex > 1) {
-                double aattrockenheit = (weather_list[iweather].activeairtemp / 300.0) - 1.0;
+                double aattrockenheit = (weather_list[iweather].activeairtemp[i] / 300.0) - 1.0;
 
                 if (aattrockenheit > 1) {
                     droughtmortbuf = droughtmortbuf + aattrockenheit * 0.1;
                 }
             }
-            weather_list[iweather].droughtmort = droughtmortbuf;
+            weather_list[iweather].droughtmort[i] = droughtmortbuf;
             if (duerreindexmin > 1) {
-                double aattrockenheitmin = (weather_list[iweather].activeairtempmin / 300.0) - 1.0;
+                double aattrockenheitmin = (weather_list[iweather].activeairtempmin[i] / 300.0) - 1.0;
 
                 if (aattrockenheitmin > 1) {
                     droughtmortbufmin = droughtmortbufmin + aattrockenheitmin * 0.1;
                 }
             }
-            weather_list[iweather].droughtmortmin = droughtmortbufmin;
+            weather_list[iweather].droughtmortmin[i] = droughtmortbufmin;
 
             if (parameter[0].qualiyearlyvis == true) {
-                printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather].jahr,
-                       iweather, weather_list[iweather].weatherfactorg, weather_list[iweather].weatherfactors, weather_list[iweather].droughtmort);
-                printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n", weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp7monthmeaniso,
-                       weather_list[iweather].vegetationperiodlengthiso);
+                printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather].jahr[i],
+                       iweather, weather_list[iweather].weatherfactorg[i], weather_list[iweather].weatherfactors[i], weather_list[iweather].droughtmort[i]);
+                printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n", weather_list[iweather].temp1monthmeaniso[i], weather_list[iweather].temp7monthmeaniso[i],
+                       weather_list[iweather].vegetationperiodlengthiso[i]);
             }
 
             // calculate restrictions
-            weather_list[iweather].janisothermrestriktiong = 0.0;
-            weather_list[iweather].janisothermrestriktiongmin = 0.0;
-            weather_list[iweather].janisothermrestriktions = 0.0;
-            weather_list[iweather].janisothermrestriktionsmin = 0.0;
-            weather_list[iweather].julisothermrestriktion = 0.0;
-            weather_list[iweather].julisothermrestriktionmin = 0.0;
-            weather_list[iweather].nddrestriktion = 0.0;
-            weather_list[iweather].nddrestriktionmin = 0.0;
+            weather_list[iweather].janisothermrestriktiong[i] = 0.0;
+            weather_list[iweather].janisothermrestriktiongmin[i] = 0.0;
+            weather_list[iweather].janisothermrestriktions[i] = 0.0;
+            weather_list[iweather].janisothermrestriktionsmin[i] = 0.0;
+            weather_list[iweather].julisothermrestriktion[i] = 0.0;
+            weather_list[iweather].julisothermrestriktionmin[i] = 0.0;
+            weather_list[iweather].nddrestriktion[i] = 0.0;
+            weather_list[iweather].nddrestriktionmin[i] = 0.0;
 
-            if (weather_list[iweather].temp1monthmeaniso < (parameter[0].janthresholdtempgmel)) {
-                weather_list[iweather].janisothermrestriktiong = 1.0;
+            if (weather_list[iweather].temp1monthmeaniso[i] < (parameter[0].janthresholdtempgmel)) {
+                weather_list[iweather].janisothermrestriktiong[i] = 1.0;
             } else {
-                weather_list[iweather].janisothermrestriktiong =
-                    1.0 - fabs(9.0 * (weather_list[iweather].temp1monthmeaniso - parameter[0].janthresholdtempgmel) / (-parameter[0].janthresholdtempgmel));
+                weather_list[iweather].janisothermrestriktiong[i] =
+                    1.0 - fabs(9.0 * (weather_list[iweather].temp1monthmeaniso[i] - parameter[0].janthresholdtempgmel) / (-parameter[0].janthresholdtempgmel));
             }
-            if (weather_list[iweather].temp1monthmeanisomin < (parameter[0].janthresholdtempgmel)) {
-                weather_list[iweather].janisothermrestriktiongmin = 1.0;
+            if (weather_list[iweather].temp1monthmeanisomin[i] < (parameter[0].janthresholdtempgmel)) {
+                weather_list[iweather].janisothermrestriktiongmin[i] = 1.0;
             } else {
-                weather_list[iweather].janisothermrestriktiongmin =
-                    1.0 - fabs(9.0 * (weather_list[iweather].temp1monthmeanisomin - parameter[0].janthresholdtempgmel) / (-parameter[0].janthresholdtempgmel));
+                weather_list[iweather].janisothermrestriktiongmin[i] =
+                    1.0 - fabs(9.0 * (weather_list[iweather].temp1monthmeanisomin[i] - parameter[0].janthresholdtempgmel) / (-parameter[0].janthresholdtempgmel));
             }
 
             // Larix sibirica
 
-            if (weather_list[iweather].temp1monthmeaniso < (-33.0)) {
-                weather_list[iweather].janisothermrestriktions = 1.0;
+            if (weather_list[iweather].temp1monthmeaniso[i] < (-33.0)) {
+                weather_list[iweather].janisothermrestriktions[i] = 1.0;
             } else {
-                weather_list[iweather].janisothermrestriktions = 1.0 - fabs(6.6 * (weather_list[iweather].temp1monthmeaniso + 33.0) / 33.0);
+                weather_list[iweather].janisothermrestriktions[i] = 1.0 - fabs(6.6 * (weather_list[iweather].temp1monthmeaniso[i] + 33.0) / 33.0);
             }
-            if (weather_list[iweather].temp1monthmeanisomin < (-33.0)) {
-                weather_list[iweather].janisothermrestriktionsmin = 1.0;
+            if (weather_list[iweather].temp1monthmeanisomin[i] < (-33.0)) {
+                weather_list[iweather].janisothermrestriktionsmin[i] = 1.0;
             } else {
-                weather_list[iweather].janisothermrestriktionsmin = 1.0 - fabs(6.6 * (weather_list[iweather].temp1monthmeanisomin + 33.0) / 33.0);
+                weather_list[iweather].janisothermrestriktionsmin[i] = 1.0 - fabs(6.6 * (weather_list[iweather].temp1monthmeanisomin[i] + 33.0) / 33.0);
             }
 
             // July temp for both
 
-            if (weather_list[iweather].temp7monthmeaniso < 10.0) {
-                weather_list[iweather].julisothermrestriktion = 1.0;
+            if (weather_list[iweather].temp7monthmeaniso[i] < 10.0) {
+                weather_list[iweather].julisothermrestriktion[i] = 1.0;
             } else {
-                weather_list[iweather].julisothermrestriktion = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeaniso - 10.0) / 10.0);
+                weather_list[iweather].julisothermrestriktion[i] = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeaniso[i] - 10.0) / 10.0);
             }
-            if (weather_list[iweather].temp7monthmeanisomin < 10.0) {
-                weather_list[iweather].julisothermrestriktionmin = 1.0;
+            if (weather_list[iweather].temp7monthmeanisomin[i] < 10.0) {
+                weather_list[iweather].julisothermrestriktionmin[i] = 1.0;
             } else {
-                weather_list[iweather].julisothermrestriktionmin = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeanisomin - 10.0) / 10.0);
+                weather_list[iweather].julisothermrestriktionmin[i] = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeanisomin[i] - 10.0) / 10.0);
             }
 
             // ndd for both
-            if (weather_list[iweather].vegetationperiodlengthiso < 60.0) {
-                weather_list[iweather].nddrestriktion = 1.0;
+            if (weather_list[iweather].vegetationperiodlengthiso[i] < 60.0) {
+                weather_list[iweather].nddrestriktion[i] = 1.0;
             } else {
-                weather_list[iweather].nddrestriktion = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthiso) - 60.0) / 60.0);
+                weather_list[iweather].nddrestriktion[i] = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthiso[i]) - 60.0) / 60.0);
             }
-            if (weather_list[iweather].vegetationperiodlengthisomin < 60.0) {
-                weather_list[iweather].nddrestriktionmin = 1.0;
+            if (weather_list[iweather].vegetationperiodlengthisomin[i] < 60.0) {
+                weather_list[iweather].nddrestriktionmin[i] = 1.0;
             } else {
-                weather_list[iweather].nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin) - 60.0) / 60.0);
+                weather_list[iweather].nddrestriktionmin[i] = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin[i]) - 60.0) / 60.0);
             }
+
+
+			// moved from mortality and included here
+			weather_list[iweather].anstiegweathermortg[i] = 160;
+			weather_list[iweather].anstiegweathermorts[i] = 160;
+			weather_list[iweather].anstiegweathermortgmin[i] = 160;
+			weather_list[iweather].anstiegweathermortsmin[i] = 160;
+
+			weather_list[iweather].anstiegweathermortg[i] = (60 * weather_list[iweather].janisothermrestriktiong[i] + 60 * weather_list[iweather].julisothermrestriktion[i] + 60 * weather_list[iweather].nddrestriktion[i]);
+			weather_list[iweather].anstiegweathermorts[i] = (60 * weather_list[iweather].janisothermrestriktions[i] + 60 * weather_list[iweather].julisothermrestriktion[i] + 60 * weather_list[iweather].nddrestriktion[i]);
+
+			weather_list[iweather].anstiegweathermortgmin[i] = (60 * weather_list[iweather].janisothermrestriktiongmin[i] + 60 * weather_list[iweather].julisothermrestriktionmin[i] + 60 * weather_list[iweather].nddrestriktionmin[i]);
+			weather_list[iweather].anstiegweathermortsmin[i] = (60 * weather_list[iweather].janisothermrestriktionsmin[i] + 60 * weather_list[iweather].julisothermrestriktionmin[i] + 60 * weather_list[iweather].nddrestriktionmin[i]);
+
 
             // output to check weather
             FILE* fdir;
@@ -410,17 +657,18 @@ void passWeather() {
             fprintf(fdir,
                     "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t "
                     "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n",
-                    weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp1monthmeanisomin, weather_list[iweather].temp7monthmeaniso,
-                    weather_list[iweather].temp7monthmeanisomin, weather_list[iweather].droughtmort, weather_list[iweather].droughtmortmin,
-                    (double)weather_list[iweather].vegetationperiodlengthiso, (double)weather_list[iweather].vegetationperiodlengthisomin, precgs, precgsmin,
-                    weather_list[iweather].janisothermrestriktiong, weather_list[iweather].janisothermrestriktiongmin,
-                    weather_list[iweather].janisothermrestriktions, weather_list[iweather].janisothermrestriktionsmin,
-                    weather_list[iweather].julisothermrestriktion, weather_list[iweather].julisothermrestriktionmin, weather_list[iweather].nddrestriktion,
-                    weather_list[iweather].nddrestriktionmin, weather_list[iweather].weatherfactorg, weather_list[iweather].weatherfactorming,
-                    weather_list[iweather].weatherfactors, weather_list[iweather].weatherfactormins);
+                    weather_list[iweather].temp1monthmeaniso[i], weather_list[iweather].temp1monthmeanisomin[i], weather_list[iweather].temp7monthmeaniso[i],
+                    weather_list[iweather].temp7monthmeanisomin[i], weather_list[iweather].droughtmort[i], weather_list[iweather].droughtmortmin[i],
+                    (double)weather_list[iweather].vegetationperiodlengthiso[i], (double)weather_list[iweather].vegetationperiodlengthisomin[i], precgs, precgsmin,
+                    weather_list[iweather].janisothermrestriktiong[i], weather_list[iweather].janisothermrestriktiongmin[i],
+                    weather_list[iweather].janisothermrestriktions[i], weather_list[iweather].janisothermrestriktionsmin[i],
+                    weather_list[iweather].julisothermrestriktion[i], weather_list[iweather].julisothermrestriktionmin[i], weather_list[iweather].nddrestriktion[i],
+                    weather_list[iweather].nddrestriktionmin[i], weather_list[iweather].weatherfactorg[i], weather_list[iweather].weatherfactorming[i],
+                    weather_list[iweather].weatherfactors[i], weather_list[iweather].weatherfactormins[i]);
 
             fclose(fdir);
         }
+		}
     }
 }
 
@@ -605,13 +853,13 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+			
             // RCP4.5
         } else if (parameter[0].weatherchoice == 501300022) {  // last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP45temp_501-3000.csv";
             char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-
         } else if (parameter[0].weatherchoice == 501300032) {  // last number added
             char tempbuf[] = "input/transectBuor Khaya_RCP45temp_501-3000.csv";
             char precbuf[] = "input/transectBuor Khaya_RCP45prec_501-3000.csv";
@@ -627,6 +875,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+			
             // RCP8.5
         } else if (parameter[0].weatherchoice == 501300023) {  // last number added
             char tempbuf[] = "input/transectTaimyr Peninsula_RCP85temp_501-3000.csv";

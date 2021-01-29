@@ -17,7 +17,7 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=11;  						// (int) choice of data output files=> all yearly output of currencies 
+outputmode=3;  						// (int) choice of data output files=> all yearly output of currencies 
 										// 0=="full"						=> all each year
 										// 1=="normal, gridded" 			=> every 20 years grid output
 										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
@@ -30,7 +30,7 @@ outputall=1;						// (int 0,1) sampling area determination
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
 vegetation=0;						// (int 0,1) Representation of an organic layer switch; currently not functional
-demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
+demlandscape=0;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=30;					// (int) Resolution in m of DEM
 elevationoffset=-1800.0;			// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
@@ -57,7 +57,7 @@ omp_num_threads=72;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=501300051;			// (int) Type of weather forcing series 
+weatherchoice=501300041;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -116,7 +116,13 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 									// ... 0==synchronous forcing per plot
 									// ... 1==linearly changing from south to north
-locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
+n_weather_along_grid=14;				// (int 0,x) number of 10-km gridded weather data along transects; currently implemented:
+									// ... weatherchoice: 5003000(2-5)(1-3) 
+									// ... transect 2 Taimyr Peninsula 55
+									// ... transect 3 Buor Khaya 13
+									// ... transect 4 Kolyma 14
+									// ... transect 5 Chukotka 61 
+locationshift=140000;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures || used when n_weather_along_grid>0 & lineartransect=false
 
 // 1.1.1 -----> Wind
 windsource=1;						// (int) source of wind data
@@ -151,17 +157,17 @@ seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=50; 				// ... (int) years of seed introduction at the beginning of each simulation
 seedintronumber=100000;				// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=1000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=730;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
 									// ... 1==only southernmost plot
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=12000;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=15000;
+seedintro_maxy=0;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=0;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
-boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
+boundaryconditions=3;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed
 									// ... 1==the western/eastern and northern/southern border turned in both directions 
 									// ... 2==dispersal connection only on the western to eastern border
@@ -171,7 +177,7 @@ starttrees=0;						// (int) type of initial tree set up
 									// ... 12==CH17
 									// ... SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
 									// ... ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
-hinterland_maxlength=0; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
+hinterland_maxlength=500; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
 										
 // 1.4.2 -----> Pollen dispersal
 pollination=0;						// (int 0,1,2) allow pollen dispersal
@@ -281,7 +287,7 @@ dbreastheightslopenonlin=7.02;		// (double) (IF allometryfunctiontype == 2) slop
 // 2.4 -----> Mortality estimation
 mortbg=0.0001;						// (double 0-1) background mortality
 maximumage=609;						// (int) maximum tree age
-mortage=8.18785;					// (double) mortality factor if a tree exceeds the maximum age
+mortage=10;					// (double) mortality factor if a tree exceeds the maximum age
 mortyouth=0.1;						// (double) mortality factor for young individuals
 mortyouthinfluenceexp=2.0;			// (double) exponent determining duration time of youth mortality
 									//  ... <1==longer

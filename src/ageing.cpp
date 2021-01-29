@@ -43,35 +43,37 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
-                tree.age++;
+				if (tree.growing == true) {
+					tree.age++;
 
-                if (tree.cone == false) {
-                    if (tree.coneheight == 65535) {
-                        // trees reaching the maturation age are assigned a minimum height value for them to bear cones
-                        if (tree.age > parameter[0].coneage) {
-                            // calculate random position in the array of maturation heights defined earlier
-                            // ... in this there are values between 0 and 182 (corresp. to (0,1) )
-                            int fraction = (mat_age_length - 1) * uniform.draw();
+					if (tree.cone == false) {
+						if (tree.coneheight == 65535) {
+							// trees reaching the maturation age are assigned a minimum height value for them to bear cones
+							if (tree.age > parameter[0].coneage) {
+								// calculate random position in the array of maturation heights defined earlier
+								// ... in this there are values between 0 and 182 (corresp. to (0,1) )
+								int fraction = (mat_age_length - 1) * uniform.draw();
 
-                            // possibility for a tree <2m to maturate
-                            if (fraction == 0) {
-                                tree.coneheight = (unsigned short int)100 + ((double)100 * uniform.draw());
-                            } else {
-                                tree.coneheight = maturationheight[fraction];
-                            }
-                        }
-                    }
-                    // tree already has a height of maturation assigned to it
-                    // ... if a tree is taller than this maturation height, he starts to produce seeds
-                    else if (tree.coneheight != 65535) {
-                        if (tree.height >= tree.coneheight) {
-                            tree.cone = true;
-                        }
-                    }
-                } else if (tree.cone == true) {
-                    tree.seednewly_produced = 0;
-                }
-            }
-        }  // tree list
+								// possibility for a tree <2m to maturate
+								if (fraction == 0) {
+									tree.coneheight = (unsigned short int)100 + ((double)100 * uniform.draw());
+								} else {
+									tree.coneheight = maturationheight[fraction];
+								}
+							}
+						}
+						// tree already has a height of maturation assigned to it
+						// ... if a tree is taller than this maturation height, he starts to produce seeds
+						else if (tree.coneheight != 65535) {
+							if (tree.height >= tree.coneheight) {
+								tree.cone = true;
+							}
+						}
+					} else if (tree.cone == true) {
+						tree.seednewly_produced = 0;
+					}
+				}
+			}  // tree list
+		}
     }      // world list
 }

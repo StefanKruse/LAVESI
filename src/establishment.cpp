@@ -27,8 +27,8 @@ void Treeestablishment(Parameter* parameter,
             auto& seed = seed_list[i_seed];
             if (!seed.dead && !seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
-                int i = seed.ycoo * parameter[0].sizemagnif / 1000;
-                int j = seed.xcoo * parameter[0].sizemagnif / 1000;
+                int i = (seed.ycoo / 1000) * parameter[0].sizemagnif;
+                int j = (seed.xcoo / 1000) * parameter[0].sizemagnif;
 
                 const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
                                      + static_cast<std::size_t>(j);

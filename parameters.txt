@@ -57,7 +57,7 @@ omp_num_threads=80;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=2500511;			// (int) Type of weather forcing series 
+weatherchoice=501300051;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02

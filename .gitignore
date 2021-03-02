@@ -13,14 +13,6 @@ build/
 # exclude temporary files
 *~
 
-# exclude output files in output dir
-output/*.csv
-output/*.txt
-output/*.png
-output/*.pdf
-output/*.mp4
-output/*.gif
-
 # exclude time usage output files
 t_*.txt
 # exclude pollen-dispersal output files

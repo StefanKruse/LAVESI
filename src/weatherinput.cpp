@@ -29,22 +29,56 @@ void getPrec(char dateinameprec[150], vector<Weather>& weather_list, int maximal
             // ... ........1 == rcp2.6
             // ... ........2 == rcp4.5
             // ... ........3 == rcp8.5
-		if(parameter[0].weatherchoice == 501300021 || parameter[0].weatherchoice == 501300022 || parameter[0].weatherchoice == 501300023) { 
+            // ... ........4 == rcp2.6 half => 1.3
+            // ... ........5 == rcp2.6 				+  cooling after 2300 back to 1901:1987
+            // ... ........6 == rcp2.6 half => 1.3 	+  cooling after 2300 back to 1901:1987
+            // ... ........7 == rcp4.5 				+  cooling after 2300 back to 1901:1987
+            // ... ........8 == rcp8.5 				+  cooling after 2300 back to 1901:1987
+
+		if(parameter[0].weatherchoice == 501300021 || 
+		   parameter[0].weatherchoice == 501300022 || 
+		   parameter[0].weatherchoice == 501300023 || 
+		   parameter[0].weatherchoice == 501300024 || 
+		   parameter[0].weatherchoice == 501300025 || 
+		   parameter[0].weatherchoice == 501300026 || 
+		   parameter[0].weatherchoice == 501300027 || 
+		   parameter[0].weatherchoice == 501300028) { 
 			transectname << "Taimyr Peninsula";
 			parameter[0].tempjandiffort = -0.9015152;
 			parameter[0].tempjuldiffort = -0.6449302;
             parameter[0].precdiffort = -4.153904;
-		} else if(parameter[0].weatherchoice == 501300031 || parameter[0].weatherchoice == 501300032 || parameter[0].weatherchoice == 501300033) {
+		} else if(parameter[0].weatherchoice == 501300031 || 
+				  parameter[0].weatherchoice == 501300032 || 
+				  parameter[0].weatherchoice == 501300033 || 
+				  parameter[0].weatherchoice == 501300034 || 
+				  parameter[0].weatherchoice == 501300035 || 
+				  parameter[0].weatherchoice == 501300036 || 
+				  parameter[0].weatherchoice == 501300037 || 
+				  parameter[0].weatherchoice == 501300038) {
 			transectname << "Buor Khaya";
 			parameter[0].tempjandiffort = -0.1907051;
 			parameter[0].tempjuldiffort = -2.065972;
             parameter[0].precdiffort = -24.06063;
-		} else if(parameter[0].weatherchoice == 501300041 || parameter[0].weatherchoice == 501300042 || parameter[0].weatherchoice == 501300043) {
+		} else if(parameter[0].weatherchoice == 501300041 || 
+				  parameter[0].weatherchoice == 501300042 || 
+				  parameter[0].weatherchoice == 501300043 || 
+				  parameter[0].weatherchoice == 501300044 || 
+				  parameter[0].weatherchoice == 501300045 || 
+				  parameter[0].weatherchoice == 501300046 || 
+				  parameter[0].weatherchoice == 501300047 || 
+				  parameter[0].weatherchoice == 501300048) {
 			transectname << "Kolyma";
 			parameter[0].tempjandiffort = 3.582945;
 			parameter[0].tempjuldiffort = 1.433178;
             parameter[0].precdiffort = 97.82596;
-		} else if(parameter[0].weatherchoice == 501300051 || parameter[0].weatherchoice == 501300052 || parameter[0].weatherchoice == 501300053) {
+		} else if(parameter[0].weatherchoice == 501300051 || 
+				  parameter[0].weatherchoice == 501300052 || 
+				  parameter[0].weatherchoice == 501300053 || 
+				  parameter[0].weatherchoice == 501300054 || 
+				  parameter[0].weatherchoice == 501300055 || 
+				  parameter[0].weatherchoice == 501300056 || 
+				  parameter[0].weatherchoice == 501300057 || 
+				  parameter[0].weatherchoice == 501300058) {
 			transectname << "Chukotka";
 			parameter[0].tempjandiffort = 4.460894;
 			parameter[0].tempjuldiffort = 4.300536;
@@ -66,6 +100,32 @@ void getPrec(char dateinameprec[150], vector<Weather>& weather_list, int maximal
 		   parameter[0].weatherchoice == 501300043 || 
 		   parameter[0].weatherchoice == 501300053) 
 			rcpscenario << "85";
+		if(parameter[0].weatherchoice == 501300024 || 
+		   parameter[0].weatherchoice == 501300034 || 
+		   parameter[0].weatherchoice == 501300044 || 
+		   parameter[0].weatherchoice == 501300054) 
+			rcpscenario << "26";
+		if(parameter[0].weatherchoice == 501300025 || 
+		   parameter[0].weatherchoice == 501300035 || 
+		   parameter[0].weatherchoice == 501300045 || 
+		   parameter[0].weatherchoice == 501300055) 
+			rcpscenario << "26";
+		if(parameter[0].weatherchoice == 501300026 || 
+		   parameter[0].weatherchoice == 501300036 || 
+		   parameter[0].weatherchoice == 501300046 || 
+		   parameter[0].weatherchoice == 501300056) 
+			rcpscenario << "26";
+		if(parameter[0].weatherchoice == 501300027 || 
+		   parameter[0].weatherchoice == 501300037 || 
+		   parameter[0].weatherchoice == 501300047 || 
+		   parameter[0].weatherchoice == 501300057) 
+			rcpscenario << "45";
+		if(parameter[0].weatherchoice == 501300028 || 
+		   parameter[0].weatherchoice == 501300038 || 
+		   parameter[0].weatherchoice == 501300048 || 
+		   parameter[0].weatherchoice == 501300058) 
+			rcpscenario << "85";
+
 
         string inputcrugridname = "input/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "prec_501-3000.csv";
 
@@ -184,22 +244,56 @@ void getTemp(	//int aktort,
             // ... ........1 == rcp2.6
             // ... ........2 == rcp4.5
             // ... ........3 == rcp8.5
-		if(parameter[0].weatherchoice == 501300021 || parameter[0].weatherchoice == 501300022 || parameter[0].weatherchoice == 501300023) { 
+            // ... ........4 == rcp2.6 half => 1.3
+            // ... ........5 == rcp2.6 				+  cooling after 2300 back to 1901:1987
+            // ... ........6 == rcp2.6 half => 1.3 	+  cooling after 2300 back to 1901:1987
+            // ... ........7 == rcp4.5 				+  cooling after 2300 back to 1901:1987
+            // ... ........8 == rcp8.5 				+  cooling after 2300 back to 1901:1987
+
+		if(parameter[0].weatherchoice == 501300021 || 
+		   parameter[0].weatherchoice == 501300022 || 
+		   parameter[0].weatherchoice == 501300023 || 
+		   parameter[0].weatherchoice == 501300024 || 
+		   parameter[0].weatherchoice == 501300025 || 
+		   parameter[0].weatherchoice == 501300026 || 
+		   parameter[0].weatherchoice == 501300027 || 
+		   parameter[0].weatherchoice == 501300028) { 
 			transectname << "Taimyr Peninsula";
 			parameter[0].tempjandiffort = -0.9015152;
 			parameter[0].tempjuldiffort = -0.6449302;
             parameter[0].precdiffort = -4.153904;
-		} else if(parameter[0].weatherchoice == 501300031 || parameter[0].weatherchoice == 501300032 || parameter[0].weatherchoice == 501300033) {
+		} else if(parameter[0].weatherchoice == 501300031 || 
+				  parameter[0].weatherchoice == 501300032 || 
+				  parameter[0].weatherchoice == 501300033 || 
+				  parameter[0].weatherchoice == 501300034 || 
+				  parameter[0].weatherchoice == 501300035 || 
+				  parameter[0].weatherchoice == 501300036 || 
+				  parameter[0].weatherchoice == 501300037 || 
+				  parameter[0].weatherchoice == 501300038) {
 			transectname << "Buor Khaya";
 			parameter[0].tempjandiffort = -0.1907051;
 			parameter[0].tempjuldiffort = -2.065972;
             parameter[0].precdiffort = -24.06063;
-		} else if(parameter[0].weatherchoice == 501300041 || parameter[0].weatherchoice == 501300042 || parameter[0].weatherchoice == 501300043) {
+		} else if(parameter[0].weatherchoice == 501300041 || 
+				  parameter[0].weatherchoice == 501300042 || 
+				  parameter[0].weatherchoice == 501300043 || 
+				  parameter[0].weatherchoice == 501300044 || 
+				  parameter[0].weatherchoice == 501300045 || 
+				  parameter[0].weatherchoice == 501300046 || 
+				  parameter[0].weatherchoice == 501300047 || 
+				  parameter[0].weatherchoice == 501300048) {
 			transectname << "Kolyma";
 			parameter[0].tempjandiffort = 3.582945;
 			parameter[0].tempjuldiffort = 1.433178;
             parameter[0].precdiffort = 97.82596;
-		} else if(parameter[0].weatherchoice == 501300051 || parameter[0].weatherchoice == 501300052 || parameter[0].weatherchoice == 501300053) {
+		} else if(parameter[0].weatherchoice == 501300051 || 
+				  parameter[0].weatherchoice == 501300052 || 
+				  parameter[0].weatherchoice == 501300053 || 
+				  parameter[0].weatherchoice == 501300054 || 
+				  parameter[0].weatherchoice == 501300055 || 
+				  parameter[0].weatherchoice == 501300056 || 
+				  parameter[0].weatherchoice == 501300057 || 
+				  parameter[0].weatherchoice == 501300058) {
 			transectname << "Chukotka";
 			parameter[0].tempjandiffort = 4.460894;
 			parameter[0].tempjuldiffort = 4.300536;
@@ -221,6 +315,31 @@ void getTemp(	//int aktort,
 		   parameter[0].weatherchoice == 501300043 || 
 		   parameter[0].weatherchoice == 501300053) 
 			rcpscenario << "85";
+		if(parameter[0].weatherchoice == 501300024 || 
+		   parameter[0].weatherchoice == 501300034 || 
+		   parameter[0].weatherchoice == 501300044 || 
+		   parameter[0].weatherchoice == 501300054) 
+			rcpscenario << "13";
+		if(parameter[0].weatherchoice == 501300025 || 
+		   parameter[0].weatherchoice == 501300035 || 
+		   parameter[0].weatherchoice == 501300045 || 
+		   parameter[0].weatherchoice == 501300055) 
+			rcpscenario << "26cool";
+		if(parameter[0].weatherchoice == 501300026 || 
+		   parameter[0].weatherchoice == 501300036 || 
+		   parameter[0].weatherchoice == 501300046 || 
+		   parameter[0].weatherchoice == 501300056) 
+			rcpscenario << "13cool";
+		if(parameter[0].weatherchoice == 501300027 || 
+		   parameter[0].weatherchoice == 501300037 || 
+		   parameter[0].weatherchoice == 501300047 || 
+		   parameter[0].weatherchoice == 501300057) 
+			rcpscenario << "45cool";
+		if(parameter[0].weatherchoice == 501300028 || 
+		   parameter[0].weatherchoice == 501300038 || 
+		   parameter[0].weatherchoice == 501300048 || 
+		   parameter[0].weatherchoice == 501300058) 
+			rcpscenario << "85cool";
 
         string inputcrugridname = "input/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
 
@@ -829,8 +948,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             // ... ........2 == rcp4.5
             // ... ........3 == rcp8.5
             // ... ........4 == rcp2.6 half => 1.3
-            // ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
-            // ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
+            // ... ........5 == rcp2.6 				+ cooling after 2300 back to 1901:1987
+            // ... ........6 == rcp2.6 half => 1.3 	+  cooling after 2300 back to 1901:1987
+            // ... ........7 == rcp4.5 				+  cooling after 2300 back to 1901:1987
+            // ... ........8 == rcp8.5 				+  cooling after 2300 back to 1901:1987
 
             // RCP2.6
         } else if (parameter[0].weatherchoice == 501300021) {  // last number added

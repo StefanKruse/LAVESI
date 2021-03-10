@@ -66,6 +66,85 @@ void Dataoutput(int t,
         // int aktortyworldcoo = (aktort - 1) / parameter[0].mapxlength;
         // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
+
+        // define output based on parameter setting
+        if (parameter[0].dataoutput == true) {
+            if (parameter[0].outputmode == 0) {  // "full"
+                if (parameter[0].spinupphase == true) {
+                    outputcurrencies = true;
+                    outputposition = true;
+                } else {
+                    outputcurrencies = true;
+                    outputposition = true;
+                    outputindividuals = true;
+                    ausgabedensity = true;
+                }
+            } else if (parameter[0].outputmode == 1) {  // "normal,gridded"
+                outputcurrencies = true;
+
+                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
+                    ausgabedensity = true;
+
+                if (parameter[0].ivort % 20 == 0) {
+                    outputgriddedbiomass = true;
+                }
+            } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
+               
+                if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
+					outputcurrencies = true;
+				
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
+					
+				if(parameter[0].ivort == 2)// test
+					outputgriddedbiomass = true;
+
+                if ( ( (parameter[0].ivort == 1300) // 1800
+						| (parameter[0].ivort == 1360) // 1860
+						| (parameter[0].ivort == 1400) // 1900
+						| (parameter[0].ivort == 1490) // 1990
+						| (parameter[0].ivort >= 1500) // 2000
+					  )
+					  && (parameter[0].ivort % 5 == 0)
+					) {
+					outputgriddedbiomass = true;
+                }
+				
+                if ((parameter[0].ivort % 20 == 0)
+						| (parameter[0].ivort >= 1500)) {
+					outputtestarea=true; // area of 200x200 m with full tree output 
+                }
+            } else if (parameter[0].outputmode == 13) {  // "normal,gridded,large area"
+                outputcurrencies = true;
+				
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
+					
+				if(parameter[0].ivort % 50 == 0)// test
+					outputgriddedbiomass = true;
+
+            } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area Khamra"
+                outputcurrencies = true;
+
+				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+					ausgabedensity = true;
+					
+				outputgriddedbiomass = true; // each sim step!
+				
+            } else if (parameter[0].outputmode == 2) {  // "OMP"
+                outputcurrencies = true;
+            } else if (parameter[0].outputmode == 3) {  // "transect"
+                outputcurrencies = true;
+
+                if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 10 == 0))) {
+                    outputtransects = true;
+                }
+            }
+        }  // define output
+
+        ostringstream s1, s2, s3, s4, s5, s6, s7, s8;
+
+        if (outputcurrencies == true) {  // currencies output
         // update evaluation lists
         // declarations
         double basalarea = 0.0;
@@ -256,95 +335,10 @@ void Dataoutput(int t,
         }
         // evaluation_list update
 
-        // define output based on parameter setting
-        if (parameter[0].dataoutput == true) {
-            if (parameter[0].outputmode == 0) {  // "full"
-                if (parameter[0].spinupphase == true) {
-                    outputcurrencies = true;
-                    outputposition = true;
-                } else {
-                    outputcurrencies = true;
-                    outputposition = true;
-                    outputindividuals = true;
-                    ausgabedensity = true;
-                }
-            } else if (parameter[0].outputmode == 1) {  // "normal,gridded"
-                outputcurrencies = true;
 
-                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
-                    ausgabedensity = true;
 
-                if (parameter[0].ivort % 20 == 0) {
-                    outputgriddedbiomass = true;
-                }
-            } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
-               
-                outputcurrencies = true;
-				
-				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
-					ausgabedensity = true;
-					
-				if(parameter[0].ivort == 2)// test
-					outputgriddedbiomass = true;
 
-                // if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 10 == 0))) {
-                    // outputgriddedbiomass = true;
-                // }
-                if ( (parameter[0].ivort == 1300) // 1800
-						| (parameter[0].ivort == 1360) // 1860
-						| (parameter[0].ivort == 1400) // 1900
-						| (parameter[0].ivort == 1490) // 1990
-						| (parameter[0].ivort >= 1500) // 2000
-					) {
-					outputgriddedbiomass = true;
-                }
-				
-                if ((parameter[0].ivort % 20 == 0)
-						| (parameter[0].ivort >= 1500)) {
-					outputtestarea=true; // area of 200x200 m with full tree output 
-                }
-            } else if (parameter[0].outputmode == 13) {  // "normal,gridded,large area"
-                outputcurrencies = true;
-				
-				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
-					ausgabedensity = true;
-					
-				if(parameter[0].ivort % 50 == 0)// test
-					outputgriddedbiomass = true;
-
-            } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area Khamra"
-                outputcurrencies = true;
-
-				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
-					ausgabedensity = true;
-					
-				outputgriddedbiomass = true; // each sim step!
-				
-            } else if (parameter[0].outputmode == 2) {  // "OMP"
-                outputcurrencies = true;
-            } else if (parameter[0].outputmode == 3) {  // "transect"
-                outputcurrencies = true;
-
-                if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 10 == 0))) {
-                    outputtransects = true;
-                }
-            }
-        }  // define output
-
-        ostringstream s1, s2, s3, s4, s5, s6, s7, s8;
-
-        if (outputcurrencies == true) {  // currencies output
-            // declarations
-            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0,
-                ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
-            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0,
-                ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
-            int gesamtseedAKT = 0, gesamtseedSUM = 0;
-            int spectree1 = 0, spectree2 = 0;
-            double yposmax = 0.0;
-            double meanbas = 0.0;
-            int h = 0;
-
+		// currencies output
             // assemble file name
             if (parameter[0].spinupphase == true) {
                 s1 << parameter[0].repeati;
@@ -471,6 +465,31 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", t);
             fprintf(filepointer, "%d;", jahr);
 
+            // declarations
+            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0,
+                ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
+            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0,
+                ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
+            int gesamtseedAKT = 0, gesamtseedSUM = 0;
+            int spectree1 = 0, spectree2 = 0;
+            double yposmax = 0.0;
+            double meanbas = 0.0;
+            int h = 0;
+
+#pragma omp parallel default(shared)
+        {
+            // declarations
+            int localageg0 = 0, localageg1 = 0, localageg2 = 0, localageg3 = 0, localageg4 = 0, localageg5 = 0, localageg6b10 = 0, localageg11b20 = 0, localageg21b50 = 0, localageg51b100 = 0, localageg101b150 = 0,
+                localageg151b200 = 0, localageg201b300 = 0, localageg301b400 = 0, localageg401b500 = 0, localageg501b600 = 0, localageg601b700 = 0, localageg701plus = 0;
+            int localages0 = 0, localages1 = 0, localages2 = 0, localages3 = 0, localages4 = 0, localages5 = 0, localages6b10 = 0, localages11b20 = 0, localages21b50 = 0, localages51b100 = 0, localages101b150 = 0,
+                localages151b200 = 0, localages201b300 = 0, localages301b400 = 0, localages401b500 = 0, localages501b600 = 0, localages601b700 = 0, localages701plus = 0;
+            int localgesamtseedAKT = 0, localgesamtseedSUM = 0;
+            int localspectree1 = 0, localspectree2 = 0;
+            double localyposmax = 0.0;
+            double localmeanbas = 0.0;
+            int localh = 0;
+
+#pragma omp for schedule(guided)
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
@@ -480,126 +499,194 @@ void Dataoutput(int t,
 						if (tree.species == 1) {
 							// bin trees by age
 							if (tree.age == 0) {
-								ageg0++;
+								localageg0++;
 							} else if (tree.age == 1) {
-								ageg1++;
+								localageg1++;
 							} else if (tree.age == 2) {
-								ageg2++;
+								localageg2++;
 							} else if (tree.age == 3) {
-								ageg3++;
+								localageg3++;
 							} else if (tree.age == 4) {
-								ageg4++;
+								localageg4++;
 							} else if (tree.age == 5) {
-								ageg5++;
+								localageg5++;
 							} else if ((tree.age > 5) && (tree.age <= 10)) {
-								ageg6b10++;
+								localageg6b10++;
 							} else if ((tree.age > 10) && (tree.age <= 20)) {
-								ageg11b20++;
+								localageg11b20++;
 							} else if ((tree.age > 20) && (tree.age <= 50)) {
-								ageg21b50++;
+								localageg21b50++;
 							} else if ((tree.age > 50) && (tree.age <= 100)) {
-								ageg51b100++;
+								localageg51b100++;
 							} else if ((tree.age > 100) && (tree.age <= 150)) {
-								ageg101b150++;
+								localageg101b150++;
 							} else if ((tree.age > 150) && (tree.age <= 200)) {
-								ageg151b200++;
+								localageg151b200++;
 							} else if ((tree.age > 200) && (tree.age <= 300)) {
-								ageg201b300++;
+								localageg201b300++;
 							} else if ((tree.age > 300) && (tree.age <= 400)) {
-								ageg301b400++;
+								localageg301b400++;
 							} else if ((tree.age > 400) && (tree.age <= 500)) {
-								ageg401b500++;
+								localageg401b500++;
 							} else if ((tree.age > 500) && (tree.age <= 600)) {
-								ageg501b600++;
+								localageg501b600++;
 							} else if ((tree.age > 600) && (tree.age <= 700)) {
-								ageg601b700++;
+								localageg601b700++;
 							} else if (tree.age > 700) {
-								ageg701plus++;
+								localageg701plus++;
 							}
 						} else if (tree.species == 2) {
 							if (tree.age == 0) {
-								ages0++;
+								localages0++;
 							} else if (tree.age == 1) {
-								ages1++;
+								localages1++;
 							} else if (tree.age == 2) {
-								ages2++;
+								localages2++;
 							} else if (tree.age == 3) {
-								ages3++;
+								localages3++;
 							} else if (tree.age == 4) {
-								ages4++;
+								localages4++;
 							} else if (tree.age == 5) {
-								ages5++;
+								localages5++;
 							} else if ((tree.age > 5) && (tree.age <= 10)) {
-								ages6b10++;
+								localages6b10++;
 							} else if ((tree.age > 10) && (tree.age <= 20)) {
-								ages11b20++;
+								localages11b20++;
 							} else if ((tree.age > 20) && (tree.age <= 50)) {
-								ages21b50++;
+								localages21b50++;
 							} else if ((tree.age > 50) && (tree.age <= 100)) {
-								ages51b100++;
+								localages51b100++;
 							} else if ((tree.age > 100) && (tree.age <= 150)) {
-								ages101b150++;
+								localages101b150++;
 							} else if ((tree.age > 150) && (tree.age <= 200)) {
-								ages151b200++;
+								localages151b200++;
 							} else if ((tree.age > 200) && (tree.age <= 300)) {
-								ages201b300++;
+								localages201b300++;
 							} else if ((tree.age > 300) && (tree.age <= 400)) {
-								ages301b400++;
+								localages301b400++;
 							} else if ((tree.age > 400) && (tree.age <= 500)) {
-								ages401b500++;
+								localages401b500++;
 							} else if ((tree.age > 500) && (tree.age <= 600)) {
-								ages501b600++;
+								localages501b600++;
 							} else if ((tree.age > 600) && (tree.age <= 700)) {
-								ages601b700++;
+								localages601b700++;
 							} else if (tree.age > 700) {
-								ages701plus++;
+								localages701plus++;
 							}
 						}
 
 						if (tree.dbasal > 0) {
-							meanbas = meanbas + tree.dbasal;
-							h++;
+							localmeanbas = localmeanbas + tree.dbasal;
+							localh++;
 						}
 
 						// counting seeds
-						gesamtseedAKT += tree.seednewly_produced;
+						localgesamtseedAKT += tree.seednewly_produced;
 						// gesamtseedSUM += tree.seedproduced;
 
 						// counting species
 						if (tree.species == 1) {
-							spectree1++;
+							localspectree1++;
 						} else if (tree.species == 2) {
-							spectree2++;
+							localspectree2++;
 						}
 
-						if ((double)tree.ycoo / 1000 > yposmax) {
-							yposmax = (double)tree.ycoo / 1000;
+						if ((double)tree.ycoo / 1000 > localyposmax) {
+							localyposmax = (double)tree.ycoo / 1000;
 						}
 					}
 				}
             }
+#pragma omp critical
+            {
+				ageg0 += localageg0; 
+				ageg1 += localageg1; 
+				ageg2 += localageg2; 
+				ageg3 += localageg3; 
+				ageg4 += localageg4; 
+				ageg5 += localageg5; 
+				ageg6b10 += localageg6b10; 
+				ageg11b20 += localageg11b20; 
+				ageg21b50 += localageg21b50; 
+				ageg51b100 += localageg51b100; 
+				ageg101b150 += localageg101b150;
+                ageg151b200 += localageg151b200; 
+				ageg201b300 += localageg201b300; 
+				ageg301b400 += localageg301b400; 
+				ageg401b500 += localageg401b500; 
+				ageg501b600 += localageg501b600; 
+				ageg601b700 += localageg601b700; 
+				ageg701plus += localageg701plus;
+				ages0 += localages0 ; 
+				ages1 += localages1; 
+				ages2 += localages2; 
+				ages3 += localages3; 
+				ages4 += localages4; 
+				ages5 += localages5; 
+				ages6b10 += localages6b10; 
+				ages11b20 += localages11b20; 
+				ages21b50 += localages21b50; 
+				ages51b100 += localages51b100; 
+				ages101b150 += localages101b150;
+                ages151b200 += localages151b200; 
+				ages201b300 += localages201b300; 
+				ages301b400 += localages301b400; 
+				ages401b500 += localages401b500; 
+				ages501b600 += localages501b600; 
+				ages601b700 += localages601b700; 
+				ages701plus += localages701plus;
+				gesamtseedAKT += localgesamtseedAKT; 
+				gesamtseedSUM += localgesamtseedSUM;
+				spectree1 += localspectree1; 
+				spectree2 += localspectree2;
+				meanbas += localmeanbas;
+				h += localh;
+			
+				if (localyposmax > yposmax) {
+					yposmax = localyposmax;
+				}
+            }
+		}
 
             // for counting seeds:
             int seedconezahl = 0, seedbodenzahl = 0;
             // for counting species:
             int specseed1 = 0, specseed2 = 0;
+#pragma omp parallel default(shared)
+        {
+            int localseedconezahl = 0;
+			int localseedbodenzahl = 0;
+            int localspecseed1 = 0;			
+			int localspecseed2 = 0;
+			
+#pragma omp for schedule(guided)
             for (unsigned int i = 0; i < seed_list.size(); ++i) {
                 const auto& seed = seed_list[i];
-                if (((double)seed.xcoo / 1000 >= xminwindow) && ((double)seed.xcoo / 1000 <= xmaxwindow) && ((double)seed.ycoo / 1000 >= yminwindow)
-                    && ((double)seed.ycoo / 1000 <= ymaxwindow)) {
-                    if (seed.incone) {
-                        seedconezahl++;
-                    } else {
-                        seedbodenzahl++;
-                    }
-                    // counting species:
-                    if (seed.species == 1) {
-                        specseed1 = specseed1 + 1;
-                    } else if (seed.species == 2) {
-                        specseed2 = specseed2 + 1;
-                    }
-                }
+				if(!seed.dead) {
+					if (((double)seed.xcoo / 1000 >= xminwindow) && ((double)seed.xcoo / 1000 <= xmaxwindow) && ((double)seed.ycoo / 1000 >= yminwindow)
+						&& ((double)seed.ycoo / 1000 <= ymaxwindow)) {
+						if (seed.incone) {
+							localseedconezahl++;
+						} else {
+							localseedbodenzahl++;
+						}
+						// counting species:
+						if (seed.species == 1) {
+							localspecseed1++;
+						} else if (seed.species == 2) {
+							localspecseed2++;
+						}
+					}
+				}
             }
+#pragma omp critical
+            {
+				seedconezahl += localseedconezahl;
+				seedbodenzahl +=  localseedbodenzahl;
+				specseed1 +=  localspecseed1;			
+				specseed2 +=  localspecseed2;			
+			}
+		}// pragma
 
             if (h > 0) {
                 fprintf(filepointer, "%4.4f;", meanbas / ((double)h));

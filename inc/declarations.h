@@ -19,8 +19,10 @@
 // constexpr unsigned int treecols = 9990;
 // constexpr unsigned int treerows = 450;	//Khamra 500x500m "...x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; x=450, y=4500
 // constexpr unsigned int treecols = 450;
-constexpr unsigned int treerows = 990;	//Khamra 1000x1000m "...x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; x=990, y=990
-constexpr unsigned int treecols = 990;
+// constexpr unsigned int treerows = 990;	//Khamra 1000x1000m "...x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; x=990, y=990
+// constexpr unsigned int treecols = 990;
+constexpr unsigned int treerows = 1980;		//Khamra 2000x2000m "...x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; x=1980, y=1980
+constexpr unsigned int treecols = 1980;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

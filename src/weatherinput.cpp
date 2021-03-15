@@ -813,6 +813,11 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/18232_khamra_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 182322) {
+            char tempbuf[] = "input/18232_khamra_trace_temp.csv";
+            char precbuf[] = "input/18232_khamra_trace_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
         }
 
         if (parameter[0].demlandscape) {

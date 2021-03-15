@@ -582,19 +582,21 @@ void Dataoutput(int t,
             int specseed1 = 0, specseed2 = 0;
             for (unsigned int i = 0; i < seed_list.size(); ++i) {
                 const auto& seed = seed_list[i];
-                if (((double)seed.xcoo / 1000 >= xminwindow) && ((double)seed.xcoo / 1000 <= xmaxwindow) && ((double)seed.ycoo / 1000 >= yminwindow)
-                    && ((double)seed.ycoo / 1000 <= ymaxwindow)) {
-                    if (seed.incone) {
-                        seedconezahl++;
-                    } else {
-                        seedbodenzahl++;
-                    }
-                    // counting species:
-                    if (seed.species == 1) {
-                        specseed1 = specseed1 + 1;
-                    } else if (seed.species == 2) {
-                        specseed2 = specseed2 + 1;
-                    }
+				if (seed.dead == false){
+					if (((double)seed.xcoo / 1000 >= xminwindow) && ((double)seed.xcoo / 1000 <= xmaxwindow) && ((double)seed.ycoo / 1000 >= yminwindow)
+						&& ((double)seed.ycoo / 1000 <= ymaxwindow)) {
+						if (seed.incone) {
+							seedconezahl++;
+						} else {
+							seedbodenzahl++;
+						}
+						// counting species:
+						if (seed.species == 1) {
+							specseed1 = specseed1 + 1;
+						} else if (seed.species == 2) {
+							specseed2 = specseed2 + 1;
+						}
+					}
                 }
             }
 
@@ -1315,12 +1317,12 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Density_value;");
                 fprintf(filepointer, "N_trees;");
                 // fprintf(filepointer, "Litter_layer_height;");
-                // fprintf(filepointer, "Litter_layer_height_mean;");
+                fprintf(filepointer, "Litter_layer_height_mean;");
                 fprintf(filepointer, "Max_thawing_depth;");
                 fprintf(filepointer, "Elevation;");
                 fprintf(filepointer, "Envirgrowthimpact;");
                 // fprintf(filepointer, "Weather_type;");
-                // fprintf(filepointer, "Thawing_depth;");
+                fprintf(filepointer, "Thawing_depth;");
                 // fprintf(filepointer, "Pixels_with_fire;");	// ###FIRE### bool variant
                 fprintf(filepointer, "N_fire;");	// ###FIRE### int variant
                 fprintf(filepointer, "\n");
@@ -1364,12 +1366,12 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);
                     fprintf(filepointer, "%d;", pEnvirgrid.Treenumber);
                     // fprintf(filepointer, "%u;", pEnvirgrid.litterheight);
-                    // fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean);
+                    fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean / 100);
                     fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.elevation / 10);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                    // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+                    fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 					//if (pEnvirgrid.fire == true) 		// ###FIRE### bool variant
 						//fprintf(filepointer, "1;");	// ###FIRE### bool variant
 					//else								// ###FIRE### bool variant

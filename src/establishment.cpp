@@ -39,11 +39,11 @@ void Treeestablishment(Parameter* parameter,
                     continue;
                 }
 
-                double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
-                // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
+                double germinationlitterheightinfluence = (2.0 - 0.01) / (0 - 4000.0) * (double) plot_list[curposi].litterheight + 1; // 
+                // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
 
-                if (germinationlitterheightinfluence < 0.01) {
-                    germinationlitterheightinfluence = 0.01;
+                if (germinationlitterheightinfluence < 1) { //default was 0.01 -> alternativ als zufallszahl
+                    germinationlitterheightinfluence = 1;
                 }
 
                 // calculate the thawing depth influence on the tree growth
@@ -198,6 +198,15 @@ void Treeestablishment(Parameter* parameter,
                                                         / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))),
                                            2.0)                           // weather influence
                                      * germinationlitterheightinfluence;  // litter layer dependency
+// cout << "wachstum=" << (basalgrowth_help / maxbw_help) << "; elevation=" <<(double)plot_list[curposi].elevation << "; weather=" << pow(((weather_list[yearposition].weatherfactorg
+                                             // * (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                             // / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+                                            // + (weather_list[yearposition].weatherfactorming
+                                               // * (1
+                                                  // - (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                                        // / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))),
+                                           // 2.0)  << "; litter=" << germinationlitterheightinfluence << "; ==>" << germgmel << endl;
+
                     germsib = parameter[0].germinationrate                // background germination rate
                               + (basalgrowth_help / maxbw_help)           // rel growth on position is density dependent
                                     * parameter[0].germinatioweatherinfluence

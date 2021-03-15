@@ -62,6 +62,7 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     bool incone;               // 1
     bool longdispersed;        // 1
     bool dead = false;         // 1
+	int firemort;				// ###CHANGED### for fire mortality
 };
 
 struct Envirgrid {        // sizeof variable //TODO: further could be replaced
@@ -70,17 +71,21 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     unsigned short int Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
                                           // and 65.535 with precision of 1/10000 which is sufficient
     unsigned short int Treenumber;        // 2	---> only for ouput; should in all cases below 65535
-    unsigned short maxthawing_depth;      // 2
-                                          // unsigned short litterheight;						// 2	-> not in use right now; TODO: replace
-                                          // litterheight with a more efficient
-    // way unsigned short litterheight0;					// 2	-> not in use right now unsigned short litterheight1;
-    // // 2	-> not in use right now unsigned short litterheight2;					// 2	-> not in use right now unsigned short
-    // litterheight3;					// 2	-> not in use right now unsigned short litterheight4;					// 2
-    // -> not in use right now unsigned short litterheight5;					// 2	-> not in use right now unsigned short litterheight6;
-    // // 2	-> not in use right now unsigned short litterheight7;					// 2	-> not in use right now unsigned short
-    // litterheight8;					// 2	-> not in use right now unsigned short litterheight9;					// 2
-    // -> not in use right now unsigned short litterheightmean;					// 2	-> not in use right now std::array<unsigned short, 10>
-    // litterheight;		// 2*10	-> not in use right now
+    unsigned short maxthawing_depth;   	// 2
+	unsigned short litterheight;		// 2
+    // litterheight with a more efficient way 
+	unsigned short litterheight0;			// 2	 
+	unsigned short litterheight1;			// 2 
+	unsigned short litterheight2;			// 2
+	unsigned short litterheight3;			// 2
+	unsigned short litterheight4;			// 2  
+	unsigned short litterheight5;			// 2 
+	unsigned short litterheight6; 			// 2
+	unsigned short litterheight7;			// 2
+	unsigned short litterheight8;			// 2
+	unsigned short litterheight9;			// 2 
+	unsigned short litterheightmean;		// 2	-> not in use right now std::array<unsigned short, 10>
+    // litterheight;						// 2*10	-> not in use right now
     unsigned short int envirgrowthimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
     unsigned short int envirfireimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
                                            // units precision (8 -> 2 bytes)
@@ -92,14 +97,36 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
               unsigned short int Treedensityvalue = 0,
               unsigned short int Treenumber = 0,
               unsigned short maxthawing_depth = 1000,
+			  unsigned short litterheight0 = 4000,					// 2 
+			  unsigned short litterheight1= 4000,					// 2	
+			  unsigned short litterheight2= 4000,					// 2 
+			  unsigned short litterheight3= 4000,					// 2
+			  unsigned short litterheight4= 4000,					// 2 
+			  unsigned short litterheight5= 4000,					// 2
+			  unsigned short litterheight6= 4000, 					// 2
+			  unsigned short litterheight7= 4000,					// 2 
+			  unsigned short litterheight8= 4000,					// 2
+			  unsigned short litterheight9= 4000,					// 2 
+			  unsigned short litterheightmean= 4000,				// 2
               unsigned short int envirgrowthimpact = 1,
               unsigned short int envirfireimpact = 0,
-			  //bool fire = false)	// ###FIRE### bool variant
+			  //bool fire = false	// ###FIRE### bool variant
 			  unsigned short int fire = 0)	//###FIRE### int variant
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
           Treenumber(Treenumber),
           maxthawing_depth(maxthawing_depth),
+          litterheight0(litterheight0),
+          litterheight1(litterheight1),
+          litterheight2(litterheight2),
+          litterheight3(litterheight3),
+          litterheight4(litterheight4),
+          litterheight5(litterheight5),
+          litterheight6(litterheight6),
+          litterheight7(litterheight7),
+          litterheight8(litterheight8),
+          litterheight9(litterheight9),
+          litterheightmean(litterheightmean),
           envirgrowthimpact(envirgrowthimpact),
           envirfireimpact(envirfireimpact),
 		  fire(fire) {}
@@ -266,6 +293,7 @@ struct Parameter {
     double mdrought;
     double seedconemort;
     double seedfloormort;
+	double seedfiremort; // seed mortality fire-related
     int gmelseedmaxage;
 
     // ancestry

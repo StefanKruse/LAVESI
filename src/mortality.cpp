@@ -154,6 +154,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             } else {
                 dry_mort = parameter[0].mdrought * weather_list[yearposition_help].droughtmort * pow((1.0 / (double)tree.height / 100), 0.5);
             }
+			
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;
 
@@ -166,6 +167,10 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			
 			// if (tree.firedamage > 0){
 			// cout << " ###### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | Treemortg=" << Treemortg << " | +++++tree.firedamage=" << ((double)tree.firedamage) << endl;
+			// }	
+			
+			// if (tree.firedamage > 0){
+			// cout << " - tree.firedamage = " << ((double)tree.firedamage) << endl;
 			// }
 			
             if (Treemortg > 1.0) {

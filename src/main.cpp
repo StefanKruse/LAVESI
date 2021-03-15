@@ -477,7 +477,8 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char deminputbuf[] = "input/dem_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char deminputbuf[] = "input/dem_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -512,7 +513,8 @@ void fillElevations() {
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char slopeinputbuf[] = "input/slope_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char slopeinputbuf[] = "input/slope_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
         strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
         if (f == NULL) {
@@ -542,7 +544,8 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char twiinputbuf[] = "input/twi_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char twiinputbuf[] = "input/twi_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
         strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
         if (f == NULL) {
@@ -704,7 +707,7 @@ void initialiseMaps() {
         auto time_start = chrono::high_resolution_clock::now();
         plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
                           * (unsigned long long int)parameter[0].sizemagnif),
-                         {initialelevation, 0, 0, 1000, 1, 0, 0}); // ###Fire### Last digit resembles initial fire counter, put to "false" for bool variant
+                         {initialelevation, 0, 0, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1, 0, 0}); // ###Fire### Last digit resembles initial fire counter, put to "false" for bool variant
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
         elapsed = time_end - time_start;

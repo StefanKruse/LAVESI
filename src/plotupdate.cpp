@@ -153,7 +153,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					}
 
 					// calculate the influence of the thawing depth on the tree growth
-					if ((cur_plot.maxthawing_depth < 2000) && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
+					// if ((cur_plot.maxthawing_depth < 2000) && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
+					if ((cur_plot.maxthawing_depth < 2000) && (parameter[0].thawing_depth == true)) {
 						tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * (double)cur_plot.maxthawing_depth);
 					} else {
 						tree.thawing_depthinfluence = 100;
@@ -356,22 +357,62 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
-    if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
-        double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
-        // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-
-        if (daempfung >= 0.9) {
-            daempfung = 0.9;
-        }
-
-        const unsigned short maxthawing_depth =
-            1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
-
+    if (parameter[0].thawing_depth == true) {
+        // double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
+        
 #pragma omp parallel for default(shared) schedule(guided)
         for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
             auto& pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid.Treedensityvalue = 0;
             pEnvirgrid.Treenumber = 0;
+			
+			if (parameter[0].vegetation==true)
+			{
+				unsigned short litterlayergrowthrate =0.5 * 100;	//0.5 cm * 100 wegen Skalierung; evt mit TWI verknüpfen oder evt Lärchenwachstum
+											 // +( 1.0/( ((1.0/0.01)-(1.0/0.95))
+													  // *exp(-(1.0/2000.0)*(double) pEnvirgrid.maxthawing_depth) 
+													  // +(1/0.95)) ); 
+				
+				pEnvirgrid.litterheight+= litterlayergrowthrate;
+				// pEnvirgrid.litterheight+= (unsigned short) (litterlayergrowthrate*60.0);
+				
+				if (pEnvirgrid.litterheight > 4000)
+					pEnvirgrid.litterheight = 4000;
+
+				pEnvirgrid.litterheightmean = (unsigned short) ( (double) 
+												 (pEnvirgrid.litterheight8
+												 +pEnvirgrid.litterheight7
+												 +pEnvirgrid.litterheight6
+												 +pEnvirgrid.litterheight5
+												 +pEnvirgrid.litterheight4
+												 +pEnvirgrid.litterheight3
+												 +pEnvirgrid.litterheight2
+												 +pEnvirgrid.litterheight1
+												 +pEnvirgrid.litterheight0
+												 +pEnvirgrid.litterheight)
+												 /10.0);
+
+				pEnvirgrid.litterheight8 = pEnvirgrid.litterheight7;
+				pEnvirgrid.litterheight7 = pEnvirgrid.litterheight6;
+				pEnvirgrid.litterheight6 = pEnvirgrid.litterheight5;
+				pEnvirgrid.litterheight5 = pEnvirgrid.litterheight4;
+				pEnvirgrid.litterheight4 = pEnvirgrid.litterheight3;
+				pEnvirgrid.litterheight3 = pEnvirgrid.litterheight2;
+				pEnvirgrid.litterheight2 = pEnvirgrid.litterheight1;
+				pEnvirgrid.litterheight1 = pEnvirgrid.litterheight0;
+				pEnvirgrid.litterheight0 = pEnvirgrid.litterheight;
+			}
+			
+			// litterheight impact and active layer calculation
+			double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
+
+			if (daempfung >= 0.9) {	// ###CHANGED### as there is now fire impact, previously >= 0.9
+				daempfung = 0.9;
+			}
+
+			const unsigned short maxthawing_depth =
+				1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
+// cout << "daempfung=" << daempfung << "; weather_list[yearposition].degreday_sqrt=" << weather_list[yearposition].degreday_sqrt << "; maxthawing_depth=" << maxthawing_depth << " ";
             pEnvirgrid.maxthawing_depth = maxthawing_depth;
 			pEnvirgrid.fire = 0; 		// ###FIRE### int variant
 			pEnvirgrid.envirfireimpact = 0; 		// ###FIRE### int variant

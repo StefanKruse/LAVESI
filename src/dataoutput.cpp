@@ -165,7 +165,7 @@ void Dataoutput(int t,
             double local_meantreeheight = 0.0, local_meantreeage = 0.0;
 
 #pragma omp for schedule(guided)
-            for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
 				if (tree.growing == true) {
@@ -490,7 +490,7 @@ void Dataoutput(int t,
             int localh = 0;
 
 #pragma omp for schedule(guided)
-            for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 
 				if (tree.growing == true) {
@@ -660,7 +660,7 @@ void Dataoutput(int t,
 			int localspecseed2 = 0;
 			
 #pragma omp for schedule(guided)
-            for (unsigned int i = 0; i < seed_list.size(); ++i) {
+            for (unsigned long long int i = 0; i < (unsigned long long int) seed_list.size(); ++i) {
                 const auto& seed = seed_list[i];
 				if(!seed.dead) {
 					if (((double)seed.xcoo / 1000 >= xminwindow) && ((double)seed.xcoo / 1000 <= xmaxwindow) && ((double)seed.ycoo / 1000 >= yminwindow)
@@ -821,7 +821,7 @@ void Dataoutput(int t,
 
                     fseek(filepointer, 0, SEEK_END);
 
-                    for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+                    for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                         auto& tree = tree_list[tree_i];
 
 						if (tree.growing == true) {
@@ -877,7 +877,7 @@ void Dataoutput(int t,
 
                     fseek(filepointer, 0, SEEK_END);
 
-                    for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+                    for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                         auto& tree = tree_list[tree_i];
 
 						if (tree.growing == true) {
@@ -973,7 +973,7 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // data output for each tree
-            for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {
@@ -1080,10 +1080,10 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // data output for each tree
-            for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 			
-				if (tree.growing == true) {
+				if ( (tree.growing == true) && (tree.age > 0) ) {// only >0 years to prevent overly large files in very warm scenarios
 					if (   ((double)tree.xcoo / 1000 >= (643515-637008.2)) // currently for Site EN18022 30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 							// ... x 643515
 							// ... y 7479959
@@ -1186,7 +1186,7 @@ void Dataoutput(int t,
             Indicount_larger2000.resize(deminputdimension_y * deminputdimension_x, 0);
 
 #pragma omp parallel for default(shared) schedule(guided)
-            for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {
@@ -1349,7 +1349,7 @@ void Dataoutput(int t,
             Species2_seedlings.resize(treerows, 0);
 
 #pragma omp parallel for default(shared) schedule(guided)
-            for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+            for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {

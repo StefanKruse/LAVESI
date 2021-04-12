@@ -1084,6 +1084,7 @@ void Dataoutput(int t,
                 auto& tree = tree_list[tree_i];
 			
 				if ( (tree.growing == true) && (tree.age > 0) ) {// only >0 years to prevent overly large files in very warm scenarios
+					/*
 					if (   ((double)tree.xcoo / 1000 >= (643515-637008.2)) // currently for Site EN18022 30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 							// ... x 643515
 							// ... y 7479959
@@ -1091,6 +1092,16 @@ void Dataoutput(int t,
 						&& ((double)tree.xcoo / 1000 <= (643515+100-637008.2))
 						&& ((double)tree.ycoo / 1000 >= (7479959-400-7469996))
 						&& ((double)tree.ycoo / 1000 <= (7479959-7469996))) {
+					*/
+					if (   ((double)tree.xcoo / 1000 >= (643515-640008.2)) // currently for Site EN18022 
+					// => 30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
+					// => 30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m smaller area
+							// ... x 643515
+							// ... y 7479959
+							// as 100-m wide transect starting here in tundra and going south into forest for 400 m and north 400 m
+						&& ((double)tree.xcoo / 1000 <= (643515+20-640008.2))
+						&& ((double)tree.ycoo / 1000 >= (7479959-1400-7475006))
+						&& ((double)tree.ycoo / 1000 <= ((7479959+600)-7475006))) {
 						// parameters
 						// fprintf(filepointer, "%d;", parameter[0].repeati);
 						// fprintf(filepointer, "%d;", tree.yworldcoo);

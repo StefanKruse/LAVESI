@@ -11,11 +11,12 @@
 // constexpr unsigned int treecols = 7860;
 // constexpr unsigned int treerows = 14310;  // 30m_Ilirney_x641989-649489m_y7476026-7490336m
 // constexpr unsigned int treecols = 7500;
-constexpr unsigned int treerows = 24720; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
-constexpr unsigned int treecols = 18000;
+// constexpr unsigned int treerows = 24720; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
+// constexpr unsigned int treecols = 18000;
 // constexpr unsigned int treerows = 14250; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
 // constexpr unsigned int treecols = 11430;
-
+constexpr unsigned int treerows = 19710; //30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m
+constexpr unsigned int treecols = 9990;
 // parameter input
 constexpr unsigned int stringlengthmax = 255;
 constexpr const char* divisionsign = "=;";

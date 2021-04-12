@@ -471,8 +471,9 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
-		char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+		char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -505,8 +506,9 @@ void fillElevations() {
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
-		char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+		char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
         if (f == NULL) {
@@ -534,8 +536,9 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
-		char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+		char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
         if (f == NULL) {

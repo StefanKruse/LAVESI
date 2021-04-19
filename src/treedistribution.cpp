@@ -43,11 +43,11 @@ void Seedin() {
 
                 // set limits
                 double maxx = (double)(treecols - 1);
-                if (parameter[0].seedintro_maxx > 0)
+                if ( (parameter[0].seedintro_maxx > 0) & (parameter[0].seedintro_maxx < (treecols - 1)) )
                     maxx = (double)parameter[0].seedintro_maxx;
 
                 double maxy = (double)(treerows - 1);
-                if (parameter[0].seedintro_maxy > 0)
+                if ( (parameter[0].seedintro_maxy > 0) & (parameter[0].seedintro_maxy < (treerows - 1)) )
                     maxy = (double)parameter[0].seedintro_maxy;
 
                 // seedwinddispersalmode==1 => randomly from the south border.
@@ -83,20 +83,13 @@ void Seedin() {
                     exit(1);
                 }
 
-                double rn_seed = 0.0;
                 int rn_species = 0;
+				// multiple species implementation
                 if (parameter[0].specpres == 0) {
-                    rn_seed = uniform.draw();
-                    if (rn_seed <= 0.5) {
-                        rn_species = 1;
-                    } else {
-                        rn_species = 2;
-                    }
-                } else if (parameter[0].specpres == 1) {
-                    rn_species = 1;
-                } else if (parameter[0].specpres == 2) {
-                    rn_species = 2;
-                }
+					rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+				} else {
+					rn_species = parameter[0].specpres;
+				}
 
                 if (seedeintragen) {
                     Seed seed;

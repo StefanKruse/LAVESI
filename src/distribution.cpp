@@ -148,17 +148,9 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, dou
         velocity = 2.7777;
     }
 
-    if (seedspec == 1) {
-        maxdispersaldistance = (velocity * 0.75 * parhei * 0.01 / (parameter[0].seeddescentg));
-    } else if (seedspec == 2) {
-        maxdispersaldistance = (parameter[0].seedtravelbreezes * 0.75 * parhei * 0.01 / (parameter[0].seeddescents));
-    }
+    maxdispersaldistance = (velocity * 0.75 * parhei * 0.01 / (speciestrait[seedspec].seeddescent));
 
-    if (parameter[0].dispersalmode == 5) {
-        dispersaldistance = getEntfernung(maxdispersaldistance, rn);
-    } else {
-        dispersaldistance = getEntfernung(maxdispersaldistance, rn);
-    }
+    dispersaldistance = getEntfernung(maxdispersaldistance, rn);
 
     // set return variables
     dy = cos(direction) * dispersaldistance;

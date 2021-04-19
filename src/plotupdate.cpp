@@ -153,8 +153,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					}
 
 					// calculate the influence of the thawing depth on the tree growth
-					if ((cur_plot.maxthawing_depth < 2000) && (parameter[0].thawing_depth == true && parameter[0].spinupphase == false)) {
-						tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * (double)cur_plot.maxthawing_depth);
+					if ( (parameter[0].thawing_depth == true) && (cur_plot.maxthawing_depth < speciestrait[tree.species].minactivelayer*10) ) {
+						tree.thawing_depthinfluence = (unsigned short)((200.0 / (speciestrait[tree.species].minactivelayer*10)) * (double)cur_plot.maxthawing_depth);
 					} else {
 						tree.thawing_depthinfluence = 100;
 					}
@@ -224,8 +224,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 
 					sumthawing_depth /= anzahlflaechen;
 
-					if (sumthawing_depth < 2000)
-						tree.thawing_depthinfluence = (unsigned short)((200.0 / 2000.0) * sumthawing_depth);
+					if (sumthawing_depth < (speciestrait[tree.species].minactivelayer*10))
+						tree.thawing_depthinfluence = (unsigned short)((200.0 / (speciestrait[tree.species].minactivelayer*10)) * sumthawing_depth);
 					else
 						tree.thawing_depthinfluence = 100;
 
@@ -356,7 +356,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
-    if (parameter[0].thawing_depth == true && parameter[0].spinupphase == false) {
+    if (parameter[0].thawing_depth == true) {
         double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
         // double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
 

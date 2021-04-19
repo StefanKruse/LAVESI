@@ -129,6 +129,7 @@ struct Parameter {
     bool demlandscape;
     int demresolution;
     int specpres;
+    unsigned short int species_max;
 
     // multi-core processing with omp
     int omp_num_threads;
@@ -264,6 +265,58 @@ struct Parameter {
     int lineakt;
 };
 
+struct Speciestraits {
+	int	number;
+	string	species;
+	double	coneage ;
+	double	seedflightrate;
+	double	seedtravelbreeze;
+	double	seeddescent;
+	double	distanceratio;
+	double	seedprodfactor;
+	double	germinationrate;
+	double	germinationweatherinfluence;
+	double	gdbasalfacq;
+	double	gdbasalfac;
+	double	gdbasalconst;
+	double	gdbreastfacq;
+	double	gdbreastfac;
+	double	gdbreastconst;
+	double	dbasalheightalloslope;
+	double	dbasalheightalloexp;
+	double	dbreastheightalloslope;
+	double	dbreastheightalloexp;
+	double	dbasalheightslopenonlin;
+	double	dbreastheightslopenonlin;
+	double	mortbg;
+	double	maximumage;
+	double	mortage;
+	double	mortyouth;
+	double	mortyouthinfluenceexp;
+	double	mgrowth;
+	double	mdensity;
+	double	densityvaluemaximumatheight;
+	double	mweather;
+	double	heightweathermorteinflussexp;
+	double	mdrought;
+	double	seedconemort;
+	double	seedfloormort;
+	double	seedmaxage;
+	double	janthresholdtemp;	
+	double	janthresholdtempcalcvalue;
+	double	weathervariablea;
+	double	weathervariableb;
+	double	weathervariablec;
+	double	weathervariabled;
+	double  yearlycalcofanstiegweathermort;
+	double  yearlycalcofanstiegweathermortmin;
+	double  minactivelayer;	
+	double  maxsoilwater;	
+	double  rootingdepth;
+	double  relbarkthickness;
+	double  resprouting;
+};
+
 struct Weather {
     int xworldcoo;
     int yworldcoo;
@@ -322,16 +375,20 @@ struct Weather {
     double degredaymin;
     double precipitationsum;
     double precipitationsummin;
-    double weatherfactorg;
-    double weatherfactorming;
-    double weatherfactors;
-    double weatherfactormins;
+    vector<double> weatherfactor;
+    vector<double> weatherfactormin;
+    // double weatherfactorg;
+    // double weatherfactorming;
+    // double weatherfactors;
+    // double weatherfactormins;
     double droughtmort;
     double droughtmortmin;
-    double janisothermrestriktions;
-    double janisothermrestriktionsmin;
-    double janisothermrestriktiong;
-    double janisothermrestriktiongmin;
+    vector<double> janisothermrestriktion;
+    vector<double> janisothermrestriktionmin;
+    // double janisothermrestriktions;
+    // double janisothermrestriktionsmin;
+    // double janisothermrestriktiong;
+    // double janisothermrestriktiongmin;
     double julisothermrestriktion;
     double julisothermrestriktionmin;
     double nddrestriktion;

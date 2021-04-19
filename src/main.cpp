@@ -5,6 +5,7 @@
 using namespace std;
 
 Parameter parameter[1];
+Speciestraits speciestrait[99];
 
 int yearposition;
 
@@ -466,14 +467,14 @@ void fillElevations() {
         // ... read dem data
         FILE* f;
         char demfilename[250];
-        // char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+        char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010
         // char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
-		char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -501,14 +502,14 @@ void fillElevations() {
 
         // ... read slope data
         char slopefilename[250];
-        // char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+        char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
-		char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
         if (f == NULL) {
@@ -531,14 +532,14 @@ void fillElevations() {
 
         // ... read slope data
         char twifilename[250];
-        // char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+        char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
-		char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
         if (f == NULL) {
@@ -781,12 +782,13 @@ int main() {
     printf("\n---->\tLAVESI\n");
     printf(
         "\n You have started  LAVESI, "
-        "An individual-based and spatially explicit simulation model for vegetation dynamics of summergreen larches (Larix Mill.) in a 3-dimensional landscape "
+        "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 1.2 (LAVESI-WIND-3DENVIR)"
-        "\n Date:\t\t 22.12.2020"
+        "\n\n Version:\t 2.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES)"
+        "\n Date:\t\t 14.04.2021"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
+        "\n\t Josias Gloy"
         "\n\t of prior versions:"
         "\n\t Alexander Gerdes, Nadja Kath, Mareike Wieczorek"
         "\n");
@@ -794,6 +796,18 @@ int main() {
 
     // read in all simulation parameters from parameters.txt
     Parameterinput();
+	
+	Getspeciestraits();
+	// print the present species in this simulation and find maximum possible species
+	cout << "Species present in simulation:" << endl;
+	for (int species_counter = 1; species_counter < 99; species_counter++) {
+		if(speciestrait[species_counter].number == 0) {
+			parameter[0].species_max = species_counter;
+			break;
+		}
+
+		cout << speciestrait[species_counter].number << " -> " << speciestrait[species_counter].species << " | min ALD: " << speciestrait[species_counter].minactivelayer << endl;
+	}
 
     // pragma omp initializing
     omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers

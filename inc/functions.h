@@ -68,6 +68,7 @@ void Pollinationprobability(double x,
                             double randomnumberwindfather);
 void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec, double randomnumberwind);
 void Parameterinput(void);
+void Getspeciestraits(void);
 void Savealllists(void);
 void Clearalllists(void);
 void Restorealllists(void);

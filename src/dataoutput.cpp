@@ -88,6 +88,16 @@ void Dataoutput(int t,
                 if (parameter[0].ivort % 20 == 0) {
                     outputgriddedbiomass = true;
                 }
+            } else if (parameter[0].outputmode == 99) {  // "test"
+                outputcurrencies = true;
+
+                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
+                    ausgabedensity = true;
+
+                if (parameter[0].ivort % 20 == 0) {
+                    outputgriddedbiomass = true;
+                    outputindividuals = true;
+                }
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
                
                 if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
@@ -759,8 +769,8 @@ void Dataoutput(int t,
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday_sqrt * weather_list[yearposition].degreday_sqrt);
             fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactorg);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactors);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[1]);//TODO: add here for all species output
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[2]);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 
             fprintf(filepointer, "\n");
@@ -947,7 +957,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "NameP;");
                 // fprintf(filepointer, "Line;");
                 // fprintf(filepointer, "Generation;");
-                // fprintf(filepointer, "Species;");
+                fprintf(filepointer, "Species;");
                 fprintf(filepointer, "Height;");
                 fprintf(filepointer, "Dbasal;");
                 fprintf(filepointer, "Dbreast;");
@@ -959,7 +969,7 @@ void Dataoutput(int t,
                 // fprintf(filepointer, "Buffer;");
                 // fprintf(filepointer, "Density_value;");
                 // fprintf(filepointer, "Distance;");
-                // fprintf(filepointer, "Thawing_depth_influence;");
+                fprintf(filepointer, "Thawing_depth_influence;");
                 fprintf(filepointer, "Elevation;");
                 fprintf(filepointer, "Envirgrowthimpact;");
                 fprintf(filepointer, "\n");
@@ -993,7 +1003,7 @@ void Dataoutput(int t,
 					// fprintf(filepointer, "%d;", tree.namep);
 					// fprintf(filepointer, "%d;", tree.line);
 					// fprintf(filepointer, "%d;", tree.generation);
-					// fprintf(filepointer, "%d;", tree.species);
+					fprintf(filepointer, "%d;", tree.species);
 					fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
 					fprintf(filepointer, "%4.4f;", tree.dbasal);
 					fprintf(filepointer, "%4.4f;", tree.dbreast);
@@ -1005,7 +1015,7 @@ void Dataoutput(int t,
 					// fprintf(filepointer, "%d;", tree.buffer);
 					// fprintf(filepointer, "%4.5f;", tree.densitywert);
 					// fprintf(filepointer, "%4.5f;", tree.dispersaldistance);
-					// fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
+					fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
 					fprintf(filepointer, "%4.4f;", (double)tree.elevation / 10);
 					fprintf(filepointer, "%4.4f;", (double)tree.envirimpact / 10000);
 					fprintf(filepointer, "\n");
@@ -1435,8 +1445,7 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // data evaluation and output
-            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
-                 kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
+            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
                 auto& pEnvirgrid = plot_list[kartenpos];
                 double ycooi = floor((double)kartenpos / ((double)treecols * parameter[0].sizemagnif));
                 double xcooi = (double)kartenpos - ((ycooi-1) * ((double)treecols * parameter[0].sizemagnif));
@@ -1472,3 +1481,4 @@ void Dataoutput(int t,
         }  // tree density map output
     }      // world list
 }
+

@@ -235,20 +235,6 @@ void passWeather() {
         vector<Weather>& weather_list = *posw;
 
         for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-            double julindexs = 0;
-            double julindexmins = 0;
-            double julindexg = 0;
-            double julindexming = 0;
-            julindexs = (0.163 / (1 + exp(12.319 - weather_list[iweather].temp7monthmean))) + 0.168;
-            julindexmins = (0.163 / (1 + exp(12.319 - weather_list[iweather].temp7monthmeanmin))) + 0.168;
-            julindexg = (0.078 / (1 + exp(14.825 - weather_list[iweather].temp7monthmean))) + 0.108;
-            julindexming = (0.078 / (1 + exp(14.825 - weather_list[iweather].temp7monthmeanmin))) + 0.108;
-
-            weather_list[iweather].weatherfactorg = (double)(julindexg - 0.108) / (0.1771 - 0.108);
-            weather_list[iweather].weatherfactorming = (double)(julindexming - 0.108) / (0.1771 - 0.108);
-            weather_list[iweather].weatherfactors = (double)(julindexs - 0.168) / (0.305 - 0.168);
-            weather_list[iweather].weatherfactormins = (double)(julindexmins - 0.168) / (0.305 - 0.168);
-
             double jantempsum = 0;
             double jantempsummin = 0;
             double jultempsum = 0;
@@ -327,51 +313,46 @@ void passWeather() {
             }
             weather_list[iweather].droughtmortmin = droughtmortbufmin;
 
-            if (parameter[0].qualiyearlyvis == true) {
-                printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather].jahr,
-                       iweather, weather_list[iweather].weatherfactorg, weather_list[iweather].weatherfactors, weather_list[iweather].droughtmort);
-                printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n", weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp7monthmeaniso,
-                       weather_list[iweather].vegetationperiodlengthiso);
-            }
-
             // calculate restrictions
-            weather_list[iweather].janisothermrestriktiong = 0.0;
-            weather_list[iweather].janisothermrestriktiongmin = 0.0;
-            weather_list[iweather].janisothermrestriktions = 0.0;
-            weather_list[iweather].janisothermrestriktionsmin = 0.0;
             weather_list[iweather].julisothermrestriktion = 0.0;
             weather_list[iweather].julisothermrestriktionmin = 0.0;
             weather_list[iweather].nddrestriktion = 0.0;
             weather_list[iweather].nddrestriktionmin = 0.0;
 
-            if (weather_list[iweather].temp1monthmeaniso < (parameter[0].janthresholdtempgmel)) {
-                weather_list[iweather].janisothermrestriktiong = 1.0;
-            } else {
-                weather_list[iweather].janisothermrestriktiong =
-                    1.0 - fabs(9.0 * (weather_list[iweather].temp1monthmeaniso - parameter[0].janthresholdtempgmel) / (-parameter[0].janthresholdtempgmel));
-            }
-            if (weather_list[iweather].temp1monthmeanisomin < (parameter[0].janthresholdtempgmel)) {
-                weather_list[iweather].janisothermrestriktiongmin = 1.0;
-            } else {
-                weather_list[iweather].janisothermrestriktiongmin =
-                    1.0 - fabs(9.0 * (weather_list[iweather].temp1monthmeanisomin - parameter[0].janthresholdtempgmel) / (-parameter[0].janthresholdtempgmel));
-            }
-
-            // Larix sibirica
-
-            if (weather_list[iweather].temp1monthmeaniso < (-33.0)) {
-                weather_list[iweather].janisothermrestriktions = 1.0;
-            } else {
-                weather_list[iweather].janisothermrestriktions = 1.0 - fabs(6.6 * (weather_list[iweather].temp1monthmeaniso + 33.0) / 33.0);
-            }
-            if (weather_list[iweather].temp1monthmeanisomin < (-33.0)) {
-                weather_list[iweather].janisothermrestriktionsmin = 1.0;
-            } else {
-                weather_list[iweather].janisothermrestriktionsmin = 1.0 - fabs(6.6 * (weather_list[iweather].temp1monthmeanisomin + 33.0) / 33.0);
-            }
+			// multiple species integration
+			weather_list[iweather].weatherfactor.resize(99,0);
+			weather_list[iweather].weatherfactormin.resize(99,0);
+			weather_list[iweather].janisothermrestriktion.resize(99,0);
+			weather_list[iweather].janisothermrestriktionmin.resize(99,0);
+			for (int species_counter = 1; species_counter < 99; species_counter++) {
+				if(speciestrait[species_counter].number == 0)
+					break;
+				
+				// for growth
+				weather_list[iweather].weatherfactor[species_counter]=(double) (((speciestrait[species_counter].weathervariablea/(1+exp(speciestrait[species_counter].weathervariableb-weather_list[iweather].temp7monthmean)))+speciestrait[species_counter].weathervariablec)-speciestrait[species_counter].weathervariablec)/(speciestrait[species_counter].weathervariabled-speciestrait[species_counter].weathervariablec);
+				weather_list[iweather].weatherfactormin[species_counter]=(double) (((speciestrait[species_counter].weathervariablea/(1+exp(speciestrait[species_counter].weathervariableb-weather_list[iweather].temp7monthmeanmin)))+speciestrait[species_counter].weathervariablec)-speciestrait[species_counter].weathervariablec)/(speciestrait[species_counter].weathervariabled-speciestrait[species_counter].weathervariablec);
+				
+				// restrictions
+				if (weather_list[iweather].temp1monthmeaniso < (speciestrait[species_counter].janthresholdtemp)) {
+					weather_list[iweather].janisothermrestriktion[species_counter]=1.0;
+				} else {
+					weather_list[iweather].janisothermrestriktion[species_counter]=1.0-fabs(speciestrait[species_counter].janthresholdtempcalcvalue*(weather_list[iweather].temp1monthmeaniso-speciestrait[species_counter].janthresholdtemp)/(-speciestrait[species_counter].janthresholdtemp));
+				}
+				if (weather_list[iweather].temp1monthmeanisomin < (speciestrait[species_counter].janthresholdtemp)) {
+					weather_list[iweather].janisothermrestriktionmin[species_counter]=1.0;
+				} else {
+					weather_list[iweather].janisothermrestriktionmin[species_counter]=1.0-fabs(speciestrait[species_counter].janthresholdtempcalcvalue*(weather_list[iweather].temp1monthmeanisomin-speciestrait[species_counter].janthresholdtemp)/(-speciestrait[species_counter].janthresholdtemp));
+				}
+				
+				// output for a quick check
+				cout << speciestrait[species_counter].number << "::" << speciestrait[species_counter].species << " => ";
+				cout << " ; wfac: " << weather_list[iweather].weatherfactor[species_counter];
+				cout << " ; wfacmin: " << weather_list[iweather].weatherfactormin[species_counter];
+				cout << " ; janthresh: " << weather_list[iweather].janisothermrestriktion[species_counter] << endl;
+				cout << " ; janthreshmin: " << weather_list[iweather].janisothermrestriktionmin[species_counter] << endl;
+			}
 
             // July temp for both
-
             if (weather_list[iweather].temp7monthmeaniso < 10.0) {
                 weather_list[iweather].julisothermrestriktion = 1.0;
             } else {
@@ -408,13 +389,18 @@ void passWeather() {
                     weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp1monthmeanisomin, weather_list[iweather].temp7monthmeaniso,
                     weather_list[iweather].temp7monthmeanisomin, weather_list[iweather].droughtmort, weather_list[iweather].droughtmortmin,
                     (double)weather_list[iweather].vegetationperiodlengthiso, (double)weather_list[iweather].vegetationperiodlengthisomin, precgs, precgsmin,
-                    weather_list[iweather].janisothermrestriktiong, weather_list[iweather].janisothermrestriktiongmin,
-                    weather_list[iweather].janisothermrestriktions, weather_list[iweather].janisothermrestriktionsmin,
+                    weather_list[iweather].janisothermrestriktion[1], weather_list[iweather].janisothermrestriktionmin[1],
+                    weather_list[iweather].janisothermrestriktion[2], weather_list[iweather].janisothermrestriktionmin[2],
                     weather_list[iweather].julisothermrestriktion, weather_list[iweather].julisothermrestriktionmin, weather_list[iweather].nddrestriktion,
-                    weather_list[iweather].nddrestriktionmin, weather_list[iweather].weatherfactorg, weather_list[iweather].weatherfactorming,
-                    weather_list[iweather].weatherfactors, weather_list[iweather].weatherfactormins);
+                    weather_list[iweather].nddrestriktionmin, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactormin[1],
+                    weather_list[iweather].weatherfactor[2], weather_list[iweather].weatherfactormin[2]);
 
             fclose(fdir);
+			
+            if (parameter[0].qualiyearlyvis == true) {
+                printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather].jahr, iweather, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactor[2], weather_list[iweather].droughtmort);
+                printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n", weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp7monthmeaniso, weather_list[iweather].vegetationperiodlengthiso);
+            }
         }
     }
 }
@@ -814,3 +800,4 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
     passWeather();
 }
+

@@ -457,8 +457,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             foldername << "wind_Chukotka";
         } else if (
             // Spasskaya Pad
-            (parameter[0].weatherchoice == 1901201801) || (parameter[0].weatherchoice == 1201801)) {
-            foldername << "wind_Chukotka";
+            (parameter[0].weatherchoice == 1901201801) || (parameter[0].weatherchoice == 1201801) || (parameter[0].weatherchoice == 1201802) || (parameter[0].weatherchoice == 1250002)) {
+            foldername << "wind_SpasskayaPad";
         } else {
 			cout << " no wind data for weather choice available, read for Chukotka!" << endl;
             foldername << "wind_Chukotka";
@@ -765,7 +765,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 			
-			
+		// last two numbers 01 only CRU+ERAinterim, 02 TRACE+CRU+ERAinterim
         } else if (parameter[0].weatherchoice == 1901201801) {  // new for CryoGrid coupling
             char tempbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_temp.csv";
             char precbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_prec.csv";
@@ -774,6 +774,16 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         } else if (parameter[0].weatherchoice == 1201801) {  // new for CryoGrid coupling
             char tempbuf[] = "input/cryogrid_cruera_0001_2018_SpasskayaPad_temp.csv";
             char precbuf[] = "input/cryogrid_cruera_0001_2018_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 1201802) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
+            char tempbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+         } else if (parameter[0].weatherchoice == 1250002) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
+            char tempbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

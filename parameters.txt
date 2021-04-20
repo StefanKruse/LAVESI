@@ -57,7 +57,7 @@ omp_num_threads=3;					// (int 1,system specific maximum) Number of cores used f
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1201801;			// (int) Type of weather forcing series 
+weatherchoice=1250002;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -126,9 +126,9 @@ windsource=1;						// (int) source of wind data
 									// ... 1==EraInterim
 									
 // 1.2 -----> Simulation run characteristics
-lastyearweatherdata=2018;			// (int) determined by the input data series
-simduration=2018;					// (int) duration of the simulation period depending on the available weather data series
-stopatyear=2018;					// (int) simulation is stopped after this year
+lastyearweatherdata=2500;			// (int) determined by the input data series
+simduration=2500;					// (int) duration of the simulation period depending on the available weather data series
+stopatyear=2500;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=0;							// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 									// ...   0==without spin up phase

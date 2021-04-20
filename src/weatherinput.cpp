@@ -455,8 +455,13 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             || (parameter[0].weatherchoice == 2300851)
             || (parameter[0].weatherchoice == 2500511)|| (parameter[0].weatherchoice == 2500521)|| (parameter[0].weatherchoice == 2500531)) {
             foldername << "wind_Chukotka";
+        } else if (
+            // Spasskaya Pad
+            (parameter[0].weatherchoice == 1901201801) || (parameter[0].weatherchoice == 1201801)) {
+            foldername << "wind_Chukotka";
         } else {
-			cout << " no wind read!" << endl;
+			cout << " no wind data for weather choice available, read for Chukotka!" << endl;
+            foldername << "wind_Chukotka";
 		}
 
         for (int t = 0; t < parameter[0].simduration; t++) {
@@ -757,6 +762,18 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         } else if (parameter[0].weatherchoice == 501300058) {  // last number added
             char tempbuf[] = "input/transectChukotka_RCP85cooltemp_501-3000.csv";
             char precbuf[] = "input/transectChukotka_RCP85prec_501-3000.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+			
+        } else if (parameter[0].weatherchoice == 1901201801) {  // new for CryoGrid coupling
+            char tempbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 1201801) {  // new for CryoGrid coupling
+            char tempbuf[] = "input/cryogrid_cruera_0001_2018_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_0001_2018_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

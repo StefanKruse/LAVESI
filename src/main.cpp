@@ -467,7 +467,7 @@ void fillElevations() {
         // ... read dem data
         FILE* f;
         char demfilename[250];
-        char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+        // char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010
         // char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
@@ -475,6 +475,7 @@ void fillElevations() {
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+        char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -502,7 +503,7 @@ void fillElevations() {
 
         // ... read slope data
         char slopefilename[250];
-        char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+        // char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
@@ -510,7 +511,8 @@ void fillElevations() {
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        strcpy(slopefilename, slopeinputbuf);
+        char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+       strcpy(slopefilename, slopeinputbuf);
         f = fopen(slopefilename, "r");
         if (f == NULL) {
             printf("Slope file not available!\n");
@@ -532,7 +534,7 @@ void fillElevations() {
 
         // ... read slope data
         char twifilename[250];
-        char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+        // char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
         // char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
@@ -540,7 +542,8 @@ void fillElevations() {
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        strcpy(twifilename, twiinputbuf);
+        char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+       strcpy(twifilename, twiinputbuf);
         f = fopen(twifilename, "r");
         if (f == NULL) {
             printf("TWI file not available!\n");

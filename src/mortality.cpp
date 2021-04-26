@@ -161,9 +161,10 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             double Treemorts = 0.0 + parameter[0].mortbg + sapl_mort_sib + age_mort + growth_mort + dens_mort + weather_mort_sib + dry_mort;
 			
 			// Treemortg = Treemortg + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 200)); //fire damage
-			Treemortg = Treemortg + ((double)tree.firedamage); // <--- high fire damage for testing
+			Treemortg = Treemortg + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			// Treemortg = Treemortg + ((double)tree.firedamage); // <--- high fire damage for testing
 			
-			Treemorts = Treemorts + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 200)); //fire damage
+			Treemorts = Treemorts + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage
 			
 			// if (tree.firedamage > 0){
 			// cout << " ###### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | Treemortg=" << Treemortg << " | +++++tree.firedamage=" << ((double)tree.firedamage) << endl;
@@ -187,15 +188,15 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // determine if a tree dies (deletion of said tree in the corresponding list)
             double zufallsz = uniform.draw();
-            if ((((tree.species == 1) && (zufallsz < Treemortg)) || ((tree.species == 2) && (zufallsz < Treemorts))) || (tree.envirimpact <= 0)) {
+            if ((((tree.species == 1) && (zufallsz < Treemortg)) || ((tree.species == 2) && (zufallsz < Treemorts))) ) { //|| (tree.envirimpact <= 0)
                 tree.growing = false;
-				
 				// if (tree.firedamage > 0)
 					// cout << "tree_list[tree_i].growing = " << tree_list[tree_i].growing;
                 tree_list.remove(tree_i);
                 // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
 				// if (tree.firedamage > 0)
-					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;
+					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;				
+			// cout << " ### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | tree.firedamage=" << (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)) << " | Treemortg=" << Treemortg << endl;
             }
         }
     }

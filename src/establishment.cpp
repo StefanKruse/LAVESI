@@ -39,7 +39,7 @@ void Treeestablishment(Parameter* parameter,
                     continue;
                 }
 
-                double germinationlitterheightinfluence = (2.0 - 0.01) / (0 - 4000.0) * (double) plot_list[curposi].litterheight + 1; // 
+                double germinationlitterheightinfluence = (2.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight + 1;
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
 
                 if (germinationlitterheightinfluence < 1) { //default was 0.01 -> alternativ als zufallszahl

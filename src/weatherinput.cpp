@@ -813,9 +813,24 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/18232_khamra_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 182322) {
+        } else if (parameter[0].weatherchoice == 182321) {
             char tempbuf[] = "input/18232_khamra_trace_temp.csv";
             char precbuf[] = "input/18232_khamra_trace_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 182322) {
+            char tempbuf[] = "input/18232_khamra_traceCORR_temp.csv";
+            char precbuf[] = "input/18232_khamra_traceCORR_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 182323) {
+            char tempbuf[] = "input/18232_khamra_trace_temp_2990_og.csv";
+            char precbuf[] = "input/18232_khamra_trace_prec_2990_og.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 182324) {
+            char tempbuf[] = "input/18232_khamra_traceCORR_temp_2990.csv";
+            char precbuf[] = "input/18232_khamra_traceCORR_prec_2990.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

@@ -376,8 +376,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				pEnvirgrid.litterheight+= litterlayergrowthrate;
 				// pEnvirgrid.litterheight+= (unsigned short) (litterlayergrowthrate*60.0);
 				
-				if (pEnvirgrid.litterheight > 4000)
-					pEnvirgrid.litterheight = 4000;
+				if (pEnvirgrid.litterheight > 1000) //4000 (= 40 cm)
+					pEnvirgrid.litterheight = 1000; //4000 (= 40 cm)
 
 				pEnvirgrid.litterheightmean = (unsigned short) ( (double) 
 												 (pEnvirgrid.litterheight8
@@ -404,7 +404,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 			}
 			
 			// litterheight impact and active layer calculation
-			double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
+			double daempfung = (1.0 / 1000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000 (<- value before)
 
 			if (daempfung >= 0.9) {	// ###CHANGED### as there is now fire impact, previously >= 0.9
 				daempfung = 0.9;

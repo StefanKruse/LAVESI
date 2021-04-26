@@ -224,7 +224,7 @@ void Fire(Parameter* parameter,
 			
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 
-			double fireimpactareasize = fireprobabilityrating*30000; // determines affected area, rough estimate that average fire burns c. 2.5% of the total area (when using 2x2 km this is c. 10 cells of 90x90m)
+			double fireimpactareasize = fireprobabilityrating*5000; // determines affected area, rough estimate that average fire burns c. 2.5% of the total area (when using 2x2 km this is c. 10 cells of 90x90m)
 			// cout << "Fire X coordinate:" << j << endl;	// can be removed
 			// cout << "Fire Y coordinate:" << i << endl;	// can be removed
 			cout << "Impacted area:" << fireimpactareasize << endl; // can be removed
@@ -276,10 +276,10 @@ void Fire(Parameter* parameter,
 								// cout << "cur_plot.fire:" << cur_plot.fire << " --- cur_plot.litterheight:" << cur_plot.litterheight << endl;
 
 								// Simple alternative for testing
-								if (fireprobabilityrating < 0.1) {
+								if (fireprobabilityrating <= 0.1) {
 									cur_plot.fire=1;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
 									cur_plot.litterheight = cur_plot.litterheight / 2;
-								} else if ((fireprobabilityrating >= 0.1)&(fireprobabilityrating < 0.3)) {
+								} else if ((fireprobabilityrating > 0.1)&(fireprobabilityrating < 0.3)) {
 									cur_plot.fire=2;
 									cur_plot.litterheight = cur_plot.litterheight / 4;
 								} else {
@@ -355,7 +355,7 @@ void Fire(Parameter* parameter,
 								}
 								
 								// fire sensing
-								// tree.firedamage = firedamage;
+								tree.firedamage = firedamage;
 								// if (tree.firedamage > 0) {
 									// cout <<  " | firedamage baum von cur_plot.fire = " << tree.firedamage << "  ";
 								// }
@@ -379,16 +379,22 @@ void Fire(Parameter* parameter,
 				// }
 						
 						
-						
 			// +++++ Seed mortality test 2 (depending on cur_plot.fire value) +++++				
 			
 				#pragma omp for schedule(guided)
 				for (unsigned int i = 0; i < seed_list.size(); ++i) {
 					auto& seed = seed_list[i];
 					if (!seed.dead && !seed.incone) {
-						seed.dead = true;
-						seed_list.remove(i);
-						// cout << "seed1";
+						int i = seed.ycoo * parameter[0].sizemagnif / 1000;
+						int j = seed.xcoo * parameter[0].sizemagnif / 1000;
+						const std::size_t curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
+													+ static_cast<std::size_t>(j);
+						auto& cur_plot = plot_list[curposi];
+						if (cur_plot.fire > 0){
+							seed.dead = true;
+							seed_list.remove(i);
+							// cout << "seed on ground died. ";
+						}
 					} else if (!seed.dead && seed.incone == true) {
 						int i = seed.ycoo * parameter[0].sizemagnif / 1000;
 						int j = seed.xcoo * parameter[0].sizemagnif / 1000;
@@ -399,23 +405,21 @@ void Fire(Parameter* parameter,
 							if (uniform.draw() < 1/3){
 								seed.dead = true;
 								seed_list.remove(i);
-								// cout << "seed2";
+								cout << "some cones died. ";
 							}
 						} else if (cur_plot.fire == 2) {
 							if (uniform.draw() < 2/3){
 								seed.dead = true;
 								seed_list.remove(i);
-								// cout << "seed3";
+								cout << "many cones died. ";
 							}
-						} else {
-							seed.dead = true;
-							seed_list.remove(i);
+						} else if (cur_plot.fire == 3) {
+								seed.dead = true;
+								seed_list.remove(i);
+								cout << "all cones died. ";
 						}
-												
-					}
+					} 							
 				}
-	
-			
 			}
 		}
 	}

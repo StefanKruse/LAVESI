@@ -39,12 +39,15 @@ void Treeestablishment(Parameter* parameter,
                     continue;
                 }
 
-                double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
+                double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
+                // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
                 // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
-
-                if (germinationlitterheightinfluence < 0.01) {
+// cout << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
+                if (germinationlitterheightinfluence < 0.01) {// minimum 1%
                     germinationlitterheightinfluence = 0.01;
                 }
+// if(plot_list[curposi].litterheight0!=1000)
+	// cout << " ... after: " << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
 
                 // calculate the thawing depth influence on the tree growth
                 double thawing_depthinfluence_help = 100;
@@ -195,6 +198,8 @@ void Treeestablishment(Parameter* parameter,
 						tree.species = seed.species;
 						tree.thawing_depthinfluence = thawing_depthinfluence_help;
 						tree.envirimpact = 10000;
+						tree.twi = 6.25*100;
+						tree.soilhumidity = 1;
 
 						tree_list.add(std::move(tree));
 

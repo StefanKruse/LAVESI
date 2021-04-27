@@ -187,14 +187,14 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].demresolution);
     }
 
-    strcpy(uebergabestring, "vegetation");
+    strcpy(uebergabestring, "litterlayer");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
-        parameter[0].vegetation = true;
+        parameter[0].litterlayer = true;
     } else {
-        parameter[0].vegetation = false;
+        parameter[0].litterlayer = false;
     };
     if (parameter[0].parameterinputvis == true) {
-        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].vegetation) ? "true" : "false");
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].litterlayer) ? "true" : "false");
     }
 
     strcpy(uebergabestring, "omp_num_threads");
@@ -896,10 +896,17 @@ void Getspeciestraits(void)
 			speciestrait[counter].weathervariablec= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].weathervariabled= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].minactivelayer= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].minsoilwater= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].maxsoilwater= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].rootingdepth= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].relbarkthickness= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].resprouting= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomassleafbase= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomassleaffaca= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomassleaffacb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodbase= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodfaca= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodfacb= strtod(strtok(NULL, " "),NULL) ;
 		}
 		counter++;
 	}

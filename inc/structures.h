@@ -33,7 +33,9 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int seednewly_produced;  // 2 	---> was int
     signed short int species;               // 2 	---> was int
     unsigned short int envirimpact;         // 2
+    unsigned short int twi;                 // 2
     short int elevation;                    // 2
+    unsigned short int soilhumidity;        // 2
     bool cone;                              // 1	---> was int; could be further replaced by single use of coneheight
     bool longdispersed;                     // 1
     bool growing;                           // 1
@@ -70,30 +72,59 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
                                           // and 65.535 with precision of 1/10000 which is sufficient
     unsigned short int Treenumber;        // 2	---> only for ouput; should in all cases below 65535
     unsigned short maxthawing_depth;      // 2
-                                          // unsigned short litterheight;						// 2	-> not in use right now; TODO: replace
-                                          // litterheight with a more efficient
-    // way unsigned short litterheight0;					// 2	-> not in use right now unsigned short litterheight1;
-    // // 2	-> not in use right now unsigned short litterheight2;					// 2	-> not in use right now unsigned short
-    // litterheight3;					// 2	-> not in use right now unsigned short litterheight4;					// 2
-    // -> not in use right now unsigned short litterheight5;					// 2	-> not in use right now unsigned short litterheight6;
-    // // 2	-> not in use right now unsigned short litterheight7;					// 2	-> not in use right now unsigned short
-    // litterheight8;					// 2	-> not in use right now unsigned short litterheight9;					// 2
-    // -> not in use right now unsigned short litterheightmean;					// 2	-> not in use right now std::array<unsigned short, 10>
-    // litterheight;		// 2*10	-> not in use right now
+	unsigned short litterheight0;			// 2	 
+	unsigned short litterheight1;			// 2 
+	unsigned short litterheight2;			// 2
+	unsigned short litterheight3;			// 2
+	unsigned short litterheight4;			// 2  
+	unsigned short litterheight5;			// 2 
+	unsigned short litterheight6; 			// 2
+	unsigned short litterheight7;			// 2
+	unsigned short litterheight8;			// 2
+	unsigned short litterheight9;			// 2 
+	unsigned short litterheightmean;		// 2	-> not in use right now std::array<unsigned short, 10> litterheight;						// 2*10	-> not in use right now
     unsigned short int envirgrowthimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
                                            // units precision (8 -> 2 bytes)
+    unsigned short int soilhumidity;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
+    unsigned short int twi;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
 
     // constructor
     Envirgrid(short int elevation = 0,
               unsigned short int Treedensityvalue = 0,
               unsigned short int Treenumber = 0,
-              unsigned short maxthawing_depth = 1000,
-              unsigned short int envirgrowthimpact = 1)
+              unsigned short maxthawing_depth = 100*10,
+			  unsigned short litterheight0 = 1000,					// 2 
+			  unsigned short litterheight1= 1000,					// 2	
+			  unsigned short litterheight2= 1000,					// 2 
+			  unsigned short litterheight3= 1000,					// 2
+			  unsigned short litterheight4= 1000,					// 2 
+			  unsigned short litterheight5= 1000,					// 2
+			  unsigned short litterheight6= 1000, 					// 2
+			  unsigned short litterheight7= 1000,					// 2 
+			  unsigned short litterheight8= 1000,					// 2
+			  unsigned short litterheight9= 1000,					// 2 
+			  unsigned short litterheightmean= 1000,				// 2
+              unsigned short int envirgrowthimpact = 1,
+              unsigned short int soilhumidity = 30*100,
+              unsigned short int twi = 6.25*100)
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
           Treenumber(Treenumber),
           maxthawing_depth(maxthawing_depth),
-          envirgrowthimpact(envirgrowthimpact) {}
+          litterheight0(litterheight0),
+          litterheight1(litterheight1),
+          litterheight2(litterheight2),
+          litterheight3(litterheight3),
+          litterheight4(litterheight4),
+          litterheight5(litterheight5),
+          litterheight6(litterheight6),
+          litterheight7(litterheight7),
+          litterheight8(litterheight8),
+          litterheight9(litterheight9),
+          litterheightmean(litterheightmean),
+          envirgrowthimpact(envirgrowthimpact),
+          soilhumidity(soilhumidity),
+          twi(twi) {}
 };
 
 struct Parameter {
@@ -125,7 +156,7 @@ struct Parameter {
 
     // submodules
     bool thawing_depth;
-    bool vegetation;
+    bool litterlayer;
     bool demlandscape;
     int demresolution;
     int specpres;
@@ -311,10 +342,17 @@ struct Speciestraits {
 	double  yearlycalcofanstiegweathermort;
 	double  yearlycalcofanstiegweathermortmin;
 	double  minactivelayer;	
+	double  minsoilwater;	
 	double  maxsoilwater;	
 	double  rootingdepth;
 	double  relbarkthickness;
 	double  resprouting;
+	double  biomassleafbase;
+	double  biomassleaffaca;
+	double  biomassleaffacb;
+	double  biomasswoodbase;
+	double  biomasswoodfaca;
+	double  biomasswoodfacb;
 };
 
 struct Weather {
@@ -371,7 +409,7 @@ struct Weather {
     int vegetationperiodlengthisomin;
     double activeairtemp;
     double activeairtempmin;
-    double degreday_sqrt;
+    double degreday;
     double degredaymin;
     double precipitationsum;
     double precipitationsummin;

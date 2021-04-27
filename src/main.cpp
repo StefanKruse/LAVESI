@@ -646,6 +646,7 @@ void fillElevations() {
                     if (countwatercells == 0) {
                         plot_list[kartenpos].elevation += 10 * eleinter;
                         // plot_list[kartenpos]->slope = slopeinter;
+                        plot_list[kartenpos].twi += twiinter*100;
 
                         // calculate environment-growth-impact (value between 0 and 1)
                         // f(TWI)		= slope * TWI + intercept
@@ -653,6 +654,9 @@ void fillElevations() {
                         double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
                                                    + (1 - parameter[0].slopetwiratio)
                                                          * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
+
+						// relaxing the impact 
+						envirgrowthimpact = pow( envirgrowthimpact, 0.5*0.5); // double square root
 
                         // plausibility check
                         if (envirgrowthimpact > 1.0)
@@ -666,10 +670,12 @@ void fillElevations() {
                     } else {
                         plot_list[kartenpos].elevation = 32767;
                         plot_list[kartenpos].envirgrowthimpact = 0;
+                        plot_list[kartenpos].twi = 25*100;
                     }
                 } else {
                     plot_list[kartenpos].elevation = 32767;
                     plot_list[kartenpos].envirgrowthimpact = 0;
+                    plot_list[kartenpos].twi = 25*100;
                 }
             }
         }
@@ -699,7 +705,7 @@ void initialiseMaps() {
         auto time_start = chrono::high_resolution_clock::now();
         plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
                           * (unsigned long long int)parameter[0].sizemagnif),
-                         {initialelevation, 0, 0, 1000, 0});
+                         {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100});
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
         elapsed = time_end - time_start;

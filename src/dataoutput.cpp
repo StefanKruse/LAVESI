@@ -91,10 +91,8 @@ void Dataoutput(int t,
             } else if (parameter[0].outputmode == 99) {  // "test"
                 outputcurrencies = true;
 
-                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
-                    ausgabedensity = true;
-
                 if (parameter[0].ivort % 20 == 0) {
+                    ausgabedensity = true;
                     outputgriddedbiomass = true;
                     outputindividuals = true;
                 }
@@ -767,7 +765,7 @@ void Dataoutput(int t,
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp7monthmean);
             fprintf(filepointer, "%d;", weather_list[yearposition].vegetationperiodlength);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday_sqrt * weather_list[yearposition].degreday_sqrt);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday);
             fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[1]);//TODO: add here for all species output
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[2]);
@@ -1215,8 +1213,8 @@ void Dataoutput(int t,
 					unsigned int grid_i = floor((double)tree.ycoo / 1000 / 30) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 30);
 
 					// calculate biomass values for each tree
-					AGBneedleliving[grid_i] += 703.6207 / (1 + exp(-1.0 * ((double)tree.height / 100 - 579.4998) / 208.687));
-					AGBwoodliving[grid_i] += 78713.62675 / (1 + exp(-1.0 * ((double)tree.height / 100 - 793.64156) / 73.91302));
+					AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 100 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
+					AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 100 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
 
 					// aggregate stand level variables
 					if (((double)tree.height / 100) > 130) {
@@ -1427,8 +1425,8 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Y;");
                 fprintf(filepointer, "Density_value;");
                 fprintf(filepointer, "N_trees;");
-                // fprintf(filepointer, "Litter_layer_height;");
-                // fprintf(filepointer, "Litter_layer_height_mean;");
+                fprintf(filepointer, "Litter_layer_height;");
+                fprintf(filepointer, "Litter_layer_height_mean;");
                 fprintf(filepointer, "Max_thawing_depth;");
                 fprintf(filepointer, "Elevation;");
                 fprintf(filepointer, "Envirgrowthimpact;");
@@ -1466,9 +1464,9 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%4.4f;", ycooi);
                     fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);
                     fprintf(filepointer, "%d;", pEnvirgrid.Treenumber);
-                    // fprintf(filepointer, "%u;", pEnvirgrid.litterheight);
-                    // fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean);
-                    fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth);
+                    fprintf(filepointer, "%u;", pEnvirgrid.litterheight0 / 10); // in cm
+                    fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean / 100); // in cm
+                    fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth / 100);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.elevation / 10);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);

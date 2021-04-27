@@ -121,9 +121,11 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                 treemortality = 0.0;
             }
 
+// if((double)tree.height / 100 > 10)
+		// cout << (double)tree.height / 100 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort <<  " - " << tree.soilhumidity << endl;
+
             // determine if a tree dies
-            
-            if ( ((double) uniform.draw() < treemortality) || (tree.envirimpact <= 0) ) {
+			if ( ((double) uniform.draw() < treemortality) || (tree.envirimpact <= 0) ) {
                 tree.growing = false;
                 tree_list.remove(tree_i);
                 // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood

@@ -29,14 +29,14 @@ outputall=1;						// (int 0,1) sampling area determination
 
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
-vegetation=0;						// (int 0,1) Representation of an organic layer switch; currently not functional
+litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=30;					// (int) Resolution in m of DEM
-elevationoffset=-1800.0;			// (double) in m adjust baselevel of climate input
+elevationoffset=-250.0;			// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
-omp_num_threads=3;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=1;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -137,7 +137,7 @@ stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when 
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
 resetyear=-99999;					// (int) year to save all container for a later resume from this time point
-specpres=0;							// (int) which larch species should be present in the model
+specpres=1;							// (int) which larch species should be present in the model
 									// ... 0==all that are in the species list provided
 									// ... 1==only Larix gmelinii
 									// ... 2==only Larix sibirica
@@ -152,9 +152,9 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=50; 				// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=10000;				// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+seedintronumber=1000000;			// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=500;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=5000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
 									// ... 1==only southernmost plot
@@ -190,7 +190,7 @@ pollengregoryc=0.6; 				// ... (double) pollen dispersal parameter
 pollengregorym=1.25;				// ... (double) pollen dispersal parameter
 
 // 1.5 -----> Growth function parameters and influences
-basalinfluenceoldyoung=0.0;			// (double) basal diameter influence for year's basal diameter growth
+basalinfluenceoldyoung=1.0;			// (double) basal diameter influence for year's basal diameter growth 0=> maximum negative impact, 1=> as in formula defined, >1 weaker impact
 relgrowthinfluence=1;				// (int 0,1) influence of current growth (reduced by density depending processes) on seed production and mortality estimation
 incfac=10;							// (int) factor for calculating area influenced by individual trees
 calcinfarea=1;						// (int) calculation mode for area size determination

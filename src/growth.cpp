@@ -124,10 +124,11 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 			if (tree.growing == true) {
 				double maxbasalwachstum = 0.0;
 				maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
+// cout << tree.dbasal << " -> " << maxbasalwachstum << endl;
 				tree.dbasalmax = 1000 * maxbasalwachstum;
 
 				double basalwachstum = maxbasalwachstum * (1.0 - tree.densitywert);
-				basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
+				// basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
 
 				if (parameter[0].demlandscape) {
 					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
@@ -141,17 +142,33 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 					tree.dbasal += basalwachstum;
 				}
 
-				if (parameter[0].relgrowthinfluence == 0) {
-					tree.dbasalrel = 1000;
-				} else if (parameter[0].relgrowthinfluence == 1) {
+				tree.dbasalrel = 1000;
+				if(parameter[0].relgrowthinfluence == 1) {
 					if (maxbasalwachstum <= 0.0)
 						tree.dbasalrel = 0;
 					else
-						tree.dbasalrel = 1000 * basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal);
+						// tree.dbasalrel = 1000 * (basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal)) * tree.soilhumidity;
+						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum) * tree.soilhumidity;
 				}
+// cout << "-> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << endl;
 
 				double maxbreastwachstum = 0;
 				double breastwachstum = 0;
+
+				// tree height update
+				if ((double)tree.height / 100 < 130) {
+					if (parameter[0].allometryfunctiontype == 1) {
+						tree.height = 100 * speciestrait[tree.species].dbasalheightalloslope * pow(tree.dbasal, speciestrait[tree.species].dbasalheightalloexp);
+					} else {
+						tree.height = 100 * speciestrait[tree.species].dbasalheightslopenonlin * tree.dbasal;
+					}
+				} else if ((double)tree.height / 100 >= 130) {
+					if (parameter[0].allometryfunctiontype == 1) {
+						tree.height = 100 * (speciestrait[tree.species].dbreastheightalloslope * pow(tree.dbreast, speciestrait[tree.species].dbreastheightalloexp) + 130.0);
+					} else {
+						tree.height = 100 * (pow((speciestrait[tree.species].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
+					}
+				}
 
 				if ((double)tree.height / 100 >= 130) {
 					maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
@@ -170,30 +187,17 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						tree.dbreast += breastwachstum;
 					}
 
-					if (parameter[0].relgrowthinfluence == 0) {
-						tree.dbreastrel = 1000;
-					} else if (parameter[0].relgrowthinfluence == 1) {
+					tree.dbreastrel = 1000;
+					if (parameter[0].relgrowthinfluence == 1) {
 						if (maxbreastwachstum <= 0.0)
 							tree.dbreastrel = 0;
 						else
-							tree.dbreastrel = 1000 * breastwachstum / maxbreastwachstum;
+							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum) * tree.soilhumidity;
 					}
+// cout << "-> breasrel= " << tree.dbreastrel << " <- " << breastwachstum << " / " << maxbreastwachstum << " * " << tree.soilhumidity << endl;
 				}
 
-				// tree height update
-				if ((double)tree.height / 100 < 130) {
-					if (parameter[0].allometryfunctiontype == 1) {
-						tree.height = 100 * speciestrait[tree.species].dbasalheightalloslope * pow(tree.dbasal, speciestrait[tree.species].dbasalheightalloexp);
-					} else {
-						tree.height = 100 * speciestrait[tree.species].dbasalheightslopenonlin * tree.dbasal;
-					}
-				} else if ((double)tree.height / 100 >= 130) {
-					if (parameter[0].allometryfunctiontype == 1) {
-						tree.height = 100 * (speciestrait[tree.species].dbreastheightalloslope * pow(tree.dbreast, speciestrait[tree.species].dbreastheightalloexp) + 130.0);
-					} else {
-						tree.height = 100 * (pow((speciestrait[tree.species].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
-					}
-				}
+
 			}
 		}
     }

@@ -1464,7 +1464,7 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%4.4f;", ycooi);
                     fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);
                     fprintf(filepointer, "%d;", pEnvirgrid.Treenumber);
-                    fprintf(filepointer, "%u;", pEnvirgrid.litterheight0 / 10); // in cm
+                    fprintf(filepointer, "%u;", pEnvirgrid.litterheight0 / 100); // in cm
                     fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean / 100); // in cm
                     fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth / 100);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.elevation / 10);

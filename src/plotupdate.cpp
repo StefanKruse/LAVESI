@@ -393,7 +393,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 			if (parameter[0].litterlayer==true) {
 				// stochastic disturbance effect
 				auto rn = uniform.draw();
-				if ( (rn < 0.5) & (rn >= 0.1) )
+				if ( (rn < 0.2) & (rn >= 0.1) )
 					pEnvirgrid.litterheight0 = pEnvirgrid.litterheight0 * 0.9;
 				else if ( (rn < 0.1) & (rn >= 0.01) )
 					pEnvirgrid.litterheight0 = pEnvirgrid.litterheight0 * 0.75;
@@ -440,7 +440,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 
 			// double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
 			// double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-			double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000 (<- value before)
+			double daempfung = (1.0 / 3000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000 (<- value before)
 
 			if (daempfung >= 0.9) {
 				daempfung = 0.9;

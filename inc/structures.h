@@ -319,6 +319,9 @@ struct Speciestraits {
 	double	dbreastheightalloexp;
 	double	dbasalheightslopenonlin;
 	double	dbreastheightslopenonlin;
+	double	heightloga;
+	double	heightlogb;
+	double	heightlogc;
 	double	mortbg;
 	double	maximumage;
 	double	mortage;

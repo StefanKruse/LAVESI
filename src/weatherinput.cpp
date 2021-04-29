@@ -782,8 +782,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
          } else if (parameter[0].weatherchoice == 1250002) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
-            char tempbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_temp.csv";
-            char precbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_prec.csv";
+            char tempbuf[] = "input/cryogrid_tracecruera_1_2500_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_tracecruera_1_2500_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

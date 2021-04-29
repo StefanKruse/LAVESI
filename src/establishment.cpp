@@ -181,7 +181,11 @@ void Treeestablishment(Parameter* parameter,
 						tree.dbreast = 0.0;
 						tree.dbreastrel = 1000;
 
-						if (parameter[0].allometryfunctiontype == 1) {
+						// tree height update
+						if (parameter[0].allometryfunctiontype == 3) {// logistic growth
+							tree.height = 100 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*10))/speciestrait[seed.species].heightlogc)));
+		// cout << "H = " << tree.height << endl;
+						} else if (parameter[0].allometryfunctiontype == 1) {
 							tree.height = 100 * speciestrait[seed.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[seed.species].dbasalheightalloexp);
 						} else {
 							tree.height = 100 * speciestrait[seed.species].dbasalheightslopenonlin * maxbw_help;

@@ -875,6 +875,9 @@ void Getspeciestraits(void)
 			speciestrait[counter].dbreastheightalloexp= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].dbasalheightslopenonlin= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].dbreastheightslopenonlin= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightloga= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightlogb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightlogc= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].mortbg= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].maximumage= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].mortage= strtod(strtok(NULL, " "),NULL) ;

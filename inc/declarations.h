@@ -21,8 +21,14 @@
 // constexpr unsigned int treecols = 450;
 // constexpr unsigned int treerows = 990;	//Khamra 1000x1000m "...x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; x=990, y=990
 // constexpr unsigned int treecols = 990;
-constexpr unsigned int treerows = 1980;		//Khamra 2000x2000m "...x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; x=1980, y=1980
-constexpr unsigned int treecols = 1980;
+//constexpr unsigned int treerows = 1980;	//Khamra 2000x2000m "...x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; x=1980, y=1980
+//constexpr unsigned int treecols = 1980;
+// constexpr unsigned int treerows = 14250; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
+// constexpr unsigned int treecols = 11430;
+// constexpr unsigned int treerows = 19710; //30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m
+// constexpr unsigned int treecols = 9990;
+constexpr unsigned int treerows = 2520;  // 30m_SpasskayaPad_x529631-532151m_y6897789-6900309m
+constexpr unsigned int treecols = 2520;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;
@@ -30,3 +36,7 @@ constexpr const char* divisionsign = "=;";
 
 class Parameter;
 extern Parameter parameter[1];
+class Speciestraits;
+extern Speciestraits speciestrait[99];
+
+

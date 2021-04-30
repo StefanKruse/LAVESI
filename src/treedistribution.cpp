@@ -43,11 +43,11 @@ void Seedin() {
 
                 // set limits
                 double maxx = (double)(treecols - 1);
-                if (parameter[0].seedintro_maxx > 0)
+                if ( (parameter[0].seedintro_maxx > 0) & (parameter[0].seedintro_maxx < (treecols - 1)) )
                     maxx = (double)parameter[0].seedintro_maxx;
 
                 double maxy = (double)(treerows - 1);
-                if (parameter[0].seedintro_maxy > 0)
+                if ( (parameter[0].seedintro_maxy > 0) & (parameter[0].seedintro_maxy < (treerows - 1)) )
                     maxy = (double)parameter[0].seedintro_maxy;
 
                 // seedwinddispersalmode==1 => randomly from the south border.
@@ -83,20 +83,13 @@ void Seedin() {
                     exit(1);
                 }
 
-                double rn_seed = 0.0;
                 int rn_species = 0;
+				// multiple species implementation
                 if (parameter[0].specpres == 0) {
-                    rn_seed = uniform.draw();
-                    if (rn_seed <= 0.5) {
-                        rn_species = 1;
-                    } else {
-                        rn_species = 2;
-                    }
-                } else if (parameter[0].specpres == 1) {
-                    rn_species = 1;
-                } else if (parameter[0].specpres == 2) {
-                    rn_species = 2;
-                }
+					rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+				} else {
+					rn_species = parameter[0].specpres;
+				}
 
                 if (seedeintragen) {
                     Seed seed;
@@ -166,6 +159,7 @@ void TreesIni(int maximal_word_length) {
             double ybuffer, ycoobuf, xbuffer, xcoobuf;
             int conebuf, agebuf;
             double heightbuf, dbasalbuf, dbreastbuf;
+			RandomNumber<double> uniform(0, 1);
 
             // ignoring the header the contents are appended to the tree array line by line
             while (fgets(puffer, maximal_word_length, f) != NULL) {
@@ -209,12 +203,11 @@ void TreesIni(int maximal_word_length) {
                     tree.densitywert = 0;
                     tree.thawing_depthinfluence = 100;
                     tree.growing = true;
-                    if (parameter[0].specpres == 0 || parameter[0].specpres == 1) {
-                        tree.species = 1;
-                    }
-                    if (parameter[0].specpres == 2) {
-                        tree.species = 2;
-                    }
+					if (parameter[0].specpres == 0) {
+						tree.species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+					} else {
+						tree.species = parameter[0].specpres;
+					}
 
                     tree_list.add_directly(std::move(tree));
                 }
@@ -287,20 +280,13 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                     yseed = (yposhint - 10) + 20 * uniform.draw();  // y coo start
 
                     // define species
-                    double seedzufall = 0.0;
-                    int specieszufall = 0;
-                    if (parameter[0].specpres == 0) {
-                        seedzufall = uniform.draw();
-                        if (seedzufall <= 0.5) {
-                            specieszufall = 1;
-                        } else {
-                            specieszufall = 2;
-                        }
-                    } else if (parameter[0].specpres == 1) {
-                        specieszufall = 1;
-                    } else if (parameter[0].specpres == 2) {
-                        specieszufall = 2;
-                    }
+					int rn_species = 0;
+					// multiple species implementation
+					if (parameter[0].specpres == 0) {
+						rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+					} else {
+						rn_species = parameter[0].specpres;
+					}
 
                     // estimation of new positions
                     double ratiorn = uniform.draw();
@@ -311,7 +297,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                     double iquer = 0;
 
                     double randomnumberwind = uniform.draw();
-                    Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, specieszufall, randomnumberwind);
+                    Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, rn_species, randomnumberwind);
 
                     xseed = xseed + jquer;
                     yseed = yseed + iquer;
@@ -388,7 +374,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         // seed.weight = 1;
                         seed.age = 0;
                         seed.longdispersed = false;
-                        seed.species = specieszufall;
+                        seed.species = rn_species;
                         seed.releaseheight = 100 * hinterheightsi;
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;

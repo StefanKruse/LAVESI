@@ -5,6 +5,7 @@
 using namespace std;
 
 Parameter parameter[1];
+Speciestraits speciestrait[99];
 
 int yearposition;
 
@@ -477,8 +478,12 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
 		// char deminputbuf[] = "input/dem_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+        char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+		
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -513,9 +518,13 @@ void fillElevations() {
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
-        strcpy(slopefilename, slopeinputbuf);
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+        char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+       strcpy(slopefilename, slopeinputbuf);
+	   
         f = fopen(slopefilename, "r");
         if (f == NULL) {
             printf("Slope file not available!\n");
@@ -544,9 +553,13 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
 		// char twiinputbuf[] = "input/twi_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
-        strcpy(twifilename, twiinputbuf);
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+        char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+       strcpy(twifilename, twiinputbuf);
+
         f = fopen(twifilename, "r");
         if (f == NULL) {
             printf("TWI file not available!\n");
@@ -649,6 +662,7 @@ void fillElevations() {
                     if (countwatercells == 0) {
                         plot_list[kartenpos].elevation += 10 * eleinter;
                         // plot_list[kartenpos]->slope = slopeinter;
+                        plot_list[kartenpos].twi += twiinter*100;
 
                         // calculate environment-growth-impact (value between 0 and 1)
                         // f(TWI)		= slope * TWI + intercept
@@ -660,6 +674,10 @@ void fillElevations() {
 						envirgrowthimpact = envirgrowthimpact + 0.4;
 						
 						// envirgrowthimpact = sqrt(envirgrowthimpact); //added to tune low envirgrowthimpact values at Khamra
+
+						// relaxing the impact 
+						// envirgrowthimpact = pow( envirgrowthimpact, 0.5*0.5); // double square root
+						// envirgrowthimpact = pow( envirgrowthimpact, 0.5); // single square root
 
                         // plausibility check
                         if (envirgrowthimpact > 1.0)
@@ -676,10 +694,12 @@ void fillElevations() {
                     } else {
                         plot_list[kartenpos].elevation = 32767;
                         plot_list[kartenpos].envirgrowthimpact = 0;
+                        plot_list[kartenpos].twi = 25*100;
                     }
                 } else {
                     plot_list[kartenpos].elevation = 32767;
                     plot_list[kartenpos].envirgrowthimpact = 0;
+                    plot_list[kartenpos].twi = 25*100;
                 }
             }
         }
@@ -709,7 +729,10 @@ void initialiseMaps() {
         auto time_start = chrono::high_resolution_clock::now();
         plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
                           * (unsigned long long int)parameter[0].sizemagnif),
-                         {initialelevation, 0, 0, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1, 0, 0}); // ###Fire### Last digit resembles initial fire counter, put to "false" for bool variant
+						  
+                         // {initialelevation, 0, 0, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1, 0, 0}); // ###Fire version from before merging### Last digit resembles initial fire counter, put to "false" for bool variant
+                         {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100}); //new version after merging (fire not considered)
+						 
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
         elapsed = time_end - time_start;
@@ -795,12 +818,13 @@ int main() {
     printf("\n---->\tLAVESI\n");
     printf(
         "\n You have started  LAVESI, "
-        "An individual-based and spatially explicit simulation model for vegetation dynamics of summergreen larches (Larix Mill.) in a 3-dimensional landscape "
+        "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 1.2 (LAVESI-WIND-3DENVIR)"
-        "\n Date:\t\t 22.12.2020"
+        "\n\n Version:\t 2.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES)"
+        "\n Date:\t\t 14.04.2021"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
+        "\n\t Josias Gloy"
         "\n\t of prior versions:"
         "\n\t Alexander Gerdes, Nadja Kath, Mareike Wieczorek"
         "\n");
@@ -808,6 +832,18 @@ int main() {
 
     // read in all simulation parameters from parameters.txt
     Parameterinput();
+	
+	Getspeciestraits();
+	// print the present species in this simulation and find maximum possible species
+	cout << "Species present in simulation:" << endl;
+	for (int species_counter = 1; species_counter < 99; species_counter++) {
+		if(speciestrait[species_counter].number == 0) {
+			parameter[0].species_max = species_counter;
+			break;
+		}
+
+		cout << speciestrait[species_counter].number << " -> " << speciestrait[species_counter].species << " | min ALD: " << speciestrait[species_counter].minactivelayer << endl;
+	}
 
     // pragma omp initializing
     omp_set_num_threads(parameter[0].omp_num_threads);  // set the number of helpers

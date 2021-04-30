@@ -14,8 +14,8 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
             auto& seed = seed_list[i];
             if (!seed.dead) {
                 seed.age++;
-                // seeds older than gmelseedmaxage years (L.gmelinii) and 10 years (L.sibirica) die
-                if (((seed.species == 1) && (seed.age > parameter[0].gmelseedmaxage)) || ((seed.species == 2) && (seed.age > 10))) {
+                // seeds older than seedmaxage years die
+                if (seed.age > speciestrait[seed.species].seedmaxage) {
                     seed.dead = true;
                     seed_list.remove(i);
                 }
@@ -43,13 +43,13 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 				
-				if(tree.growing == true) {
+				if (tree.growing == true) {
 					tree.age++;
 
 					if (tree.cone == false) {
 						if (tree.coneheight == 65535) {
 							// trees reaching the maturation age are assigned a minimum height value for them to bear cones
-							if (tree.age > parameter[0].coneage) {
+							if (tree.age > speciestrait[tree.species].coneage) {
 								// calculate random position in the array of maturation heights defined earlier
 								// ... in this there are values between 0 and 182 (corresp. to (0,1) )
 								int fraction = (mat_age_length - 1) * uniform.draw();
@@ -65,7 +65,7 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 						// tree already has a height of maturation assigned to it
 						// ... if a tree is taller than this maturation height, he starts to produce seeds
 						else if (tree.coneheight != 65535) {
-							if (tree.height >= tree.coneheight) {
+							if (tree.height / 100 >= tree.coneheight) {
 								tree.cone = true;
 							}
 						}

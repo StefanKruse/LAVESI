@@ -187,14 +187,14 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].demresolution);
     }
 
-    strcpy(uebergabestring, "vegetation");
+    strcpy(uebergabestring, "litterlayer");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
-        parameter[0].vegetation = true;
+        parameter[0].litterlayer = true;
     } else {
-        parameter[0].vegetation = false;
+        parameter[0].litterlayer = false;
     };
     if (parameter[0].parameterinputvis == true) {
-        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].vegetation) ? "true" : "false");
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].litterlayer) ? "true" : "false");
     }
 
     strcpy(uebergabestring, "omp_num_threads");
@@ -833,3 +833,87 @@ void Parameterinput(void) {
     parameter[0].tempdiffort = 0.0;
     parameter[0].precdiffort = 0.0;
 }
+
+void Getspeciestraits(void)
+{	
+	FILE *f;
+	f = fopen("specieslist.csv","r"); 
+	if (f == NULL)
+	{
+		printf("speciestrait.csv file not available!\n");
+		exit(1);
+	}
+	
+	char puffer[1255];
+	int counter=0;
+	
+
+	// read in line by line
+	while( fgets(puffer,1255,f) !=NULL)
+	{
+		if (counter>=1)
+		{
+			speciestrait[counter].number= strtod(strtok(puffer, " "),NULL);
+			speciestrait[counter].species= strtok(NULL, " ");
+			speciestrait[counter].coneage= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seedflightrate= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seedtravelbreeze= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seeddescent= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].distanceratio= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seedprodfactor= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].germinationrate= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].germinationweatherinfluence= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].gdbasalfacq= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].gdbasalfac= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].gdbasalconst= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].gdbreastfacq= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].gdbreastfac= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].gdbreastconst= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].dbasalheightalloslope= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].dbasalheightalloexp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].dbreastheightalloslope= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].dbreastheightalloexp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].dbasalheightslopenonlin= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].dbreastheightslopenonlin= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightloga= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightlogb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightlogc= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mortbg= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].maximumage= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mortage= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mortyouth= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mortyouthinfluenceexp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mgrowth= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mdensity= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].densityvaluemaximumatheight= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mweather= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].heightweathermorteinflussexp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mdrought= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seedconemort= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seedfloormort= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].seedmaxage= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].janthresholdtemp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].janthresholdtempcalcvalue= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].weathervariablea= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].weathervariableb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].weathervariablec= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].weathervariabled= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].minactivelayer= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].minsoilwater= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].maxsoilwater= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].rootingdepth= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].relbarkthickness= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].resprouting= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomassleafbase= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomassleaffaca= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomassleaffacb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodbase= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodfaca= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodfacb= strtod(strtok(NULL, " "),NULL) ;
+		}
+		counter++;
+	}
+	fclose(f);
+}
+
+

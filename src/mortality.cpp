@@ -28,7 +28,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // height dependent influences
             double wachstumrel = 1.0;
-            if ((double)tree.height / 100 < 130) {
+            if ((double)tree.height / 10 < 130) {
                 wachstumrel = (double)tree.dbasalrel / 1000;
             } else {
                 wachstumrel = (double)tree.dbreastrel / 1000;
@@ -36,10 +36,10 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // extra competition effect
             double heightnkugeleinfluss = 1;
-            if ((double)tree.height / 100 < (speciestrait[tree.species].densityvaluemaximumatheight * 2)) {
+            if ((double)tree.height / 10 < (speciestrait[tree.species].densityvaluemaximumatheight * 2)) {
                 heightnkugeleinfluss =
                     heightnkugeleinfluss
-                    + (sqrt(pow(speciestrait[tree.species].densityvaluemaximumatheight, 2) - pow((double)tree.height / 100 - speciestrait[tree.species].densityvaluemaximumatheight, 2))
+                    + (sqrt(pow(speciestrait[tree.species].densityvaluemaximumatheight, 2) - pow((double)tree.height / 10 - speciestrait[tree.species].densityvaluemaximumatheight, 2))
                        / speciestrait[tree.species].densityvaluemaximumatheight);
             }
 
@@ -87,7 +87,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                                                        + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
             }
 
-            double heightreduce = pow((1.0 / (double)tree.height / 100), speciestrait[tree.species].heightweathermorteinflussexp);  // includes a minimun limit
+            double heightreduce = pow((1.0 / (double)tree.height / 10), speciestrait[tree.species].heightweathermorteinflussexp);  // includes a minimun limit
             if (heightreduce < 0.001)
                 heightreduce = 0.001;
             double weather_mort = speciestrait[tree.species].mweather * weathermortadd * heightreduce;
@@ -98,7 +98,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                            * (weather_list[yearposition_help].droughtmort
                               + ((weather_list[yearposition_help].droughtmortmin - weather_list[yearposition_help].droughtmort) * ((double)tree.ycoo / 1000)
                                  / ((double)treerows)))
-                           * pow((1.0 / (double)tree.height / 100), 0.5);
+                           * pow((1.0 / (double)tree.height / 10), 0.5);
             } else if (parameter[0].demlandscape) {
                 dry_mort = speciestrait[tree.species].mdrought
                            * ((weather_list[yearposition_help].droughtmort * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
@@ -107,9 +107,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                                  * (1
                                     - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                           / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
-                           * pow((1.0 / (double)tree.height / 100), 0.5);
+                           * pow((1.0 / (double)tree.height / 10), 0.5);
             } else {
-                dry_mort = speciestrait[tree.species].mdrought * weather_list[yearposition_help].droughtmort * pow((1.0 / (double)tree.height / 100), 0.5);
+                dry_mort = speciestrait[tree.species].mdrought * weather_list[yearposition_help].droughtmort * pow((1.0 / (double)tree.height / 10), 0.5);
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
@@ -121,8 +121,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                 treemortality = 0.0;
             }
 
-// if((double)tree.height / 100 > 10)
-		// cout << (double)tree.height / 100 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort <<  " - " << tree.soilhumidity << endl;
+// if((double)tree.height / 10 > 10)
+		// cout << (double)tree.height / 10 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort <<  " - " << tree.soilhumidity << endl;
 
             // determine if a tree dies
 			if ( ((double) uniform.draw() < treemortality) || (tree.envirimpact <= 0) ) {
@@ -174,7 +174,12 @@ void Mortality(Parameter* parameter,
                     if (uniform.draw() < (seed.incone ? speciestrait[seed.species].seedconemort : speciestrait[seed.species].seedfloormort)) {
                         seed.dead = true;
                         seed_list.remove(i);
-                    }
+                    } else {
+// if (!seed.incone)
+	// cout << " seed survived on ground !!! " << endl;
+					}
+					// if(!seed.incone)
+						// cout << "seed on ground!!! " << endl;
                 }
             }
 

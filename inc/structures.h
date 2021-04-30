@@ -27,8 +27,8 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int dbasalmax;           // 2	---> one year max probably few centimeters -> unsigned short int /1000 max 65cm
     unsigned short int dbasalrel;           // 2	---> one year max probably few centimeters -> unsigned short int /1000
     unsigned short int dbreastrel;          // 2	---> one year max probably few centimeters -> unsigned short int /1000
-    unsigned short int height;              // 2	---> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision
-    unsigned short int coneheight;          // 2	---> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision
+    unsigned short int height;              // 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
+    unsigned short int coneheight;          // 2	in cm; max 655 m -> 1 cm precision
     unsigned short int age;                 // 2 	---> was int
     unsigned short int seednewly_produced;  // 2 	---> was int
     signed short int species;               // 2 	---> was int
@@ -57,7 +57,7 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     // int line;						// 4	-> not in use right now
     // int generation;					// 4	-> not in use right now
     unsigned short int
-        releaseheight;         // 2	---> was double -> unsigned short in then /100 in cm 0 to 10000 so 65535 as max would be sufficient for trees up to 65m
+        releaseheight;         // 2		in cm; max 65 m -> unsigned short int /10 max 65 m and still has 0.1 cm precision
     unsigned short int age;    // 2	---> was int
     signed short int species;  // 2	---> was int
     bool incone;               // 1

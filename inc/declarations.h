@@ -19,6 +19,8 @@
 // constexpr unsigned int treecols = 9990;
 constexpr unsigned int treerows = 2520;  // 30m_SpasskayaPad_x529631-532151m_y6897789-6900309m
 constexpr unsigned int treecols = 2520;
+// constexpr unsigned int treerows = 270;  // 30m_x531881-532151m_y6900039-6900309m.csv"
+// constexpr unsigned int treecols = 270;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

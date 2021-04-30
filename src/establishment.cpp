@@ -167,7 +167,9 @@ void Treeestablishment(Parameter* parameter,
                                      * germinationlitterheightinfluence;                                                              // litter layer dependency
                }
 
-				if (uniform.draw() < germinationprobability) {
+				double rn = uniform.draw();
+				if (rn < germinationprobability) {
+// cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
 					if (maxbw_help > 0.0) { // otherwise can survive
 						Tree tree;
 
@@ -189,12 +191,12 @@ void Treeestablishment(Parameter* parameter,
 
 						// tree height update
 						if (parameter[0].allometryfunctiontype == 3) {// logistic growth
-							tree.height = 100 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*10))/speciestrait[seed.species].heightlogc)));
+							tree.height = 10 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*10))/speciestrait[seed.species].heightlogc)));
 		// cout << "H = " << tree.height << endl;
 						} else if (parameter[0].allometryfunctiontype == 1) {
-							tree.height = 100 * speciestrait[seed.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[seed.species].dbasalheightalloexp);
+							tree.height = 10 * speciestrait[seed.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[seed.species].dbasalheightalloexp);
 						} else {
-							tree.height = 100 * speciestrait[seed.species].dbasalheightslopenonlin * maxbw_help;
+							tree.height = 10 * speciestrait[seed.species].dbasalheightslopenonlin * maxbw_help;
 						}
 						tree.age = 0;
 						tree.cone = false;
@@ -216,10 +218,10 @@ void Treeestablishment(Parameter* parameter,
 						seed.dead = true;
 						seed_list.remove(i_seed);
 					}
-                } else {
-                    seed.dead = true;
-                    seed_list.remove(i_seed);
-                }
+                } //else {
+                    // seed.dead = true;
+                    // seed_list.remove(i_seed);
+                // }
             }
         }  // seed_list loop
         seed_list.consolidate();

@@ -122,12 +122,6 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 						} else {
 							tree.densitywert = 0.0;  // no competition effect
 						}
-
-						// dem sensing
-						if (parameter[0].demlandscape) {
-							tree.elevation = cur_plot.elevation;
-							tree.envirimpact = cur_plot.envirgrowthimpact;
-						}
 					} else if (parameter[0].densitymode == 3) {
 						// determine the grid position randomly
 						int izuf = (treerows - 1) * parameter[0].sizemagnif * uniform.draw();
@@ -159,6 +153,11 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 						tree.thawing_depthinfluence = 100;
 					}
 					
+					// dem sensing
+					if (parameter[0].demlandscape && (cur_plot.elevation < 32767)) {  // dem sensing
+						tree.elevation = cur_plot.elevation;
+						tree.envirimpact = cur_plot.envirgrowthimpact;
+					}
 					// assess humidity which influences growth
 					tree.soilhumidity = cur_plot.soilhumidity;
 					tree.twi = cur_plot.twi;

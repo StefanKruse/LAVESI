@@ -127,9 +127,15 @@ void Treeestablishment(Parameter* parameter,
                         density_help = 0.0;  // no competition
                     }
                 }
+				if (density_help < 0.0)
+					density_help = 0.0;
+				if (density_help > 1.0)
+					density_help = 1.0;
                 // update growth
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
-
+// if(basalgrowth_help>10)
+	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
+	
                 // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
                 double germinationprobability = 0.0;
                 if (parameter[0].lineartransect == true) {

@@ -132,6 +132,8 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 
 				if (parameter[0].demlandscape) {
 					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
+// if(basalwachstum>10)
+	// cout << " basalwachstum = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
 				}
 
 				if (basalwachstum < 0.0) {
@@ -151,8 +153,8 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						// tree.dbasalrel = 1000 * (basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal)) * tree.soilhumidity;
 						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum) * tree.soilhumidity;
 				}
-if(tree.dbasal/100 >500)
-	cout << " Basal dia = " << tree.dbasal << " -> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << endl;
+// if(tree.dbasal > 100)
+	// cout << " Basal dia = " << tree.dbasal << " -> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << " ... " << tree.elevation/10 << " ... " << tree.soilhumidity << endl;
 
 
 				// tree height update

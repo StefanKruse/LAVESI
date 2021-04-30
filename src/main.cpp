@@ -657,7 +657,7 @@ void fillElevations() {
 
 						// relaxing the impact 
 						// envirgrowthimpact = pow( envirgrowthimpact, 0.5*0.5); // double square root
-						envirgrowthimpact = pow( envirgrowthimpact, 0.5); // single square root
+						// envirgrowthimpact = pow( envirgrowthimpact, 0.5); // single square root
 
                         // plausibility check
                         if (envirgrowthimpact > 1.0)

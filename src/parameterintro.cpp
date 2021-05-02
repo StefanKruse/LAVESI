@@ -890,6 +890,7 @@ void Getspeciestraits(void)
 			speciestrait[counter].densityvaluemaximumatheight= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].mweather= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].heightweathermorteinflussexp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mwindthrow= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].mdrought= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].seedconemort= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].seedfloormort= strtod(strtok(NULL, " "),NULL) ;

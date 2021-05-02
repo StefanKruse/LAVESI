@@ -332,6 +332,7 @@ struct Speciestraits {
 	double	densityvaluemaximumatheight;
 	double	mweather;
 	double	heightweathermorteinflussexp;
+	double	mwindthrow;
 	double	mdrought;
 	double	seedconemort;
 	double	seedfloormort;

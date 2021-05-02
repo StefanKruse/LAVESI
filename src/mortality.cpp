@@ -22,9 +22,13 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
         if (tree.growing == true) {
             double agesmort = 0.0;
-            if (tree.age > speciestrait[tree.species].maximumage) {  // if maximal age is exceeded an additional factor occurs
-                agesmort = 1.0;
-            }
+			agesmort = tree.age / speciestrait[tree.species].maximumage;
+            // if (tree.age > speciestrait[tree.species].maximumage) {  // if maximal age is exceeded an additional factor occurs
+                // agesmort = 1.0;
+            // }
+			
+            double windthrowmort = 0.0;
+			windthrowmort = speciestrait[tree.species].mwindthrow * ((double)tree.height / 10) / (65535 / 10);// scaled to maximum of height in model of 65 m
 
             // height dependent influences
             double wachstumrel = 1.0;
@@ -113,7 +117,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
-            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort;
+            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort;
 
             if (treemortality > 1.0) {
                 treemortality = 1.0;

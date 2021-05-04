@@ -143,6 +143,25 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     cout << "Treeestablishment(" << elapsed.count() << ")+";
 #endif
 
+/*	if(parameter[0].ivort % 20 == 0){// test fire impact
+        for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
+            VectorList<Tree>& tree_list = *posw;
+
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+
+				if (tree.growing == true){
+					if(tree.xcoo/1000 > 2500){ // half of the plot for testing
+						tree.crownstart = 500*10; // flames reach 500 cm high
+						tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000; // update relative crown damage for mortality
+// cout << tree.xcoo << " <- " << tree.crownstart/10 << " ... " << tree.height/10 << " ... " << tree.relcrowndamage/1000 << endl;
+					}
+				}
+			}
+		}
+	}
+*/
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif

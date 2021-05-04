@@ -89,7 +89,8 @@ void Dataoutput(int t,
                     outputgriddedbiomass = true;
                 }
             } else if (parameter[0].outputmode == 99) {  // "test"
-                if (parameter[0].ivort % 200 == 0) {
+                // if (parameter[0].ivort % 20 == 0) {
+                if ((parameter[0].ivort % 20 == 0) | (parameter[0].ivort % 21 == 0)) {
 					outputcurrencies = true;
                     ausgabedensity = true;
                     outputgriddedbiomass = true;

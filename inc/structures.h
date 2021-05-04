@@ -9,7 +9,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     double dbreast;                 // 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision; could be replaced
     double densitywert;             // 8->2	---> need to check range of values for replacment
     double thawing_depthinfluence;  // 8->2	---> need to check range of values for replacment
-    unsigned int xcoo;  // 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 4294
+    unsigned int xcoo;  // 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 
                         // km long/wide simulations // TODO really only positive? -> see compiler warnings
     unsigned int ycoo;  // 4	---> was double // TODO really only positive? -> see compiler warnings
     // double dispersaldistance;			// 8	-> not in use right now
@@ -39,6 +39,8 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     bool cone;                              // 1	---> was int; could be further replaced by single use of coneheight
     bool longdispersed;                     // 1
     bool growing;                           // 1
+    unsigned short int crownstart;          // 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
+    unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced

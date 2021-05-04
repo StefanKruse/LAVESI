@@ -30,6 +30,14 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             double windthrowmort = 0.0;
 			windthrowmort = speciestrait[tree.species].mwindthrow * ((double)tree.height / 10) / (65535 / 10);// scaled to maximum of height in model of 65 m
 
+			double firecrowndamagemort = (double)tree.relcrowndamage / 1000;
+			if(firecrowndamagemort < 0.0)
+				firecrowndamagemort = 0.0;
+			else if(firecrowndamagemort > 1.0)
+				firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
+			tree.relcrowndamage = 0*1000;
+// cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
+			
             // height dependent influences
             double wachstumrel = 1.0;
             if ((double)tree.height / 10 < 130) {
@@ -117,7 +125,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
-            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort;
+            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort;
 
             if (treemortality > 1.0) {
                 treemortality = 1.0;
@@ -137,6 +145,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
         }
     }
     tree_list.consolidate();
+cout << endl;
 }
 
 void Mortality(Parameter* parameter,

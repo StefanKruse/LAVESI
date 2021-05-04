@@ -1547,7 +1547,7 @@ void Environmentupdate(struct Parameter *parameter, int yearposition, vector<vec
 		
 		// TODO: call only in certain years
 		// external update of active layer thickness values
-		if(parameter[0].ivort%25 == 0)
+		if( (parameter[0].callcryogrid==false & parameter[0].CryoGrid_thawing_depth==true) | parameter[0].ivort%25==0)
 			PrepareCryogrid(tree_list, cryo_list);		// collect information of trees
 		
 		if(parameter[0].callcryogrid==true & parameter[0].CryoGrid_thawing_depth==true & (( parameter[0].spinupphase==true & parameter[0].ivort == 500 ) | ( parameter[0].spinupphase==false &  parameter[0].ivort%25 == 0)))

@@ -877,13 +877,15 @@ int main()
 		}
 		
 		int yearswithseedintropuffer=parameter[0].yearswithseedintro;	 
-		parameter[0].repeati=0;
+		// parameter[0].repeati=0;
+		parameter[0].repeati=9;
 		int zaehler=0;	
 
 		// buffer simulation length
 		int simdurationini=parameter[0].simduration;
 		
-		for (int nruns=0; nruns<parameter[0].runs; nruns++)
+		// for (int nruns=0; nruns<parameter[0].runs; nruns++)
+		for (int nruns=9; nruns<12; nruns++)
 		{
 			parameter[0].starter=false;
 

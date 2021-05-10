@@ -161,9 +161,15 @@ void Treeestablishment(Parameter* parameter,
                         density_help = 0.0;  // no competition
                     }
                 }
+				if (density_help < 0.0)
+					density_help = 0.0;
+				if (density_help > 1.0)
+					density_help = 1.0;					
                 // update growth
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
-                double zufallsz = uniform.draw();
+if(basalgrowth_help>10)
+	cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << (double)plot_list[curposi].elevation / 10 << " density_help= " << density_help << endl;
+	                double zufallsz = uniform.draw();
 
                 // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
                 double germgmel = 0.0;
@@ -243,9 +249,9 @@ void Treeestablishment(Parameter* parameter,
                             tree.dbreastrel = 1000;
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                tree.height = 100 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
+                                tree.height = 10 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
                             } else {
-                                tree.height = 100 * parameter[0].dbasalheightslopenonlin * maxbw_help;
+                                tree.height = 10 * parameter[0].dbasalheightslopenonlin * maxbw_help;
                             }
                             tree.age = 0;
                             tree.cone = false;
@@ -288,9 +294,9 @@ void Treeestablishment(Parameter* parameter,
                             tree.dbreastrel = 1000;
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                tree.height = 100 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
+                                tree.height = 10 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
                             } else {
-                                tree.height = 100 * parameter[0].dbasalheightslopenonlin * maxbw_help;
+                                tree.height = 10 * parameter[0].dbasalheightslopenonlin * maxbw_help;
                             }
 
                             tree.age = 0;
@@ -310,10 +316,10 @@ void Treeestablishment(Parameter* parameter,
                             seed_list.remove(i_seed);
                         }
                     }
-                } else {
-                    seed.dead = true;
-                    seed_list.remove(i_seed);
-                }
+                } //else {
+                    // seed.dead = true;
+                    // seed_list.remove(i_seed);
+                // }
             }
         }  // seed_list loop
         seed_list.consolidate();

@@ -389,7 +389,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.age = 0;
                         seed.longdispersed = false;
                         seed.species = specieszufall;
-                        seed.releaseheight = 100 * hinterheightsi;
+                        seed.releaseheight = 10 * hinterheightsi;
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;

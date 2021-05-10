@@ -27,8 +27,8 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int dbasalmax;           // 2	---> one year max probably few centimeters -> unsigned short int /1000 max 65cm
     unsigned short int dbasalrel;           // 2	---> one year max probably few centimeters -> unsigned short int /1000
     unsigned short int dbreastrel;          // 2	---> one year max probably few centimeters -> unsigned short int /1000
-    unsigned short int height;              // 2	---> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision
-    unsigned short int coneheight;          // 2	---> was double; max 100 m -> unsigned short int /100 max 65 m and still has 0.01 cm precision
+    unsigned short int height;              // 2	---> was double; max 100 m -> unsigned short int /10 max 65 m and still has 0.01 cm precision
+    unsigned short int coneheight;          // 2	---> was double
     unsigned short int age;                 // 2 	---> was int
     unsigned short int seednewly_produced;  // 2 	---> was int
     signed short int species;               // 2 	---> was int

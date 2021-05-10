@@ -17,7 +17,7 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=99;  						// (int) choice of data output files=> all yearly output of currencies 
+outputmode=0;  						// (int) choice of data output files=> all yearly output of currencies 
 										// 0=="full"						=> all each year
 										// 1=="normal, gridded" 			=> every 20 years grid output
 										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
@@ -31,12 +31,12 @@ outputall=1;						// (int 0,1) sampling area determination
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
-demresolution=30;					// (int) Resolution in m of DEM
+demresolution=90;					// (int) Resolution in m of DEM
 elevationoffset=-200.0;			// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
-omp_num_threads=80;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=36;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -57,7 +57,7 @@ omp_num_threads=80;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1201801;			// (int) Type of weather forcing series 
+weatherchoice=18232;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -112,35 +112,35 @@ precipitationlapse_year=0.197;	// precipitation lapse rate for whole year in mm 
 									// Spasskaya Pad 100 km radius = 0.197
 
 precweather=1;						//  (int 0,1,2) Influence of precipitation on maximum tree diameter growth 
-									// ... 0==not at all
-									// ... 1==linearly if smaller than threshold
-									// ... 2==parabola function with a global maximum at the optimum
+										// ... 0==not at all
+										// ... 1==linearly if smaller than threshold
+										// ... 2==parabola function with a global maximum at the optimum
 
 evapod=1.5;							// (double) Evapotranspiration based on Dolmann, 2004) 
 weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipitation values on a gradient depending on their latidudinal position
-									// ... 0==without a gradient
-									// ... 1==calculation of a linear gradient
+										// ... 0==without a gradient
+										// ... 1==calculation of a linear gradient
 nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northernmost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
 nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmost plot's position
 										// 111 km == 1 decimal degree
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
-									// ... 0==synchronous forcing per plot
-									// ... 1==linearly changing from south to north
+										// ... 0==synchronous forcing per plot
+										// ... 1==linearly changing from south to north
 locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=1;						// (int) source of wind data
-									// ... 0==random dispersal direction and not depending on wind speed
-									// ... 1==EraInterim
+										// ... 0==random dispersal direction and not depending on wind speed
+										// ... 1==EraInterim
 									
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=2018;			// (int) determined by the input data series
-simduration=2018;					// (int) duration of the simulation period depending on the available weather data series
-stopatyear=2018;					// (int) simulation is stopped after this year
+simduration=118;					// (int) duration of the simulation period depending on the available weather data series
+stopatyear=3000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
-ivortmax=500;							// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
-									// ...   0==without spin up phase
-									// ... >10==with spin up phase //###EGU###
+ivortmax=200;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+										// ...   0==without spin up phase
+										// ... >10==with spin up phase //###EGU###
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
 stabilmovingwindow=10;				// ... (int) time window length for which the state of the population is evaluated for the stabilization phase
 stabilpercentchangethreshold=0.005;	// ... (double 0-1) threshold for evaluation of a population's state given for four variables as sum, the value 0.02 is one aims for less than 0.5% variation
@@ -159,18 +159,18 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
-yearswithseedintro=5; 				// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=5000;			// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+yearswithseedintro=10; 				// ... (int) years of seed introduction at the beginning of each simulation
+seedintronumber=10000;			// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=5000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=1000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
 									// ... 1==only southernmost plot
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=8990;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=8000;
+seedintro_maxy=1980;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=1980;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed

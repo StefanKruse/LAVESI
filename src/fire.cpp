@@ -278,13 +278,13 @@ void Fire(Parameter* parameter,
 								// Simple alternative for testing
 								if (fireprobabilityrating <= 0.1) {
 									cur_plot.fire=1;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
-									cur_plot.litterheight = cur_plot.litterheight / 2;
+									cur_plot.litterheight0 = cur_plot.litterheight0 / 2;
 								} else if ((fireprobabilityrating > 0.1)&(fireprobabilityrating < 0.3)) {
 									cur_plot.fire=2;
-									cur_plot.litterheight = cur_plot.litterheight / 4;
+									cur_plot.litterheight0 = cur_plot.litterheight0 / 4;
 								} else {
 									cur_plot.fire=3;
-									cur_plot.litterheight = 0;
+									cur_plot.litterheight0 = 0;
 								}
 							}
 						}

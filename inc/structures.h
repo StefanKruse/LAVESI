@@ -115,7 +115,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 			  unsigned short litterheightmean= 1000,				// 2
               unsigned short int envirgrowthimpact = 1,
               unsigned short int soilhumidity = 30*100,
-              unsigned short int twi = 6.25*100)
+              unsigned short int twi = 6.25*100,
 			  
 			  unsigned short int envirfireimpact = 0,
 			  //bool fire = false	// ###FIRE### bool variant
@@ -138,7 +138,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
           litterheightmean(litterheightmean),
           envirgrowthimpact(envirgrowthimpact),
           envirfireimpact(envirfireimpact),
-		  fire(fire) {}
+		  fire(fire),
           soilhumidity(soilhumidity),
           twi(twi) {}
 };

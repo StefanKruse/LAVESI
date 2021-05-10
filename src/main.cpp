@@ -478,11 +478,11 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		// char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
 		// char deminputbuf[] = "input/dem_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
 		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
 		
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
@@ -518,11 +518,11 @@ void fillElevations() {
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		// char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
        strcpy(slopefilename, slopeinputbuf);
 	   
         f = fopen(slopefilename, "r");
@@ -553,11 +553,11 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		// char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
 		// char twiinputbuf[] = "input/twi_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
        strcpy(twifilename, twiinputbuf);
 
         f = fopen(twifilename, "r");
@@ -730,8 +730,9 @@ void initialiseMaps() {
         plot_list.resize(((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols
                           * (unsigned long long int)parameter[0].sizemagnif),
 						  
+						 // Here, initial grid values are prepared. For the values check structures.h L100 following!  
                          // {initialelevation, 0, 0, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1, 0, 0}); // ###Fire version from before merging### Last digit resembles initial fire counter, put to "false" for bool variant
-                         {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100}); //new version after merging (fire not considered)
+                         {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0}); //new version after merging; added last two 0s for fire
 						 
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;

@@ -114,6 +114,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort;
+			treemortality = treemortality + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
 			//Treemortg = Treemortg + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
 
             if (treemortality > 1.0) {

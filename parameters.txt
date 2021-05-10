@@ -32,7 +32,7 @@ thawing_depth=1;					// (int 0,1) Active layer calculation switch
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=90;					// (int) Resolution in m of DEM
-elevationoffset=-200.0;			// (double) in m adjust baselevel of climate input
+elevationoffset=-200.0;				// (double) in m adjust baselevel of climate input //use 0 here instead?
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
@@ -159,10 +159,10 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
-yearswithseedintro=10; 				// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=10000;			// ... (int) number of seeds introduced per year (FOR EACH yearswithseedintro) and plot
+yearswithseedintro=5; 				// ... (int) years of seed introduction at the beginning of each simulation
+seedintronumber=5000;				// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced 
-seedintronumberpermanent=1000;		// ... (int) if seedintropermanent==1 number of seeds introduced per year and plot 
+seedintronumberpermanent=100;		// ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
 									// ... 1==only southernmost plot
@@ -261,7 +261,7 @@ seeddescents=0.93;					// (double) descent speed for L. sibirica seeds (estimati
 distanceratio=0.16;					// (double) dispersal distance factor
 seedprodfactor=8;					// (double) seed production factor
 germinationrate=0.0;				// (double 0-1) germination rate
-germinatioweatherinfluence=1.0;// (double) influence of the climate to germination
+germinatioweatherinfluence=1.0;		// (double) influence of the climate to germination
 gmelseedmaxage=2.0;					// (int) years of seed fertility for Larix gmelinii
 
 // 2.2 -----> Diameter growth

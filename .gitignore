@@ -20,6 +20,7 @@ output/*.png
 output/*.pdf
 output/*.mp4
 output/*.gif
+output/species_over_time_spatial/*.png
 
 # exclude time usage output files
 t_*.txt

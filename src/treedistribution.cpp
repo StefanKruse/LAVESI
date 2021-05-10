@@ -191,7 +191,7 @@ void TreesIni(int maximal_word_length) {
                     tree.dbasalrel = 1000;
                     tree.dbreast = dbreastbuf;
                     tree.dbreastrel = 1000;
-                    tree.height = 100 * heightbuf;
+                    tree.height = 10 * heightbuf;
                     tree.age = agebuf;
                     tree.cone = conebuf;
                     if (tree.cone == true) {
@@ -375,7 +375,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.age = 0;
                         seed.longdispersed = false;
                         seed.species = rn_species;
-                        seed.releaseheight = 100 * hinterheightsi;
+                        seed.releaseheight = 10 * hinterheightsi;
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;

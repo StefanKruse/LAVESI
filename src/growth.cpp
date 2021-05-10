@@ -159,20 +159,20 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 
 				// tree height update
 				if (parameter[0].allometryfunctiontype == 3) {// logistic growth
-					tree.height = 100 * exp(speciestrait[tree.species].heightloga/(1+exp((speciestrait[tree.species].heightlogb-log(tree.dbasal*10))/speciestrait[tree.species].heightlogc)));
+					tree.height = 10 * exp(speciestrait[tree.species].heightloga/(1+exp((speciestrait[tree.species].heightlogb-log(tree.dbasal*10))/speciestrait[tree.species].heightlogc)));
 // cout << "H = " << tree.height << endl;
 				} else {
-					if ((double)tree.height / 100 < 130) {
+					if ((double)tree.height / 10 < 130) {
 						if (parameter[0].allometryfunctiontype == 1) {
-							tree.height = 100 * speciestrait[tree.species].dbasalheightalloslope * pow(tree.dbasal, speciestrait[tree.species].dbasalheightalloexp);
+							tree.height = 10 * speciestrait[tree.species].dbasalheightalloslope * pow(tree.dbasal, speciestrait[tree.species].dbasalheightalloexp);
 						} else {
-							tree.height = 100 * speciestrait[tree.species].dbasalheightslopenonlin * tree.dbasal;
+							tree.height = 10 * speciestrait[tree.species].dbasalheightslopenonlin * tree.dbasal;
 						}
-					} else if ((double)tree.height / 100 >= 130) {
+					} else if ((double)tree.height / 10 >= 130) {
 						if (parameter[0].allometryfunctiontype == 1) {
-							tree.height = 100 * (speciestrait[tree.species].dbreastheightalloslope * pow(tree.dbreast, speciestrait[tree.species].dbreastheightalloexp) + 130.0);
+							tree.height = 10 * (speciestrait[tree.species].dbreastheightalloslope * pow(tree.dbreast, speciestrait[tree.species].dbreastheightalloexp) + 130.0);
 						} else {
-							tree.height = 100 * (pow((speciestrait[tree.species].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
+							tree.height = 10 * (pow((speciestrait[tree.species].dbreastheightslopenonlin * pow(tree.dbreast, 0.5)), 2) + 130.0);
 						}
 					}
 				}
@@ -180,7 +180,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				double maxbreastwachstum = 0;
 				double breastwachstum = 0;
 
-				if ((double)tree.height / 100 >= 130) {
+				if ((double)tree.height / 10 >= 130) {
 					maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
 
 					breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);

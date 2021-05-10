@@ -145,6 +145,25 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     cout << "Treeestablishment(" << elapsed.count() << ")+";
 #endif
 
+/*	if(parameter[0].ivort % 20 == 0){// test fire impact
+        for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
+            VectorList<Tree>& tree_list = *posw;
+
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+
+				if (tree.growing == true){
+					if(tree.xcoo/1000 > 2500){ // half of the plot for testing
+						tree.crownstart = 500*10; // flames reach 500 cm high
+						tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000; // update relative crown damage for mortality
+// cout << tree.xcoo << " <- " << tree.crownstart/10 << " ... " << tree.height/10 << " ... " << tree.relcrowndamage/1000 << endl;
+					}
+				}
+			}
+		}
+	}
+*/
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
@@ -483,7 +502,11 @@ void fillElevations() {
 		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
-		
+        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
+        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
+
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
         if (f == NULL) {
@@ -523,6 +546,11 @@ void fillElevations() {
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
+        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
+
        strcpy(slopefilename, slopeinputbuf);
 	   
         f = fopen(slopefilename, "r");
@@ -558,6 +586,11 @@ void fillElevations() {
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
+        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
+
        strcpy(twifilename, twiinputbuf);
 
         f = fopen(twifilename, "r");

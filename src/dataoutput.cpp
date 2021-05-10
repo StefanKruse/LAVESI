@@ -89,9 +89,9 @@ void Dataoutput(int t,
                     outputgriddedbiomass = true;
                 }
             } else if (parameter[0].outputmode == 99) {  // "test"
-                outputcurrencies = true;
-
-                if (parameter[0].ivort % 20 == 0) {
+                // if (parameter[0].ivort % 20 == 0) {
+                if ((parameter[0].ivort % 20 == 0) | (parameter[0].ivort % 21 == 0)) {
+					outputcurrencies = true;
                     ausgabedensity = true;
                     outputgriddedbiomass = true;
                     outputindividuals = true;
@@ -180,19 +180,19 @@ void Dataoutput(int t,
 					if (((double)tree.xcoo / 1000 >= xminwindow) && ((double)tree.xcoo / 1000 <= xmaxwindow) && ((double)tree.ycoo / 1000 >= yminwindow)
 						&& ((double)tree.ycoo / 1000 <= ymaxwindow)) {  // loop over reduced plot
 						// basal area as population size identifier
-						if ((double)tree.height / 100 >= 130) {
+						if ((double)tree.height / 10 >= 130) {
 							local_basalarea += (M_PI * pow((tree.dbreast / 2), 2));
 							local_stemcount++;
 						}
 
 						// population sizes in height classes
-						if ((double)tree.height / 100 <= 40) {
+						if ((double)tree.height / 10 <= 40) {
 							local_nheight0b40++;
-						} else if (((double)tree.height / 100 > 40) && ((double)tree.height / 100 <= 200)) {
+						} else if (((double)tree.height / 10 > 40) && ((double)tree.height / 10 <= 200)) {
 							local_nheight41b200++;
-						} else if ((double)tree.height / 100 > 200) {
+						} else if ((double)tree.height / 10 > 200) {
 							local_nheight201b10000++;
-							local_meantreeheight += (double)tree.height / 100;
+							local_meantreeheight += (double)tree.height / 10;
 							local_meantreeage += (double)tree.age;
 						}
 
@@ -835,7 +835,7 @@ void Dataoutput(int t,
 							// fprintf(filepointer, "%d;", tree.namem);
 							fprintf(filepointer, "%4.4f;", tree.dbasal);
 							fprintf(filepointer, "%4.4f;", tree.dbreast);
-							fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+							fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 							fprintf(filepointer, "%d;", tree.age);
 							fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
 							fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
@@ -895,13 +895,13 @@ void Dataoutput(int t,
 							fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 							fprintf(filepointer, "%4.4f;", tree.dbasal);
 							fprintf(filepointer, "%4.4f;", tree.dbreast);
-							fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+							fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 							fprintf(filepointer, "%d;", tree.age);
 							fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
 							fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
 							fprintf(filepointer, "%4.5f;", tree.densitywert);
 							// fprintf(filepointer, "%d;", tree.generation);
-							fprintf(filepointer, "%4.4f;", (double)tree.coneheight / 100);
+							fprintf(filepointer, "%4.4f;", (double)tree.coneheight);
 							fprintf(filepointer, "%d;", tree.seednewly_produced);
 							// fprintf(filepointer, "%d;", tree.seedproduced);
 							fprintf(filepointer, "%lf;", tree.thawing_depthinfluence);
@@ -1000,7 +1000,7 @@ void Dataoutput(int t,
 					// fprintf(filepointer, "%d;", tree.line);
 					// fprintf(filepointer, "%d;", tree.generation);
 					fprintf(filepointer, "%d;", tree.species);
-					fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+					fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 					fprintf(filepointer, "%4.4f;", tree.dbasal);
 					fprintf(filepointer, "%4.4f;", tree.dbreast);
 					fprintf(filepointer, "%d;", tree.age);
@@ -1125,7 +1125,7 @@ void Dataoutput(int t,
 						// fprintf(filepointer, "%d;", tree.line);
 						// fprintf(filepointer, "%d;", tree.generation);
 						// fprintf(filepointer, "%d;", tree.species);
-						fprintf(filepointer, "%4.4f;", (double)tree.height / 100);
+						fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 						fprintf(filepointer, "%4.4f;", tree.dbasal);
 						fprintf(filepointer, "%4.4f;", tree.dbreast);
 						fprintf(filepointer, "%d;", tree.age);
@@ -1211,40 +1211,40 @@ void Dataoutput(int t,
 					unsigned int grid_i = floor((double)tree.ycoo / 1000 / 30) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 30);
 
 					// calculate biomass values for each tree
-					AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 100 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
-					AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 100 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
+					AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
+					AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
 
 					// aggregate stand level variables
-					if (((double)tree.height / 100) > 130) {
+					if (((double)tree.height / 10) > 130) {
 						Stemcount[grid_i]++;
 						Basalarea[grid_i] += (M_PI * pow((tree.dbreast / 100 / 2), 2));  // in sq.m so here conversion from cm to m
 					}
 					// aggregate further stand structure variables
-					if (((double)tree.height / 100) < 10) {
+					if (((double)tree.height / 10) < 10) {
 						Indicount_10[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 10) & (((double)tree.height / 100) < 40)) {
+					} else if ((((double)tree.height / 10) >= 10) & (((double)tree.height / 10) < 40)) {
 						Indicount_40[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 40) & (((double)tree.height / 100) < 100)) {
+					} else if ((((double)tree.height / 10) >= 40) & (((double)tree.height / 10) < 100)) {
 						Indicount_100[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 100) & (((double)tree.height / 100) < 200)) {
+					} else if ((((double)tree.height / 10) >= 100) & (((double)tree.height / 10) < 200)) {
 						Indicount_200[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 200) & (((double)tree.height / 100) < 300)) {
+					} else if ((((double)tree.height / 10) >= 200) & (((double)tree.height / 10) < 300)) {
 						Indicount_300[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 300) & (((double)tree.height / 100) < 400)) {
+					} else if ((((double)tree.height / 10) >= 300) & (((double)tree.height / 10) < 400)) {
 						Indicount_400[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 400) & (((double)tree.height / 100) < 500)) {
+					} else if ((((double)tree.height / 10) >= 400) & (((double)tree.height / 10) < 500)) {
 						Indicount_500[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 500) & (((double)tree.height / 100) < 750)) {
+					} else if ((((double)tree.height / 10) >= 500) & (((double)tree.height / 10) < 750)) {
 						Indicount_750[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 750) & (((double)tree.height / 100) < 1000)) {
+					} else if ((((double)tree.height / 10) >= 750) & (((double)tree.height / 10) < 1000)) {
 						Indicount_1000[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 1000) & (((double)tree.height / 100) < 1250)) {
+					} else if ((((double)tree.height / 10) >= 1000) & (((double)tree.height / 10) < 1250)) {
 						Indicount_1250[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 1250) & (((double)tree.height / 100) < 1500)) {
+					} else if ((((double)tree.height / 10) >= 1250) & (((double)tree.height / 10) < 1500)) {
 						Indicount_1500[grid_i]++;
-					} else if ((((double)tree.height / 100) >= 1500) & (((double)tree.height / 100) < 2000)) {
+					} else if ((((double)tree.height / 10) >= 1500) & (((double)tree.height / 10) < 2000)) {
 						Indicount_2000[grid_i]++;
-					} else if (((double)tree.height / 100) >= 2000) {
+					} else if (((double)tree.height / 10) >= 2000) {
 						Indicount_larger2000[grid_i]++;
 					}
 				}
@@ -1373,7 +1373,7 @@ void Dataoutput(int t,
 					unsigned int yposi = tree.ycoo / 1000;
 
 					// aggregate variables
-					if (((double)tree.height / 100) > 130) {
+					if (((double)tree.height / 10) > 130) {
 						if (tree.species == 1)
 							Species1_stems[yposi]++;
 						else

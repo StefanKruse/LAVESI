@@ -29,6 +29,14 @@ constexpr unsigned int treecols = 1980;
 // constexpr unsigned int treecols = 9990;
 // constexpr unsigned int treerows = 2520;  // 30m_SpasskayaPad_x529631-532151m_y6897789-6900309m
 // constexpr unsigned int treecols = 2520;
+// constexpr unsigned int treerows = 270;  // 30m_x531881-532151m_y6900039-6900309m
+// constexpr unsigned int treecols = 270;
+// constexpr unsigned int treerows = 510;  // 30m_SpasskayaPad_x531881-532391m_y6900039-6900549m
+// constexpr unsigned int treecols = 510;
+// constexpr unsigned int treerows = 2520;  // 30m_SpasskayaPad_x530881-533401m_y6899039-6901559m
+// constexpr unsigned int treecols = 2520;
+//constexpr unsigned int treerows = 5010;  // 30m_SpasskayaPad_x529631-534641m_y6897789-6902799m
+//constexpr unsigned int treecols = 5010;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

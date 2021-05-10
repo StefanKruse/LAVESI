@@ -449,12 +449,14 @@ void Parameterinput(void) {
 
     strcpy(uebergabestring, "seedintronumber");
     parameter[0].seedintronumber = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
+	parameter[0].seedintronumber = (int) parameter[0].seedintronumber * ((treerows/100)*(treecols/100)); // per ha
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumber);
     }
 
     strcpy(uebergabestring, "seedintronumberpermanent");
     parameter[0].seedintronumberpermanent = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
+	parameter[0].seedintronumberpermanent = (int) parameter[0].seedintronumberpermanent * ((treerows/100)*(treecols/100)); // per ha
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
     }
@@ -888,6 +890,7 @@ void Getspeciestraits(void)
 			speciestrait[counter].densityvaluemaximumatheight= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].mweather= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].heightweathermorteinflussexp= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mwindthrow= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].mdrought= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].seedconemort= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].seedfloormort= strtod(strtok(NULL, " "),NULL) ;

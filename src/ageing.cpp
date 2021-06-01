@@ -65,7 +65,7 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 						// tree already has a height of maturation assigned to it
 						// ... if a tree is taller than this maturation height, he starts to produce seeds
 						else if (tree.coneheight != 65535) {
-							if (tree.height >= tree.coneheight) {
+							if (tree.height / 10 >= tree.coneheight) {
 								tree.cone = true;
 							}
 						}

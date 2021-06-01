@@ -295,9 +295,9 @@ void Treeestablishment(Parameter* parameter,
                             tree.dbreastrel = 1000;
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                tree.height = 100 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
+                                tree.height = 10 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
                             } else {
-                                tree.height = 100 * parameter[0].dbasalheightslopenonlin * maxbw_help;
+                                tree.height = 10 * parameter[0].dbasalheightslopenonlin * maxbw_help;
                             }
                             tree.age = 0;
                             tree.cone = false;
@@ -340,9 +340,9 @@ void Treeestablishment(Parameter* parameter,
                             tree.dbreastrel = 1000;
 
                             if (parameter[0].allometryfunctiontype == 1) {
-                                tree.height = 100 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
+                                tree.height = 10 * parameter[0].dbasalheightalloslope * pow(maxbw_help, parameter[0].dbasalheightalloexp);
                             } else {
-                                tree.height = 100 * parameter[0].dbasalheightslopenonlin * maxbw_help;
+                                tree.height = 10 * parameter[0].dbasalheightslopenonlin * maxbw_help;
                             }
 
                             tree.age = 0;

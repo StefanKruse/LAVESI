@@ -14,9 +14,9 @@ void Seedproduction(Parameter* parameter, vector<VectorList<Tree>>& world_tree_l
 			if (tree.growing == true) {
 				if (tree.cone == true) {
 					int newseedsproduced = (parameter[0].seedprodfactor                           // seed production in dependence of a factor
-											* (double)tree.height / 100 / 100                     // ... the tree's  height in m...
+											* (double)tree.height / 10 / 100                     // ... the tree's  height in m...
 											* (double)tree.dbasalrel / 1000                       // ... the tree's current growth in cm...
-											* (1.0 - (1.0 / ((double)tree.height / 100 / 50))));  // ... height.
+											* (1.0 - (1.0 / ((double)tree.height / 10 / 50))));  // ... height.
 					if (newseedsproduced > 0) {
 						tree.seednewly_produced = newseedsproduced;
 					} else {

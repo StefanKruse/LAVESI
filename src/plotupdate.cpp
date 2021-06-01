@@ -240,34 +240,34 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 										 parameter[0].densityvaluedbasalinfluence);  // increasing influence by increasing tree height
 
 				if (parameter[0].dichtheightrel == 1) {
-					tree.densitywert = tree.densitywert * (-1.0 / 130.0 * (double)tree.height / 100 + 1.0);
+					tree.densitywert = tree.densitywert * (-1.0 / 130.0 * (double)tree.height / 10 + 1.0);
 				} else if (parameter[0].dichtheightrel == 2) {
-					tree.densitywert = tree.densitywert * (-1.0 / 200.0 * (double)tree.height / 100 + 1.0);
+					tree.densitywert = tree.densitywert * (-1.0 / 200.0 * (double)tree.height / 10 + 1.0);
 				} else if (parameter[0].dichtheightrel == 3) {
-					double hrelbuf = (-1.0 / 200.0 * (double)tree.height / 100 + 1.0);
+					double hrelbuf = (-1.0 / 200.0 * (double)tree.height / 10 + 1.0);
 					if (hrelbuf < 0.1)
 						hrelbuf = 0.1;
 					tree.densitywert = tree.densitywert * hrelbuf;
 				} else if (parameter[0].dichtheightrel == 4) {
-					if ((double)tree.height / 100 < 40)
+					if ((double)tree.height / 10 < 40)
 						tree.densitywert = 1.0;
-					else if (((double)tree.height / 100 >= 40) && ((double)tree.height / 100 < 200))
+					else if (((double)tree.height / 10 >= 40) && ((double)tree.height / 10 < 200))
 						tree.densitywert = 0.5;
-					else if ((double)tree.height / 100 >= 200)
+					else if ((double)tree.height / 10 >= 200)
 						tree.densitywert = 0.0;
 				} else if (parameter[0].dichtheightrel == 5) {
-					if ((double)tree.height / 100 < 40)
+					if ((double)tree.height / 10 < 40)
 						tree.densitywert = 1.0;
-					else if (((double)tree.height / 100 >= 40) && ((double)tree.height / 100 < 200))
+					else if (((double)tree.height / 10 >= 40) && ((double)tree.height / 10 < 200))
 						tree.densitywert = 0.55;
-					else if ((double)tree.height / 100 >= 200)
+					else if ((double)tree.height / 10 >= 200)
 						tree.densitywert = 0.1;
 				} else if (parameter[0].dichtheightrel == 6) {
-					if ((double)tree.height / 100 < 40)
+					if ((double)tree.height / 10 < 40)
 						tree.densitywert = 1.0;
-					else if (((double)tree.height / 100 >= 40) && ((double)tree.height / 100 < 200))
+					else if (((double)tree.height / 10 >= 40) && ((double)tree.height / 10 < 200))
 						tree.densitywert = 0.9;
-					else if ((double)tree.height / 100 >= 200)
+					else if ((double)tree.height / 10 >= 200)
 						tree.densitywert = 0.8;
 				} else if (parameter[0].dichtheightrel == 10) {  // added to fit the height classes distribution properly
 					// density value decreases by increasing tree height linearly

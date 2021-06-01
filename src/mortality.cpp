@@ -35,7 +35,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // height dependent influences
             double wachstumrel = 1.0;
-            if ((double)tree.height / 100 < 130) {
+            if ((double)tree.height / 10 < 130) {
                 wachstumrel = (double)tree.dbasalrel / 1000;
             } else {
                 wachstumrel = (double)tree.dbreastrel / 1000;
@@ -43,10 +43,10 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // extra competition effect
             double heightnkugeleinfluss = 1;
-            if ((double)tree.height / 100 < (parameter[0].densityvaluemaximumatheight * 2)) {
+            if ((double)tree.height / 10 < (parameter[0].densityvaluemaximumatheight * 2)) {
                 heightnkugeleinfluss =
                     heightnkugeleinfluss
-                    + (sqrt(pow(parameter[0].densityvaluemaximumatheight, 2) - pow((double)tree.height / 100 - parameter[0].densityvaluemaximumatheight, 2))
+                    + (sqrt(pow(parameter[0].densityvaluemaximumatheight, 2) - pow((double)tree.height / 10 - parameter[0].densityvaluemaximumatheight, 2))
                        / parameter[0].densityvaluemaximumatheight);
             }
 
@@ -148,7 +148,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                                                        + parameter[0].gdbasalfacqsib * tree.dbasal * tree.dbasal)))));
             }
 
-            double heightreduce = pow((1.0 / (double)tree.height / 100), parameter[0].heightweathermorteinflussexp);  // includes a minimun limit
+            double heightreduce = pow((1.0 / (double)tree.height / 10), parameter[0].heightweathermorteinflussexp);  // includes a minimun limit
             if (heightreduce < 0.001)
                 heightreduce = 0.001;
             double weather_mort_gmel = parameter[0].mweather * weathermortaddg * heightreduce;
@@ -159,13 +159,13 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				double transectstart= treerows - parameter[0].locationshift;
                 dry_mort = parameter[0].mdrought
                            * weighmeanweathervar(weather_list[yearposition_help].droughtmort, ((double)tree.ycoo/1000)-transectstart)
-                           * pow((1.0 / (double)tree.height / 100), 0.5);
+                           * pow((1.0 / (double)tree.height / 10), 0.5);
             } else if (parameter[0].lineartransect) {
                 dry_mort = parameter[0].mdrought
                            * (weather_list[yearposition_help].droughtmort[0]
                               + ((weather_list[yearposition_help].droughtmortmin[0] - weather_list[yearposition_help].droughtmort[0]) * ((double)tree.ycoo / 1000)
                                  / ((double)treerows)))
-                           * pow((1.0 / (double)tree.height / 100), 0.5);
+                           * pow((1.0 / (double)tree.height / 10), 0.5);
             } else if (parameter[0].demlandscape) {
                 dry_mort = parameter[0].mdrought
                            * ((weather_list[yearposition_help].droughtmort[0] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
@@ -174,9 +174,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                                  * (1
                                     - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                           / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
-                           * pow((1.0 / (double)tree.height / 100), 0.5);
+                           * pow((1.0 / (double)tree.height / 10), 0.5);
             } else {
-                dry_mort = parameter[0].mdrought * weather_list[yearposition_help].droughtmort[0] * pow((1.0 / (double)tree.height / 100), 0.5);
+                dry_mort = parameter[0].mdrought * weather_list[yearposition_help].droughtmort[0] * pow((1.0 / (double)tree.height / 10), 0.5);
             }
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double Treemortg = 0.0 + parameter[0].mortbg + sapl_mort_gmel + age_mort + growth_mort + dens_mort + weather_mort_gmel + dry_mort;

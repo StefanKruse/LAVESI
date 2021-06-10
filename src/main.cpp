@@ -15,6 +15,7 @@ vector<VectorList<Seed>> world_seed_list;
 vector<vector<Weather>> world_weather_list;
 vector<vector<Envirgrid>> world_plot_list;
 vector<vector<Evaluation>> world_evaluation_list;
+vector<vector<Cryogrid>> world_cryo_list;
 
 // lists for resetyear copies
 vector<VectorList<Tree>> world_tree_list_copy;
@@ -43,7 +44,8 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 					  yearposition, 
 					  world_plot_list, 
 					  world_tree_list, 
-					  world_weather_list);
+					  world_weather_list, 
+					  world_cryo_list);
 #ifdef OUTPUT_COMP_DURATION
     auto time_end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed;
@@ -54,7 +56,10 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Growth(&parameter[0], yearposition, world_tree_list, world_weather_list);
+    Growth(&parameter[0], 
+	       yearposition, 
+	       world_tree_list, 
+	       world_weather_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -165,7 +170,16 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+    Dataoutput(t, 
+			   jahr, 
+			   &parameter[0], 
+			   yearposition, 
+			   world_tree_list, 
+			   world_seed_list, 
+			   world_weather_list, 
+			   world_plot_list, 
+			   world_evaluation_list, 
+			   world_cryo_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -346,7 +360,8 @@ void Yearsteps() {
 
         // calculate current year and print a summary of the year
         int jahr = parameter[0].startjahr + t;
-        yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
+ 		parameter[0].currentyear=parameter[0].startjahr+t; // TODO: replace other references to jahr with this global state variable
+       yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
                        + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
 
         if (parameter[0].yearlyvis == true) {
@@ -462,6 +477,7 @@ void createLists() {
             world_weather_list.emplace_back();     // include new weather_list in corresponding world list
             world_plot_list.emplace_back();        // include new plot_list in corresponding world list
             world_evaluation_list.emplace_back();  // include new evaluation_list in corresponding world list
+            world_cryo_list.emplace_back();  // include new cryogrid_list in corresponding world list
 
             if (parameter[0].resetyear > 0) {
                 // Create lists for resetting to a certain year
@@ -485,115 +501,133 @@ void fillElevations() {
     if (parameter[0].mapylength == 1) {
         // ... read dem data
         FILE* f;
-        char demfilename[250];
-        // char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
-        // char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010
-        // char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210
-        // char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
-        // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
-		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
-		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
-        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
-        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
-        // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
-        char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
-        strcpy(demfilename, deminputbuf);
-        f = fopen(demfilename, "r");
-        if (f == NULL) {
-            printf("DEM file not available!\n");
-            exit(1);
-        }
+		char puffer[6000];
+		int counter;
+		int deminputdimension_y = treerows / parameter[0].demresolution;  // matrix + 1 to avoid border effects
+		int deminputdimension_x = treecols / parameter[0].demresolution;  // matrix + 1 to avoid border effects
 
-        int deminputdimension_y = treerows / parameter[0].demresolution;  // matrix + 1 to avoid border effects
-        int deminputdimension_x = treecols / parameter[0].demresolution;  // matrix + 1 to avoid border effects
-        char puffer[6000];
-        vector<double> elevationinput;
-        elevationinput.resize(deminputdimension_y * deminputdimension_x, 0);
-        int counter = -1;
-        // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000
-        // entries)
-        while (fgets(puffer, 6000, f) != NULL) {
-			char * allelements = strtok(puffer, " "); // separate into single tokens
-			while(allelements != NULL) {
-                counter++;  // rows
-                elevationinput[counter] = strtod(allelements, NULL);
-				allelements = strtok(NULL, " "); // set to next
+		vector<double> elevationinput;
+		if(parameter[0].cryogrid_scenario == 0) {
+			elevationinput.resize(deminputdimension_y * deminputdimension_x, 0);
+			char demfilename[250];
+			// char deminputbuf[] = "input/dem_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+			// char deminputbuf[] = "input/dem_30m_Ilirney_653902x7489357m.csv"; //x=11010 y=14010
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv"; //x=16920 y=18210
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv"; //x=7860 y=14220
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+			// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
+			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
+			char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=510 y=510
+			strcpy(demfilename, deminputbuf);
+			f = fopen(demfilename, "r");
+			if (f == NULL) {
+				printf("DEM file not available!\n");
+				exit(1);
 			}
-        }
-        fclose(f);
 
-        // ... read slope data
-        char slopefilename[250];
-        // char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
-        // char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
-        // char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
-        // char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
-		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
-		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
-		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
-        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
-        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
-        // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
-        char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
-       strcpy(slopefilename, slopeinputbuf);
-        f = fopen(slopefilename, "r");
-        if (f == NULL) {
-            printf("Slope file not available!\n");
-            exit(1);
-        }
-
+			counter = -1;
+			// read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000
+			// entries)
+			while (fgets(puffer, 6000, f) != NULL) {
+				char * allelements = strtok(puffer, " "); // separate into single tokens
+				while(allelements != NULL) {
+					counter++;  // rows
+					elevationinput[counter] = strtod(allelements, NULL);
+					allelements = strtok(NULL, " "); // set to next
+				}
+			}
+			fclose(f);
+		} else {
+			elevationinput.resize(deminputdimension_y * deminputdimension_x, 208.3762); // for Spasskaya Pad
+		}
+		
         vector<double> slopeinput;
-        slopeinput.resize(deminputdimension_y * deminputdimension_x, 0);
-        counter = -1;
-        while (fgets(puffer, 6000, f) != NULL) {
-			char * allelements = strtok(puffer, " "); // separate into single tokens
-			while(allelements != NULL) {
-                counter++;  // rows
-                slopeinput[counter] = strtod(allelements, NULL);
-				allelements = strtok(NULL, " "); // set to next
+		if(parameter[0].cryogrid_scenario == 0) {
+			slopeinput.resize(deminputdimension_y * deminputdimension_x, 0);
+			
+			// ... read slope data
+			char slopefilename[250];
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+			// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
+			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
+			char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=510 y=510
+			strcpy(slopefilename, slopeinputbuf);
+			f = fopen(slopefilename, "r");
+			if (f == NULL) {
+				printf("Slope file not available!\n");
+				exit(1);
 			}
-        }
-        fclose(f);
 
-        // ... read slope data
-        char twifilename[250];
-        // char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
-        // char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
-        // char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
-        // char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
-        // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
-		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
-		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
-		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
-        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
-        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
-        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
-        // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
-        char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
-       strcpy(twifilename, twiinputbuf);
-        f = fopen(twifilename, "r");
-        if (f == NULL) {
-            printf("TWI file not available!\n");
-            exit(1);
-        }
+			counter = -1;
+			while (fgets(puffer, 6000, f) != NULL) {
+				char * allelements = strtok(puffer, " "); // separate into single tokens
+				while(allelements != NULL) {
+					counter++;  // rows
+					slopeinput[counter] = strtod(allelements, NULL);
+					allelements = strtok(NULL, " "); // set to next
+				}
+			}
+			fclose(f);
+		} else {
+			slopeinput.resize(deminputdimension_y * deminputdimension_x, 1.780986); // for Spasskaya Pad
+		}
 
         vector<double> twiinput;
-        twiinput.resize(deminputdimension_y * deminputdimension_x, 0);
-        counter = -1;
-        while (fgets(puffer, 6000, f) != NULL) {
-			char * allelements = strtok(puffer, " "); // separate into single tokens
-			while(allelements != NULL) {
-                counter++;  // rows
-                twiinput[counter] = strtod(allelements, NULL);
-				allelements = strtok(NULL, " "); // set to next
+		if(parameter[0].cryogrid_scenario == 0) {
+			twiinput.resize(deminputdimension_y * deminputdimension_x, 0);
+			
+			// ... read slope data
+			char twifilename[250];
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_647902x7481367m.csv";  // x=5010 y=4020
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_653902x7489357m.csv";//x=11010 y=14010
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_x635418-652338m_y7472396-7490606m.csv";//x=16920 y=18210
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_x641658-649518m_y7476056-7490276m.csv";//x=7860 y=14220
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
+			// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
+			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
+			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
+			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
+			char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=510 y=510
+			strcpy(twifilename, twiinputbuf);
+			f = fopen(twifilename, "r");
+			if (f == NULL) {
+				printf("TWI file not available!\n");
+				exit(1);
 			}
-        }
-        fclose(f);
-
+			counter = -1;
+			while (fgets(puffer, 6000, f) != NULL) {
+				char * allelements = strtok(puffer, " "); // separate into single tokens
+				while(allelements != NULL) {
+					counter++;  // rows
+					twiinput[counter] = strtod(allelements, NULL);
+					allelements = strtok(NULL, " "); // set to next
+				}
+			}
+			fclose(f);
+		} else { // set value to predefined value
+			twiinput.resize(deminputdimension_y * deminputdimension_x, 8.991485); // for Spasskaya Pad
+		}
+// cout << twiinput[0] << " ... " <<  twiinput[(int)(twiinput.size()/2)] << endl;
         // interpolate to envirgrid
         for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
             vector<Envirgrid>& plot_list = *posw;
@@ -675,9 +709,10 @@ void fillElevations() {
                     // in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
                     // 32767
                     if (countwatercells == 0) {
+// cout << twiinter << " ... twi inter ..." << endl;
                         plot_list[kartenpos].elevation += 10 * eleinter;
                         // plot_list[kartenpos]->slope = slopeinter;
-                        plot_list[kartenpos].twi += twiinter*100;
+                        plot_list[kartenpos].twi = twiinter*100;
 
                         // calculate environment-growth-impact (value between 0 and 1)
                         // f(TWI)		= slope * TWI + intercept
@@ -790,6 +825,38 @@ void initialiseMaps() {
         evaluation_list.emplace_back(std::move(pEvaluation));
     }
     cout << " ... ... ended initialise Maps " << endl;
+
+	aktort=0;
+	for (vector<vector<Cryogrid> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); posw++) {
+		vector<Cryogrid>& cryo_list = *posw;
+
+		aktort++;
+
+		// int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
+		// int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
+
+		// TODO: assure 10x10 m grid
+		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
+
+		// cout << (int) (ceil(treerows*parameter[0].sizemagnif/50) * ceil(treecols*parameter[0].sizemagnif/50)) << " cells to fill " << endl;
+		for (int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++) {
+			Cryogrid pCryogrid;
+
+			pCryogrid.ycoo=floor( (double) kartenpos/ceil(treecols*sizemagnifcryo) );
+			pCryogrid.xcoo=(double) kartenpos - (pCryogrid.ycoo * ceil(treecols*sizemagnifcryo));
+
+			pCryogrid.leafarea=0;
+			pCryogrid.stemarea=0;
+			pCryogrid.maxtreeheight=0;
+			pCryogrid.meantreeheight=0;
+			pCryogrid.treecount=0;
+			pCryogrid.maxthawing_depth = 0;
+			pCryogrid.litterheight0=0;
+			pCryogrid.soilhumidity=0;
+			
+			cryo_list.emplace_back(std::move(pCryogrid));
+		}
+	}
 }
 
 void runSimulation() {
@@ -825,8 +892,8 @@ int main() {
         "\n You have started  LAVESI, "
         "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 2.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES)"
-        "\n Date:\t\t 14.04.2021"
+        "\n\n Version:\t 3.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-CRYOGRID)"
+        "\n Date:\t\t 07.06.2021"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
         "\n\t Josias Gloy"
@@ -874,6 +941,8 @@ int main() {
         parameter[0].nameakt = 0;
         // parameter[0].lineakt = 0;
         parameter[0].yearswithseedintro = yearswithseedintropuffer;
+
+		parameter[0].cryogridcalled=false;
 
         runSimulation();
     }

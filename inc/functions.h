@@ -16,14 +16,16 @@ void Dataoutput(int t,
                 vector<VectorList<Seed>>& world_seed_list,
                 vector<vector<Weather>>& world_weather_list,
                 vector<vector<Envirgrid>>& world_plot_list,
-                vector<vector<Evaluation>>& world_evaluation_list);
+                vector<vector<Evaluation>>& world_evaluation_list,
+				vector<vector<Cryogrid>>& world_cryo_list);
 void Treedistribution(Parameter* parameter, int stringlengthmax);
 void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorList<Seed>>& world_seed_list, vector<vector<Weather>>& world_weather_list);
 void Environmentupdate(//Parameter* parameter,
                        int yearposition,
                        vector<vector<Envirgrid>>& world_plot_list,
                        vector<VectorList<Tree>>& world_tree_list,
-                       vector<vector<Weather>>& world_weather_list);
+                       vector<vector<Weather>>& world_weather_list,
+					   vector<vector<Cryogrid>>& world_cryo_list);
 void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& world_tree_list, vector<vector<Weather>>& world_weather_list);
 void Seeddispersal(//int Jahr, 
 				   Parameter* parameter, 

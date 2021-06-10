@@ -11,7 +11,8 @@ void Dataoutput(int t,
                 vector<VectorList<Seed>>& world_seed_list,
                 vector<vector<Weather>>& world_weather_list,
                 vector<vector<Envirgrid>>& world_plot_list,
-                vector<vector<Evaluation>>& world_evaluation_list) {
+                vector<vector<Evaluation>>& world_evaluation_list,
+				vector<vector<Cryogrid>>& world_cryo_list) {
     double xminwindow = 0.0;
     double xmaxwindow = 0.0;
     double yminwindow = 0.0;
@@ -40,6 +41,7 @@ void Dataoutput(int t,
     bool outputtestarea = false;
     bool outputtransects = false;
     bool ausgabedensity = false;
+    bool outputcryogrid = false;
 
     // preprocessing and output of data for each plot
     int aktort = 0;
@@ -59,6 +61,9 @@ void Dataoutput(int t,
         vector<Evaluation>& evaluation_list = *posiweltausw;
         vector<Evaluation>::iterator posausw = evaluation_list.begin();
         auto& pEvaluation = (*posausw);
+		
+		vector<vector<Cryogrid> >::iterator worldposcryogrid = (world_cryo_list.begin()+aktort);
+		vector<Cryogrid>& cryo_list = *worldposcryogrid;
 
         aktort++;
 
@@ -89,8 +94,10 @@ void Dataoutput(int t,
                     outputgriddedbiomass = true;
                 }
             } else if (parameter[0].outputmode == 99) {  // "test"
-                // if (parameter[0].ivort % 20 == 0) {
-                if ((parameter[0].ivort % 20 == 0) | (parameter[0].ivort % 21 == 0)) {
+                if ( (parameter[0].ivort % 50 == 0) || (parameter[0].ivort >= 2005) ) {
+                // if ( (parameter[0].ivort % 20 == 0) | (parameter[0].ivort % 21 == 0) | (parameter[0].ivort % 24 == 0) | (parameter[0].ivort % 25 == 0) ) {
+                // if ( (parameter[0].ivort % 5 == 0) ) {
+                // if ( (parameter[0].ivort == 19) | (parameter[0].ivort == 20) | (parameter[0].ivort == 21) ) {
 					outputcurrencies = true;
                     ausgabedensity = true;
                     outputgriddedbiomass = true;
@@ -130,6 +137,16 @@ void Dataoutput(int t,
 					
 				if(parameter[0].ivort % 50 == 0)// test
 					outputgriddedbiomass = true;
+             } else if (parameter[0].outputmode == 14) {  // "normal,gridded,large area" for Cryogrid coupling
+                // outputcurrencies = true;
+				
+				// if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
+				if( (parameter[0].ivort == 1) || (parameter[0].ivort >= 2014) ) {// write full Envirgrid once on sim start
+					ausgabedensity = true;
+                    outputindividuals = true;
+				}
+				if( (parameter[0].ivort % 50 == 0) || (parameter[0].ivort >= 2005) )// test
+					outputcryogrid = true;
 
             } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area Khamra"
                 outputcurrencies = true;
@@ -1212,8 +1229,14 @@ void Dataoutput(int t,
 					// calculate grid position from x/y coordinates
 					unsigned int grid_i = floor((double)tree.ycoo / 1000 / 30) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 30);
 
+					// living branches at the tree 
+					double livingtreefraction = (tree.height - tree.crownstart) / tree.height;
+					if(livingtreefraction < 0.0)
+						livingtreefraction = 0.0;
+					else if(livingtreefraction > 1.0)
+						livingtreefraction = 1.0;
 					// calculate biomass values for each tree
-					AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
+					AGBneedleliving[grid_i] += livingtreefraction * speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
 					AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
 
 					// aggregate stand level variables
@@ -1319,6 +1342,77 @@ void Dataoutput(int t,
             fclose(filepointer);
         }  // gridded tree biomass output
 
+        if (outputcryogrid == true) {  // gridded tree biomass output
+            // assemble file name
+            s1 << parameter[0].repeati;
+            s2 << parameter[0].weatherchoice;
+            s3 << parameter[0].ivort;
+            s4 << aktort;
+            s5 << parameter[0].cryogrid_scenario;
+			if(parameter[0].cryogrid_scenario > 0)
+				dateiname = "./output_" + s5.str() + "/datacryogrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
+			else
+				dateiname = "./output/datacryogrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
+            s1.str("");
+            s1.clear();
+            s2.str("");
+            s2.clear();
+            s3.str("");
+            s3.clear();
+            s4.str("");
+            s4.clear();
+            s5.str("");
+            s5.clear();
+
+            // trying to open the file for writing
+            filepointer = fopen(dateiname.c_str(), "r+");
+            // if fopen fails, open a new file + header output
+            if (filepointer == NULL) {
+                filepointer = fopen(dateiname.c_str(), "w+");
+
+                fprintf(filepointer, "x;");
+                fprintf(filepointer, "y;");
+                fprintf(filepointer, "leafarea;");
+                fprintf(filepointer, "stemarea;");
+                fprintf(filepointer, "maxtreeheight;");
+                fprintf(filepointer, "meantreeheight;");
+                fprintf(filepointer, "treecount;");
+                fprintf(filepointer, "maxthawing_depth;");
+                fprintf(filepointer, "litterheight0;");
+                fprintf(filepointer, "soilhumidity;");
+                fprintf(filepointer, "envirgridcount");
+                fprintf(filepointer, "\n");
+
+                if (filepointer == NULL) {
+                    fprintf(stderr, "Error: File could not be opened!\n");
+                    exit(1);
+                }
+            }
+
+            fseek(filepointer, 0, SEEK_END);
+
+            // data output for each grid cell
+			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
+			for (int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++) {
+				auto& pCryogrid = cryo_list[kartenpos];
+				
+				fprintf(filepointer, "%d;", (int)pCryogrid.xcoo);
+				fprintf(filepointer, "%d;", (int)pCryogrid.ycoo);
+				fprintf(filepointer, "%4.4f;", pCryogrid.leafarea);
+				fprintf(filepointer, "%4.4f;", pCryogrid.stemarea);
+				fprintf(filepointer, "%4.2f;", pCryogrid.maxtreeheight);
+				fprintf(filepointer, "%4.2f;", pCryogrid.meantreeheight);
+				fprintf(filepointer, "%d;", pCryogrid.treecount);
+				fprintf(filepointer, "%4.2f;", pCryogrid.maxthawing_depth);
+				fprintf(filepointer, "%4.2f;", pCryogrid.litterheight0);
+				fprintf(filepointer, "%4.2f;", pCryogrid.soilhumidity);
+				fprintf(filepointer, "%d", pCryogrid.envirgridcount);				
+				fprintf(filepointer, "\n");
+			}
+			
+            fclose(filepointer);
+        }  // gridded output
+
         if (outputtransects == true) {  // transect output
             // assemble file name
             s1 << parameter[0].repeati;
@@ -1406,11 +1500,17 @@ void Dataoutput(int t,
             // assemble file name:
             s1 << parameter[0].ivort;
             s2 << parameter[0].weatherchoice;
-            dateiname = "output/datatrees_Treedensity" + s1.str() + "_" + s2.str() + ".csv";
+            s5 << parameter[0].cryogrid_scenario;
+			if(parameter[0].cryogrid_scenario > 0)
+				dateiname = "./output_" + s5.str() + "/datatrees_Treedensity" + s1.str() + "_" + s2.str() + ".csv";
+			else
+				dateiname = "./output/datatrees_Treedensity" + s1.str() + "_" + s2.str() + ".csv";
             s1.str("");
             s1.clear();
             s2.str("");
             s2.clear();
+            s5.str("");
+            s5.clear();
 
             // trying to open the file for reading
             filepointer = fopen(dateiname.c_str(), "r+");
@@ -1429,9 +1529,10 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Litter_layer_height_mean;");
                 fprintf(filepointer, "Max_thawing_depth;");
                 fprintf(filepointer, "Elevation;");
+                fprintf(filepointer, "TWI;");
                 fprintf(filepointer, "Envirgrowthimpact;");
                 // fprintf(filepointer, "Weather_type;");
-                // fprintf(filepointer, "Thawing_depth;");
+                fprintf(filepointer, "Soilhumidity;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -1446,31 +1547,34 @@ void Dataoutput(int t,
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
                 auto& pEnvirgrid = plot_list[kartenpos];
                 double ycooi = floor((double)kartenpos / ((double)treecols * parameter[0].sizemagnif));
-                double xcooi = (double)kartenpos - ((ycooi-1) * ((double)treecols * parameter[0].sizemagnif));
-                if ((parameter[0].demlandscape
+                double xcooi = (double)kartenpos - (ycooi * ((double)treecols * parameter[0].sizemagnif));
+                if (((parameter[0].demlandscape == true)
                      && ((((xcooi / parameter[0].sizemagnif / parameter[0].demresolution) - floor(xcooi / parameter[0].sizemagnif / parameter[0].demresolution))
                           == 0)
                          && (((ycooi / parameter[0].sizemagnif / parameter[0].demresolution)
                               - floor(ycooi / parameter[0].sizemagnif / parameter[0].demresolution))
                              == 0)))
-                    || ((pEnvirgrid.Treenumber > 0)
+                    || ((parameter[0].demlandscape == false) && (pEnvirgrid.Treenumber > 0) // output only if tree density values >0
                         && ((xcooi >= xminwindow * parameter[0].sizemagnif) && (xcooi <= xmaxwindow * parameter[0].sizemagnif)
                             && (ycooi >= yminwindow * parameter[0].sizemagnif)
-                            && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))) {  // output only if tree density values >0
+                            && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))
+						) {  
                     fprintf(filepointer, "%d;", parameter[0].repeati);
                     // fprintf(filepointer, "%d;", pEnvirgrid.yworldcoo);
                     // fprintf(filepointer, "%d;", pEnvirgrid.xworldcoo);
-                    fprintf(filepointer, "%4.4f;", xcooi);
-                    fprintf(filepointer, "%4.4f;", ycooi);
+                    fprintf(filepointer, "%4.4f;", xcooi / parameter[0].sizemagnif);
+                    fprintf(filepointer, "%4.4f;", ycooi / parameter[0].sizemagnif);
                     fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);
                     fprintf(filepointer, "%d;", pEnvirgrid.Treenumber);
-                    fprintf(filepointer, "%u;", pEnvirgrid.litterheight0 / 100); // in cm
-                    fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean / 100); // in cm
-                    fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth / 100);
+                    fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.litterheight0 / 100); // in cm
+                    fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.litterheightmean / 100); // in cm
+                    fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.maxthawing_depth / 10);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.elevation / 10);
+                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.twi / 100);
+                    // fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.slope/ 10);
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
-                    // fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.soilhumidity / 100);
                     fprintf(filepointer, "\n");
                 }
             }

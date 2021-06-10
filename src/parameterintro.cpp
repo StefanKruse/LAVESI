@@ -171,6 +171,22 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth) ? "true" : "false");
     }
 
+    strcpy(uebergabestring, "cryogrid_thawing_depth");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].cryogrid_thawing_depth = true;
+    } else {
+        parameter[0].cryogrid_thawing_depth = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].cryogrid_thawing_depth) ? "true" : "false");
+    }
+	
+    strcpy(uebergabestring, "cryogrid_scenario");
+    parameter[0].cryogrid_scenario = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_scenario);
+    }
+
     strcpy(uebergabestring, "demlandscape");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
         parameter[0].demlandscape = true;

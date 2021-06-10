@@ -457,7 +457,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             foldername << "wind_Chukotka";
         } else if (
             // Spasskaya Pad
-            (parameter[0].weatherchoice == 1901201801) || (parameter[0].weatherchoice == 1201801) || (parameter[0].weatherchoice == 1201802) || (parameter[0].weatherchoice == 1250002)) {
+            (parameter[0].weatherchoice == 1901201801) || (parameter[0].weatherchoice == 1201801) || (parameter[0].weatherchoice == 1201802) || (parameter[0].weatherchoice == 1210001) || (parameter[0].weatherchoice == 1210002) || (parameter[0].weatherchoice == 1210003) || (parameter[0].weatherchoice == 1210004) || (parameter[0].weatherchoice == 1250002)) {
             foldername << "wind_SpasskayaPad";
         } else {
 			cout << " no wind data for weather choice available, read for Chukotka!" << endl;
@@ -471,7 +471,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
             if (parameter[0].windsource == 1) {
                 findyr1 = 1979;
-                findyr2 = 2018;
+                // findyr2 = 2018;
+                findyr2 = 2100;
             }
 
             ss.str("");
@@ -481,7 +482,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 ss << jahr;
 
                 if (parameter[0].windsource == 1) {
-                    filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
+                    // filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
+                    filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
                 }
 
                 ifstream fileinp(filename.c_str());
@@ -781,9 +783,24 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-         } else if (parameter[0].weatherchoice == 1250002) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
+        } else if (parameter[0].weatherchoice == 1250002) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
             char tempbuf[] = "input/cryogrid_tracecruera_1_2500_SpasskayaPad_temp.csv";
             char precbuf[] = "input/cryogrid_tracecruera_1_2500_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 1210001) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_0001_2100_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_0001_2100_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 1210002) {  // new for CryoGrid coupling ... ERA5 future scenarios RCP 2.6 (2) 4.5 (3) 8.5 (4)
+            char tempbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 1210004) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

@@ -94,18 +94,18 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     Envirgrid(short int elevation = 0,
               unsigned short int Treedensityvalue = 0,
               unsigned short int Treenumber = 0,
-              unsigned short maxthawing_depth = 100*10,
-			  unsigned short litterheight0 = 1000,					// 2 
-			  unsigned short litterheight1= 1000,					// 2	
-			  unsigned short litterheight2= 1000,					// 2 
-			  unsigned short litterheight3= 1000,					// 2
-			  unsigned short litterheight4= 1000,					// 2 
-			  unsigned short litterheight5= 1000,					// 2
-			  unsigned short litterheight6= 1000, 					// 2
-			  unsigned short litterheight7= 1000,					// 2 
-			  unsigned short litterheight8= 1000,					// 2
-			  unsigned short litterheight9= 1000,					// 2 
-			  unsigned short litterheightmean= 1000,				// 2
+              unsigned short maxthawing_depth = 100*10,				// 100 cm standard, 10 factor for internal storage
+			  unsigned short litterheight0 = 10*100,					// 10 cm standard, 100 factor for internal storage
+			  unsigned short litterheight1= 10*100,					// 2	
+			  unsigned short litterheight2= 10*100,					// 2 
+			  unsigned short litterheight3= 10*100,					// 2
+			  unsigned short litterheight4= 10*100,					// 2 
+			  unsigned short litterheight5= 10*100,					// 2
+			  unsigned short litterheight6= 10*100, 					// 2
+			  unsigned short litterheight7= 10*100,					// 2 
+			  unsigned short litterheight8= 10*100,					// 2
+			  unsigned short litterheight9= 10*100,					// 2 
+			  unsigned short litterheightmean= 10*100,				// 2
               unsigned short int envirgrowthimpact = 1,
               unsigned short int soilhumidity = 30*100,
               unsigned short int twi = 6.25*100)
@@ -150,6 +150,7 @@ struct Parameter {
     int repeati;
     unsigned int ivortmax;
     unsigned int ivort;
+	int currentyear;
     bool stabilperiod;
     double stabilmovingwindow;
     double stabilpercentchangethreshold;
@@ -158,6 +159,18 @@ struct Parameter {
 
     // submodules
     bool thawing_depth;
+	bool cryogrid_thawing_depth;
+	unsigned short int cryogrid_scenario;
+	bool callcryogrid;
+	bool cryogridcalled;
+	double altslope;
+	double altintercept;
+	double activelayeranomaly1;
+	double activelayeranomaly2;
+	double activelayeranomaly3;
+	double soilhumidityanomaly1;
+	double soilhumidityanomaly2;
+	double soilhumidityanomaly3;
     bool litterlayer;
     bool demlandscape;
     int demresolution;
@@ -465,3 +478,19 @@ struct Evaluation {
     vector<double> meantreeageliste;
     vector<double> meantreeagerunmeanliste;
 };
+
+struct Cryogrid {
+	double xcoo;
+	double ycoo;
+	double leafarea;
+	double stemarea;
+	double maxtreeheight;
+	double meantreeheight;
+	signed int treecount;
+	// double	finerootbiomass; // TODO: now constant later 
+	double maxthawing_depth;
+	double litterheight0;
+	double soilhumidity;
+	signed int envirgridcount;
+};
+

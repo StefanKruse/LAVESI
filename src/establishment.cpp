@@ -30,8 +30,7 @@ void Treeestablishment(Parameter* parameter,
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
-                const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
-                                     + static_cast<std::size_t>(j);
+                const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif) + static_cast<std::size_t>(j);
 
                 if ((parameter[0].demlandscape) && (plot_list[curposi].elevation == 32767)) {
                     seed.dead = true;

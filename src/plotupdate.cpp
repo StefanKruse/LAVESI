@@ -522,7 +522,7 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 	}
 	
 	// output before read in and update from Cryogrid
-	if( (parameter[0].outputmode == 14) && ((parameter[0].ivort % 50 == 0) || (parameter[0].ivort >= 2005)) ) { // compare with dataoutput
+	if(true) { // compare with dataoutput
             // assemble file name
 			ostringstream s1, s2, s3, s4, s5, s6, s7, s8;
 			s1 << parameter[0].repeati;
@@ -1638,7 +1638,7 @@ void Environmentupdate(//Parameter* parameter,
 		if( (parameter[0].cryogrid_thawing_depth==true) ) { // external update of active layer thickness values
 		
 			// if( (parameter[0].cryogridcalled == true) | (parameter[0].ivort % 20 == 0) ) {
-			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 50 == 0)) || (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].cryogridcalled == true) ) {
+			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 50 == 0)) || (parameter[0].ivort > 2000) || (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].cryogridcalled == true) ) {
 				PrepareCryogrid(tree_list, cryo_list, plot_list);		// collect information of trees
 				cout << " -> called ... PrepareCryogrid " << endl;
 			}

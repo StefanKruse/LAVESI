@@ -592,8 +592,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 	// 2. call CryoGrid and estimate permafrost thaw depth
 	// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
 	
-	unsigned short int disturbanceyear = 2020; // TODO: set globally only once currently declared also elsewhere
-
 	// declaration of used vectors 
 	std::vector<double> leafareaiout;
 	std::vector<double> maxthawing_depthiout;
@@ -794,11 +792,11 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 					// 53 {x>3333}				0.15		1						0.10		1.00
 	
 			double yearsincedisturbance = 0;
-			if(parameter[0].currentyear >= disturbanceyear)
-				yearsincedisturbance = parameter[0].currentyear - disturbanceyear;
+			if(parameter[0].currentyear >= parameter[0].cryogrid_disturbanceyear)
+				yearsincedisturbance = parameter[0].currentyear - parameter[0].cryogrid_disturbanceyear;
 
 			double albedo = 0.15;
-			if( ((parameter[0].cryogrid_scenario == 3) | (parameter[0].cryogrid_scenario == 4)) && (parameter[0].ivort >= disturbanceyear) )
+			if( ((parameter[0].cryogrid_scenario == 3) | (parameter[0].cryogrid_scenario == 4)) && (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) )
 				albedo = 0.40 + ((0.15-0.40)/7) * yearsincedisturbance; // based on Jin, 2012 ground albedo after 7 years back to pre-fire conditions
 			if( albedo < 0.15)
 				albedo = 0.15;
@@ -810,10 +808,10 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 // for (auto i = 0; i < 3; i++) { // check
 	// cout << "olayer = " << organiclayer[i] << endl;
 // }
-			if( (parameter[0].cryogrid_scenario == 3) && (parameter[0].ivort >= disturbanceyear) ) {
+			if( (parameter[0].cryogrid_scenario == 3) && (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) ) {
 				organiclayer[1] = 0.1 + ((1.0-0.1)/10) * yearsincedisturbance; // based on Bonan, 1989, organic layer revoverd after 10 years back to pre-fire conditions
 				organiclayer[2] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
-			} else if( (parameter[0].cryogrid_scenario == 4) && (parameter[0].ivort >= disturbanceyear) ) {
+			} else if( (parameter[0].cryogrid_scenario == 4) && (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) ) {
 				organiclayer[0] = 0.1 + ((1.0-0.1)/10) * yearsincedisturbance;
 				organiclayer[1] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
 				organiclayer[2] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
@@ -983,24 +981,17 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 		}
 	}
 
-	bool slurmscheduler = true;
 	if(true) {// 2. call CryoGrid and estimate permafrost thaw depth
-		// main.m from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg"
-		// data read from in "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
-		
 		cout << "try to called matlab at " << clock() << endl;
 		int cryogridcallreturn = 0;
-		if (slurmscheduler == true) {
-			// system("sbatch /legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg_switch_scenarios/submit.sh"); // TODO: make path relative
-			cryogridcallreturn = system("sbatch ../CryoGrid/sample_CryoVeg_switch_scenarios/submit.sh"); // TODO: make path relative
+		if (parameter[0].cryogrid_slurm == true) {
+			cryogridcallreturn = system("sbatch ../CryoGrid/sample_CryoVeg_switch_scenarios/submit.sh");
 		} else {
-			// system("matlab -nodisplay -nosplash -nodesktop -r \"run('/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/CryoGrid/sample_CryoVeg_switch_scenarios/main_CryoVeg.m');exit;\""); // TODO: make path relative
-			cryogridcallreturn = system("matlab -nodisplay -nosplash -nodesktop -r \"run('../CryoGrid/sample_CryoVeg_switch_scenarios/main_CryoVeg.m');exit;\""); // TODO: make path relative
+			cryogridcallreturn = system("matlab -nodisplay -nosplash -nodesktop -r \"run('../CryoGrid/sample_CryoVeg_switch_scenarios/main_CryoVeg.m');exit;\"");
 		}
 		if(cryogridcallreturn == -1)
 		  cout << "system call of CryoGrid failed!" << endl;
 		cout << "after called matlab at " << clock() << endl;
-		// exit(1);
 	}
 
 	if(true) {// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
@@ -1640,23 +1631,21 @@ void Environmentupdate(//Parameter* parameter,
 // iter=0;
 // cout << endl;
 		
-		unsigned short int disturbanceyear = 2020; // TODO: set globally currently declared also elsewhere
-		unsigned short int firstcryogridyear = 2015;
 		// impact function
-		if( parameter[0].ivort == disturbanceyear )
+		if( parameter[0].ivort == parameter[0].cryogrid_disturbanceyear )
 			Disturbance(tree_list,plot_list);
 
 		if( (parameter[0].cryogrid_thawing_depth==true) ) { // external update of active layer thickness values
 		
 			// if( (parameter[0].cryogridcalled == true) | (parameter[0].ivort % 20 == 0) ) {
-			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 50 == 0)) || (parameter[0].ivort == firstcryogridyear) || (parameter[0].cryogridcalled == true) ) {
+			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 50 == 0)) || (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].cryogridcalled == true) ) {
 				PrepareCryogrid(tree_list, cryo_list, plot_list);		// collect information of trees
 				cout << " -> called ... PrepareCryogrid " << endl;
 			}
 
 			// if( (parameter[0].ivort % 20 == 0) ) {
-			// if( (parameter[0].ivort == firstcryogridyear) || (parameter[0].ivort >= disturbanceyear) ) {
-			if( (parameter[0].ivort == firstcryogridyear) || (parameter[0].ivort >= firstcryogridyear) ) {
+			// if( (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) ) {
+			if( (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].ivort >= parameter[0].cryogrid_firstyear) ) {
 				UpdateCryogrid(cryo_list);		// export data and call Cryogrid instance and collect back output
 				parameter[0].cryogridcalled = true;
 				cout << " -> called ... UpdateCryogrid " << endl;

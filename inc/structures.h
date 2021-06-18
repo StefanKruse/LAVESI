@@ -161,6 +161,9 @@ struct Parameter {
     bool thawing_depth;
 	bool cryogrid_thawing_depth;
 	unsigned short int cryogrid_scenario;
+	unsigned short int cryogrid_disturbanceyear;
+	unsigned short int cryogrid_firstyear;
+	bool cryogrid_slurm;
 	bool callcryogrid;
 	bool cryogridcalled;
 	double altslope;

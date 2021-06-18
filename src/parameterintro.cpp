@@ -187,6 +187,28 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_scenario);
     }
 
+    strcpy(uebergabestring, "cryogrid_disturbanceyear");
+    parameter[0].cryogrid_disturbanceyear = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_disturbanceyear);
+    }
+	
+    strcpy(uebergabestring, "cryogrid_firstyear");
+    parameter[0].cryogrid_firstyear = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_firstyear);
+    }
+
+    strcpy(uebergabestring, "cryogrid_slurm");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].cryogrid_slurm = true;
+    } else {
+        parameter[0].cryogrid_slurm = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].cryogrid_slurm) ? "true" : "false");
+    }
+
     strcpy(uebergabestring, "demlandscape");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
         parameter[0].demlandscape = true;

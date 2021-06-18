@@ -459,6 +459,14 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             // Spasskaya Pad
             (parameter[0].weatherchoice == 1901201801) || (parameter[0].weatherchoice == 1201801) || (parameter[0].weatherchoice == 1201802) || (parameter[0].weatherchoice == 1210001) || (parameter[0].weatherchoice == 1210002) || (parameter[0].weatherchoice == 1210003) || (parameter[0].weatherchoice == 1210004) || (parameter[0].weatherchoice == 1250002)) {
             foldername << "wind_SpasskayaPad";
+        } else if (
+            // Nyurba
+            (parameter[0].weatherchoice == 121000201) || (parameter[0].weatherchoice == 121000301) || (parameter[0].weatherchoice == 121000401) ) {
+            foldername << "wind_Nyurba";
+        } else if (
+            // Khamra
+            (parameter[0].weatherchoice == 121000202) || (parameter[0].weatherchoice == 121000302) || (parameter[0].weatherchoice == 121000402) ) {
+            foldername << "wind_Khamra";
         } else {
 			cout << " no wind data for weather choice available, read for Chukotka!" << endl;
             foldername << "wind_Chukotka";
@@ -767,7 +775,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 			
-		// last two numbers 01 only CRU+ERAinterim, 02 TRACE+CRU+ERAinterim
+		// last two numbers 01 only CRU+ERAinterim, >02 TRACE+CRU+ERA
         } else if (parameter[0].weatherchoice == 1901201801) {  // new for CryoGrid coupling
             char tempbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_temp.csv";
             char precbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_prec.csv";
@@ -793,14 +801,56 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/cryogrid_cruera_0001_2100_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+			
+		// two numbers 01 define RCP scenario 01 RCP2.6, 02 4.5 and 03 8.5 CRU+ERAinterim, 02 TRACE+CRU+ERAinterim
+		// ... additional two numbers for region not present e.g. 1210002	is Spasskaya Pad
+		//														  121000201	is Nyurba
+		//														  121000202	is Khamra
+		//														  121000203	is Ilirney
+		//														  121000204	is West of Bilibino
         } else if (parameter[0].weatherchoice == 1210002) {  // new for CryoGrid coupling ... ERA5 future scenarios RCP 2.6 (2) 4.5 (3) 8.5 (4)
             char tempbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_SpasskayaPad_temp.csv";
             char precbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 1210003) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_rcp45_0001_2100_SpasskayaPad_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp45_0001_2100_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
         } else if (parameter[0].weatherchoice == 1210004) {  // new for CryoGrid coupling ... ERA5
             char tempbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_SpasskayaPad_temp.csv";
             char precbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_SpasskayaPad_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 121000201) {  // new for CryoGrid coupling ... ERA5 future scenarios RCP 2.6 (2) 4.5 (3) 8.5 (4)
+            char tempbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_Nyurba_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_Nyurba_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 121000301) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_rcp45_0001_2100_Nyurba_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp45_0001_2100_Nyurba_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 121000401) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_Nyurba_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_Nyurba_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 121000202) {  // new for CryoGrid coupling ... ERA5 future scenarios RCP 2.6 (2) 4.5 (3) 8.5 (4)
+            char tempbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_Khamra_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp26_0001_2100_Khamra_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 121000302) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_rcp45_0001_2100_Khamra_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp45_0001_2100_Khamra_prec.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+        } else if (parameter[0].weatherchoice == 121000402) {  // new for CryoGrid coupling ... ERA5
+            char tempbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_Khamra_temp.csv";
+            char precbuf[] = "input/cryogrid_cruera_rcp85_0001_2100_Khamra_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

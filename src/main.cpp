@@ -522,8 +522,18 @@ void fillElevations() {
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
 			char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/dem_30m_Nyrba_x547262-552272m_y6992707-6997717m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/dem_30m_Nyrba_x549512-550022m_y6994957-6995467m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/dem_30m_Khamra_x606854-611864m_y6647755-6652765m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/dem_30m_Khamra_x609104-609614m_y6650005-6650515m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/dem_30m_WestofBilibino_x430003-435013m_y7593159-7598169m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/dem_30m_WestofBilibino_x432253-432763m_y7595409-7595919m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x641378-646388m_y7479001-7484011m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/dem_30m_Ilirney_x643628-644138m_y7481251-7481761m.csv";  // dim x=510 y=510
+
 			strcpy(demfilename, deminputbuf);
 			f = fopen(demfilename, "r");
 			if (f == NULL) {
@@ -565,8 +575,18 @@ void fillElevations() {
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
 			char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/slope_30m_Nyrba_x547262-552272m_y6992707-6997717m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/slope_30m_Nyrba_x549512-550022m_y6994957-6995467m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/slope_30m_Khamra_x606854-611864m_y6647755-6652765m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/slope_30m_Khamra_x609104-609614m_y6650005-6650515m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/slope_30m_WestofBilibino_x430003-435013m_y7593159-7598169m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/slope_30m_WestofBilibino_x432253-432763m_y7595409-7595919m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/slope_30m_Ilirney_x641378-646388m_y7479001-7484011m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/slope_30m_Ilirney_x643628-644138m_y7481251-7481761m.csv";  // dim x=510 y=510
+
 			strcpy(slopefilename, slopeinputbuf);
 			f = fopen(slopefilename, "r");
 			if (f == NULL) {
@@ -606,8 +626,18 @@ void fillElevations() {
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
+
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
 			char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/twi_30m_Nyrba_x547262-552272m_y6992707-6997717m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/twi_30m_Nyrba_x549512-550022m_y6994957-6995467m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/twi_30m_Khamra_x606854-611864m_y6647755-6652765m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/twi_30m_Khamra_x609104-609614m_y6650005-6650515m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/twi_30m_WestofBilibino_x430003-435013m_y7593159-7598169m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/twi_30m_WestofBilibino_x432253-432763m_y7595409-7595919m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/twi_30m_Ilirney_x641378-646388m_y7479001-7484011m.csv";  // dim x=5010 y=5010
+			// char deminputbuf[] = "input/twi_30m_Ilirney_x643628-644138m_y7481251-7481761m.csv";  // dim x=510 y=510
+
 			strcpy(twifilename, twiinputbuf);
 			f = fopen(twifilename, "r");
 			if (f == NULL) {

@@ -592,6 +592,8 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 	// 2. call CryoGrid and estimate permafrost thaw depth
 	// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
 	
+	unsigned short int disturbanceyear = 2020; // TODO: set globally only once currently declared also elsewhere
+
 	// declaration of used vectors 
 	std::vector<double> leafareaiout;
 	std::vector<double> maxthawing_depthiout;
@@ -790,10 +792,40 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 					// 51 {x<1666}				0.15		1						0			0.10
 					// 52 {1666<x<3333}			0.15		1						0.06		0.50
 					// 53 {x>3333}				0.15		1						0.10		1.00
+	
+			double yearsincedisturbance = 0;
+			if(parameter[0].currentyear >= disturbanceyear)
+				yearsincedisturbance = parameter[0].currentyear - disturbanceyear;
+
 			double albedo = 0.15;
-			if( (parameter[0].cryogrid_scenario == 3) | (parameter[0].cryogrid_scenario == 4) )
-				albedo = 0.40;
-			
+			if( ((parameter[0].cryogrid_scenario == 3) | (parameter[0].cryogrid_scenario == 4)) && (parameter[0].ivort >= disturbanceyear) )
+				albedo = 0.40 + ((0.15-0.40)/7) * yearsincedisturbance; // based on Jin, 2012 ground albedo after 7 years back to pre-fire conditions
+			if( albedo < 0.15)
+				albedo = 0.15;
+
+			double organiclayer[3]={0};
+			for (auto i = 0; i < 3; i++) { // check
+				organiclayer[i] = 1.0;
+			}
+// for (auto i = 0; i < 3; i++) { // check
+	// cout << "olayer = " << organiclayer[i] << endl;
+// }
+			if( (parameter[0].cryogrid_scenario == 3) && (parameter[0].ivort >= disturbanceyear) ) {
+				organiclayer[1] = 0.1 + ((1.0-0.1)/10) * yearsincedisturbance; // based on Bonan, 1989, organic layer revoverd after 10 years back to pre-fire conditions
+				organiclayer[2] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
+			} else if( (parameter[0].cryogrid_scenario == 4) && (parameter[0].ivort >= disturbanceyear) ) {
+				organiclayer[0] = 0.1 + ((1.0-0.1)/10) * yearsincedisturbance;
+				organiclayer[1] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
+				organiclayer[2] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
+			}
+			for (auto i = 0; i < 3; i++) { // check
+				if( organiclayer[i] > 1.0)
+					organiclayer[i] = 1.0;
+				else if( organiclayer[i] < 0.0)
+					organiclayer[i] = 0.0;
+			}
+
+
 			
 			// aggregate data
 			double leafareai[3]={0};
@@ -935,12 +967,9 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			fprintf(filepointer, "\n");
 			
 			fprintf(filepointer, "organiclayer;");
-			fprintf(filepointer, "%d;", 1);
-			fprintf(filepointer, "%d;", 1);
-			if( (parameter[0].cryogrid_scenario == 3) | (parameter[0].cryogrid_scenario == 4) )
-				fprintf(filepointer, "%d", 0);
-			else
-				fprintf(filepointer, "%d", 1);
+			fprintf(filepointer, "%3.3f;", organiclayer[0]);
+			fprintf(filepointer, "%3.3f;", organiclayer[1]);
+			fprintf(filepointer, "%3.3f", organiclayer[2]);
 			fprintf(filepointer, "\n");
 
 			fprintf(filepointer, "maxthawing_depth_cm;");
@@ -1433,7 +1462,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 			pEnvirgrid.maxthawing_depth = maxthawing_depth * 10; // *10 for internal storage conversion
 			pEnvirgrid.Treedensityvalue = 0;
 			pEnvirgrid.Treenumber = 0;
-			pEnvirgrid.soilhumidity = 30 * 100; // *100 for internal storage conversion; reset to start value
+			// pEnvirgrid.soilhumidity = 30 * 100; // *100 for internal storage conversion; reset to start value
 		}
 	} else {
 #pragma omp parallel for default(shared) schedule(guided)
@@ -1441,7 +1470,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
             auto& pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid.Treedensityvalue = 0;
             pEnvirgrid.Treenumber = 0;
-			pEnvirgrid.soilhumidity = 30 * 100; // *100 for internal storage conversion; reset to start value
+			// pEnvirgrid.soilhumidity = 30 * 100; // *100 for internal storage conversion; reset to start value
         }
     }
 }
@@ -1565,6 +1594,9 @@ void Disturbance(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
 					}
 				}
 			}
+			
+			// update relative crown damage for mortality
+			tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000;
 		}
 	}
 	tree_list.consolidate();
@@ -1608,7 +1640,7 @@ void Environmentupdate(//Parameter* parameter,
 // iter=0;
 // cout << endl;
 		
-		unsigned short int disturbanceyear = 2020;
+		unsigned short int disturbanceyear = 2020; // TODO: set globally currently declared also elsewhere
 		unsigned short int firstcryogridyear = 2015;
 		// impact function
 		if( parameter[0].ivort == disturbanceyear )

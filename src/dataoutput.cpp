@@ -114,6 +114,14 @@ void Dataoutput(int t,
 						| (parameter[0].ivort >= 1500)) {
 					outputtestarea=true; // area of 200x200 m with full tree output 
                 }
+            } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area" paramterization
+               
+                if ((parameter[0].ivort % 100 == 0) | (parameter[0].ivort == 1517))
+					outputcurrencies = true;
+
+                if ((parameter[0].ivort % 100 == 0) | (parameter[0].ivort == 1517)) {
+					outputgriddedbiomass = true;
+                }
             } else if (parameter[0].outputmode == 13) {  // "normal,gridded,large area"
                 outputcurrencies = true;
 				
@@ -123,7 +131,7 @@ void Dataoutput(int t,
 				if(parameter[0].ivort % 50 == 0)// test
 					outputgriddedbiomass = true;
 
-            } else if (parameter[0].outputmode == 12) {  // "normal,gridded,large area Khamra"
+            } else if (parameter[0].outputmode == 14) {  // "normal,gridded,large area Khamra"
                 outputcurrencies = true;
 
 				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start

@@ -141,14 +141,17 @@ void Seedin()
 					pSeed->thawing_depthinfluence=100;
 					if (parameter[0].variabletraits==1) 
 					{
-						pSeed->seedweight=normrand(0.9,0.5,0.33,1.66);
-						pSeed->droughtresist=normrand(50,20,0,100);
+						pSeed->seedweight=1;
+						//pSeed->seedweight=normrand(1,0.5,0.33,1.66);
+						pSeed->droughtresist=normrand(28.4532485252458,20,0,100);
+						//pSeed->droughtresist=100;
 					}
 					else 
 					{
 						pSeed->seedweight=1;
-						pSeed->droughtresist=0;
+						pSeed->droughtresist=28.4532485252458;
 					}
+					pSeed->currentweight=pSeed->seedweight;
 					seed_list.push_back(pSeed);	
 					
 					if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )
@@ -304,14 +307,17 @@ void TreesIni(int maximal_word_length)
 						}	
 						if (parameter[0].variabletraits==1) 
 							{
-								pTree->seedweight=normrand(1,0.5,0.33,1.66);
-								pTree->droughtresist=normrand(50,20,0,100);
+								pSeed->seedweight=1;
+								//pTree->seedweight=normrand(1,0.5,0.33,1.66);
+								pTree->droughtresist=normrand(28.4532485252458,20,0,100);
+								//pSeed->droughtresist=100;
 							}
 						else 
 							{
 								pTree->seedweight=1;
-								pTree->droughtresist=0;
+								pTree->droughtresist=28.4532485252458;
 							}
+							pSeed->currentweight=pSeed->seedweight;
 						tree_list.push_back(pTree);
 					}
 					counter++;
@@ -550,14 +556,17 @@ void Hinterlandseedintro( struct Parameter *parameter, int yearposition, vector<
 							pSeed->dispersaldistance=dispersaldistance;	
 							if (parameter[0].variabletraits==1 )
 							{
-								pSeed->seedweight=normrand(0.9,0.5,0.33,1.66);
-								pSeed->droughtresist=normrand(50,20,0,100);
+								pSeed->seedweight=1;
+								//pSeed->seedweight=normrand(1,0.5,0.33,1.66);
+								pSeed->droughtresist=normrand(28.4532485252458,20,0,100);
+								//pSeed->droughtresist=100;
 							}
 							else 
 							{
 								pSeed->seedweight=1;
-								pSeed->droughtresist=0;
+								pSeed->droughtresist=28.4532485252458;
 							}
+							pSeed->currentweight=pSeed->seedweight;
 							seed_list.push_back(pSeed);	
 							
 							if ( (pSeed->yworldcoo<0.0) | (pSeed->yworldcoo> (double) (treerows-1)) | (pSeed->xcoo<0.0) | (pSeed->xcoo> (double) (treecols-1)) )

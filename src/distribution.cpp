@@ -78,6 +78,17 @@ do{
 return z1;	
 }
 
+double averand(double mu1, double mu2, double weight,double std,double Lbound, double Rbound)
+{
+	double R1,R2,z1=-1,mu;
+do{
+	mu=(mu1*(1-weight))+(mu2*weight);
+	R1=rand()*(1.0/RAND_MAX);
+	R2=rand()*(1.0/RAND_MAX);
+	z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std+mu;
+}while(z1<=(Lbound) || z1>=(Rbound));
+return z1;	
+}
 /*
 NOT IN USE.
 meanrand() yields random numbers that are distributed according to the mean of two gaussian distributions. 

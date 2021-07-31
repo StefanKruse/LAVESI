@@ -255,6 +255,84 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
+		//treeline/forestline v1 
+		//bool treelinefound = false;
+		//bool forestlinefound = false;
+		//int treeline = 0;
+		//int forestline = 0;
+		
+		//for (int ycounter = 50; ycounter <= 5000; ycounter++) // have to let it start above 0. this does make it loose the early stage differences, but those are not that important
+		//{
+		//	int localtreeamount = 0;
+		//	if (treelinefound == false || forestlinefound == false)
+		//	{
+		//		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); pos++)
+		//		{
+		//			pTree=(*pos);
+		//			if (pTree->height>=130)
+		//			{
+		//				if ((pTree->ycoo<=ycounter) && (pTree->ycoo>ycounter-50))
+		//				{
+		//					++localtreeamount;
+		//				}
+		//			}
+		//			if (localtreeamount >= 100) //if number of trees is reached no point in continuing counting. this should hopefully reduce the time needed.
+		//			{
+		//				break; 
+		//			}
+		//		}
+		//	}
+		//	if (localtreeamount<1 && treelinefound==false)
+		//	{
+		//		treeline=ycounter;
+		//		treelinefound = true;
+		//	}
+		//	if (localtreeamount<100 && forestlinefound==false)
+		//	{
+		//		forestline=ycounter;
+		//		forestlinefound = true;
+		//	}
+		//}
+		
+		//treeline/forestline v2
+		int plotsize = 5000;
+		int treeamount [plotsize];
+		for (list<Tree*>::iterator pos = tree_list.begin(); pos != tree_list.end(); pos++)
+				{
+					pTree=(*pos);
+					if (pTree->height>=130)
+					{
+						int treespot = floor(pTree->ycoo);
+						treeamount [treespot]=treeamount [treespot]+1;
+					}
+				}
+		bool treelinefound = false;
+		bool forestlinefound = false;
+		int treeline = 0;
+		int forestline = 0;
+		for (int ycounter = 49; ycounter <= 4999; ycounter++) // have to let it start above 0. this does make it loose the early stage differences, but those are not that important.
+		{
+			int inttreecount=0;
+			for (int introwcount = 0; introwcount <= 49; introwcount++)
+			{
+				int listposition = ycounter-introwcount;
+				inttreecount=inttreecount + treeamount[listposition];
+			}
+			if (inttreecount<1 && treelinefound==false)
+			{
+				treeline=ycounter;
+				treelinefound = true;
+			}
+			if (inttreecount<100 && forestlinefound==false)
+			{
+				forestline=ycounter;
+				forestlinefound = true;
+			}
+			if (forestlinefound == true && treelinefound == true)
+			{
+				break;
+			}
+		}
 		
 		
 		// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -305,6 +383,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 	
 				// declarations
 				int ageg0=0, ageg1=0, ageg2=0, ageg3=0, ageg4=0, ageg5=0, ageg6b10=0, ageg11b20=0, ageg21b50=0, ageg51b100=0, ageg101b150=0, ageg151b200=0, ageg201b300=0, ageg301b400=0, ageg401b500=0, ageg501b600=0, ageg601b700=0, ageg701plus=0;
+				double droughtage0=0, droughtage1=0, droughtage2=0, droughtage3=0, droughtage4=0, droughtage5=0, droughtage6b10=0, droughtage11b20=0, droughtage21b50=0, droughtage51b100=0, droughtage101b150=0, droughtage151b200=0, droughtage201b300=0, droughtage301b400=0, droughtage401b500=0, droughtage501b600=0, droughtage601b700=0, droughtage701plus=0;
 				int ages0=0, ages1=0, ages2=0, ages3=0, ages4=0, ages5=0, ages6b10=0, ages11b20=0, ages21b50=0, ages51b100=0, ages101b150=0, ages151b200=0, ages201b300=0, ages301b400=0, ages401b500=0, ages501b600=0, ages601b700=0, ages701plus=0;
 				int gesamtseedAKT=0, gesamtseedSUM=0;
 				int spectree1=0, spectree2=0;
@@ -367,40 +446,58 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "Saettigungsjahr;");
 					fprintf(filepointer, "ageg0;");
 					fprintf(filepointer, "ages0;");
+					fprintf(filepointer, "droughtage0;");
 					fprintf(filepointer, "ageg1;");
 					fprintf(filepointer, "ages1;");
+					fprintf(filepointer, "droughtage1;");
 					fprintf(filepointer, "ageg2;");
 					fprintf(filepointer, "ages2;");
+					fprintf(filepointer, "droughtage2;");
 					fprintf(filepointer, "ageg3;");
 					fprintf(filepointer, "ages3;");
+					fprintf(filepointer, "droughtage3;");
 					fprintf(filepointer, "ageg4;");
 					fprintf(filepointer, "ages4;");
+					fprintf(filepointer, "droughtage4;");
 					fprintf(filepointer, "ageg5;");
 					fprintf(filepointer, "ages5;");
+					fprintf(filepointer, "droughtage5;");
 					fprintf(filepointer, "ageg6bis10;");
 					fprintf(filepointer, "ages6bis10;");
+					fprintf(filepointer, "droughtage6b10;");
 					fprintf(filepointer, "ageg11bis20;");
 					fprintf(filepointer, "ages11bis20;");
+					fprintf(filepointer, "droughtage11b20;");
 					fprintf(filepointer, "ageg21bis50;");
 					fprintf(filepointer, "ages21bis50;");
+					fprintf(filepointer, "droughtage21b50;");
 					fprintf(filepointer, "ageg51bis100;");
 					fprintf(filepointer, "ages51bis100;");
+					fprintf(filepointer, "droughtage51b100;");
 					fprintf(filepointer, "ageg101bis150;");
 					fprintf(filepointer, "ages101bis150;");
+					fprintf(filepointer, "droughtage101b150;");
 					fprintf(filepointer, "ageg151bis200;");
 					fprintf(filepointer, "ages151bis200;");
+					fprintf(filepointer, "droughtage151b200;");
 					fprintf(filepointer, "ageg201bis300;");
 					fprintf(filepointer, "ages201bis300;");
+					fprintf(filepointer, "droughtage201b300;");
 					fprintf(filepointer, "ageg301bis400;");
 					fprintf(filepointer, "ages301bis400;");
+					fprintf(filepointer, "droughtage301b400;");
 					fprintf(filepointer, "ageg401bis500;");
 					fprintf(filepointer, "ages401bis500;");
+					fprintf(filepointer, "droughtage401b500;");
 					fprintf(filepointer, "ageg501bis600;");
 					fprintf(filepointer, "ages501bis600;");
+					fprintf(filepointer, "droughtage501b600;");
 					fprintf(filepointer, "ageg601bis700;");
 					fprintf(filepointer, "ages601bis700;");
+					fprintf(filepointer, "droughtage601b700;");
 					fprintf(filepointer, "ageg701plus;");
-					fprintf(filepointer, "ages701plus;");					
+					fprintf(filepointer, "ages701plus;");
+					fprintf(filepointer, "droughtage701plus;");					
 					fprintf(filepointer, "GesamtseedprodAKT;");
 					fprintf(filepointer, "GesamtseedprodSUM;");
 					fprintf(filepointer, "Trees_gmel;");
@@ -410,6 +507,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "Seeds_gmel;");
 					fprintf(filepointer, "Seeds_sib;");
 					fprintf(filepointer, "Y_Pos_Max;");
+					fprintf(filepointer, "treeline;");
+					fprintf(filepointer, "forsetline;");
 					// weather
 					fprintf(filepointer, "weathertyp;");
 					fprintf(filepointer, "Starttrees;");
@@ -423,6 +522,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 					fprintf(filepointer, "weatherfaktor_gmel;");				
 					fprintf(filepointer, "weatherfaktor_sib;");							
 					fprintf(filepointer, "thawing_depth_infl;");
+					fprintf(filepointer, "droughtmort;");
 					fprintf(filepointer, "\n");
 				
 					if (filepointer == NULL)
@@ -452,24 +552,24 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						if(pTree->species == 1)
 						{
 							// bin trees by age
-							if (pTree->age == 0)	{ageg0++;}
-							else if (pTree->age == 1)	{ageg1++;}
-							else if (pTree->age == 2)	{ageg2++;}
-							else if (pTree->age == 3)	{ageg3++;}
-							else if (pTree->age == 4)	{ageg4++;}
-							else if (pTree->age == 5)	{ageg5++;}
-							else if ( (pTree->age > 5) && (pTree->age <= 10) )	{ageg6b10++;}
-							else if ( (pTree->age > 10) && (pTree->age <= 20) )	{ageg11b20++;}
-							else if ( (pTree->age > 20) && (pTree->age <= 50) )	{ageg21b50++;}
-							else if ( (pTree->age > 50) && (pTree->age <= 100) )	{ageg51b100++;}
-							else if ( (pTree->age > 100) && (pTree->age <= 150) )	{ageg101b150++;}
-							else if ( (pTree->age > 150) && (pTree->age <= 200) )	{ageg151b200++;}
-							else if ( (pTree->age > 200) && (pTree->age <= 300) )	{ageg201b300++;}
-							else if ( (pTree->age > 300) && (pTree->age <= 400) )	{ageg301b400++;}
-							else if ( (pTree->age > 400) && (pTree->age <= 500) )	{ageg401b500++;}
-							else if ( (pTree->age > 500) && (pTree->age <= 600) )	{ageg501b600++;}
-							else if ( (pTree->age > 600) && (pTree->age <= 700) )	{ageg601b700++;}
-							else if (pTree->age > 700)	{ageg701plus++;}
+							if (pTree->age == 0)	{ageg0++;droughtage0=droughtage0+pTree->droughtresist;}
+							else if (pTree->age == 1)	{ageg1++;droughtage1=droughtage1+pTree->droughtresist;}
+							else if (pTree->age == 2)	{ageg2++;droughtage2=droughtage2+pTree->droughtresist;}
+							else if (pTree->age == 3)	{ageg3++;droughtage3=droughtage3+pTree->droughtresist;}
+							else if (pTree->age == 4)	{ageg4++;droughtage4=droughtage4+pTree->droughtresist;}
+							else if (pTree->age == 5)	{ageg5++;droughtage5=droughtage5+pTree->droughtresist;}
+							else if ( (pTree->age > 5) && (pTree->age <= 10) )	{ageg6b10++;droughtage6b10=droughtage6b10+pTree->droughtresist;}
+							else if ( (pTree->age > 10) && (pTree->age <= 20) )	{ageg11b20++;droughtage11b20=droughtage11b20+pTree->droughtresist;}
+							else if ( (pTree->age > 20) && (pTree->age <= 50) )	{ageg21b50++;droughtage21b50=droughtage21b50+pTree->droughtresist;}
+							else if ( (pTree->age > 50) && (pTree->age <= 100) )	{ageg51b100++;droughtage51b100=droughtage51b100+pTree->droughtresist;}
+							else if ( (pTree->age > 100) && (pTree->age <= 150) )	{ageg101b150++;droughtage101b150=droughtage101b150+pTree->droughtresist;}
+							else if ( (pTree->age > 150) && (pTree->age <= 200) )	{ageg151b200++;droughtage151b200=droughtage151b200+pTree->droughtresist;}
+							else if ( (pTree->age > 200) && (pTree->age <= 300) )	{ageg201b300++;droughtage201b300=droughtage201b300+pTree->droughtresist;}
+							else if ( (pTree->age > 300) && (pTree->age <= 400) )	{ageg301b400++;droughtage301b400=droughtage301b400+pTree->droughtresist;}
+							else if ( (pTree->age > 400) && (pTree->age <= 500) )	{ageg401b500++;droughtage401b500=droughtage401b500+pTree->droughtresist;}
+							else if ( (pTree->age > 500) && (pTree->age <= 600) )	{ageg501b600++;droughtage501b600=droughtage501b600+pTree->droughtresist;}
+							else if ( (pTree->age > 600) && (pTree->age <= 700) )	{ageg601b700++;droughtage601b700=droughtage601b700+pTree->droughtresist;}
+							else if (pTree->age > 700)	{ageg701plus++;droughtage701plus=droughtage701plus+pTree->droughtresist;}
 						}
 						else if(pTree->species == 2)
 						{
@@ -521,7 +621,30 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				
 					++pos;
 				}
-			
+				
+				//averaging
+				droughtage0=droughtage0/ageg0; 
+				droughtage1=droughtage1/ageg1;
+				droughtage2=droughtage2/ageg2;
+				droughtage3=droughtage3/ageg3;
+				droughtage4=droughtage4/ageg4; 
+				droughtage5=droughtage5/ageg5;
+				droughtage6b10=droughtage6b10/ageg6b10; 
+				droughtage11b20=droughtage11b20/ageg11b20; 
+				droughtage21b50=droughtage21b50/ageg21b50; 
+				droughtage51b100=droughtage51b100/ageg51b100;
+				droughtage101b150=droughtage101b150/ageg101b150;
+				droughtage151b200=droughtage151b200/ageg151b200;
+				droughtage201b300=droughtage201b300/ageg201b300; 
+				droughtage301b400=droughtage301b400/ageg301b400;
+				droughtage401b500=droughtage401b500/ageg401b500;
+				droughtage501b600=droughtage501b600/ageg501b600;
+				droughtage601b700=droughtage601b700/ageg601b700;
+				droughtage701plus=droughtage701plus/ageg701plus;
+				
+				
+				
+				
 				// for counting seeds:
 				int seedconezahl=0, seedbodenzahl=0;
 				// for counting species:
@@ -572,40 +695,58 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", pEvaluation->yearofequilibrium);
 				fprintf(filepointer, "%d;", ageg0);
 				fprintf(filepointer, "%d;", ages0);
+				fprintf(filepointer, "%4.4f;", droughtage0);
 				fprintf(filepointer, "%d;", ageg1);
 				fprintf(filepointer, "%d;", ages1);
+				fprintf(filepointer, "%4.4f;", droughtage1);
 				fprintf(filepointer, "%d;", ageg2);
 				fprintf(filepointer, "%d;", ages2);
+				fprintf(filepointer, "%4.4f;", droughtage2);
 				fprintf(filepointer, "%d;", ageg3);
 				fprintf(filepointer, "%d;", ages3);
+				fprintf(filepointer, "%4.4f;", droughtage3);
 				fprintf(filepointer, "%d;", ageg4);
 				fprintf(filepointer, "%d;", ages4);
+				fprintf(filepointer, "%4.4f;", droughtage4);
 				fprintf(filepointer, "%d;", ageg5);
 				fprintf(filepointer, "%d;", ages5);
+				fprintf(filepointer, "%4.4f;", droughtage5);
 				fprintf(filepointer, "%d;", ageg6b10);
 				fprintf(filepointer, "%d;", ages6b10);
+				fprintf(filepointer, "%4.4f;", droughtage6b10);
 				fprintf(filepointer, "%d;", ageg11b20);
 				fprintf(filepointer, "%d;", ages11b20);
+				fprintf(filepointer, "%4.4f;", droughtage11b20);
 				fprintf(filepointer, "%d;", ageg21b50);
 				fprintf(filepointer, "%d;", ages21b50);
+				fprintf(filepointer, "%4.4f;", droughtage21b50);
 				fprintf(filepointer, "%d;", ageg51b100);
 				fprintf(filepointer, "%d;", ages51b100);
+				fprintf(filepointer, "%4.4f;", droughtage51b100);
 				fprintf(filepointer, "%d;", ageg101b150);
 				fprintf(filepointer, "%d;", ages101b150);
+				fprintf(filepointer, "%4.4f;", droughtage101b150);
 				fprintf(filepointer, "%d;", ageg151b200);
 				fprintf(filepointer, "%d;", ages151b200);
+				fprintf(filepointer, "%4.4f;", droughtage151b200);
 				fprintf(filepointer, "%d;", ageg201b300);
 				fprintf(filepointer, "%d;", ages201b300);
+				fprintf(filepointer, "%4.4f;", droughtage201b300);
 				fprintf(filepointer, "%d;", ageg301b400);
 				fprintf(filepointer, "%d;", ages301b400);
+				fprintf(filepointer, "%4.4f;", droughtage301b400);
 				fprintf(filepointer, "%d;", ageg401b500);
 				fprintf(filepointer, "%d;", ages401b500);
+				fprintf(filepointer, "%4.4f;", droughtage401b500);
 				fprintf(filepointer, "%d;", ageg501b600);
 				fprintf(filepointer, "%d;", ages501b600);
+				fprintf(filepointer, "%4.4f;", droughtage501b600);
 				fprintf(filepointer, "%d;", ageg601b700);
 				fprintf(filepointer, "%d;", ages601b700);
+				fprintf(filepointer, "%4.4f;", droughtage601b700);
 				fprintf(filepointer, "%d;", ageg701plus);
 				fprintf(filepointer, "%d;", ages701plus);
+				fprintf(filepointer, "%4.4f;", droughtage701plus);
 				fprintf(filepointer, "%d;", gesamtseedAKT);
 				fprintf(filepointer, "%d;", gesamtseedSUM);
 				fprintf(filepointer, "%d;", spectree1);
@@ -615,6 +756,8 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%d;", specseed1);
 				fprintf(filepointer, "%d;", specseed2);				
 				fprintf(filepointer, "%4.2f;",yposmax);
+				fprintf(filepointer, "%d;", treeline);
+				fprintf(filepointer, "%d;", forestline);
 				// weather
 				fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 				fprintf(filepointer, "%d;", parameter[0].starttrees);
@@ -628,6 +771,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactorg);
 				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->weatherfactors);		
 				fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+				fprintf(filepointer, "%4.4f;", weather_list[yearposition]->droughtmort);
 			
 				fprintf(filepointer, "\n");
 				
@@ -653,7 +797,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 			// -- -- -- -- -- -- - trees Position -- -- -- -- -- -- -- -- //
 
-			if ( parameter[0].ivort==1 || (parameter[0].spinupphase==true && (parameter[0].ivort%10)==0) || (parameter[0].spinupphase==false) )
+			if ( parameter[0].ivort==1 || (parameter[0].spinupphase==true && (parameter[0].ivort%500)==0) || (parameter[0].spinupphase==false) )
 			{	
 				// assemble file name
 				if (parameter[0].spinupphase==true)
@@ -767,6 +911,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "name;");
 						fprintf(filepointer, "namem;");
 						fprintf(filepointer, "namep;");
+						fprintf(filepointer, "dispersaldistance;");
 						fprintf(filepointer, "\n");
 
 						if (filepointer == NULL)
@@ -804,6 +949,7 @@ void Dataoutput( int t, int jahr, struct Parameter *parameter, int yearposition,
 						fprintf(filepointer, "%d;", pTree->name);
 						fprintf(filepointer, "%d;", pTree->namem);
 						fprintf(filepointer, "%d;", pTree->namep);
+						fprintf(filepointer, "%4.4f;", pTree->dispersaldistance);
 						fprintf(filepointer, "\n");
 
 						++pos;

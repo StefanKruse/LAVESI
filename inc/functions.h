@@ -29,3 +29,4 @@ void Clearalllists_copy(void);
 
 double mixrand(double mu1,double mu2,double std1,double std2, double Lbound, double Rbound);
 double normrand(double mu, double std, double Lbound, double Rbound);
+double averand(double mu1, double mu2, double weight,double std,double Lbound, double Rbound);

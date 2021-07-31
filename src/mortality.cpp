@@ -118,7 +118,7 @@ void TreeMort(int yearposition_help,vector<Weather*> &weather_list,list<Tree*> &
 										exp(parameter[0].gdbasalconstsib+parameter[0].gdbasalfacsib*pTree->dbasal+parameter[0].gdbasalfacqsib*pTree->dbasal*pTree->dbasal)))));	
 			double weather_mort_gmel	= parameter[0].mweather * weathermortaddg * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);
 			double weather_mort_sib	= parameter[0].mweather * weathermortadds * pow((1.0 / pTree->height), parameter[0].heightweathermorteinflussexp);				
-			double dry_mort		= (parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * pow((1.0 / pTree->height), 0.5))*(pTree->droughtresist/100);
+			double dry_mort		= parameter[0].mdrought * weather_list[yearposition_help]->droughtmort * (pow((1.0 / pTree->height), 0.5)+0.5) *(pTree->droughtresist/100); //added the +0.1 so that drought mort gets raised for taller trees
 			
 			// calculating the mortality rate of the tree considering the factors of each mortality rate
 			double Treemortg = 0.0 
@@ -330,7 +330,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 							
 									pollen_list[kartenpos]->Treenames.clear();
 									pollen_list[kartenpos]->seedweight=0;
-									pollen_list[kartenpos]->droughtresist=10;
+									pollen_list[kartenpos]->droughtresist=0;
 							}	
 			for(list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); ++posb)
 			{
@@ -490,34 +490,43 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 									//This should be changed to a pollengrid size dependent law derived from genetic studies
 									//(square root?... according to neutral theory) for std1 and a tree dependent std2.
 									//
-									pSeed->seedweight=mixrand(Vthdpth.at(iran),0.05,pTree->seedweight,0.05,0.33,1.66); // changed the std to be a lot smaller since they can be any value anway. realistic value to be determined
+									pSeed->seedweight=1;
+									//pSeed->seedweight=mixrand(Vthdpth.at(iran),0.05,pTree->seedweight,0.05,0.33,1.66); // changed the std to be a lot smaller since they can be any value anway. realistic value to be determined
+									//pSeed->seedweight=averand(Vthdpth.at(iran),pTree->seedweight,0.5,0.05,0.33,1.66);	
 									// pSeed->seedweight=Vthdpth.at(iran); //used for testing
-									pSeed->droughtresist=mixrand(Vdrought.at(iran),2,pTree->droughtresist,20,0,100);
+									pSeed->droughtresist=mixrand(Vdrought.at(iran),8,pTree->droughtresist,8,0,100);
+									//pSeed->droughtresist=100;
 									// pSeed->droughtresist=Vdrought.at(iran); //used for testing
 								} 
 								else if ((Vname.size()==0) && (parameter[0].pollination==1 || parameter[0].pollination==9))
 								{
 									//If no fathering pollen grid cell is found....
 									pSeed->namep=0;
-									pSeed->seedweight=normrand(pTree->seedweight,0.05,0.33,1.66);								
-									pSeed->droughtresist=normrand(pTree->droughtresist,2,0,100);								}
+									pSeed->seedweight=1;
+									//pSeed->seedweight=normrand(pTree->seedweight,0.05,0.33,1.66);								
+									pSeed->droughtresist=normrand(pTree->droughtresist,8,0,100);	
+									//pSeed->droughtresist=100;
+									}
 								else if (parameter[0].pollination ==0)   ///should be further upstream to avoid unnecessary computation. no need to keep pollenlist when there is no pollination 
 								{
 									if (parameter[0].variabletraits == 1)
 									{
 									pSeed->namep=0;
-									pSeed->seedweight=normrand(0.8,0.5,0.33,1.66);
-									pSeed->droughtresist=normrand(50,20,0,100);
+									//pSeed->seedweight=normrand(1,0.5,0.33,1.66);
+									pSeed->seedweight=1;
+									//pSeed->droughtresist=100;
+									pSeed->droughtresist=normrand(28.4532485252458,20,0,100);
 									}
 									else
 									{
 									pSeed->namep=0;
 									pSeed->seedweight=1;
-									pSeed->droughtresist=50;
+									pSeed->droughtresist=28.4532485252458;
 									}
 								} 
 								
 								
+								pSeed->currentweight=pTree->seedweight;
 								pSeed->line=pTree->line;
 								pSeed->generation=pTree->generation+1;
 								pSeed->incone=true;
@@ -562,7 +571,7 @@ void Mortality( struct Parameter *parameter,int Jahr, int yearposition, vector<l
 				
 				
 		// output of seeds (position and parents)
-		if(parameter[0].ivort>1045)
+		if(parameter[0].ivort>33000)
 		{
 			char output[50];
 

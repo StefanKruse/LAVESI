@@ -110,7 +110,7 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 							double time_start_individual_seed_Seedwinddispersal=omp_get_wtime();
 							Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, pSeed->releaseheight, pSeed->species);
 							cum_time_Seedwinddispersal+=omp_get_wtime()-time_start_individual_seed_Seedwinddispersal;
-		
+							dispersaldistance=sqrt(pow(iquer,2)+pow(jquer,2));
 							if(parameter[0].ivort>1045 && parameter[0].outputmode!=9)
 							{							
 								double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -177,9 +177,9 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 								}
 							}
 						
-							pSeed->xcoo=pSeed->xcoo+jquer/sqrt(pSeed->seedweight);
-							pSeed->ycoo=pSeed->ycoo+iquer/sqrt(pSeed->seedweight);
-							pSeed->dispersaldistance=dispersaldistance/sqrt(pSeed->seedweight);	
+							pSeed->xcoo=pSeed->xcoo+jquer/pow(pSeed->currentweight,parameter[0].seedweightfactor);
+							pSeed->ycoo=pSeed->ycoo+iquer/pow(pSeed->currentweight,parameter[0].seedweightfactor);
+							pSeed->dispersaldistance=dispersaldistance/pow(pSeed->currentweight,parameter[0].seedweightfactor);
 
 
 							/****************************************************************************************//**
@@ -324,7 +324,7 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 								double iquer=0;
 
 								Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, pSeed->releaseheight, pSeed->species);
-								
+								dispersaldistance=sqrt(pow(iquer,2)+pow(jquer,2));
 								if(parameter[0].ivort>1045 && parameter[0].outputmode!=9 && parameter[0].omp_num_threads==1)
 								{
 									double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -389,9 +389,9 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 									}
 								}
 								
-								pSeed->xcoo=pSeed->xcoo+jquer;
-								pSeed->ycoo=pSeed->ycoo+iquer;
-								pSeed->dispersaldistance=dispersaldistance;	
+							pSeed->xcoo=pSeed->xcoo+jquer/pow(pSeed->currentweight,parameter[0].seedweightfactor);
+							pSeed->ycoo=pSeed->ycoo+iquer/pow(pSeed->currentweight,parameter[0].seedweightfactor);
+							pSeed->dispersaldistance=dispersaldistance/pow(pSeed->currentweight,parameter[0].seedweightfactor);
 
 							
 								/****************************************************************************************//**
@@ -545,7 +545,7 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 									double iquer=0;
 
 									Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, pSeed->releaseheight, pSeed->species);
-									
+									dispersaldistance=sqrt(pow(iquer,2)+pow(jquer,2));
 									if(parameter[0].ivort>1045 && parameter[0].outputmode!=9 && parameter[0].omp_num_threads==1)
 									{
 											double seedeinschreibzufall=0.0 +( (double) 1.0*rand()/(RAND_MAX + 1.0));
@@ -612,9 +612,9 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
 											}
 									}
 									
-									pSeed->xcoo=pSeed->xcoo+jquer;
-									pSeed->ycoo=pSeed->ycoo+iquer;
-									pSeed->dispersaldistance=dispersaldistance;	
+									pSeed->xcoo=pSeed->xcoo+jquer/pow(pSeed->currentweight,parameter[0].seedweightfactor);
+									pSeed->ycoo=pSeed->ycoo+iquer/pow(pSeed->currentweight,parameter[0].seedweightfactor);
+									pSeed->dispersaldistance=dispersaldistance/pow(pSeed->currentweight,parameter[0].seedweightfactor);
 
 									
 									/****************************************************************************************//**

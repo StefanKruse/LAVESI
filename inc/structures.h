@@ -66,6 +66,7 @@ using namespace std;
 		double 	descent; 
 		double 	thawing_depthinfluence;
 		double seedweight,seedweightvar;
+		double currentweight;
 		double droughtresist;
 	};
 
@@ -239,6 +240,8 @@ using namespace std;
 		double 	pollendirectionvariance;
 		int	variabletraits;
 		int 	pollination;
+		double	seedweightfactor;
+		double 	seednumberfactor;
 		double 	pollenfall;
 		double 	pollengregorym,pollengregoryc;
 		

@@ -198,9 +198,19 @@ void Spinupphase()
 				// if (parameter[0].weatherchoice==21 || parameter[0].weatherchoice==22 || parameter[0].weatherchoice==23 || parameter[0].weatherchoice==24)
 				// {
 					// firstyear=1934;
-					firstyear=world_weather_list[0][0]->jahr;
 					// lastyear=2013;
-					lastyear=world_weather_list[0][0]->jahr+90;
+					if(parameter[0].ivort<=1000)
+					{
+					firstyear=world_weather_list[0][0]->jahr;
+					
+					lastyear=world_weather_list[0][0]->jahr+117;
+					}
+					else if (parameter[0].ivort>1000)
+					{
+					firstyear=world_weather_list[0][0]->jahr+118;
+					
+					lastyear=world_weather_list[0][0]->jahr+235;
+					}
 				// }
 				
 				// choose a random year for weather determination
@@ -672,7 +682,6 @@ void runSimulation()
 
 		// plot and evaluation list preparation for each location on the transect 
 		initialiseMaps();
-		printf("this far");
 		// tree input similar to CH17 or seed input
 		Treedistribution(&parameter[0], stringlengthmax);
 		

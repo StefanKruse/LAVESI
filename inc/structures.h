@@ -375,6 +375,10 @@ struct Speciestraits {
 	double  biomasswoodbase;
 	double  biomasswoodfaca;
 	double  biomasswoodfacb;
+	unsigned short int deciduous;
+	double  crownradiusestslope;
+	double  crownradiusestinterc;
+	double  leafareaslope;
 };
 
 struct Weather {
@@ -486,6 +490,7 @@ struct Cryogrid {
 	double xcoo;
 	double ycoo;
 	double leafarea;
+	double leafarea_deciduous;
 	double stemarea;
 	double maxtreeheight;
 	double meantreeheight;

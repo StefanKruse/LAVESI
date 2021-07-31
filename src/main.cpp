@@ -520,7 +520,7 @@ void fillElevations() {
 			// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
-			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=1260 y=1260
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
 
 			// char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
@@ -573,7 +573,7 @@ void fillElevations() {
 			// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
-			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=1260 y=1260
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
 
 			// char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
@@ -624,7 +624,7 @@ void fillElevations() {
 			// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532151m_y6900039-6900309m.csv";  // dim x=270 y=270
-			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x531881-532391m_y6900039-6900549m.csv";  // dim x=510 y=510
+			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv";  // dim x=1260 y=1260
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x530881-533401m_y6899039-6901559m.csv";  // dim x=2520 y=2520
 
 			// char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-534641m_y6897789-6902799m.csv";  // dim x=5010 y=5010
@@ -876,6 +876,7 @@ void initialiseMaps() {
 			pCryogrid.xcoo=(double) kartenpos - (pCryogrid.ycoo * ceil(treecols*sizemagnifcryo));
 
 			pCryogrid.leafarea=0;
+			pCryogrid.leafarea_deciduous=0;
 			pCryogrid.stemarea=0;
 			pCryogrid.maxtreeheight=0;
 			pCryogrid.meantreeheight=0;

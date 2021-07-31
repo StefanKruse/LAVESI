@@ -356,13 +356,17 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 			}
 				// water stress update
 				// ... dependency on local site conditions
+// cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 // if(tree.height/10 > 130) cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 				tree.soilhumidity = pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
+// cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 // if(tree.height/10 > 130) cout << " ... between: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
-				if( (tree.soilhumidity < speciestrait[tree.species].minsoilwater*100) | (tree.soilhumidity > speciestrait[tree.species].maxsoilwater*100) )
-					tree.soilhumidity=0;
+				if( (tree.soilhumidity < 15*100) | (tree.soilhumidity > 60*100) )
+					tree.soilhumidity=0.0;
+				else if( (tree.soilhumidity < speciestrait[tree.species].minsoilwater*100) | (tree.soilhumidity > speciestrait[tree.species].maxsoilwater*100) )
+					tree.soilhumidity=0.1;
 				else
-					tree.soilhumidity=1;
+					tree.soilhumidity=1.0;
 // if(tree.height/10 > 130) cout << " ... after: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 		}
 	}
@@ -381,6 +385,7 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 		
 		// aggregiere nach Scenarien!! -> x wert abhängig 0-A, A-B, C-max
 		pCryogrid.leafarea = 0;
+		pCryogrid.leafarea_deciduous = 0;
 		pCryogrid.stemarea = 0;
 		pCryogrid.maxtreeheight = 0;
 		pCryogrid.treecount = 0;
@@ -405,8 +410,8 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 			// TODO: leaf- and stemarea distribution
 			// TODO: impact area for leaf- stem area check
 			// double crownradius=exp(0.9193333*log(tree.dbasal) + 2.4618496) / 100; //in m // LACA Chukotka
-			double crownradius=exp(1.067957*log(tree.dbasal) + 2.063213) / 100; //in m // LAGM Central Yakutia
-			    
+			// double crownradius=exp(1.067957*log(tree.dbasal) + 2.063213) / 100; //in m // LAGM Central Yakutia
+			double crownradius=exp(speciestrait[tree.species].crownradiusestslope*log(tree.dbasal) + speciestrait[tree.species].crownradiusestinterc) / 100; //in m
 			// cout << crownradius << endl;
 			// cout << cryo_list.size() << " = length cryo_list" << endl;
 			// cout << world_cryo_list.size() << " = length world_cryo_list" << endl;
@@ -424,7 +429,10 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 			// if the trees influences only one density grid cell
 			if ( crownradius < (1.0/sizemagnifcryo) ) {
 				// cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * 23.99583 * tree.dbasal * 2 / cryogridcellarea; // LACA Chukotka
-				cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * 13.7443 * tree.dbasal * 2 / cryogridcellarea; // LAGM Central Yakutia
+				// cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * 13.7443 * tree.dbasal * 2 / cryogridcellarea; // LAGM Central Yakutia
+				cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * speciestrait[tree.species].leafareaslope * tree.dbasal * 2 / cryogridcellarea;
+				if(speciestrait[tree.species].deciduous == 1)
+					cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea_deciduous += livingtreefraction * speciestrait[tree.species].leafareaslope * tree.dbasal * 2 / cryogridcellarea;
 				cryo_list[i*ceil(treecols*sizemagnifcryo)+j].stemarea += M_PI * tree.dbasal/100 * sqrt( pow(tree.dbasal/100,2) + pow(tree.height / 10 / 100,2) )  / cryogridcellarea;
 				if(tree.height / 10 > cryo_list[i*ceil(treecols*sizemagnifcryo)+j].maxtreeheight)
 					cryo_list[i*ceil(treecols*sizemagnifcryo)+j].maxtreeheight = tree.height / 10;
@@ -441,7 +449,8 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 				if(fractionimpactpertile > 0) {
 					// determine shifted coordinates and adding up the density value
 					// double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * 23.99583 * tree.dbasal * 2;
-					double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * 13.7443 * tree.dbasal * 2;
+					// double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * 13.7443 * tree.dbasal * 2;
+					double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * speciestrait[tree.species].leafareaslope * tree.dbasal * 2;
 					double stemareaoftreepertile = fractionimpactpertile * M_PI * tree.dbasal/100 * sqrt( pow(tree.dbasal/100,2) + pow(tree.height / 10 / 100,2) );
 					
 					for (int rastposi=(i+xyquerrastpos); rastposi>(i-(xyquerrastpos+1)); rastposi--) {
@@ -453,6 +462,8 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 								// only if the current grid cell is part of the influence area, a value is assigned
 								if (entfrastpos <= (double) xyquerrastpos) {
 									cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].leafarea += leafareaoftreepertile;
+									if(speciestrait[tree.species].deciduous == 1)
+										cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].leafarea_deciduous += leafareaoftreepertile;
 									cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].stemarea += stemareaoftreepertile;
 									if(tree.height / 10 > cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].maxtreeheight)
 										cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].maxtreeheight = tree.height / 10;
@@ -544,6 +555,7 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
                 fprintf(filepointer, "x;");
                 fprintf(filepointer, "y;");
                 fprintf(filepointer, "leafarea;");
+                fprintf(filepointer, "leafarea_deciduous;");
                 fprintf(filepointer, "stemarea;");
                 fprintf(filepointer, "maxtreeheight;");
                 fprintf(filepointer, "meantreeheight;");
@@ -570,6 +582,7 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 				fprintf(filepointer, "%d;", (int)pCryogrid.xcoo);
 				fprintf(filepointer, "%d;", (int)pCryogrid.ycoo);
 				fprintf(filepointer, "%4.4f;", pCryogrid.leafarea);
+				fprintf(filepointer, "%4.4f;", pCryogrid.leafarea_deciduous);
 				fprintf(filepointer, "%4.4f;", pCryogrid.stemarea);
 				fprintf(filepointer, "%4.2f;", pCryogrid.maxtreeheight);
 				fprintf(filepointer, "%4.2f;", pCryogrid.meantreeheight);
@@ -653,6 +666,7 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			std::vector<double> maxthawing_depthi;
 			std::vector<double> litterheight0i;
 			std::vector<double> soilhumidityi;
+			std::vector<double> deciduousfractioni;
 			// create a copy of cryo_list and sort by leaf area values
 			vector<Cryogrid> cryo_list_sortcopy(cryo_list); 
 			std::sort(cryo_list_sortcopy.begin(), cryo_list_sortcopy.end(), 
@@ -669,6 +683,10 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 				maxthawing_depthi.push_back(pCryogrid.maxthawing_depth); // in cm
 				litterheight0i.push_back(pCryogrid.litterheight0); // in cm
 				soilhumidityi.push_back(pCryogrid.soilhumidity); // in percent
+				if(pCryogrid.leafarea > 0)
+					deciduousfractioni.push_back(pCryogrid.leafarea_deciduous/pCryogrid.leafarea);
+				else
+					deciduousfractioni.push_back(0);
 			}
 			// setup leafareaiout and maxthawing_depthi aggregated
 			leafareaiout.push_back(leafareai[0]);
@@ -767,6 +785,14 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			fprintf(filepointer, "%3.3f;", maxthawing_depthi[maxthawing_depthi.size()/2+maxthawing_depthi.size()/2/2]);
 			fprintf(filepointer, "%3.3f", maxthawing_depthi[maxthawing_depthi.size()-1]);
 			fprintf(filepointer, "\n");
+			
+			fprintf(filepointer, "deciduous_fraction;");
+			fprintf(filepointer, "%3.3f;", deciduousfractioni[0]);
+			fprintf(filepointer, "%3.3f;", deciduousfractioni[deciduousfractioni.size()/2/2]);
+			fprintf(filepointer, "%3.3f;", deciduousfractioni[deciduousfractioni.size()/2]);
+			fprintf(filepointer, "%3.3f;", deciduousfractioni[deciduousfractioni.size()/2+deciduousfractioni.size()/2/2]);
+			fprintf(filepointer, "%3.3f", deciduousfractioni[deciduousfractioni.size()-1]);
+			fprintf(filepointer, "\n");
 
 			fclose(filepointer);
 		} else { // ... for each scenario mean over 3 condition
@@ -823,8 +849,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 					organiclayer[i] = 0.0;
 			}
 
-
-			
 			// aggregate data
 			double leafareai[3]={0};
 			double stemareai[3]={0};
@@ -834,7 +858,9 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			double litterheight0i[3]={0};
 			double soilhumidityi[3]={0};
 			double counti[3]={0};
+			double deciduousfractioni[3]={0};
 			
+
 			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
 			const auto loop_size_cryogrid = static_cast<std::size_t>(ceil(treerows*sizemagnifcryo)) * static_cast<std::size_t>(ceil(treecols*sizemagnifcryo));
 // #pragma omp parallel for default(shared) schedule(guided)
@@ -861,6 +887,8 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 					litterheight0i[conditioni-1] += pCryogrid.litterheight0;
 					soilhumidityi[conditioni-1] += pCryogrid.soilhumidity;
 					counti[conditioni-1] ++;
+					if(pCryogrid.leafarea>0)
+						deciduousfractioni[conditioni-1] += pCryogrid.leafarea_deciduous/pCryogrid.leafarea;
 				}
 			}
 
@@ -874,6 +902,7 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 				maxthawing_depthi[i] = maxthawing_depthi[i]/counti[i];
 				litterheight0i[i] = litterheight0i[i]/counti[i];
 				soilhumidityi[i] = soilhumidityi[i]/counti[i];
+				deciduousfractioni[i] = deciduousfractioni[i]/counti[i];
 			}
 			// setup leafareaiout aggregated
 			leafareaiout.push_back(leafareai[0]);
@@ -975,13 +1004,19 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			fprintf(filepointer, "%3.3f;", maxthawing_depthi[1]);
 			fprintf(filepointer, "%3.3f", maxthawing_depthi[2]);
 			fprintf(filepointer, "\n");
+			
+			fprintf(filepointer, "deciduous_fraction;");
+			fprintf(filepointer, "%3.3f;", deciduousfractioni[0]);
+			fprintf(filepointer, "%3.3f;", deciduousfractioni[1]);
+			fprintf(filepointer, "%3.3f", deciduousfractioni[2]);
+			fprintf(filepointer, "\n");
 
 			fclose(filepointer);
 // }
 		}
 	}
 
-	if(true) {// 2. call CryoGrid and estimate permafrost thaw depth
+	if((parameter[0].ivort >= parameter[0].cryogrid_firstyear)) {// 2. call CryoGrid and estimate permafrost thaw depth
 		cout << "try to called matlab at " << clock() << endl;
 		int cryogridcallreturn = 0;
 		if (parameter[0].cryogrid_slurm == true) {
@@ -994,7 +1029,7 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 		cout << "after called matlab at " << clock() << endl;
 	}
 
-	if(true) {// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
+	if((parameter[0].ivort >= parameter[0].cryogrid_firstyear)) {// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
 		// TODO: clean couts
 		// from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		// cryogridoutput_00025_0000007001_aggregated.txt_CG.csv
@@ -1638,14 +1673,17 @@ void Environmentupdate(//Parameter* parameter,
 		if( (parameter[0].cryogrid_thawing_depth==true) ) { // external update of active layer thickness values
 		
 			// if( (parameter[0].cryogridcalled == true) | (parameter[0].ivort % 20 == 0) ) {
-			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 50 == 0)) || (parameter[0].ivort > 2000) || (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].cryogridcalled == true) ) {
+			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 20 == 0)) || (parameter[0].ivort > 2000) || (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].cryogridcalled == true) ) {
 				PrepareCryogrid(tree_list, cryo_list, plot_list);		// collect information of trees
 				cout << " -> called ... PrepareCryogrid " << endl;
 			}
 
-			// if( (parameter[0].ivort % 20 == 0) ) {
 			// if( (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) ) {
-			if( (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].ivort >= parameter[0].cryogrid_firstyear) ) {
+				
+			if( (parameter[0].ivort % 20 == 0) && (parameter[0].ivort < parameter[0].cryogrid_firstyear) ) { // only export data
+				UpdateCryogrid(cryo_list);		// export data and call Cryogrid instance and collect back output
+			}
+			if(parameter[0].ivort >= parameter[0].cryogrid_firstyear) {
 				UpdateCryogrid(cryo_list);		// export data and call Cryogrid instance and collect back output
 				parameter[0].cryogridcalled = true;
 				cout << " -> called ... UpdateCryogrid " << endl;

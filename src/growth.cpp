@@ -131,7 +131,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				// basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
 
 				if (parameter[0].demlandscape) {
-					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
+					basalwachstum = basalwachstum * ((double)tree.envirimpact / 10000) * tree.soilhumidity;
 // if(basalwachstum>10)
 	// cout << " basalwachstum = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
 				}
@@ -151,7 +151,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						tree.dbasalrel = 0;
 					else
 						// tree.dbasalrel = 1000 * (basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal)) * tree.soilhumidity;
-						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum) * tree.soilhumidity;
+						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum);
 				}
 // if(tree.dbasal > 100)
 	// cout << " Basal dia = " << tree.dbasal << " -> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << " ... " << tree.elevation/10 << " ... " << tree.soilhumidity << endl;
@@ -185,7 +185,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 					breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
 
 					if (parameter[0].demlandscape) {
-						breastwachstum = breastwachstum * (double)tree.envirimpact / 10000;
+						breastwachstum = breastwachstum * ((double)tree.envirimpact / 10000) * tree.soilhumidity;
 					}
 
 					if (breastwachstum < 0.0) {
@@ -201,7 +201,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						if (maxbreastwachstum <= 0.0)
 							tree.dbreastrel = 0;
 						else
-							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum) * tree.soilhumidity;
+							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum);
 					}
 // cout << "-> breasrel= " << tree.dbreastrel << " <- " << breastwachstum << " / " << maxbreastwachstum << " * " << tree.soilhumidity << endl;
 				}

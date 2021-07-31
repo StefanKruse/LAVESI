@@ -125,8 +125,12 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
+            // double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort + tree.soilhumidity;
             double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort;
 
+			if(tree.soilhumidity == 0.0)
+				treemortality += 0.1;
+				
             if (treemortality > 1.0) {
                 treemortality = 1.0;
             } else if (treemortality < 0.0) {

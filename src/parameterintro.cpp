@@ -874,8 +874,7 @@ void Parameterinput(void) {
     parameter[0].precdiffort = 0.0;
 }
 
-void Getspeciestraits(void)
-{	
+void Getspeciestraits(void) {	
 	FILE *f;
 	f = fopen("specieslist.csv","r"); 
 	if (f == NULL)
@@ -951,6 +950,10 @@ void Getspeciestraits(void)
 			speciestrait[counter].biomasswoodbase= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].biomasswoodfaca= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].biomasswoodfacb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].deciduous= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].crownradiusestslope= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].crownradiusestinterc= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].leafareaslope= strtod(strtok(NULL, " "),NULL) ;
 		}
 		counter++;
 	}

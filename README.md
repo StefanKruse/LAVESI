@@ -1,17 +1,12 @@
-# LAVESI-WIND 1.0
-This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of the larch tree species <i>Larix gmelinii</i> (RUPR.) RUPR. which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug).
+# LAVESI-WIND 1.2
+This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of larch tree species, which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug). In this version long latitudinal transects of climate forcing data can be simulated to run areas spanning the current treeline/forested area up to the shoreline with the Arctic Ocean. 
 
 ### Version history:
-- The version of this code is based on LAVESI-WIND v1.0 
+- The version of this code is based on LAVESI-WIND v1.0 for which details can be found in the publication in Gescientific Model Development: ASDF
 - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
-
-## CHANGELOG (only major changes in functionalities):
-- included a Hinterland seed input function to consider seed travel from the south into the plot area
  
 ### Authors:
 - Stefan Kruse - stefan.kruse@awi.de
-- Alexander Gerdes - alexander.gerdes@awi.de
-- Nadja J. Kath - nkath@uni-potsdam.de
 
 ## Containing files:
 1. Source code and header files: "....cpp" in/src/ and "....h" in /inc/ , and the makefile "Makefile"
@@ -30,13 +25,11 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
 1. compile the code with the help of the makefile: "make parallel"
 2. update the settings of the simulation run in the parameter file "parameter.txt"
 3. create a output folder if not existing, e.g. by "mkdir output"
-3. execute the program with "./LAVESI"
+3. execute the program with "./LAVESI_WIND"
 
 ## Prerequisites:
 - linux OS
 - g++ compiler (install e.g. by 'sudo apt install g++')
-- valgrind (www.valgrind.org, and follow installation instructions there)
 
 ## Further hints: 
-1. start in background not bound to your console session by "nohup ./LAVESI_WIND &"
-2. change the area size of simulation in /inc/declarations.h at "...treerows" and "...cols", values given in meters
+- change the area size of simulation in /inc/declarations.h at "...treerows" and "...cols", values given in meters

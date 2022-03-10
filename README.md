@@ -2,7 +2,7 @@
 This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of larch tree species, which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug). In this version long latitudinal transects of climate forcing data can be simulated to run areas spanning the current treeline/forested area up to the shoreline with the Arctic Ocean. 
 
 ### Version history:
-- The version of this code is based on LAVESI-WIND v1.0 for which details can be found in the publication in Gescientific Model Development: ASDF
+- The version of this code is based on LAVESI-WIND v1.0 for which details can be found in the publication in Gescientific Model Development: Stefan Kruse, Alexander Gerdes, Nadja J. Kath, Ulrike Herzschuh (2018). Implementing spatially explicit wind-driven seed and pollen dispersal in the individual-based larch simulation model: LAVESI-WIND 1.0. Geoscientific Model Development, 11, 4451–4467. https://doi.org/10.5194/gmd-11-4451-2018
 - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
  
 ### Authors:

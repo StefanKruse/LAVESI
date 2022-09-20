@@ -840,6 +840,37 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/18232_khamra_traceCORR_prec_2990.csv";
 			strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
+			
+			// For Lake Satagay fire module simulations
+        } else if (parameter[0].weatherchoice == 18224) {
+            char tempbuf[] = "input/18224_satagay_cruts4.03_temp_1901-2018.csv";
+            char precbuf[] = "input/18224_satagay_cruts4.03_prec_1901-2018.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 182241) {
+            char tempbuf[] = "input/18224_satagay_cruts4.06_temp_1901-2021.csv";
+            char precbuf[] = "input/18224_satagay_cruts4.06_prec_1901-2021.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 182242) {
+            char tempbuf[] = "input/18224_satagay_cmip6_MPI-ESM1-2-COMPLETE-HR-LR_TAS_1850-2100_rounded.csv";
+            char precbuf[] = "input/18224_satagay_cmip6_MPI-ESM1-2-COMPLETE-HR-LR_PREC_1850-2100_rounded.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 182243) {
+            char tempbuf[] = "input/18224_satagay_traceadjcru+cru_temp_22000BP-2021CE.csv";
+            char precbuf[] = "input/18224_satagay_traceadjcru+cru_prec_22000BP-2021CE.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 182244) {	// same as 182243 above, but cut off first 1k yrs and instead added spinup phase of 10x copies of first 50 yrs
+            char tempbuf[] = "input/18224_satagay_traceadjcru+cru_temp_21000BP-2021CE_Spinup10x50yrs.csv";
+            char precbuf[] = "input/18224_satagay_traceadjcru+cru_prec_21000BP-2021CE_Spinup10x50yrs.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
 
 		// last two numbers 01 only CRU+ERAinterim, 02 TRACE+CRU+ERAinterim
         } else if (parameter[0].weatherchoice == 1901201801) {  // new for CryoGrid coupling

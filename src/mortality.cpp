@@ -36,7 +36,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			else if(firecrowndamagemort > 1.0)
 				firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
 			tree.relcrowndamage = 0*1000;
-// cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
+			// if (firecrowndamagemort > 0) {
+			// cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
+			// }
 			
             // height dependent influences
             double wachstumrel = 1.0;
@@ -126,8 +128,12 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort;
-			treemortality = treemortality + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
-			//Treemortg = Treemortg + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			// treemortality = treemortality + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			// NOTE: IS THIS STILL NEEDED? Since crowndamage as well as barkthickness are integrated at other places now, this might not work es wanted.
+			
+			// if (tree.firedamage > 0) {
+			// cout << "treemortality: " << treemortality << " - tree.firedamage: " << tree.firedamage << endl;
+			// }
 
             if (treemortality > 1.0) {
                 treemortality = 1.0;

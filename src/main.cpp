@@ -497,8 +497,11 @@ void fillElevations() {
         // char deminputbuf[] = "input/dem_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv"; //x=7500 y=14310
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char deminputbuf[] = "input/dem_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char deminputbuf[] = "input/dem_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980 
 		// char deminputbuf[] = "input/dem_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		// char deminputbuf[] = "input/dem_90m_satagay_x242511.6202-252501.6202m_y6999138.4447-7009128.4447m.csv"; //x=9990, y=9990
+		char deminputbuf[] = "input/dem_90m_satagay_x245684-247664m_y7000974-7002954m.csv"; //x=1980, y=1980 ### FOR SATAGAY, PREVIOUS USE ###
+		//char deminputbuf[] = "input/dem_90m_satagay_x237506.6203-257486.6203m_y6994133.4448-7014113.4448m.csv"; //x=19980, y=19980 ### FOR SATAGAY ###
 		// char deminputbuf[] = "input/dem_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char deminputbuf[] = "input/dem_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         // char deminputbuf[] = "input/dem_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
@@ -541,8 +544,11 @@ void fillElevations() {
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char slopeinputbuf[] = "input/slope_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980 ### PREVIOUS USE ###
 		// char slopeinputbuf[] = "input/slope_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		// char slopeinputbuf[] = "input/slope_90m_satagay_x242511.6202-252501.6202m_y6999138.4447-7009128.4447m.csv"; //x=9990, y=9990
+		char slopeinputbuf[] = "input/slope_90m_satagay_x245684-247664m_y7000974-7002954m.csv"; //x=1980, y=1980 ### FOR SATAGAY, PREVIOUS USE ###
+		// char slopeinputbuf[] = "input/slope_90m_satagay_x237506.6203-257486.6203m_y6994133.4448-7014113.4448m.csv"; //x=19980, y=19980 ### FOR SATAGAY ###
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char slopeinputbuf[] = "input/slope_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         // char slopeinputbuf[] = "input/slope_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
@@ -581,8 +587,11 @@ void fillElevations() {
         // char twiinputbuf[] = "input/twi_30m_Ilirney_x641989-649489m_y7476026-7490336m.csv";//x=7500 y=14310
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m.csv"; //x=18000, y=24720
 		// char twiinputbuf[] = "input/twi_90m_khamra_x275889.94-276339.94m_y6656469.44-6656919.44m.csv"; //x=9990, y=9990
-		char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980
+		// char twiinputbuf[] = "input/twi_90m_khamra_x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; //x=1980, y=1980 ### PREVIOUS USE ###
 		// char twiinputbuf[] = "input/twi_90m_khamra_x272300.874-273290.874m_y6659779.814-6660769.814m.csv"; //x=990, y=990
+		// char twiinputbuf[] = "input/twi_90m_satagay_x242511.6202-252501.6202m_y6999138.4447-7009128.4447m.csv"; //x=9990, y=9990
+		char twiinputbuf[] = "input/twi_90m_satagay_x245684-247664m_y7000974-7002954m.csv"; //x=1980, y=1980 ### FOR SATAGAY, PREVIOUS USE ###
+		// char twiinputbuf[] = "input/twi_90m_satagay_x237506.6203-257486.6203m_y6994133.4448-7014113.4448m.csv"; //x=1980, y=1980 ### FOR SATAGAY###
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_fieldsitesbuf500m_636153.2366-647553.2366x7472831.2823-7487051.2823m.csv"; //x=11400, y=14220
 		// char twiinputbuf[] = "input/twi_30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m.csv"; //x=9990, y=19710
         // char twiinputbuf[] = "input/twi_30m_SpasskayaPad_x529631-532151m_y6897789-6900309m.csv";  // dim x=2520 y=2520
@@ -704,7 +713,7 @@ void fillElevations() {
                                                    + (1 - parameter[0].slopetwiratio)
                                                          * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
 						
-						envirgrowthimpact = envirgrowthimpact + 0.4;
+						envirgrowthimpact = envirgrowthimpact + 0.3; //before: + 0.4
 						
 						// envirgrowthimpact = sqrt(envirgrowthimpact); //added to tune low envirgrowthimpact values at Khamra
 

@@ -126,6 +126,18 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].slopetwiratio);
     }
+	
+	strcpy(uebergabestring, "firemode");
+    parameter[0].firemode = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].firemode);
+    }
+	
+	strcpy(uebergabestring, "fireintensitymode");
+    parameter[0].fireintensitymode = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].fireintensitymode);
+    }
 
     strcpy(uebergabestring, "temperaturelapse_jan");
     parameter[0].temperaturelapse_jan = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);

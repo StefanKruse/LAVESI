@@ -29,16 +29,20 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			
             double windthrowmort = 0.0;
 			windthrowmort = speciestrait[tree.species].mwindthrow * ((double)tree.height / 10) / (65535 / 10);// scaled to maximum of height in model of 65 m
+			
+			double firecrowndamagemort = 0.0;
 
-			double firecrowndamagemort = (double)tree.relcrowndamage / 1000;
-			if(firecrowndamagemort < 0.0)
-				firecrowndamagemort = 0.0;
-			else if(firecrowndamagemort > 1.0)
-				firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
-			tree.relcrowndamage = 0*1000;
-			// if (firecrowndamagemort > 0) {
-			// cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
-			// }
+			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
+				firecrowndamagemort = (double)tree.relcrowndamage / 1000;
+				if(firecrowndamagemort < 0.0)
+					firecrowndamagemort = 0.0;
+				else if(firecrowndamagemort > 1.0)
+					firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
+				tree.relcrowndamage = 0*1000;
+				if (firecrowndamagemort > 0) {
+				cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
+				}
+			}
 			
             // height dependent influences
             double wachstumrel = 1.0;
@@ -128,8 +132,15 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort;
-			// treemortality = treemortality + (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
-			// NOTE: IS THIS STILL NEEDED? Since crowndamage as well as barkthickness are integrated at other places now, this might not work es wanted.
+			
+			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
+			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
+			treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			} else if ((parameter[0].firemode != 0) & (parameter[0].firemode != 112)) {
+				treemortality = treemortality + (double)tree.firedamage;
+			} else if (parameter[0].firemode == 0) {
+				treemortality = treemortality;
+			}
 			
 			// if (tree.firedamage > 0) {
 			// cout << "treemortality: " << treemortality << " - tree.firedamage: " << tree.firedamage << endl;
@@ -141,7 +152,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                 treemortality = 0.0;
             }
 
-// if((double)tree.height / 10 > 10)
+		// if((double)tree.height / 10 > 10)
 		// cout << (double)tree.height / 10 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort <<  " - " << tree.soilhumidity << endl;
 
             // determine if a tree dies
@@ -201,11 +212,9 @@ void Mortality(Parameter* parameter,
                         seed.dead = true;
                         seed_list.remove(i);
                     } else {
-// if (!seed.incone)
-	// cout << " seed survived on ground !!! " << endl;
+					// if (!seed.incone)
+					// cout << " seed survived on ground !!! " << endl;
 					}
-					// if(!seed.incone)
-						// cout << "seed on ground!!! " << endl;
                 }
             }
 

@@ -39,7 +39,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     bool cone;                              // 1	---> was int; could be further replaced by single use of coneheight
     bool longdispersed;                     // 1
     bool growing;                           // 1
-	unsigned short int firedamage;			// 2
+	unsigned short firedamage;				// 2
     unsigned short int crownstart;          // 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
     unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
 };
@@ -90,9 +90,10 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     unsigned short int envirgrowthimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
     unsigned short int envirfireimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
                                            // units precision (8 -> 2 bytes)
-	//bool fire; //###FIRE### bool variant
-	unsigned short int fire;	//###FIRE### changed int variant
-	unsigned short int firevalue;	// for writing output and resetting to 0 each year
+	double fire;	//###FIRE###
+	unsigned short int firecells;	// for writing output
+	double fireintensitymax;	// for writing output
+	double fireintensitymean;	// for writing output
 
     unsigned short int soilhumidity;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
     unsigned short int twi;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
@@ -105,24 +106,25 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 
               unsigned short maxthawing_depth = 100*10,
 			  unsigned short litterheight0 = 1000,					// 2 
-			  unsigned short litterheight1= 1000,					// 2	
-			  unsigned short litterheight2= 1000,					// 2 
-			  unsigned short litterheight3= 1000,					// 2
-			  unsigned short litterheight4= 1000,					// 2 
-			  unsigned short litterheight5= 1000,					// 2
-			  unsigned short litterheight6= 1000, 					// 2
-			  unsigned short litterheight7= 1000,					// 2 
-			  unsigned short litterheight8= 1000,					// 2
-			  unsigned short litterheight9= 1000,					// 2 
-			  unsigned short litterheightmean= 1000,				// 2
+			  unsigned short litterheight1 = 1000,					// 2	
+			  unsigned short litterheight2 = 1000,					// 2 
+			  unsigned short litterheight3 = 1000,					// 2
+			  unsigned short litterheight4 = 1000,					// 2 
+			  unsigned short litterheight5 = 1000,					// 2
+			  unsigned short litterheight6 = 1000, 					// 2
+			  unsigned short litterheight7 = 1000,					// 2 
+			  unsigned short litterheight8 = 1000,					// 2
+			  unsigned short litterheight9 = 1000,					// 2 
+			  unsigned short litterheightmean = 1000,				// 2
               unsigned short int envirgrowthimpact = 1,
               unsigned short int soilhumidity = 30*100,
               unsigned short int twi = 6.25*100,
 			  
 			  unsigned short int envirfireimpact = 0,
-			  //bool fire = false	// ###FIRE### bool variant
-			  unsigned short int fire = 0,	//###FIRE### int variant
-			  unsigned short int firevalue = 0)	
+			  double fire = 0.0,
+			  unsigned short int firecells = 0,
+			  double fireintensitymax = 0,
+			  double fireintensitymean = 0)	
 			  
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
@@ -140,11 +142,14 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
           litterheight9(litterheight9),
           litterheightmean(litterheightmean),
           envirgrowthimpact(envirgrowthimpact),
+		  soilhumidity(soilhumidity),
+		  twi(twi),
+		  
           envirfireimpact(envirfireimpact),
 		  fire(fire),
-		  firevalue(firevalue),
-          soilhumidity(soilhumidity),
-          twi(twi) {}
+		  firecells(firecells),
+          fireintensitymax(fireintensitymax),
+		  fireintensitymean(fireintensitymean) {}
 };
 
 struct Parameter {
@@ -181,6 +186,8 @@ struct Parameter {
     int demresolution;
     int specpres;
     unsigned short int species_max;
+	int firemode;
+	double fireintensitymode;
 
     // multi-core processing with omp
     int omp_num_threads;
@@ -469,6 +476,9 @@ struct Weather {
 	double fireindex10;
 	double fireindex11;
 	double fireindex12;
+	double FPR;
+	double tempmeanjja;
+	double precipitationsumjja;
 };
 
 struct Evaluation {

@@ -22,7 +22,7 @@ void Fire(Parameter* parameter,
         aktort++;
 		
 		RandomNumber<double> uniform(0, 1);
-				
+		
 				
 		// ##################################	
 		// ########## Fire weather ##########################################################################################################
@@ -35,203 +35,199 @@ void Fire(Parameter* parameter,
 		unsigned short int n_severeweather = 0;
 		unsigned short int n_extremeweather = 0;
 		
-		unsigned short int firethresh1 = 3.48;	// determine thresholds that decide fire weather severity (previous values: 3.48, 5, 7)
-		unsigned short int firethresh2 = 6.9;
-		unsigned short int firethresh3 = 8.3;
+		// Used for Lake Satagay localization 
+		unsigned short int firethresh1 = 6.6;	// determine thresholds that decide monthly fire weather severity
+		unsigned short int firethresh2 = 6.85;
+		unsigned short int firethresh3 = 7.1;
 		
+		// Used for Lake Khamra localization
+		// unsigned short int firethresh1 = 4.0;	// determine thresholds that decide monthly fire weather severity (previous values: 3.48, 6.9, 8.3)
+		// unsigned short int firethresh2 = 6.5;
+		// unsigned short int firethresh3 = 7.5;
 		
 		// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
 		if (weather_list[yearposition].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex1 >= firethresh1) && (weather_list[yearposition].fireindex1 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex1 > firethresh2) && (weather_list[yearposition].fireindex1 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex1 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 			
 		// cout << "February fire index =" << weather_list[yearposition].fireindex2  << endl;
 		if (weather_list[yearposition].fireindex2 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex2 >= firethresh1) && (weather_list[yearposition].fireindex2 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex2 > firethresh2) && (weather_list[yearposition].fireindex2 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex2 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 			
 		// cout << "March fire index =" << weather_list[yearposition].fireindex3  << endl;
 		if (weather_list[yearposition].fireindex3 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex3 >= firethresh1) && (weather_list[yearposition].fireindex3 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex3 > firethresh2) && (weather_list[yearposition].fireindex3 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex3 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 			
 		// cout << "April fire index =" << weather_list[yearposition].fireindex4  << endl;
 		if (weather_list[yearposition].fireindex4 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex4 >= firethresh1) && (weather_list[yearposition].fireindex4 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex4 > firethresh2) && (weather_list[yearposition].fireindex4 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex4 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 			
 		// cout << "May fire index =" << weather_list[yearposition].fireindex5  << endl;
 		if (weather_list[yearposition].fireindex5 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex5 >= firethresh1) && (weather_list[yearposition].fireindex5 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex5 > firethresh2) && (weather_list[yearposition].fireindex5 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex5 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "June fire index =" << weather_list[yearposition].fireindex6  << endl;
 		if (weather_list[yearposition].fireindex6 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex6 >= firethresh1) && (weather_list[yearposition].fireindex6 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex6 > firethresh2) && (weather_list[yearposition].fireindex6 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex6 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "July fire index =" << weather_list[yearposition].fireindex7  << endl;
 		if (weather_list[yearposition].fireindex7 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex7 >= firethresh1) && (weather_list[yearposition].fireindex7 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex7 > firethresh2) && (weather_list[yearposition].fireindex7 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex7 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "August fire index =" << weather_list[yearposition].fireindex8  << endl;
 		if (weather_list[yearposition].fireindex8 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex8 >= firethresh1) && (weather_list[yearposition].fireindex8 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex8 > firethresh2) && (weather_list[yearposition].fireindex8 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex8 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "September fire index =" << weather_list[yearposition].fireindex9  << endl;
 		if (weather_list[yearposition].fireindex9 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex9 >= firethresh1) && (weather_list[yearposition].fireindex9 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex9 > firethresh2) && (weather_list[yearposition].fireindex9 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex9 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "October fire index =" << weather_list[yearposition].fireindex10  << endl;
 		if (weather_list[yearposition].fireindex10 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex10 >= firethresh1) && (weather_list[yearposition].fireindex10 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex10 > firethresh2) && (weather_list[yearposition].fireindex10 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex10 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "November fire index =" << weather_list[yearposition].fireindex11  << endl;
 		if (weather_list[yearposition].fireindex11 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex11 >= firethresh1) && (weather_list[yearposition].fireindex11 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex11 > firethresh2) && (weather_list[yearposition].fireindex11 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex11 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 
 		// cout << "December fire index =" << weather_list[yearposition].fireindex12  << endl;
 		if (weather_list[yearposition].fireindex12 < firethresh1){
-			// cout << "No fire weather" << endl;
 		} else if ((weather_list[yearposition].fireindex12 >= firethresh1) && (weather_list[yearposition].fireindex12 <= firethresh2)){
-			// cout << "Mild fire weather" << endl;
 			n_mildweather++;
 		} else if ((weather_list[yearposition].fireindex12 > firethresh2) && (weather_list[yearposition].fireindex12 <= firethresh3)){
-			// cout << "Severe fire weather" << endl;
 			n_severeweather++;
 		} else if (weather_list[yearposition].fireindex12 > firethresh3){
-			// cout << "Extreme fire weather" << endl;
 			n_extremeweather++;
 		}
 		
-		// Calculation of annual FPR based on weather conditions
-		double fireprobabilityrating = (n_mildweather*0.02 + n_severeweather*0.1 + n_extremeweather*0.5) / 6; // tried to include: / std::max(n_mildweather*0.005 + n_severeweather*0.01 + n_extremeweather*0.03);
+		// Initializing fireprobabilityrating
+		double fireprobabilityrating = 0.0;
+		
+		fireprobabilityrating = (n_mildweather*0.04 + ((n_severeweather*0.5)/6) + n_extremeweather*0.5); // Calculation of annual FPR based on monthly weather conditions
+		
+		if (fireprobabilityrating > 1) {
+			fireprobabilityrating = 1;
+		}
+		
+		weather_list[yearposition].FPR = fireprobabilityrating;
 		cout << endl << "\tn_mildweather:" << (n_mildweather) << endl;	// optional output during simulation
 		cout << "\tn_severeweather:" << (n_severeweather) << endl;	// optional output during simulation
 		cout << "\tn_extremeweather:" << (n_extremeweather) << endl;	// optional output during simulation
 		cout << "\tAnnual FPR:" << fireprobabilityrating << endl;	// optional output during simulation
 		
-		
+
 		// ####################################	
 		// ########## Fire occurence ########################################################################################################
 		// ####################################
 		
-		if (uniform.draw() < fireprobabilityrating) {	// if random number drawn between 0 and 1 is larger than the annual FPR, impact area is calculated
+		bool ignition = false;
+		
+		// Decide if fire is ignited (depending on firemode and fireprobabilityrating)
+		if (parameter[0].firemode == 112) {
+			if (uniform.draw() < fireprobabilityrating) {
+				ignition = true;
+			} else {
+				ignition = false;
+			}
+		} else if (parameter[0].firemode == 0) {
+			ignition = false;
+		} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
+			if (parameter[0].ivort % parameter[0].firemode == 0) {
+				ignition = true;
+			} else {
+				ignition = false;
+				cout << "\tFire ignitions can't occur in this year!" << endl;
+			}
+		}
+		
+		// Set fire size and assign impacted area 
+		if ((ignition == true)) {
 			cout << "+++ A wildfire occurs! +++" << endl;
 			double xfirecenter = uniform.draw()*treecols;
 			double yfirecenter = uniform.draw()*treerows;
 			
+			double fireimpactareasize = 0.0;
+			
+			if (parameter[0].firemode == 112) {
+				fireimpactareasize = fireprobabilityrating * treecols; // Relative area of plot depnding on fire intensity
+			} else if (parameter[0].firemode == 0) {
+				fireimpactareasize = 0.0;
+				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
+				fireimpactareasize = 5 * treecols;
+				}
+			
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 
-			double fireimpactareasize = fireprobabilityrating*5000*6; // determines affected area, rough estimate that average fire burns c. 2.5% of the total area (when using 2x2 km this is c. 10 cells of 90x90m), def = 5000
+			// double fireimpactareasize = fireprobabilityrating * (treecols*treerows); // determines affected area; currently depending on FPR range (0-1) - so if FPR = 0.1, then 10% of the area burn.
 			// cout << "Fire X coordinate:" << j << endl;	// optional output during simulation
 			// cout << "Fire Y coordinate:" << i << endl;	// optional output during simulation
-			cout << "Impacted area:" << fireimpactareasize << endl; // optional output during simulation
-
+			// cout << "\tImpacted area: " << printf("%.2f", (pi * pow(2.0, fireimpactareasize))) << " m2 or " << printf("%.0f",((pi * pow(2.0, fireimpactareasize))/(treecols*treerows)))*100 << "% of total plot area" << endl; // optional output during simulation
+			// cout << "Total area (m2) from treecols*treerows: " << treecols*treerows << endl; // optional output during simulation
 
 			// check which gridcells fall into fire scar
 			if (fireimpactareasize > 0) {  // if there is an impacted area
@@ -251,8 +247,6 @@ void Fire(Parameter* parameter,
 									static_cast<std::size_t>(rastposi) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
 									+ static_cast<std::size_t>(rastposj);
 								auto& cur_plot = plot_list[curposii];
-								//cur_plot.fire == true;	// bool variant
-								
 								
 								// ##################################################
 								// ##### Fire intensity and litter layer impact #####
@@ -260,113 +254,34 @@ void Fire(Parameter* parameter,
 								
 								// Fire impact on grid cell, including these variables:
 								// fireprobabilityrating // 0 to 1 -> 0 = no fire; 1 = fire occurs definitely
+								// cur_plot.fire // 0 to 1 -> 0 = no fire impact, 1 = highest fire intensity
 								// cur_plot.Treedensityvalue // 0 to 10000 -> 0 = no trees; 10000 = very dense
-								// cur_plot.envirfireimpact // 0 to 10000 -> as calculated in main.cpp, 0 = fully wet; 10000 = very dry
+								// cur_plot.envirfireimpact // 0 to 10000 -> as calculated in main.cpp, 0 = fully wet; 10000 = very dry // ##########CHECK##########
 								
-								// ### First version ###
-								
-								// if ((fireprobabilityrating < 1/3) & 
-									// (cur_plot.Treedensityvalue < 3333) & (cur_plot.envirfireimpact < 3333)) {
-									// cur_plot.fire = 1;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
-									// cur_plot.litterheight = cur_plot.litterheight / 2;
-								// } else if ((fireprobabilityrating < 2/3) & 
-									// (cur_plot.Treedensityvalue >= 3333) & (cur_plot.envirfireimpact >= 3333)) {
-									// cur_plot.fire = 2;
-									// cur_plot.litterheight = cur_plot.litterheight / 4;									
-								// } else if ((fireprobabilityrating >= 2/3) &
-									// (cur_plot.Treedensityvalue >= 3333) & (cur_plot.envirfireimpact >= 3333)){
-									// cur_plot.fire = 3;
-									// cur_plot.litterheight = 0;									
-								// } else {
-									// cur_plot.fire = 1;
-									// cur_plot.litterheight = cur_plot.litterheight / 2;
-								// }
-								// cout << "cur_plot.fire:" << cur_plot.fire << " --- cur_plot.litterheight:" << cur_plot.litterheight << endl;
-
-
-								// ### Second version ###
-								// Simpler variant for testing 
-								
-								// if (fireprobabilityrating <= 0.1) {
-									// cur_plot.fire=1;	// int variant => 0 no fire, 1 ground fire, 2 medium fire, 3 crown fire
-									// cur_plot.litterheight0 = cur_plot.litterheight0 / 2;
-								// } else if ((fireprobabilityrating > 0.1)&(fireprobabilityrating < 0.3)) {
-									// cur_plot.fire=2;
-									// cur_plot.litterheight0 = cur_plot.litterheight0 / 4;
-								// } else {
-									// cur_plot.fire=3;
-									// cur_plot.litterheight0 = 0;
-								// }
-								
-								// ### Third version ### 
-								// Assigning cur_plot.fire values depending on FPR and environmental conditions,
-								// int variant => 0 = no fire; 1 = low intensity ground fire; 2 = medium intensity fire; 3 = high intensity crown fire
-								
-								if (fireprobabilityrating <= 0.1) {
-									cur_plot.fire = 1; // low intensity ground fire
-								} else if ((fireprobabilityrating > 0.1)&(fireprobabilityrating < 0.3)) {
-									cur_plot.fire = 2; // medium intensity fire
-								} else {
-									cur_plot.fire = 3; // high intensity crown fire
+								// Set FPR as cell fire intensity and scale by TWI (only of firemode == 112)
+								if (parameter[0].firemode == 112) {
+									cur_plot.fire = pow(fireprobabilityrating, ((cur_plot.twi / 100) / 12.5));
+								} else if ((parameter[0].firemode > 0) & (parameter[0].firemode  != 112)) {
+									cur_plot.fire = 1;
+								}
+								// If a custom, fixed fire intensity was selected, apply that instead
+								if (parameter[0].fireintensitymode != 1.0) {
+									cur_plot.fire = parameter[0].fireintensitymode;
+									//cout << " - Fire intensity: " << cur_plot.fire << endl;	// optional output during simulation
 								}
 								
-								// Influence of FPR on TWI -> TEST, most likely twi needs to be set back after each year?
-								if (fireprobabilityrating <= 0.1) {
-									cur_plot.twi = cur_plot.twi; // no effect
-								} else if (fireprobabilityrating > 0.1 && fireprobabilityrating < 0.3) {
-									cur_plot.twi = cur_plot.twi - (2*100); // medium drying of the landscape
-								} else {
-									cur_plot.twi = cur_plot.twi - (4*100); // high drying of the landscape
+								// Fire intensity stays between 0-1
+								if (cur_plot.fire > 1) {
+									cur_plot.fire = 1;
 								}
-								
-								// TWI influence on intensity - better might be e.g. pow(cur_plot.twi/(6.25*100), 0.5*0.25) -> CHECK THIS CODE, also regarding the envirfireimpact variable created in main.cpp
-								if (cur_plot.twi >= (16.66*100)) {
-									cur_plot.fire = cur_plot.fire - 1; // high moisture -> decreasing fire intensity
-								} else if (cur_plot.twi < (16.66*100) && cur_plot.twi > (8.33*100)) {
-									cur_plot.fire = cur_plot.fire; // medium moisture -> no effect
-								} else if (cur_plot.twi <= (8.33*100)) {
-									cur_plot.fire = cur_plot.fire + 1; // low moisture -> increasing fire intensity
-								} else {
-									cur_plot.fire = cur_plot.fire; // no effect
-								}
-								
-								// Tree Density influence on intensity
-								if (cur_plot.Treedensityvalue < 3333 && cur_plot.fire >= 1) {
-									cur_plot.fire = cur_plot.fire + 1; // low tree density increases intensity in all fire weather conditions
-								} else if (cur_plot.Treedensityvalue > 6666 && cur_plot.fire > 2) {
-									cur_plot.fire = cur_plot.fire + 1; // high tree density increases intensity in extreme fire weather conditions
-								} else if (cur_plot.Treedensityvalue > 6666 && cur_plot.fire <= 1) {
-									cur_plot.fire = cur_plot.fire - 1; // high tree density decreases intensity in mild fire weather conditions
-								}
-								
-								// Existing litter layer can mediate fire intensity -> CHECK IF CORRECT
-								// cur_plot.fire = cur_plot.fire * ((cur_plot.litterheight0 / 1000)/ 10);
-								
-								// Fire intensity stays between 0-3
-								if (cur_plot.fire > 3) {
-									cur_plot.fire = 3;
-								} else if (cur_plot.fire <= 0) {
-									cur_plot.fire = 0;
-								}								
 								
 								// Fire damage on litter layer
-								if (cur_plot.fire <= 1) {
-									cur_plot.litterheight0 = cur_plot.litterheight0 / 2;
-								} else if (cur_plot.fire > 1 && cur_plot.fire <= 2) {
-									cur_plot.litterheight0 = cur_plot.litterheight0 / 4;
-								} else if (cur_plot.fire > 2) {
-									cur_plot.litterheight0 = 0;
-								}
+								cur_plot.litterheight0 = cur_plot.litterheight0 - (cur_plot.litterheight0 * cur_plot.fire);
 								
-								// Give fire intensity value to pEnvirgrid.fire // NOT WORKING
-								//fire = cur_plot.fire;
-								
-								// cout << "cur_plot.fire: " << cur_plot.fire << " --- ";
 							}
 						}
 					}
-				}
-				
+				}		
 				
 				// ################################
 				// ##### Fire impact on trees #####
@@ -405,8 +320,8 @@ void Fire(Parameter* parameter,
 								auto& cur_plot = plot_list[curposi];
 
 								// fire sensing
-								tree.firedamage = cur_plot.fire;	//Since tree is within one gridcell, it can take that cell's value directly (needs to be divided by 3)
-								tree.firedamage = tree.firedamage*(speciestrait[tree.species].relbarkthickness/2);	//mediated by bark thickness
+								tree.firedamage = cur_plot.fire;	// Since tree is within one gridcell, it can take that cell's value directly
+								
 								// if (tree.firedamage > 0) {
 									// cout <<  " +++ bark = " << speciestrait[tree.species].relbarkthickness <<  "& firedamage = " << tree.firedamage;
 								// }
@@ -416,7 +331,8 @@ void Fire(Parameter* parameter,
 								int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
 
 								// fire sensing
-								unsigned int firedamage = 0;
+								unsigned firedamage = 0;
+								unsigned int firedamagecells = 0;
 
 								for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
 									for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
@@ -433,57 +349,47 @@ void Fire(Parameter* parameter,
 												auto& cur_plot = plot_list[curposii];
 
 												// fire sensing
-												if(cur_plot.fire > firedamage)
-													firedamage = cur_plot.fire;	// If tree covers multiple gridcells, it will take the highest cur_plot.fire value from these
+												firedamage = firedamage + cur_plot.fire;	// If tree covers multiple gridcells, it will sum up all cur_plot.fire values
+												++firedamagecells;
+												
 											}
 										}
 									}
 								}
 								
 								// fire sensing
-								tree.firedamage = firedamage*(speciestrait[tree.species].relbarkthickness/2);	//mediated by bark thickness
-								// if (tree.firedamage > 0) {
-									// cout <<  " +++ bark = " << speciestrait[tree.species].relbarkthickness <<  "& firedamage = " << tree.firedamage;
-								// }
+								tree.firedamage = firedamage / (unsigned short) firedamagecells;	// Tree gets assigned the mean cur_plot.fire value of all included gridcells
 							}
 							
-							// Flame height depending on tree fire damage
-							if (tree.firedamage > 0) {
-								if (tree.firedamage > 0 && tree.firedamage <= 1) {
-									tree.crownstart = 100*10; // flames reach 100 cm high
-									tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000;
-									//cout << "|| tree.crownstart: " << tree.crownstart << " --- tree.relcrowndamamage: " << tree.relcrowndamage;
-									}
-								else if (tree.firedamage < 2 && tree.firedamage <= 3) {
-									tree.crownstart = 400*10; // flames reach 400 cm high
-									tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000;
-									}
-								else if (tree.firedamage < 3) {
-									tree.crownstart = 800*10; // flames reach 800 cm high
-									tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000;
-									}		
+							// Fire intensity mediated by bark thickness (only if firemode == 112, otherwise if firemode > 0 it's always 1 - OR if custom fireintensity is given)
+							if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
+								tree.firedamage = tree.firedamage - (0.1 * speciestrait[tree.species].relbarkthickness / 3);	
+							} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
+								tree.firedamage = 1.0;
 							}
+							
+							// Fire intensity stays between 0-1							
+							if (tree.firedamage <= 0) {
+								tree.firedamage = 0;
+							}
+							
+							// Flame height depending on tree fire damage (only if firemode == 112 OR if custom fireintensity is given)
+							if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
+								tree.crownstart = tree.firedamage * 5000 * 10; // flames reach 5000 cm high
+								tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10)) * 1000;
+							} else {
+								tree.relcrowndamage = 0.0;
+							}	
 						}
 					}
 				}
-
+				
 				
 			// ################################
 			// ##### Fire impact on seeds #####
 			// ################################
-				
-			// ### Seed mortality variant 1 (all seeds die) ###
-				
-			// #pragma omp for schedule(guided)
-			// for (unsigned int i = 0; i < seed_list.size(); ++i) {
-				// auto& seed = seed_list[i];
-				// if (!seed.dead) {
-					// seed.dead = true;
-					// seed_list.remove(i);
-					// }
-				// }
 										
-			// ### Seed mortality variant 2 (seeds die depending on location and fire intensity) ###			
+			// Seeds die depending on location and fire intensity			
 				
 				#pragma omp for schedule(guided)
 				for (unsigned int i = 0; i < seed_list.size(); ++i) {
@@ -495,32 +401,24 @@ void Fire(Parameter* parameter,
 													+ static_cast<std::size_t>(j);
 						auto& cur_plot = plot_list[curposi];
 						if (!seed.incone) {
-							seed.dead = true;
-							seed_list.remove(i);
-							//cout << "seed died. ";
+							if (cur_plot.fire > 0) {
+								seed.dead = true;
+								seed_list.remove(i);
+								//cout << "seed died. ";
+							} else {
+								seed.dead = false;
+								//cout << "seed survived. ";
+							}
 						} else {
-							if (cur_plot.fire == 1) {
-								if (uniform.draw() <= 1/3){
+							if (cur_plot.fire > 0) {
+								if (uniform.draw() <= cur_plot.fire){
 									seed.dead = true;
 									seed_list.remove(i);
 									//cout << "some cones died. ";
-								} else if (uniform.draw() > 1/3) {
+								} else {
 									seed.dead = false;
 									//cout << "cones survived. ";
 								}
-							} else if (cur_plot.fire == 2) {
-								if (uniform.draw() <= 2/3){
-									seed.dead = true;
-									seed_list.remove(i);
-									//cout << "many cones died. ";
-								} else if (uniform.draw() > 2/3) {
-									seed.dead = false;
-									//cout << "cones survived. ";
-								}
-							} else if (cur_plot.fire == 3) {
-									seed.dead = true;
-									seed_list.remove(i);
-									//cout << "all cones died. ";
 							}
 						}
 					}
@@ -528,4 +426,4 @@ void Fire(Parameter* parameter,
 			}
 		}
 	}
-}
+}	

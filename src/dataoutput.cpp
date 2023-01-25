@@ -91,20 +91,30 @@ void Dataoutput(int t,
 			} else if (parameter[0].outputmode == 55) {  // "FIRE"
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
-                    outputposition = true;
+                    //outputposition = true;
                 } else {
                     outputcurrencies = true;
-                    outputposition = true;
-                    outputindividuals = true;
+                    //outputposition = true;
+                    //outputindividuals = true;
                     ausgabedensity = true;
-					outputgriddedbiomass = true; // needs to be fixed
+					outputgriddedbiomass = true;
                 }	// "FIRE" end
-			} else if (parameter[0].outputmode == 56) {  // "FIRE": Reduced version
+			} else if (parameter[0].outputmode == 56) {  // "FIRE": Reduced version, temporal only
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
                 } else {
                     outputcurrencies = true;
-                }	
+                }
+			} else if (parameter[0].outputmode == 57) {  // "FIRE": temporal+spatial
+                if (parameter[0].spinupphase == true) {
+                    outputcurrencies = true;
+                } else {
+                    outputcurrencies = true; //every year
+					if (parameter[0].ivort % 100 == 0) { //every 100 yrs
+					outputgriddedbiomass = true;
+					ausgabedensity = true;
+					}
+                }					
 			} else if (parameter[0].outputmode == 77) {  // example
                 outputcurrencies = true;
 
@@ -191,8 +201,11 @@ void Dataoutput(int t,
         int breastdiametercount = 0;
         int stemcount = 0;
         double meantreeheight = 0.0, meantreeage = 0.0;
-		int firevalue = 0;
-		int fireprobabilityrating = 0;
+		int firecells = 0;
+		double fireprobabilityrating = 0.0;
+		double fireintensitymax = 0.0;
+		double fireintensitymean = 0.0;
+		double annualintensitysum = 0.0;
 
 #pragma omp parallel default(shared)
         {
@@ -374,23 +387,43 @@ void Dataoutput(int t,
             }
         }
 		
-		// Assigning annual fire value
-         
+		// Assigning annual firecells (counter for gridcells burned), fireintensitymax (maximum intensity), fireintensitymean (mean intensity)
 		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
 			auto& pEnvirgrid = plot_list[kartenpos];
 			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
 			double xcooi = (double)kartenpos - (ycooi * ((double)treecols * (double)parameter[0].sizemagnif));	
 			
-				if(parameter[0].demlandscape & 
-				(((int)xcooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0) &	// xcooi is gridcell resolution in envirgrid == 20 cm steps // => every 90 m/demresolution output
-				(((int)ycooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0)) {
-
-					if (pEnvirgrid.fire > 0) {
-						firevalue++;
+			if(parameter[0].demlandscape & 
+			(((int)xcooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0) &	// xcooi is gridcell resolution in envirgrid == 20 cm steps // => every 90 m/demresolution output
+			(((int)ycooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0)) {
+				
+				if (pEnvirgrid.fire > 0) {
+					// counting burned gridcells
+					firecells++;
+					// checking for maximum intensity
+					if (pEnvirgrid.fire > fireintensitymax){
+					fireintensitymax = pEnvirgrid.fire;
 					}
+					// calculating mean intensity
+					annualintensitysum = annualintensitysum + pEnvirgrid.fire;
 				}
+			}
 		}
-
+		
+		// calculating mean intensity
+		if (firecells > 0) {
+		fireintensitymean = annualintensitysum / firecells;
+		} else {
+			fireintensitymean = 0;
+		}
+		
+		// Assigning annual fire probability rating (FPR)
+		for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
+			vector<Weather>& weather_list = *posw;
+			
+			fireprobabilityrating = weather_list[yearposition].FPR;
+			
+		}
 
         // evaluation_list update
 
@@ -445,42 +478,12 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Mean_tree_age;");
                 fprintf(filepointer, "Turningpoint_year;");
                 fprintf(filepointer, "Equillibrium_year;");
-                fprintf(filepointer, "Age_Lgmel_0;");
-                fprintf(filepointer, "Age_Lsibi_0;");
-                fprintf(filepointer, "Age_Lgmel_1;");
-                fprintf(filepointer, "Age_Lsibi_1;");
-                fprintf(filepointer, "Age_Lgmel_2;");
-                fprintf(filepointer, "Age_Lsibi_2;");
-                fprintf(filepointer, "Age_Lgmel_3;");
-                fprintf(filepointer, "Age_Lsibi_3;");
-                fprintf(filepointer, "Age_Lgmel_4;");
-                fprintf(filepointer, "Age_Lsibi_4;");
-                fprintf(filepointer, "Age_Lgmel_5;");
-                fprintf(filepointer, "Age_Lsibi_5;");
-                fprintf(filepointer, "Age_Lgmel_6to10;");
-                fprintf(filepointer, "Age_Lsibi_6to10;");
-                fprintf(filepointer, "Age_Lgmel_11to20;");
-                fprintf(filepointer, "Age_Lsibi_11to20;");
-                fprintf(filepointer, "Age_Lgmel_21to50;");
-                fprintf(filepointer, "Age_Lsibi_21to50;");
-                fprintf(filepointer, "Age_Lgmel_51to100;");
-                fprintf(filepointer, "Age_Lsibi_51to100;");
-                fprintf(filepointer, "Age_Lgmel_101to150;");
-                fprintf(filepointer, "Age_Lsibi_101to150;");
-                fprintf(filepointer, "Age_Lgmel_151to200;");
-                fprintf(filepointer, "Age_Lsibi_151to200;");
-                fprintf(filepointer, "Age_Lgmel_201to300;");
-                fprintf(filepointer, "Age_Lsibi_201to300;");
-                fprintf(filepointer, "Age_Lgmel_301to400;");
-                fprintf(filepointer, "Age_Lsibi_301to400;");
-                fprintf(filepointer, "Age_Lgmel_401to500;");
-                fprintf(filepointer, "Age_Lsibi_401to500;");
-                fprintf(filepointer, "Age_Lgmel_501to600;");
-                fprintf(filepointer, "Age_Lsibi_501to600;");
-                fprintf(filepointer, "Age_Lgmel_601to700;");
-                fprintf(filepointer, "Age_Lsibi_601to700;");
-                fprintf(filepointer, "Age_Lgmel_701plus;");
-                fprintf(filepointer, "Age_Lsibi_701plus;");
+                fprintf(filepointer, "Stemcount_species1;");
+                fprintf(filepointer, "Stemcount_species2;");
+                fprintf(filepointer, "Stemcount_species3;");
+                fprintf(filepointer, "Stemcount_species4;");
+                fprintf(filepointer, "Stemcount_species5;");
+                fprintf(filepointer, "Stemcount_species6;");
                 fprintf(filepointer, "Seed_produced_currently;");
                 fprintf(filepointer, "Seed_produced_total;");
                 fprintf(filepointer, "N_trees_Lgmel;");
@@ -496,15 +499,20 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Temperature_mean_year;");
                 fprintf(filepointer, "Temperature_mean_january;");
                 fprintf(filepointer, "Temperature_mean_july;");
+                fprintf(filepointer, "Temperature_mean_jja;");
                 fprintf(filepointer, "Vegetation_period_length;");
                 fprintf(filepointer, "AAT;");
                 fprintf(filepointer, "DDT;");
                 fprintf(filepointer, "Precipitation_sum_year;");
+                fprintf(filepointer, "Precipitation_sum_jja;");
                 fprintf(filepointer, "Weather_factor_Lgmel;");
                 fprintf(filepointer, "Weather_factor_Lsibi;");
                 fprintf(filepointer, "Thawing_depth_influence;");
 				// Fire
-				fprintf(filepointer, "N_fire;");
+				fprintf(filepointer, "N_firecells;");
+				fprintf(filepointer, "FPR_annual;");
+				fprintf(filepointer, "FI_max;");
+				fprintf(filepointer, "FI_mean;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -524,10 +532,7 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", jahr);
 
             // declarations
-            int ageg0 = 0, ageg1 = 0, ageg2 = 0, ageg3 = 0, ageg4 = 0, ageg5 = 0, ageg6b10 = 0, ageg11b20 = 0, ageg21b50 = 0, ageg51b100 = 0, ageg101b150 = 0,
-                ageg151b200 = 0, ageg201b300 = 0, ageg301b400 = 0, ageg401b500 = 0, ageg501b600 = 0, ageg601b700 = 0, ageg701plus = 0;
-            int ages0 = 0, ages1 = 0, ages2 = 0, ages3 = 0, ages4 = 0, ages5 = 0, ages6b10 = 0, ages11b20 = 0, ages21b50 = 0, ages51b100 = 0, ages101b150 = 0,
-                ages151b200 = 0, ages201b300 = 0, ages301b400 = 0, ages401b500 = 0, ages501b600 = 0, ages601b700 = 0, ages701plus = 0;
+            int stemcount_species1 = 0, stemcount_species2 = 0, stemcount_species3 = 0, stemcount_species4 = 0, stemcount_species5 = 0, stemcount_species6 = 0;
             int gesamtseedAKT = 0, gesamtseedSUM = 0;
             int spectree1 = 0, spectree2 = 0;
             double yposmax = 0.0;
@@ -537,10 +542,7 @@ void Dataoutput(int t,
 #pragma omp parallel default(shared)
         {
             // declarations
-            int localageg0 = 0, localageg1 = 0, localageg2 = 0, localageg3 = 0, localageg4 = 0, localageg5 = 0, localageg6b10 = 0, localageg11b20 = 0, localageg21b50 = 0, localageg51b100 = 0, localageg101b150 = 0,
-                localageg151b200 = 0, localageg201b300 = 0, localageg301b400 = 0, localageg401b500 = 0, localageg501b600 = 0, localageg601b700 = 0, localageg701plus = 0;
-            int localages0 = 0, localages1 = 0, localages2 = 0, localages3 = 0, localages4 = 0, localages5 = 0, localages6b10 = 0, localages11b20 = 0, localages21b50 = 0, localages51b100 = 0, localages101b150 = 0,
-                localages151b200 = 0, localages201b300 = 0, localages301b400 = 0, localages401b500 = 0, localages501b600 = 0, localages601b700 = 0, localages701plus = 0;
+            int stemcount_local_species1 = 0, stemcount_local_species2 = 0, stemcount_local_species3 = 0, stemcount_local_species4 = 0, stemcount_local_species5 = 0, stemcount_local_species6 = 0;
             int localgesamtseedAKT = 0, localgesamtseedSUM = 0;
             int localspectree1 = 0, localspectree2 = 0;
             double localyposmax = 0.0;
@@ -554,82 +556,20 @@ void Dataoutput(int t,
 				if (tree.growing == true) {
 					if (((double)tree.xcoo / 1000 >= xminwindow) && ((double)tree.xcoo / 1000 <= xmaxwindow) && ((double)tree.ycoo / 1000 >= yminwindow)
 						&& ((double)tree.ycoo / 1000 <= ymaxwindow)) {
-						if (tree.species == 1) {
-							// bin trees by age
-							if (tree.age == 0) {
-								localageg0++;
-							} else if (tree.age == 1) {
-								localageg1++;
-							} else if (tree.age == 2) {
-								localageg2++;
-							} else if (tree.age == 3) {
-								localageg3++;
-							} else if (tree.age == 4) {
-								localageg4++;
-							} else if (tree.age == 5) {
-								localageg5++;
-							} else if ((tree.age > 5) && (tree.age <= 10)) {
-								localageg6b10++;
-							} else if ((tree.age > 10) && (tree.age <= 20)) {
-								localageg11b20++;
-							} else if ((tree.age > 20) && (tree.age <= 50)) {
-								localageg21b50++;
-							} else if ((tree.age > 50) && (tree.age <= 100)) {
-								localageg51b100++;
-							} else if ((tree.age > 100) && (tree.age <= 150)) {
-								localageg101b150++;
-							} else if ((tree.age > 150) && (tree.age <= 200)) {
-								localageg151b200++;
-							} else if ((tree.age > 200) && (tree.age <= 300)) {
-								localageg201b300++;
-							} else if ((tree.age > 300) && (tree.age <= 400)) {
-								localageg301b400++;
-							} else if ((tree.age > 400) && (tree.age <= 500)) {
-								localageg401b500++;
-							} else if ((tree.age > 500) && (tree.age <= 600)) {
-								localageg501b600++;
-							} else if ((tree.age > 600) && (tree.age <= 700)) {
-								localageg601b700++;
-							} else if (tree.age > 700) {
-								localageg701plus++;
-							}
-						} else if (tree.species == 2) {
-							if (tree.age == 0) {
-								localages0++;
-							} else if (tree.age == 1) {
-								localages1++;
-							} else if (tree.age == 2) {
-								localages2++;
-							} else if (tree.age == 3) {
-								localages3++;
-							} else if (tree.age == 4) {
-								localages4++;
-							} else if (tree.age == 5) {
-								localages5++;
-							} else if ((tree.age > 5) && (tree.age <= 10)) {
-								localages6b10++;
-							} else if ((tree.age > 10) && (tree.age <= 20)) {
-								localages11b20++;
-							} else if ((tree.age > 20) && (tree.age <= 50)) {
-								localages21b50++;
-							} else if ((tree.age > 50) && (tree.age <= 100)) {
-								localages51b100++;
-							} else if ((tree.age > 100) && (tree.age <= 150)) {
-								localages101b150++;
-							} else if ((tree.age > 150) && (tree.age <= 200)) {
-								localages151b200++;
-							} else if ((tree.age > 200) && (tree.age <= 300)) {
-								localages201b300++;
-							} else if ((tree.age > 300) && (tree.age <= 400)) {
-								localages301b400++;
-							} else if ((tree.age > 400) && (tree.age <= 500)) {
-								localages401b500++;
-							} else if ((tree.age > 500) && (tree.age <= 600)) {
-								localages501b600++;
-							} else if ((tree.age > 600) && (tree.age <= 700)) {
-								localages601b700++;
-							} else if (tree.age > 700) {
-								localages701plus++;
+						
+						if((double)tree.height >= (130 * 10)) {
+							if (tree.species == 1) {
+								stemcount_local_species1++;
+							} else if (tree.species == 2) {
+								stemcount_local_species2++;
+							} else if (tree.species == 3) {
+								stemcount_local_species3++;
+							} else if (tree.species == 4) {
+								stemcount_local_species4++;
+							} else if (tree.species == 5) {
+								stemcount_local_species5++;
+							} else if (tree.species == 6) {
+								stemcount_local_species6++;
 							}
 						}
 
@@ -657,42 +597,12 @@ void Dataoutput(int t,
             }
 #pragma omp critical
             {
-				ageg0 += localageg0; 
-				ageg1 += localageg1; 
-				ageg2 += localageg2; 
-				ageg3 += localageg3; 
-				ageg4 += localageg4; 
-				ageg5 += localageg5; 
-				ageg6b10 += localageg6b10; 
-				ageg11b20 += localageg11b20; 
-				ageg21b50 += localageg21b50; 
-				ageg51b100 += localageg51b100; 
-				ageg101b150 += localageg101b150;
-                ageg151b200 += localageg151b200; 
-				ageg201b300 += localageg201b300; 
-				ageg301b400 += localageg301b400; 
-				ageg401b500 += localageg401b500; 
-				ageg501b600 += localageg501b600; 
-				ageg601b700 += localageg601b700; 
-				ageg701plus += localageg701plus;
-				ages0 += localages0 ; 
-				ages1 += localages1; 
-				ages2 += localages2; 
-				ages3 += localages3; 
-				ages4 += localages4; 
-				ages5 += localages5; 
-				ages6b10 += localages6b10; 
-				ages11b20 += localages11b20; 
-				ages21b50 += localages21b50; 
-				ages51b100 += localages51b100; 
-				ages101b150 += localages101b150;
-                ages151b200 += localages151b200; 
-				ages201b300 += localages201b300; 
-				ages301b400 += localages301b400; 
-				ages401b500 += localages401b500; 
-				ages501b600 += localages501b600; 
-				ages601b700 += localages601b700; 
-				ages701plus += localages701plus;
+				stemcount_species1 += stemcount_local_species1;
+				stemcount_species2 += stemcount_local_species2;
+				stemcount_species3 += stemcount_local_species3;
+				stemcount_species4 += stemcount_local_species4;
+				stemcount_species5 += stemcount_local_species5;
+				stemcount_species6 += stemcount_local_species6;
 				gesamtseedAKT += localgesamtseedAKT; 
 				gesamtseedSUM += localgesamtseedSUM;
 				spectree1 += localspectree1; 
@@ -763,42 +673,12 @@ void Dataoutput(int t,
             fprintf(filepointer, "%6.4f;", pEvaluation.meantreeageliste[pEvaluation.meantreeageliste.size() - 1]);
             fprintf(filepointer, "%d;", pEvaluation.yearofturningpoint);
             fprintf(filepointer, "%d;", pEvaluation.yearofequilibrium);
-            fprintf(filepointer, "%d;", ageg0);
-            fprintf(filepointer, "%d;", ages0);
-            fprintf(filepointer, "%d;", ageg1);
-            fprintf(filepointer, "%d;", ages1);
-            fprintf(filepointer, "%d;", ageg2);
-            fprintf(filepointer, "%d;", ages2);
-            fprintf(filepointer, "%d;", ageg3);
-            fprintf(filepointer, "%d;", ages3);
-            fprintf(filepointer, "%d;", ageg4);
-            fprintf(filepointer, "%d;", ages4);
-            fprintf(filepointer, "%d;", ageg5);
-            fprintf(filepointer, "%d;", ages5);
-            fprintf(filepointer, "%d;", ageg6b10);
-            fprintf(filepointer, "%d;", ages6b10);
-            fprintf(filepointer, "%d;", ageg11b20);
-            fprintf(filepointer, "%d;", ages11b20);
-            fprintf(filepointer, "%d;", ageg21b50);
-            fprintf(filepointer, "%d;", ages21b50);
-            fprintf(filepointer, "%d;", ageg51b100);
-            fprintf(filepointer, "%d;", ages51b100);
-            fprintf(filepointer, "%d;", ageg101b150);
-            fprintf(filepointer, "%d;", ages101b150);
-            fprintf(filepointer, "%d;", ageg151b200);
-            fprintf(filepointer, "%d;", ages151b200);
-            fprintf(filepointer, "%d;", ageg201b300);
-            fprintf(filepointer, "%d;", ages201b300);
-            fprintf(filepointer, "%d;", ageg301b400);
-            fprintf(filepointer, "%d;", ages301b400);
-            fprintf(filepointer, "%d;", ageg401b500);
-            fprintf(filepointer, "%d;", ages401b500);
-            fprintf(filepointer, "%d;", ageg501b600);
-            fprintf(filepointer, "%d;", ages501b600);
-            fprintf(filepointer, "%d;", ageg601b700);
-            fprintf(filepointer, "%d;", ages601b700);
-            fprintf(filepointer, "%d;", ageg701plus);
-            fprintf(filepointer, "%d;", ages701plus);
+            fprintf(filepointer, "%d;", stemcount_species1);
+            fprintf(filepointer, "%d;", stemcount_species2);
+            fprintf(filepointer, "%d;", stemcount_species3);
+            fprintf(filepointer, "%d;", stemcount_species4);
+            fprintf(filepointer, "%d;", stemcount_species5);
+            fprintf(filepointer, "%d;", stemcount_species6);
             fprintf(filepointer, "%d;", gesamtseedAKT);
             fprintf(filepointer, "%d;", gesamtseedSUM);
             fprintf(filepointer, "%d;", spectree1);
@@ -814,16 +694,20 @@ void Dataoutput(int t,
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempyearmean);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp1monthmean);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp7monthmean);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempmeanjja);
             fprintf(filepointer, "%d;", weather_list[yearposition].vegetationperiodlength);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday);
             fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsumjja);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[1]);//TODO: add here for all species output
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[2]);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 			// Fire
-			fprintf(filepointer, "%d;", firevalue); // ###FIRE###
-			fprintf(filepointer, "%d;", fireprobabilityrating); // ###FIRE###
+			fprintf(filepointer, "%d;", firecells); // ###FIRE###
+			fprintf(filepointer, "%f;", fireprobabilityrating); // ###FIRE###
+			fprintf(filepointer, "%f;", fireintensitymax); // ###FIRE###
+			fprintf(filepointer, "%f;", fireintensitymean); // ###FIRE###
             fprintf(filepointer, "\n");
 
             fclose(filepointer);
@@ -832,12 +716,9 @@ void Dataoutput(int t,
                 cout << "\tBasalarea = " << pEvaluation.basalarealist[pEvaluation.basalarealist.size() - 1] << endl;
                 cout << "\tN0-40 = " << nheight0b40 << "\tN40-200 = " << nheight41b200 << "\tN200+ = " << nheight201b10000 << endl;
                 cout << "\tNseeds:\tproduced = " << gesamtseedAKT << "\tground = " << seedbodenzahl << "\tcones = " << seedconezahl << endl;
-				cout << "\tfirevalue = " << firevalue << endl;
+				cout << "\tBurned cells = " << firecells << endl;
+				//cout << "\tFPR (output) = " << fireprobabilityrating << endl;
             }
-			
-			// if (firevalue > 0) {
-				// firevalue == 0; // Reset firevalue
-			// }
 			
         }  // trees currencies
 
@@ -1230,12 +1111,16 @@ void Dataoutput(int t,
 		// ###########################
 
 		if (outputgriddedbiomass == true) {  // gridded tree biomass output
+			ostringstream s_speciesname;
+			for(signed short int speciesnumber_i = 1; speciesnumber_i < 7; ++speciesnumber_i) {
+			 
 					// assemble file name
 					s1 << parameter[0].repeati;
 					s2 << parameter[0].weatherchoice;
 					s3 << parameter[0].ivort;
 					s4 << aktort;
-					dateiname = "output/databiomassgrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + ".csv";
+					s_speciesname << speciesnumber_i;
+					dateiname = "output/databiomassgrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + "_" + s_speciesname.str() + ".csv";
 					s1.str("");
 					s1.clear();
 					s2.str("");
@@ -1244,6 +1129,8 @@ void Dataoutput(int t,
 					s3.clear();
 					s4.str("");
 					s4.clear();
+					s_speciesname.str("");
+					s_speciesname.clear();
 		 
 					// aggregate data on 30 m grid
 					int deminputdimension_y = treerows / parameter[0].demresolution;  // matrix + 1 to avoid border effects
@@ -1287,7 +1174,7 @@ void Dataoutput(int t,
 					for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
 						auto& tree = tree_list[tree_i];
 					  
-					   if (tree.growing == true) {
+					   if ((tree.species == speciesnumber_i) & (tree.growing == true)) {
 									  // calculate grid position from x/y coordinates
 									   unsigned int grid_i = floor((double)tree.ycoo / 1000 / 90) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 90); //90 entered here (before: 30, changed because of DEM resolution)
 
@@ -1396,6 +1283,7 @@ void Dataoutput(int t,
 					}
 		 
 					fclose(filepointer);
+			}// for each species loop
 		}  // gridded tree biomass output
 
 
@@ -1521,8 +1409,7 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Envirgrowthimpact;");
                 // fprintf(filepointer, "Weather_type;");
                 fprintf(filepointer, "Thawing_depth;");
-                // fprintf(filepointer, "Pixels_with_fire;");	// ###FIRE### bool variant
-                fprintf(filepointer, "N_fire;");	// ###FIRE### int variant
+                fprintf(filepointer, "Fire_intensity;");	// ###FIRE###
 				fprintf(filepointer, "TWI;");
                 fprintf(filepointer, "\n");
 
@@ -1570,14 +1457,11 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
                     // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
                     fprintf(filepointer, "%d;", parameter[0].thawing_depth);
-					//if (pEnvirgrid.fire == true) 		// ###FIRE### bool variant
-						//fprintf(filepointer, "1;");	// ###FIRE### bool variant
-					//else								// ###FIRE### bool variant
-						//fprintf(filepointer, "0;");	// ###FIRE### bool variant
-                    fprintf(filepointer, "%d;", pEnvirgrid.fire);
-					fprintf(filepointer, "%d;", pEnvirgrid.twi);
+                    fprintf(filepointer, "%f;", pEnvirgrid.fire);
+					fprintf(filepointer, "%d;", pEnvirgrid.twi / 100);
                     fprintf(filepointer, "\n");
                 }
+				
             }
 
             fclose(filepointer);

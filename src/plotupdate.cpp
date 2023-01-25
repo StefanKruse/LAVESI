@@ -468,6 +468,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 			pEnvirgrid.maxthawing_depth = maxthawing_depth;
 			pEnvirgrid.Treedensityvalue = 0;
 			pEnvirgrid.Treenumber = 0;
+			pEnvirgrid.fire = 0;
+			pEnvirgrid.envirfireimpact = 0;
 		}
 	} else {
 #pragma omp parallel for default(shared) schedule(guided)
@@ -475,8 +477,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
             auto& pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid.Treedensityvalue = 0;
             pEnvirgrid.Treenumber = 0;
-			pEnvirgrid.fire = 0; 		// ###FIRE### int variant
-			pEnvirgrid.envirfireimpact = 0; 		// ###FIRE### int variant
+			pEnvirgrid.fire = 0;
+			pEnvirgrid.envirfireimpact = 0;
         }
     }
 }

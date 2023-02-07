@@ -369,7 +369,28 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].sizemagnif);
     }
-
+	
+	strcpy(uebergabestring,"pollengridpoints");
+	parameter[0].pollengridpoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridpoints);
+	}
+	
+	strcpy(uebergabestring,"pollengridxpoints");
+	parameter[0].pollengridxpoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridxpoints);
+	}
+	
+	strcpy(uebergabestring,"pollengridypoints");
+	parameter[0].pollengridypoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridypoints);
+	}
+	
     strcpy(uebergabestring, "starttrees");
     parameter[0].starttrees = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -847,13 +868,34 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);
     }
-
+	
+	strcpy(uebergabestring,"variabletraits");
+	parameter[0].variabletraits=(int) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].variabletraits);
+	}
+	
     strcpy(uebergabestring, "pollination");
     parameter[0].pollination = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollination);
     }
-
+	
+	strcpy(uebergabestring,"seedweightfactor");
+	parameter[0].seedweightfactor=(double) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].seedweightfactor);
+	}	
+	
+	strcpy(uebergabestring,"seednumberfactor");
+	parameter[0].seednumberfactor=(double) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].seednumberfactor);
+	}
+	
     strcpy(uebergabestring, "pollendirectionvariance");
     parameter[0].pollendirectionvariance = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

@@ -6,9 +6,13 @@
 using namespace std;
 
 void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list) {
+	printf("\n");
+	printf("AGEING WAS CALLED");
+						printf("\n");
+						printf("\n");
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-
+	
 #pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
@@ -42,11 +46,16 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
             for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
-
+				
+					if (tree.clonetimer>0){
+						printf("ageing test before %d", tree.clonetimer);
+						printf("\n");
+							tree.clonetimer--;
+							}
 				if (tree.growing == true) {
 					tree.age++;
-
-					if (tree.cone == false) {
+					
+					if (tree.cone == false && tree.cloningactive == false) {
 						if (tree.coneheight == 65535) {
 							// trees reaching the maturation age are assigned a minimum height value for them to bear cones
 							if (tree.age > speciestrait[tree.species].coneage) {
@@ -65,14 +74,23 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 						// tree already has a height of maturation assigned to it
 						// ... if a tree is taller than this maturation height, he starts to produce seeds
 						else if (tree.coneheight != 65535) {
-							if (tree.height / 10 >= tree.coneheight) {
+							//if (tree.height / 10 >= tree.coneheight && tree.cloning == false) {
 								tree.cone = true;
-							}
-						}
+							//}
+							//else if (tree.height / 10 >= tree.coneheight && tree.cloning == true) {
+							//	tree.cloningactive = true;
+							//}
+						}			
 					} else if (tree.cone == true) {
 						tree.seednewly_produced = 0;
 					}
+					
 				}
+				if (tree.clonetimer>0){
+						printf("ageing test after %d", tree.clonetimer);
+						printf("\n");
+							}
+				
 			}
         }  // tree list
     }      // world list

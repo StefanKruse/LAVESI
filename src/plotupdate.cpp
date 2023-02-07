@@ -542,7 +542,7 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
             s4 << 1;
             s5 << parameter[0].cryogrid_scenario;
 			
-			FILE* filepointer;
+			FILE* filepointer {};
 			string dateiname;
 			dateiname = "./output_" + s5.str() + "/datacryogrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + "_beforeupdate.csv";
  
@@ -611,7 +611,7 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 	std::vector<double> soilhumidityiout;
 
 	if(true) {// 1. compile data and write to file
-		FILE *filepointer;
+		FILE *filepointer{};
 		string filename;
 
 		// assemble file name:
@@ -1034,7 +1034,7 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 		// from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
 		// cryogridoutput_00025_0000007001_aggregated.txt_CG.csv
 		
-		FILE *filepointer;
+		FILE *filepointer{};
 		string filename;
 		ostringstream s1,s2,s3;
 
@@ -1126,7 +1126,7 @@ cout << leafareaiout[i] << " / " << endl;
 					}
 					double xmean = sum/xn;
 					// diff square sums
-					double xvariance;
+					double xvariance{};
 					for(int i = 0; i < xn; i++)
 						xvariance += pow(xmean-leafareaiout[i],2);
 					// mean y
@@ -1137,7 +1137,7 @@ cout << activelayerdepthin[i] << " / " << endl;
 					}
 					double ymean = sum/xn;
 					// diff square sums
-					double yxcovariance;
+					double yxcovariance{};
 					for(int i = 0; i < xn; i++)
 						yxcovariance += (xmean-leafareaiout[i]) * (ymean-activelayerdepthin[i]);
 					// slope

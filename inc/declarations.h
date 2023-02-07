@@ -27,9 +27,10 @@
 // constexpr unsigned int treecols = 2520;
 // constexpr unsigned int treerows = 5010;  // 30m_SpasskayaPad_x529631-534641m_y6897789-6902799m
 // constexpr unsigned int treecols = 5010;
-constexpr unsigned int treerows = 1260;  // 30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv
-constexpr unsigned int treecols = 1260;
-
+//constexpr unsigned int treerows = 1260;  // 30m_SpasskayaPad_x530881-532141m_y6899039-6900299m.csv
+//constexpr unsigned int treecols = 1260;
+constexpr unsigned int treerows = 50000;  
+constexpr unsigned int treecols = 1000;
 // parameter input
 constexpr unsigned int stringlengthmax = 255;
 constexpr const char* divisionsign = "=;";

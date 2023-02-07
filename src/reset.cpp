@@ -34,8 +34,8 @@ void Savealllists() {
             Tree newtree;
 
             // copy
-            // newtree.yworldcoo = tree.yworldcoo;
-            // newtree.xworldcoo = tree.xworldcoo;
+            newtree.yworldcoo = tree.yworldcoo;
+            newtree.xworldcoo = tree.xworldcoo;
             newtree.xcoo = tree.xcoo;
             newtree.ycoo = tree.ycoo;
             // newtree.name = tree.name;
@@ -117,10 +117,10 @@ void Savealllists() {
 
             Envirgrid pEnvirgrid_copy;
 
-            // pEnvirgrid_copy.xworldcoo = pEnvirgrid.xworldcoo;
-            // pEnvirgrid_copy.yworldcoo = pEnvirgrid.yworldcoo;
-            // pEnvirgrid_copy.xcoo = pEnvirgrid.xcoo;
-            // pEnvirgrid_copy.ycoo = pEnvirgrid.ycoo;
+            pEnvirgrid_copy.xworldcoo = pEnvirgrid.xworldcoo;
+            pEnvirgrid_copy.yworldcoo = pEnvirgrid.yworldcoo;
+            pEnvirgrid_copy.xcoo = pEnvirgrid.xcoo;
+            pEnvirgrid_copy.ycoo = pEnvirgrid.ycoo;
             pEnvirgrid_copy.Treedensityvalue = pEnvirgrid.Treedensityvalue;
             pEnvirgrid_copy.Treenumber = pEnvirgrid.Treenumber;
             pEnvirgrid_copy.maxthawing_depth = pEnvirgrid.maxthawing_depth;
@@ -170,8 +170,8 @@ void Savealllists() {
             auto& pEvaluation = (*pos);
             Evaluation pEvaluation_copy;
 
-            // pEvaluation_copy->xworldcoo = pEvaluation->xworldcoo;
-            // pEvaluation_copy->yworldcoo = pEvaluation->yworldcoo;
+            pEvaluation_copy.xworldcoo = pEvaluation.xworldcoo;
+            pEvaluation_copy.yworldcoo = pEvaluation.yworldcoo;
             for (vector<double>::iterator posval = pEvaluation.basalarealist.begin(); posval < pEvaluation.basalarealist.end();) {
                 pEvaluation_copy.basalarealist.push_back((*posval));
                 ++posval;
@@ -390,10 +390,10 @@ void Restorealllists(void) {
 
             Envirgrid pEnvirgrid_copy;
 
-            // pEnvirgrid_copy.xworldcoo = pEnvirgrid.xworldcoo;
-            // pEnvirgrid_copy.yworldcoo = pEnvirgrid.yworldcoo;
-            // pEnvirgrid_copy.xcoo = pEnvirgrid.xcoo;
-            // pEnvirgrid_copy.ycoo = pEnvirgrid.ycoo;
+            pEnvirgrid_copy.xworldcoo = pEnvirgrid.xworldcoo;
+            pEnvirgrid_copy.yworldcoo = pEnvirgrid.yworldcoo;
+            pEnvirgrid_copy.xcoo = pEnvirgrid.xcoo;
+            pEnvirgrid_copy.ycoo = pEnvirgrid.ycoo;
             pEnvirgrid_copy.Treedensityvalue = pEnvirgrid.Treedensityvalue;
             pEnvirgrid_copy.Treenumber = pEnvirgrid.Treenumber;
             pEnvirgrid_copy.maxthawing_depth = pEnvirgrid.maxthawing_depth;
@@ -445,8 +445,8 @@ void Restorealllists(void) {
 
             Evaluation pEvaluation_copy;
 
-            // pEvaluation_copy.xworldcoo = pEvaluation.xworldcoo;
-            // pEvaluation_copy.yworldcoo = pEvaluation.yworldcoo;
+            pEvaluation_copy.xworldcoo = pEvaluation.xworldcoo;
+            pEvaluation_copy.yworldcoo = pEvaluation.yworldcoo;
             for (vector<double>::iterator posval = pEvaluation.basalarealist.begin(); posval < pEvaluation.basalarealist.end();) {
                 pEvaluation_copy.basalarealist.push_back((*posval));
                 ++posval;

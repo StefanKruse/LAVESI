@@ -68,8 +68,8 @@ void Dataoutput(int t,
         aktort++;
 
         // calculation of the current location in a world grid // currently not used
-        // int aktortyworldcoo = (aktort - 1) / parameter[0].mapxlength;
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+         int aktortyworldcoo = (aktort - 1) / parameter[0].mapxlength;
+         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 
         // define output based on parameter setting
@@ -388,8 +388,8 @@ void Dataoutput(int t,
             if (filepointer == NULL) {
                 filepointer = fopen(dateiname.c_str(), "w+");
                 fprintf(filepointer, "Repeat;");
-                // fprintf(filepointer, "YPLOTPOS;");
-                // fprintf(filepointer, "XPLOTPOS;");
+                 fprintf(filepointer, "YPLOTPOS;");
+                 fprintf(filepointer, "XPLOTPOS;");
                 fprintf(filepointer, "Progress;");
                 fprintf(filepointer, "Spinup;");
 
@@ -484,8 +484,8 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             fprintf(filepointer, "%d;", parameter[0].repeati);
-            // fprintf(filepointer, "%d;", aktortyworldcoo);
-            // fprintf(filepointer, "%d;", aktortxworldcoo);
+             fprintf(filepointer, "%d;", aktortyworldcoo);
+             fprintf(filepointer, "%d;", aktortxworldcoo);
             fprintf(filepointer, "%d;", parameter[0].ivort);
             fprintf(filepointer, "%d;", t);
             fprintf(filepointer, "%d;", jahr);
@@ -875,8 +875,8 @@ void Dataoutput(int t,
                         filepointer = fopen(dateiname.c_str(), "w+");
 
                         fprintf(filepointer, "Repeat;");
-                        // fprintf(filepointer, "YPLOTPOS;");
-                        // fprintf(filepointer, "XPLOTPOS;");
+                        fprintf(filepointer, "YPLOTPOS;");
+                        fprintf(filepointer, "XPLOTPOS;");
                         fprintf(filepointer, "Year;");
                         fprintf(filepointer, "Random_year;");
                         fprintf(filepointer, "Weather_type;");
@@ -884,6 +884,31 @@ void Dataoutput(int t,
                         fprintf(filepointer, "Diameter_breast;");
                         fprintf(filepointer, "Height;");
                         fprintf(filepointer, "Age;");
+						fprintf(filepointer, "seednumber;");
+						fprintf(filepointer, "clonality;");
+						fprintf(filepointer, "cloningactive;");
+						fprintf(filepointer, "clonetimer;");
+						fprintf(filepointer, "cloned;");
+						fprintf(filepointer, "seedweight;");
+						fprintf(filepointer, "selving;");
+						fprintf(filepointer, "drought;");
+						fprintf(filepointer, "inbreedingdepression;");
+						fprintf(filepointer, "1inbreedingdepression;");
+						fprintf(filepointer, "2inbreedingdepression;");
+						fprintf(filepointer, "3inbreedingdepression;");
+						fprintf(filepointer, "4inbreedingdepression;");
+						fprintf(filepointer, "5inbreedingdepression;");
+						fprintf(filepointer, "6inbreedingdepression;");
+						fprintf(filepointer, "7inbreedingdepression;");
+						fprintf(filepointer, "8inbreedingdepression;");
+						fprintf(filepointer, "9inbreedingdepression;");
+						fprintf(filepointer, "10inbreedingdepression;");
+						fprintf(filepointer, "11inbreedingdepression;");
+						fprintf(filepointer, "12inbreedingdepression;");
+						fprintf(filepointer, "13inbreedingdepression;");
+						fprintf(filepointer, "14inbreedingdepression;");
+						fprintf(filepointer, "15inbreedingdepression;");
+						fprintf(filepointer, "16inbreedingdepression;");
                         fprintf(filepointer, "X;");
                         fprintf(filepointer, "Y;");
                         fprintf(filepointer, "Density_value;");
@@ -907,8 +932,8 @@ void Dataoutput(int t,
 
 						if (tree.growing == true) {
 							fprintf(filepointer, "%d;", parameter[0].repeati);
-							// fprintf(filepointer, "%d;", tree.yworldcoo);
-							// fprintf(filepointer, "%d;", tree.xworldcoo);
+							fprintf(filepointer, "%d;", tree.yworldcoo);
+							fprintf(filepointer, "%d;", tree.xworldcoo);
 							fprintf(filepointer, "%d;", parameter[0].ivort);
 							fprintf(filepointer, "%d;", jahr);
 							fprintf(filepointer, "%d;", parameter[0].weatherchoice);
@@ -916,6 +941,31 @@ void Dataoutput(int t,
 							fprintf(filepointer, "%4.4f;", tree.dbreast);
 							fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 							fprintf(filepointer, "%d;", tree.age);
+							fprintf(filepointer, "%4.4f;", tree.seednumber);
+							fprintf(filepointer, "%4.4f;", tree.clonality);
+							fprintf(filepointer, "%d;", tree.cloningactive);
+							fprintf(filepointer, "%d;", tree.clonetimer);
+							fprintf(filepointer, "%d;", tree.cloned);
+							fprintf(filepointer, "%4.4f;", tree.seedweight);
+							fprintf(filepointer, "%4.4f;", tree.droughtresist);
+							fprintf(filepointer, "%4.4f;", tree.selving);
+							fprintf(filepointer, "%4.4f;", tree.inbreedingdepression);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[0]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[1]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[2]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[3]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[4]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[5]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[6]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[7]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[8]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[9]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[10]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[11]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[12]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[13]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[14]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[15]);
 							fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
 							fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
 							fprintf(filepointer, "%4.5f;", tree.densitywert);
@@ -958,8 +1008,8 @@ void Dataoutput(int t,
 
                 // parameters
                 // fprintf(filepointer, "Repeat;");
-                // fprintf(filepointer, "YPLOTPOS;");
-                // fprintf(filepointer, "XPLOTPOS;");
+                fprintf(filepointer, "YPLOTPOS;");
+                fprintf(filepointer, "XPLOTPOS;");
                 // fprintf(filepointer, "Weather_type;");
                 // time variables
                 // fprintf(filepointer, "Progress;");
@@ -977,6 +1027,32 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Dbasal;");
                 fprintf(filepointer, "Dbreast;");
                 fprintf(filepointer, "Age;");
+				fprintf(filepointer, "seednumber;");
+				
+						fprintf(filepointer, "clonality;");
+						fprintf(filepointer, "cloningactive;");
+						fprintf(filepointer, "clonetimer;");
+						fprintf(filepointer, "cloned;");
+						fprintf(filepointer, "seedweight;");
+						fprintf(filepointer, "selving;");
+						fprintf(filepointer, "drought;");
+						fprintf(filepointer, "inbreedingdepression;");
+						fprintf(filepointer, "1inbreedingdepression;");
+						fprintf(filepointer, "2inbreedingdepression;");
+						fprintf(filepointer, "3inbreedingdepression;");
+						fprintf(filepointer, "4inbreedingdepression;");
+						fprintf(filepointer, "5inbreedingdepression;");
+						fprintf(filepointer, "6inbreedingdepression;");
+						fprintf(filepointer, "7inbreedingdepression;");
+						fprintf(filepointer, "8inbreedingdepression;");
+						fprintf(filepointer, "9inbreedingdepression;");
+						fprintf(filepointer, "10inbreedingdepression;");
+						fprintf(filepointer, "11inbreedingdepression;");
+						fprintf(filepointer, "12inbreedingdepression;");
+						fprintf(filepointer, "13inbreedingdepression;");
+						fprintf(filepointer, "14inbreedingdepression;");
+						fprintf(filepointer, "15inbreedingdepression;");
+						fprintf(filepointer, "16inbreedingdepression;");
                 // fprintf(filepointer, "Cone;");
                 // fprintf(filepointer, "Cone_height;");
                 // fprintf(filepointer, "Seeds_produced_currently;");
@@ -1004,8 +1080,8 @@ void Dataoutput(int t,
 				if (tree.growing == true) {
 					// parameters
 					// fprintf(filepointer, "%d;", parameter[0].repeati);
-					// fprintf(filepointer, "%d;", tree.yworldcoo);
-					// fprintf(filepointer, "%d;", tree.xworldcoo);
+					fprintf(filepointer, "%d;", tree.yworldcoo);
+					fprintf(filepointer, "%d;", tree.xworldcoo);
 					// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 					// time variables
 					// fprintf(filepointer, "%d;", t);
@@ -1023,6 +1099,31 @@ void Dataoutput(int t,
 					fprintf(filepointer, "%4.4f;", tree.dbasal);
 					fprintf(filepointer, "%4.4f;", tree.dbreast);
 					fprintf(filepointer, "%d;", tree.age);
+					fprintf(filepointer, "%4.4f;", tree.seednumber);
+							fprintf(filepointer, "%4.4f;", tree.clonality);
+							fprintf(filepointer, "%d;", tree.cloningactive);
+							fprintf(filepointer, "%d;", tree.clonetimer);
+							fprintf(filepointer, "%d;", tree.cloned);
+							fprintf(filepointer, "%4.4f;", tree.seedweight);
+							fprintf(filepointer, "%4.4f;", tree.droughtresist);
+							fprintf(filepointer, "%4.4f;", tree.selving);
+							fprintf(filepointer, "%4.4f;", tree.inbreedingdepression);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[0]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[1]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[2]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[3]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[4]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[5]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[6]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[7]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[8]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[9]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[10]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[11]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[12]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[13]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[14]);
+							fprintf(filepointer, "%d;", tree.neutralmarkers[15]);
 					// fprintf(filepointer, "%d;", tree.cone);
 					// fprintf(filepointer, "%4.4f;", tree.coneheight);
 					// fprintf(filepointer, "%d;", tree.seednewly_produced);
@@ -1065,8 +1166,8 @@ void Dataoutput(int t,
 
                 // parameters
                 // fprintf(filepointer, "Repeat;");
-                // fprintf(filepointer, "YPLOTPOS;");
-                // fprintf(filepointer, "XPLOTPOS;");
+                fprintf(filepointer, "YPLOTPOS;");
+                fprintf(filepointer, "XPLOTPOS;");
                 // fprintf(filepointer, "Weather_type;");
                 // time variables
                 // fprintf(filepointer, "Progress;");
@@ -1129,8 +1230,8 @@ void Dataoutput(int t,
 						&& ((double)tree.ycoo / 1000 <= ((7479959+600)-7475006))) {
 						// parameters
 						// fprintf(filepointer, "%d;", parameter[0].repeati);
-						// fprintf(filepointer, "%d;", tree.yworldcoo);
-						// fprintf(filepointer, "%d;", tree.xworldcoo);
+						fprintf(filepointer, "%d;", tree.yworldcoo);
+						fprintf(filepointer, "%d;", tree.xworldcoo);
 						// fprintf(filepointer, "%d;", parameter[0].weatherchoice);
 						// time variables
 						// fprintf(filepointer, "%d;", t);
@@ -1519,8 +1620,8 @@ void Dataoutput(int t,
                 filepointer = fopen(dateiname.c_str(), "w+");
 
                 fprintf(filepointer, "Repeat;");
-                // fprintf(filepointer, "YPLOTPOS;");
-                // fprintf(filepointer, "XPLOTPOS;");
+                 fprintf(filepointer, "YPLOTPOS;");
+                fprintf(filepointer, "XPLOTPOS;");
                 fprintf(filepointer, "X;");
                 fprintf(filepointer, "Y;");
                 fprintf(filepointer, "Density_value;");
@@ -1560,8 +1661,8 @@ void Dataoutput(int t,
                             && (ycooi <= ymaxwindow * parameter[0].sizemagnif)))
 						) {  
                     fprintf(filepointer, "%d;", parameter[0].repeati);
-                    // fprintf(filepointer, "%d;", pEnvirgrid.yworldcoo);
-                    // fprintf(filepointer, "%d;", pEnvirgrid.xworldcoo);
+                     fprintf(filepointer, "%d;", pEnvirgrid.yworldcoo);
+                     fprintf(filepointer, "%d;", pEnvirgrid.xworldcoo);
                     fprintf(filepointer, "%4.4f;", xcooi / parameter[0].sizemagnif);
                     fprintf(filepointer, "%4.4f;", ycooi / parameter[0].sizemagnif);
                     fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);

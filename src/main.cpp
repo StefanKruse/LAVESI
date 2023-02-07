@@ -13,6 +13,8 @@ int yearposition;
 vector<VectorList<Tree>> world_tree_list;
 vector<VectorList<Seed>> world_seed_list;
 vector<vector<Weather>> world_weather_list;
+vector<vector<Pollengrid>> world_pollen_list;
+
 vector<vector<Envirgrid>> world_plot_list;
 vector<vector<Evaluation>> world_evaluation_list;
 vector<vector<Cryogrid>> world_cryo_list;
@@ -70,7 +72,7 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
         if (parameter[0].windsource == 1) {
             findyr1 = 1979;
-            findyr2 = 2012;  // TODO: adjust to available data
+            findyr2 = 2018;  // TODO: adjust to available data
         }
     }
 
@@ -194,7 +196,9 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 			  yearposition, 
 			  world_tree_list, 
 			  world_seed_list, 
-			  world_weather_list);
+			  world_weather_list,
+			  world_pollen_list,
+			  world_plot_list);
     wspd.clear();
     wdir.clear();
     wspd.shrink_to_fit();
@@ -478,7 +482,7 @@ void createLists() {
             world_plot_list.emplace_back();        // include new plot_list in corresponding world list
             world_evaluation_list.emplace_back();  // include new evaluation_list in corresponding world list
             world_cryo_list.emplace_back();  // include new cryogrid_list in corresponding world list
-
+			world_pollen_list.emplace_back();
             if (parameter[0].resetyear > 0) {
                 // Create lists for resetting to a certain year
                 world_tree_list_copy.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
@@ -785,6 +789,8 @@ void initialiseMaps() {
     int aktort = 0;
     for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
         vector<Envirgrid>& plot_list = *posw;
+		vector<vector<Pollengrid>>::iterator posw2=(world_pollen_list.begin()+aktort);
+		vector<Pollengrid>& pollen_list = *posw2;
         vector<vector<Evaluation>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
         vector<Evaluation>& evaluation_list = *posiwelt;
         aktort++;
@@ -792,8 +798,42 @@ void initialiseMaps() {
         //		xworld= repeating the same position
         //		yworld= different position along the transect
         // necessary for the global lists
-        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+         int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
+         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+		//double lent=(double) sqrt(parameter[0].pollengridpoints);
+		
+		double lentx=(double) (parameter[0].pollengridxpoints);
+		double lenty=(double) (parameter[0].pollengridypoints);
+		
+		//THIS LOOP CREATES THE POLLEN GRID ON EACH PLOT WITH A RESOLUTION OF 
+		//(parameter[0].pollengridxpoints)*(parameter[0].pollengridypoints);
+		for(int kartenpos=0;kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++)
+		{
+			Pollengrid pPollengrid;
+			pPollengrid.seedweight=0;
+			pPollengrid.seedweightvar=0;
+			pPollengrid.droughtresist=0;
+			pPollengrid.seednumber=0;
+			pPollengrid.clonality=0;
+			pPollengrid.growthform=0;
+			pPollengrid.activedepth=0;
+			pPollengrid.selving=0;
+			pPollengrid.maturation=0;
+			pPollengrid.winterwater=0;
+			pPollengrid.nutrition=0;
+			pPollengrid.name=0;
+			pPollengrid.Number=kartenpos+1;
+		
+			pPollengrid.xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
+											 +0.5*treerows/lentx;
+											 
+			pPollengrid.ycoo=floor(kartenpos/lentx)*treecols/lenty
+											   +0.5*treecols/lenty;
+			
+			pollen_list.emplace_back(std::move(pPollengrid));
+		}
+
+
 
         short int initialelevation = 0;
         if (parameter[0].mapylength == 1)
@@ -810,8 +850,8 @@ void initialiseMaps() {
 
         // create an evaluation element for each site
         Evaluation pEvaluation;
-        // pEvaluation.yworldcoo = aktortyworldcoo;
-        // pEvaluation.xworldcoo = aktortxworldcoo;
+         pEvaluation.yworldcoo = aktortyworldcoo;
+        pEvaluation.xworldcoo = aktortxworldcoo;
         pEvaluation.basalarealist.clear();
         pEvaluation.basalarealist.shrink_to_fit();
         pEvaluation.basalarearunmeanlist.clear();
@@ -862,8 +902,8 @@ void initialiseMaps() {
 
 		aktort++;
 
-		// int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
-		// int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
+		 int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
+		int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 		// TODO: assure 10x10 m grid
 		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;

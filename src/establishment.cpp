@@ -27,6 +27,10 @@ void Treeestablishment(Parameter* parameter,
             auto& seed = seed_list[i_seed];
             if (!seed.dead && !seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
+				
+
+				
+			
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
@@ -37,7 +41,22 @@ void Treeestablishment(Parameter* parameter,
                     seed_list.remove(i_seed);
                     continue;
                 }
-
+				if(parameter[0].ivort<5000){
+						if ((seed.ycoo/ 1000)>1000){
+							if ((seed.ycoo/ 1000)<=49900){
+								seed.dead = true;
+								seed_list.remove(i_seed);
+								continue;
+							}
+							else if((seed.xcoo/ 1000) >100 && (seed.xcoo/ 1000) <=900){
+								seed.dead = true;
+								seed_list.remove(i_seed);
+								continue;
+							}
+						
+						}
+						
+				}
                 double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
                 // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
@@ -172,8 +191,8 @@ void Treeestablishment(Parameter* parameter,
 					if (maxbw_help > 0.0) { // otherwise can survive
 						Tree tree;
 
-						// tree.yworldcoo = seed.yworldcoo;
-						// tree.xworldcoo = seed.xworldcoo;
+						tree.yworldcoo = seed.yworldcoo;
+						tree.xworldcoo = seed.xworldcoo;
 						tree.xcoo = seed.xcoo;
 						tree.ycoo = seed.ycoo;
 						// tree.name = ++parameter[0].nameakt;
@@ -208,6 +227,40 @@ void Treeestablishment(Parameter* parameter,
 						tree.growing = true;
 						tree.species = seed.species;
 						tree.thawing_depthinfluence = thawing_depthinfluence_help;
+						tree.seedweight = seed.seedweight;
+						tree.droughtresist = seed.droughtresist;
+						tree.seednumber = seed.seednumber;
+						tree.clonality = seed.clonality;
+						//double ranc = uniform.draw();
+						//if (ranc*100<=tree.clonality && tree.clonality!=0){
+						//	tree.cloning = true;
+						//} else {
+							tree.cloning = true;
+						//}
+						tree.cloningactive=false;
+						tree.clonetimer=0;
+						tree.cloned=false;
+						tree.cloneboost=1;
+						tree.growthform = seed.growthform;
+						double rang = uniform.draw();
+						if (rang*100<=tree.growthform && tree.growthform!=0){
+							tree.growthstunt= true;
+						} else {
+							tree.growthstunt = false;
+						}
+						tree.activedepth = seed.activedepth;
+						tree.selving = seed.selving;
+						tree.maturation = seed.maturation;
+						tree.winterwater = seed.winterwater;
+						tree.nutrition = seed.nutrition;
+						tree.neutralmarkers=seed.neutralmarkers;
+						tree.inbreedingdepression=0;
+						for(unsigned int neutralcounter=0;neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
+							if (tree.neutralmarkers[neutralcounter]==tree.neutralmarkers[neutralcounter+1]){
+								tree.inbreedingdepression=tree.inbreedingdepression+(10.0/( tree.neutralmarkers.size()/2.0));
+							}
+						}
+						
 						tree.envirimpact = 10000;
 						tree.twi = 6.25*100;
 						tree.soilhumidity = 1;

@@ -127,7 +127,7 @@ void getTemp(	//int aktort,
                                + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
                               / 12;
 
-            Weather pWeather;
+            Weather pWeather{};
 
             // pWeather.yworldcoo = aktortyworldcoo;
             // pWeather.xworldcoo = aktortxworldcoo;
@@ -301,6 +301,7 @@ void passWeather() {
 
                 if (aattrockenheit > 1) {
                     droughtmortbuf = droughtmortbuf + aattrockenheit * 0.1;
+					droughtmortbuf=pow(droughtmortbuf/0.3863,2);
                 }
             }
             weather_list[iweather].droughtmort = droughtmortbuf;
@@ -309,6 +310,7 @@ void passWeather() {
 
                 if (aattrockenheitmin > 1) {
                     droughtmortbufmin = droughtmortbufmin + aattrockenheitmin * 0.1;
+					droughtmortbufmin=pow(droughtmortbufmin/0.3863,2); //this part is new. min did not exist before.
                 }
             }
             weather_list[iweather].droughtmortmin = droughtmortbufmin;
@@ -433,7 +435,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             || (parameter[0].weatherchoice == 501300024) || (parameter[0].weatherchoice == 501300025) || (parameter[0].weatherchoice == 501300026)
             || (parameter[0].weatherchoice == 501300027) || (parameter[0].weatherchoice == 501300028) || (parameter[0].weatherchoice == 21)
             || (parameter[0].weatherchoice == 22) || (parameter[0].weatherchoice == 23) || (parameter[0].weatherchoice == 24)
-            || (parameter[0].weatherchoice == 7001)) {
+            || (parameter[0].weatherchoice == 7001 || parameter[0].weatherchoice==18065)) {
             foldername << "wind_Taimyr";
         } else if (
             // Buor Khaya Peninsula
@@ -479,8 +481,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
             if (parameter[0].windsource == 1) {
                 findyr1 = 1979;
-                // findyr2 = 2018;
-                findyr2 = 2100;
+                findyr2 = 2018;
+                //findyr2 = 2100;
             }
 
             ss.str("");
@@ -490,8 +492,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 ss << jahr;
 
                 if (parameter[0].windsource == 1) {
-                    // filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
-                    filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
+                    filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat"; // check folder name for according file names
+                    // filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
                 }
 
                 ifstream fileinp(filename.c_str());
@@ -854,6 +856,13 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }
+		else if (parameter[0].weatherchoice==18065)
+		{
+		char tempbuf[]="input/newtemperature.csv";
+		char precbuf[]="input/newpercipitation.csv";
+		strcpy(dateinametemp, tempbuf);
+		strcpy(dateinameprec, precbuf);
+		}
 
         if (parameter[0].demlandscape) {
             // elevation adjustment

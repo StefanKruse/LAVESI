@@ -188,6 +188,10 @@ struct Parameter {
     unsigned short int species_max;
 	int firemode;
 	double fireintensitymode;
+	int firegapoutput;
+	double firegapoutput_threshold;
+	int firegapoutput_years;
+	int counter_fire_happened;
 
     // multi-core processing with omp
     int omp_num_threads;

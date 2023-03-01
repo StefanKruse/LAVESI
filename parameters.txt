@@ -46,9 +46,15 @@ fireintensitymode=1.0;				// (double) Wildfire intensity switch
 										// 0.0==fire intensity of zero
 										// 0.0<x<1.0==fixed fire intensity at given value
 										// 1.0==fire intensity according to chosen firemode (no effect of fireintensitymode parameter)
+firegapoutput=0;					// (int 0,1) Annual "fire gap" output switch
+										// 0==no additional output
+										// 1==additional currencies output for burned area only, for 30 years after a fire
+firegapoutput_threshold=0.5		 	// (double 0.00,1.00) If firepapoutput=1, determine here the threshold of fire probability/intensity above which fire gap output should be written (default = 0.5)
+firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many years post-fire the output should be written (default=30)
+counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
 
 // 0.4 Computation environment
-omp_num_threads=48;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=56;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -69,7 +75,7 @@ omp_num_threads=48;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1822408;			// (int) Type of weather forcing series 
+weatherchoice=1822406;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -113,11 +119,16 @@ weatherchoice=1822408;			// (int) Type of weather forcing series
 									// ... ### MPI-ESM 25ka ###
 									// 1822404 == Lake Satagay unadjusted MPI-ESM (22950 BCE - 1949 CE; -->24900<-- yrs; last year 1949+1) -> crashes after c. 9000 yrs (no trees growing)
 									// 1822405 == Lake Satagay CRU-adjusted MPI-ESM (22950 BCE - 1949 CE; -->24900<-- yrs; last year 1949+1) -> works (when lastyearweatherdata = 24900) -> ???
-									// 1822406 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM + CMIP6 (22950 BCE - 2100 CE; -->25051<-- yrs; last year 2100+1) -> works
+									// 1822406 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM (Anne Dallmeyer) + CMIP6 (22950 BCE - 2100 CE; -->25051<-- yrs; last year 2100+1) -> works
+									// 1822409 == 1822406, but T is -5%
+									// 1822410 == 1822406, but T is +5%
+									// 1822411 == 1822406, but P is -5%
+									// 1822412 == 1822406, but P is +5%
+									// 1822413 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM-CR (Marie Kapsch) + CMIP6 (23050 BCE - 2100 CE; -->26051<-- yrs; last year 2100+1)
+									
 									// ... ### MPI-ESM1-2 CMIP6 ###
 									// 1822407 == Lake Satagay CMIP6 MPI-ESM1-2 combined HR+LR (historical+long run) simulation (1850 - 2100 CE; -->251 yrs<--; last year 2100+1) -> works
 									// 1822408 == Lake Satagay adjusted CMIP6 MPI-ESM1-2 combined HR+LR (historical+long run) simulation, adjusted to CRU (1850 - 2100 CE; -->251 yrs<--; last year 2100+1) -> ???
-									
 
 temperaturelapse_jan=0.004318;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 									// Chukotka elevation:	0.001722
@@ -168,10 +179,10 @@ windsource=10;						// (int) source of wind data
 									
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=2101;			// (int) determined by the input data series (final year + 1)
-simduration=251;					// (int) duration of the simulation period depending on the available weather data series
-stopatyear=2200;					// (int) simulation is stopped after this year
+simduration=25051;					// (int) duration of the simulation period depending on the available weather data series
+stopatyear=26000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
-ivortmax=100;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
+ivortmax=500;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										// ...   0==without spin up phase
 										// ... >10==with spin up phase
 stabilperiod=0;						// (int 0,1) simulate a stabilization phase that ends when the simulated population falls below a certain threshold (stabilpercentchangethreshold)
@@ -339,7 +350,7 @@ relgrowthmortinfluenceexp=1.0;		// (double) influence exponent of current tree g
 									// ... <1==weaker
 mdensity=0.25;						// (double) mortality factor for density	//default = 0.25
 densityvaluemaximumatheight=0.0;	// (double) (IF mdensity>0) the density influence is modified depending on the tree's height by using a circle-function	//default = 0.0
-mweather=0.5;						// mortalitaetsfaktor_weather (0-+oo) (standard=0.5!)
+mweather=0.5;						// mortalitaetsfaktor_weather (0-+oo)	// default = 0.5
 heightweathermorteinflussexp=0.75;	// (double) exponent for determining an influence of the tree height on the climate mortality	//default = 0.75
 mdrought=0.1;						// (double) mortalitaetsfaktor_Trockenheit (0-+oo)	//default = 0.1
 seedconemort=0.44724;				// (double 0-1) mortality rate of seeds in cones on the trees	//default = 0.44724

@@ -40,6 +40,8 @@ void Dataoutput(int t,
     bool outputtestarea = false;
     bool outputtransects = false;
     bool ausgabedensity = false;
+	bool outputgriddedbiomass_fire = false;
+	bool ausgabedensity_fire = false;
 
     // preprocessing and output of data for each plot
     int aktort = 0;
@@ -105,16 +107,31 @@ void Dataoutput(int t,
                 } else {
                     outputcurrencies = true;
                 }
+				
+				
 			} else if (parameter[0].outputmode == 57) {  // "FIRE": temporal+spatial
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
+					// int counter = 30; // declaration of counter for fire gap output in years after a fire, in the beginning of the simulation
                 } else {
-                    outputcurrencies = true; //every year
-					if (parameter[0].ivort % 100 == 0) { //every 100 yrs
-					outputgriddedbiomass = true;
-					ausgabedensity = true;
+                    outputcurrencies = true; //write temporal output every year
+					if (parameter[0].ivort % 100 == 0) { //write spatial output every 100 yrs
+						outputgriddedbiomass = true;
+						ausgabedensity = true;
 					}
-                }					
+					if (parameter[0].firegapoutput == 1) { // if fire gap output is activated
+						if (parameter[0].counter_fire_happened > 0) { // If counter has been started but not yet finished
+							outputgriddedbiomass_fire = true; // write spatial output every year
+							ausgabedensity_fire = true;
+							parameter[0].counter_fire_happened--; // subtract one year
+							cout << "\tWriting fire gap output. " << parameter[0].counter_fire_happened << " more years will follow." << endl;
+						} else {
+							cout << "\tNo fire gap output will be produced. Counter = " << parameter[0].counter_fire_happened << endl;
+						}
+					}
+                }
+				
+				
 			} else if (parameter[0].outputmode == 77) {  // example
                 outputcurrencies = true;
 
@@ -1383,7 +1400,7 @@ void Dataoutput(int t,
             // assemble file name:
             s1 << parameter[0].ivort;
             s2 << parameter[0].weatherchoice;
-            dateiname = "output/datatrees_Treedensity" + s1.str() + "_" + s2.str() + ".csv";
+			dateiname = "output/datatrees_Treedensity" + s1.str() + "_" + s2.str() + ".csv";
             s1.str("");
             s1.clear();
             s2.str("");
@@ -1466,6 +1483,259 @@ void Dataoutput(int t,
 
             fclose(filepointer);
         }  // tree density map output
-    }      // world list
-}
+		
+		// ####################################
+		// ##### outputfiregap / treedensity ###################################################################################################################
+		// ####################################
+		
+		// treedensity_firegap output
+		if (ausgabedensity_fire == true) {  // tree density map output
+            // assemble file name:
+            s1 << parameter[0].ivort;
+            s2 << parameter[0].weatherchoice;
+			dateiname = "output/firegap/datatrees_Treedensity" + s1.str() + "_" + s2.str() + "_firegap.csv";
+            s1.str("");
+            s1.clear();
+            s2.str("");
+            s2.clear();
 
+            // trying to open the file for reading
+            filepointer = fopen(dateiname.c_str(), "r+");
+            // if fopen fails, open a new file + header output
+            if (filepointer == NULL) {
+                filepointer = fopen(dateiname.c_str(), "w+");
+
+                fprintf(filepointer, "Repeat;");
+                fprintf(filepointer, "X;");
+                fprintf(filepointer, "Y;");
+                fprintf(filepointer, "Density_value;");
+                fprintf(filepointer, "N_trees;");
+                fprintf(filepointer, "Litter_layer_height;");
+                fprintf(filepointer, "Litter_layer_height_mean;");
+                fprintf(filepointer, "Max_thawing_depth;");
+                fprintf(filepointer, "Elevation;");
+                fprintf(filepointer, "Envirgrowthimpact;");
+                fprintf(filepointer, "Thawing_depth;");
+                fprintf(filepointer, "Fire_intensity;");	// ###FIRE###
+				fprintf(filepointer, "TWI;");
+                fprintf(filepointer, "\n");
+
+                if (filepointer == NULL) {
+                    fprintf(stderr, "Error: output file is missing!\n");
+                    exit(1);
+                }
+            }
+
+            fseek(filepointer, 0, SEEK_END);
+
+            // data evaluation and output
+            for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
+                auto& pEnvirgrid = plot_list[kartenpos];
+                double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+                double xcooi = (double)kartenpos - (ycooi * ((double)treecols * (double)parameter[0].sizemagnif));
+
+				if(parameter[0].demlandscape & 
+					(((int)xcooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0) &	// xcooi is gridcell resolution in envirgrid == 20 cm steps // => every 90 m/demresolution output
+					(((int)ycooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0)) {
+							
+                    fprintf(filepointer, "%d;", parameter[0].repeati);
+                    fprintf(filepointer, "%4.4f;", xcooi);
+                    fprintf(filepointer, "%4.4f;", ycooi);
+                    fprintf(filepointer, "%4.5f;", (double)pEnvirgrid.Treedensityvalue / 10000);
+                    fprintf(filepointer, "%d;", pEnvirgrid.Treenumber);
+                    fprintf(filepointer, "%u;", pEnvirgrid.litterheight0 / 100); // in cm
+                    fprintf(filepointer, "%u;", pEnvirgrid.litterheightmean / 100); // in cm
+                    fprintf(filepointer, "%u;", pEnvirgrid.maxthawing_depth / 100);
+                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.elevation / 10);
+                    fprintf(filepointer, "%4.4f;", (double)pEnvirgrid.envirgrowthimpact / 10000);
+                    // fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+                    fprintf(filepointer, "%d;", parameter[0].thawing_depth);
+                    fprintf(filepointer, "%f;", pEnvirgrid.fire);
+					fprintf(filepointer, "%d;", pEnvirgrid.twi / 100);
+                    fprintf(filepointer, "\n");
+                }
+				
+            }
+
+            fclose(filepointer);
+        }  // End: tree density _firegap map output
+		
+		// databiomassgrid_firegap output
+		if (outputgriddedbiomass_fire == true) {  // gridded tree biomass output
+			ostringstream s_speciesname;
+			for(signed short int speciesnumber_i = 1; speciesnumber_i < 7; ++speciesnumber_i) {
+			 
+					// assemble file name
+					s1 << parameter[0].repeati;
+					s2 << parameter[0].weatherchoice;
+					s3 << parameter[0].ivort;
+					s4 << aktort;
+					s_speciesname << speciesnumber_i;
+					dateiname = "output/firegap/databiomassgrid_" + s1.str() + "_" + s2.str() + "_" + s3.str() + "_" + s4.str() + "_" + s_speciesname.str() + "_firegap.csv";
+					s1.str("");
+					s1.clear();
+					s2.str("");
+					s2.clear();
+					s3.str("");
+					s3.clear();
+					s4.str("");
+					s4.clear();
+					s_speciesname.str("");
+					s_speciesname.clear();
+		 
+					// aggregate data on 30 m grid
+					int deminputdimension_y = treerows / parameter[0].demresolution;  // matrix + 1 to avoid border effects
+					int deminputdimension_x = treecols / parameter[0].demresolution;  // matrix + 1 to avoid border effects
+					vector<double> AGBneedleliving;
+					AGBneedleliving.resize(deminputdimension_y * deminputdimension_x, 0);
+					vector<double> AGBwoodliving;
+					AGBwoodliving.resize(deminputdimension_y * deminputdimension_x, 0);
+					vector<unsigned int> Stemcount;
+					Stemcount.resize(deminputdimension_y * deminputdimension_x, 0);
+					vector<double> Basalarea;
+					Basalarea.resize(deminputdimension_y * deminputdimension_x, 0);
+					vector<unsigned int> Indicount_10;
+					vector<unsigned int> Indicount_40;
+					vector<unsigned int> Indicount_100;
+					vector<unsigned int> Indicount_200;
+					vector<unsigned int> Indicount_300;
+					vector<unsigned int> Indicount_400;
+					vector<unsigned int> Indicount_500;
+					vector<unsigned int> Indicount_750;
+					vector<unsigned int> Indicount_1000;
+					vector<unsigned int> Indicount_1250;
+					vector<unsigned int> Indicount_1500;
+					vector<unsigned int> Indicount_2000;
+					vector<unsigned int> Indicount_larger2000;
+					Indicount_10.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_40.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_100.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_200.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_300.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_400.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_500.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_750.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_1000.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_1250.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_1500.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_2000.resize(deminputdimension_y * deminputdimension_x, 0);
+					Indicount_larger2000.resize(deminputdimension_y * deminputdimension_x, 0);
+		 
+		#pragma omp parallel for default(shared) schedule(guided)
+					for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
+						auto& tree = tree_list[tree_i];
+					  
+					   if ((tree.species == speciesnumber_i) & (tree.growing == true)) {
+									  // calculate grid position from x/y coordinates
+									   unsigned int grid_i = floor((double)tree.ycoo / 1000 / 90) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 90); //90 entered here (before: 30, changed because of DEM resolution)
+
+									   // calculate biomass values for each tree
+									   AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
+									   AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
+
+									   // aggregate stand level variables
+									   if (((double)tree.height / 10) > 130) {
+													  Stemcount[grid_i]++;
+													  Basalarea[grid_i] += (M_PI * pow((tree.dbreast / 100 / 2), 2));  // in sq.m so here conversion from cm to m
+									   }
+									   // aggregate further stand structure variables
+									   if (((double)tree.height / 10) < 10) {
+													  Indicount_10[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 10) & (((double)tree.height / 10) < 40)) {
+													  Indicount_40[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 40) & (((double)tree.height / 10) < 100)) {
+													  Indicount_100[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 100) & (((double)tree.height / 10) < 200)) {
+													  Indicount_200[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 200) & (((double)tree.height / 10) < 300)) {
+													  Indicount_300[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 300) & (((double)tree.height / 10) < 400)) {
+													  Indicount_400[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 400) & (((double)tree.height / 10) < 500)) {
+													  Indicount_500[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 500) & (((double)tree.height / 10) < 750)) {
+													  Indicount_750[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 750) & (((double)tree.height / 10) < 1000)) {
+													  Indicount_1000[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 1000) & (((double)tree.height / 10) < 1250)) {
+													  Indicount_1250[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 1250) & (((double)tree.height / 10) < 1500)) {
+													  Indicount_1500[grid_i]++;
+									   } else if ((((double)tree.height / 10) >= 1500) & (((double)tree.height / 10) < 2000)) {
+													  Indicount_2000[grid_i]++;
+									   } else if (((double)tree.height / 10) >= 2000) {
+													  Indicount_larger2000[grid_i]++;
+									   }
+						}
+					}
+
+					// trying to open the file for reading
+					filepointer = fopen(dateiname.c_str(), "r+");
+					// if fopen fails, open a new file + header output
+					if (filepointer == NULL) {
+						filepointer = fopen(dateiname.c_str(), "w+");
+		 
+						fprintf(filepointer, "x;");
+						fprintf(filepointer, "y;");
+						fprintf(filepointer, "AGBneedleliving;");
+						fprintf(filepointer, "AGBwoodliving;");
+						fprintf(filepointer, "Stemcount;");
+						fprintf(filepointer, "Basalarea;");
+						fprintf(filepointer, "Individuals_0_10cm;");
+						fprintf(filepointer, "Individuals_10_40cm;");
+						fprintf(filepointer, "Individuals_40_100cm;");
+						fprintf(filepointer, "Individuals_100_200cm;");
+						fprintf(filepointer, "Individuals_200_300cm;");
+						fprintf(filepointer, "Individuals_300_400cm;");
+						fprintf(filepointer, "Individuals_400_500cm;");
+						fprintf(filepointer, "Individuals_500_750cm;");
+						fprintf(filepointer, "Individuals_750_1000cm;");
+						fprintf(filepointer, "Individuals_1000_1250cm;");
+						fprintf(filepointer, "Individuals_1250_1500cm;");
+						fprintf(filepointer, "Individuals_1500_2000cm;");
+						fprintf(filepointer, "Individuals_larger2000cm;");
+						fprintf(filepointer, "\n");
+		 
+						if (filepointer == NULL) {
+							fprintf(stderr, "Error: File could not be opened!\n");
+							exit(1);
+						}
+					}
+		 
+					fseek(filepointer, 0, SEEK_END);
+		 
+					// data output for each tree
+					for (unsigned int grid_i = 0; grid_i < AGBneedleliving.size(); ++grid_i) {
+						// if(AGBneedleliving[grid_i]>0) {
+						unsigned int y = grid_i / deminputdimension_x;
+						unsigned int x = (double)grid_i - y * deminputdimension_x;
+		 
+						fprintf(filepointer, "%d;", x);
+						fprintf(filepointer, "%d;", y);
+						fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i] / 1000 / (90 * 90));    // in kg/sq.m.		//90 entered for all lines 1316-1332 (before: 30, changed because of DEM resolution)
+						fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i] / 1000 / (90 * 90));      // in kg/sq.m.
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Stemcount[grid_i]);  // in stems/ha
+						fprintf(filepointer, "%4.8f;", ((100 * 100) / (90 * 90)) * Basalarea[grid_i]);
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_10[grid_i]);          // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_40[grid_i]);          // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_100[grid_i]);         // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_200[grid_i]);         // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_300[grid_i]);         // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_400[grid_i]);         // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_500[grid_i]);         // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_750[grid_i]);         // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_1000[grid_i]);        // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_1250[grid_i]);        // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_1500[grid_i]);        // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_2000[grid_i]);        // in individuals/ha
+						fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_larger2000[grid_i]);  // in individuals/ha
+						fprintf(filepointer, "\n");
+						// }
+					}
+		 
+					fclose(filepointer);
+			}// for each species loop
+		}  // End: databiomassgrid_firegap output
+		
+    } // world list
+}

@@ -23,8 +23,6 @@
 // constexpr unsigned int treecols = 990;
 // constexpr unsigned int treerows = 1980;	//Khamra 2000x2000m "...x271300.874-273280.874m_y6658779.814-6660759.814m.csv"; x=1980, y=1980 ### PREVIOUS USE ###
 // constexpr unsigned int treecols = 1980;
-// constexpr unsigned int treerows = 9990;	//Satagay 9990x9990m "...x242511.6202-252501.6202m_y6999138.4447-7009128.4447m.csv"; x=9990, y=9990
-// constexpr unsigned int treecols = 9990;
 // constexpr unsigned int treerows = 1980;	//Satagay 2000x2000m "...x245684-247664m_y7000974-7002954m.csv"; x=1980, y=1980 -> Works
 // constexpr unsigned int treecols = 1980;
 // constexpr unsigned int treerows = 180;	//Satagay 200x200m "...x246883.185256-247063.185256m_y7004613.696481-7004793.696481m.csv"; x=180, y=180 -> Works
@@ -33,6 +31,8 @@
 // constexpr unsigned int treecols = 19980;
 constexpr unsigned int treerows = 990;	//Satagay 990x990m (1km buffer) "...x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; x=990, y=990 -> Works
 constexpr unsigned int treecols = 990;
+// constexpr unsigned int treerows = 9990;	//Satagay 9990x9990m (5km buffer) "...x242506.620303-252496.620303m_y6999133.444824-7009123.444824m.csv"; x=9990, y=9990 -> ???
+// constexpr unsigned int treecols = 9990;
 // constexpr unsigned int treerows = 14250; //30m_Ilirney_x637008.2-655008.2m_y7469996-7494716m
 // constexpr unsigned int treecols = 11430;
 // constexpr unsigned int treerows = 19710; //30m_Ilirney_x640008.2-649998.2m_y7475006-7494716m

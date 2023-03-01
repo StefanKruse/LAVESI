@@ -992,6 +992,36 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 
+		} else if (parameter[0].weatherchoice == 1822409) {	// = 1822406 (MPI-ESM Anne), but T is - 5%
+            char tempbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_TEMP_22950BCE-2100CE_adjustedtoCRU_SAminus5perc.csv";
+            char precbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_PREC_22950BCE-2100CE_adjustedtoCRU.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 1822410) {	// = 1822406 (MPI-ESM Anne), but T is + 5%
+            char tempbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_TEMP_22950BCE-2100CE_adjustedtoCRU_SAplus5perc.csv";
+            char precbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_PREC_22950BCE-2100CE_adjustedtoCRU.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 1822411) {	// = 1822406 (MPI-ESM Anne), but P is - 5%
+            char tempbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_TEMP_22950BCE-2100CE_adjustedtoCRU.csv";
+            char precbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_PREC_22950BCE-2100CE_adjustedtoCRU_SAminus5perc.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+			
+		} else if (parameter[0].weatherchoice == 1822412) {	// = 1822406 (MPI-ESM Anne), but P is + 5%
+            char tempbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_TEMP_22950BCE-2100CE_adjustedtoCRU.csv";
+            char precbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_PREC_22950BCE-2100CE_adjustedtoCRU_SAplus5perc.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);	
+			
+		} else if (parameter[0].weatherchoice == 1822413) {	// Lake Satagay CRU-adjusted COMPLETE MPI-ESM-CR (Marie Kapsch) + CMIP6
+            char tempbuf[] = "input/18224_satagay_MPI-ESM-CRCOMPLETE_Kapsch_TEMP_23050BCE-2100CE_adjustedtoCRU.csv";
+            char precbuf[] = "input/18224_satagay_MPI-ESM-CRCOMPLETE_Kapsch_PREC_23050BCE-2100CE_adjustedtoCRU.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+
 		// last two numbers 01 only CRU+ERAinterim, 02 TRACE+CRU+ERAinterim
         } else if (parameter[0].weatherchoice == 1901201801) {  // new for CryoGrid coupling
             char tempbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_temp.csv";

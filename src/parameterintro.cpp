@@ -138,6 +138,34 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].fireintensitymode);
     }
+	
+    strcpy(uebergabestring, "firegapoutput");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].firegapoutput = true;
+    } else {
+        parameter[0].firegapoutput = false;
+    };
+    if (parameter[0].firegapoutput == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].firegapoutput) ? "true" : "false");
+    }
+	
+	strcpy(uebergabestring, "firegapoutput_threshold");
+    parameter[0].firegapoutput_threshold = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].firegapoutput_threshold);
+    }
+	
+	strcpy(uebergabestring, "firegapoutput_years");
+    parameter[0].firegapoutput_years = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].firegapoutput_years);
+    }
+	
+	strcpy(uebergabestring, "counter_fire_happened");
+    parameter[0].counter_fire_happened = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].counter_fire_happened);
+    }
 
     strcpy(uebergabestring, "temperaturelapse_jan");
     parameter[0].temperaturelapse_jan = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);

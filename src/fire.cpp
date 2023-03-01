@@ -1,6 +1,7 @@
 #include "LAVESI.h"
 #include "RandomNumber.h"
 #include "VectorList.h"
+#include <optional>
 
 using namespace std;
 
@@ -10,6 +11,11 @@ void Fire(Parameter* parameter,
                        vector<VectorList<Seed>>& world_seed_list,
                        vector<vector<Weather>>& world_weather_list,
                        vector<vector<Envirgrid>>& world_plot_list) {
+	
+	FILE* filepointer; // test for firegapoutput
+    string dateiname;  
+	ostringstream s1;
+						   
     int aktort = 0;
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather>& weather_list = *posw;
@@ -23,6 +29,9 @@ void Fire(Parameter* parameter,
 		
 		RandomNumber<double> uniform(0, 1);
 		
+		double xfirecenter = 0.0; // declaration here to be available for fire gap output
+		double yfirecenter = 0.0;
+		double fireimpactareasize = 0.0;
 				
 		// ##################################	
 		// ########## Fire weather ##########################################################################################################
@@ -35,10 +44,12 @@ void Fire(Parameter* parameter,
 		unsigned short int n_severeweather = 0;
 		unsigned short int n_extremeweather = 0;
 		
+		// determine thresholds that decide monthly fire weather severity
+		
 		// Used for Lake Satagay localization 
-		unsigned short int firethresh1 = 6.6;	// determine thresholds that decide monthly fire weather severity
-		unsigned short int firethresh2 = 6.85;
-		unsigned short int firethresh3 = 7.1;
+		unsigned short int firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
+		unsigned short int firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
+		unsigned short int firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
 		
 		// Used for Lake Khamra localization
 		// unsigned short int firethresh1 = 4.0;	// determine thresholds that decide monthly fire weather severity (previous values: 3.48, 6.9, 8.3)
@@ -168,7 +179,11 @@ void Fire(Parameter* parameter,
 		// Initializing fireprobabilityrating
 		double fireprobabilityrating = 0.0;
 		
-		fireprobabilityrating = (n_mildweather*0.04 + ((n_severeweather*0.5)/6) + n_extremeweather*0.5); // Calculation of annual FPR based on monthly weather conditions
+		fireprobabilityrating = (n_mildweather*0.02 + n_severeweather*0.2 + n_extremeweather*0.5); // Calculation of annual FPR based on monthly weather conditions
+		// mild conditions: Fire every c. 50 yrs
+		// severe conditions: Fire every c. 5 yrs
+		// extreme conditions: Fire every c. 2 yrs
+		// Whole forumla results in a mean annual FPR of 0.03 accross the whole 25ka period, meaning on average a fire may occurr once every c. 33 years
 		
 		if (fireprobabilityrating > 1) {
 			fireprobabilityrating = 1;
@@ -208,17 +223,19 @@ void Fire(Parameter* parameter,
 		// Set fire size and assign impacted area 
 		if ((ignition == true)) {
 			cout << "+++ A wildfire occurs! +++" << endl;
-			double xfirecenter = uniform.draw()*treecols;
-			double yfirecenter = uniform.draw()*treerows;
+			//double xfirecenter = uniform.draw()*treecols;
+			//double yfirecenter = uniform.draw()*treerows;
+			xfirecenter = uniform.draw()*treecols;
+			yfirecenter = uniform.draw()*treerows;
 			
-			double fireimpactareasize = 0.0;
+			//double fireimpactareasize = 0.0;
 			
 			if (parameter[0].firemode == 112) {
-				fireimpactareasize = fireprobabilityrating * treecols; // Relative area of plot depnding on fire intensity
+				fireimpactareasize = fireprobabilityrating * treecols; // Relative area of plot depending on fire intensity
 			} else if (parameter[0].firemode == 0) {
 				fireimpactareasize = 0.0;
 				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
-				fireimpactareasize = 5 * treecols;
+				fireimpactareasize = 5 * treecols; // To cover the complete plot area
 				}
 			
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
@@ -277,7 +294,6 @@ void Fire(Parameter* parameter,
 								
 								// Fire damage on litter layer
 								cur_plot.litterheight0 = cur_plot.litterheight0 - (cur_plot.litterheight0 * cur_plot.fire);
-								
 							}
 						}
 					}
@@ -422,8 +438,68 @@ void Fire(Parameter* parameter,
 							}
 						}
 					}
+				} // End: Fire impact on seeds
+			} // End: All fire impacts
+		} // End: Main ignition code
+		
+		// ###########################
+		// ##### Fire gap output #####
+		// ###########################
+		
+		// Here in fire.cpp only the initial x/y coordinates and fireimpactareasize are written in the year a fire is ignited.
+		// Annual spatial  output for the whole plot is produced in dataoutput.cpp (outputmode == 57) for 30 years following the fire.
+		
+		if (parameter[0].firegapoutput == 1) {
+			
+			if ((ignition == true) & (fireprobabilityrating > parameter[0].firegapoutput_threshold)) { // If fire occured above intensity threshold
+				if (parameter[0].counter_fire_happened == 0) { // if counter reached 0
+					parameter[0].counter_fire_happened = parameter[0].firegapoutput_years; // renew counter
+					
+					// assemble file name:
+					s1 << parameter[0].ivort;
+					dateiname = "output/firegap/firegap_" + s1.str() + ".txt";
+					s1.str("");
+					s1.clear();
+					
+					// trying to open the file for reading
+					filepointer = fopen(dateiname.c_str(), "r+");
+					// if fopen fails, open a new file + header output
+					if (filepointer == NULL) {
+						filepointer = fopen(dateiname.c_str(), "w+");
+
+						fprintf(filepointer, "Firecenter_X;");
+						fprintf(filepointer, "Firecenter_Y;");
+						fprintf(filepointer, "fireimpactareasize;");
+						fprintf(filepointer, "fireprobabilityrating;");
+						fprintf(filepointer, "\n");
+
+						if (filepointer == NULL) {
+							fprintf(stderr, "Error: output file is missing!\n");
+							exit(1);
+						}
+					}
+						
+					fseek(filepointer, 0, SEEK_END);
+						
+					// data evaluation and output		
+					fprintf(filepointer, "%4.4f;", xfirecenter* parameter[0].sizemagnif);
+					fprintf(filepointer, "%4.4f;", yfirecenter* parameter[0].sizemagnif);
+					fprintf(filepointer, "%4.4f;", fireimpactareasize);
+					fprintf(filepointer, "%4.4f;", fireprobabilityrating);
+					fprintf(filepointer, "\n");
+
+					fclose(filepointer);
 				}
 			}
-		}
+			
+			//if (parameter[0].counter_fire_happened > 0) { // If counter has been started but not yet finished
+				//counter_fire_output = true; // write output
+				// parameter[0].counter_fire_happened--; // subtract one year
+				// cout << "\tWriting fire gap output. " << parameter[0].counter_fire_happened << " more years will follow." << endl;
+			// } else {
+				//counter_fire_output = false; 
+				// cout << "\tNo fire gap output will be produced. Counter = 0." << parameter[0].counter_fire_happened << endl;
+			// }
+		} // End: Fire gap output
 	}
 }	

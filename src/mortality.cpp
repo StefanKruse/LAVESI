@@ -39,10 +39,11 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				else if(firecrowndamagemort > 1.0)
 					firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
 				tree.relcrowndamage = 0*1000;
-				if (firecrowndamagemort > 0) {
-				cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
-				}
 			}
+			
+			// if (firecrowndamagemort > 0) {
+				// cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
+			// }
 			
             // height dependent influences
             double wachstumrel = 1.0;

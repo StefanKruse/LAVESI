@@ -8,6 +8,7 @@
 // 0.4 Computation environment
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
+
 // 0.1 -----> Display in console
 parameterinputvis=0;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr

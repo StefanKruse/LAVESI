@@ -37,3 +37,6 @@ Thumbs.db
 
 # exclude core dump files
 core
+
+# exlude backup files
+*.bak

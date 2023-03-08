@@ -641,7 +641,12 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/TY02_prcweighted_model.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 22) {
+        } else if (parameter[0].weatherchoice == 1000000001) {
+            char tempbuf[] = "input/temp_11-CH-02II.csv";
+            char precbuf[] = "input/prec_11-CH-02II.csv";
+            strcpy(dateinametemp, tempbuf);
+            strcpy(dateinameprec, precbuf);
+         } else if (parameter[0].weatherchoice == 22) {
             char tempbuf[] = "input/CH17_tmpweighted_model.csv";
             char precbuf[] = "input/CH17_prcweighted_model.csv";
             strcpy(dateinametemp, tempbuf);

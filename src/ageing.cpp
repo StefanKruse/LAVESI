@@ -6,10 +6,10 @@
 using namespace std;
 
 void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list) {
-	printf("\n");
-	printf("AGEING WAS CALLED");
-						printf("\n");
-						printf("\n");
+	//printf("\n");
+	//printf("AGEING WAS CALLED");
+		//				printf("\n");
+			//			printf("\n");
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
 	
@@ -48,14 +48,14 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
                 auto& tree = tree_list[tree_i];
 				
 					if (tree.clonetimer>0){
-						printf("ageing test before %d", tree.clonetimer);
-						printf("\n");
+						// printf("ageing test before %d", tree.clonetimer);
+						// printf("\n");
 							tree.clonetimer--;
 							}
 				if (tree.growing == true) {
 					tree.age++;
 					
-					if (tree.cone == false && tree.cloningactive == false) {
+					if (tree.cone == false ) {
 						if (tree.coneheight == 65535) {
 							// trees reaching the maturation age are assigned a minimum height value for them to bear cones
 							if (tree.age > speciestrait[tree.species].coneage) {
@@ -74,9 +74,9 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 						// tree already has a height of maturation assigned to it
 						// ... if a tree is taller than this maturation height, he starts to produce seeds
 						else if (tree.coneheight != 65535) {
-							//if (tree.height / 10 >= tree.coneheight && tree.cloning == false) {
+							if (tree.height / 10 >= tree.coneheight ) {
 								tree.cone = true;
-							//}
+							}
 							//else if (tree.height / 10 >= tree.coneheight && tree.cloning == true) {
 							//	tree.cloningactive = true;
 							//}
@@ -86,10 +86,10 @@ void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vec
 					}
 					
 				}
-				if (tree.clonetimer>0){
-						printf("ageing test after %d", tree.clonetimer);
-						printf("\n");
-							}
+				// if (tree.clonetimer>0){
+						// printf("ageing test after %d", tree.clonetimer);
+						// printf("\n");
+							// }
 				
 			}
         }  // tree list

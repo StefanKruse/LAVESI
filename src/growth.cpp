@@ -53,7 +53,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather>& weather_list, Tree
         }
     }
 	maxbw_help=maxbw_help *(tree.droughtresist/100);
-	maxbw_help=maxbw_help/pow(tree.seednumber,0.5);
+	// maxbw_help=maxbw_help/pow(tree.seednumber,0.5);
 	maxbw_help=maxbw_help*tree.cloneboost;
 	maxbw_help=maxbw_help-(maxbw_help*tree.inbreedingdepression);
     return maxbw_help;
@@ -110,7 +110,7 @@ double getMaxbreastwachstum(int yearposition, vector<Weather>& weather_list, Tre
         }
     }
 	maxbrw_help=maxbrw_help*(tree.droughtresist/100);
-	maxbrw_help=maxbrw_help/pow(tree.seednumber,0.5);
+	// maxbrw_help=maxbrw_help/pow(tree.seednumber,0.5);
 	maxbrw_help=maxbrw_help*tree.cloneboost;
 	maxbrw_help=maxbrw_help-(maxbrw_help*tree.inbreedingdepression);
     return (maxbrw_help);

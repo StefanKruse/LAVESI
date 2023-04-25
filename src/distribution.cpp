@@ -45,34 +45,35 @@ do{
 return z1;	
 }
 
-vector <unsigned int> mixvector(vector<unsigned int> vectre,vector<unsigned int> vecpol)
+void mixvector(const std::array<unsigned int,24> &vectre, const std::array<unsigned int,24> &vecpol, std::array<unsigned int,24>& vecseed)
+// vector <unsigned int> mixvector(vector<unsigned int> vectre,vector<unsigned int> vecpol)
 {
-	vector<unsigned int> newvector(24, 0);
+	// vector<unsigned int> newvector(24, 0);
 	//RandomNumber<int> uniformnum(1, 2);  ///this function is for double not int. int function ToDo
 	RandomNumber<double> uniform(0, 1);
-for(unsigned int neutralcounter=0 ;neutralcounter<vectre.size() ;neutralcounter++){
+for(unsigned int neutralcounter=0 ;neutralcounter < 24 ;neutralcounter++){
 	double randecide=uniform.draw();
 	if (neutralcounter %2 == 0 ){
 	
 		if (randecide<0.5){
-				newvector[neutralcounter]=vectre[neutralcounter];
+				vecseed[neutralcounter]=vectre[neutralcounter];
 		}
 		else {
-			newvector[neutralcounter]=vectre[neutralcounter+1];
+			vecseed[neutralcounter]=vectre[neutralcounter+1];
 		}
 	}
 	else{
 	
 		if (randecide<0.5){
-				newvector[neutralcounter]=vecpol[neutralcounter];
+				vecseed[neutralcounter]=vecpol[neutralcounter];
 		}
 		else {
-			newvector[neutralcounter]=vecpol[neutralcounter-1];
+			vecseed[neutralcounter]=vecpol[neutralcounter-1];
 		}
 	}
 }
 
-return newvector;
+// return newvector;
 }
 
 
@@ -82,7 +83,7 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
  //vector<std::list<Tree*> >::iterator world_positon_b,
  vector<vector<Pollengrid> >::iterator world_positon_p,
  double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
- vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<double>  &numberinfl, vector<double>  &clonalityinfl, vector<double>  &growthforminfl, vector<double>  &activedepthinfl, vector<double>  &selvinginfl, vector<double>  &maturationinfl, vector<double>  &winterwaterinfl, vector<double>  &nutritioninfl, vector<vector<vector<unsigned int>>>  &neutralinfl, vector<int>  &fathname, int outputtreesiter)
+ vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<double>  &selvinginfl, vector<unsigned int>& neutralinfl, vector<int>  &fathname)
 {
   //list<Tree*>& tree_list = *world_positon_b;
 
@@ -159,8 +160,8 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
 		if((tresize)!=0)
 		{
 	
-			dx=(pPollengrid.xcoo)-x; 
-			dy=(pPollengrid.ycoo)-y; 
+			dx=(pPollengrid.xcoo)-(x/1000); 
+			dy=(pPollengrid.ycoo)-(y/1000); 
 //
 			dr=sqrt(dx*dx+dy*dy);
 			
@@ -191,32 +192,21 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
 				//INHERITING SEED WEIGHT
 				thdpthinfl.push_back(pPollengrid.seedweight);
 				droghtinfl.push_back(pPollengrid.droughtresist);
-				numberinfl.push_back(pPollengrid.seednumber);
-				clonalityinfl.push_back(pPollengrid.clonality);
-				growthforminfl.push_back(pPollengrid.growthform);
-				activedepthinfl.push_back(pPollengrid.activedepth);
+				// numberinfl.push_back(pPollengrid.seednumber);
+				
 				selvinginfl.push_back(pPollengrid.selving);
-				maturationinfl.push_back(pPollengrid.maturation);
-				winterwaterinfl.push_back(pPollengrid.winterwater);
-				nutritioninfl.push_back(pPollengrid.nutrition);
-				neutralinfl.push_back(pPollengrid.neutralmarkers);
+				// printf("Pnetralsize: %ld ",pPollengrid.neutralmarkers.size());
+				if(neutralinfl.size()<=0){
+				for (unsigned int i=0; i < pPollengrid.neutralmarkers.size(); i++ ){
+					neutralinfl.push_back( pPollengrid.neutralmarkers[i]);
+				}					
+				}
+				// neutralinfl.push_back(pPollengrid.neutralmarkers);
 				fathname.push_back(pPollengrid.name);
 				//thdpthinflvar.push_back(pPollengrid->seedweightvar);
 				
 				
 				++pos; 
-			}
-			
-			// data output for pollen flight analysis
-			if(parameter[0].pollination==1 && parameter[0].omp_num_threads==1 && outputtreesiter<=5 && parameter[0].ivort>=1046)
-			{
-				FILE *fdir;
-				char filenamechar[25];
-				sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
-				string output="output/windgen_pollination_total_" + string(filenamechar) + ".txt";
-				fdir=fopen(output.c_str(),"a+");
-				fprintf(fdir,"%10.20f \t %10.20f \t %10.20f \t %d \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p,  x, y);
-				fclose(fdir);
 			}
 		}
 		else

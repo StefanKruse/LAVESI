@@ -42,7 +42,7 @@ elevationoffset=0.0;			// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 
 // 0.4 Computation environment
-omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=32;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -157,15 +157,15 @@ specpres=1;							// (int) which larch species should be present in the model
 mapxlength=1;						// (int) number of parallel executed plots for each climate
 mapylength=1;						// (int) number of plots along a south-north transect
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
-pollengridpoints=800;						//pollengridxpoints, pollengridypoints dynamisch...
-pollengridxpoints=1000;
-pollengridypoints=20;						
+pollengridpoints=36;						//pollengridxpoints, pollengridypoints dynamisch...
+pollengridxpoints=6;
+pollengridypoints=6;						
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=50; 				// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=10000;			// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
+seedintronumber=500;			// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=0;				// (int 0,1) should seeds permanently introduced 
 seedintronumberpermanent=0;		// ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot 
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction

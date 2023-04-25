@@ -73,9 +73,12 @@ void Seedin() {
                 }
                 // seedwinddispersalmode==2 => randomly all over the plot
                 else if (parameter[0].seedwinddispersalmode == 2) {
-                    jseed = maxx * uniform.draw();
+                    do{
+					jseed = maxx * uniform.draw();
                     iseed = maxy * uniform.draw();
-
+					}while( (iseed > 500 && iseed <=49900) || (iseed > 49900 && jseed >100 && jseed <=900));
+					
+					
                     seedeintragen = true;
                 } else {
                     printf("\n\nLaVeSi was stopped\n");
@@ -98,10 +101,19 @@ void Seedin() {
                     seed.xworldcoo = aktortxworldcoo;
                     seed.xcoo = 1000 * jseed;
                     seed.ycoo = 1000 * iseed;
-                    // seed.namem = 0;
-                    // seed.namep = 0;
-                    // seed.line = ++parameter[0].lineakt;
-                    // seed.generation = 0;
+                    seed.namem = 0;
+                    seed.namep = 0;
+                    seed.line = ++parameter[0].lineakt;
+                    seed.generation = 0;
+					if ((seed.ycoo/ 1000)<=500){
+						seed.origin=1;
+						}
+					else if((seed.xcoo/ 1000) <=100) {
+						seed.origin=2;
+						}
+					else if((seed.xcoo/ 1000) >900){
+						seed.origin=3;
+						}
                     seed.incone = false;
                     // seed.weight = 1;
                     seed.age = 0;
@@ -116,35 +128,34 @@ void Seedin() {
 						seed.droughtresist=normrand(50,20,0,100);
 						//seed.seedweight=1;
 						//seed.droughtresist=100;
-						seed.seednumber=normrand(1,0.5,0.33,1.66);
-									//seed.clonality=normrand(50,20,0,100);
-									seed.clonality=0;
-									seed.growthform=normrand(50,20,0,100);
-									seed.activedepth=normrand(50,20,0,100);
-									//seed.selving=0;
-									seed.selving=normrand(50,20,0,100);
-									seed.maturation=normrand(50,20,0,100);
-									seed.winterwater=normrand(50,20,0,100);
-									seed.nutrition=normrand(50,20,0,100);
-									 vector<unsigned int> copyneutralmarkers(24, 0);
-									 generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
-									seed.neutralmarkers=copyneutralmarkers;
+						// seed.seednumber=normrand(1,0.5,0.33,1.66);
+											
+						//seed.selving=0;
+						seed.selving=normrand(50,20,0,100);
+						
+						// vector<unsigned int> copyneutralmarkers(24, 0);
+						// seed.neutralmarkers.resize(24,999999+1);
+						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
+						for(unsigned int i=0; i < 24; i++) {
+											seed.neutralmarkers[i] = uniformneutral.draw();
+										 }
+						// seed.neutralmarkers = copyneutralmarkers;
 					}
 					else 
 					{
 						seed.seedweight=1;
 						seed.droughtresist=100;
-						seed.seednumber=1;
-									seed.clonality=0;
-									seed.growthform=0;
-									seed.activedepth=50;
-									seed.selving=0;
-									seed.maturation=50;
-									seed.winterwater=50;
-									seed.nutrition=50;
+						// seed.seednumber=1;
+					
+						seed.selving=0;
+						
 					}
 					seed.currentweight=seed.seedweight;
-                    seed_list.add_directly(std::move(seed));
+					if(seed.neutralmarkers.size() == 24 & seed.neutralmarkers[0] != 999999+1) { // filled vector and not the initialization value
+						seed_list.add_directly(std::move(seed));
+					} else {
+						cout << " not enough markers " << endl;
+					}
                 }
             }
             seed_list.consolidate();
@@ -216,7 +227,7 @@ void TreesIni(int maximal_word_length) {
                     tree.xworldcoo = aktortxworldcoo;
                     tree.xcoo = 1000 * xcoobuf;
                     tree.ycoo = 1000 * ycoobuf;
-                    // tree.name = ++parameter[0].nameakt;
+                    tree.name = ++parameter[0].nameakt;
                     // tree.namem = 0;
                     // tree.namep = 0;
                     // tree.line = ++parameter[0].lineakt;
@@ -249,15 +260,12 @@ void TreesIni(int maximal_word_length) {
 						//tree.droughtresist=normrand(50,20,0,100);
 						tree.seedweight=1;
 						tree.droughtresist=100;
-						tree.seednumber=normrand(1,0.5,0.33,1.66);
-									tree.clonality=normrand(50,20,0,100);
-									tree.growthform=normrand(50,20,0,100);
-									tree.activedepth=normrand(50,20,0,100);
+						// tree.seednumber=normrand(1,0.5,0.33,1.66);
+									
+									
 									tree.selving=0;
 									//tree.selving=normrand(50,20,0,100);
-									tree.maturation=normrand(50,20,0,100);
-									tree.winterwater=normrand(50,20,0,100);
-									tree.nutrition=normrand(50,20,0,100);
+									
 									//double ranc = uniform.draw();
 									//if (ranc*100<=tree.clonality && tree.clonality!=0){
 									//tree.cloning = true;
@@ -268,11 +276,15 @@ void TreesIni(int maximal_word_length) {
 									tree.cloned=false;
 									tree.cloneboost=1;
 								
-									vector<unsigned int> copyneutralmarkers(24, 0);
-									 generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
-									tree.neutralmarkers=copyneutralmarkers;
+									// vector<unsigned int> copyneutralmarkers(24, 0);
+									 // generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
+									// tree.neutralmarkers=copyneutralmarkers;
+									// generate(tree.neutralmarkers.begin(),tree.neutralmarkers.end(), uniformneutral.draw());
+									for(unsigned int i=0; i < 24; i++) {
+											tree.neutralmarkers[i] = uniformneutral.draw();
+										 }
 									tree.inbreedingdepression=0;
-						for( int neutralcounter=0; neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
+						for( unsigned int neutralcounter=0; neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
 							if (tree.neutralmarkers[neutralcounter]==tree.neutralmarkers[neutralcounter+1]){
 								tree.inbreedingdepression=tree.inbreedingdepression+(100/(tree.neutralmarkers.size()/2));
 							}
@@ -282,14 +294,10 @@ void TreesIni(int maximal_word_length) {
 					{
 						tree.seedweight=1;
 						tree.droughtresist=100;
-						tree.seednumber=1;
-									tree.clonality=0;
-								tree.growthform=0;
-									tree.activedepth=50;
-									tree.selving=0;
-									tree.maturation=50;
-									tree.winterwater=50;
-									tree.nutrition=50;
+						// tree.seednumber=1;
+						
+						tree.selving=0;
+						
 					}
 					
 					
@@ -451,10 +459,19 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.xworldcoo = aktortxworldcoo;
                         seed.xcoo = 1000 * xseed;
                         seed.ycoo = 1000 * yseed;
-                        // seed.namem = 0;
-                        // seed.namep = 0;
-                        // seed.line = ++parameter[0].lineakt;
-                        // seed.generation = 0;
+                        seed.namem = 0;
+                        seed.namep = 0;
+                        seed.line = ++parameter[0].lineakt;
+                        seed.generation = 0;
+						if ((seed.ycoo/ 1000)<=1000){
+						seed.origin=1;
+						}
+					else if((seed.xcoo/ 1000) <=100) {
+						seed.origin=2;
+						}
+					else if((seed.xcoo/ 1000) >900){
+						seed.origin=3;
+						}
                         seed.incone = false;
                         // seed.weight = 1;
                         seed.age = 0;
@@ -470,34 +487,28 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
 						seed.droughtresist=normrand(50,20,0,100);
 						//seed.seedweight=1;
 						//seed.droughtresist=100;
-						seed.seednumber=normrand(1,0.5,0.33,1.66);
-									//seed.clonality=normrand(50,20,0,100);
-									seed.clonality=0;
-									seed.growthform=normrand(50,20,0,100);
-									seed.activedepth=normrand(50,20,0,100);
-									//seed.selving=0;
-									seed.selving=normrand(50,20,0,100);
-									seed.maturation=normrand(50,20,0,100);
-									seed.winterwater=normrand(50,20,0,100);
-									seed.nutrition=normrand(50,20,0,100);
-									
-									vector<unsigned int> copyneutralmarkers(24, 0);
-									 generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
-									seed.neutralmarkers=copyneutralmarkers;
+						// seed.seednumber=normrand(1,0.5,0.33,1.66);
 						
+						//seed.selving=0;
+						seed.selving=normrand(50,20,0,100);
+						
+						
+						// vector<unsigned int> copyneutralmarkers(24, 0);
+						 // generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
+						// seed.neutralmarkers=copyneutralmarkers;
+						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
+						for(unsigned int i=0; i < 24; i++) {
+											seed.neutralmarkers[i] = uniformneutral.draw();
+										 }
 						}
 						else 
 						{
 						seed.seedweight=1;
 						seed.droughtresist=100;
-						seed.seednumber=1;
-									seed.clonality=0;
-									seed.growthform=0;
-									seed.activedepth=50;
+						// seed.seednumber=1;
+																		
 									seed.selving=0;
-									seed.maturation=50;
-									seed.winterwater=50;
-									seed.nutrition=50;
+									
 						}
 						seed.currentweight=seed.seedweight;
 						

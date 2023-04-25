@@ -5,18 +5,12 @@
 
 using namespace std;
 
-struct Tree {                       // sizeof variable //TODO: further could be replaced
+struct Tree { 
 	
     double seedweight,seedweightvar;
     double droughtresist;
-	double seednumber;
-	double clonality;
-	double growthform;
-	double activedepth;
+	// double seednumber;
 	double selving;
-	double maturation;
-	double winterwater;
-	double nutrition;
 	double cloneboost;  // used both as boost for clone and substractor for cloner.
     double dbasal;                  // 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision; could be replaced
     double dbreast;                 // 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision; could be replaced
@@ -34,13 +28,15 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     int namep;							// 4	-> not in use right now
     int line;							// 4	-> not in use right now
     int generation;
+	int origin;
     int subgridpos;
 	int subgridVECpos;						
     // int yr_of_establishment;				// 4	-> not in use anymore
     // int yr_of_dying;						// 4	-> not in use anymore
     // unsigned int seedproduced;			// 4	-> not in use right now; used only for visualisation
     // int buffer;							// 4	-> not in use right now
-vector<unsigned int> neutralmarkers;
+	// vector<unsigned int> neutralmarkers;
+	std::array<unsigned int, 24> neutralmarkers;
     unsigned short int dbasalmax;           // 2	---> one year max probably few centimeters -> unsigned short int /1000 max 65cm
     unsigned short int dbasalrel;           // 2	---> one year max probably few centimeters -> unsigned short int /1000
     unsigned short int dbreastrel;          // 2	---> one year max probably few centimeters -> unsigned short int /1000
@@ -75,14 +71,8 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     double seedweight,seedweightvar;
     double currentweight;
     double droughtresist;
-	double seednumber;
-	double clonality;
-	double growthform;
-	double activedepth;
+	// double seednumber;
 	double selving;
-	double maturation;
-	double winterwater;
-	double nutrition;
     double thawing_depthinfluence;  	// 8
     int xcoo;              				// 4	---> was double -> int with /1000 precision
     int ycoo;              				// 4	---> was double -> int with /1000 precision
@@ -92,7 +82,9 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     int namep;						// 4	-> not in use right now
     int line;						// 4	-> not in use right now
     int generation;					// 4	-> not in use right now
-vector<unsigned int> neutralmarkers;
+    int origin;	
+	// vector<unsigned int> neutralmarkers;
+	std::array<unsigned int, 24> neutralmarkers;
     unsigned short int
         releaseheight;         // 2		in cm; max 65 m -> unsigned short int /10 max 65 m and still has 0.1 cm precision
     unsigned short int age;    // 2	---> was int
@@ -169,24 +161,16 @@ short int elevation;  // 2	---> for memory consumptiom optimization use: signed 
 };
 
 struct Pollengrid 	{
-		vector<vector<unsigned int>> neutralmarkers;	
-		vector<int> Treenames;	
-		double seedweight,seedweightvar;
-		double droughtresist;
-		double seednumber;
-			double clonality;
-	double growthform;
-	double activedepth;
+	vector<unsigned int> neutralmarkers;	
+	vector<int> Treenames;					
+	double seedweight,seedweightvar;
+	double droughtresist;
+	// double seednumber;
 	double selving;
-	double maturation;
-	double winterwater;
-	double nutrition;	
-		unsigned int	xcoo;
-		unsigned int	ycoo;	
-		int Number;
-		int name;
-		
-		
+	unsigned int	xcoo;
+	unsigned int	ycoo;	
+	int Number;
+	int name;
 	};
 
 struct Parameter {

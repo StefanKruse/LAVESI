@@ -240,11 +240,22 @@ void Spinupphase() {
             int lastyear = 0;
             int startlag = 5;
 
-            firstyear = world_weather_list[0][0].jahr;
-            cout << "firstyear: " << firstyear << endl;
-            lastyear = world_weather_list[0][0].jahr + 100;
-            cout << "lastyear: " << lastyear << endl;
-
+            // firstyear = world_weather_list[0][0].jahr;
+            // cout << "firstyear: " << firstyear << endl;
+            // lastyear = world_weather_list[0][0].jahr + 100;
+            // cout << "lastyear: " << lastyear << endl;
+				if(parameter[0].ivort<=5000)
+					{
+					firstyear=world_weather_list[0][0].jahr;
+					
+					lastyear=world_weather_list[0][0].jahr+117;
+					}
+					else if (parameter[0].ivort>5000)
+					{
+					firstyear=world_weather_list[0][0].jahr+118;
+					
+					lastyear=world_weather_list[0][0].jahr+235;
+					}
             // choose a random year for weather determination
             double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
@@ -800,7 +811,7 @@ void initialiseMaps() {
         // necessary for the global lists
          int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
          int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-		//double lent=(double) sqrt(parameter[0].pollengridpoints);
+		double lent=(double) sqrt(parameter[0].pollengridpoints);
 		
 		double lentx=(double) (parameter[0].pollengridxpoints);
 		double lenty=(double) (parameter[0].pollengridypoints);
@@ -810,18 +821,16 @@ void initialiseMaps() {
 		for(int kartenpos=0;kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++)
 		{
 			Pollengrid pPollengrid;
+			pPollengrid.neutralmarkers.reserve(24*100000); // reserve memory
+			pPollengrid.Treenames.reserve(100000); // reserve memory
 			pPollengrid.seedweight=0;
 			pPollengrid.seedweightvar=0;
 			pPollengrid.droughtresist=0;
-			pPollengrid.seednumber=0;
-			pPollengrid.clonality=0;
-			pPollengrid.growthform=0;
-			pPollengrid.activedepth=0;
+			// pPollengrid.seednumber=0;
 			pPollengrid.selving=0;
-			pPollengrid.maturation=0;
-			pPollengrid.winterwater=0;
-			pPollengrid.nutrition=0;
 			pPollengrid.name=0;
+			//vector<vector<unsigned int>> copyneutralmarkers(24,24, 0);
+			//pPollengrid.neutralmarkers=copyneutralmarkers;
 			pPollengrid.Number=kartenpos+1;
 		
 			pPollengrid.xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
@@ -1010,7 +1019,7 @@ int main() {
         printf("\n\tProgress: %d of %d\n", nruns, parameter[0].runs);
 
         parameter[0].nameakt = 0;
-        // parameter[0].lineakt = 0;
+        parameter[0].lineakt = 0;
         parameter[0].yearswithseedintro = yearswithseedintropuffer;
 
 		parameter[0].cryogridcalled=false;

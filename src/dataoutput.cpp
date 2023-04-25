@@ -800,7 +800,7 @@ void Dataoutput(int t,
         }  // trees currencies
 
         if (outputposition == true) {  // tree position output
-            if (parameter[0].ivort == 1 || (parameter[0].spinupphase == true && (parameter[0].ivort % 10) == 0) || (parameter[0].spinupphase == false)) {
+            if (parameter[0].ivort == 1 || (parameter[0].spinupphase == true && (parameter[0].ivort % 100) == 0) || (parameter[0].spinupphase == false)) {
                 // assemble file name
                 s1 << parameter[0].repeati;
                 s2 << parameter[0].weatherchoice;
@@ -884,14 +884,14 @@ void Dataoutput(int t,
                         fprintf(filepointer, "Diameter_breast;");
                         fprintf(filepointer, "Height;");
                         fprintf(filepointer, "Age;");
-						fprintf(filepointer, "seednumber;");
-						fprintf(filepointer, "clonality;");
+						// fprintf(filepointer, "seednumber;");
+						
 						fprintf(filepointer, "cloningactive;");
 						fprintf(filepointer, "clonetimer;");
 						fprintf(filepointer, "cloned;");
 						fprintf(filepointer, "seedweight;");
-						fprintf(filepointer, "selving;");
 						fprintf(filepointer, "drought;");
+						fprintf(filepointer, "selving;");
 						fprintf(filepointer, "inbreedingdepression;");
 						fprintf(filepointer, "1inbreedingdepression;");
 						fprintf(filepointer, "2inbreedingdepression;");
@@ -912,7 +912,14 @@ void Dataoutput(int t,
                         fprintf(filepointer, "X;");
                         fprintf(filepointer, "Y;");
                         fprintf(filepointer, "Density_value;");
-                        // fprintf(filepointer, "Generation;");
+                         fprintf(filepointer, "Name;");
+						fprintf(filepointer, "NameM;");
+						fprintf(filepointer, "NameP;");
+						// fprintf(filepointer, "Line;");
+						fprintf(filepointer, "Generation;");
+						fprintf(filepointer, "Origin;");
+						fprintf(filepointer, "Species;");
+						fprintf(filepointer, "Cone;");
                         fprintf(filepointer, "Cone_height;");
                         fprintf(filepointer, "Seeds_produced_currently;");
                         // fprintf(filepointer, "Seeds_produced_total;");
@@ -941,8 +948,8 @@ void Dataoutput(int t,
 							fprintf(filepointer, "%4.4f;", tree.dbreast);
 							fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 							fprintf(filepointer, "%d;", tree.age);
-							fprintf(filepointer, "%4.4f;", tree.seednumber);
-							fprintf(filepointer, "%4.4f;", tree.clonality);
+							// fprintf(filepointer, "%4.4f;", tree.seednumber);
+							
 							fprintf(filepointer, "%d;", tree.cloningactive);
 							fprintf(filepointer, "%d;", tree.clonetimer);
 							fprintf(filepointer, "%d;", tree.cloned);
@@ -969,7 +976,14 @@ void Dataoutput(int t,
 							fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
 							fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
 							fprintf(filepointer, "%4.5f;", tree.densitywert);
-							// fprintf(filepointer, "%d;", tree.generation);
+							 fprintf(filepointer, "%d;", tree.name);
+							fprintf(filepointer, "%d;", tree.namem);
+							fprintf(filepointer, "%d;", tree.namep);
+							// fprintf(filepointer, "%d;", tree.line);
+							fprintf(filepointer, "%d;", tree.generation);
+							fprintf(filepointer, "%d;", tree.origin);
+							fprintf(filepointer, "%d;", tree.species);
+							fprintf(filepointer, "%d;", tree.cone);
 							fprintf(filepointer, "%4.4f;", (double)tree.coneheight);
 							fprintf(filepointer, "%d;", tree.seednewly_produced);
 							// fprintf(filepointer, "%d;", tree.seedproduced);
@@ -1017,25 +1031,26 @@ void Dataoutput(int t,
                 // tree variables
                 fprintf(filepointer, "X;");
                 fprintf(filepointer, "Y;");
-                // fprintf(filepointer, "Name;");
-                // fprintf(filepointer, "NameM;");
-                // fprintf(filepointer, "NameP;");
+                fprintf(filepointer, "Name;");
+                 fprintf(filepointer, "NameM;");
+                 fprintf(filepointer, "NameP;");
                 // fprintf(filepointer, "Line;");
-                // fprintf(filepointer, "Generation;");
+                 fprintf(filepointer, "Generation;");
+				 fprintf(filepointer, "Origin;");
                 fprintf(filepointer, "Species;");
                 fprintf(filepointer, "Height;");
                 fprintf(filepointer, "Dbasal;");
                 fprintf(filepointer, "Dbreast;");
                 fprintf(filepointer, "Age;");
-				fprintf(filepointer, "seednumber;");
+				// fprintf(filepointer, "seednumber;");
 				
-						fprintf(filepointer, "clonality;");
+						
 						fprintf(filepointer, "cloningactive;");
 						fprintf(filepointer, "clonetimer;");
 						fprintf(filepointer, "cloned;");
 						fprintf(filepointer, "seedweight;");
-						fprintf(filepointer, "selving;");
 						fprintf(filepointer, "drought;");
+						fprintf(filepointer, "selving;");
 						fprintf(filepointer, "inbreedingdepression;");
 						fprintf(filepointer, "1inbreedingdepression;");
 						fprintf(filepointer, "2inbreedingdepression;");
@@ -1053,8 +1068,8 @@ void Dataoutput(int t,
 						fprintf(filepointer, "14inbreedingdepression;");
 						fprintf(filepointer, "15inbreedingdepression;");
 						fprintf(filepointer, "16inbreedingdepression;");
-                // fprintf(filepointer, "Cone;");
-                // fprintf(filepointer, "Cone_height;");
+                 fprintf(filepointer, "Cone;");
+                 fprintf(filepointer, "Cone_height;");
                 // fprintf(filepointer, "Seeds_produced_currently;");
                 // fprintf(filepointer, "Seeds_produced_total;");
                 // fprintf(filepointer, "Buffer;");
@@ -1089,18 +1104,19 @@ void Dataoutput(int t,
 					// tree variables
 					fprintf(filepointer, "%4.4f;", (double)tree.xcoo / 1000);
 					fprintf(filepointer, "%4.4f;", (double)tree.ycoo / 1000);
-					// fprintf(filepointer, "%d;", tree.name);
-					// fprintf(filepointer, "%d;", tree.namem);
-					// fprintf(filepointer, "%d;", tree.namep);
+					fprintf(filepointer, "%d;", tree.name);
+					 fprintf(filepointer, "%d;", tree.namem);
+					 fprintf(filepointer, "%d;", tree.namep);
 					// fprintf(filepointer, "%d;", tree.line);
-					// fprintf(filepointer, "%d;", tree.generation);
+					 fprintf(filepointer, "%d;", tree.generation);
+					 fprintf(filepointer, "%d;", tree.origin);
 					fprintf(filepointer, "%d;", tree.species);
 					fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
 					fprintf(filepointer, "%4.4f;", tree.dbasal);
 					fprintf(filepointer, "%4.4f;", tree.dbreast);
 					fprintf(filepointer, "%d;", tree.age);
-					fprintf(filepointer, "%4.4f;", tree.seednumber);
-							fprintf(filepointer, "%4.4f;", tree.clonality);
+					// fprintf(filepointer, "%4.4f;", tree.seednumber);
+							
 							fprintf(filepointer, "%d;", tree.cloningactive);
 							fprintf(filepointer, "%d;", tree.clonetimer);
 							fprintf(filepointer, "%d;", tree.cloned);
@@ -1124,8 +1140,8 @@ void Dataoutput(int t,
 							fprintf(filepointer, "%d;", tree.neutralmarkers[13]);
 							fprintf(filepointer, "%d;", tree.neutralmarkers[14]);
 							fprintf(filepointer, "%d;", tree.neutralmarkers[15]);
-					// fprintf(filepointer, "%d;", tree.cone);
-					// fprintf(filepointer, "%4.4f;", tree.coneheight);
+					fprintf(filepointer, "%d;", tree.cone);
+					fprintf(filepointer, "%4.4f;",(double) tree.coneheight);
 					// fprintf(filepointer, "%d;", tree.seednewly_produced);
 					// fprintf(filepointer, "%d;", tree.seedproduced);
 					// fprintf(filepointer, "%d;", tree.buffer);

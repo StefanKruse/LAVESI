@@ -68,8 +68,7 @@ void Seeddispersal(//int jahr,
             auto& seed = seed_list[i];
 			//when a print was here it worked
 			
-			seed.dead=false;
-			seed.incone=true;
+	
 			
 			//so at this points seeds are counted as dead and not incone. despite otherwsie being listed as incone
             if (!seed.dead && seed.incone) {
@@ -167,11 +166,19 @@ void Seeddispersal(//int jahr,
                         seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + upslopedispfact * dispfraction * jquer);
                         seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + upslopedispfact * dispfraction * iquer);
                     } else {
-                        seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + jquer);
-                        seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + iquer);
+						// cout << "last position treex" << seed.xcoo << endl;
+						// cout << "last position treey" << seed.ycoo << endl;
+						// cout << "jquer" << jquer << endl;
+						// cout << "iquer" << iquer << endl;
+						
+                        seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + (jquer/pow(seed.currentweight,parameter[0].seedweightfactor)));
+                        seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + (iquer/pow(seed.currentweight,parameter[0].seedweightfactor)));
+						
+						// cout << "new position seedx" << seed.xcoo << endl;
+						// cout << "new position seedy" << seed.ycoo << endl;
                     }
-					seed.xcoo=seed.xcoo+jquer/pow(seed.currentweight,parameter[0].seedweightfactor);
-					seed.ycoo=seed.ycoo+iquer/pow(seed.currentweight,parameter[0].seedweightfactor);
+					// seed.xcoo=seed.xcoo+jquer/pow(seed.currentweight,parameter[0].seedweightfactor);
+					// seed.ycoo=seed.ycoo+iquer/pow(seed.currentweight,parameter[0].seedweightfactor);
 					//seed.dispersaldistance=dispersaldistance/pow(seed.currentweight,parameter[0].seedweightfactor);
 					
 					

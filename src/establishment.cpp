@@ -42,7 +42,7 @@ void Treeestablishment(Parameter* parameter,
                     continue;
                 }
 				if(parameter[0].ivort<5000){
-						if ((seed.ycoo/ 1000)>1000){
+						if ((seed.ycoo/ 1000)>500){
 							if ((seed.ycoo/ 1000)<=49900){
 								seed.dead = true;
 								seed_list.remove(i_seed);
@@ -195,12 +195,13 @@ void Treeestablishment(Parameter* parameter,
 						tree.xworldcoo = seed.xworldcoo;
 						tree.xcoo = seed.xcoo;
 						tree.ycoo = seed.ycoo;
-						// tree.name = ++parameter[0].nameakt;
-						// tree.namem = seed.namem;
-						// tree.namep = seed.namep;
+						tree.name = ++parameter[0].nameakt;
+						tree.namem = seed.namem;
+						tree.namep = seed.namep;
 						// tree.yr_of_establishment = yearposition;
-						// tree.line = seed.line;
-						// tree.generation = seed.generation;
+						tree.line = seed.line;
+						tree.generation = seed.generation;
+						tree.origin=seed.origin;
 						tree.dbasal = basalgrowth_help;
 						tree.dbasalmax = 1000 * maxbw_help;
 						tree.dbasalrel = 1000;
@@ -229,8 +230,8 @@ void Treeestablishment(Parameter* parameter,
 						tree.thawing_depthinfluence = thawing_depthinfluence_help;
 						tree.seedweight = seed.seedweight;
 						tree.droughtresist = seed.droughtresist;
-						tree.seednumber = seed.seednumber;
-						tree.clonality = seed.clonality;
+						// tree.seednumber = seed.seednumber;
+						
 						//double ranc = uniform.draw();
 						//if (ranc*100<=tree.clonality && tree.clonality!=0){
 						//	tree.cloning = true;
@@ -241,18 +242,10 @@ void Treeestablishment(Parameter* parameter,
 						tree.clonetimer=0;
 						tree.cloned=false;
 						tree.cloneboost=1;
-						tree.growthform = seed.growthform;
-						double rang = uniform.draw();
-						if (rang*100<=tree.growthform && tree.growthform!=0){
-							tree.growthstunt= true;
-						} else {
-							tree.growthstunt = false;
-						}
-						tree.activedepth = seed.activedepth;
+						
 						tree.selving = seed.selving;
-						tree.maturation = seed.maturation;
-						tree.winterwater = seed.winterwater;
-						tree.nutrition = seed.nutrition;
+						
+						// tree.neutralmarkers.resize(24,999999+1);
 						tree.neutralmarkers=seed.neutralmarkers;
 						tree.inbreedingdepression=0;
 						for(unsigned int neutralcounter=0;neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){

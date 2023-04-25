@@ -68,17 +68,10 @@ void Pollinationprobability(double x,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
 			    vector<double>  &droghtinfl,
-				vector<double>  &numberinfl,
-					vector<double> &clonalityinfl,
-					vector<double> &growthforminfl,
-					vector<double> &activedepthinfl,
-					vector<double> &selvinginfl,
-					vector<double> &maturationinfl,
-					vector<double> &winterwaterinfl,
-					vector<double> &nutritioninfl,
-					vector<vector<vector<unsigned int>>>  &neutralinfl,
-			    vector<int> &fathname,
-                            int outputtreesiter);
+			    //vector<double>  &numberinfl,
+		         	vector<double> &selvinginfl,
+				vector<unsigned int>& neutralinfl,
+			    vector<int> &fathname);
                             //double randomnumberwind,
                             //double randomnumberwindfather
 
@@ -94,4 +87,4 @@ double mixrand(double mu1,double mu2,double std1,double std2, double Lbound, dou
 double normrand(double mu, double std, double Lbound, double Rbound);
 double averand(double mu1, double mu2, double weight,double std,double Lbound, double Rbound);
 double Clonecreation(unsigned int x,unsigned int y, int avdistance);
-vector <unsigned int>  mixvector(vector<unsigned int> vectre,vector<unsigned int> vecpol);
+void mixvector(const std::array<unsigned int,24> &vectre, const std::array<unsigned int,24> &vecpol, std::array<unsigned int,24>& vecseed);

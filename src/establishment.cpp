@@ -27,10 +27,10 @@ void Treeestablishment(Parameter* parameter,
             auto& seed = seed_list[i_seed];
             if (!seed.dead && !seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
-				
 
-				
-			
+
+
+
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
@@ -41,22 +41,7 @@ void Treeestablishment(Parameter* parameter,
                     seed_list.remove(i_seed);
                     continue;
                 }
-				if(parameter[0].ivort<5000){
-						if ((seed.ycoo/ 1000)>500){
-							if ((seed.ycoo/ 1000)<=49900){
-								seed.dead = true;
-								seed_list.remove(i_seed);
-								continue;
-							}
-							else if((seed.xcoo/ 1000) >100 && (seed.xcoo/ 1000) <=900){
-								seed.dead = true;
-								seed_list.remove(i_seed);
-								continue;
-							}
-						
-						}
-						
-				}
+
                 double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
                 // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
@@ -153,7 +138,7 @@ void Treeestablishment(Parameter* parameter,
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
 // if(basalgrowth_help>10)
 	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
-	
+
                 // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
                 double germinationprobability = 0.0;
                 if (parameter[0].lineartransect == true) {
@@ -231,7 +216,7 @@ void Treeestablishment(Parameter* parameter,
 						tree.seedweight = seed.seedweight;
 						tree.droughtresist = seed.droughtresist;
 						// tree.seednumber = seed.seednumber;
-						
+
 						//double ranc = uniform.draw();
 						//if (ranc*100<=tree.clonality && tree.clonality!=0){
 						//	tree.cloning = true;
@@ -242,9 +227,9 @@ void Treeestablishment(Parameter* parameter,
 						tree.clonetimer=0;
 						tree.cloned=false;
 						tree.cloneboost=1;
-						
+
 						tree.selving = seed.selving;
-						
+
 						// tree.neutralmarkers.resize(24,999999+1);
 						tree.neutralmarkers=seed.neutralmarkers;
 						tree.inbreedingdepression=0;
@@ -253,7 +238,7 @@ void Treeestablishment(Parameter* parameter,
 								tree.inbreedingdepression=tree.inbreedingdepression+(10.0/( tree.neutralmarkers.size()/2.0));
 							}
 						}
-						
+
 						tree.envirimpact = 10000;
 						tree.twi = 6.25*100;
 						tree.soilhumidity = 1;
@@ -275,4 +260,3 @@ void Treeestablishment(Parameter* parameter,
         tree_list.consolidate();
     }
 }
-

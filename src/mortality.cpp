@@ -229,7 +229,7 @@ void Mortality(Parameter* parameter,
 							double lentx=(parameter[0].pollengridxpoints);
 							double lenty=(parameter[0].pollengridypoints);
 							
-							int kartenpos=(floor((tree.ycoo/1000)/(treerows/lentx))*lenty)+(floor((tree.xcoo/1000)/(treecols/lenty)));
+							int kartenpos=(floor(((tree.ycoo/1000)*0.9999999)/(treerows/lentx))*lenty)+(floor(((tree.xcoo/1000)*0.9999999)/(treecols/lenty)));
 							
 							
 							// for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++)

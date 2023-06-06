@@ -76,9 +76,9 @@ void Seedin() {
                     do{
 					jseed = maxx * uniform.draw();
                     iseed = maxy * uniform.draw();
-					}while( (iseed > 500 && iseed <=49900) || (iseed > 49900 && jseed >100 && jseed <=900));
-					
-					
+					}while( (iseed > 1000 && iseed <=49800) || (iseed > 49800 && jseed >200 && jseed <=900));
+
+
                     seedeintragen = true;
                 } else {
                     printf("\n\nLaVeSi was stopped\n");
@@ -108,7 +108,7 @@ void Seedin() {
 					if ((seed.ycoo/ 1000)<=500){
 						seed.origin=1;
 						}
-					else if((seed.xcoo/ 1000) <=100) {
+					else if((seed.xcoo/ 1000) <=200) {
 						seed.origin=2;
 						}
 					else if((seed.xcoo/ 1000) >900){
@@ -122,17 +122,17 @@ void Seedin() {
                     seed.releaseheight = 0;
                     seed.thawing_depthinfluence = 100;
                     seed.dead = false;
-					if (parameter[0].variabletraits==1) 
+					if (parameter[0].variabletraits==1)
 					{
 						seed.seedweight=normrand(1,0.5,0.33,1.66);
 						seed.droughtresist=normrand(50,20,0,100);
 						//seed.seedweight=1;
 						//seed.droughtresist=100;
 						// seed.seednumber=normrand(1,0.5,0.33,1.66);
-											
+
 						//seed.selving=0;
 						seed.selving=normrand(50,20,0,100);
-						
+
 						// vector<unsigned int> copyneutralmarkers(24, 0);
 						// seed.neutralmarkers.resize(24,999999+1);
 						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
@@ -141,14 +141,14 @@ void Seedin() {
 										 }
 						// seed.neutralmarkers = copyneutralmarkers;
 					}
-					else 
+					else
 					{
 						seed.seedweight=1;
 						seed.droughtresist=100;
 						// seed.seednumber=1;
-					
+
 						seed.selving=0;
-						
+
 					}
 					seed.currentweight=seed.seedweight;
 					if(seed.neutralmarkers.size() == 24 & seed.neutralmarkers[0] != 999999+1) { // filled vector and not the initialization value
@@ -191,6 +191,9 @@ void TreesIni(int maximal_word_length) {
             } else if (parameter[0].starttrees == 120100050) {
                 f = fopen("input/CH17I_Treevert2011_100_50000.csv", "r");
                 printf("load: input/CH17I_Treevert2011_100_50000.csv");
+            } else if (parameter[0].starttrees == 12345) {
+                f = fopen("input/testingboth.csv", "r");
+                printf("load: input/testingboth.csv");
             }
 
             if (f == NULL) {
@@ -198,17 +201,18 @@ void TreesIni(int maximal_word_length) {
                 exit(1);
             }
 
-            char puffer[255];
+            char puffer[25555];
             int counter = 1;
 
             double ybuffer, ycoobuf, xbuffer, xcoobuf;
-            int conebuf, agebuf;
-            double heightbuf, dbasalbuf, dbreastbuf;
+            int conebuf, agebuf, originbuf;
+            short unsigned int inbreedingbuf1, inbreedingbuf2,inbreedingbuf3,inbreedingbuf4,inbreedingbuf5,inbreedingbuf6,inbreedingbuf7,inbreedingbuf8,inbreedingbuf9,inbreedingbuf10,inbreedingbuf11,inbreedingbuf12,inbreedingbuf13,inbreedingbuf14,inbreedingbuf15,inbreedingbuf16,inbreedingbuf17,inbreedingbuf18,inbreedingbuf19,inbreedingbuf20,inbreedingbuf21,inbreedingbuf22,inbreedingbuf23,inbreedingbuf24;
+            double heightbuf, dbasalbuf, dbreastbuf, seedweightbuf, droughtbuf, selvingbuf, inbreedingbuf;
 			RandomNumber<double> uniform(0, 1);
 			RandomNumber<double> uniformneutral(0, 999999);
 
             // ignoring the header the contents are appended to the tree array line by line
-            while (fgets(puffer, maximal_word_length, f) != NULL) {
+            while (fgets(puffer, 255555, f) != NULL) {
                 if (counter >= 2) {
                     strtok(puffer, ";");
                     sscanf(strtok(NULL, ";"), "%lg", &ybuffer);
@@ -220,6 +224,38 @@ void TreesIni(int maximal_word_length) {
                     dbreastbuf = strtod(strtok(NULL, ";"), NULL);
                     sscanf(strtok(NULL, ";"), "%d", &conebuf);
                     sscanf(strtok(NULL, ";"), "%d", &agebuf);
+                    sscanf(strtok(NULL, ";"), "%d", &originbuf);
+                    sscanf(strtok(NULL, ";"), "%lg", &seedweightbuf);
+                    sscanf(strtok(NULL, ";"), "%lg", &droughtbuf);
+                    sscanf(strtok(NULL, ";"), "%lg", &selvingbuf);
+                    sscanf(strtok(NULL, ";"), "%lg", &inbreedingbuf);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf1);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf2);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf3);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf4);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf5);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf6);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf7);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf8);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf9);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf10);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf11);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf12);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf13);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf14);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf15);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf16);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf17);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf18);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf19);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf20);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf21);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf22);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf23);
+                    sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf24);
+
+
+
 
                     Tree tree;
 
@@ -228,10 +264,10 @@ void TreesIni(int maximal_word_length) {
                     tree.xcoo = 1000 * xcoobuf;
                     tree.ycoo = 1000 * ycoobuf;
                     tree.name = ++parameter[0].nameakt;
-                    // tree.namem = 0;
-                    // tree.namep = 0;
-                    // tree.line = ++parameter[0].lineakt;
-                    // tree.generation = 0;
+                    tree.namem = 0;
+                     tree.namep = 0;
+                    tree.line = ++parameter[0].lineakt;
+                    tree.generation = 0;
                     // tree.yr_of_establishment = 0;
                     tree.dbasal = dbasalbuf;
                     tree.dbasalrel = 1000;
@@ -240,6 +276,38 @@ void TreesIni(int maximal_word_length) {
                     tree.height = 10 * heightbuf;
                     tree.age = agebuf;
                     tree.cone = conebuf;
+                    tree.origin=originbuf;
+                    tree.seedweight=seedweightbuf;
+                    tree.droughtresist=droughtbuf;
+                    tree.selving=selvingbuf;
+                    tree.inbreedingdepression=inbreedingbuf;
+                        tree.neutralmarkers[0] = inbreedingbuf1;
+                        tree.neutralmarkers[1] = inbreedingbuf2;
+                        tree.neutralmarkers[2] = inbreedingbuf3;
+                        tree.neutralmarkers[3] = inbreedingbuf4;
+                        tree.neutralmarkers[4] = inbreedingbuf5;
+                        tree.neutralmarkers[5] = inbreedingbuf6;
+                        tree.neutralmarkers[6] = inbreedingbuf7;
+                        tree.neutralmarkers[7] = inbreedingbuf8;
+                        tree.neutralmarkers[8] = inbreedingbuf9;
+                        tree.neutralmarkers[9] = inbreedingbuf10;
+                        tree.neutralmarkers[10] = inbreedingbuf11;
+                        tree.neutralmarkers[11] = inbreedingbuf12;
+                        tree.neutralmarkers[12] = inbreedingbuf13;
+                        tree.neutralmarkers[13] = inbreedingbuf14;
+                        tree.neutralmarkers[14] = inbreedingbuf15;
+                        tree.neutralmarkers[15] = inbreedingbuf16;
+                        tree.neutralmarkers[16] = inbreedingbuf17;
+                        tree.neutralmarkers[17] = inbreedingbuf18;
+                        tree.neutralmarkers[18] = inbreedingbuf19;
+                        tree.neutralmarkers[19] = inbreedingbuf20;
+                        tree.neutralmarkers[20] = inbreedingbuf21;
+                        tree.neutralmarkers[21] = inbreedingbuf22;
+                        tree.neutralmarkers[22] = inbreedingbuf23;
+                        tree.neutralmarkers[23] = inbreedingbuf24;
+
+
+
                     if (tree.cone == true) {
                         tree.coneheight = 65535;
                     }
@@ -254,18 +322,18 @@ void TreesIni(int maximal_word_length) {
 					} else {
 						tree.species = parameter[0].specpres;
 					}
-					if (parameter[0].variabletraits==1) 
+					if (parameter[0].variabletraits==1)
 					{
 						//tree.seedweight=normrand(1,0.5,0.33,1.66);
 						//tree.droughtresist=normrand(50,20,0,100);
-						tree.seedweight=1;
-						tree.droughtresist=100;
+						//tree.seedweight=1;
+						//tree.droughtresist=100;
 						// tree.seednumber=normrand(1,0.5,0.33,1.66);
-									
-									
-									tree.selving=0;
+
+
+							//		tree.selving=0;
 									//tree.selving=normrand(50,20,0,100);
-									
+
 									//double ranc = uniform.draw();
 									//if (ranc*100<=tree.clonality && tree.clonality!=0){
 									//tree.cloning = true;
@@ -275,32 +343,32 @@ void TreesIni(int maximal_word_length) {
 									tree.clonetimer=0;
 									tree.cloned=false;
 									tree.cloneboost=1;
-								
+
 									// vector<unsigned int> copyneutralmarkers(24, 0);
 									 // generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
 									// tree.neutralmarkers=copyneutralmarkers;
 									// generate(tree.neutralmarkers.begin(),tree.neutralmarkers.end(), uniformneutral.draw());
-									for(unsigned int i=0; i < 24; i++) {
-											tree.neutralmarkers[i] = uniformneutral.draw();
-										 }
-									tree.inbreedingdepression=0;
-						for( unsigned int neutralcounter=0; neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
-							if (tree.neutralmarkers[neutralcounter]==tree.neutralmarkers[neutralcounter+1]){
-								tree.inbreedingdepression=tree.inbreedingdepression+(100/(tree.neutralmarkers.size()/2));
-							}
-						}
+									//for(unsigned int i=0; i < 24; i++) {
+										//	tree.neutralmarkers[i] = uniformneutral.draw();
+										// }
+								//	tree.inbreedingdepression=0;
+						//for( unsigned int neutralcounter=0; neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
+							//if (tree.neutralmarkers[neutralcounter]==tree.neutralmarkers[neutralcounter+1]){
+								//tree.inbreedingdepression=tree.inbreedingdepression+(100/(tree.neutralmarkers.size()/2));
+							//}
+						//}
 					}
-					else 
+					else
 					{
 						tree.seedweight=1;
 						tree.droughtresist=100;
 						// tree.seednumber=1;
-						
+
 						tree.selving=0;
-						
+
 					}
-					
-					
+
+
                     tree_list.add_directly(std::move(tree));
                 }
                 counter++;
@@ -463,15 +531,9 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.namep = 0;
                         seed.line = ++parameter[0].lineakt;
                         seed.generation = 0;
-						if ((seed.ycoo/ 1000)<=1000){
+
 						seed.origin=1;
-						}
-					else if((seed.xcoo/ 1000) <=100) {
-						seed.origin=2;
-						}
-					else if((seed.xcoo/ 1000) >900){
-						seed.origin=3;
-						}
+
                         seed.incone = false;
                         // seed.weight = 1;
                         seed.age = 0;
@@ -481,18 +543,18 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;
-						if (parameter[0].variabletraits==1) 
+						if (parameter[0].variabletraits==1)
 						{
 						seed.seedweight=normrand(1,0.5,0.33,1.66);
 						seed.droughtresist=normrand(50,20,0,100);
 						//seed.seedweight=1;
 						//seed.droughtresist=100;
 						// seed.seednumber=normrand(1,0.5,0.33,1.66);
-						
+
 						//seed.selving=0;
 						seed.selving=normrand(50,20,0,100);
-						
-						
+
+
 						// vector<unsigned int> copyneutralmarkers(24, 0);
 						 // generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
 						// seed.neutralmarkers=copyneutralmarkers;
@@ -501,17 +563,17 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
 											seed.neutralmarkers[i] = uniformneutral.draw();
 										 }
 						}
-						else 
+						else
 						{
 						seed.seedweight=1;
 						seed.droughtresist=100;
 						// seed.seednumber=1;
-																		
+
 									seed.selving=0;
-									
+
 						}
 						seed.currentweight=seed.seedweight;
-						
+
                         seed_list.add_directly(std::move(seed));
                     }
                 }

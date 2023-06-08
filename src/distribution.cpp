@@ -49,7 +49,7 @@ void Pollinationprobability(double x,
     thdpthinfl.clear();
     thdpthinfl.shrink_to_fit();
 
-    if (parameter[0].windsource == 1) {  // EraInterim
+    if (parameter[0].windsource == 1 || parameter[0].windsource == 999) {  // EraInterim
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);
         velocity = wspd.at(ripm);
@@ -138,7 +138,7 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, dou
     double direction = 0.0;
     double velocity = 0.0;
 
-    if (parameter[0].windsource == 1) {  // EraInterim
+    if (parameter[0].windsource == 1 || parameter[0].windsource == 999) {  // EraInterim
         // choose a month between May and September:
         ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
         direction = M_PI * (wdir.at(ripm) / 180);

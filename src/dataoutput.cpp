@@ -501,6 +501,8 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Stemcount_species4;");
                 fprintf(filepointer, "Stemcount_species5;");
                 fprintf(filepointer, "Stemcount_species6;");
+                fprintf(filepointer, "Stemcount_species7;");
+// add here more for each species present in model
                 fprintf(filepointer, "Seed_produced_currently;");
                 fprintf(filepointer, "Seed_produced_total;");
                 fprintf(filepointer, "N_trees_Lgmel;");
@@ -549,7 +551,7 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", jahr);
 
             // declarations
-            int stemcount_species1 = 0, stemcount_species2 = 0, stemcount_species3 = 0, stemcount_species4 = 0, stemcount_species5 = 0, stemcount_species6 = 0;
+            int stemcount_species1 = 0, stemcount_species2 = 0, stemcount_species3 = 0, stemcount_species4 = 0, stemcount_species5 = 0, stemcount_species6 = 0, stemcount_species7 = 0;
             int gesamtseedAKT = 0, gesamtseedSUM = 0;
             int spectree1 = 0, spectree2 = 0;
             double yposmax = 0.0;
@@ -559,7 +561,7 @@ void Dataoutput(int t,
 #pragma omp parallel default(shared)
         {
             // declarations
-            int stemcount_local_species1 = 0, stemcount_local_species2 = 0, stemcount_local_species3 = 0, stemcount_local_species4 = 0, stemcount_local_species5 = 0, stemcount_local_species6 = 0;
+            int stemcount_local_species1 = 0, stemcount_local_species2 = 0, stemcount_local_species3 = 0, stemcount_local_species4 = 0, stemcount_local_species5 = 0, stemcount_local_species6 = 0, stemcount_local_species7 = 0;
             int localgesamtseedAKT = 0, localgesamtseedSUM = 0;
             int localspectree1 = 0, localspectree2 = 0;
             double localyposmax = 0.0;
@@ -587,6 +589,8 @@ void Dataoutput(int t,
 								stemcount_local_species5++;
 							} else if (tree.species == 6) {
 								stemcount_local_species6++;
+							} else if (tree.species == 7) {
+								stemcount_local_species7++;
 							}
 						}
 
@@ -620,6 +624,7 @@ void Dataoutput(int t,
 				stemcount_species4 += stemcount_local_species4;
 				stemcount_species5 += stemcount_local_species5;
 				stemcount_species6 += stemcount_local_species6;
+				stemcount_species7 += stemcount_local_species7;
 				gesamtseedAKT += localgesamtseedAKT; 
 				gesamtseedSUM += localgesamtseedSUM;
 				spectree1 += localspectree1; 
@@ -696,6 +701,7 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", stemcount_species4);
             fprintf(filepointer, "%d;", stemcount_species5);
             fprintf(filepointer, "%d;", stemcount_species6);
+            fprintf(filepointer, "%d;", stemcount_species7);
             fprintf(filepointer, "%d;", gesamtseedAKT);
             fprintf(filepointer, "%d;", gesamtseedSUM);
             fprintf(filepointer, "%d;", spectree1);
@@ -1129,8 +1135,8 @@ void Dataoutput(int t,
 
 		if (outputgriddedbiomass == true) {  // gridded tree biomass output
 			ostringstream s_speciesname;
-			for(signed short int speciesnumber_i = 1; speciesnumber_i < 7; ++speciesnumber_i) {
-			 
+			for(signed short int speciesnumber_i = 1; speciesnumber_i < 8; ++speciesnumber_i) {
+// increase here number to +1 of included species
 					// assemble file name
 					s1 << parameter[0].repeati;
 					s2 << parameter[0].weatherchoice;

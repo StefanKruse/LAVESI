@@ -185,6 +185,7 @@ struct Parameter {
     bool demlandscape;
     int demresolution;
     int specpres;
+	unsigned short int roi;
     unsigned short int species_max;
 	int firemode;
 	double fireintensitymode;
@@ -331,6 +332,7 @@ struct Parameter {
 struct Speciestraits {
 	int	number;
 	string	species;
+	int	roi;
 	double	coneage ;
 	double	seedflightrate;
 	double	seedtravelbreeze;
@@ -389,6 +391,7 @@ struct Speciestraits {
 	double  biomasswoodbase;
 	double  biomasswoodfaca;
 	double  biomasswoodfacb;
+	int  lightdemand;
 };
 
 struct Weather {

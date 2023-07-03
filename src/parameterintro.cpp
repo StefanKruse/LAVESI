@@ -315,6 +315,12 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].specpres);
     }
+	
+    strcpy(uebergabestring, "roi");
+    parameter[0].roi = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].roi);
+    }
 
     strcpy(uebergabestring, "mapxlength");
     parameter[0].mapxlength = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
@@ -897,6 +903,7 @@ void Getspeciestraits(void)
 		{
 			speciestrait[counter].number= strtod(strtok(puffer, " "),NULL);
 			speciestrait[counter].species= strtok(NULL, " ");
+			speciestrait[counter].roi= strtod(strtok(NULL, " "),NULL);
 			speciestrait[counter].coneage= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].seedflightrate= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].seedtravelbreeze= strtod(strtok(NULL, " "),NULL) ;
@@ -953,6 +960,7 @@ void Getspeciestraits(void)
 			speciestrait[counter].biomasswoodbase= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].biomasswoodfaca= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].biomasswoodfacb= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].lightdemand= strtod(strtok(NULL, " "),NULL) ;
 		}
 		counter++;
 	}

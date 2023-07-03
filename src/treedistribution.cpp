@@ -86,7 +86,21 @@ void Seedin() {
                 int rn_species = 0;
 				// multiple species implementation
                 if (parameter[0].specpres == 0) {
-					rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+					if (parameter[0].roi == 0) {
+						rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+					} else {
+						// make vector with species number that are in roi
+						// https://en.cppreference.com/w/cpp/container/vector
+						// TODO later for quicker computation move to global declaration
+						vector<int> speciesinroi;
+						for (int species_counter = 1; species_counter < 99; species_counter++) {
+							if(parameter[0].roi == speciestrait[species_counter].roi) {
+								speciesinroi.push_back(species_counter);
+							}
+						}
+						// sample one out of this
+						rn_species = speciesinroi[(int) 1 + (uniform.draw() * (speciesinroi.size()-1))-1];
+					}
 				} else {
 					rn_species = parameter[0].specpres;
 				}

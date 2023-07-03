@@ -354,24 +354,24 @@ void passWeather() {
 
             // July temp for both
             if (weather_list[iweather].temp7monthmeaniso < 10.0) {
-                weather_list[iweather].julisothermrestriktion = 1.0;
+                weather_list[iweather].julisothermrestriktion = 0; // from 1.0
             } else {
                 weather_list[iweather].julisothermrestriktion = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeaniso - 10.0) / 10.0);
             }
             if (weather_list[iweather].temp7monthmeanisomin < 10.0) {
-                weather_list[iweather].julisothermrestriktionmin = 1.0;
+                weather_list[iweather].julisothermrestriktionmin = 0; // from 1.0
             } else {
                 weather_list[iweather].julisothermrestriktionmin = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeanisomin - 10.0) / 10.0);
             }
 
             // ndd for both
             if (weather_list[iweather].vegetationperiodlengthiso < 60.0) {
-                weather_list[iweather].nddrestriktion = 1.0;
+                weather_list[iweather].nddrestriktion = 0; // from 1.0
             } else {
                 weather_list[iweather].nddrestriktion = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthiso) - 60.0) / 60.0);
             }
             if (weather_list[iweather].vegetationperiodlengthisomin < 60.0) {
-                weather_list[iweather].nddrestriktionmin = 1.0;
+                weather_list[iweather].nddrestriktionmin = 0; // from 1.0
             } else {
                 weather_list[iweather].nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
@@ -1207,10 +1207,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 findyr2 = 2020;
 			} else if (parameter[0].windsource == 999) {
 				findyr1 = 1;
-				findyr2 = 25000;
+				findyr2 = 25070;
 			} else if (parameter[0].windsource == 998) {
 				findyr1 = 1;
-				findyr2 = 25000;
+				findyr2 = 25070;
 			}
 
             ss.str("");

@@ -131,6 +131,10 @@ void Treeestablishment(Parameter* parameter,
 					density_help = 0.0;
 				if (density_help > 1.0)
 					density_help = 1.0;
+				
+				// add shade tolerancy
+				density_help = density_help / pow(speciestrait[seed.species].lightdemand, 2.0); // TODO: tune
+				
                 // update growth
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
 // if(basalgrowth_help>10)

@@ -70,7 +70,11 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
             findyr2 = 2012;  // TODO: adjust to available data
         } else if (parameter[0].windsource == 999) {
 			findyr1 = 1;
-			findyr2 = 25000;
+			findyr2 = 25070;
+	} else if (parameter[0].windsource == 998) {
+			findyr1 = 1;
+			findyr2 = 25070;
+
 		}
     }
 
@@ -6219,7 +6223,7 @@ int main() {
 			break;
 		}
 
-		cout << speciestrait[species_counter].number << " -> " << speciestrait[species_counter].species << " | min ALD: " << speciestrait[species_counter].minactivelayer << endl;
+		cout << speciestrait[species_counter].number << " -> " << speciestrait[species_counter].species << " | min ALD: " << speciestrait[species_counter].minactivelayer << " | min biomasswoodfacb: " << speciestrait[species_counter].biomasswoodfacb << endl;
 	}
 
     // pragma omp initializing

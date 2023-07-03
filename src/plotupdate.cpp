@@ -410,7 +410,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				else if (rn < 0.0001)
 					pEnvirgrid.litterheight0 = pEnvirgrid.litterheight0 * 0.01;
 
-				unsigned short litterlayergrowthrate =0.5 * 100;	//0.5 cm * 100 wegen Skalierung; evt mit TWI verknüpfen oder evt Lärchenwachstum
+				unsigned short litterlayergrowthrate =0.5 * 100 * 0.25;	//0.5 cm * 100 wegen Skalierung; evt mit TWI verknüpfen oder evt Lärchenwachstum
 											 // +( 1.0/( ((1.0/0.01)-(1.0/0.95))
 													  // *exp(-(1.0/2000.0)*(double) pEnvirgrid.maxthawing_depth) 
 													  // +(1/0.95)) ); 

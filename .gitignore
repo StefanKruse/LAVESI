@@ -1,7 +1,7 @@
 # help e.g. under https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
 
 # exclude executable
-/LAVESI_WIND
+/LAVESI_FIRE
 # exclude redirected output streams
 nohup.out
 
@@ -37,6 +37,3 @@ Thumbs.db
 
 # exclude core dump files
 core
-
-# exlude backup files
-*.bak

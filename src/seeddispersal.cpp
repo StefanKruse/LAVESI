@@ -177,7 +177,7 @@ void Seeddispersal(//int jahr,
                         }
                     } else if (seed.ycoo < 0) {
                         if ((parameter[0].boundaryconditions == 1)) {
-                            seed.ycoo = 1000 * ((double)(treerows - 1) + fmod((double)seed.ycoo / 1000, (double)(treerows - 1)));  // TODO fix
+                            seed.ycoo = 1000 * ((double)(treerows - 1) + fmod((double)seed.ycoo / 1000, (double)(treerows - 1))); 
                             // seed.namem = 0;
                             // seed.namep = 0;
                         } else if ((parameter[0].boundaryconditions == 3)) {
@@ -190,7 +190,7 @@ void Seeddispersal(//int jahr,
                     }
                     if (seed.xcoo < 0) {
                         if ((parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3)) {
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1);  // TODO fix
+                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1); 
                             // seed.namem = 0;
                             // seed.namep = 0;
                         } else {
@@ -199,12 +199,12 @@ void Seeddispersal(//int jahr,
                         }
                     } else if ((double)seed.xcoo / 1000 > (double)(treecols - 1)) {
                         if (parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3) {
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1));  // TODO fix
+                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)); 
                             // seed.namem = 0;
                             // seed.namep = 0;
 
                         } else if ((parameter[0].boundaryconditions == 2) && (uniform.draw() < 0.5)) {  // Reducing seed introduction on the western border:
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1));  // TODO fix
+                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1));
                         } else {
                             sameausserhalb = true;
                             seedleftE++;

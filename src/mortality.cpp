@@ -136,7 +136,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			
 			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
 			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
-			treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); // -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
 			} else if ((parameter[0].firemode != 0) & (parameter[0].firemode != 112)) {
 				treemortality = treemortality + (double)tree.firedamage;
 			} else if (parameter[0].firemode == 0) {
@@ -162,7 +162,6 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				// if (tree.firedamage > 0)
 					// cout << "tree_list[tree_i].growing = " << tree_list[tree_i].growing;
                 tree_list.remove(tree_i);
-                // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
 				// if (tree.firedamage > 0)
 					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;				
 			// cout << " ### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | tree.firedamage=" << (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)) << " | Treemortg=" << Treemortg << endl;
@@ -214,7 +213,7 @@ void Mortality(Parameter* parameter,
                         seed_list.remove(i);
                     } else {
 					// if (!seed.incone)
-					// cout << " seed survived on ground !!! " << endl;
+					// cout << " seed survived on ground! " << endl;
 					}
                 }
             }
@@ -224,7 +223,7 @@ void Mortality(Parameter* parameter,
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {
-					++n_trees;  // for calculating mean of computation times // TODO still necessary
+					++n_trees;  // for calculating mean of computation times 
 
 					if (tree.seednewly_produced > 0) {
 						bool pollinated = false;
@@ -272,7 +271,6 @@ void Mortality(Parameter* parameter,
 								if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
 									// int iran = uniform() * (Vname.size() - 1);
 									// seed.namep = Vname.at(iran);
-									// TODO: add here properties that are passed down from the father tree
 									seed.thawing_depthinfluence = 100;
 								} else {
 									// seed.namep = 0;

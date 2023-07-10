@@ -4,14 +4,13 @@
 
 using namespace std;
 
-struct Tree {                       // sizeof variable //TODO: further could be replaced
-    double dbasal;                  // 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision; could be replaced
-    double dbreast;                 // 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision; could be replaced
-    double densitywert;             // 8->2	---> need to check range of values for replacment
-    double thawing_depthinfluence;  // 8->2	---> need to check range of values for replacment
-    unsigned int xcoo;  // 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 
-                        // km long/wide simulations // TODO really only positive? -> see compiler warnings
-    unsigned int ycoo;  // 4	---> was double // TODO really only positive? -> see compiler warnings
+struct Tree {                       // sizeof variable
+    double dbasal;                  // 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision
+    double dbreast;                 // 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision
+    double densitywert;             // 8->2
+    double thawing_depthinfluence;  // 8->2
+    unsigned int xcoo;  // 4 	---> unsigned int 4294967295 /1000 precision 
+    unsigned int ycoo;  // 4
     // double dispersaldistance;			// 8	-> not in use right now
     // int xworldcoo;						// 4	-> not in use right now
     // int yworldcoo;						// 4	-> not in use right now
@@ -36,7 +35,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int twi;                 // 2
     short int elevation;                    // 2
     unsigned short int soilhumidity;        // 2
-    bool cone;                              // 1	---> was int; could be further replaced by single use of coneheight
+    bool cone;                              // 1	---> was int
     bool longdispersed;                     // 1
     bool growing;                           // 1
 	unsigned short firedamage;				// 2
@@ -44,7 +43,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
 };
 
-struct Seed {  // sizeof variable //TODO: further could be replaced
+struct Seed {  // sizeof variable
     // double weight;					// 8	-> not in use right now
     // double dispersaldistance;		// 8	-> not in use right now
     // double maxgrowth;				// 8	-> not in use right now
@@ -66,10 +65,10 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     bool incone;               // 1
     bool longdispersed;        // 1
     bool dead = false;         // 1
-	int firemort;				// ###CHANGED### for fire mortality
+	int firemort;			   // for fire mortality
 };
 
-struct Envirgrid {        // sizeof variable //TODO: further could be replaced
+struct Envirgrid {        // sizeof variable
     short int elevation;  // 2	---> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km
                           // elevation range (8 -> 2 bytes)
     unsigned short int Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
@@ -90,7 +89,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     unsigned short int envirgrowthimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
     unsigned short int envirfireimpact;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 1, precision of  *10000 possible, so 1/10000
                                            // units precision (8 -> 2 bytes)
-	double fire;	//###FIRE###
+	double fire;
 	unsigned short int firecells;	// for writing output
 	double fireintensitymax;	// for writing output
 	double fireintensitymean;	// for writing output

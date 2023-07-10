@@ -41,13 +41,13 @@ void Treeestablishment(Parameter* parameter,
 
                 double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
-                // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
-// cout << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
+                // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; 
+				// cout << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
                 if (germinationlitterheightinfluence < 0.01) {// minimum 1%
                     germinationlitterheightinfluence = 0.01;
                 }
-// if(plot_list[curposi].litterheight0!=1000)
-	// cout << " ... after: " << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
+				// if(plot_list[curposi].litterheight0!=1000)
+					// cout << " ... after: " << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
 
                 // calculate the thawing depth influence on the tree growth
                 double thawing_depthinfluence_help = 100;
@@ -57,7 +57,6 @@ void Treeestablishment(Parameter* parameter,
 
                 // ... and weather.
                 // calculate the latest growth performance
-                // TODO: merge with general growth functions
                 double maxbw_help = 0;
 
                 if (parameter[0].lineartransect == true) {
@@ -133,10 +132,10 @@ void Treeestablishment(Parameter* parameter,
 					density_help = 1.0;
                 // update growth
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
-// if(basalgrowth_help>10)
-	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
+				// if(basalgrowth_help>10)
+					// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
 	
-                // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
+                // minimal germination rate is roughly estimated
                 double germinationprobability = 0.0;
                 if (parameter[0].lineartransect == true) {
                     germinationprobability = speciestrait[seed.species].germinationrate       // background germination rate
@@ -169,7 +168,7 @@ void Treeestablishment(Parameter* parameter,
 
 				double rn = uniform.draw();
 				if (rn < germinationprobability) {
-// cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
+				// cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
 					if (maxbw_help > 0.0) { // otherwise can survive
 						Tree tree;
 
@@ -192,7 +191,7 @@ void Treeestablishment(Parameter* parameter,
 						// tree height update
 						if (parameter[0].allometryfunctiontype == 3) {// logistic growth
 							tree.height = 10 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*10))/speciestrait[seed.species].heightlogc)));
-		// cout << "H = " << tree.height << endl;
+						// cout << "H = " << tree.height << endl;
 						} else if (parameter[0].allometryfunctiontype == 1) {
 							tree.height = 10 * speciestrait[seed.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[seed.species].dbasalheightalloexp);
 						} else {

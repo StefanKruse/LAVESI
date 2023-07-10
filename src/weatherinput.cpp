@@ -2,7 +2,6 @@
 
 using namespace std;
 
-// TODO temporary here
 extern vector<vector<Weather>> world_weather_list;
 extern vector<double> wdir, wspd;
 extern vector<vector<double>> windspd;
@@ -82,7 +81,7 @@ void getPrec(char dateinameprec[250], vector<Weather>& weather_list, int maximal
 void getTemp(	//int aktort, 
 				char dateinametemp[250], 
 				vector<Weather>& weather_list) {
-    // TODO: check whether this grid-based simulation setup is still necessary or can be removed
+
     // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
     // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
@@ -425,55 +424,6 @@ void passWeather() {
 			double P12 = weather_list[iweather].prec12monthmean;
 			weather_list[iweather].fireindex12 = 0.11816*(((T12 + 12.03) * 0.7213351) + ((P12 - 39.14) * 0.6925862)) + (-0.12372*(((T12 + 12.03) * -0.6925862) + ((P12 - 39.14) * 0.7213351)))+1.46818;
 
-			//Fire index calculation for each month (for Lake Khamra)
-			// double T1 = weather_list[iweather].temp1monthmean;
-			// double P1 = weather_list[iweather].prec1monthmean;
-			// weather_list[iweather].fireindex1 = 0.10336*(((T1 + 6.19) * 0.6291112) + ((P1 - 34.99) * 0.7773153)) + (-0.17637*(((T1 + 6.19) * -0.7773153) + ((P1 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T2 = weather_list[iweather].temp2monthmean;
-			// double P2 = weather_list[iweather].prec2monthmean;
-			// weather_list[iweather].fireindex2 = 0.10336*(((T2 + 6.19) * 0.6291112) + ((P2 - 34.99) * 0.7773153)) + (-0.17637*(((T2 + 6.19) * -0.7773153) + ((P2 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T3 = weather_list[iweather].temp3monthmean;
-			// double P3 = weather_list[iweather].prec3monthmean;
-			// weather_list[iweather].fireindex3 = 0.10336*(((T3 + 6.19) * 0.6291112) + ((P3 - 34.99) * 0.7773153)) + (-0.17637*(((T3 + 6.19) * -0.7773153) + ((P3 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T4 = weather_list[iweather].temp4monthmean;
-			// double P4 = weather_list[iweather].prec4monthmean;
-			// weather_list[iweather].fireindex4 = 0.10336*(((T4 + 6.19) * 0.6291112) + ((P4 - 34.99) * 0.7773153)) + (-0.17637*(((T4 + 6.19) * -0.7773153) + ((P4 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T5 = weather_list[iweather].temp5monthmean;
-			// double P5 = weather_list[iweather].prec5monthmean;
-			// weather_list[iweather].fireindex5 = 0.10336*(((T5 + 6.19) * 0.6291112) + ((P5 - 34.99) * 0.7773153)) + (-0.17637*(((T5 + 6.19) * -0.7773153) + ((P5 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T6 = weather_list[iweather].temp6monthmean;
-			// double P6 = weather_list[iweather].prec6monthmean;
-			// weather_list[iweather].fireindex6 = 0.10336*(((T6 + 6.19) * 0.6291112) + ((P6 - 34.99) * 0.7773153)) + (-0.17637*(((T6 + 6.19) * -0.7773153) + ((P6 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T7 = weather_list[iweather].temp7monthmean;
-			// double P7 = weather_list[iweather].prec7monthmean;
-			// weather_list[iweather].fireindex7 = 0.10336*(((T7 + 6.19) * 0.6291112) + ((P7 - 34.99) * 0.7773153)) + (-0.17637*(((T7 + 6.19) * -0.7773153) + ((P7 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T8 = weather_list[iweather].temp8monthmean;
-			// double P8 = weather_list[iweather].prec8monthmean;
-			// weather_list[iweather].fireindex8 = 0.10336*(((T8 + 6.19) * 0.6291112) + ((P8 - 34.99) * 0.7773153)) + (-0.17637*(((T8 + 6.19) * -0.7773153) + ((P8 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T9 = weather_list[iweather].temp9monthmean;
-			// double P9 = weather_list[iweather].prec9monthmean;
-			// weather_list[iweather].fireindex9 = 0.10336*(((T9 + 6.19) * 0.6291112) + ((P9 - 34.99) * 0.7773153)) + (-0.17637*(((T9 + 6.19) * -0.7773153) + ((P9 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T10 = weather_list[iweather].temp10monthmean;
-			// double P10 = weather_list[iweather].prec10monthmean;
-			// weather_list[iweather].fireindex10 = 0.10336*(((T10 + 6.19) * 0.6291112) + ((P10 - 34.99) * 0.7773153)) + (-0.17637*(((T10 + 6.19) * -0.7773153) + ((P10 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T11 = weather_list[iweather].temp11monthmean;
-			// double P11 = weather_list[iweather].prec11monthmean;
-			// weather_list[iweather].fireindex11 = 0.10336*(((T11 + 6.19) * 0.6291112) + ((P11 - 34.99) * 0.7773153)) + (-0.17637*(((T11 + 6.19) * -0.7773153) + ((P11 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T12 = weather_list[iweather].temp12monthmean;
-			// double P12 = weather_list[iweather].prec12monthmean;
-			// weather_list[iweather].fireindex12 = 0.10336*(((T12 + 6.19) * 0.6291112) + ((P12 - 34.99) * 0.7773153)) + (-0.17637*(((T12 + 6.19) * -0.7773153) + ((P12 - 34.99) * 0.6291112)))+0.69034;
-			
 			// JJA temperature and precipitation for output
 			weather_list[iweather].tempmeanjja = (weather_list[iweather].temp6monthmean + weather_list[iweather].temp7monthmean + weather_list[iweather].temp8monthmean) / 3;
 			weather_list[iweather].precipitationsumjja = weather_list[iweather].prec6monthmean + weather_list[iweather].prec7monthmean + weather_list[iweather].prec8monthmean;
@@ -563,13 +513,13 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             foldername << "wind_SpasskayaPad";
         } else if (
             // Lake Satagay
-            (parameter[0].weatherchoice == 1822401) || (parameter[0].weatherchoice == 1822402) || (parameter[0].weatherchoice == 1822403) || (parameter[0].weatherchoice == 1822404)
-			 || (parameter[0].weatherchoice == 1822405)  || (parameter[0].weatherchoice == 1822406)  || (parameter[0].weatherchoice == 1822407) || (parameter[0].weatherchoice == 1822408)) {
+            (parameter[0].weatherchoice == 1822403) || (parameter[0].weatherchoice == 1822406) || (parameter[0].weatherchoice == 1822409) || (parameter[0].weatherchoice == 1822410)
+			 || (parameter[0].weatherchoice == 1822411)  || (parameter[0].weatherchoice == 1822412)  || (parameter[0].weatherchoice == 1822413)) {
             foldername << "wind_Satagay";
 			cout << "Reading wind data for Lake Satagay" << endl;
         } else {
-			cout << "No wind data for weather choice available, reading data for Chukotka!" << endl;
-            foldername << "wind_Chukotka";
+			cout << "No wind data for weather choice available, reading data for Lake Satagay!" << endl;
+            foldername << "wind_Satagay";
 		}
 
 
@@ -636,341 +586,9 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         aktort++;
 
         // depending on the weather choice different files will be opened and read line by line
-        if (parameter[0].weatherchoice == 21) {
-            char tempbuf[] = "input/TY02_tmpweighted_model.csv";
-            char precbuf[] = "input/TY02_prcweighted_model.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 22) {
-            char tempbuf[] = "input/CH17_tmpweighted_model.csv";
-            char precbuf[] = "input/CH17_prcweighted_model.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 23) {
-            char tempbuf[] = "input/CH02_tmpweighted_model.csv";
-            char precbuf[] = "input/CH02_prcweighted_model.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 24) {
-            char tempbuf[] = "input/CH06_tmpweighted_model.csv";
-            char precbuf[] = "input/CH06_prcweighted_model.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 7001) {
-            char tempbuf[] = "input/Coredata_complete_tmp_forw_ens01.csv";
-            char precbuf[] = "input/Coredata_complete_prc.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-        } else if (parameter[0].weatherchoice == 2300451) {
-            char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp45increasing.csv";
-            char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp45increasing.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 2300851) {
-            char tempbuf[] = "input/trans_Chukotka_shift00_temp_1901-2300_rcp85increasing.csv";
-            char precbuf[] = "input/trans_Chukotka_shift00_prec_1901-2300_rcp85increasing.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-            // forcing with 501:1900 reconstruction, 1901:2018 CRU TS 4 reanalysis and 2019:3000 CMIP5 predictions until 2500 and remain at final sim years or
-            // back to 1901-2000 period until 3000; naming conventions:
-            // ... 501 == start year
-            // ... ...3000 == final year
-            // ... .......2 == Transect 2 Taimyr Peninsula
-            // ... .......3 == Transect 3 Buor Khaya
-            // ... .......4 == Transect 4 Kolyma
-            // ... .......5 == Transect 5 Chukotka
-            // ... ........1 == rcp2.6
-            // ... ........2 == rcp4.5
-            // ... ........3 == rcp8.5
-            // ... ........4 == rcp2.6 half => 1.3
-            // ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
-            // ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
-
-            // RCP2.6
-        } else if (parameter[0].weatherchoice == 501300021) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP26temp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300031) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP26temp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300041) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP26temp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300051) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP26temp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 2500511) {  // new last number == for simulation of repeat 2076:2125 time slice
-            char tempbuf[] = "input/transectChukotka_RCP26temp_2076-2125repeated_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP26prec_2076-2125repeated_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-            // RCP4.5
-        } else if (parameter[0].weatherchoice == 501300022) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP45temp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300032) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP45temp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300042) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP45temp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300052) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP45temp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-		} else if (parameter[0].weatherchoice == 2500521) {  // new last number == for simulation of repeat 2076:2125 time slice
-            char tempbuf[] = "input/transectChukotka_RCP45temp_2076-2125repeated_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP45prec_2076-2125repeated_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-            // RCP8.5
-        } else if (parameter[0].weatherchoice == 501300023) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP85temp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300033) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP85temp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300043) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP85temp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300053) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP85temp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 2500531) {  // new last number == for simulation of repeat 2076:2125 time slice
-            char tempbuf[] = "input/transectChukotka_RCP85temp_2076-2125repeated_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP85prec_2076-2125repeated_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-            // RCP2.6 half as strong warming named 1.3
-        } else if (parameter[0].weatherchoice == 501300024) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP13temp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300034) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP13temp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300044) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP13temp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300054) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP13temp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-            //  cooling back down to 1901:1987
-            // RCP2.6 but with cooling back down to 1901:1987
-        } else if (parameter[0].weatherchoice == 501300025) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP26cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300035) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP26cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300045) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP26cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300055) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP26cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-            // RCP2.6 half as strong warming named 1.3 but with cooling back down to 1901:1987
-        } else if (parameter[0].weatherchoice == 501300026) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP13cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300036) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP13cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300046) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP13cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300056) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP13cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP26prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-            // RCP4.5 but with cooling back down to 1901:1987
-        } else if (parameter[0].weatherchoice == 501300027) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP45cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300037) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP45cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300047) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP45cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300057) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP45cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP45prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-            // RCP8.5 but with cooling back down to 1901:1987
-        } else if (parameter[0].weatherchoice == 501300028) {  // last number added
-            char tempbuf[] = "input/transectTaimyr Peninsula_RCP85cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectTaimyr Peninsula_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300038) {  // last number added
-            char tempbuf[] = "input/transectBuor Khaya_RCP85cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectBuor Khaya_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300048) {  // last number added
-            char tempbuf[] = "input/transectKolyma_RCP85cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectKolyma_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 501300058) {  // last number added
-            char tempbuf[] = "input/transectChukotka_RCP85cooltemp_501-3000.csv";
-            char precbuf[] = "input/transectChukotka_RCP85prec_501-3000.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-			// For Lake Khamra fire module test
-        } else if (parameter[0].weatherchoice == 18232) {
-            char tempbuf[] = "input/18232_khamra_temp.csv";
-            char precbuf[] = "input/18232_khamra_prec.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 182321) {
-            char tempbuf[] = "input/18232_khamra_trace_temp.csv";
-            char precbuf[] = "input/18232_khamra_trace_prec.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 182322) {
-            char tempbuf[] = "input/18232_khamra_traceCORR_temp.csv";
-            char precbuf[] = "input/18232_khamra_traceCORR_prec.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 182323) {
-            char tempbuf[] = "input/18232_khamra_trace_temp_2990_og.csv";
-            char precbuf[] = "input/18232_khamra_trace_prec_2990_og.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 182324) {
-            char tempbuf[] = "input/18232_khamra_traceCORR_temp_2990.csv";
-            char precbuf[] = "input/18232_khamra_traceCORR_prec_2990.csv";
-			strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-			// For Lake Satagay fire module simulations
-        } else if (parameter[0].weatherchoice == 18224) {
-            char tempbuf[] = "input/18224_satagay_cruts4.03_temp_1901-2018.csv";
-            char precbuf[] = "input/18224_satagay_cruts4.03_prec_1901-2018.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 182241) {
-            char tempbuf[] = "input/18224_satagay_cruts4.06_temp_1901-2021.csv";
-            char precbuf[] = "input/18224_satagay_cruts4.06_prec_1901-2021.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 182244) {	// same as 182243 above, but cut off first 1k yrs and instead added spinup phase of 10x copies of first 50 yrs
-            char tempbuf[] = "input/18224_satagay_traceadjcru+cru_temp_21000BP-2021CE_Spinup10x50yrs.csv";
-            char precbuf[] = "input/18224_satagay_traceadjcru+cru_prec_21000BP-2021CE_Spinup10x50yrs.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 182245) {	// New MPI 25ka data from Anne, adjusted by CRU-TS (only temperature)
-            char tempbuf[] = "input/18224_satagay_mpi_temp_22950BP-1949CE_adjustedtocru.csv";
-            char precbuf[] = "input/18224_satagay_mpi_prec_22950BP-1949CE_nonadjusted.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 182246) {	// New MPI 25ka data from Anne, adjusted by CRU-TS (only temperature) - TEST with only last 100 years
-            char tempbuf[] = "input/18224_satagay_mpi_temp_1849-1949CE_adjustedtocru_TEST.csv";
-            char precbuf[] = "input/18224_satagay_mpi_prec_1849-1949CE_nonadjusted_TEST.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 182247) {	// New MPI 25ka data from Anne, adjusted by CRU-TS (only temperature) - TEST with only last 100 years
-            char tempbuf[] = "input/18224_satagay_mpi_temp_22950BP-1949CE_adjustedtocru.csv";
-            char precbuf[] = "input/18224_satagay_mpi_prec_22950BP-1949CE_adjustedtocru.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 1822401) {	// Trace21ka data adjusted to CRU-TS
-            char tempbuf[] = "input/18224_satagay_trace_temp_22000BP-1990CE_adjustedtocru.csv";
-            char precbuf[] = "input/18224_satagay_trace_prec_22000BP-1990CE_adjustedtocru.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 1822402) {	// Trace21ka data adjusted to CRU-TS, appending CRU-TS after 1900
-            char tempbuf[] = "input/18224_satagay_traceadjcru+cru_temp_22000BP-2021CE.csv";
-            char precbuf[] = "input/18224_satagay_traceadjcru+cru_prec_22000BP-2021CE.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 1822403) {	// MPI-ESM 25ka data, unadjusted
+		if (parameter[0].weatherchoice == 1822403) {	// MPI-ESM 25ka data, unadjusted
             char tempbuf[] = "input/18224_satagay_TRACE_CMIP6-COMPLETE_TEMP_20049BCE-2100CE_adjustedtoCRU.csv";
             char precbuf[] = "input/18224_satagay_TRACE_CMIP6-COMPLETE_PREC_22950BCE-2100CE_adjustedtoCRU.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 1822404) {	// MPI-ESM 25ka data, unadjusted
-            char tempbuf[] = "input/18224_satagay_mpi25ka_temp_24900BP-1949CE_nonadjusted.csv";
-            char precbuf[] = "input/18224_satagay_mpi25ka_prec_24900BP-1949CE_nonadjusted.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 1822405) {	// MPI-ESM 25ka data, adjusted to CRU-TS (T and P)
-            char tempbuf[] = "input/18224_satagay_mpi25ka_temp_24900BP-1949CE_adjustedtoCRU.csv";
-            char precbuf[] = "input/18224_satagay_mpi25ka_prec_24900BP-1949CE_adjustedtoCRU.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
 			
@@ -979,18 +597,6 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             char precbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_PREC_22950BCE-2100CE_adjustedtoCRU.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);			
-
-		} else if (parameter[0].weatherchoice == 1822407) {	// MPI-ESM1-2 CMIP6 data (historical + future, 1850-2100 CE)
-            char tempbuf[] = "input/18224_satagay_cmip6_MPI-ESM1-2-COMPLETE-HR-LR_TAS_1850-2100.csv";
-            char precbuf[] = "input/18224_satagay_cmip6_MPI-ESM1-2-COMPLETE-HR-LR_PREC_1850-2100.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-			
-		} else if (parameter[0].weatherchoice == 1822408) {	// MPI-ESM1-2 CMIP6 data (historical + future, 1850-2100 CE), adjusted to CRU-TS
-            char tempbuf[] = "input/18224_satagay_cmip6_MPI-ESM1-2-COMPLETE-HR-LR_TAS_1850-2100_adjustedtoCRU.csv";
-            char precbuf[] = "input/18224_satagay_cmip6_MPI-ESM1-2-COMPLETE-HR-LR_PREC_1850-2100_adjustedtoCRU.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
 
 		} else if (parameter[0].weatherchoice == 1822409) {	// = 1822406 (MPI-ESM Anne), but T is - 5%
             char tempbuf[] = "input/18224_satagay_MPI-ESMCOMPLETE_TEMP_22950BCE-2100CE_adjustedtoCRU_SAminus5perc.csv";
@@ -1019,28 +625,6 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		} else if (parameter[0].weatherchoice == 1822413) {	// Lake Satagay CRU-adjusted COMPLETE MPI-ESM-CR (Marie Kapsch) + CMIP6
             char tempbuf[] = "input/18224_satagay_MPI-ESM-CRCOMPLETE_Kapsch_TEMP_23050BCE-2100CE_adjustedtoCRU.csv";
             char precbuf[] = "input/18224_satagay_MPI-ESM-CRCOMPLETE_Kapsch_PREC_23050BCE-2100CE_adjustedtoCRU.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-
-		// last two numbers 01 only CRU+ERAinterim, 02 TRACE+CRU+ERAinterim
-        } else if (parameter[0].weatherchoice == 1901201801) {  // new for CryoGrid coupling
-            char tempbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_temp.csv";
-            char precbuf[] = "input/cryogrid_cruera_1901_2018_SpasskayaPad_prec.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 1201801) {  // new for CryoGrid coupling
-            char tempbuf[] = "input/cryogrid_cruera_0001_2018_SpasskayaPad_temp.csv";
-            char precbuf[] = "input/cryogrid_cruera_0001_2018_SpasskayaPad_prec.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-        } else if (parameter[0].weatherchoice == 1201802) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
-            char tempbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_temp.csv";
-            char precbuf[] = "input/cryogrid_tracecruera_1_2018_SpasskayaPad_prec.csv";
-            strcpy(dateinametemp, tempbuf);
-            strcpy(dateinameprec, precbuf);
-         } else if (parameter[0].weatherchoice == 1250002) {  // new for CryoGrid coupling ... with TRACE from 0-1901 or 30 for precipitation
-            char tempbuf[] = "input/cryogrid_tracecruera_1_2500_SpasskayaPad_temp.csv";
-            char precbuf[] = "input/cryogrid_tracecruera_1_2500_SpasskayaPad_prec.csv";
             strcpy(dateinametemp, tempbuf);
             strcpy(dateinameprec, precbuf);
         }

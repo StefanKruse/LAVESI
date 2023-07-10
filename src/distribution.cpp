@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// TODO temporary here
 extern vector<double> wdir, wspd;
 
 void Pollinationprobability(double x,

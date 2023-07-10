@@ -12,7 +12,7 @@ void Fire(Parameter* parameter,
                        vector<vector<Weather>>& world_weather_list,
                        vector<vector<Envirgrid>>& world_plot_list) {
 	
-	FILE* filepointer; // test for firegapoutput
+	FILE* filepointer; // for firegapoutput
     string dateiname;  
 	ostringstream s1;
 						   
@@ -44,17 +44,11 @@ void Fire(Parameter* parameter,
 		unsigned short int n_severeweather = 0;
 		unsigned short int n_extremeweather = 0;
 		
-		// determine thresholds that decide monthly fire weather severity
-		
+		// determine thresholds that decide monthly fire weather severity	
 		// Used for Lake Satagay localization 
 		unsigned short int firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
 		unsigned short int firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
 		unsigned short int firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
-		
-		// Used for Lake Khamra localization
-		// unsigned short int firethresh1 = 4.0;	// determine thresholds that decide monthly fire weather severity (previous values: 3.48, 6.9, 8.3)
-		// unsigned short int firethresh2 = 6.5;
-		// unsigned short int firethresh3 = 7.5;
 		
 		// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
 		if (weather_list[yearposition].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
@@ -211,6 +205,7 @@ void Fire(Parameter* parameter,
 			}
 		} else if (parameter[0].firemode == 0) {
 			ignition = false;
+			cout << "\tFire can't occur because firemode == 0!" << endl;
 		} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
 			if (parameter[0].ivort % parameter[0].firemode == 0) {
 				ignition = true;
@@ -233,10 +228,10 @@ void Fire(Parameter* parameter,
 			if (parameter[0].firemode == 112) {
 				fireimpactareasize = fireprobabilityrating * treecols; // Relative area of plot depending on fire intensity
 			} else if (parameter[0].firemode == 0) {
-				fireimpactareasize = 0.0;
-				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
+				fireimpactareasize = 0;
+			} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
 				fireimpactareasize = 5 * treecols; // To cover the complete plot area
-				}
+			}
 			
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 
@@ -273,7 +268,6 @@ void Fire(Parameter* parameter,
 								// fireprobabilityrating // 0 to 1 -> 0 = no fire; 1 = fire occurs definitely
 								// cur_plot.fire // 0 to 1 -> 0 = no fire impact, 1 = highest fire intensity
 								// cur_plot.Treedensityvalue // 0 to 10000 -> 0 = no trees; 10000 = very dense
-								// cur_plot.envirfireimpact // 0 to 10000 -> as calculated in main.cpp, 0 = fully wet; 10000 = very dry // ##########CHECK##########
 								
 								// Set FPR as cell fire intensity and scale by TWI (only of firemode == 112)
 								if (parameter[0].firemode == 112) {

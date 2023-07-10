@@ -8,7 +8,6 @@
 // 0.4 Computation environment
 //	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	--	//
 
-
 // 0.1 -----> Display in console
 parameterinputvis=0;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
@@ -22,12 +21,11 @@ outputmode=57;  						// (int) choice of data output files=> all yearly output o
 										// 0=="full"						=> all each year
 										// 1=="normal, gridded" 			=> every 20 years grid output
 										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
-										// 12 =="fire"						=> every year after spin up (density, biomass)
 										// 2=="OMP" 						=> each year computation time
 										// 3=="transect" 					=> every 100 years transect output and year >2000 output every 10 years until the end of the simulation
-										// 55=="FIRE"						=> Write output every simulation year (density, biomass) needed for testing fire component
-										// 56=="FIRE", temporal				=> Write output every simulation year, only including temporal "currencies" file -> fast
-										// 57=="FIRE", temporal + spatial	=> Write temporal "currencies" output every simulation year and spatial every 100 years-> slower
+										// 55=="LAVESI-FIRE_1"				=> Write output every simulation year (density, biomass)
+										// 56=="LAVESI-FIRE_2"	 			=> Write output every simulation year, only including temporal "currencies" file for fast computation
+										// 57=="LAVESI-FIRE_3"				=> Write temporal "currencies" output every simulation year and spatial every 100 years (used in research paper)
 outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
 										// 1==output of all tree data on the plot
@@ -35,11 +33,11 @@ outputall=1;						// (int 0,1) sampling area determination
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
-demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
+demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in DEM)
 demresolution=90;					// (int) Resolution in m of DEM
-elevationoffset=0.0;				// (double) in m adjust baselevel of climate input // CHANGED, was -200.0 before
+elevationoffset=0.0;				// (double) in m adjust baselevel of climate input
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
-firemode=112;						// (int) Wildfire simulation switch
+firemode=112;							// (int) LAVESI_FIRE wildfire simulation switch
 										// 0==no fires
 										// >0==fixed fire return interval, burning the whole plot at 100% intensity every x years (e.g. 50 means fire occurs every 50 years)
 										// 112==full dynamic fire module
@@ -55,7 +53,7 @@ firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many 
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
 
 // 0.4 Computation environment
-omp_num_threads=56;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=32;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -77,59 +75,15 @@ omp_num_threads=56;					// (int 1,system specific maximum) Number of cores used 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
 weatherchoice=1822406;			// (int) Type of weather forcing series 
-									// ... 22==TY02
-									// ... 22==CH17
-									// ... 23==CH02
-									// ... 24==CH06
-									// ... ... the site IDs refer to field locations visited at the southern Taymyr-Peninsula
-									// ... +++ 1901-2300 forcing at Lake Ilirney, Chuktoka; increasing 2100-2300 for RCPs
-									// ... 2300451== RCP 4.5
-									// ... 2300851== RCP 8.5
-									// ... +++ forcing with 501:1900 reconstruction, 1901:2018 CRU TS reanalysis and 2019:3000 CMIP5 predictions until 2500 and remain at final sim years or back to 1901-2000 period until 3000; naming conventions:
-									// ... ... 501 == start year x
-									// ... ... ...3000 == final year x
-									// ... ... .......2 == Transect 2 Taimyr Peninsula
-									// ... ... .......3 == Transect 3 Buor Khaya
-									// ... ... .......4 == Transect 4 Kolyma
-									// ... ... .......5 == Transect 5 Chukotka x
-									// ... ... ........1 == rcp2.6 x
-									// ... ... ........2 == rcp4.5
-									// ... ... ........3 == rcp8.5
-									// ... ... ........4 == rcp2.6 half => 1.3
-									// ... ... ........5 == rcp2.6 + cooling after 2300 back to 1901:1987
-									// ... ... ........6 == rcp2.6 half => 1.3 +  cooling after 2300 back to 1901:1987
-									// ... 18232 == Lake Khamra CRU TS reanalysis (1901 - 2018 CE)
-									// ... 182321 == Lake Khamra 1990 yrs TRACE data (0 - 1990 CE), NON-ADJUSTED -> works
-									// ... 182322 == Lake Khamra 1990 yrs TRACE data (0 - 1990 CE), ADJUSTED by comparison with CRUTS -> doesn't work!
-									// ... 182323 == Lake Khamra 2990 yrs TRACE data (1000 BCE - 1990 CE), NON-ADJUSTED -> works
-									// ... 182324 == Lake Khamra 2990 yrs TRACE data (1000 BCE - 1990 CE), ADJUSTED by comparison with CRUTS -> doesn't work!
-									// ... 18224 == Lake Satagay CRU TS v4.03 reanalysis (1901 - 2018 CE; 118 yrs) -> works
-									// ... 182241 == Lake Satagay CRU TS v4.06 reanalysis (1901 - 2021 CE; 121 yrs) -> works
-									// ... 182244 == Lake Satagay combined CRU-adjusted TraCE-21ka + CRU TS v4.06 (CRU-adjusted TraCE: 19049 - 1900 CE, CRU: 1901 - 2021 CE; 21520 yrs), including in the beginning 10x copies of first 50yrs of data for spinup (500 yrs) -> works
-									// ... 182245 == Lake Satagay MPI-ESM 25 ka, adjusted by CRU TS c4.06 for overlap 1901 - 1949 CE (coverage 22950 BCE - 1949 CE; 24900 yrs) -> doesn't work?
-									// ... 182246 == TEST for Lake Satagay MPI-ESM 25 ka, adjusted by CRU TS c4.06 for overlap 1901 - 1949 CE (coverage 1849 - 1949 CE; 24900 yrs) -> doesn't work?
-									// ... 182247 == Lake Satagay MPI-ESM 25 ka, both T+P adjusted by CRU TS c4.06 for overlap 1901 - 1949 CE (coverage 22950 BCE - 1949 CE; 24900 yrs) -> doesn't work?
-									// ... ... 2500511 == for simulation of repeat 2076:2125 time slice for 2500 years of the according climate scenario (currently 2.6 4.5 and 8.5 implemented) similar to above
-									// ... 1901 and 1201801 is for Spasskaya Pad ERA-adjusted CRU data
-									
-									// ##### Lake Satagay climate input #####
 									// ... ### Trace21ka ###
-									// 1822401 == Lake Satagay CRU-adjusted TraCE-21ka (CRU-adjusted TraCE: 20049 - 1990 CE; -->22040<-- yrs; last year 1990+1) -> works
-									// 1822402 == Lake Satagay combined CRU-adjusted TraCE-21ka + CRU TS v4.06 (CRU-adjusted TraCE: 20049 - 1900 CE, CRU: 1901 - 2021 CE; -->22071<-- yrs; last year 2021+1) -> works
-									// 1822403 == Lake Satagay combined CRU-adjusted TraCE-21ka + CMIP6 (CRU-adjusted TraCE: 20049 - 1849 CE, CMIP6: 1850 - 2100 CE; -->22150<-- yrs; last year 2100+1) -> works
-									// ... ### MPI-ESM 25ka ###
-									// 1822404 == Lake Satagay unadjusted MPI-ESM (22950 BCE - 1949 CE; -->24900<-- yrs; last year 1949+1) -> crashes after c. 9000 yrs (no trees growing)
-									// 1822405 == Lake Satagay CRU-adjusted MPI-ESM (22950 BCE - 1949 CE; -->24900<-- yrs; last year 1949+1) -> works (when lastyearweatherdata = 24900) -> ???
-									// 1822406 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM (Anne Dallmeyer) + CMIP6 (22950 BCE - 2100 CE; -->25051<-- yrs; last year 2100+1) -> works
-									// 1822409 == 1822406, but T is -5%
-									// 1822410 == 1822406, but T is +5%
-									// 1822411 == 1822406, but P is -5%
-									// 1822412 == 1822406, but P is +5%
-									// 1822413 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM-CR (Marie Kapsch) + CMIP6 (23050 BCE - 2100 CE; -->26051<-- yrs; last year 2100+1)
-									
-									// ... ### MPI-ESM1-2 CMIP6 ###
-									// 1822407 == Lake Satagay CMIP6 MPI-ESM1-2 combined HR+LR (historical+long run) simulation (1850 - 2100 CE; -->251 yrs<--; last year 2100+1) -> works
-									// 1822408 == Lake Satagay adjusted CMIP6 MPI-ESM1-2 combined HR+LR (historical+long run) simulation, adjusted to CRU (1850 - 2100 CE; -->251 yrs<--; last year 2100+1) -> ???
+									// 1822403 == Lake Satagay combined CRU-adjusted TraCE-21ka + CMIP6 (CRU-adjusted TraCE: 20049-1849 CE, CMIP6: 1850-2100 CE; total of 22150 yrs; last year 2100+1)
+									// ... ### MPI-ESM1.2 25ka ###
+									// 1822406 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM1.2 (Anne Dallmeyer) + CMIP6 (22950 BCE-2100 CE; total of 25051 yrs; last year 2100+1)
+									// 1822409 == 1822406, but T is -5% (used for sensitivity analysis)
+									// 1822410 == 1822406, but T is +5% (used for sensitivity analysis)
+									// 1822411 == 1822406, but P is -5% (used for sensitivity analysis)
+									// 1822412 == 1822406, but P is +5% (used for sensitivity analysis)
+									// 1822413 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM-CR (Marie Kapsch) + CMIP6 (23050 BCE-2100 CE; total of 25151 yrs; last year 2100+1)
 
 temperaturelapse_jan=0.004318;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 									// Chukotka elevation:	0.001722
@@ -147,7 +101,7 @@ temperaturelapse_jul=-0.006764;		// temperature lapse rate for januar (warmest m
 									// Kolyma . transect:	(-0.003582945/1000)=-0.000003582945 // ori per km
 									// Spasskaya Pad 100 km radius = -0.006764
 											
-precipitationlapse_year=0.197;	// precipitation lapse rate for whole year in mm prec per meter elevation
+precipitationlapse_year=0.197;		// precipitation lapse rate for whole year in mm prec per meter elevation
 									// Chukotka elevation:	0.01709
 									// .      . transect:	(-0.06041807/1000)=-0.00006041807
 									// Taimyr . transect:	(-0.03461587/1000)=-0.00003461587 // ori per km
@@ -181,7 +135,7 @@ windsource=10;						// (int) source of wind data
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=2101;			// (int) determined by the input data series (final year + 1)
 simduration=25051;					// (int) duration of the simulation period depending on the available weather data series
-stopatyear=26000;					// (int) simulation is stopped after this year
+stopatyear=30000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=500;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										// ...   0==without spin up phase
@@ -214,7 +168,7 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=990;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxy=990;					// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
 seedintro_maxx=990;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries

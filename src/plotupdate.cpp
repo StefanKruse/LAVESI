@@ -51,7 +51,7 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
 				for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
 					for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
 						if ((rastposi <= (int)((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-							&& (rastposj <= (int)((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  // TODO directly use in for loop boundaries
+							&& (rastposj <= (int)((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) { 
 							// distance calculation to determine the influence of the density value in spatial units ...
 							// ... and inserting the value at every position
 							double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
@@ -410,10 +410,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				else if (rn < 0.0001)
 					pEnvirgrid.litterheight0 = pEnvirgrid.litterheight0 * 0.01;
 
-				unsigned short litterlayergrowthrate =0.5 * 100;	//0.5 cm * 100 wegen Skalierung; evt mit TWI verknüpfen oder evt Lärchenwachstum
-											 // +( 1.0/( ((1.0/0.01)-(1.0/0.95))
-													  // *exp(-(1.0/2000.0)*(double) pEnvirgrid.maxthawing_depth) 
-													  // +(1/0.95)) ); 
+				unsigned short litterlayergrowthrate =0.5 * 100;
 				
 				pEnvirgrid.litterheight0+= litterlayergrowthrate;
 				
@@ -446,7 +443,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 
 			// double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
 			// double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-			double daempfung = (1.0 / 3000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000 (<- value before)
+			double daempfung = (1.0 / 3000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 3000
 
 			if (daempfung >= 0.9) {
 				daempfung = 0.9;
@@ -459,11 +456,11 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 
 			const unsigned short maxthawing_depth =
 				// 1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
-				1000.0 * (1.0 - daempfung) * 0.050*4 * std::sqrt(
+				1000.0 * (1.0 - daempfung) * 0.050*10 * std::sqrt(
 				
 					weather_list[yearposition].degreday + elefactor*(weather_list[yearposition].degredaymin - weather_list[yearposition].degreday) // reduction based on per 1000 m
 				
-				); // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 4 assumed use for tuning ALT
+				); // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 8 assumed use for tuning ALT at Lake Satagay
 // cout << maxthawing_depth << " | " << daempfung << " | " << weather_list[yearposition].degreday<< " & " << weather_list[yearposition].degredaymin << " & " << elefactor << " & " << ((double)pEnvirgrid.elevation / 10) << endl;
 			pEnvirgrid.maxthawing_depth = maxthawing_depth;
 			pEnvirgrid.Treedensityvalue = 0;

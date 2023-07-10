@@ -90,7 +90,7 @@ void Dataoutput(int t,
                 if (parameter[0].ivort % 20 == 0) {
                     outputgriddedbiomass = true;
                 }	
-			} else if (parameter[0].outputmode == 55) {  // "FIRE"
+			} else if (parameter[0].outputmode == 55) {  // fire output
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
                     //outputposition = true;
@@ -101,7 +101,7 @@ void Dataoutput(int t,
                     ausgabedensity = true;
 					outputgriddedbiomass = true;
                 }	// "FIRE" end
-			} else if (parameter[0].outputmode == 56) {  // "FIRE": Reduced version, temporal only
+			} else if (parameter[0].outputmode == 56) {  // fire output: reduced version, temporal only
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
                 } else {
@@ -109,7 +109,7 @@ void Dataoutput(int t,
                 }
 				
 				
-			} else if (parameter[0].outputmode == 57) {  // "FIRE": temporal+spatial
+			} else if (parameter[0].outputmode == 57) {  // fire output: temporal+spatial
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
 					// int counter = 30; // declaration of counter for fire gap output in years after a fire, in the beginning of the simulation
@@ -131,24 +131,6 @@ void Dataoutput(int t,
 					}
                 }
 				
-				
-			} else if (parameter[0].outputmode == 77) {  // example
-                outputcurrencies = true;
-
-                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
-                    ausgabedensity = true;
-
-                if (parameter[0].ivort % 20 == 0) { //every 20 yrs
-                    outputgriddedbiomass = true;
-                }
-            } else if (parameter[0].outputmode == 99) {  // "test"
-                // if (parameter[0].ivort % 20 == 0) {
-                if ((parameter[0].ivort % 20 == 0) | (parameter[0].ivort % 21 == 0)) {
-					outputcurrencies = true;
-                    ausgabedensity = true;
-                    outputgriddedbiomass = true;
-                    outputindividuals = true;
-                }
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
                
                 if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
@@ -175,22 +157,7 @@ void Dataoutput(int t,
 						| (parameter[0].ivort >= 1500)) {
 					outputtestarea=true; // area of 200x200 m with full tree output 
                 }
-            } else if (parameter[0].outputmode == 13) {  // "normal,gridded,large area"
-                outputcurrencies = true;
-				
-				if(parameter[0].ivort == 1)// write full Envirgrid once on sim start
-					ausgabedensity = true;
-					
-				if(parameter[0].ivort % 50 == 0)// test
-					outputgriddedbiomass = true;
 
-            } else if (parameter[0].outputmode == 12) {  // FIRE OUTPUT
-                outputcurrencies = true;
-
-				if(parameter[0].ivort >= 1)// write once sim start (after spinup)
-					ausgabedensity = true;
-					//outputgriddedbiomass = true; // each sim step!
-				
             } else if (parameter[0].outputmode == 2) {  // "OMP"
                 outputcurrencies = true;
             } else if (parameter[0].outputmode == 3) {  // "transect"
@@ -434,7 +401,7 @@ void Dataoutput(int t,
 			fireintensitymean = 0;
 		}
 		
-		// Assigning annual fire probability rating (FPR)
+		// assigning annual fire probability rating (FPR)
 		for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
 			vector<Weather>& weather_list = *posw;
 			
@@ -717,14 +684,14 @@ void Dataoutput(int t,
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday);
             fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
             fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsumjja);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[1]);//TODO: add here for all species output
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[1]);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[2]);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 			// Fire
-			fprintf(filepointer, "%d;", firecells); // ###FIRE###
-			fprintf(filepointer, "%f;", fireprobabilityrating); // ###FIRE###
-			fprintf(filepointer, "%f;", fireintensitymax); // ###FIRE###
-			fprintf(filepointer, "%f;", fireintensitymean); // ###FIRE###
+			fprintf(filepointer, "%d;", firecells); // fire module
+			fprintf(filepointer, "%f;", fireprobabilityrating); // fire module
+			fprintf(filepointer, "%f;", fireintensitymax); // fire module
+			fprintf(filepointer, "%f;", fireintensitymean); // fire module
             fprintf(filepointer, "\n");
 
             fclose(filepointer);
@@ -1426,7 +1393,7 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Envirgrowthimpact;");
                 // fprintf(filepointer, "Weather_type;");
                 fprintf(filepointer, "Thawing_depth;");
-                fprintf(filepointer, "Fire_intensity;");	// ###FIRE###
+                fprintf(filepointer, "Fire_intensity;");	// fire module
 				fprintf(filepointer, "TWI;");
                 fprintf(filepointer, "\n");
 

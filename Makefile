@@ -4,7 +4,7 @@ OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 
 .PHONY: all clean cleanoutput debug debugparallel format parallel
 
-all: LAVESI_WIND
+all: LAVESI_FIRE
 
 clean:
 	@rm -rf data*.csv nohup.out output/data*.csv t_*.txt pollDist* output/windgen*.txt output/*.png output/*.mp4 output/firegap/*_firegap.csv output/firegap/firegap_*.txt output/*.gif t_*.txt build LAVESI_WIND
@@ -33,5 +33,5 @@ build/%.o: src/%.cpp $(HEADERS)
 	@mkdir -p build
 	$(CXX) -c $< -o $@ $(FLAGS) $(CXXFLAGS) -c
 
-LAVESI_WIND: $(OBJS)
+LAVESI_FIRE: $(OBJS)
 	$(CXX) $^ -lm -o $@ $(FLAGS) $(CXXFLAGS)

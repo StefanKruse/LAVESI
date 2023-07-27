@@ -414,6 +414,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 											 // +( 1.0/( ((1.0/0.01)-(1.0/0.95))
 													  // *exp(-(1.0/2000.0)*(double) pEnvirgrid.maxthawing_depth) 
 													  // +(1/0.95)) ); 
+													// * 0.25 for smaller litter layer thickness
 				
 				pEnvirgrid.litterheight0+= litterlayergrowthrate;
 				
@@ -455,7 +456,9 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 			double elefactor = 0.0;
 			if (parameter[0].demlandscape)
 				// calculate relative elevatio position
-				elefactor = ((double)pEnvirgrid.elevation / 10) / (1000 + parameter[0].elevationoffset);
+				elefactor = 1-(((double)pEnvirgrid.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000));
+													// changed from elefactor = ((double)pEnvirgrid.elevation / 10) / (1000 + parameter[0].elevationoffset)
+													//changes are based on use of elevationoffset in establishment.cpp (line 76-78)
 
 			const unsigned short maxthawing_depth =
 				// 1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)

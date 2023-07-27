@@ -99,7 +99,7 @@ void Seedin() {
 							}
 						}
 						// sample one out of this
-						rn_species = speciesinroi[(int) 1 + (uniform.draw() * (speciesinroi.size()-1))-1];
+						rn_species = speciesinroi[(int) 1 + (uniform.draw() * (speciesinroi.size()))-1];
 					}
 				} else {
 					rn_species = parameter[0].specpres;

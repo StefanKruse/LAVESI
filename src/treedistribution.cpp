@@ -105,15 +105,15 @@ void Seedin() {
                     seed.namep = 0;
                     seed.line = ++parameter[0].lineakt;
                     seed.generation = 0;
-					if ((seed.ycoo/ 1000)<=500){
-						seed.origin=1;
-						}
-					else if((seed.xcoo/ 1000) <=200) {
+					// if ((seed.ycoo/ 1000)<=500){
+						// seed.origin=1;
+						// }
+					// else if((seed.xcoo/ 1000) <=200) {
 						seed.origin=2;
-						}
-					else if((seed.xcoo/ 1000) >900){
-						seed.origin=3;
-						}
+						// }
+					// else if((seed.xcoo/ 1000) >900){
+						// seed.origin=3;
+						// }
                     seed.incone = false;
                     // seed.weight = 1;
                     seed.age = 0;
@@ -130,7 +130,7 @@ void Seedin() {
 						//seed.droughtresist=100;
 						// seed.seednumber=normrand(1,0.5,0.33,1.66);
 
-						//seed.selving=0;
+						// seed.selving=0;
 						seed.selving=normrand(50,20,0,100);
 
 						// vector<unsigned int> copyneutralmarkers(24, 0);

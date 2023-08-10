@@ -13,7 +13,7 @@ do{
 	R2=uniform.draw() ;
 	z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std1+mu1;
 	z2=(sqrt(-2.0*log(R1))*sin(2.0*M_PI*R2))*std2+mu2;
-	R1=((rand()%2)? z1:z2);
+	R1=((uniform.draw() > 0.5)? z1:z2);
 }while(R1<=(Lbound) || R1>=(Rbound));
 //cout<<z1<<" "<<z2<<endl;
 return R1;
@@ -86,7 +86,7 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
  vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<double>  &selvinginfl, vector<unsigned int>& neutralinfl, vector<int>  &fathname)
 {
   //list<Tree*>& tree_list = *world_positon_b;
-
+RandomNumber<double> uniform(0, 1);
 		vector<Pollengrid>& pollen_list = *world_positon_p;
   direction=0.0;
   velocity=0.0;
@@ -107,6 +107,15 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
   pName.shrink_to_fit();
   thdpthinfl.clear();
   thdpthinfl.shrink_to_fit();
+  droghtinfl.clear();
+  droghtinfl.shrink_to_fit();
+  selvinginfl.clear();
+  selvinginfl.shrink_to_fit();
+  neutralinfl.clear();
+  neutralinfl.shrink_to_fit();
+  fathname.clear();
+  fathname.shrink_to_fit();
+
   		
 	if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 	{
@@ -124,20 +133,20 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
 	}
 	else if(parameter[0].windsource==0)
 	{
-	   direction=2*M_PI*(rand()/RAND_MAX); 
+	   direction=2*M_PI*uniform.draw(); 
 	   velocity=2.777;
 	}
 
 	if(cntr!=0 && (parameter[0].windsource==1))
 	{
-		ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*rand()/(RAND_MAX+1.0)));
+		ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*uniform.draw()-0.000001));
 	
 		direction=	M_PI * ( wdir.at(ripm) / 180 );
 		velocity=wspd.at(ripm);
 	}
 	else if((cntr==0 && (parameter[0].windsource==1) || parameter[0].windsource==0))
 	{
-	   direction=0.0+((double)(2*M_PI)*rand()/(RAND_MAX+1.0));
+	   direction=0.0+((double)(2*M_PI)*(uniform.draw()-0.000001));
 	   velocity=2.777;//10 km/h
 	}
 	
@@ -178,7 +187,7 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
 			//p*=
 			// f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
 			
-			if(rand()>p*RAND_MAX)
+			if(uniform.draw()>p)
 			{
 				++pos;
 			}

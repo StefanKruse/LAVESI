@@ -173,6 +173,17 @@ struct Pollengrid 	{
 	int name;
 	};
 
+
+struct Pollencalcs 	{
+	vector<unsigned int> neutral;	
+	vector<int> name;					
+	vector<double> seedweight;
+	vector<double> droughtresist;
+	vector<double> selving;
+	vector<int> pname;
+	unsigned short int filled;
+	};
+
 struct Parameter {
     // output
     bool parameterinputvis;

@@ -44,8 +44,9 @@ void Mortality(Parameter* parameter,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
                vector<vector<Weather>>& world_weather_list,
-		vector<vector<Pollengrid>>& world_pollen_list,
-		vector<vector<Envirgrid>>& world_plot_list);
+			   vector<vector<Pollengrid>>& world_pollen_list,
+	   		   vector<vector<Pollencalcs>>& world_pollcalcs,
+			   vector<vector<Envirgrid>>& world_plot_list);
 void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list);
 void Pollinationprobability(double x,
                             double y,

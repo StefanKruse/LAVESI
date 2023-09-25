@@ -75,6 +75,9 @@ void Dataoutput(int t,
         // define output based on parameter setting
         if (parameter[0].dataoutput == true) {
             if (parameter[0].outputmode == 0) {  // "full"
+                if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
+                    ausgabedensity = true;
+
                 if (parameter[0].spinupphase == true) {
                     outputcurrencies = true;
                     outputposition = true;

@@ -28,9 +28,6 @@ void Treeestablishment(Parameter* parameter,
             if (!seed.dead && !seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
 
-
-
-
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
@@ -250,10 +247,7 @@ void Treeestablishment(Parameter* parameter,
 						seed.dead = true;
 						seed_list.remove(i_seed);
 					}
-                } //else {
-                    // seed.dead = true;
-                    // seed_list.remove(i_seed);
-                // }
+                }
             }
         }  // seed_list loop
         seed_list.consolidate();

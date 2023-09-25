@@ -9,13 +9,11 @@ extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 
 void Seedin() {
-    RandomNumber<double> uniform(0, 1);
-	RandomNumber<double> uniformneutral(0, 999999);
     int aktort = 0;
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
         aktort++;
-         int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
+        int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         bool seedinput;
@@ -37,6 +35,9 @@ void Seedin() {
                 seednobuffer = parameter[0].seedintronumber;
             }
 
+			RandomNumber<double> uniform(0, 1);
+			// RandomNumber<double> uniformneutral(0, 999999);
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
             for (int n = 0; n < seednobuffer; n++) {
                 // calculate post-dispersal position
                 double jseed, iseed;
@@ -134,10 +135,11 @@ void Seedin() {
 						seed.selving=normrand(50,20,0,100);
 
 						// vector<unsigned int> copyneutralmarkers(24, 0);
-						// seed.neutralmarkers.resize(24,999999+1);
+						// seed.neutralmarkers.resize(24);
 						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
 						for(unsigned int i=0; i < 24; i++) {
-											seed.neutralmarkers[i] = uniformneutral.draw();
+											// seed.neutralmarkers[i] = uniformneutral.draw();
+											seed.neutralmarkers[i] = uniform.draw()*999999;
 										 }
 						// seed.neutralmarkers = copyneutralmarkers;
 					}
@@ -152,7 +154,11 @@ void Seedin() {
 					}
 					seed.currentweight=seed.seedweight;
 					if(seed.neutralmarkers.size() == 24 & seed.neutralmarkers[0] != 999999+1) { // filled vector and not the initialization value
-						seed_list.add_directly(std::move(seed));
+						#pragma omp critical
+						{
+							seed_list.add_directly(std::move(seed));
+							// seed_list.add(std::move(seed));
+						}
 					} else {
 						cout << " not enough markers " << endl;
 					}
@@ -209,7 +215,7 @@ void TreesIni(int maximal_word_length) {
             short unsigned int inbreedingbuf1, inbreedingbuf2,inbreedingbuf3,inbreedingbuf4,inbreedingbuf5,inbreedingbuf6,inbreedingbuf7,inbreedingbuf8,inbreedingbuf9,inbreedingbuf10,inbreedingbuf11,inbreedingbuf12,inbreedingbuf13,inbreedingbuf14,inbreedingbuf15,inbreedingbuf16,inbreedingbuf17,inbreedingbuf18,inbreedingbuf19,inbreedingbuf20,inbreedingbuf21,inbreedingbuf22,inbreedingbuf23,inbreedingbuf24;
             double heightbuf, dbasalbuf, dbreastbuf, seedweightbuf, droughtbuf, selvingbuf, inbreedingbuf;
 			RandomNumber<double> uniform(0, 1);
-			RandomNumber<double> uniformneutral(0, 999999);
+			// RandomNumber<double> uniformneutral(0, 999999);
 
             // ignoring the header the contents are appended to the tree array line by line
             while (fgets(puffer, 255555, f) != NULL) {
@@ -306,8 +312,6 @@ void TreesIni(int maximal_word_length) {
                         tree.neutralmarkers[22] = inbreedingbuf23;
                         tree.neutralmarkers[23] = inbreedingbuf24;
 
-
-
                     if (tree.cone == true) {
                         tree.coneheight = 65535;
                     }
@@ -368,8 +372,10 @@ void TreesIni(int maximal_word_length) {
 
 					}
 
-
-                    tree_list.add_directly(std::move(tree));
+					#pragma omp critical
+					{
+						tree_list.add_directly(std::move(tree));
+					}
                 }
                 counter++;
             }
@@ -382,7 +388,7 @@ void TreesIni(int maximal_word_length) {
 
 void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorList<Seed>>& world_seed_list, vector<vector<Weather>>& world_weather_list) {
     RandomNumber<double> uniform(0, 1);
-	RandomNumber<double> uniformneutral(0, 999999);
+	// RandomNumber<double> uniformneutral(0, 999999);
     // function parameters
     double logmodel_seeds_Po = 7.8997307;
     double logmodel_seeds_r = -0.6616466;
@@ -421,7 +427,8 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
 #endif
 
             // hinterland_maxlength is cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
-            for (int yposhint = -10; yposhint > -1 * parameter[0].hinterland_maxlength; yposhint = yposhint - 20) {
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
+			for (int yposhint = -10; yposhint > -1 * parameter[0].hinterland_maxlength; yposhint = yposhint - 20) {
                 double jultempi =
                     weather_list[yearposition].temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
 
@@ -560,7 +567,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
 						// seed.neutralmarkers=copyneutralmarkers;
 						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
 						for(unsigned int i=0; i < 24; i++) {
-											seed.neutralmarkers[i] = uniformneutral.draw();
+											seed.neutralmarkers[i] = uniform.draw()*999999;
 										 }
 						}
 						else
@@ -574,7 +581,11 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
 						}
 						seed.currentweight=seed.seedweight;
 
-                        seed_list.add_directly(std::move(seed));
+						#pragma omp critical
+						{
+							seed_list.add_directly(std::move(seed));
+							// seed_list.add(std::move(seed));
+						}
                     }
                 }
             }

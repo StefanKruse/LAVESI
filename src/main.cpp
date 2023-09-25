@@ -14,6 +14,7 @@ vector<VectorList<Tree>> world_tree_list;
 vector<VectorList<Seed>> world_seed_list;
 vector<vector<Weather>> world_weather_list;
 vector<vector<Pollengrid>> world_pollen_list;
+vector<vector<Pollencalcs>> world_pollcalcs;
 
 vector<vector<Envirgrid>> world_plot_list;
 vector<vector<Evaluation>> world_evaluation_list;
@@ -198,6 +199,7 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 			  world_seed_list, 
 			  world_weather_list,
 			  world_pollen_list,
+			  world_pollcalcs,
 			  world_plot_list);
     wspd.clear();
     wdir.clear();
@@ -240,22 +242,17 @@ void Spinupphase() {
             int lastyear = 0;
             int startlag = 5;
 
-            // firstyear = world_weather_list[0][0].jahr;
-            // cout << "firstyear: " << firstyear << endl;
-            // lastyear = world_weather_list[0][0].jahr + 100;
-            // cout << "lastyear: " << lastyear << endl;
-				if(parameter[0].ivort<=5000)
-					{
-					firstyear=world_weather_list[0][0].jahr;
-					
-					lastyear=world_weather_list[0][0].jahr+117;
-					}
-					else if (parameter[0].ivort>5000)
-					{
-					firstyear=world_weather_list[0][0].jahr+118;
-					
-					lastyear=world_weather_list[0][0].jahr+235;
-					}
+
+			if(parameter[0].ivort<=5000) {
+				firstyear=world_weather_list[0][0].jahr;
+				lastyear=world_weather_list[0][0].jahr+117;
+			}
+			else if (parameter[0].ivort>5000) {
+				firstyear=world_weather_list[0][0].jahr+118;
+				lastyear=world_weather_list[0][0].jahr+235;
+			}
+
+			
             // choose a random year for weather determination
             double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
@@ -266,7 +263,7 @@ void Spinupphase() {
 
             // go through all functions for vegetation dynamics
             vegetationDynamics(yearposition, jahr, t);
-
+	
         } while (parameter[0].ivort < parameter[0].ivortmax);
 
     } else if (parameter[0].ivortmax > 0 && parameter[0].stabilperiod == true) {
@@ -494,6 +491,7 @@ void createLists() {
             world_evaluation_list.emplace_back();  // include new evaluation_list in corresponding world list
             world_cryo_list.emplace_back();  // include new cryogrid_list in corresponding world list
 			world_pollen_list.emplace_back();
+			world_pollcalcs.emplace_back();
             if (parameter[0].resetyear > 0) {
                 // Create lists for resetting to a certain year
                 world_tree_list_copy.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
@@ -802,6 +800,8 @@ void initialiseMaps() {
         vector<Envirgrid>& plot_list = *posw;
 		vector<vector<Pollengrid>>::iterator posw2=(world_pollen_list.begin()+aktort);
 		vector<Pollengrid>& pollen_list = *posw2;
+		vector<vector<Pollencalcs>>::iterator posw3=(world_pollcalcs.begin()+aktort);
+		vector<Pollencalcs>& pollcalcs = *posw3;
         vector<vector<Evaluation>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
         vector<Evaluation>& evaluation_list = *posiwelt;
         aktort++;
@@ -811,15 +811,14 @@ void initialiseMaps() {
         // necessary for the global lists
          int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
          int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-		double lent=(double) sqrt(parameter[0].pollengridpoints);
-		
+		 
+		// double lent=(double) sqrt(parameter[0].pollengridpoints);
 		double lentx=(double) (parameter[0].pollengridxpoints);
 		double lenty=(double) (parameter[0].pollengridypoints);
 		
 		//THIS LOOP CREATES THE POLLEN GRID ON EACH PLOT WITH A RESOLUTION OF 
 		//(parameter[0].pollengridxpoints)*(parameter[0].pollengridypoints);
-		for(int kartenpos=0;kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++)
-		{
+		for(int kartenpos=0; kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++) {
 			Pollengrid pPollengrid;
 			pPollengrid.neutralmarkers.reserve(24*100000); // reserve memory
 			pPollengrid.Treenames.reserve(100000); // reserve memory
@@ -841,8 +840,19 @@ void initialiseMaps() {
 			
 			pollen_list.emplace_back(std::move(pPollengrid));
 		}
+		
+		for(int kartenpos=0; kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++) {
+			Pollencalcs pPollencalcs;
+			pPollencalcs.neutral.reserve(24*10000); // reserve memory
+			pPollencalcs.name.reserve(1000);					
+			pPollencalcs.seedweight.reserve(1000);
+			pPollencalcs.droughtresist.reserve(1000);
+			pPollencalcs.selving.reserve(1000);
+			pPollencalcs.pname.reserve(1000);
+			pPollencalcs.filled=0;
 
-
+			pollcalcs.emplace_back(std::move(pPollencalcs));
+		}
 
         short int initialelevation = 0;
         if (parameter[0].mapylength == 1)

@@ -354,24 +354,24 @@ void passWeather() {
 
             // July temp for both
             if (weather_list[iweather].temp7monthmeaniso < 10.0) {
-                weather_list[iweather].julisothermrestriktion = 0; // from 1.0
+                weather_list[iweather].julisothermrestriktion = 1.0;
             } else {
                 weather_list[iweather].julisothermrestriktion = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeaniso - 10.0) / 10.0);
             }
             if (weather_list[iweather].temp7monthmeanisomin < 10.0) {
-                weather_list[iweather].julisothermrestriktionmin = 0; // from 1.0
+                weather_list[iweather].julisothermrestriktionmin = 1.0;
             } else {
                 weather_list[iweather].julisothermrestriktionmin = 1.0 - fabs(2.0 * (weather_list[iweather].temp7monthmeanisomin - 10.0) / 10.0);
             }
 
             // ndd for both
             if (weather_list[iweather].vegetationperiodlengthiso < 60.0) {
-                weather_list[iweather].nddrestriktion = 0; // from 1.0
+                weather_list[iweather].nddrestriktion = 1.0;
             } else {
                 weather_list[iweather].nddrestriktion = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthiso) - 60.0) / 60.0);
             }
             if (weather_list[iweather].vegetationperiodlengthisomin < 60.0) {
-                weather_list[iweather].nddrestriktionmin = 0; // from 1.0
+                weather_list[iweather].nddrestriktionmin = 1.0;
             } else {
                 weather_list[iweather].nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
@@ -529,8 +529,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         string item;
 
         // define input folder
-		if ((parameter[0].weatherchoice == 1000000283) /* ### FOR EN22-065 ### */ ||
-		(parameter[0].weatherchoice == 1000000284)) /* ### FOR EN22-066 ### */ { 
+        if ((parameter[0].weatherchoice == 1000000283) /* ### FOR EN22-065 ### */ ||
+		(parameter[0].weatherchoice == 1000000284)) /* ### FOR EN22-066 ### */ {
 		foldername << "cell_1";
 		} else if ((parameter[0].weatherchoice == 1000000285) /* ### FOR EN22-067 ### */ ||
 		(parameter[0].weatherchoice == 1000000286) /* ### FOR EN22-068 ### */ ||
@@ -538,9 +538,9 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000289) /* ### FOR EN22-071 ### */ ||
 		(parameter[0].weatherchoice == 1000000290) /* ### FOR EN22-072 ### */ ||
 		(parameter[0].weatherchoice == 1000000291) /* ### FOR EN22-073 ### */ ||
-		(parameter[0].weatherchoice == 1000000292)) /* ### FOR EN22-074 ### */ { 
+		(parameter[0].weatherchoice == 1000000292)) /* ### FOR EN22-074 ### */ {
 		foldername << "cell_2";
-		} else if ((parameter[0].weatherchoice == 1000000287)) /* ### FOR EN22-069 ### */ { 
+		} else if ((parameter[0].weatherchoice == 1000000287)) /* ### FOR EN22-069 ### */ {
 		foldername << "cell_3";
 		} else if ((parameter[0].weatherchoice == 1000000219) /* ### FOR EN22-001 ### */ ||
 		(parameter[0].weatherchoice == 1000000220) /* ### FOR EN22-002 ### */ ||
@@ -550,14 +550,14 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000275) /* ### FOR EN22-057 ### */ ||
 		(parameter[0].weatherchoice == 1000000276) /* ### FOR EN22-058 ### */ ||
 		(parameter[0].weatherchoice == 1000000277) /* ### FOR EN22-059 ### */ ||
-		(parameter[0].weatherchoice == 1000000278)) /* ### FOR EN22-060 ### */ { 
+		(parameter[0].weatherchoice == 1000000278)) /* ### FOR EN22-060 ### */ {
 		foldername << "cell_4";
 		} else if ((parameter[0].weatherchoice == 1000000279) /* ### FOR EN22-061 ### */ ||
-		(parameter[0].weatherchoice == 1000000280)) /* ### FOR EN22-062 ### */ { 
+		(parameter[0].weatherchoice == 1000000280)) /* ### FOR EN22-062 ### */ {
 		foldername << "cell_5";
 		} else if ((parameter[0].weatherchoice == 1000000281) /* ### FOR EN22-063 ### */ ||
 		(parameter[0].weatherchoice == 1000000282) /* ### FOR EN22-064 ### */ ||
-		(parameter[0].weatherchoice == 1000000293)) /* ### FOR EN22-075 ### */ { 
+		(parameter[0].weatherchoice == 1000000293)) /* ### FOR EN22-075 ### */ {
 		foldername << "cell_6";
 		} else if ((parameter[0].weatherchoice == 1000000148) /* ### FOR EN18075 ### */ ||
 		(parameter[0].weatherchoice == 1000000149) /* ### FOR EN18076 ### */ ||
@@ -567,14 +567,15 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000153) /* ### FOR EN18080 ### */ ||
 		(parameter[0].weatherchoice == 1000000154) /* ### FOR EN18081 ### */ ||
 		(parameter[0].weatherchoice == 1000000155) /* ### FOR EN18082 ### */ ||
-		(parameter[0].weatherchoice == 1000000156)) /* ### FOR EN18083 ### */ { 
+		(parameter[0].weatherchoice == 1000000156)) /* ### FOR EN18083 ### */ {
+			cout << "usingWinddata!" << endl;
 		foldername << "cell_7";
 		} else if ((parameter[0].weatherchoice == 1000000144) /* ### FOR EN18071 ### */ ||
 		(parameter[0].weatherchoice == 1000000145) /* ### FOR EN18072 ### */ ||
 		(parameter[0].weatherchoice == 1000000146) /* ### FOR EN18073 ### */ ||
-		(parameter[0].weatherchoice == 1000000147)) /* ### FOR EN18074 ### */ { 
+		(parameter[0].weatherchoice == 1000000147)) /* ### FOR EN18074 ### */ {
 		foldername << "cell_8";
-		} else if ((parameter[0].weatherchoice == 1000000132)) /* ### FOR EN18062 ### */ { 
+		} else if ((parameter[0].weatherchoice == 1000000132)) /* ### FOR EN18062 ### */ {
 		foldername << "cell_9";
 		} else if ((parameter[0].weatherchoice == 1000000131) /* ### FOR EN18061 ### */ ||
 		(parameter[0].weatherchoice == 1000000176) /* ### FOR EN21220 ### */ ||
@@ -615,12 +616,12 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000215) /* ### FOR EN21259 ### */ ||
 		(parameter[0].weatherchoice == 1000000216) /* ### FOR EN21260 ### */ ||
 		(parameter[0].weatherchoice == 1000000217) /* ### FOR EN21261 ### */ ||
-		(parameter[0].weatherchoice == 1000000218)) /* ### FOR EN21262 ### */ { 
+		(parameter[0].weatherchoice == 1000000218)) /* ### FOR EN21262 ### */ {
 		foldername << "cell_10";
 		} else if ((parameter[0].weatherchoice == 1000000184) /* ### FOR EN21228 ### */ ||
 		(parameter[0].weatherchoice == 1000000185) /* ### FOR EN21229 ### */ ||
 		(parameter[0].weatherchoice == 1000000186) /* ### FOR EN21230 ### */ ||
-		(parameter[0].weatherchoice == 1000000187)) /* ### FOR EN21231 ### */ { 
+		(parameter[0].weatherchoice == 1000000187)) /* ### FOR EN21231 ### */ {
 		foldername << "cell_11";
 		} else if ((parameter[0].weatherchoice == 1000000256) /* ### FOR EN22-038 ### */ ||
 		(parameter[0].weatherchoice == 1000000257) /* ### FOR EN22-039 ### */ ||
@@ -638,24 +639,24 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000269) /* ### FOR EN22-051 ### */ ||
 		(parameter[0].weatherchoice == 1000000270) /* ### FOR EN22-052 ### */ ||
 		(parameter[0].weatherchoice == 1000000271) /* ### FOR EN22-053 ### */ ||
-		(parameter[0].weatherchoice == 1000000272)) /* ### FOR EN22-054 ### */ { 
+		(parameter[0].weatherchoice == 1000000272)) /* ### FOR EN22-054 ### */ {
 		foldername << "cell_12";
 		} else if ((parameter[0].weatherchoice == 1000000255) /* ### FOR EN22-037 ### */ ||
-		(parameter[0].weatherchoice == 1000000273)) /* ### FOR EN22-055 ### */ { 
+		(parameter[0].weatherchoice == 1000000273)) /* ### FOR EN22-055 ### */ {
 		foldername << "cell_13";
 		} else if ((parameter[0].weatherchoice == 1000000137) /* ### FOR EN18067 ### */ ||
 		(parameter[0].weatherchoice == 1000000138) /* ### FOR EN18068 ### */ ||
 		(parameter[0].weatherchoice == 1000000140) /* ### FOR EN18070_centre ### */ ||
 		(parameter[0].weatherchoice == 1000000141) /* ### FOR EN18070_edge ### */ ||
 		(parameter[0].weatherchoice == 1000000142) /* ### FOR EN18070_end ### */ ||
-		(parameter[0].weatherchoice == 1000000143)) /* ### FOR EN18070_transition ### */ { 
+		(parameter[0].weatherchoice == 1000000143)) /* ### FOR EN18070_transition ### */ {
 		foldername << "cell_14";
-		} else if ((parameter[0].weatherchoice == 1000000139)) /* ### FOR EN18069 ### */ { 
+		} else if ((parameter[0].weatherchoice == 1000000139)) /* ### FOR EN18069 ### */ {
 		foldername << "cell_15";
 		} else if ((parameter[0].weatherchoice == 1000000133) /* ### FOR EN18063 ### */ ||
 		(parameter[0].weatherchoice == 1000000134) /* ### FOR EN18064 ### */ ||
 		(parameter[0].weatherchoice == 1000000135) /* ### FOR EN18065 ### */ ||
-		(parameter[0].weatherchoice == 1000000136)) /* ### FOR EN18066 ### */ { 
+		(parameter[0].weatherchoice == 1000000136)) /* ### FOR EN18066 ### */ {
 		foldername << "cell_16";
 		} else if ((parameter[0].weatherchoice == 1000000157) /* ### FOR EN21201 ### */ ||
 		(parameter[0].weatherchoice == 1000000159) /* ### FOR EN21203 ### */ ||
@@ -668,7 +669,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000172) /* ### FOR EN21216 ### */ ||
 		(parameter[0].weatherchoice == 1000000173) /* ### FOR EN21217 ### */ ||
 		(parameter[0].weatherchoice == 1000000174) /* ### FOR EN21218 ### */ ||
-		(parameter[0].weatherchoice == 1000000175)) /* ### FOR EN21219 ### */ { 
+		(parameter[0].weatherchoice == 1000000175)) /* ### FOR EN21219 ### */ {
 		foldername << "cell_17";
 		} else if ((parameter[0].weatherchoice == 1000000158) /* ### FOR EN21202 ### */ ||
 		(parameter[0].weatherchoice == 1000000162) /* ### FOR EN21206 ### */ ||
@@ -676,7 +677,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000164) /* ### FOR EN21208 ### */ ||
 		(parameter[0].weatherchoice == 1000000168) /* ### FOR EN21212 ### */ ||
 		(parameter[0].weatherchoice == 1000000169) /* ### FOR EN21213 ### */ ||
-		(parameter[0].weatherchoice == 1000000170)) /* ### FOR EN21214 ### */ { 
+		(parameter[0].weatherchoice == 1000000170)) /* ### FOR EN21214 ### */ {
 		foldername << "cell_18";
 		} else if ((parameter[0].weatherchoice == 1000000080) /* ### FOR 16-KP-V20 ### */ ||
 		(parameter[0].weatherchoice == 1000000081) /* ### FOR 16-KP-V21 ### */ ||
@@ -697,7 +698,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000096) /* ### FOR 16-KP-V36 ### */ ||
 		(parameter[0].weatherchoice == 1000000097) /* ### FOR 16-KP-V37 ### */ ||
 		(parameter[0].weatherchoice == 1000000098) /* ### FOR 16-KP-V38 ### */ ||
-		(parameter[0].weatherchoice == 1000000099)) /* ### FOR 16-KP-V39 ### */ { 
+		(parameter[0].weatherchoice == 1000000099)) /* ### FOR 16-KP-V39 ### */ {
 		foldername << "cell_19";
 		} else if ((parameter[0].weatherchoice == 1000000223) /* ### FOR EN22-005 ### */ ||
 		(parameter[0].weatherchoice == 1000000224) /* ### FOR EN22-006 ### */ ||
@@ -730,10 +731,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000251) /* ### FOR EN22-033 ### */ ||
 		(parameter[0].weatherchoice == 1000000252) /* ### FOR EN22-034 ### */ ||
 		(parameter[0].weatherchoice == 1000000253) /* ### FOR EN22-035 ### */ ||
-		(parameter[0].weatherchoice == 1000000254)) /* ### FOR EN22-036 ### */ { 
+		(parameter[0].weatherchoice == 1000000254)) /* ### FOR EN22-036 ### */ {
 		foldername << "cell_20";
 		} else if ((parameter[0].weatherchoice == 1000000129) /* ### FOR B19-T1 ### */ ||
-		(parameter[0].weatherchoice == 1000000130)) /* ### FOR B19-T2 ### */ { 
+		(parameter[0].weatherchoice == 1000000130)) /* ### FOR B19-T2 ### */ {
 		foldername << "cell_21";
 		} else if ((parameter[0].weatherchoice == 1000000009) /* ### FOR 12-KO-02a ### */ ||
 		(parameter[0].weatherchoice == 1000000010) /* ### FOR 12-KO-02b ### */ ||
@@ -741,7 +742,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000012) /* ### FOR 12-KO-03b ### */ ||
 		(parameter[0].weatherchoice == 1000000013) /* ### FOR 12-KO-04a ### */ ||
 		(parameter[0].weatherchoice == 1000000014) /* ### FOR 12-KO-04b ### */ ||
-		(parameter[0].weatherchoice == 1000000015)) /* ### FOR 12-KO-05 ### */ { 
+		(parameter[0].weatherchoice == 1000000015)) /* ### FOR 12-KO-05 ### */ {
 		foldername << "cell_22";
 		} else if ((parameter[0].weatherchoice == 1000000073) /* ### FOR 16-KP-V13 ### */ ||
 		(parameter[0].weatherchoice == 1000000074) /* ### FOR 16-KP-V14 ### */ ||
@@ -758,7 +759,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000124) /* ### FOR 18-BIL-02-EN18032 ### */ ||
 		(parameter[0].weatherchoice == 1000000125) /* ### FOR 18-BIL-02-EN18033 ### */ ||
 		(parameter[0].weatherchoice == 1000000126) /* ### FOR 18-BIL-02-EN18034 ### */ ||
-		(parameter[0].weatherchoice == 1000000127)) /* ### FOR 18-BIL-02-EN18035 ### */ { 
+		(parameter[0].weatherchoice == 1000000127)) /* ### FOR 18-BIL-02-EN18035 ### */ {
 		foldername << "cell_23";
 		} else if ((parameter[0].weatherchoice == 1000000061) /* ### FOR 16-KP-V01 ### */ ||
 		(parameter[0].weatherchoice == 1000000062) /* ### FOR 16-KP-V02 ### */ ||
@@ -822,10 +823,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000057) /* ### FOR 16-KP-04-EN18052 ### */ ||
 		(parameter[0].weatherchoice == 1000000058) /* ### FOR 16-KP-04-EN18053 ### */ ||
 		(parameter[0].weatherchoice == 1000000059) /* ### FOR 16-KP-04-EN18054 ### */ ||
-		(parameter[0].weatherchoice == 1000000060)) /* ### FOR 16-KP-04-EN18055 ### */ { 
+		(parameter[0].weatherchoice == 1000000060)) /* ### FOR 16-KP-04-EN18055 ### */ {
 		foldername << "cell_24";
 		} else if ((parameter[0].weatherchoice == 1000000003) /* ### FOR 11-CH-06I ### */ ||
-		(parameter[0].weatherchoice == 1000000004)) /* ### FOR 11-CH-06III ### */ { 
+		(parameter[0].weatherchoice == 1000000004)) /* ### FOR 11-CH-06III ### */ {
 		foldername << "cell_25";
 		} else if ((parameter[0].weatherchoice == 1000000001) /* ### FOR 11-CH-02II ### */ ||
 		(parameter[0].weatherchoice == 1000000002) /* ### FOR 11-CH-02III ### */ ||
@@ -836,14 +837,14 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000296) /* ### FOR TY07VI ### */ ||
 		(parameter[0].weatherchoice == 1000000297) /* ### FOR TY07VII ### */ ||
 		(parameter[0].weatherchoice == 1000000298) /* ### FOR TY09VI ### */ ||
-		(parameter[0].weatherchoice == 1000000299)) /* ### FOR TY09VII ### */ { 
+		(parameter[0].weatherchoice == 1000000299)) /* ### FOR TY09VII ### */ {
 		foldername << "cell_26";
 		} else if ((parameter[0].weatherchoice == 1000000016) /* ### FOR 13-TY-02-VI ### */ ||
 		(parameter[0].weatherchoice == 1000000017) /* ### FOR 13-TY-02-VII ### */ ||
 		(parameter[0].weatherchoice == 1000000294) /* ### FOR TY04VI ### */ ||
-		(parameter[0].weatherchoice == 1000000295)) /* ### FOR TY04VII ### */ { 
+		(parameter[0].weatherchoice == 1000000295)) /* ### FOR TY04VII ### */ {
 		foldername << "cell_27";
-		} else if ((parameter[0].weatherchoice == 1000000128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ { 
+		} else if ((parameter[0].weatherchoice == 1000000128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ {
 		foldername << "cell_28";
 		} else if ((parameter[0].weatherchoice == 1000000018) /* ### FOR 14-OM-02-V1 ### */ ||
 		(parameter[0].weatherchoice == 1000000019) /* ### FOR 14-OM-02-V2 ### */ ||
@@ -855,10 +856,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 1000000025) /* ### FOR 14-OM-TRANS4 ### */ ||
 		(parameter[0].weatherchoice == 1000000026) /* ### FOR 14-OM-TRANS5 ### */ ||
 		(parameter[0].weatherchoice == 1000000028) /* ### FOR 14-OM-TRANS6 ### */ ||
-		(parameter[0].weatherchoice == 1000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ { 
+		(parameter[0].weatherchoice == 1000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ {
 		foldername << "cell_29";
-		if ((parameter[0].weatherchoice == 2000000283) /* ### FOR EN22-065 ### */ ||
-		(parameter[0].weatherchoice == 2000000284)) /* ### FOR EN22-066 ### */ { 
+		} else if ((parameter[0].weatherchoice == 2000000283) /* ### FOR EN22-065 ### */ ||
+		(parameter[0].weatherchoice == 2000000284)) /* ### FOR EN22-066 ### */ {
 		foldername << "cell_1";
 		} else if ((parameter[0].weatherchoice == 2000000285) /* ### FOR EN22-067 ### */ ||
 		(parameter[0].weatherchoice == 2000000286) /* ### FOR EN22-068 ### */ ||
@@ -866,9 +867,9 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000289) /* ### FOR EN22-071 ### */ ||
 		(parameter[0].weatherchoice == 2000000290) /* ### FOR EN22-072 ### */ ||
 		(parameter[0].weatherchoice == 2000000291) /* ### FOR EN22-073 ### */ ||
-		(parameter[0].weatherchoice == 2000000292)) /* ### FOR EN22-074 ### */ { 
+		(parameter[0].weatherchoice == 2000000292)) /* ### FOR EN22-074 ### */ {
 		foldername << "cell_2";
-		} else if ((parameter[0].weatherchoice == 2000000287)) /* ### FOR EN22-069 ### */ { 
+		} else if ((parameter[0].weatherchoice == 2000000287)) /* ### FOR EN22-069 ### */ {
 		foldername << "cell_3";
 		} else if ((parameter[0].weatherchoice == 2000000219) /* ### FOR EN22-001 ### */ ||
 		(parameter[0].weatherchoice == 2000000220) /* ### FOR EN22-002 ### */ ||
@@ -878,14 +879,14 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000275) /* ### FOR EN22-057 ### */ ||
 		(parameter[0].weatherchoice == 2000000276) /* ### FOR EN22-058 ### */ ||
 		(parameter[0].weatherchoice == 2000000277) /* ### FOR EN22-059 ### */ ||
-		(parameter[0].weatherchoice == 2000000278)) /* ### FOR EN22-060 ### */ { 
+		(parameter[0].weatherchoice == 2000000278)) /* ### FOR EN22-060 ### */ {
 		foldername << "cell_4";
 		} else if ((parameter[0].weatherchoice == 2000000279) /* ### FOR EN22-061 ### */ ||
-		(parameter[0].weatherchoice == 2000000280)) /* ### FOR EN22-062 ### */ { 
+		(parameter[0].weatherchoice == 2000000280)) /* ### FOR EN22-062 ### */ {
 		foldername << "cell_5";
 		} else if ((parameter[0].weatherchoice == 2000000281) /* ### FOR EN22-063 ### */ ||
 		(parameter[0].weatherchoice == 2000000282) /* ### FOR EN22-064 ### */ ||
-		(parameter[0].weatherchoice == 2000000293)) /* ### FOR EN22-075 ### */ { 
+		(parameter[0].weatherchoice == 2000000293)) /* ### FOR EN22-075 ### */ {
 		foldername << "cell_6";
 		} else if ((parameter[0].weatherchoice == 2000000148) /* ### FOR EN18075 ### */ ||
 		(parameter[0].weatherchoice == 2000000149) /* ### FOR EN18076 ### */ ||
@@ -895,14 +896,15 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000153) /* ### FOR EN18080 ### */ ||
 		(parameter[0].weatherchoice == 2000000154) /* ### FOR EN18081 ### */ ||
 		(parameter[0].weatherchoice == 2000000155) /* ### FOR EN18082 ### */ ||
-		(parameter[0].weatherchoice == 2000000156)) /* ### FOR EN18083 ### */ { 
+		(parameter[0].weatherchoice == 2000000156)) /* ### FOR EN18083 ### */ {
+			cout << "usingWinddata2!" << endl;
 		foldername << "cell_7";
 		} else if ((parameter[0].weatherchoice == 2000000144) /* ### FOR EN18071 ### */ ||
 		(parameter[0].weatherchoice == 2000000145) /* ### FOR EN18072 ### */ ||
 		(parameter[0].weatherchoice == 2000000146) /* ### FOR EN18073 ### */ ||
-		(parameter[0].weatherchoice == 2000000147)) /* ### FOR EN18074 ### */ { 
+		(parameter[0].weatherchoice == 2000000147)) /* ### FOR EN18074 ### */ {
 		foldername << "cell_8";
-		} else if ((parameter[0].weatherchoice == 2000000132)) /* ### FOR EN18062 ### */ { 
+		} else if ((parameter[0].weatherchoice == 2000000132)) /* ### FOR EN18062 ### */ {
 		foldername << "cell_9";
 		} else if ((parameter[0].weatherchoice == 2000000131) /* ### FOR EN18061 ### */ ||
 		(parameter[0].weatherchoice == 2000000176) /* ### FOR EN21220 ### */ ||
@@ -943,12 +945,12 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000215) /* ### FOR EN21259 ### */ ||
 		(parameter[0].weatherchoice == 2000000216) /* ### FOR EN21260 ### */ ||
 		(parameter[0].weatherchoice == 2000000217) /* ### FOR EN21261 ### */ ||
-		(parameter[0].weatherchoice == 2000000218)) /* ### FOR EN21262 ### */ { 
+		(parameter[0].weatherchoice == 2000000218)) /* ### FOR EN21262 ### */ {
 		foldername << "cell_10";
 		} else if ((parameter[0].weatherchoice == 2000000184) /* ### FOR EN21228 ### */ ||
 		(parameter[0].weatherchoice == 2000000185) /* ### FOR EN21229 ### */ ||
 		(parameter[0].weatherchoice == 2000000186) /* ### FOR EN21230 ### */ ||
-		(parameter[0].weatherchoice == 2000000187)) /* ### FOR EN21231 ### */ { 
+		(parameter[0].weatherchoice == 2000000187)) /* ### FOR EN21231 ### */ {
 		foldername << "cell_11";
 		} else if ((parameter[0].weatherchoice == 2000000256) /* ### FOR EN22-038 ### */ ||
 		(parameter[0].weatherchoice == 2000000257) /* ### FOR EN22-039 ### */ ||
@@ -966,24 +968,24 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000269) /* ### FOR EN22-051 ### */ ||
 		(parameter[0].weatherchoice == 2000000270) /* ### FOR EN22-052 ### */ ||
 		(parameter[0].weatherchoice == 2000000271) /* ### FOR EN22-053 ### */ ||
-		(parameter[0].weatherchoice == 2000000272)) /* ### FOR EN22-054 ### */ { 
+		(parameter[0].weatherchoice == 2000000272)) /* ### FOR EN22-054 ### */ {
 		foldername << "cell_12";
 		} else if ((parameter[0].weatherchoice == 2000000255) /* ### FOR EN22-037 ### */ ||
-		(parameter[0].weatherchoice == 2000000273)) /* ### FOR EN22-055 ### */ { 
+		(parameter[0].weatherchoice == 2000000273)) /* ### FOR EN22-055 ### */ {
 		foldername << "cell_13";
 		} else if ((parameter[0].weatherchoice == 2000000137) /* ### FOR EN18067 ### */ ||
 		(parameter[0].weatherchoice == 2000000138) /* ### FOR EN18068 ### */ ||
 		(parameter[0].weatherchoice == 2000000140) /* ### FOR EN18070_centre ### */ ||
 		(parameter[0].weatherchoice == 2000000141) /* ### FOR EN18070_edge ### */ ||
 		(parameter[0].weatherchoice == 2000000142) /* ### FOR EN18070_end ### */ ||
-		(parameter[0].weatherchoice == 2000000143)) /* ### FOR EN18070_transition ### */ { 
+		(parameter[0].weatherchoice == 2000000143)) /* ### FOR EN18070_transition ### */ {
 		foldername << "cell_14";
-		} else if ((parameter[0].weatherchoice == 2000000139)) /* ### FOR EN18069 ### */ { 
+		} else if ((parameter[0].weatherchoice == 2000000139)) /* ### FOR EN18069 ### */ {
 		foldername << "cell_15";
 		} else if ((parameter[0].weatherchoice == 2000000133) /* ### FOR EN18063 ### */ ||
 		(parameter[0].weatherchoice == 2000000134) /* ### FOR EN18064 ### */ ||
 		(parameter[0].weatherchoice == 2000000135) /* ### FOR EN18065 ### */ ||
-		(parameter[0].weatherchoice == 2000000136)) /* ### FOR EN18066 ### */ { 
+		(parameter[0].weatherchoice == 2000000136)) /* ### FOR EN18066 ### */ {
 		foldername << "cell_16";
 		} else if ((parameter[0].weatherchoice == 2000000157) /* ### FOR EN21201 ### */ ||
 		(parameter[0].weatherchoice == 2000000159) /* ### FOR EN21203 ### */ ||
@@ -996,7 +998,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000172) /* ### FOR EN21216 ### */ ||
 		(parameter[0].weatherchoice == 2000000173) /* ### FOR EN21217 ### */ ||
 		(parameter[0].weatherchoice == 2000000174) /* ### FOR EN21218 ### */ ||
-		(parameter[0].weatherchoice == 2000000175)) /* ### FOR EN21219 ### */ { 
+		(parameter[0].weatherchoice == 2000000175)) /* ### FOR EN21219 ### */ {
 		foldername << "cell_17";
 		} else if ((parameter[0].weatherchoice == 2000000158) /* ### FOR EN21202 ### */ ||
 		(parameter[0].weatherchoice == 2000000162) /* ### FOR EN21206 ### */ ||
@@ -1004,7 +1006,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000164) /* ### FOR EN21208 ### */ ||
 		(parameter[0].weatherchoice == 2000000168) /* ### FOR EN21212 ### */ ||
 		(parameter[0].weatherchoice == 2000000169) /* ### FOR EN21213 ### */ ||
-		(parameter[0].weatherchoice == 2000000170)) /* ### FOR EN21214 ### */ { 
+		(parameter[0].weatherchoice == 2000000170)) /* ### FOR EN21214 ### */ {
 		foldername << "cell_18";
 		} else if ((parameter[0].weatherchoice == 2000000080) /* ### FOR 16-KP-V20 ### */ ||
 		(parameter[0].weatherchoice == 2000000081) /* ### FOR 16-KP-V21 ### */ ||
@@ -1025,7 +1027,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000096) /* ### FOR 16-KP-V36 ### */ ||
 		(parameter[0].weatherchoice == 2000000097) /* ### FOR 16-KP-V37 ### */ ||
 		(parameter[0].weatherchoice == 2000000098) /* ### FOR 16-KP-V38 ### */ ||
-		(parameter[0].weatherchoice == 2000000099)) /* ### FOR 16-KP-V39 ### */ { 
+		(parameter[0].weatherchoice == 2000000099)) /* ### FOR 16-KP-V39 ### */ {
 		foldername << "cell_19";
 		} else if ((parameter[0].weatherchoice == 2000000223) /* ### FOR EN22-005 ### */ ||
 		(parameter[0].weatherchoice == 2000000224) /* ### FOR EN22-006 ### */ ||
@@ -1058,10 +1060,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000251) /* ### FOR EN22-033 ### */ ||
 		(parameter[0].weatherchoice == 2000000252) /* ### FOR EN22-034 ### */ ||
 		(parameter[0].weatherchoice == 2000000253) /* ### FOR EN22-035 ### */ ||
-		(parameter[0].weatherchoice == 2000000254)) /* ### FOR EN22-036 ### */ { 
+		(parameter[0].weatherchoice == 2000000254)) /* ### FOR EN22-036 ### */ {
 		foldername << "cell_20";
 		} else if ((parameter[0].weatherchoice == 2000000129) /* ### FOR B19-T1 ### */ ||
-		(parameter[0].weatherchoice == 2000000130)) /* ### FOR B19-T2 ### */ { 
+		(parameter[0].weatherchoice == 2000000130)) /* ### FOR B19-T2 ### */ {
 		foldername << "cell_21";
 		} else if ((parameter[0].weatherchoice == 2000000009) /* ### FOR 12-KO-02a ### */ ||
 		(parameter[0].weatherchoice == 2000000010) /* ### FOR 12-KO-02b ### */ ||
@@ -1069,7 +1071,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000012) /* ### FOR 12-KO-03b ### */ ||
 		(parameter[0].weatherchoice == 2000000013) /* ### FOR 12-KO-04a ### */ ||
 		(parameter[0].weatherchoice == 2000000014) /* ### FOR 12-KO-04b ### */ ||
-		(parameter[0].weatherchoice == 2000000015)) /* ### FOR 12-KO-05 ### */ { 
+		(parameter[0].weatherchoice == 2000000015)) /* ### FOR 12-KO-05 ### */ {
 		foldername << "cell_22";
 		} else if ((parameter[0].weatherchoice == 2000000073) /* ### FOR 16-KP-V13 ### */ ||
 		(parameter[0].weatherchoice == 2000000074) /* ### FOR 16-KP-V14 ### */ ||
@@ -1086,7 +1088,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000124) /* ### FOR 18-BIL-02-EN18032 ### */ ||
 		(parameter[0].weatherchoice == 2000000125) /* ### FOR 18-BIL-02-EN18033 ### */ ||
 		(parameter[0].weatherchoice == 2000000126) /* ### FOR 18-BIL-02-EN18034 ### */ ||
-		(parameter[0].weatherchoice == 2000000127)) /* ### FOR 18-BIL-02-EN18035 ### */ { 
+		(parameter[0].weatherchoice == 2000000127)) /* ### FOR 18-BIL-02-EN18035 ### */ {
 		foldername << "cell_23";
 		} else if ((parameter[0].weatherchoice == 2000000061) /* ### FOR 16-KP-V01 ### */ ||
 		(parameter[0].weatherchoice == 2000000062) /* ### FOR 16-KP-V02 ### */ ||
@@ -1150,10 +1152,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000057) /* ### FOR 16-KP-04-EN18052 ### */ ||
 		(parameter[0].weatherchoice == 2000000058) /* ### FOR 16-KP-04-EN18053 ### */ ||
 		(parameter[0].weatherchoice == 2000000059) /* ### FOR 16-KP-04-EN18054 ### */ ||
-		(parameter[0].weatherchoice == 2000000060)) /* ### FOR 16-KP-04-EN18055 ### */ { 
+		(parameter[0].weatherchoice == 2000000060)) /* ### FOR 16-KP-04-EN18055 ### */ {
 		foldername << "cell_24";
 		} else if ((parameter[0].weatherchoice == 2000000003) /* ### FOR 11-CH-06I ### */ ||
-		(parameter[0].weatherchoice == 2000000004)) /* ### FOR 11-CH-06III ### */ { 
+		(parameter[0].weatherchoice == 2000000004)) /* ### FOR 11-CH-06III ### */ {
 		foldername << "cell_25";
 		} else if ((parameter[0].weatherchoice == 2000000001) /* ### FOR 11-CH-02II ### */ ||
 		(parameter[0].weatherchoice == 2000000002) /* ### FOR 11-CH-02III ### */ ||
@@ -1164,14 +1166,14 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000296) /* ### FOR TY07VI ### */ ||
 		(parameter[0].weatherchoice == 2000000297) /* ### FOR TY07VII ### */ ||
 		(parameter[0].weatherchoice == 2000000298) /* ### FOR TY09VI ### */ ||
-		(parameter[0].weatherchoice == 2000000299)) /* ### FOR TY09VII ### */ { 
+		(parameter[0].weatherchoice == 2000000299)) /* ### FOR TY09VII ### */ {
 		foldername << "cell_26";
 		} else if ((parameter[0].weatherchoice == 2000000016) /* ### FOR 13-TY-02-VI ### */ ||
 		(parameter[0].weatherchoice == 2000000017) /* ### FOR 13-TY-02-VII ### */ ||
 		(parameter[0].weatherchoice == 2000000294) /* ### FOR TY04VI ### */ ||
-		(parameter[0].weatherchoice == 2000000295)) /* ### FOR TY04VII ### */ { 
+		(parameter[0].weatherchoice == 2000000295)) /* ### FOR TY04VII ### */ {
 		foldername << "cell_27";
-		} else if ((parameter[0].weatherchoice == 2000000128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ { 
+		} else if ((parameter[0].weatherchoice == 2000000128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ {
 		foldername << "cell_28";
 		} else if ((parameter[0].weatherchoice == 2000000018) /* ### FOR 14-OM-02-V1 ### */ ||
 		(parameter[0].weatherchoice == 2000000019) /* ### FOR 14-OM-02-V2 ### */ ||
@@ -1183,13 +1185,12 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000025) /* ### FOR 14-OM-TRANS4 ### */ ||
 		(parameter[0].weatherchoice == 2000000026) /* ### FOR 14-OM-TRANS5 ### */ ||
 		(parameter[0].weatherchoice == 2000000028) /* ### FOR 14-OM-TRANS6 ### */ ||
-		(parameter[0].weatherchoice == 2000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ { 
+		(parameter[0].weatherchoice == 2000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ {
 		foldername << "cell_29";
 		} else {
-					cout << "No wind data for weather choice available, reading data for Chukotka!X" << endl;
-					foldername << "wind_Chukotka";
-		}	
-	
+			cout << "No wind data for weather choice available, reading data for Chukotka!X" << endl;
+            foldername << "wind_Chukotka";
+		}
 
 
 
@@ -1265,7 +1266,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         aktort++;
 
         // depending on the weather choice different files will be opened and read line by line
-		if (parameter[0].weatherchoice == 1000000001) {
+        if (parameter[0].weatherchoice == 1000000001) {
 		  char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/001_temp1.csv"; //x=990, y=990 ### FOR 11-CH-02II ###
 		  char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/001_prec1.csv";
 		  strcpy(dateinametemp, tempbuf);
@@ -4257,7 +4258,6 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		  strcpy(dateinameprec, precbuf);
 		}
 
-		
 
         if (parameter[0].demlandscape) {
             // elevation adjustment

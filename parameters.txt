@@ -53,7 +53,7 @@ firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many 
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
 
 // 0.4 Computation environment
-omp_num_threads=32;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=24;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -161,7 +161,7 @@ seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=100; 			// ... (int) years of seed introduction at the beginning of each simulation
 seedintronumber=5000;				// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced
-seedintronumberpermanent=5;		    // ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot
+seedintronumberpermanent=500;		    // ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
 									// ... 1==only southernmost plot

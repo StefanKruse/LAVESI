@@ -640,6 +640,8 @@ void fillElevations() {
                         double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
                                                    + (1 - parameter[0].slopetwiratio)
                                                          * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
+														 
+						envirgrowthimpact = envirgrowthimpact + 0.3; // Localization
 
                         // plausibility check
                         if (envirgrowthimpact > 1.0)

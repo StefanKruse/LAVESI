@@ -46,9 +46,9 @@ void Fire(Parameter* parameter,
 		
 		// determine thresholds that decide monthly fire weather severity	
 		// Used for Lake Satagay localization 
-		unsigned short int firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
-		unsigned short int firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
-		unsigned short int firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
+		double firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
+		double firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
+		double firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
 		
 		// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
 		if (weather_list[yearposition].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
@@ -282,8 +282,8 @@ void Fire(Parameter* parameter,
 								}
 								
 								// Fire intensity stays between 0-1
-								if (cur_plot.fire > 1) {
-									cur_plot.fire = 1;
+								if (cur_plot.fire > 1.0) {
+									cur_plot.fire = 1.0;
 								}
 								
 								// Fire damage on litter layer
@@ -341,7 +341,7 @@ void Fire(Parameter* parameter,
 								int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
 
 								// fire sensing
-								unsigned firedamage = 0;
+								double firedamage = 0.0;
 								unsigned int firedamagecells = 0;
 
 								for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
@@ -368,7 +368,7 @@ void Fire(Parameter* parameter,
 								}
 								
 								// fire sensing
-								tree.firedamage = firedamage / (unsigned short) firedamagecells;	// Tree gets assigned the mean cur_plot.fire value of all included gridcells
+								tree.firedamage = firedamage / (double) firedamagecells;	// Tree gets assigned the mean cur_plot.fire value of all included gridcells
 							}
 							
 							// Fire intensity mediated by bark thickness (only if firemode == 112, otherwise if firemode > 0 it's always 1 - OR if custom fireintensity is given)
@@ -379,14 +379,14 @@ void Fire(Parameter* parameter,
 							}
 							
 							// Fire intensity stays between 0-1							
-							if (tree.firedamage <= 0) {
-								tree.firedamage = 0;
+							if (tree.firedamage <= 0.0) {
+								tree.firedamage = 0.0;
 							}
 							
 							// Flame height depending on tree fire damage (only if firemode == 112 OR if custom fireintensity is given)
 							if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
 								tree.crownstart = tree.firedamage * 5000 * 10; // flames reach 5000 cm high
-								tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10)) * 1000;
+								tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10)) * 10;
 							} else {
 								tree.relcrowndamage = 0.0;
 							}	

@@ -246,7 +246,7 @@ void Parameterinput(void) {
     strcpy(uebergabestring, "weatherchoice");
     parameter[0].weatherchoice = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
-        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].weatherchoice);
+        printf("read:	%s <= %ld ==> Main\n", uebergabestring, parameter[0].weatherchoice);
     }
 
     if (parameter[0].parameterinputvis == true) {

@@ -36,14 +36,11 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				firecrowndamagemort = (double)tree.relcrowndamage / 1000;
 				if(firecrowndamagemort < 0.0)
 					firecrowndamagemort = 0.0;
-				else if(firecrowndamagemort > 1.0)
+				else if(firecrowndamagemort >= 1.0)
 					firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
 				tree.relcrowndamage = 0*1000;
 			}
 			
-			// if (firecrowndamagemort > 0) {
-				// cout << firecrowndamagemort << " ... " << tree.relcrowndamage / 1000 << " | ";
-			// }
 			
             // height dependent influences
             double wachstumrel = 1.0;
@@ -136,7 +133,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			
 			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
 			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
-			treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); //fire damage from before merging -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			// treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); // -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
+			treemortality = treemortality + (double)tree.firedamage * pow((100*1/(double)tree.height), 0.5*0.5); //adapted version
+			
 			} else if ((parameter[0].firemode != 0) & (parameter[0].firemode != 112)) {
 				treemortality = treemortality + (double)tree.firedamage;
 			} else if (parameter[0].firemode == 0) {

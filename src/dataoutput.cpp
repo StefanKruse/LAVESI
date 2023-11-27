@@ -718,7 +718,7 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", specseed2);
             fprintf(filepointer, "%4.2f;", yposmax);
             // weather
-            fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+            fprintf(filepointer, "%ld;", parameter[0].weatherchoice);
             // fprintf(filepointer, "%d;", parameter[0].starttrees);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempyearmean);
             fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp1monthmean);
@@ -868,7 +868,7 @@ void Dataoutput(int t,
 							// fprintf(filepointer, "%d;", tree.xworldcoo);
 							fprintf(filepointer, "%d;", parameter[0].ivort);
 							fprintf(filepointer, "%d;", jahr);
-							fprintf(filepointer, "%d;", parameter[0].weatherchoice);
+							fprintf(filepointer, "%ld;", parameter[0].weatherchoice);
 							fprintf(filepointer, "%4.4f;", tree.dbasal);
 							fprintf(filepointer, "%4.4f;", tree.dbreast);
 							fprintf(filepointer, "%4.4f;", (double)tree.height / 10);

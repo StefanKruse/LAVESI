@@ -39,7 +39,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     bool cone;                              // 1	---> was int; could be further replaced by single use of coneheight
     bool longdispersed;                     // 1
     bool growing;                           // 1
-	unsigned short firedamage;				// 2
+	double firedamage;				// 2
     unsigned short int crownstart;          // 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
     unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
 };
@@ -230,7 +230,7 @@ struct Parameter {
     int hinterland_maxlength;
 
     // climate processing
-    int weatherchoice;
+    long int weatherchoice;
     int precweather;
     double precthreshold;
     double tempjandiffort;

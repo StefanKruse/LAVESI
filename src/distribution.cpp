@@ -83,39 +83,39 @@ void Pollinationprobability(double x, double y,struct Parameter *parameter,
  //vector<std::list<Tree*> >::iterator world_positon_b,
  vector<vector<Pollengrid> >::iterator world_positon_p,
  double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
- vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<double>  &selvinginfl, vector<unsigned int>& neutralinfl, vector<int>  &fathname)
-{
-  //list<Tree*>& tree_list = *world_positon_b;
-RandomNumber<double> uniform(0, 1);
-		vector<Pollengrid>& pollen_list = *world_positon_p;
-  direction=0.0;
-  velocity=0.0;
-  ripm=0;
-  cntr=0;
-  p=0.0;
-  kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
-  phi=0.0;
-  dr=0.0;
-  dx=0.0;
-  dy=0.0;
-  I0kappa=0.0;
-  pe=0.01;
-  C=parameter[0].pollengregoryc;
-  m=parameter[0].pollengregorym;
-		
-  pName.clear();
-  pName.shrink_to_fit();
-  thdpthinfl.clear();
-  thdpthinfl.shrink_to_fit();
-  droghtinfl.clear();
-  droghtinfl.shrink_to_fit();
-  selvinginfl.clear();
-  selvinginfl.shrink_to_fit();
-  neutralinfl.clear();
-  neutralinfl.shrink_to_fit();
-  fathname.clear();
-  fathname.shrink_to_fit();
+ vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<double>  &selvinginfl, vector<unsigned int>& neutralinfl, vector<int>  &fathname) {
 
+	RandomNumber<double> uniform(0, 1);
+	
+	vector<Pollengrid>& pollen_list = *world_positon_p;
+  
+	direction=0.0;
+	velocity=0.0;
+	ripm=0;
+	cntr=0;
+	p=0.0;
+	kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
+	phi=0.0;
+	dr=0.0;
+	dx=0.0;
+	dy=0.0;
+	I0kappa=0.0;
+	pe=0.01;
+	C=parameter[0].pollengregoryc;
+	m=parameter[0].pollengregorym;
+		
+	pName.clear();
+	pName.shrink_to_fit();
+	thdpthinfl.clear();
+	thdpthinfl.shrink_to_fit();
+	droghtinfl.clear();
+	droghtinfl.shrink_to_fit();
+	selvinginfl.clear();
+	selvinginfl.shrink_to_fit();
+	neutralinfl.clear();
+	neutralinfl.shrink_to_fit();
+	fathname.clear();
+	fathname.shrink_to_fit();
   		
 	if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
 	{
@@ -157,10 +157,7 @@ RandomNumber<double> uniform(0, 1);
 	I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa));
 	
 	
-	//for (list<Tree*>::iterator posb = tree_list.begin(); posb != tree_list.end(); )
-	//{
-
-		for (unsigned int pos = 0; pos < pollen_list.size(); ++pos) {
+	for (unsigned int pos = 0; pos < pollen_list.size(); ++pos) {
 //		Old version: use pTree_copy and the above for loop, in order to check every tree for genetic lineage.	
 		//auto& pTree_copy = tree_list[pos];
 		auto& pPollengrid = pollen_list[pos];
@@ -171,7 +168,6 @@ RandomNumber<double> uniform(0, 1);
 	
 			dx=(pPollengrid.xcoo)-(x/1000); 
 			dy=(pPollengrid.ycoo)-(y/1000); 
-//
 			dr=sqrt(dx*dx+dy*dy);
 			
 			if((dr!=0))
@@ -184,7 +180,6 @@ RandomNumber<double> uniform(0, 1);
 			}
 			
 			p=exp(kappa*(cos(phi-direction)*-1))/(2*I0kappa)*(exp(-2*pe*pow(dr,1-0.5*m)/(sqrt(M_PI)*C*(1-0.5*m))));
-			//p*=
 			// f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
 			
 			if(uniform.draw()>p)
@@ -205,11 +200,15 @@ RandomNumber<double> uniform(0, 1);
 				
 				selvinginfl.push_back(pPollengrid.selving);
 				// printf("Pnetralsize: %ld ",pPollengrid.neutralmarkers.size());
-				if(neutralinfl.size()<=0){
-				for (unsigned int i=0; i < pPollengrid.neutralmarkers.size(); i++ ){
+				
+				
+				
+				double randpreneutral=uniform.draw();
+				int neutralran= floor (randpreneutral *((pPollengrid.neutralmarkers.size()/24)-0.00001));
+				for (unsigned int i=0+(24*neutralran); i < 24+(24*neutralran); i++ ){
 					neutralinfl.push_back( pPollengrid.neutralmarkers[i]);
-				}					
-				}
+					// printf(" pPollengrid.neut: %d ", pPollengrid.neutralmarkers[i] );
+				}		
 				// neutralinfl.push_back(pPollengrid.neutralmarkers);
 				fathname.push_back(pPollengrid.name);
 				//thdpthinflvar.push_back(pPollengrid->seedweightvar);

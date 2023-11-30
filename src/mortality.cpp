@@ -332,10 +332,9 @@ void Mortality(Parameter* parameter,
 					vector<unsigned short> seedliving;
 					for(int sna=0; sna < tree.seednewly_produced; sna++) {
 						double zufallsz = 0.0 +( (double) 1.0*uniform.draw() );
-						// if(zufallsz>=parameter[0].seedconemort) {
-						if(zufallsz<(1-parameter[0].seedconemort)) {
+						if(zufallsz>=parameter[0].seedconemort) {
 							// ++seedlebend;
-							seedliving.push_back((zufallsz/(1-parameter[0].seedconemort))*100); // scaling to range to yield uniform(0,1) distributed values 
+							seedliving.push_back(zufallsz*100);
 						}
 					}
 					// cout << " seedlebend = " << seedlebend << endl;
@@ -430,7 +429,6 @@ void Mortality(Parameter* parameter,
 							else if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9)) {
 								//cout << " pollination" << endl;
 								double randecide=uniform.draw();
-								// TODO PARAL also use here rescaled same random number
 								int iran= floor (randecide *(Vname.size()-0.00001)); //at the end -1 was deleteed as it is suspected to be causing the bug
 								//cout << " iran =" << iran << endl;
 								//Vname.at(iran) is the chosen pollen grid cell number returned from the pollination function

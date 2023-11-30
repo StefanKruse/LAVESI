@@ -198,8 +198,8 @@ void TreesIni(int maximal_word_length) {
                 f = fopen("input/CH17I_Treevert2011_100_50000.csv", "r");
                 printf("load: input/CH17I_Treevert2011_100_50000.csv");
             } else if (parameter[0].starttrees == 12345) {
-                f = fopen("input/testingboth.csv", "r");
-                printf("load: input/testingboth.csv");
+                f = fopen("input/testingbothmiddle.csv", "r");
+                printf("load: input/testingbothmiddle.csv");
             }
 
             if (f == NULL) {

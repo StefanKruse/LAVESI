@@ -1,8 +1,8 @@
 #pragma once
 
 // plot dimensions rows==y, cols==x
-constexpr unsigned int treerows = 500;  
-constexpr unsigned int treecols = 500;
+constexpr unsigned int treerows = 1000;  
+constexpr unsigned int treecols = 1000;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

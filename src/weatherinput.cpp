@@ -1190,6 +1190,73 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		(parameter[0].weatherchoice == 2000000028) /* ### FOR 14-OM-TRANS6 ### */ ||
 		(parameter[0].weatherchoice == 2000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ {
 		foldername << "cell_29";
+		} else if ((parameter[0].weatherchoice == 1000000401) /* ### FOR 2023051101 ### */ ||
+		(parameter[0].weatherchoice == 1000000402) /* ### FOR 2023051102 ### */ ||
+		(parameter[0].weatherchoice == 1000000403) /* ### FOR 2023051103 ### */ ||
+		(parameter[0].weatherchoice == 1000000404) /* ### FOR 2023051201 ### */ ||
+		(parameter[0].weatherchoice == 1000000405) /* ### FOR 2023051202 ### */ ||
+		(parameter[0].weatherchoice == 1000000406) /* ### FOR 2023051203 ### */ ||
+		(parameter[0].weatherchoice == 1000000407) /* ### FOR 2023051301 ### */ ||
+		(parameter[0].weatherchoice == 1000000408) /* ### FOR 2023051302 ### */ ||
+		(parameter[0].weatherchoice == 1000000409) /* ### FOR 2023051401 ### */ ||
+		(parameter[0].weatherchoice == 1000000410) /* ### FOR 2023051402 ### */ ||
+		(parameter[0].weatherchoice == 1000000463) /* ### FOR 2023060603 ### */ ||
+		(parameter[0].weatherchoice == 1000000464) /* ### FOR 2023060604 ### */ ||
+		(parameter[0].weatherchoice == 1000000465) /* ### FOR 2023060701 ### */ ||
+		(parameter[0].weatherchoice == 1000000466) /* ### FOR 2023060702 ### */ ||
+		(parameter[0].weatherchoice == 1000000467) /* ### FOR 2023060703 ### */ ||
+		(parameter[0].weatherchoice == 1000000468) /* ### FOR 2023060704 ### */ ||
+		(parameter[0].weatherchoice == 1000000469) /* ### FOR 2023060705 ### */ ||
+		(parameter[0].weatherchoice == 1000000470) /* ### FOR 2023060706 ### */ ||
+		(parameter[0].weatherchoice == 1000000471) /* ### FOR 2023060802 ### */ ||
+		(parameter[0].weatherchoice == 1000000472)) /* ### FOR 2023060803 ### */ {
+			foldername << "cell_40";
+		} else if ((parameter[0].weatherchoice == 1000000411) /* ### FOR 2023051701 ### */ ||
+		(parameter[0].weatherchoice == 1000000412) /* ### FOR 2023051702 ### */ ||
+		(parameter[0].weatherchoice == 1000000419) /* ### FOR 2023051808 ### */ ||
+		(parameter[0].weatherchoice == 1000000450) /* ### FOR 2023060101 ### */ ||
+		(parameter[0].weatherchoice == 1000000451)) /* ### FOR 2023060102 ### */ {
+			foldername << "cell_41";
+		} else if ((parameter[0].weatherchoice == 1000000458) /* ### FOR 2023060502 ### */ ||
+		(parameter[0].weatherchoice == 1000000459)) /* ### FOR 2023060503 ### */ {
+			foldername << "cell_42";
+		} else if ((parameter[0].weatherchoice == 1000000457) /* ### FOR 2023060301 ### */ ||
+		(parameter[0].weatherchoice == 1000000460) /* ### FOR 2023060504 ### */ ||
+		(parameter[0].weatherchoice == 1000000461) /* ### FOR 2023060505 ### */ ||
+		(parameter[0].weatherchoice == 1000000462)) /* ### FOR 2023060601 ### */ {
+			foldername << "cell_43";
+		} else if ((parameter[0].weatherchoice == 1000000413) /* ### FOR 2023051801 ### */ ||
+		(parameter[0].weatherchoice == 1000000414) /* ### FOR 2023051802 ### */ ||
+		(parameter[0].weatherchoice == 1000000415) /* ### FOR 2023051803 ### */ ||
+		(parameter[0].weatherchoice == 1000000416) /* ### FOR 2023051804 ### */ ||
+		(parameter[0].weatherchoice == 1000000417) /* ### FOR 2023051806 ### */ ||
+		(parameter[0].weatherchoice == 1000000418) /* ### FOR 2023051807 ### */ ||
+		(parameter[0].weatherchoice == 1000000420) /* ### FOR 2023051901 ### */ ||
+		(parameter[0].weatherchoice == 1000000421) /* ### FOR 2023051902 ### */ ||
+		(parameter[0].weatherchoice == 1000000422) /* ### FOR 2023052101 ### */ ||
+		(parameter[0].weatherchoice == 1000000423) /* ### FOR 2023052102 ### */ ||
+		(parameter[0].weatherchoice == 1000000424) /* ### FOR 2023052103 ### */ ||
+		(parameter[0].weatherchoice == 1000000425) /* ### FOR 2023052104 ### */ ||
+		(parameter[0].weatherchoice == 1000000426) /* ### FOR 2023052106 ### */ ||
+		(parameter[0].weatherchoice == 1000000427) /* ### FOR 2023052107 ### */ ||
+		(parameter[0].weatherchoice == 1000000438) /* ### FOR 2023052802 ### */ ||
+		(parameter[0].weatherchoice == 1000000439) /* ### FOR 2023052803 ### */ ||
+		(parameter[0].weatherchoice == 1000000440) /* ### FOR 2023052804 ### */ ||
+		(parameter[0].weatherchoice == 1000000441) /* ### FOR 2023052805 ### */ ||
+		(parameter[0].weatherchoice == 1000000442) /* ### FOR 2023052806 ### */ ||
+		(parameter[0].weatherchoice == 1000000443) /* ### FOR 2023052807 ### */ ||
+		(parameter[0].weatherchoice == 1000000444) /* ### FOR 2023052901 ### */ ||
+		(parameter[0].weatherchoice == 1000000445) /* ### FOR 2023052902 ### */ ||
+		(parameter[0].weatherchoice == 1000000446) /* ### FOR 2023052903 ### */ ||
+		(parameter[0].weatherchoice == 1000000447) /* ### FOR 2023053001 ### */ ||
+		(parameter[0].weatherchoice == 1000000448) /* ### FOR 2023053002 ### */ ||
+		(parameter[0].weatherchoice == 1000000449) /* ### FOR 2023053003 ### */ ||
+		(parameter[0].weatherchoice == 1000000452) /* ### FOR 2023060105 ### */ ||
+		(parameter[0].weatherchoice == 1000000453) /* ### FOR 2023060106 ### */ ||
+		(parameter[0].weatherchoice == 1000000454) /* ### FOR 2023060201 ### */ ||
+		(parameter[0].weatherchoice == 1000000455) /* ### FOR 2023060203 ### */ ||
+		(parameter[0].weatherchoice == 1000000456)) /* ### FOR 2023060204 ### */ {
+			foldername << "cell_44";
 		} else if ((parameter[0].weatherchoice == 50001)) /* ### FOR Close_to_Fairbanks_EN23-611 ### */ {
 			foldername << "cell_32";
 		} else if ((parameter[0].weatherchoice == 50002) /* ### FOR Fielding_Lake_EN23-675 ### */ ||

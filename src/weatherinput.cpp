@@ -130,7 +130,7 @@ void getTemp(	//int aktort,
                                + temp7monthmeanbuf + temp8monthmeanbuf + temp9monthmeanbuf + temp10monthmeanbuf + temp11monthmeanbuf + temp12monthmeanbuf)
                               / 12;
 
-            Weather pWeather;
+            Weather pWeather{};
 
             // pWeather.yworldcoo = aktortyworldcoo;
             // pWeather.xworldcoo = aktortxworldcoo;
@@ -304,6 +304,7 @@ void passWeather() {
 
                 if (aattrockenheit > 1) {
                     droughtmortbuf = droughtmortbuf + aattrockenheit * 0.1;
+					droughtmortbuf=pow(droughtmortbuf/0.3863,2);
                 }
             }
             weather_list[iweather].droughtmort = droughtmortbuf;
@@ -312,6 +313,7 @@ void passWeather() {
 
                 if (aattrockenheitmin > 1) {
                     droughtmortbufmin = droughtmortbufmin + aattrockenheitmin * 0.1;
+					droughtmortbufmin=pow(droughtmortbufmin/0.3863,2); //this part is new. min did not exist before.
                 }
             }
             weather_list[iweather].droughtmortmin = droughtmortbufmin;
@@ -1275,7 +1277,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 			foldername << "cell_1";
 		} else {
 			cout << "No wind data for weather choice available, reading data for Chukotka!X" << endl;
-            foldername << "wind_Chukotka";
+            foldername << "wind_Chukotka"; // TODO: make local version possible retaining only few test plots for a proof-of-running
 		}
 
 
@@ -1314,6 +1316,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 				} else if (parameter[0].windsource == 998) {
 					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/wind_last25kyr_from100yrMeans/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				}
+             }
 
                 ifstream fileinp(filename.c_str());
 
@@ -1340,8 +1343,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 wdir.clear();
                 wspd.shrink_to_fit();
                 wdir.shrink_to_fit();
-            }
-        }
+            }// each year
 
         jahr = 0;
     }
@@ -1351,72 +1353,70 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         vector<Weather>& weather_list = *posw;
         aktort++;
 
-    // depending on the weather choice different files will be opened and read line by line
- 	long int plotcodeNum;
-	plotcodeNum = parameter[0].weatherchoice - 1000000000;
-	
-	std::stringstream plotcode;
-	plotcode << std::setw(3) << std::setfill('0') << plotcodeNum;
-
+		// depending on the weather choice different files will be opened and read line by line
+		long int plotcodeNum;
+		plotcodeNum = parameter[0].weatherchoice - 1000000000;
 		
-	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
-		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/" + plotcode.str() + "_temp1.csv";
-		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/" + plotcode.str() + "_prec1.csv";
-		strcpy(dateinametemp, tempbuf.c_str());
-		strcpy(dateinameprec, precbuf.c_str());
-	} else if (parameter[0].weatherchoice > 2000000000 && parameter[0].weatherchoice < 3000000000){
-		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_from100yrMeans/" + plotcode.str() + "_temp2.csv";
-		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_from100yrMeans/" + plotcode.str() + "_prec2.csv";
-		strcpy(dateinametemp, tempbuf.c_str());
-		strcpy(dateinameprec, precbuf.c_str());
-	} else if (parameter[0].weatherchoice == 50001) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Close_to_Fairbanks_EN23-611_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Close_to_Fairbanks_EN23-611_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50002) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fielding_Lake_EN23-675_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fielding_Lake_EN23-675_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50003) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_East_EN22-021_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_East_EN22-021_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50004) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_West_EN22-032_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_West_EN22-032_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50005) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50006) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Nutenvut_16KP03-V20_V39_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Nutenvut_16KP03-V20_V39_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50007) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Ulu_EN21-201_219_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Ulu_EN21-201_219_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50008) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Mucho_Lake_EN22-065_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Mucho_Lake_EN22-065_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50009) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Road_to_Central_EN23-651_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Road_to_Central_EN23-651_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	}
+		std::stringstream plotcode;
+		plotcode << std::setw(3) << std::setfill('0') << plotcodeNum;
 
-
+			
+		if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
+			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/" + plotcode.str() + "_temp1.csv";
+			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/" + plotcode.str() + "_prec1.csv";
+			strcpy(dateinametemp, tempbuf.c_str());
+			strcpy(dateinameprec, precbuf.c_str());
+		} else if (parameter[0].weatherchoice > 2000000000 && parameter[0].weatherchoice < 3000000000){
+			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_from100yrMeans/" + plotcode.str() + "_temp2.csv";
+			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_from100yrMeans/" + plotcode.str() + "_prec2.csv";
+			strcpy(dateinametemp, tempbuf.c_str());
+			strcpy(dateinameprec, precbuf.c_str());
+		} else if (parameter[0].weatherchoice == 50001) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Close_to_Fairbanks_EN23-611_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Close_to_Fairbanks_EN23-611_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50002) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fielding_Lake_EN23-675_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fielding_Lake_EN23-675_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50003) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_East_EN22-021_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_East_EN22-021_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50004) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_West_EN22-032_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_West_EN22-032_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50005) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50006) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Nutenvut_16KP03-V20_V39_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Nutenvut_16KP03-V20_V39_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50007) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Ulu_EN21-201_219_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Ulu_EN21-201_219_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50008) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Mucho_Lake_EN22-065_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Mucho_Lake_EN22-065_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		} else if (parameter[0].weatherchoice == 50009) {
+			char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Road_to_Central_EN23-651_temp1.csv";
+			char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Road_to_Central_EN23-651_prec1.csv";
+			strcpy(dateinametemp, tempbuf);
+			strcpy(dateinameprec, precbuf);
+		}
 
         if (parameter[0].demlandscape) {
             // elevation adjustment
@@ -1457,4 +1457,3 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
     passWeather();
 }
-

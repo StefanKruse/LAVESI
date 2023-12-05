@@ -5,6 +5,7 @@
 #include "libraries.h"
 #include "structures.h"
 
+
 // General todo list:
 // TODO do not use namespace std
 // TODO remove "== true"/"== false"

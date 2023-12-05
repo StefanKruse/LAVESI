@@ -10,7 +10,7 @@
 
 
 // 0.1 -----> Display in console
-parameterinputvis=0;				// (int 0,1) show read-in of parameters
+parameterinputvis=1;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
 qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=1;				// (int 0,1) seed dispersal
@@ -34,6 +34,11 @@ outputall=1;						// (int 0,1) sampling area determination
 
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
+cryogrid_thawing_depth=0;			// (int 0,1) Active layer calculation with coupled CryoGrid
+cryogrid_scenario=0;				// (int 0,max) Disturbance scenarios (1 natural/no,2 logging,3 surface fire,4 crown fire,5 pests)
+cryogrid_disturbanceyear=2020;		// (int) Year of abstrahized disturbance for cryogrid_scenario 1-5
+cryogrid_firstyear=2015;			// (int) Year from which on CryoGrid should be called
+cryogrid_slurm=0;					// (int 0,1) Should CryoGrid be called directly or via slurm scheduler
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=5;					// (int) Resolution in m of DEM
@@ -76,7 +81,7 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1000000149;
+weatherchoice=1000000149;			// (int) Type of weather forcing series 
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -110,8 +115,7 @@ weatherchoice=1000000149;
 									// ... 182246 == TEST for Lake Satagay MPI-ESM 25 ka, adjusted by CRU TS c4.06 for overlap 1901 - 1949 CE (coverage 1849 - 1949 CE; 24900 yrs) -> doesn't work?
 									// ... 182247 == Lake Satagay MPI-ESM 25 ka, both T+P adjusted by CRU TS c4.06 for overlap 1901 - 1949 CE (coverage 22950 BCE - 1949 CE; 24900 yrs) -> doesn't work?
 									// ... ... 2500511 == for simulation of repeat 2076:2125 time slice for 2500 years of the according climate scenario (currently 2.6 4.5 and 8.5 implemented) similar to above
-									// ... 1901 and 1201801 is for Spasskaya Pad ERA-adjusted CRU data
-									
+									// ... 1901 and 1201801 is for Spasskaya Pad ERA-adjusted CRU data									
 									// ##### Lake Satagay climate input #####
 									// ... ### Trace21ka ###
 									// 1822401 == Lake Satagay CRU-adjusted TraCE-21ka (CRU-adjusted TraCE: 20049 - 1990 CE; -->22040<-- yrs; last year 1990+1) -> works
@@ -130,6 +134,7 @@ weatherchoice=1000000149;
 									// ... ### MPI-ESM1-2 CMIP6 ###
 									// 1822407 == Lake Satagay CMIP6 MPI-ESM1-2 combined HR+LR (historical+long run) simulation (1850 - 2100 CE; -->251 yrs<--; last year 2100+1) -> works
 									// 1822408 == Lake Satagay adjusted CMIP6 MPI-ESM1-2 combined HR+LR (historical+long run) simulation, adjusted to CRU (1850 - 2100 CE; -->251 yrs<--; last year 2100+1) -> ???
+									// ... 1210001 ... ERA5-adjusted CRU data, year 1:1900 repeated 1901:2000 series and then prolonged 2021:2100 by 2000:2020 series
 
 temperaturelapse_jan=0.004318;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 									// Chukotka elevation:	0.001722
@@ -170,7 +175,7 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// ... 0==synchronous forcing per plot
 										// ... 1==linearly changing from south to north
-locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
+locationshift=-1000;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=999
@@ -206,6 +211,9 @@ roi=1;								// (int) determine region of interest for species
 mapxlength=1;						// (int) number of parallel executed plots for each climate
 mapylength=1;						// (int) number of plots along a south-north transect
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
+pollengridpoints=3000;						//pollengridxpoints, pollengridypoints dynamisch...
+pollengridxpoints=100;
+pollengridypoints=100;						
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
@@ -220,8 +228,8 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=49;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=49;
+seedintro_maxy=0;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=0;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed
@@ -236,12 +244,16 @@ starttrees=0;						// (int) type of initial tree set up
 hinterland_maxlength=0; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
 										
 // 1.4.2 -----> Pollen dispersal
-pollination=0;						// (int 0,1,2) allow pollen dispersal
+pollination=9;						// (int 0,1,2) allow pollen dispersal
 									// ... 0==without pollination
 									// ... 1==pollination is computed during the simulation period (simduration)
 									// ... ... (IF pollination==1 && omp_num_threads==1 && ivortmax==1000 && simduration==80) pollination variables are printed to one file "windgen_pollination_total....txt" for the years after 1978
 									// ... 9==each year computation of pollination
 									// ... it is strongly recommended to use at least 4 multiple core, or more as this functionality is computational intensive
+
+variabletraits=1;						// (int 0,1) turning variable traits off and on (this determines the initial trees and if pollination is off if traits should vary or not (so if pollination is on the values are going to end up diferened no matter what this value says))
+seedweightfactor=0.5;						//seedweight flightdistance multiplier used for testing(or tuinig)
+seednumberfactor=2;
 
 pollendirectionvariance=10;			// (double) variance of the von Mises distribution in degrees. Used in the pollen distribution function
 pollenfall=0.126;					// (double) pollen fall velocity

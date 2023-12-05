@@ -1,4 +1,5 @@
 #include "LAVESI.h"
+#include "RandomNumber.h"
 #include "VectorList.h"
 
 using namespace std;
@@ -6,99 +7,211 @@ using namespace std;
 // TODO temporary here
 extern vector<double> wdir, wspd;
 
-void Pollinationprobability(double x,
-                            double y,
-                            Parameter* parameter,
-                            vector<VectorList<Tree>>::iterator world_positon_b,
-                            double direction,
-                            double velocity,
-                            unsigned int ripm,
-                            // unsigned int cntr,
-                            double p,
-                            double kappa,
-                            double phi,
-                            double dr,
-                            double dx,
-                            double dy,
-                            double I0kappa,
-                            double pe,
-                            double C,
-                            double m,
-                            vector<int>& pName,
-                            vector<double>& thdpthinfl,
-                            int outputtreesiter,
-                            double randomnumberwind,
-                            double randomnumberwindfather) {
-    VectorList<Tree>& tree_list = *world_positon_b;
-    direction = 0.0;
-    velocity = 0.0;
-    ripm = 0;
-    // cntr = 0;
-    p = 0.0;
-    kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2);
-    phi = 0.0;
-    dr = 0.0;
-    dx = 0.0;
-    dy = 0.0;
-    I0kappa = 0.0;
-    pe = 0.01;
-    C = parameter[0].pollengregoryc;
-    m = parameter[0].pollengregorym;
-    pName.clear();
-    pName.shrink_to_fit();
-    thdpthinfl.clear();
-    thdpthinfl.shrink_to_fit();
+double mixrand(double mu1,double std1,double mu2,double std2, double Lbound, double Rbound)
+{
+	double R1,R2,z1=-1,z2=-1;
+	RandomNumber<double> uniform(0, 1);
+	do{
+		R1=uniform.draw() ;
+		R2=uniform.draw() ;
+		z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std1+mu1;
+		z2=(sqrt(-2.0*log(R1))*sin(2.0*M_PI*R2))*std2+mu2;
+		R1=((uniform.draw() > 0.5)? z1:z2);
+	}while(R1<=(Lbound) || R1>=(Rbound));
+	//cout<<z1<<" "<<z2<<endl;
+	return R1;
+}
 
-    if (parameter[0].windsource == 1 || parameter[0].windsource == 999) {  // EraInterim
-        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
-        direction = M_PI * (wdir.at(ripm) / 180);
-        velocity = wspd.at(ripm);
-    } else {  // random
-        direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
-        velocity = 2.777;
-    }
-    pe = parameter[0].pollenfall / velocity;
+double normrand(double mu,double std,double Lbound, double Rbound)
+{
+	double R1,R2,z1=-1;
+	RandomNumber<double> uniform(0, 1);
+	do{
+		R1=uniform.draw() ;
+		R2=uniform.draw() ;
+		z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std+mu;
+	}while(z1<=(Lbound) || z1>=(Rbound));
+	return z1;	
+}
 
-    // Simpson integration + https://elec424.fandom.com/wiki/Modified_Bessel_Functions
-    I0kappa = 0.16666 * (exp(kappa) + 4.0 + exp(-1.0 * kappa));
+double averand(double mu1, double mu2, double weight,double std,double Lbound, double Rbound)
+{
+	double R1,R2,z1=-1,mu;
+	RandomNumber<double> uniform(0, 1);
+	do{
+		mu=(mu1*(1-weight))+(mu2*weight);
+		R1=uniform.draw() ;
+		R2=uniform.draw() ;
+		z1=(sqrt(-2.0*log(R1))*cos(2.0*M_PI*R2))*std+mu;
+	}while(z1<=(Lbound) || z1>=(Rbound));
+	return z1;	
+}
 
-    for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
-        auto& tree_copy = tree_list[tree_i];
-		
-		if (tree_copy.growing == true) {
-		
-			if (tree_copy.cone == true) {  // only if the pollinating tree has cones:
-				dx = ((double)tree_copy.xcoo / 1000) - x;
-				dy = ((double)tree_copy.ycoo / 1000) - y;
-				dr = sqrt(dx * dx + dy * dy);
-
-				if ((dr != 0)) {
-					phi = atan2(dx, dy);
-				} else {
-					phi = direction + 0.5 * M_PI;  // makes self-pollination less probable: p~1/I0(kappa)
-				}
-
-				p = exp(kappa * (cos(phi - direction) * -1)) / (2 * I0kappa) * (exp(-2 * pe * pow(dr, 1 - 0.5 * m) / (sqrt(M_PI) * C * (1 - 0.5 * m))));
-				// f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
-
-				if (randomnumberwindfather <= p) {
-					// pName.push_back(tree_copy.name);
-					thdpthinfl.push_back(100);
-					// data output for pollen flight analysis
-					if (parameter[0].pollination == 1 && parameter[0].omp_num_threads == 1 && outputtreesiter <= 5 && parameter[0].ivort >= 1046) {
-						FILE* fdir;
-						char filenamechar[25];
-						sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);
-						string output = "output/windgen_pollination_total_" + string(filenamechar) + ".txt";
-						fdir = fopen(output.c_str(), "a+");
-						fprintf(fdir, "%10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t %10.20f \t \n", dr, phi, p, (double)tree_copy.xcoo / 1000,
-								(double)tree_copy.ycoo / 1000, x, y);
-						fclose(fdir);
-					}
-				}
-			}
+void mixvector(const std::array<unsigned int,24> &vectre, const std::array<unsigned int,24> &vecpol, std::array<unsigned int,24>& vecseed)
+// vector <unsigned int> mixvector(vector<unsigned int> vectre,vector<unsigned int> vecpol)
+{
+	// vector<unsigned int> newvector(24, 0);
+	//RandomNumber<int> uniformnum(1, 2);  ///this function is for double not int. int function ToDo
+	RandomNumber<double> uniform(0, 1);
+for(unsigned int neutralcounter=0 ;neutralcounter < 24 ;neutralcounter++){
+	double randecide=uniform.draw();
+	if (neutralcounter %2 == 0 ){
+	
+		if (randecide<0.5){
+				vecseed[neutralcounter]=vectre[neutralcounter];
 		}
-    }
+		else {
+			vecseed[neutralcounter]=vectre[neutralcounter+1];
+		}
+	}
+	else{
+	
+		if (randecide<0.5){
+				vecseed[neutralcounter]=vecpol[neutralcounter];
+		}
+		else {
+			vecseed[neutralcounter]=vecpol[neutralcounter-1];
+		}
+	}
+}
+
+// return newvector;
+}
+
+void Pollinationprobability(double x, double y,struct Parameter *parameter,
+ //vector<std::list<Tree*> >::iterator world_positon_b,
+ vector<vector<Pollengrid> >::iterator world_positon_p,
+ double direction,double velocity,unsigned int ripm,unsigned int cntr,double p,double kappa,double phi,double dr,double dx,double dy,double I0kappa,double pe,double C,double m,
+ vector<int> &pName, vector<double>  &thdpthinfl, vector<double>  &droghtinfl, vector<double>  &selvinginfl, vector<unsigned int>& neutralinfl, vector<int>  &fathname) {
+
+	RandomNumber<double> uniform(0, 1);
+	
+	vector<Pollengrid>& pollen_list = *world_positon_p;
+  
+	direction=0.0;
+	velocity=0.0;
+	ripm=0;
+	cntr=0;
+	p=0.0;
+	kappa=pow(180/(parameter[0].pollendirectionvariance*M_PI),2);
+	phi=0.0;
+	dr=0.0;
+	dx=0.0;
+	dy=0.0;
+	I0kappa=0.0;
+	pe=0.01;
+	C=parameter[0].pollengregoryc;
+	m=parameter[0].pollengregorym;
+		
+	pName.clear();
+	pName.shrink_to_fit();
+	thdpthinfl.clear();
+	thdpthinfl.shrink_to_fit();
+	droghtinfl.clear();
+	droghtinfl.shrink_to_fit();
+	selvinginfl.clear();
+	selvinginfl.shrink_to_fit();
+	neutralinfl.clear();
+	neutralinfl.shrink_to_fit();
+	fathname.clear();
+	fathname.shrink_to_fit();
+  		
+	if(parameter[0].windsource!=0 && parameter[0].windsource!=4 && parameter[0].windsource!=5)
+	{
+		cntr=1;
+	}
+	else if(parameter[0].windsource==4)
+	{
+		direction=	M_PI * ( 0 / 180 );
+		velocity=2.777;
+	}
+	else if(parameter[0].windsource==5)
+	{
+		direction=	M_PI * ( 180 / 180 );
+		velocity=2.777;
+	}
+	else if(parameter[0].windsource==0)
+	{
+	   direction=2*M_PI*uniform.draw(); 
+	   velocity=2.777;
+	}
+
+	if(cntr!=0 && (parameter[0].windsource==1 || parameter[0].windsource == 999))
+	{
+		ripm=(int)(0.5*wdir.size() + wdir.size()/6 *(1-2*uniform.draw()-0.000001));
+	
+		direction=	M_PI * ( wdir.at(ripm) / 180 );
+		velocity=wspd.at(ripm);
+	}
+	else if(((cntr==0) && ((parameter[0].windsource==1) || (parameter[0].windsource == 999))) || (parameter[0].windsource==0))
+	{
+	   direction=0.0+((double)(2*M_PI)*(uniform.draw()-0.000001));
+	   velocity=2.777;//10 km/h
+	}
+	
+	pe=parameter[0].pollenfall/velocity;
+	
+	
+	// Simpson integration + elec424.wikia.com/wiki/Modified_Bessel_Functions:
+	I0kappa=0.16666*(exp(kappa) +4.0+exp(-1.0*kappa));
+	
+	
+	for (unsigned int pos = 0; pos < pollen_list.size(); ++pos) {
+//		Old version: use pTree_copy and the above for loop, in order to check every tree for genetic lineage.	
+		//auto& pTree_copy = tree_list[pos];
+		auto& pPollengrid = pollen_list[pos];
+		int tresize=pPollengrid.Treenames.size();
+		// only if the pollinating tree has cones (see mortality.cpp)!
+		if((tresize)!=0)
+		{
+	
+			dx=(pPollengrid.xcoo)-(x/1000); 
+			dy=(pPollengrid.ycoo)-(y/1000); 
+			dr=sqrt(dx*dx+dy*dy);
+			
+			if((dr!=0)) {
+			  phi=atan2(dx,dy);
+			} else {
+				phi=direction+0.5*M_PI;// makes self-pollination less probable: p~1/I0(kappa)
+			}
+			
+			p=exp(kappa*(cos(phi-direction)*-1))/(2*I0kappa)*(exp(-2*pe*pow(dr,1-0.5*m)/(sqrt(M_PI)*C*(1-0.5*m))));
+			// f(dr) based on Microbiology of the atmosphere, p(phi) von Mises distribution
+			
+			if(uniform.draw()>p) {
+				++pos;
+			} else {
+				pName.push_back(pPollengrid.Number);
+				
+				//HAVE ONE PARTICULAR TRAIT VALUE FOR EVERY GRID CELL!
+				
+				//INHERITING SEED WEIGHT
+				thdpthinfl.push_back(pPollengrid.seedweight);
+				droghtinfl.push_back(pPollengrid.droughtresist);
+				// numberinfl.push_back(pPollengrid.seednumber);
+				
+				selvinginfl.push_back(pPollengrid.selving);
+				// printf("Pnetralsize: %ld ",pPollengrid.neutralmarkers.size());
+				
+				
+				
+				double randpreneutral=uniform.draw();
+				int neutralran= floor (randpreneutral *((pPollengrid.neutralmarkers.size()/24)-0.00001));
+				for (auto i=0+(24*neutralran); i < 24+(24*neutralran); i++ ){
+					neutralinfl.push_back( pPollengrid.neutralmarkers[i]);
+					// printf(" pPollengrid.neut: %d ", pPollengrid.neutralmarkers[i] );
+				}		
+				// neutralinfl.push_back(pPollengrid.neutralmarkers);
+				fathname.push_back(pPollengrid.name);
+				//thdpthinflvar.push_back(pPollengrid->seedweightvar);
+				
+				
+				++pos; 
+			}
+		} else {
+			++pos;
+		}
+	}
 }
 
 double getEntfernung(double D, double ratiorn_help) {

@@ -16,8 +16,12 @@ int yearposition;
 vector<VectorList<Tree>> world_tree_list;
 vector<VectorList<Seed>> world_seed_list;
 vector<vector<Weather>> world_weather_list;
+vector<vector<Pollengrid>> world_pollen_list;
+vector<vector<Pollencalcs>> world_pollcalcs;
+
 vector<vector<Envirgrid>> world_plot_list;
 vector<vector<Evaluation>> world_evaluation_list;
+vector<vector<Cryogrid>> world_cryo_list;
 
 // lists for resetyear copies
 vector<VectorList<Tree>> world_tree_list_copy;
@@ -46,7 +50,8 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 					  yearposition, 
 					  world_plot_list, 
 					  world_tree_list, 
-					  world_weather_list);
+					  world_weather_list, 
+					  world_cryo_list);
 #ifdef OUTPUT_COMP_DURATION
     auto time_end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed;
@@ -59,7 +64,10 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Growth(&parameter[0], yearposition, world_tree_list, world_weather_list);
+    Growth(&parameter[0], 
+	       yearposition, 
+	       world_tree_list, 
+	       world_weather_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -74,10 +82,9 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
         } else if (parameter[0].windsource == 999) {
 			findyr1 = 1;
 			findyr2 = 25070;
-	} else if (parameter[0].windsource == 998) {
+		} else if (parameter[0].windsource == 998) {
 			findyr1 = 1;
 			findyr2 = 25070;
-
 		}
     }
 
@@ -123,11 +130,11 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #endif
     if (parameter[0].seedintro == true && parameter[0].yearswithseedintro > 0) {
         parameter[0].starter = true;
-        Treedistribution(&parameter[0], stringlengthmax);
+        Treedistribution(&parameter[0]);
         parameter[0].yearswithseedintro--;
     } else if (parameter[0].seedintropermanent == true && parameter[0].yearswithseedintro <= 0) {
         parameter[0].starter = true;
-        Treedistribution(&parameter[0], stringlengthmax);
+        Treedistribution(&parameter[0]);
     }
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
@@ -177,7 +184,16 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Dataoutput(t, jahr, &parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list, world_evaluation_list);
+    Dataoutput(t, 
+			   jahr, 
+			   &parameter[0], 
+			   yearposition, 
+			   world_tree_list, 
+			   world_seed_list, 
+			   world_weather_list, 
+			   world_plot_list, 
+			   world_evaluation_list, 
+			   world_cryo_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -193,7 +209,10 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 			  yearposition, 
 			  world_tree_list, 
 			  world_seed_list, 
-			  world_weather_list);
+			  world_weather_list,
+			  world_pollen_list,
+			  world_pollcalcs,
+			  world_plot_list);
     wspd.clear();
     wdir.clear();
     wspd.shrink_to_fit();
@@ -207,7 +226,9 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Ageing(&parameter[0], world_tree_list, world_seed_list);
+    Ageing(//&parameter[0], 
+			world_tree_list, 
+			world_seed_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -235,11 +256,17 @@ void Spinupphase() {
             int lastyear = 0;
             int startlag = 5;
 
-            firstyear = world_weather_list[0][0].jahr;
-            cout << "firstyear: " << firstyear << endl;
-            lastyear = world_weather_list[0][0].jahr + 100;
-            cout << "lastyear: " << lastyear << endl;
 
+			if(parameter[0].ivort<=5000) {
+				firstyear=world_weather_list[0][0].jahr;
+				lastyear=world_weather_list[0][0].jahr+117;
+			}
+			else if (parameter[0].ivort>5000) {
+				firstyear=world_weather_list[0][0].jahr+118;
+				lastyear=world_weather_list[0][0].jahr+235;
+			}
+
+			
             // choose a random year for weather determination
             double x = uniform.draw();
             int jahr = (firstyear + startlag) + (int)((double)((lastyear - startlag) - firstyear) * x);
@@ -250,7 +277,7 @@ void Spinupphase() {
 
             // go through all functions for vegetation dynamics
             vegetationDynamics(yearposition, jahr, t);
-
+	
         } while (parameter[0].ivort < parameter[0].ivortmax);
 
     } else if (parameter[0].ivortmax > 0 && parameter[0].stabilperiod == true) {
@@ -359,7 +386,8 @@ void Yearsteps() {
 
         // calculate current year and print a summary of the year
         int jahr = parameter[0].startjahr + t;
-        yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
+ 		parameter[0].currentyear=parameter[0].startjahr+t; // TODO: replace other references to jahr with this global state variable
+       yearposition = ((world_weather_list[0][0].jahr - parameter[0].startjahr) * -1)
                        + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
 
         if (parameter[0].yearlyvis == true) {
@@ -475,7 +503,9 @@ void createLists() {
             world_weather_list.emplace_back();     // include new weather_list in corresponding world list
             world_plot_list.emplace_back();        // include new plot_list in corresponding world list
             world_evaluation_list.emplace_back();  // include new evaluation_list in corresponding world list
-
+            world_cryo_list.emplace_back();  // include new cryogrid_list in corresponding world list
+			world_pollen_list.emplace_back();
+			world_pollcalcs.emplace_back();
             if (parameter[0].resetyear > 0) {
                 // Create lists for resetting to a certain year
                 world_tree_list_copy.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
@@ -504,9 +534,9 @@ void fillElevations() {
 	plotcode << std::setw(3) << std::setfill('0') << plotcodeNum;
 
 	// ... read dem data
-        FILE* f;
-        char demfilename[250];
-		
+	FILE* f;
+	char demfilename[250];
+	
 	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
 		if (treerows == 50) {
 			string deminputbuf = 
@@ -592,7 +622,7 @@ void fillElevations() {
         fclose(f);
 
     // ... read slope data
-        char slopefilename[250];
+    char slopefilename[250];
 		
 	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
 		if (treerows == 50) {
@@ -651,14 +681,12 @@ void fillElevations() {
 		strcpy(slopefilename, slopeinputbuf);
 	}
 
-
-
         f = fopen(slopefilename, "r");
         if (f == NULL) {
             printf("Slope file not available!\n");
             exit(1);
         }
-
+		
         vector<double> slopeinput;
         slopeinput.resize(deminputdimension_y * deminputdimension_x, 0);
         counter = -1;
@@ -732,8 +760,6 @@ void fillElevations() {
 		strcpy(twifilename, twiinputbuf);
 	}
 
-	
-
         f = fopen(twifilename, "r");
         if (f == NULL) {
             printf("TWI file not available!\n");
@@ -753,6 +779,7 @@ void fillElevations() {
         }
         fclose(f);
 
+// cout << twiinput[0] << " ... " <<  twiinput[(int)(twiinput.size()/2)] << endl;
         // interpolate to envirgrid
         for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
             vector<Envirgrid>& plot_list = *posw;
@@ -834,9 +861,10 @@ void fillElevations() {
                     // in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
                     // 32767
                     if (countwatercells == 0) {
+// cout << twiinter << " ... twi inter ..." << endl;
                         plot_list[kartenpos].elevation += 10 * eleinter;
                         // plot_list[kartenpos]->slope = slopeinter;
-                        plot_list[kartenpos].twi += twiinter*100;
+                        plot_list[kartenpos].twi = twiinter*100;
 
                         // calculate environment-growth-impact (value between 0 and 1)
                         // f(TWI)		= slope * TWI + intercept
@@ -886,6 +914,10 @@ void initialiseMaps() {
     int aktort = 0;
     for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
         vector<Envirgrid>& plot_list = *posw;
+		vector<vector<Pollengrid>>::iterator posw2=(world_pollen_list.begin()+aktort);
+		vector<Pollengrid>& pollen_list = *posw2;
+		vector<vector<Pollencalcs>>::iterator posw3=(world_pollcalcs.begin()+aktort);
+		vector<Pollencalcs>& pollcalcs = *posw3;
         vector<vector<Evaluation>>::iterator posiwelt = (world_evaluation_list.begin() + aktort);
         vector<Evaluation>& evaluation_list = *posiwelt;
         aktort++;
@@ -893,8 +925,50 @@ void initialiseMaps() {
         //		xworld= repeating the same position
         //		yworld= different position along the transect
         // necessary for the global lists
-        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+         int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
+         int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
+		 
+		// double lent=(double) sqrt(parameter[0].pollengridpoints);
+		double lentx=(double) (parameter[0].pollengridxpoints);
+		double lenty=(double) (parameter[0].pollengridypoints);
+		
+		//THIS LOOP CREATES THE POLLEN GRID ON EACH PLOT WITH A RESOLUTION OF 
+		//(parameter[0].pollengridxpoints)*(parameter[0].pollengridypoints);
+		for(int kartenpos=0; kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++) {
+			Pollengrid pPollengrid;
+			pPollengrid.neutralmarkers.reserve(24*100000); // reserve memory
+			pPollengrid.Treenames.reserve(100000); // reserve memory
+			pPollengrid.seedweight=0;
+			pPollengrid.seedweightvar=0;
+			pPollengrid.droughtresist=0;
+			// pPollengrid.seednumber=0;
+			pPollengrid.selving=0;
+			pPollengrid.name=0;
+			//vector<vector<unsigned int>> copyneutralmarkers(24,24, 0);
+			//pPollengrid.neutralmarkers=copyneutralmarkers;
+			pPollengrid.Number=kartenpos+1;
+		
+			pPollengrid.xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
+											 +0.5*treerows/lentx;
+											 
+			pPollengrid.ycoo=floor(kartenpos/lentx)*treecols/lenty
+											   +0.5*treecols/lenty;
+			
+			pollen_list.emplace_back(std::move(pPollengrid));
+		}
+		
+		for(int kartenpos=0; kartenpos< (parameter[0].pollengridxpoints*parameter[0].pollengridypoints); kartenpos++) {
+			Pollencalcs pPollencalcs;
+			pPollencalcs.neutral.reserve(24*10000); // reserve memory
+			pPollencalcs.name.reserve(1000);					
+			pPollencalcs.seedweight.reserve(1000);
+			pPollencalcs.droughtresist.reserve(1000);
+			pPollencalcs.selving.reserve(1000);
+			pPollencalcs.pname.reserve(1000);
+			pPollencalcs.filled=0;
+
+			pollcalcs.emplace_back(std::move(pPollencalcs));
+		}
 
         short int initialelevation = 0;
         if (parameter[0].mapylength == 1)
@@ -915,8 +989,8 @@ void initialiseMaps() {
 
         // create an evaluation element for each site
         Evaluation pEvaluation;
-        // pEvaluation.yworldcoo = aktortyworldcoo;
-        // pEvaluation.xworldcoo = aktortxworldcoo;
+         pEvaluation.yworldcoo = aktortyworldcoo;
+        pEvaluation.xworldcoo = aktortxworldcoo;
         pEvaluation.basalarealist.clear();
         pEvaluation.basalarealist.shrink_to_fit();
         pEvaluation.basalarearunmeanlist.clear();
@@ -960,6 +1034,39 @@ void initialiseMaps() {
         evaluation_list.emplace_back(std::move(pEvaluation));
     }
     cout << " ... ... ended initialise Maps " << endl;
+
+	aktort=0;
+	for (vector<vector<Cryogrid> >::iterator posw = world_cryo_list.begin(); posw != world_cryo_list.end(); posw++) {
+		vector<Cryogrid>& cryo_list = *posw;
+
+		aktort++;
+
+		// int aktortyworldcoo=(int) floor( (double) (aktort-1)/parameter[0].mapxlength );
+		// int aktortxworldcoo=(aktort-1) - (aktortyworldcoo * parameter[0].mapxlength);
+
+		// TODO: assure 10x10 m grid
+		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
+
+		// cout << (int) (ceil(treerows*parameter[0].sizemagnif/50) * ceil(treecols*parameter[0].sizemagnif/50)) << " cells to fill " << endl;
+		for (int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++) {
+			Cryogrid pCryogrid;
+
+			pCryogrid.ycoo=floor( (double) kartenpos/ceil(treecols*sizemagnifcryo) );
+			pCryogrid.xcoo=(double) kartenpos - (pCryogrid.ycoo * ceil(treecols*sizemagnifcryo));
+
+			pCryogrid.leafarea=0;
+			pCryogrid.leafarea_deciduous=0;
+			pCryogrid.stemarea=0;
+			pCryogrid.maxtreeheight=0;
+			pCryogrid.meantreeheight=0;
+			pCryogrid.treecount=0;
+			pCryogrid.maxthawing_depth = 0;
+			pCryogrid.litterheight0=0;
+			pCryogrid.soilhumidity=0;
+			
+			cryo_list.emplace_back(std::move(pCryogrid));
+		}
+	}
 }
 
 void runSimulation() {
@@ -975,7 +1082,7 @@ void runSimulation() {
         fillElevations();
 
     // tree input from files and/or seed input
-    Treedistribution(&parameter[0], stringlengthmax);
+    Treedistribution(&parameter[0]);
 
     parameter[0].ivort = 0;
 
@@ -992,14 +1099,15 @@ int main() {
     // console output of the version and general information
     printf("\n---->\tLAVESI\n");
     printf(
-        "\n You have started  LAVESI-FIRE, "
+        "\n You have started  LAVESI, "
         "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests and wildfires in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 2.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-FIRE)"
-        "\n Date:\t\t 14.04.2021"
+        "\n\n Version:\t 4.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-CRYOGRID-FIRE)"
+        "\n Date:\t\t 04.12.2023"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
         "\n\t Josias Gloy"
+        "\n\t Luca Farkas"
         "\n\t of prior versions:"
         "\n\t Alexander Gerdes, Nadja Kath, Mareike Wieczorek"
         "\n");
@@ -1042,8 +1150,10 @@ int main() {
         printf("\n\tProgress: %d of %d\n", nruns, parameter[0].runs);
 
         parameter[0].nameakt = 0;
-        // parameter[0].lineakt = 0;
+        parameter[0].lineakt = 0;
         parameter[0].yearswithseedintro = yearswithseedintropuffer;
+
+		parameter[0].cryogridcalled=false;
 
         runSimulation();
     }

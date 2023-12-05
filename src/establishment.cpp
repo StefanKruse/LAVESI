@@ -27,11 +27,11 @@ void Treeestablishment(Parameter* parameter,
             auto& seed = seed_list[i_seed];
             if (!seed.dead && !seed.incone) {
                 // determine if the seed germinates, depending on the density around it and the litter layer
+
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
-                const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
-                                     + static_cast<std::size_t>(j);
+                const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif) + static_cast<std::size_t>(j);
 
                 if ((parameter[0].demlandscape) && (plot_list[curposi].elevation == 32767)) {
                     seed.dead = true;
@@ -139,7 +139,7 @@ void Treeestablishment(Parameter* parameter,
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
 // if(basalgrowth_help>10)
 	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
-	
+
                 // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
                 double germinationprobability = 0.0;
                 if (parameter[0].lineartransect == true) {
@@ -177,16 +177,17 @@ void Treeestablishment(Parameter* parameter,
 					if (maxbw_help > 0.0) { // otherwise can survive
 						Tree tree;
 
-						// tree.yworldcoo = seed.yworldcoo;
-						// tree.xworldcoo = seed.xworldcoo;
+						tree.yworldcoo = seed.yworldcoo;
+						tree.xworldcoo = seed.xworldcoo;
 						tree.xcoo = seed.xcoo;
 						tree.ycoo = seed.ycoo;
-						// tree.name = ++parameter[0].nameakt;
-						// tree.namem = seed.namem;
-						// tree.namep = seed.namep;
+						tree.name = ++parameter[0].nameakt;
+						tree.namem = seed.namem;
+						tree.namep = seed.namep;
 						// tree.yr_of_establishment = yearposition;
-						// tree.line = seed.line;
-						// tree.generation = seed.generation;
+						tree.line = seed.line;
+						tree.generation = seed.generation;
+						tree.origin=seed.origin;
 						tree.dbasal = basalgrowth_help;
 						tree.dbasalmax = 1000 * maxbw_help;
 						tree.dbasalrel = 1000;
@@ -213,6 +214,32 @@ void Treeestablishment(Parameter* parameter,
 						tree.growing = true;
 						tree.species = seed.species;
 						tree.thawing_depthinfluence = thawing_depthinfluence_help;
+						tree.seedweight = seed.seedweight;
+						tree.droughtresist = seed.droughtresist;
+						// tree.seednumber = seed.seednumber;
+
+						//double ranc = uniform.draw();
+						//if (ranc*100<=tree.clonality && tree.clonality!=0){
+						//	tree.cloning = true;
+						//} else {
+							tree.cloning = true;
+						//}
+						tree.cloningactive=false;
+						tree.clonetimer=0;
+						tree.cloned=false;
+						tree.cloneboost=1;
+
+						tree.selving = seed.selving;
+
+						// tree.neutralmarkers.resize(24,999999+1);
+						tree.neutralmarkers=seed.neutralmarkers;
+						tree.inbreedingdepression=0;
+						for(unsigned int neutralcounter=0;neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
+							if (tree.neutralmarkers[neutralcounter]==tree.neutralmarkers[neutralcounter+1]){
+								tree.inbreedingdepression=tree.inbreedingdepression+(10.0/( tree.neutralmarkers.size()/2.0));
+							}
+						}
+
 						tree.envirimpact = 10000;
 						tree.twi = 6.25*100;
 						tree.soilhumidity = 1;
@@ -224,14 +251,10 @@ void Treeestablishment(Parameter* parameter,
 						seed.dead = true;
 						seed_list.remove(i_seed);
 					}
-                } //else {
-                    // seed.dead = true;
-                    // seed_list.remove(i_seed);
-                // }
+                }
             }
         }  // seed_list loop
         seed_list.consolidate();
         tree_list.consolidate();
     }
 }
-

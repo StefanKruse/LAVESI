@@ -52,7 +52,10 @@ double getMaxbasalwachstum(int yearposition, vector<Weather>& weather_list, Tree
                     * weather_list[yearposition].weatherfactor[tree.species];
         }
     }
-
+	maxbw_help=maxbw_help *(tree.droughtresist/100);
+	// maxbw_help=maxbw_help/pow(tree.seednumber,0.5);
+	maxbw_help=maxbw_help*tree.cloneboost;
+	maxbw_help=maxbw_help-(maxbw_help*tree.inbreedingdepression);
     return maxbw_help;
 }
 
@@ -106,6 +109,10 @@ double getMaxbreastwachstum(int yearposition, vector<Weather>& weather_list, Tre
                               * weather_list[yearposition].weatherfactor[tree.species];
         }
     }
+	maxbrw_help=maxbrw_help*(tree.droughtresist/100);
+	// maxbrw_help=maxbrw_help/pow(tree.seednumber,0.5);
+	maxbrw_help=maxbrw_help*tree.cloneboost;
+	maxbrw_help=maxbrw_help-(maxbrw_help*tree.inbreedingdepression);
     return (maxbrw_help);
 }
 
@@ -120,7 +127,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 #pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
             auto& tree = tree_list[tree_i];
-			
+		
 			if (tree.growing == true) {
 				double maxbasalwachstum = 0.0;
 				maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
@@ -131,7 +138,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				// basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
 
 				if (parameter[0].demlandscape) {
-					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
+					basalwachstum = basalwachstum * ((double)tree.envirimpact / 10000) * tree.soilhumidity;
 // if(basalwachstum>10)
 	// cout << " basalwachstum = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
 				}
@@ -151,7 +158,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						tree.dbasalrel = 0;
 					else
 						// tree.dbasalrel = 1000 * (basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal)) * tree.soilhumidity;
-						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum) * tree.soilhumidity;
+						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum);
 				}
 // if(tree.dbasal > 100)
 	// cout << " Basal dia = " << tree.dbasal << " -> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << " ... " << tree.elevation/10 << " ... " << tree.soilhumidity << endl;
@@ -186,7 +193,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 					breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
 
 					if (parameter[0].demlandscape) {
-						breastwachstum = breastwachstum * (double)tree.envirimpact / 10000;
+						breastwachstum = breastwachstum * ((double)tree.envirimpact / 10000) * tree.soilhumidity;
 					}
 
 					if (breastwachstum < 0.0) {
@@ -202,7 +209,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						if (maxbreastwachstum <= 0.0)
 							tree.dbreastrel = 0;
 						else
-							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum) * tree.soilhumidity;
+							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum);
 					}
 // cout << "-> breasrel= " << tree.dbreastrel << " <- " << breastwachstum << " / " << maxbreastwachstum << " * " << tree.soilhumidity << endl;
 				}

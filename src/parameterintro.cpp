@@ -211,6 +211,44 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].thawing_depth) ? "true" : "false");
     }
 
+    strcpy(uebergabestring, "cryogrid_thawing_depth");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].cryogrid_thawing_depth = true;
+    } else {
+        parameter[0].cryogrid_thawing_depth = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].cryogrid_thawing_depth) ? "true" : "false");
+    }
+	
+    strcpy(uebergabestring, "cryogrid_scenario");
+    parameter[0].cryogrid_scenario = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_scenario);
+    }
+
+    strcpy(uebergabestring, "cryogrid_disturbanceyear");
+    parameter[0].cryogrid_disturbanceyear = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_disturbanceyear);
+    }
+	
+    strcpy(uebergabestring, "cryogrid_firstyear");
+    parameter[0].cryogrid_firstyear = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].cryogrid_firstyear);
+    }
+
+    strcpy(uebergabestring, "cryogrid_slurm");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].cryogrid_slurm = true;
+    } else {
+        parameter[0].cryogrid_slurm = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].cryogrid_slurm) ? "true" : "false");
+    }
+
     strcpy(uebergabestring, "demlandscape");
     if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
         parameter[0].demlandscape = true;
@@ -377,7 +415,28 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].sizemagnif);
     }
-
+	
+	strcpy(uebergabestring,"pollengridpoints");
+	parameter[0].pollengridpoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridpoints);
+	}
+	
+	strcpy(uebergabestring,"pollengridxpoints");
+	parameter[0].pollengridxpoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridxpoints);
+	}
+	
+	strcpy(uebergabestring,"pollengridypoints");
+	parameter[0].pollengridypoints=(int) Parameterinput(&uebergabestring[0], stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true) 
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollengridypoints);
+	}
+	
     strcpy(uebergabestring, "starttrees");
     parameter[0].starttrees = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -495,14 +554,14 @@ void Parameterinput(void) {
 
     strcpy(uebergabestring, "seedintronumber");
     parameter[0].seedintronumber = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
-	parameter[0].seedintronumber = (int) parameter[0].seedintronumber * ((treerows/100)*(treecols/100)); // per ha
+    parameter[0].seedintronumber = (int) parameter[0].seedintronumber *  (((double)treerows/100)*((double)treecols/100)); // per ha
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumber);
     }
 
     strcpy(uebergabestring, "seedintronumberpermanent");
     parameter[0].seedintronumberpermanent = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
-	parameter[0].seedintronumberpermanent = (int) parameter[0].seedintronumberpermanent * ((treerows/100)*(treecols/100)); // per ha
+	parameter[0].seedintronumberpermanent = (int) parameter[0].seedintronumberpermanent *  (((double)treerows/100)*((double)treecols/100)); // per ha
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
     }
@@ -855,13 +914,34 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);
     }
-
+	
+	strcpy(uebergabestring,"variabletraits");
+	parameter[0].variabletraits=(int) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].variabletraits);
+	}
+	
     strcpy(uebergabestring, "pollination");
     parameter[0].pollination = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].pollination);
     }
-
+	
+	strcpy(uebergabestring,"seedweightfactor");
+	parameter[0].seedweightfactor=(double) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].seedweightfactor);
+	}	
+	
+	strcpy(uebergabestring,"seednumberfactor");
+	parameter[0].seednumberfactor=(double) Parameterinput(&uebergabestring[0],stringlengthmax, &divisionsign[0], &parameter[0]);
+	if (parameter[0].parameterinputvis ==true)
+	{
+		printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].seednumberfactor);
+	}
+	
     strcpy(uebergabestring, "pollendirectionvariance");
     parameter[0].pollendirectionvariance = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -882,8 +962,7 @@ void Parameterinput(void) {
     parameter[0].precdiffort = 0.0;
 }
 
-void Getspeciestraits(void)
-{	
+void Getspeciestraits(void) {	
 	FILE *f;
 	f = fopen("specieslist.csv","r"); 
 	if (f == NULL)

@@ -51,13 +51,14 @@ void Seeddispersal(//int jahr,
 
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
-
+	
         vector<vector<Envirgrid>>::iterator world_positon_b = (world_plot_list.begin() + aktort);
         vector<Envirgrid>& plot_list = *world_positon_b;
 
         // determine the current location, so that in long distance dispersal the target can be determined
         aktort++;
-
+		//int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
+        //int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
         // variable for displaying seeds crossing the borders // TODO: move to only used when debugging mode
         int seedleftN = 0, seedleftE = 0, seedleftS = 0, seedleftW = 0;
 
@@ -65,10 +66,18 @@ void Seeddispersal(//int jahr,
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
         for (unsigned int i = 0; i < seed_list.size(); ++i) {
             auto& seed = seed_list[i];
+			//when a print was here it worked
+			
+	
+			
+			//so at this points seeds are counted as dead and not incone. despite otherwsie being listed as incone
             if (!seed.dead && seed.incone) {
+				//now with a print here it does not.
+				//this means either the ssed are conted as dead or as not incone. ILL just print that information
+				
                 if (uniform.draw() <= parameter[0].seedflightrate) {
                     double ratiorn = uniform.draw();
-
+					
                     seed.incone = false;
 
                     // double dispersaldistance = 0.0;
@@ -157,10 +166,22 @@ void Seeddispersal(//int jahr,
                         seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + upslopedispfact * dispfraction * jquer);
                         seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + upslopedispfact * dispfraction * iquer);
                     } else {
-                        seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + jquer);
-                        seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + iquer);
+						// cout << "last position treex" << seed.xcoo << endl;
+						// cout << "last position treey" << seed.ycoo << endl;
+						// cout << "jquer" << jquer << endl;
+						// cout << "iquer" << iquer << endl;
+						
+                        seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + (jquer/pow(seed.currentweight,parameter[0].seedweightfactor)));
+                        seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + (iquer/pow(seed.currentweight,parameter[0].seedweightfactor)));
+						
+						// cout << "new position seedx" << seed.xcoo << endl;
+						// cout << "new position seedy" << seed.ycoo << endl;
                     }
-
+					// seed.xcoo=seed.xcoo+jquer/pow(seed.currentweight,parameter[0].seedweightfactor);
+					// seed.ycoo=seed.ycoo+iquer/pow(seed.currentweight,parameter[0].seedweightfactor);
+					//seed.dispersaldistance=dispersaldistance/pow(seed.currentweight,parameter[0].seedweightfactor);
+					
+					
                     // check whether seed lands on plot or leaves the plot
                     bool sameausserhalb = false;
                     if (seed.ycoo > 1000 * ((int)treerows - 1)) {
@@ -219,11 +240,21 @@ void Seeddispersal(//int jahr,
                                (double)seed.ycoo / 1000, (double)seed.xcoo / 1000);
                         exit(1);
                     }
-
+					//if(parameter[0].ivort<5000){
+					//	if (seed.ycoo>1000){
+					//		if (seed.ycoo<=49900){
+					//			sameausserhalb = true;
+					//		}
+					//		else if(seed.xcoo>100 && seed.xcoo <=900){
+					//			sameausserhalb = true;
+					//		}
+					//	}
+					//	}
                     if (sameausserhalb) {
-                        seed.dead = true;
+						seed.dead = true;
                         seed_list.remove(i);
-                    }
+					}
+                    
                 }
             }
         }

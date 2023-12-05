@@ -50,9 +50,7 @@ void Ageing(//Parameter* parameter,
                 auto& tree = tree_list[tree_i];
 
 				if (tree.clonetimer>0){
-					// printf("ageing test before %d", tree.clonetimer);
-					// printf("\n");
-						tree.clonetimer--;
+					tree.clonetimer--;
 				}
 				
 				if (tree.growing == true) {
@@ -80,20 +78,12 @@ void Ageing(//Parameter* parameter,
 							if (tree.height / 10 >= tree.coneheight ) {
 								tree.cone = true;
 							}
-							//else if (tree.height / 10 >= tree.coneheight && tree.cloning == true) {
-							//	tree.cloningactive = true;
-							//}
 						}			
 					} else if (tree.cone == true) {
 						tree.seednewly_produced = 0;
 					}
 					
-				}
-				// if (tree.clonetimer>0){
-						// printf("ageing test after %d", tree.clonetimer);
-						// printf("\n");
-							// }
-				
+				}				
 			}
         }  // tree list
     }  // world list

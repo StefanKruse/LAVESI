@@ -21,7 +21,6 @@ void TreeMort(int yearposition_help,
 
     RandomNumber<double> uniform(0, 1);
 	
-// #pragma omp parallel for default(shared) private(uniform) schedule(guided)
 #pragma omp parallel for default(shared) private(uniform) schedule(static)
     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
         auto& tree = tree_list[tree_i];
@@ -135,7 +134,6 @@ void TreeMort(int yearposition_help,
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
-            // double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort + tree.soilhumidity;
             double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort;
 			
 			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
@@ -148,10 +146,6 @@ void TreeMort(int yearposition_help,
 			} else if (parameter[0].firemode == 0) {
 				treemortality = treemortality;
 			}
-			
-			// if (tree.firedamage > 0) {
-			// cout << "treemortality: " << treemortality << " - tree.firedamage: " << tree.firedamage << endl;
-			// }
 
 			if(tree.soilhumidity == 0.0)
 				treemortality += 0.1;
@@ -162,19 +156,10 @@ void TreeMort(int yearposition_help,
                 treemortality = 0.0;
             }
 
-		// if((double)tree.height / 10 > 10)
-		// cout << (double)tree.height / 10 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort <<  " - " << tree.soilhumidity << endl;
-
             // determine if a tree dies
 			if ( ((double) uniform.draw() < treemortality) || (tree.envirimpact <= 0) ) {
                 tree.growing = false;
-				// if (tree.firedamage > 0)
-					// cout << "tree_list[tree_i].growing = " << tree_list[tree_i].growing;
-                tree_list.remove(tree_i);
-                // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
-				// if (tree.firedamage > 0)
-					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;				
-			// cout << " ### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | tree.firedamage=" << (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)) << " | Treemortg=" << Treemortg << endl;
+                tree_list.remove(tree_i);				
             }
         }
     }
@@ -193,7 +178,6 @@ void Mortality(Parameter* parameter,
 			   vector<vector<Envirgrid>>& world_plot_list) {
     int aktort = 0;
 	
-
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather>& weather_list = *posw;
         vector<VectorList<Tree>>::iterator world_positon_b = (world_tree_list.begin() + aktort);
@@ -214,7 +198,6 @@ void Mortality(Parameter* parameter,
 		RandomNumber<double> uniform(0, 1);
 
 		// mortality of seeds
-// #pragma omp parallel for default(shared) private(uniform) schedule(guided)
 #pragma omp parallel for default(shared) private(uniform) schedule(static)
 		for (unsigned int i = 0; i < seed_list.size(); ++i) {
 			auto& seed = seed_list[i];
@@ -247,7 +230,6 @@ void Mortality(Parameter* parameter,
 			pollcalcs[kartenpos].filled = 0;
 		}
 
-// #pragma omp parallel for default(shared) schedule(guided)
 #pragma omp parallel for default(shared) schedule(static)
 		for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
 			auto& tree = tree_list[tree_i];
@@ -275,7 +257,6 @@ void Mortality(Parameter* parameter,
 			}
 		}
 
-// #pragma omp parallel for default(shared) schedule(guided)
 #pragma omp parallel for default(shared) schedule(static)
 		// TODO make independent from parameter just based on size
 		for(int kartenpos=0;kartenpos<(parameter[0].pollengridxpoints*parameter[0].pollengridypoints);kartenpos++) {
@@ -340,11 +321,6 @@ void Mortality(Parameter* parameter,
 
 			auto& tree = tree_list[it];
 			
-			// if( (pPollengrid.xcoo + 0.5*treerows/lentx >= tree.xcoo/1000)
-				// &&       (pPollengrid.ycoo + 0.5*treecols/lenty	>= tree.ycoo/1000)
-				// &&		 (pPollengrid.ycoo - 0.5*treecols/lentx	<  tree.ycoo/1000)	
-				// &&		 (pPollengrid.xcoo - 0.5*treerows/lenty	<  tree.xcoo/1000)
-				// ) {
 				if(tree.seednewly_produced>0) {
 					// declare structures to copy locally arriving pollen information
 					// TODO this is computationally intensive, better nested around gridpoints and copy once all data from the pollencalcs structure for all trees in this
@@ -356,18 +332,14 @@ void Mortality(Parameter* parameter,
 					vector<int> pollname;
 					
 					// TODO PARAL could be a direct check and if portion > seedconemort just let it survive or save this and use for selving evaluation, saving 1 RNG
-					// unsigned int seedlebend=0;
 					vector<unsigned short> seedliving;
 					for(int sna=0; sna < tree.seednewly_produced; sna++) {
 						double zufallsz = 0.0 +( (double) 1.0*uniform.draw() );
 						if(zufallsz>=parameter[0].seedconemort) {
-							// ++seedlebend;
 							seedliving.push_back(zufallsz*100);
 						}
 					}
-					// cout << " seedlebend = " << seedlebend << endl;
 					
-					// if(seedlebend>0) {
 					if(seedliving.size()>0) {
 						int position=(floor(((tree.ycoo/1000)*0.9999999)/(treerows/lentx))*lenty)+(floor(((tree.xcoo/1000)*0.9999999)/(treecols/lenty)));
 						copy(pollcalcs[position].neutral.begin(), pollcalcs[position].neutral.end(), back_inserter(Vneutral));
@@ -377,44 +349,7 @@ void Mortality(Parameter* parameter,
 						copy(pollcalcs[position].selving.begin(), pollcalcs[position].selving.end(), back_inserter(Vselve));
 						copy(pollcalcs[position].pname.begin(), pollcalcs[position].pname.end(), back_inserter(pollname));
 						pollcalcs[position].filled = 1;
-						/*
-						if( (parameter[0].pollination==1 && parameter[0].ivort>1045) || (parameter[0].pollination==9)) {
-							int position=(floor(((tree.ycoo/1000)*0.9999999)/(treerows/lentx))*lenty)+(floor(((tree.xcoo/1000)*0.9999999)/(treecols/lenty)));
-							if (pollcalcs[position].filled==0){
-								Pollinationprobability(tree.xcoo,tree.ycoo,&parameter[0],world_positon_p,direction,velocity,ripm,cntr,p,kappa,phi,dr,dx,dy,I0kappa,pe,C,m, Vname,Vthdpth,Vdrought,Vselve,Vneutral,pollname);
-								
-								// pollcalcs[position].neutral = Vneutral;
-								// pollcalcs[position].name = Vname;
-								// pollcalcs[position].seedweight = Vthdpth;
-								// pollcalcs[position].droughtresist = Vdrought;
-								// pollcalcs[position].selving = Vselve;
-								// pollcalcs[position].pname = pollname;
-								copy(Vneutral.begin(), Vneutral.end(), back_inserter(pollcalcs[position].neutral));
-								copy(Vname.begin(), Vname.end(), back_inserter(pollcalcs[position].name));
-								copy(Vthdpth.begin(), Vthdpth.end(), back_inserter(pollcalcs[position].seedweight));
-								copy(Vdrought.begin(), Vdrought.end(), back_inserter(pollcalcs[position].droughtresist));
-								copy(Vselve.begin(), Vselve.end(), back_inserter(pollcalcs[position].selving));
-								copy(pollname.begin(), pollname.end(), back_inserter(pollcalcs[position].pname));
-								pollcalcs[position].filled = 1;
-							} else {
-								// Vneutral = pollcalcs[position].neutral;
-								// Vname = pollcalcs[position].name; 
-								// Vthdpth = pollcalcs[position].seedweight ;
-								// Vdrought  = pollcalcs[position].droughtresist ;
-								// Vselve = pollcalcs[position].selving ;
-								// pollname = pollcalcs[position].pname;	
-								copy(pollcalcs[position].neutral.begin(), pollcalcs[position].neutral.end(), back_inserter(Vneutral));
-								copy(pollcalcs[position].name.begin(), pollcalcs[position].name.end(), back_inserter(Vname));
-								copy(pollcalcs[position].seedweight.begin(), pollcalcs[position].seedweight.end(), back_inserter(Vthdpth));
-								copy(pollcalcs[position].droughtresist.begin(), pollcalcs[position].droughtresist.end(), back_inserter(Vdrought));
-								copy(pollcalcs[position].selving.begin(), pollcalcs[position].selving.end(), back_inserter(Vselve));
-								copy(pollcalcs[position].pname.begin(), pollcalcs[position].pname.end(), back_inserter(pollname));
-								pollcalcs[position].filled = 1;
-							}
-						}
-						*/
 						
-						// for(unsigned int sl=0; sl<seedlebend; sl++) {
 						for(unsigned int sl=0; sl<seedliving.size(); sl++) {
 							Seed seed;
 							seed.yworldcoo=aktortyworldcoo;
@@ -424,98 +359,40 @@ void Mortality(Parameter* parameter,
 							seed.dead = false;
 							seed.generation = tree.generation+1;
 							seed.namem=tree.name;
-							// double rans = uniform.draw();
-							// if ( rans*100 < tree.selving && (parameter[0].pollination==1 || parameter[0].pollination==9) ) {
 							if ( seedliving[sl] < tree.selving && (parameter[0].pollination==1 || parameter[0].pollination==9) ) {
-								//cout << "selfing" << endl;
-								//If no fathering pollen grid cell is found....
+								// if no fathering pollen grid cell is found....
 								seed.namep=0;
-								//seed.seedweight=1;
-								seed.seedweight=normrand(tree.seedweight,0.05,0.33,1.66);								
+								seed.seedweight=normrand(tree.seedweight,0.05,0.33,1.66);	
 								seed.droughtresist=normrand(tree.droughtresist,8,0,100);
-								// seed.seednumber=normrand(tree.seednumber,0.05,0.33,1.66);
-								
 								seed.selving=normrand(tree.selving,8,0,100);
-								//seed.selving=normrand(tree.selving,8,0,100);
-								
-								//seed.droughtresist=100;
-								// seed.neutralmarkers.resize(24,999999+1);
-								// seed.neutralmarkers=mixvector(tree.neutralmarkers,tree.neutralmarkers);
-								// vector<unsigned int> mixvector_i(24,999999+1); 									
-								// mixvector_i = mixvector(tree.neutralmarkers,tree.neutralmarkers);
-									// copy item for item
-									// for(unsigned int i=0; i < 24; i++) {
-										// seed.neutralmarkers[i] = mixvector_i[i];
-									// }
 								mixvector(tree.neutralmarkers,tree.neutralmarkers,seed.neutralmarkers);
-								//vector<unsigned int> copyneutralmarkers(16, 0);
-								// generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
-								//seed.neutralmarkers=copyneutralmarkers;
 							}
 							// if chosen, determine the father by pollination out of available (matured) trees
 							
 							else if((Vname.size()>0) && (parameter[0].pollination==1 || parameter[0].pollination==9)) {
-								//cout << " pollination" << endl;
 								double randecide=uniform.draw();
 								int iran= floor (randecide *(Vname.size()-0.00001)); //at the end -1 was deleteed as it is suspected to be causing the bug
-								//cout << " iran =" << iran << endl;
 								//Vname.at(iran) is the chosen pollen grid cell number returned from the pollination function
 								//Vthdpth.at(iran) is the chosen trait (seed weight) value returned from the pollination function
 								seed.namep=Vname.at(iran); 
-								
-								// printf("Vnamesiz: %ld ",Vname.size());
-								// printf("Vnamesiz: %4.4f ",randecide);
-								// printf("Vnamesiz: %d ",iran);
+
 								seed.seedweight=mixrand(Vthdpth.at(iran),0.05,tree.seedweight,0.05,0.33,1.66); // changed the std to be a lot 
 								seed.droughtresist=mixrand(Vdrought.at(iran),8,tree.droughtresist,8,0,100);
-								// seed.seednumber=mixrand(Vnumber.at(iran),0.05,tree.seednumber,0.05,0.33,1.66);
-								// printf("seednumber: %4.4f ",Vthdpth.at(iran));
-								// printf("neutral0 %d ",Vneutral[0]);
-								// printf("neutral23 %d ",Vneutral[23]);
-								
-								
 								seed.selving=mixrand(Vselve.at(iran),8,tree.selving,8,0,100);
 								
-								
 								std::array<unsigned int, 24> storearray;
-								// vector<unsigned int> neutralstore = Vneutral.at(0);
 								for (unsigned int i=0; i < 24; i++ ){
 									int	point_i= i+(24*iran);
-									// printf("tree.n: %d ",neutralstore[0]);
-									// storearray[i] = neutralstore[point_i];
 									storearray[i] = Vneutral[point_i];
-									// storearray[i] = i;
-									// if (storearray[i] <0 || storearray[1]> 1000000)
-									// {
-									// printf("iran: %d ", iran );
-									// printf("pollen.n: %d ", storearray[i] );
-									// 
-									// }
 								}
 								
 								mixvector(tree.neutralmarkers,storearray,seed.neutralmarkers);
-								// for (unsigned int i=0; i < 24; i++ ){
-								// printf("seed.n: %d ", seed.neutralmarkers[i] );
-								
-								// }								
-								
 							} else if (parameter[0].pollination ==0) { ///TODO should be further upstream to avoid unnecessary computation. no need to keep pollenlist when there is no pollination 
 								if (parameter[0].variabletraits == 1) {
 									seed.namep=0;
-									//seed.seedweight=normrand(1,0.5,0.33,1.66);
 									seed.seedweight=1;
 									seed.droughtresist=100;
-									//seed.droughtresist=normrand(28.4532485252458,20,0,100);
-									// seed.seednumber=normrand(1,0.5,0.33,1.66);
-									
-									
 									seed.selving=normrand(50,20,0,100);
-									//seed.selving=normrand(50,20,0,100);
-									
-								
-									// generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
-									// seed.neutralmarkers=copyneutralmarkers;
-									// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
 									for(unsigned int i=0; i < 24; i++) {
 										seed.neutralmarkers[i] = uniform.draw()*999999;
 									 }
@@ -523,12 +400,9 @@ void Mortality(Parameter* parameter,
 									seed.namep=0;
 									seed.seedweight=1;
 									seed.droughtresist=100;
-									// seed.seednumber=1;
-									
 									seed.selving=0;
 								}
 							} else {
-								//cout << "no pollination seed deletion " << endl;
 								seed.dead = true;
 							}
 							
@@ -538,12 +412,10 @@ void Mortality(Parameter* parameter,
 								seed.generation=tree.generation+1;
 								seed.origin=tree.origin;
 								seed.incone=true;
-								//seed.weight=1;
 								seed.age=0;
 								seed.species=tree.species;
 								seed.releaseheight=tree.height;
 								seed.thawing_depthinfluence=100;
-								// newseed_list.push_back(seed);
 #pragma omp critical
 								{
 									seed_list.add_directly(std::move(seed));
@@ -555,13 +427,10 @@ void Mortality(Parameter* parameter,
 				
 				if (tree.cloningactive==true) {
 					if (tree.cloned!=true){
-						//printf("Did this work?");  Its seems to be the creation of the new tree that is causing the issue
 						tree.clonetimer=6;
-						//printf("started cloning %d", tree.clonetimer);
-						//printf("\n");
 						tree.cloned=true;
 						Tree treenew;
-									   int i = tree.ycoo * parameter[0].sizemagnif / 1000;
+						int i = tree.ycoo * parameter[0].sizemagnif / 1000;
 						int j = tree.xcoo * parameter[0].sizemagnif / 1000;
 
 						const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif) + static_cast<std::size_t>(j);
@@ -633,11 +502,9 @@ void Mortality(Parameter* parameter,
 							if (parameter[0].densitytiletree == 1)  // sum of values
 							{
 								density_help = (1.0 - (density_help / ((double)plot_list[curposi].Treedensityvalue / 10000)));
-								//                           density_desired(at position) / density_currently(at position)
 							} else if (parameter[0].densitytiletree == 2)  // multiplication of values
 							{
 								density_help = (1.0 - (density_help / (((double)plot_list[curposi].Treedensityvalue / 10000) * density_help)));
-								//                           density_desired(at position) / density_currently(at position)
 							}
 						} else {
 							density_help = 0.0;  // no competition
@@ -659,15 +526,11 @@ void Mortality(Parameter* parameter,
 					double moveranx=uniform.draw()*4000-2000;
 					double moverany=uniform.draw()*4000-2000;
 					
-						//printf("creatinf tree at %4.4f",  tree.ycoo+moverany );
-						//printf("and  %4.4f", tree.xcoo+moveranx);
 					if (tree.ycoo+moverany > 1000 * ((int)treerows - 1)) {
 						treenew.ycoo = 1000 * ((int)treerows - 1);
-						//printf("moved");
 					}
 					else if (tree.ycoo+moverany <0) {
 						treenew.ycoo =0.0;
-						//printf("moved");
 					}
 					else{
 						treenew.ycoo = tree.ycoo+moverany; 
@@ -679,11 +542,9 @@ void Mortality(Parameter* parameter,
 					}
 					if (tree.xcoo+moveranx > 1000 * ((int)treecols - 1)) {
 						treenew.xcoo = 1000 * ((int)treecols - 1);
-						//printf("moved");
 					}
 					else if (tree.xcoo+moveranx < 0) {
 						treenew.xcoo = 0.0;
-						//printf("moved");
 					}
 					else {
 						treenew.xcoo = tree.xcoo+moveranx;
@@ -693,7 +554,6 @@ void Mortality(Parameter* parameter,
 					treenew.name = ++parameter[0].nameakt;
 					treenew.namem = tree.namem;
 					treenew.namep = 0;
-					// treenew.yr_of_establishment = yearposition;
 					treenew.line = tree.line;
 					treenew.generation = tree.generation+1;
 					treenew.origin=tree.origin;
@@ -706,7 +566,6 @@ void Mortality(Parameter* parameter,
 					// tree height update
 					if (parameter[0].allometryfunctiontype == 3) {// logistic growth
 						treenew.height = 10 * exp(speciestrait[tree.species].heightloga/(1+exp((speciestrait[tree.species].heightlogb-log(treenew.dbasal*10))/speciestrait[tree.species].heightlogc)));
-	// cout << "H = " << treenew.height << endl;
 					} else if (parameter[0].allometryfunctiontype == 1) {
 						treenew.height = 10 * speciestrait[tree.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[tree.species].dbasalheightalloexp);
 					} else {
@@ -716,30 +575,17 @@ void Mortality(Parameter* parameter,
 					treenew.cone = false;
 					treenew.coneheight = 65535;
 					treenew.seednewly_produced = 0;
-					// treenew.seedproduced = 0;
-					// treenew.buffer = 1;
 					treenew.densitywert = density_help;
-					// treenew.dispersaldistance = tree.dispersaldistance;
 					treenew.growing = true;
 					treenew.species = tree.species;
 					treenew.thawing_depthinfluence = thawing_depthinfluence_help;
 					treenew.seedweight = tree.seedweight;
 					treenew.droughtresist = tree.droughtresist;
-					// treenew.seednumber = tree.seednumber;
-											//double ranc = uniform.draw();
-					//if (ranc*100<=treenew.clonality && treenew.clonality!=0){
-					//	treenew.cloning = true;
-					//} else {
-						treenew.cloning = false;
-					//}
+					treenew.cloning = false;
 					treenew.cloningactive=true;
 					treenew.clonetimer=10;
-					//printf("new tree cloned %d", treenew.clonetimer);
-					//printf("\n");
 					treenew.cloned=true;
-					
 					treenew.selving = tree.selving;
-				
 					treenew.neutralmarkers=tree.neutralmarkers;
 					treenew.inbreedingdepression=tree.inbreedingdepression;
 					treenew.envirimpact = 10000;
@@ -748,9 +594,9 @@ void Mortality(Parameter* parameter,
 					treenew.crownstart = 0*10;
 					treenew.relcrowndamage = 0*1000;
 					//adding factor for growth here. should make this dependend on height maybe. although treeas are maturation height when the clone, so straight might be fine.
-						treenew.cloneboost=2;
-						tree.cloneboost=0.95;
-					// deleting tree if outside of plot should be here ???	
+					treenew.cloneboost=2;
+					tree.cloneboost=0.95;
+
 					tree_list.add(std::move(treenew));
 					
 					}
@@ -760,9 +606,7 @@ void Mortality(Parameter* parameter,
 						tree.cloningactive=false;
 					}
 				}
-			// } // in pollengrid
 		}// main tree loop for each tree
-		// seed_list.consolidate();
 		tree_list.consolidate();
 		
 		TreeMort(yearposition, 
@@ -772,4 +616,3 @@ void Mortality(Parameter* parameter,
 					);
     } // main world loop
 }
-

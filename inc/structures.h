@@ -6,10 +6,8 @@
 using namespace std;
 
 struct Tree { 
-	
     double seedweight,seedweightvar;
     double droughtresist;
-	// double seednumber;
 	double selving;
 	double cloneboost;  // used both as boost for clone and substractor for cloner.
     double dbasal;                  // 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision; could be replaced
@@ -21,8 +19,8 @@ struct Tree {
                         // km long/wide simulations // TODO really only positive? -> see compiler warnings
     unsigned int ycoo;  // 4	---> was double // TODO really only positive? -> see compiler warnings
     // double dispersaldistance;			// 8	-> not in use right now
-     int xworldcoo;						// 4	-> not in use right now
-     int yworldcoo;						// 4	-> not in use right now
+    int xworldcoo;						// 4	-> not in use right now
+    int yworldcoo;						// 4	-> not in use right now
     int name;							// 4	-> not in use right now
     int namem;							// 4	-> not in use right now
     int namep;							// 4	-> not in use right now
@@ -35,7 +33,6 @@ struct Tree {
     // int yr_of_dying;						// 4	-> not in use anymore
     // unsigned int seedproduced;			// 4	-> not in use right now; used only for visualisation
     // int buffer;							// 4	-> not in use right now
-	// vector<unsigned int> neutralmarkers;
 	std::array<unsigned int, 24> neutralmarkers;
     unsigned short int dbasalmax;           // 2	---> one year max probably few centimeters -> unsigned short int /1000 max 65cm
     unsigned short int dbasalrel;           // 2	---> one year max probably few centimeters -> unsigned short int /1000
@@ -63,7 +60,6 @@ struct Tree {
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced
-	
     // double weight;					// 8	-> not in use right now
     // double dispersaldistance;		// 8	-> not in use right now
     // double maxgrowth;				// 8	-> not in use right now
@@ -72,36 +68,33 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     double seedweight,seedweightvar;
     double currentweight;
     double droughtresist;
-	// double seednumber;
 	double selving;
     double thawing_depthinfluence;  	// 8
     int xcoo;              				// 4	---> was double -> int with /1000 precision
     int ycoo;              				// 4	---> was double -> int with /1000 precision
-     int xworldcoo;					// 4	-> not in use right now
-     int yworldcoo;					// 4	-> not in use right now
+    int xworldcoo;					// 4	-> not in use right now
+    int yworldcoo;					// 4	-> not in use right now
     int namem;						// 4	-> not in use right now
     int namep;						// 4	-> not in use right now
     int line;						// 4	-> not in use right now
     int generation;					// 4	-> not in use right now
     int origin;	
-	// vector<unsigned int> neutralmarkers;
 	std::array<unsigned int, 24> neutralmarkers;
-    unsigned short int
-        releaseheight;         // 2		in cm; max 65 m -> unsigned short int /10 max 65 m and still has 0.1 cm precision
+    unsigned short int releaseheight;         // 2		in cm; max 65 m -> unsigned short int /10 max 65 m and still has 0.1 cm precision
     unsigned short int age;    // 2	---> was int
     signed short int species;  // 2	---> was int
     bool incone;               // 1
     bool longdispersed;        // 1
     bool dead = false;         // 1
-	int firemort;				// ###CHANGED### for fire mortality
+	int firemort;				// for fire mortality
 };
 
 struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     int xcoo;              				
     int ycoo;
-int xworldcoo;					
-     int yworldcoo;    
-short int elevation;  // 2	---> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km
+	int xworldcoo;					
+    int yworldcoo;    
+	short int elevation;  // 2	---> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km
                           // elevation range (8 -> 2 bytes)
     unsigned short int Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
                                           // and 65.535 with precision of 1/10000 which is sufficient
@@ -149,13 +142,11 @@ short int elevation;  // 2	---> for memory consumptiom optimization use: signed 
               unsigned short int envirgrowthimpact = 1,
               unsigned short int soilhumidity = 30*100,
               unsigned short int twi = 6.25*100,
-			  
 			  unsigned short int envirfireimpact = 0,
 			  double fire = 0.0,
 			  unsigned short int firecells = 0,
 			  double fireintensitymax = 0,
 			  double fireintensitymean = 0)	
-			  
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
           Treenumber(Treenumber),
@@ -174,7 +165,6 @@ short int elevation;  // 2	---> for memory consumptiom optimization use: signed 
           envirgrowthimpact(envirgrowthimpact),
 		  soilhumidity(soilhumidity),
 		  twi(twi),
-		  
           envirfireimpact(envirfireimpact),
 		  fire(fire),
 		  firecells(firecells),
@@ -182,7 +172,7 @@ short int elevation;  // 2	---> for memory consumptiom optimization use: signed 
 		  fireintensitymean(fireintensitymean) {}
 };
 
-struct Pollengrid 	{
+struct Pollengrid	{
 	vector<unsigned int> neutralmarkers;	
 	vector<int> Treenames;					
 	double seedweight,seedweightvar;
@@ -193,10 +183,10 @@ struct Pollengrid 	{
 	unsigned int	ycoo;	
 	int Number;
 	int name;
-	};
+};
 
 
-struct Pollencalcs 	{
+struct Pollencalcs	{
 	vector<unsigned int> neutral;	
 	vector<int> name;					
 	vector<double> seedweight;
@@ -204,7 +194,7 @@ struct Pollencalcs 	{
 	vector<double> selving;
 	vector<int> pname;
 	unsigned short int filled;
-	};
+};
 
 struct Parameter {
     // output
@@ -468,10 +458,11 @@ struct Speciestraits {
 	double  biomasswoodfaca;
 	double  biomasswoodfacb;
 	int  lightdemand;
-	unsigned short int deciduous;
-	double  crownradiusestslope;
-	double  crownradiusestinterc;
-	double  leafareaslope;
+	double woodongreenmass;
+	unsigned short int deciduous;	// currently not used
+	double  crownradiusestslope;	// currently not used
+	double  crownradiusestinterc;	// currently not used
+	double  leafareaslope;			// currently not used
 };
 
 struct Weather {
@@ -534,18 +525,10 @@ struct Weather {
     double precipitationsummin;
     vector<double> weatherfactor;
     vector<double> weatherfactormin;
-    // double weatherfactorg;
-    // double weatherfactorming;
-    // double weatherfactors;
-    // double weatherfactormins;
     double droughtmort;
     double droughtmortmin;
     vector<double> janisothermrestriktion;
     vector<double> janisothermrestriktionmin;
-    // double janisothermrestriktions;
-    // double janisothermrestriktionsmin;
-    // double janisothermrestriktiong;
-    // double janisothermrestriktiongmin;
     double julisothermrestriktion;
     double julisothermrestriktionmin;
     double nddrestriktion;
@@ -603,7 +586,6 @@ struct Cryogrid {
 	double maxtreeheight;
 	double meantreeheight;
 	signed int treecount;
-	// double	finerootbiomass; // TODO: now constant later 
 	double maxthawing_depth;
 	double litterheight0;
 	double soilhumidity;

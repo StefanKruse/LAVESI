@@ -28,7 +28,6 @@ void Seedin() {
         }
 
         if (seedinput == true) {
-
             int seednobuffer;
             if (parameter[0].yearswithseedintro <= 0) {
                 seednobuffer = parameter[0].seedintronumberpermanent;
@@ -36,7 +35,7 @@ void Seedin() {
                 seednobuffer = parameter[0].seedintronumber;
             }
 			RandomNumber<double> uniform(0, 1);
-			// RandomNumber<double> uniformneutral(0, 999999);
+
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
             for (int n = 0; n < seednobuffer; n++) {
                 // calculate post-dispersal position
@@ -52,8 +51,7 @@ void Seedin() {
                 if ( (parameter[0].seedintro_maxy > 0) & (parameter[0].seedintro_maxy < (treerows - 1)) )
                     maxy = (double)parameter[0].seedintro_maxy;
 
-                // seedwinddispersalmode==1 => randomly from the south border.
-                if (parameter[0].seedwinddispersalmode == 1) {
+                if (parameter[0].seedwinddispersalmode == 1) { // seedwinddispersalmode==1 => randomly from the south border.
                     jseed = maxx * uniform.draw();
 
                     double dispersaldistance;
@@ -71,14 +69,11 @@ void Seedin() {
 
                     seedeintragen = true;
                     iseed = dispersaldistance;
-                }
-                // seedwinddispersalmode==2 => randomly all over the plot
-                else if (parameter[0].seedwinddispersalmode == 2) {
-                    do{
-					jseed = maxx * uniform.draw();
-                    iseed = maxy * uniform.draw();
-					}while( (iseed > 1000 && iseed <=49800) || (iseed > 49800 && jseed >200 && jseed <=900));
-
+                } else if (parameter[0].seedwinddispersalmode == 2) { // seedwinddispersalmode==2 => randomly all over the plot
+                    // do{
+						jseed = maxx * uniform.draw();
+						iseed = maxy * uniform.draw();
+					// } while( (iseed > 1000 && iseed <=49800) || (iseed > 49800 && jseed >200 && jseed <=900)); // do-while if a certain area needs to be specified
 
                     seedeintragen = true;
                 } else {
@@ -128,7 +123,7 @@ void Seedin() {
 						// }
 					// else if((seed.xcoo/ 1000) >900){
 						// seed.origin=3;
-						// }
+						// } // code here necessary to keep track on source areas
                     seed.incone = false;
                     // seed.weight = 1;
                     seed.age = 0;
@@ -137,41 +132,24 @@ void Seedin() {
                     seed.releaseheight = 0;
                     seed.thawing_depthinfluence = 100;
                     seed.dead = false;
-					if (parameter[0].variabletraits==1)
-					{
+					if (parameter[0].variabletraits==1) {
 						seed.seedweight=normrand(1,0.5,0.33,1.66);
 						seed.droughtresist=normrand(50,20,0,100);
-						//seed.seedweight=1;
-						//seed.droughtresist=100;
-						// seed.seednumber=normrand(1,0.5,0.33,1.66);
-
-						// seed.selving=0;
 						seed.selving=normrand(50,20,0,100);
 
-						// vector<unsigned int> copyneutralmarkers(24, 0);
-						// seed.neutralmarkers.resize(24);
-						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
 						for(unsigned int i=0; i < 24; i++) {
-											// seed.neutralmarkers[i] = uniformneutral.draw();
-											seed.neutralmarkers[i] = uniform.draw()*999999;
-										 }
-						// seed.neutralmarkers = copyneutralmarkers;
-					}
-					else
-					{
+							seed.neutralmarkers[i] = uniform.draw()*999999;
+						}
+					} else {
 						seed.seedweight=1;
 						seed.droughtresist=100;
-						// seed.seednumber=1;
-
 						seed.selving=0;
-
 					}
 					seed.currentweight=seed.seedweight;
 					if((seed.neutralmarkers.size() == 24) & (seed.neutralmarkers[0] != (999999+1))) { // filled vector and not the initialization value
-						#pragma omp critical
+#pragma omp critical
 						{
 							seed_list.add_directly(std::move(seed));
-							// seed_list.add(std::move(seed));
 						}
 					} else {
 						cout << " not enough markers " << endl;
@@ -229,7 +207,6 @@ void TreesIni() {
             short unsigned int inbreedingbuf1, inbreedingbuf2,inbreedingbuf3,inbreedingbuf4,inbreedingbuf5,inbreedingbuf6,inbreedingbuf7,inbreedingbuf8,inbreedingbuf9,inbreedingbuf10,inbreedingbuf11,inbreedingbuf12,inbreedingbuf13,inbreedingbuf14,inbreedingbuf15,inbreedingbuf16,inbreedingbuf17,inbreedingbuf18,inbreedingbuf19,inbreedingbuf20,inbreedingbuf21,inbreedingbuf22,inbreedingbuf23,inbreedingbuf24;
             double heightbuf, dbasalbuf, dbreastbuf, seedweightbuf, droughtbuf, selvingbuf, inbreedingbuf;
 			RandomNumber<double> uniform(0, 1);
-			// RandomNumber<double> uniformneutral(0, 999999);
 
             // ignoring the header the contents are appended to the tree array line by line
             while (fgets(puffer, 255555, f) != NULL) {
@@ -274,9 +251,6 @@ void TreesIni() {
                     sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf23);
                     sscanf(strtok(NULL, ";"), "%hu", &inbreedingbuf24);
 
-
-
-
                     Tree tree;
 
                     tree.yworldcoo = aktortyworldcoo;
@@ -301,47 +275,44 @@ void TreesIni() {
                     tree.droughtresist=droughtbuf;
                     tree.selving=selvingbuf;
                     tree.inbreedingdepression=inbreedingbuf;
-                        tree.neutralmarkers[0] = inbreedingbuf1;
-                        tree.neutralmarkers[1] = inbreedingbuf2;
-                        tree.neutralmarkers[2] = inbreedingbuf3;
-                        tree.neutralmarkers[3] = inbreedingbuf4;
-                        tree.neutralmarkers[4] = inbreedingbuf5;
-                        tree.neutralmarkers[5] = inbreedingbuf6;
-                        tree.neutralmarkers[6] = inbreedingbuf7;
-                        tree.neutralmarkers[7] = inbreedingbuf8;
-                        tree.neutralmarkers[8] = inbreedingbuf9;
-                        tree.neutralmarkers[9] = inbreedingbuf10;
-                        tree.neutralmarkers[10] = inbreedingbuf11;
-                        tree.neutralmarkers[11] = inbreedingbuf12;
-                        tree.neutralmarkers[12] = inbreedingbuf13;
-                        tree.neutralmarkers[13] = inbreedingbuf14;
-                        tree.neutralmarkers[14] = inbreedingbuf15;
-                        tree.neutralmarkers[15] = inbreedingbuf16;
-                        tree.neutralmarkers[16] = inbreedingbuf17;
-                        tree.neutralmarkers[17] = inbreedingbuf18;
-                        tree.neutralmarkers[18] = inbreedingbuf19;
-                        tree.neutralmarkers[19] = inbreedingbuf20;
-                        tree.neutralmarkers[20] = inbreedingbuf21;
-                        tree.neutralmarkers[21] = inbreedingbuf22;
-                        tree.neutralmarkers[22] = inbreedingbuf23;
-                        tree.neutralmarkers[23] = inbreedingbuf24;
+					tree.neutralmarkers[0] = inbreedingbuf1;
+					tree.neutralmarkers[1] = inbreedingbuf2;
+					tree.neutralmarkers[2] = inbreedingbuf3;
+					tree.neutralmarkers[3] = inbreedingbuf4;
+					tree.neutralmarkers[4] = inbreedingbuf5;
+					tree.neutralmarkers[5] = inbreedingbuf6;
+					tree.neutralmarkers[6] = inbreedingbuf7;
+					tree.neutralmarkers[7] = inbreedingbuf8;
+					tree.neutralmarkers[8] = inbreedingbuf9;
+					tree.neutralmarkers[9] = inbreedingbuf10;
+					tree.neutralmarkers[10] = inbreedingbuf11;
+					tree.neutralmarkers[11] = inbreedingbuf12;
+					tree.neutralmarkers[12] = inbreedingbuf13;
+					tree.neutralmarkers[13] = inbreedingbuf14;
+					tree.neutralmarkers[14] = inbreedingbuf15;
+					tree.neutralmarkers[15] = inbreedingbuf16;
+					tree.neutralmarkers[16] = inbreedingbuf17;
+					tree.neutralmarkers[17] = inbreedingbuf18;
+					tree.neutralmarkers[18] = inbreedingbuf19;
+					tree.neutralmarkers[19] = inbreedingbuf20;
+					tree.neutralmarkers[20] = inbreedingbuf21;
+					tree.neutralmarkers[21] = inbreedingbuf22;
+					tree.neutralmarkers[22] = inbreedingbuf23;
+					tree.neutralmarkers[23] = inbreedingbuf24;
 
                     if (tree.cone == true) {
                         tree.coneheight = 65535;
                     }
                     tree.seednewly_produced = 0;
-                    // tree.seedproduced = 0;
-                    // tree.buffer = 1;
                     tree.densitywert = 0;
                     tree.thawing_depthinfluence = 100;
                     tree.growing = true;
-					if (parameter[0].specpres == 0) {
+					if (parameter[0].specpres == 0) {// needs to be updated if trees are read in
 						tree.species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
 					} else {
 						tree.species = parameter[0].specpres;
 					}
-					if (parameter[0].variabletraits==1)
-					{
+					if (parameter[0].variabletraits==1) {
 						//tree.seedweight=normrand(1,0.5,0.33,1.66);
 						//tree.droughtresist=normrand(50,20,0,100);
 						//tree.seedweight=1;
@@ -378,12 +349,10 @@ void TreesIni() {
 					} else {
 						tree.seedweight=1;
 						tree.droughtresist=100;
-						// tree.seednumber=1;
-
 						tree.selving=0;
 					}
 
-					#pragma omp critical
+#pragma omp critical
 					{
 						tree_list.add_directly(std::move(tree));
 					}
@@ -399,7 +368,7 @@ void TreesIni() {
 
 void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorList<Seed>>& world_seed_list, vector<vector<Weather>>& world_weather_list) {
     RandomNumber<double> uniform(0, 1);
-	// RandomNumber<double> uniformneutral(0, 999999);
+
     // function parameters
     double logmodel_seeds_Po = 7.8997307;
     double logmodel_seeds_r = -0.6616466;
@@ -549,9 +518,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.namep = 0;
                         seed.line = ++parameter[0].lineakt;
                         seed.generation = 0;
-
 						seed.origin=1;
-
                         seed.incone = false;
                         // seed.weight = 1;
                         seed.age = 0;
@@ -561,41 +528,24 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                         seed.thawing_depthinfluence = 100;
                         // seed.dispersaldistance = dispersaldistance;
                         seed.dead = false;
-						if (parameter[0].variabletraits==1)
-						{
-						seed.seedweight=normrand(1,0.5,0.33,1.66);
-						seed.droughtresist=normrand(50,20,0,100);
-						//seed.seedweight=1;
-						//seed.droughtresist=100;
-						// seed.seednumber=normrand(1,0.5,0.33,1.66);
+						if (parameter[0].variabletraits==1) {
+							seed.seedweight=normrand(1,0.5,0.33,1.66);
+							seed.droughtresist=normrand(50,20,0,100);
 
-						//seed.selving=0;
-						seed.selving=normrand(50,20,0,100);
-
-
-						// vector<unsigned int> copyneutralmarkers(24, 0);
-						 // generate(copyneutralmarkers.begin(),copyneutralmarkers.end(), uniformneutral);
-						// seed.neutralmarkers=copyneutralmarkers;
-						// generate(seed.neutralmarkers.begin(),seed.neutralmarkers.end(), uniformneutral.draw());
-						for(unsigned int i=0; i < 24; i++) {
-											seed.neutralmarkers[i] = uniform.draw()*999999;
-										 }
-						}
-						else
-						{
-						seed.seedweight=1;
-						seed.droughtresist=100;
-						// seed.seednumber=1;
-
-									seed.selving=0;
-
+							//seed.selving=0;
+							seed.selving=normrand(50,20,0,100);
+							for(unsigned int i=0; i < 24; i++) {
+								seed.neutralmarkers[i] = uniform.draw()*999999;
+							}
+						} else {
+							seed.seedweight=1;
+							seed.droughtresist=100;
+							seed.selving=0;
 						}
 						seed.currentweight=seed.seedweight;
-
-						#pragma omp critical
+#pragma omp critical
 						{
 							seed_list.add_directly(std::move(seed));
-							// seed_list.add(std::move(seed));
 						}
                     }
                 }

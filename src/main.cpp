@@ -18,7 +18,6 @@ vector<VectorList<Seed>> world_seed_list;
 vector<vector<Weather>> world_weather_list;
 vector<vector<Pollengrid>> world_pollen_list;
 vector<vector<Pollencalcs>> world_pollcalcs;
-
 vector<vector<Envirgrid>> world_plot_list;
 vector<vector<Evaluation>> world_evaluation_list;
 vector<vector<Cryogrid>> world_cryo_list;
@@ -592,6 +591,33 @@ void fillElevations() {
 	} else if (parameter[0].weatherchoice == 50009) {
 		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_dem.csv"; //x=990, y=990
 		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51001) { /// TRANSECTS 
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Close_to_Fairbanks_EN23-611_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51002) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fielding_Lake_EN23-675_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51003) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_East_EN22-021_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51004) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_West_EN22-032_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51005) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51006) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Nutenvut_16KP03-V20_V39_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51007) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Ulu_EN21-201_219_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51008) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Mucho_Lake_EN22-065_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice == 51009) {
+		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_dem_transect.csv"; //x=990, y=990
+		strcpy(demfilename, deminputbuf);
 	}
 
 
@@ -679,6 +705,33 @@ void fillElevations() {
 	} else if (parameter[0].weatherchoice == 50009) {
 		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_slope.csv"; //x=990, y=990
 		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51001) { /// TRANSECTS 
+	  char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Close_to_Fairbanks_EN23-611_slope_transect.csv"; //x=990, y=990
+	  strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51002) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fielding_Lake_EN23-675_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51003) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_East_EN22-021_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51004) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_West_EN22-032_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51005) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51006) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Nutenvut_16KP03-V20_V39_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51007) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Ulu_EN21-201_219_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51008) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Mucho_Lake_EN22-065_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice == 51009) {
+		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_slope_transect.csv"; //x=990, y=990
+		strcpy(slopefilename, slopeinputbuf);
 	}
 
         f = fopen(slopefilename, "r");
@@ -758,6 +811,33 @@ void fillElevations() {
 	} else if (parameter[0].weatherchoice == 50009) {
 		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_twi.csv"; //x=990, y=990
 		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51001) { /// TRANSECTS 
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Close_to_Fairbanks_EN23-611_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51002) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fielding_Lake_EN23-675_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51003) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_East_EN22-021_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51004) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_West_EN22-032_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51005) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51006) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Nutenvut_16KP03-V20_V39_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51007) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Ulu_EN21-201_219_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51008) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Mucho_Lake_EN22-065_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice == 51009) {
+		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_twi_transect.csv"; //x=990, y=990
+		strcpy(twifilename, twiinputbuf);
 	}
 
         f = fopen(twifilename, "r");
@@ -779,7 +859,6 @@ void fillElevations() {
         }
         fclose(f);
 
-// cout << twiinput[0] << " ... " <<  twiinput[(int)(twiinput.size()/2)] << endl;
         // interpolate to envirgrid
         for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
             vector<Envirgrid>& plot_list = *posw;
@@ -861,9 +940,7 @@ void fillElevations() {
                     // in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
                     // 32767
                     if (countwatercells == 0) {
-// cout << twiinter << " ... twi inter ..." << endl;
                         plot_list[kartenpos].elevation += 10 * eleinter;
-                        // plot_list[kartenpos]->slope = slopeinter;
                         plot_list[kartenpos].twi = twiinter*100;
 
                         // calculate environment-growth-impact (value between 0 and 1)
@@ -941,11 +1018,8 @@ void initialiseMaps() {
 			pPollengrid.seedweight=0;
 			pPollengrid.seedweightvar=0;
 			pPollengrid.droughtresist=0;
-			// pPollengrid.seednumber=0;
 			pPollengrid.selving=0;
 			pPollengrid.name=0;
-			//vector<vector<unsigned int>> copyneutralmarkers(24,24, 0);
-			//pPollengrid.neutralmarkers=copyneutralmarkers;
 			pPollengrid.Number=kartenpos+1;
 		
 			pPollengrid.xcoo=fmod((double)kartenpos,lentx)*treerows/lentx
@@ -989,7 +1063,7 @@ void initialiseMaps() {
 
         // create an evaluation element for each site
         Evaluation pEvaluation;
-         pEvaluation.yworldcoo = aktortyworldcoo;
+        pEvaluation.yworldcoo = aktortyworldcoo;
         pEvaluation.xworldcoo = aktortxworldcoo;
         pEvaluation.basalarealist.clear();
         pEvaluation.basalarealist.shrink_to_fit();
@@ -1100,7 +1174,7 @@ int main() {
     printf("\n---->\tLAVESI\n");
     printf(
         "\n You have started  LAVESI, "
-        "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests and wildfires in a 3-dimensional landscape "
+        "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests and wildfires including variable traits in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
         "\n\n Version:\t 4.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-CRYOGRID-FIRE)"
         "\n Date:\t\t 04.12.2023"

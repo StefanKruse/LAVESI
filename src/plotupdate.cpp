@@ -360,20 +360,16 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 				if (tree.densitywert > parameter[0].desitymaxreduction)
 					tree.densitywert = parameter[0].desitymaxreduction;			
 			}
-				// water stress update
-				// ... dependency on local site conditions
-// cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
-// if(tree.height/10 > 130) cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
-				tree.soilhumidity = pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
-// cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
-// if(tree.height/10 > 130) cout << " ... between: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
-				if( (tree.soilhumidity < 15*100) | (tree.soilhumidity > 60*100) )
-					tree.soilhumidity=0.0;
-				else if( (tree.soilhumidity < speciestrait[tree.species].minsoilwater*100) | (tree.soilhumidity > speciestrait[tree.species].maxsoilwater*100) )
-					tree.soilhumidity=0.1;
-				else
-					tree.soilhumidity=1.0;
-// if(tree.height/10 > 130) cout << " ... after: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
+			// water stress update
+			// ... dependency on local site conditions
+			tree.soilhumidity = pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
+			if( (tree.soilhumidity < 15*100) | (tree.soilhumidity > 60*100) ) {
+				tree.soilhumidity=0.0;
+			} else if( (tree.soilhumidity < speciestrait[tree.species].minsoilwater*100) | (tree.soilhumidity > speciestrait[tree.species].maxsoilwater*100) ) {
+				tree.soilhumidity=0.1;
+			} else {
+				tree.soilhumidity=1.0;
+			}
 		}
 	}
 }
@@ -381,15 +377,11 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_list) {
 	// setup and wipe grid
 	double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
-	// cout << sizemagnifcryo << " sizemagnifcryo " << endl;
 
-	// TODO: maybe move to intializing
-	// cout << (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)) << " = cells in cryogrid (plotupdate)" << endl;	
-// #pragma omp parallel for default(shared) schedule(guided)
 	for(int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++) {
 		auto& pCryogrid = cryo_list[kartenpos];
 		
-		// aggregiere nach Scenarien!! -> x wert abhängig 0-A, A-B, C-max
+		// aggregate by scenario -> x value depending 0-A, A-B, C-max
 		pCryogrid.leafarea = 0;
 		pCryogrid.leafarea_deciduous = 0;
 		pCryogrid.stemarea = 0;
@@ -402,7 +394,6 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 		pCryogrid.envirgridcount = 0;
 	}
 
-// #pragma omp parallel for default(shared) schedule(guided)
 	for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
         auto& tree = tree_list[tree_i];
 
@@ -410,20 +401,8 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 			int i=(int) floor((tree.ycoo / 1000) *sizemagnifcryo);
 			int j=(int) floor((tree.xcoo / 1000) *sizemagnifcryo);
 			
-			// cout << i << " i & " << j << " j " << endl;
-			
-			
-			// TODO: leaf- and stemarea distribution
-			// TODO: impact area for leaf- stem area check
-			// double crownradius=exp(0.9193333*log(tree.dbasal) + 2.4618496) / 100; //in m // LACA Chukotka
-			// double crownradius=exp(1.067957*log(tree.dbasal) + 2.063213) / 100; //in m // LAGM Central Yakutia
 			double crownradius=exp(speciestrait[tree.species].crownradiusestslope*log(tree.dbasal) + speciestrait[tree.species].crownradiusestinterc) / 100; //in m
-			// cout << crownradius << endl;
-			// cout << cryo_list.size() << " = length cryo_list" << endl;
-			// cout << world_cryo_list.size() << " = length world_cryo_list" << endl;
-			
 			double cryogridcellarea = pow(1.0/sizemagnifcryo, 2);
-			// cout << cryogridcellarea << " cellarea | "  << endl ;
 
 			// living branches at the tree 
 			double livingtreefraction = (tree.height - tree.crownstart) / tree.height;
@@ -434,8 +413,6 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 
 			// if the trees influences only one density grid cell
 			if ( crownradius < (1.0/sizemagnifcryo) ) {
-				// cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * 23.99583 * tree.dbasal * 2 / cryogridcellarea; // LACA Chukotka
-				// cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * 13.7443 * tree.dbasal * 2 / cryogridcellarea; // LAGM Central Yakutia
 				cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea += livingtreefraction * speciestrait[tree.species].leafareaslope * tree.dbasal * 2 / cryogridcellarea;
 				if(speciestrait[tree.species].deciduous == 1)
 					cryo_list[i*ceil(treecols*sizemagnifcryo)+j].leafarea_deciduous += livingtreefraction * speciestrait[tree.species].leafareaslope * tree.dbasal * 2 / cryogridcellarea;
@@ -443,19 +420,15 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 				if(tree.height / 10 > cryo_list[i*ceil(treecols*sizemagnifcryo)+j].maxtreeheight)
 					cryo_list[i*ceil(treecols*sizemagnifcryo)+j].maxtreeheight = tree.height / 10;
 				cryo_list[i*ceil(treecols*sizemagnifcryo)+j].meantreeheight += tree.height / 10;
-				// cryo_list[i*ceil(treecols*sizemagnifcryo)+j].soilhumidity += pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
 				cryo_list[i*ceil(treecols*sizemagnifcryo)+j].treecount++;
 			} else {// if the trees influences more than one density grid cell
 				// determine dimensions of the grid around the tree
 				int xyquerrastpos= (int) floor(crownradius*sizemagnifcryo);
 				
-				// TODO: check
 				double fractionimpactpertile = cryogridcellarea / (M_PI * pow(crownradius,2));
 				
 				if(fractionimpactpertile > 0) {
 					// determine shifted coordinates and adding up the density value
-					// double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * 23.99583 * tree.dbasal * 2;
-					// double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * 13.7443 * tree.dbasal * 2;
 					double leafareaoftreepertile = fractionimpactpertile * livingtreefraction * speciestrait[tree.species].leafareaslope * tree.dbasal * 2;
 					double stemareaoftreepertile = fractionimpactpertile * M_PI * tree.dbasal/100 * sqrt( pow(tree.dbasal/100,2) + pow(tree.height / 10 / 100,2) );
 					
@@ -474,7 +447,6 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 									if(tree.height / 10 > cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].maxtreeheight)
 										cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].maxtreeheight = tree.height / 10;
 									cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].meantreeheight += tree.height / 10;
-									// cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].soilhumidity += pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
 									cryo_list[rastposi*ceil(treecols*sizemagnifcryo)+rastposj].treecount++;
 								}
 							}
@@ -488,17 +460,13 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 	}
 
 	// add envir-grid values
-   const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)* static_cast<std::size_t>(parameter[0].sizemagnif);
-// #pragma omp parallel for default(shared) schedule(guided)
+	const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)* static_cast<std::size_t>(parameter[0].sizemagnif);
 	for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 		auto& pEnvirgrid = plot_list[kartenpos];		
 		// calculate weighted mean of surrounding 3x3 grid Cryogrid-maxthawing_depth values for each Envirgrid-Tile
 
 		// find position in Cryogrid
 		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
-
-		// pEnvirgrid->ycoo=floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
-		// pEnvirgrid->xcoo=(double) kartenpos - (pEnvirgrid->ycoo * (treecols*parameter[0].sizemagnif));
 		double pEnvirgridycoo=floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
 		double pEnvirgridxcoo=(double) kartenpos - (pEnvirgridycoo * (treecols*parameter[0].sizemagnif));
 		double yii = (sizemagnifcryo * pEnvirgridycoo / parameter[0].sizemagnif);
@@ -514,17 +482,13 @@ void PrepareCryogrid(VectorList<Tree>& tree_list, vector<Cryogrid>& cryo_list, v
 	}
 	
 	// process mean value of tree height and of soilhumidity and litterheight
-	// cryo_list[i*ceil(treecols*sizemagnifcryo)+j].meantreeheight/cryo_list[i*ceil(treecols*sizemagnifcryo)+j].treecount;
-// #pragma omp parallel for default(shared) schedule(guided)
 	for (int kartenpos=0; kartenpos < (int) (ceil(treerows*sizemagnifcryo) * ceil(treecols*sizemagnifcryo)); kartenpos++) {
 		auto& pCryogrid = cryo_list[kartenpos];
 
 		if (pCryogrid.treecount > 0) {
 			pCryogrid.meantreeheight = pCryogrid.meantreeheight / (double) pCryogrid.treecount;
-			// pCryogrid.soilhumidity = pCryogrid.soilhumidity / (double) pCryogrid.treecount;
 		} else {
 			pCryogrid.meantreeheight = 0.0;
-			// pCryogrid.soilhumidity = 0.0;
 		}
 			
 		if (pCryogrid.envirgridcount > 0) {
@@ -625,14 +589,10 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 		s1 << std::setfill('0') << std::setw(5) << parameter[0].ivort; // TODO: replace or add current year here
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 		s3 << parameter[0].cryogrid_scenario;
-		// filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt"; // TODO: add relative path
-		filename="../output_"+s3.str()+"/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt"; // TODO: add relative path
-		// s1.str("");s1.clear();s2.str("");s2.clear();s2.str("");s2.clear();
-
+		filename="../output_"+s3.str()+"/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt";
 		// unsigned short int cryogrid_scenario = 2; // read from parameterfile
 
-		if(parameter[0].cryogrid_scenario == 0) { // ... create copy of cryo_list and sort by leaf area
-			
+		if(parameter[0].cryogrid_scenario == 0) { // ... create copy of cryo_list and sort by leaf area	
 			// trying to open the file for reading
 			filepointer = fopen (filename.c_str(), "r+");
 			// if fopen fails, open a new file + header output
@@ -837,9 +797,7 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			for (auto i = 0; i < 3; i++) { // check
 				organiclayer[i] = 1.0;
 			}
-// for (auto i = 0; i < 3; i++) { // check
-	// cout << "olayer = " << organiclayer[i] << endl;
-// }
+
 			if( (parameter[0].cryogrid_scenario == 3) && (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) ) {
 				organiclayer[1] = 0.1 + ((1.0-0.1)/10) * yearsincedisturbance; // based on Bonan, 1989, organic layer revoverd after 10 years back to pre-fire conditions
 				organiclayer[2] = 0.0 + ((1.0-0.0)/10) * yearsincedisturbance;
@@ -869,7 +827,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 
 			double sizemagnifcryo =  ((double) parameter[0].sizemagnif) /50;
 			const auto loop_size_cryogrid = static_cast<std::size_t>(ceil(treerows*sizemagnifcryo)) * static_cast<std::size_t>(ceil(treecols*sizemagnifcryo));
-// #pragma omp parallel for default(shared) schedule(guided)
 			for (std::size_t kartenpos=0; kartenpos < loop_size_cryogrid; kartenpos++) {
 				auto& pCryogrid = cryo_list[kartenpos];
 
@@ -898,8 +855,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 				}
 			}
 
-// #pragma omp single
-// {
 			for (auto i = 0; i < 3; i++) { // calculate mean
 				leafareai[i] = leafareai[i]/counti[i];
 				stemareai[i] = stemareai[i]/counti[i];
@@ -1018,7 +973,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			fprintf(filepointer, "\n");
 
 			fclose(filepointer);
-// }
 		}
 	}
 
@@ -1036,10 +990,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 	}
 
 	if((parameter[0].ivort >= parameter[0].cryogrid_firstyear)) {// 3. read thaw depth and assign thaw depth to Environment-grid by interpolation from 10 x 10 m grid to 0.2 x 0.2 m grid
-		// TODO: clean couts
-		// from "/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output"
-		// cryogridoutput_00025_0000007001_aggregated.txt_CG.csv
-		
 		FILE *filepointer{};
 		string filename;
 		ostringstream s1,s2,s3;
@@ -1050,9 +1000,6 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 		s2 << std::setfill('0') << std::setw(10) << parameter[0].weatherchoice;
 		s3 << parameter[0].cryogrid_scenario;
 
-		// filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt_CG.csv"; // TODO: add relative path
-		// filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt_test_vegetation_snow_40_CG.csv"; // TODO: add relative path
-		// filename="/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/output/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt_CG.csv"; // TODO: add relative path
 		filename="../output_"+s3.str()+"/cryogridoutput_" +s1.str()+"_"+s2.str()+"_aggregated.txt_CG.csv"; // TODO: add relative path
 
 		while((filepointer == NULL)) { // wait until output file is avalable
@@ -1072,43 +1019,29 @@ void UpdateCryogrid(vector<Cryogrid>& cryo_list) {
 			char linebuffer[255];
 			std::vector<double> activelayerdepthin;
 			std::vector<double> soilhumidityin;
-cout << "leafareaiout.size = " << leafareaiout.size() << endl;
-cout << "maxthawing_depthiout.size = " << maxthawing_depthiout.size() << endl;
+			cout << "leafareaiout.size = " << leafareaiout.size() << endl;
+			cout << "maxthawing_depthiout.size = " << maxthawing_depthiout.size() << endl;
 
 			int counter = 1; // to skip first line of file 
 			while (fgets(linebuffer, stringlengthmax, filepointer) != NULL) {
-cout << " ... " << counter << " - read in ->  " << linebuffer << endl; // TODO: only for testing, delete
-// file in 
-// 1. header
-// 2. ALthickness max
-// 3. Pflanzenverfügbares Wasser in AL
-// 4. LAI
-// 5. SAI
-// 6. height
+				// file in 
+				// 1. header
+				// 2. ALthickness max
+				// 3. Pflanzenverfügbares Wasser in AL
+				// 4. LAI
+				// 5. SAI
+				// 6. height
 				if (counter==2) { // maximum active layer thickness
-					activelayerdepthin.push_back(strtod(strtok(linebuffer, "\t"), NULL)); // ACHTUNG 
-					activelayerdepthin.push_back(strtod(strtok(NULL, "\t"), NULL)); // ACHTUNG 
-					activelayerdepthin.push_back(strtod(strtok(NULL, "\t"), NULL)); // ACHTUNG 
-cout << activelayerdepthin[0] << " activelayerdepth 1 "  << endl; // print current value // TODO: only for testing, delete
-cout << activelayerdepthin[1] << " activelayerdepth 2 "  << endl; // print current value // TODO: only for testing, delete
-cout << activelayerdepthin[2] << " activelayerdepth 3 "  << endl; // print current value // TODO: only for testing, delete
-cout << leafareaiout[0] << " leafarea 1 " << endl; // print current value // TODO: only for testing, delete
-cout << leafareaiout[1] << " leafarea 2 " << endl; // print current value // TODO: only for testing, delete
-cout << leafareaiout[2] << " leafarea 3 " << endl; // print current value // TODO: only for testing, delete
-cout << maxthawing_depthiout[0] << " maxthawing_depth 1 " << endl; // print current value // TODO: only for testing, delete
-cout << maxthawing_depthiout[1] << " maxthawing_depth 2 " << endl; // print current value // TODO: only for testing, delete
-cout << maxthawing_depthiout[2] << " maxthawing_depth 3 " << endl; // print current value // TODO: only for testing, delete
+					activelayerdepthin.push_back(strtod(strtok(linebuffer, "\t"), NULL)); 
+					activelayerdepthin.push_back(strtod(strtok(NULL, "\t"), NULL));
+					activelayerdepthin.push_back(strtod(strtok(NULL, "\t"), NULL));
 				} else if (counter==3) { // plant available soil humidity
 					soilhumidityin.push_back(strtod(strtok(linebuffer, "\t"), NULL)); // ACHTUNG 
 					soilhumidityin.push_back(strtod(strtok(NULL, "\t"), NULL)); // ACHTUNG 
 					soilhumidityin.push_back(strtod(strtok(NULL, "\t"), NULL)); // ACHTUNG 
-cout << soilhumidityin[0] << endl; // print current value // TODO: only for testing, delete
-cout << soilhumidityin[1] << endl; // print current value // TODO: only for testing, delete
-cout << soilhumidityin[2] << endl; // print current value // TODO: only for testing, delete
 				}
 				counter++;
 			}
-cout << "length of activelayerdepthin = " << activelayerdepthin.size() << endl;// TODO: only for testing, delete
 			
 			fclose(filepointer);
 
@@ -1120,15 +1053,12 @@ cout << "length of activelayerdepthin = " << activelayerdepthin.size() << endl;/
 					int xn=leafareaiout.size();
 					int yn=activelayerdepthin.size();
 					// only if equal proceed
-					
-cout << xn << " xn and yn " << yn << endl;
-					
+										
 					// mean x
 					double sum = 0;
 					for(int i = 0; i < xn; i++)
 					{
 						sum += leafareaiout[i];
-cout << leafareaiout[i] << " / " << endl;
 					}
 					double xmean = sum/xn;
 					// diff square sums
@@ -1139,7 +1069,6 @@ cout << leafareaiout[i] << " / " << endl;
 					sum = 0;
 					for(int i = 0; i < xn; i++) {
 						sum += activelayerdepthin[i];
-cout << activelayerdepthin[i] << " / " << endl;
 					}
 					double ymean = sum/xn;
 					// diff square sums
@@ -1149,12 +1078,8 @@ cout << activelayerdepthin[i] << " / " << endl;
 					// slope
 					parameter[0].altslope = yxcovariance / xvariance;
 					parameter[0].altintercept = ymean - parameter[0].altslope * xmean;
-					
-cout << " .. slope = " << parameter[0].altslope << endl;
-cout << " .. intercept = " << parameter[0].altintercept << endl;	
-			} else { // calculate active layer depth and soil humidity anomalies in each of the three conditions
+				} else { // calculate active layer depth and soil humidity anomalies in each of the three conditions
 				for(long unsigned int i = 0; i < activelayerdepthin.size(); i++) {
-cout << " ALT in / out : " << activelayerdepthin[i] << " / " << maxthawing_depthiout[i] << " / " << endl;
 					if(i == 0) {
 						parameter[0].activelayeranomaly1 = maxthawing_depthiout[i] - activelayerdepthin[i]*100; // is positive when new/read in mean is higher and this anomaly needs to be added to each pCryogrid.maxthawing_depth value
 						parameter[0].soilhumidityanomaly1 = soilhumidityiout[i] - soilhumidityin[i];
@@ -1166,8 +1091,6 @@ cout << " ALT in / out : " << activelayerdepthin[i] << " / " << maxthawing_depth
 						parameter[0].soilhumidityanomaly3 = soilhumidityiout[i] - soilhumidityin[i];
 					}
 				}
-cout << parameter[0].activelayeranomaly1 << " | " << parameter[0].activelayeranomaly2 << " | " << parameter[0].activelayeranomaly3 << endl;
-cout << parameter[0].soilhumidityanomaly1 << " | " << parameter[0].soilhumidityanomaly2 << " | " << parameter[0].soilhumidityanomaly3 << endl;
 			}
 		}
 	}
@@ -1202,7 +1125,6 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 		if(parameter[0].cryogridcalled == true) {// when ALT was calculated by CryoGrid
 			if(parameter[0].cryogrid_scenario == 0) { // setup linear model for interpolation
 				activelayeri = (parameter[0].altslope * pCryogrid.leafarea + parameter[0].altintercept) * 100;
-				// activelayeri = (parameter[0].altslope * pCryogrid.leafarea + parameter[0].altintercept) * 100; //TODO
 				// check for valid values
 				if(activelayeri < 0)
 					activelayeri = 0;
@@ -1238,8 +1160,6 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 				soilhumidityi = 100;
 		}
 
-
-// cout << " ALT cryogrid = " << activelayeri << " <- " << pCryogrid.maxthawing_depth << endl;
 		// assing value to cryogrid
 		pCryogrid.maxthawing_depth = activelayeri; // conversion from meter input to cm and *10 is internal storage conversion
 		pCryogrid.soilhumidity = soilhumidityi;
@@ -1247,7 +1167,6 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 
 	// downscale Cryogrid to Envirgrid
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)* static_cast<std::size_t>(parameter[0].sizemagnif);
-// bool stophere = false;
 #pragma omp parallel for default(shared) schedule(guided)
 	for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 		auto& pEnvirgrid = plot_list[kartenpos];		
@@ -1256,8 +1175,6 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 		// find position in Cryogrid
 		double sizemagnifcryo =  ((double) parameter[0].sizemagnif) / 50;
 
-		// pEnvirgrid->ycoo=floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
-		// pEnvirgrid->xcoo=(double) kartenpos - (pEnvirgrid->ycoo * (treecols*parameter[0].sizemagnif));
 		double pEnvirgridycoo=floor( (double) kartenpos/(treecols*parameter[0].sizemagnif) );
 		double pEnvirgridxcoo=(double) kartenpos - (pEnvirgridycoo * (treecols*parameter[0].sizemagnif));
 		double yii = (sizemagnifcryo * pEnvirgridycoo / parameter[0].sizemagnif);
@@ -1265,24 +1182,15 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 		int yi = (int) floor(yii);
 		int xi = (int) floor(xii);
 
-// cout << endl << endl << "  plot coo x,y = " << pEnvirgrid.xcoo << "," << pEnvirgrid.ycoo << endl;
-// cout << " coo in Cryogrid x,y = " << xi << "," << yi << endl;
-
 		// access surrounding tiles values
 		// ... and calculate distance to Envirgrid-tile
 		// for testing only if all exist
 		if((yi>1) & (xi>1) & (yi<((sizemagnifcryo*treecols)-1)) & (xi<((sizemagnifcryo*treecols)-1))) {
-// if(stophere) cout << endl << endl << "  plot coo x,y = " << pEnvirgridxcoo << "," << pEnvirgridycoo << endl;
-// if(stophere) cout << " coo in Cryogrid x,y = " << xi << "," << yi << endl;
-			
 			std::vector<double> cgvals;
 			std::vector<double> cgvals_soilhumidity;
 			std::vector<double> dists;
 
 			// access data
-// if(stophere) cout << endl << cryo_list[(yi+1)*sizemagnifcryo*treecols+xi-1].maxthawing_depth; // NW
-// if(stophere) cout << " " << cryo_list[(yi+1)*sizemagnifcryo*treecols+xi].maxthawing_depth; // N
-// if(stophere) cout << " " << cryo_list[(yi+1)*sizemagnifcryo*treecols+xi+1].maxthawing_depth; // NE
 			cgvals.push_back(cryo_list[(yi+1)*sizemagnifcryo*treecols+xi-1].maxthawing_depth); // NW
 			cgvals.push_back(cryo_list[(yi+1)*sizemagnifcryo*treecols+xi].maxthawing_depth); // N
 			cgvals.push_back(cryo_list[(yi+1)*sizemagnifcryo*treecols+xi+1].maxthawing_depth); // NE
@@ -1290,16 +1198,10 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 			cgvals_soilhumidity.push_back(cryo_list[(yi+1)*sizemagnifcryo*treecols+xi].soilhumidity); // N
 			cgvals_soilhumidity.push_back(cryo_list[(yi+1)*sizemagnifcryo*treecols+xi+1].soilhumidity); // NE
 				// distance to curent tile
-// if(stophere) cout << " - " << sqrt(pow(1-(yii - (double) yi),2) + pow(-1-(xii - (double) xi),2));
-// if(stophere) cout << " " << sqrt(pow(1-(yii - (double) yi),2) + pow(0-(xii - (double) xi),2));
-// if(stophere) cout << " " << sqrt(pow(1-(yii - (double) yi),2) + pow(1-(xii - (double) xi),2));
 				dists.push_back(sqrt(pow(1-(yii - (double) yi),2) + pow(-1-(xii - (double) xi),2)));
 				dists.push_back(sqrt(pow(1-(yii - (double) yi),2) + pow(0-(xii - (double) xi),2)));
 				dists.push_back(sqrt(pow(1-(yii - (double) yi),2) + pow(1-(xii - (double) xi),2)));
 			
-// if(stophere) cout << endl << cryo_list[yi*sizemagnifcryo*treecols+xi-1].maxthawing_depth; // W
-// if(stophere) cout << " " << cryo_list[yi*sizemagnifcryo*treecols+xi].maxthawing_depth; // actual
-// if(stophere) cout << " " << cryo_list[yi*sizemagnifcryo*treecols+xi+1].maxthawing_depth; // E
 			cgvals.push_back(cryo_list[yi*sizemagnifcryo*treecols+xi-1].maxthawing_depth); // W
 			cgvals.push_back(cryo_list[yi*sizemagnifcryo*treecols+xi].maxthawing_depth); // actual
 			cgvals.push_back(cryo_list[yi*sizemagnifcryo*treecols+xi+1].maxthawing_depth); // E
@@ -1307,16 +1209,10 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 			cgvals_soilhumidity.push_back(cryo_list[yi*sizemagnifcryo*treecols+xi].soilhumidity); // actual
 			cgvals_soilhumidity.push_back(cryo_list[yi*sizemagnifcryo*treecols+xi+1].soilhumidity); // E
 				// distance to curent tile
-// if(stophere) cout << " - " << sqrt(pow(0-(yii - (double) yi),2) + pow(-1-(xii - (double) xi),2));
-// if(stophere) cout << " " << sqrt(pow(0-(yii - (double) yi),2) + pow(0-(xii - (double) xi),2));
-// if(stophere) cout << " " << sqrt(pow(0-(yii - (double) yi),2) + pow(1-(xii - (double) xi),2));
 				dists.push_back(sqrt(pow(0-(yii - (double) yi),2) + pow(-1-(xii - (double) xi),2)));
 				dists.push_back(sqrt(pow(0-(yii - (double) yi),2) + pow(0-(xii - (double) xi),2)));
 				dists.push_back(sqrt(pow(0-(yii - (double) yi),2) + pow(1-(xii - (double) xi),2)));
 
-// if(stophere) cout << endl << cryo_list[(yi-1)*sizemagnifcryo*treecols+xi-1].maxthawing_depth; // SW
-// if(stophere) cout << " " << cryo_list[(yi-1)*sizemagnifcryo*treecols+xi].maxthawing_depth; // S
-// if(stophere) cout << " " << cryo_list[(yi-1)*sizemagnifcryo*treecols+xi+1].maxthawing_depth; // SE
 			cgvals.push_back(cryo_list[(yi-1)*sizemagnifcryo*treecols+xi-1].maxthawing_depth); // SW
 			cgvals.push_back(cryo_list[(yi-1)*sizemagnifcryo*treecols+xi].maxthawing_depth); // S
 			cgvals.push_back(cryo_list[(yi-1)*sizemagnifcryo*treecols+xi+1].maxthawing_depth); // SE
@@ -1324,21 +1220,12 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 			cgvals_soilhumidity.push_back(cryo_list[(yi-1)*sizemagnifcryo*treecols+xi].soilhumidity); // S
 			cgvals_soilhumidity.push_back(cryo_list[(yi-1)*sizemagnifcryo*treecols+xi+1].soilhumidity); // SE
 				// distance to curent tile
-// if(stophere) cout << " - " << sqrt(pow(-1-(yii - (double) yi),2) + pow(-1-(xii - (double) xi),2));
-// if(stophere) cout << " " << sqrt(pow(-1-(yii - (double) yi),2) + pow(0-(xii - (double) xi),2));
-// if(stophere) cout << " " << sqrt(pow(-1-(yii - (double) yi),2) + pow(1-(xii - (double) xi),2));
 				dists.push_back(sqrt(pow(-1-(yii - (double) yi),2) + pow(-1-(xii - (double) xi),2)));
 				dists.push_back(sqrt(pow(-1-(yii - (double) yi),2) + pow(0-(xii - (double) xi),2)));
 				dists.push_back(sqrt(pow(-1-(yii - (double) yi),2) + pow(1-(xii - (double) xi),2)));
-				
-// if(stophere) cout << endl << dists.size() << endl;
-// if(stophere) cout << cgvals.size() << endl;
 			
 			// 1 - dist/maxdist
-// if(stophere) double maxdist = *max_element(dists.begin(), dists.end());
 			double sumdist = accumulate(dists.begin(), dists.end(), 0.0);
-// if(stophere) cout << endl << "maxdist=" << maxdist << endl;
-// if(stophere) cout << endl << "sumdist=" << sumdist << endl;
 			double sumdistsscaled = 0;
 			for(long unsigned int veci = 0; veci < cgvals.size() ; veci++) {
 				if(dists[veci] == 0)
@@ -1346,7 +1233,6 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 				sumdistsscaled += 1/(dists[veci]/sumdist);
 				dists[veci] = 1/(dists[veci]/sumdist);
 			}
-// if(stophere) cout << endl << "sumdistsscaled=" << sumdistsscaled << endl;
 			double weightedmean = 0;
 			double weightedmean_soilhumidity = 0;
 			for(long unsigned int veci = 0; veci < cgvals.size() ; veci++) {
@@ -1356,49 +1242,14 @@ void UpdateEnvirgridALD(vector<Cryogrid>& cryo_list, vector<Envirgrid>& plot_lis
 				weightedmean_soilhumidity += cgvals_soilhumidity[veci];
 			}
 			
-// if(stophere) cout << " ... ... dists and cgvals ... ... " << endl;
-// if(stophere) for( int veci = 0; veci < cgvals.size() ; veci++) {
-	// cout << "veci=" << veci << ": d=" << dists[veci] << "  & ald=" << cgvals[veci] << endl;
-	// }
-			// weightedmean = weightedmean/cgvals.size();
-// if(stophere) cout << "weightedmean=" << weightedmean << endl;
-			
-// if(stophere) cout << endl;
 			double maxthawing_depth_local = 0;
 			double soilhumidity_local = 0;
 			if(parameter[0].cryogrid_scenario == 0) { // setup linear model for interpolation
 				maxthawing_depth_local = weightedmean; // internal stored /10
 				soilhumidity_local = weightedmean_soilhumidity; // internal stored /100			
 			} else { // calculate active layer depth anomalie in each of the three conditions
-// cout << "wmean:" << weightedmean << "+ALT:" << pEnvirgrid.maxthawing_depth ;
 				maxthawing_depth_local = ((double)pEnvirgrid.maxthawing_depth/10 - weightedmean); // internal stored /10
 				soilhumidity_local = ((double)pEnvirgrid.soilhumidity/100 - weightedmean_soilhumidity); // internall stored /100				
-// cout << " ==> ALT:" << pEnvirgrid.maxthawing_depth << endl;
-// if(pEnvirgrid.maxthawing_depth <=0)
- // cout << pEnvirgrid.maxthawing_depth << "|wmean="<< weightedmean << "sumdist=" << sumdist << "cgvals.size()=" << cgvals.size() << "sumdist=" << sumdist;
- // stophere=true;
- // else
- // stophere=false;
- 
- 
-/* for R code testing
-
-
-
-after=read.csv2("//dmawi/potsdam/data/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/LAVESI/output_4/datacryogrid_1_1210001_100_1.csv",dec=".")
-before=read.csv2("//dmawi/potsdam/data/legacy/Model/Modelling/CryogridLAVESI/CouplingMaster/LAVESI/output_4/datacryogrid_1_1210001_100_1_beforeupdate.csv",dec=".")
- str(before)
- with(before,lattice::levelplot(maxthawing_depth~x+y))
- with(after,lattice::levelplot(maxthawing_depth~x+y))
- with(before,summary(maxthawing_depth))
- with(after,summary(maxthawing_depth))
- 
- with(before,summary(soilhumidity))
- with(after,summary(soilhumidity))
- 
- 
- 
-*/
 			}
 			
 			if (maxthawing_depth_local < 0) // negative values
@@ -1441,7 +1292,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				else if (rn < 0.0001)
 					pEnvirgrid.litterheight0 = (double)pEnvirgrid.litterheight0 * 0.01;
 
-				unsigned short litterlayergrowthrate =0.5 * 100 * 0.25;	//0.5 cm * 100 wegen Skalierung; evt mit TWI verknüpfen oder evt Lärchenwachstum
+				unsigned short litterlayergrowthrate =0.5 * 100 * 0.25;	//0.5 cm * 100 for scaling, could be depending on environment or vegetation
 
 											 // +( 1.0/( ((1.0/0.01)-(1.0/0.95))
 													  // *exp(-(1.0/2000.0)*(double) pEnvirgrid.maxthawing_depth) 
@@ -1477,24 +1328,19 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				pEnvirgrid.litterheight1 = pEnvirgrid.litterheight0;
 			}
 
-			// double daempfung = (1.0 / 4000.0) * 200;  // 1/4000 =slope to reach the maximum value at appr. 4000
-			// double daempfung = (1.0 / 4000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000
-			double daempfung = (1.0 / 3000.0) * (double)pEnvirgrid.litterheightmean;  // 1/4000 =slope to reach the maximum value at appr. 4000 (<- value before)
+			double daempfung = (1.0 / 3000.0) * (double)pEnvirgrid.litterheightmean;  // 1/3000 =slope to reach the maximum value at appr. 3000
 
 			if (daempfung >= 0.9) {
 				daempfung = 0.9;
 			}
 
 			double elefactor = 0.0;
-			if (parameter[0].demlandscape)
+			if (parameter[0].demlandscape) {
 				// calculate relative elevatio position
 				elefactor = 1-(((double)pEnvirgrid.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000));
-													// changed from elefactor = ((double)pEnvirgrid.elevation / 10) / (1000 + parameter[0].elevationoffset)
-													//changes are based on use of elevationoffset in establishment.cpp (line 76-78)
-
+			}
 
 			const unsigned short maxthawing_depth =
-				// 1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 				100 * (1.0 - daempfung) * 0.050 * std::sqrt(
 					weather_list[yearposition].degreday + elefactor*(weather_list[yearposition].degredaymin - weather_list[yearposition].degreday) // reduction based on per 1000 m
 					)*8; // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 8 use for tuning ALT
@@ -1669,33 +1515,17 @@ void Environmentupdate(//Parameter* parameter,
 
 
 		ResetMaps(yearposition, plot_list, weather_list);
-// unsigned int miniter = treerows*parameter[0].sizemagnif* 100*parameter[0].sizemagnif +100*parameter[0].sizemagnif;//100 m vom rand
-// unsigned int maxiter = miniter+5;
-// const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif);
-// unsigned int iter=0;
-// cout << "-> Thawing depths after ResetMaps: ";
-// for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
-	// iter++;
-	// if(iter > miniter & iter < maxiter)
-		// cout << plot_list[kartenpos].maxthawing_depth << " ";
-// }
-// iter=0;
-// cout << endl;
 		
 		// impact function
 		if( parameter[0].ivort == parameter[0].cryogrid_disturbanceyear )
 			Disturbance(tree_list,plot_list);
 
 		if( (parameter[0].cryogrid_thawing_depth==true) ) { // external update of active layer thickness values
-		
-			// if( (parameter[0].cryogridcalled == true) | (parameter[0].ivort % 20 == 0) ) {
 			if( ((parameter[0].outputmode == 14) && (parameter[0].ivort % 20 == 0)) || (parameter[0].ivort > 2000) || (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].cryogridcalled == true) ) {
 				PrepareCryogrid(tree_list, cryo_list, plot_list);		// collect information of trees
 				cout << " -> called ... PrepareCryogrid " << endl;
 			}
 
-			// if( (parameter[0].ivort == parameter[0].cryogrid_firstyear) || (parameter[0].ivort >= parameter[0].cryogrid_disturbanceyear) ) {
-				
 			if( (parameter[0].ivort % 20 == 0) && (parameter[0].ivort < parameter[0].cryogrid_firstyear) ) { // only export data
 				UpdateCryogrid(cryo_list);		// export data and call Cryogrid instance and collect back output
 			}
@@ -1709,14 +1539,6 @@ void Environmentupdate(//Parameter* parameter,
 				UpdateEnvirgridALD(cryo_list, plot_list, weather_list, yearposition);	// interpolate for Envirgrid-tiles from Cryogrid active layer depth, use former estimation values after once called CryoGrid
 				cout << " -> called ... UpdateEnvirgridALD " << endl;
 			}
-// cout << "-> Thawing depths after UpdateEnvirgridALD: ";
-// for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
-	// iter++;
-	// if(iter > miniter & iter < maxiter)
-		// cout << plot_list[kartenpos].maxthawing_depth << " ";
-// }
-// iter=0;
-// cout << endl;
 		}
 
         AddTreeDensity(tree_list, plot_list);

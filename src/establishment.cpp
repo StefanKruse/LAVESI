@@ -25,9 +25,7 @@ void Treeestablishment(Parameter* parameter,
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
             auto& seed = seed_list[i_seed];
-            if (!seed.dead && !seed.incone) {
-                // determine if the seed germinates, depending on the density around it and the litter layer
-
+            if (!seed.dead && !seed.incone) {// determine if the seed germinates, depending on the density around it and the litter layer
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
 
@@ -197,7 +195,6 @@ void Treeestablishment(Parameter* parameter,
 						// tree height update
 						if (parameter[0].allometryfunctiontype == 3) {// logistic growth
 							tree.height = 10 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*10))/speciestrait[seed.species].heightlogc)));
-		// cout << "H = " << tree.height << endl;
 						} else if (parameter[0].allometryfunctiontype == 1) {
 							tree.height = 10 * speciestrait[seed.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[seed.species].dbasalheightalloexp);
 						} else {
@@ -216,22 +213,12 @@ void Treeestablishment(Parameter* parameter,
 						tree.thawing_depthinfluence = thawing_depthinfluence_help;
 						tree.seedweight = seed.seedweight;
 						tree.droughtresist = seed.droughtresist;
-						// tree.seednumber = seed.seednumber;
-
-						//double ranc = uniform.draw();
-						//if (ranc*100<=tree.clonality && tree.clonality!=0){
-						//	tree.cloning = true;
-						//} else {
-							tree.cloning = true;
-						//}
+						tree.cloning = true;
 						tree.cloningactive=false;
 						tree.clonetimer=0;
 						tree.cloned=false;
 						tree.cloneboost=1;
-
 						tree.selving = seed.selving;
-
-						// tree.neutralmarkers.resize(24,999999+1);
 						tree.neutralmarkers=seed.neutralmarkers;
 						tree.inbreedingdepression=0;
 						for(unsigned int neutralcounter=0;neutralcounter<=tree.neutralmarkers.size();neutralcounter+=2){
@@ -239,7 +226,6 @@ void Treeestablishment(Parameter* parameter,
 								tree.inbreedingdepression=tree.inbreedingdepression+(10.0/( tree.neutralmarkers.size()/2.0));
 							}
 						}
-
 						tree.envirimpact = 10000;
 						tree.twi = 6.25*100;
 						tree.soilhumidity = 1;

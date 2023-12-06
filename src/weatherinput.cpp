@@ -1408,26 +1408,13 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		}
 
         if (parameter[0].demlandscape) {
-            // elevation adjustment
-            double current_elevation;
-            double minele = 300;
-            double maxele = 1300;
-            // calculate steps by the set number of plots
-            double stepele = (maxele - minele) / (parameter[0].mapylength - 1);
-            // assume if >1 y-simulation plots that elevation range will be tested
-            if (parameter[0].mapylength > 1)
-                current_elevation = parameter[0].elevationoffset + minele + stepele * (aktort - 1);
-            else
-                current_elevation = parameter[0].elevationoffset;
-
-            parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * current_elevation;
-            parameter[0].tempjandiffortmin =
-                parameter[0].temperaturelapse_jan * (current_elevation + 1000);  // calculate changes per 1000 m to use later for tree growth estimation
-            parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * current_elevation;
-            parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * (current_elevation + 1000);
+            parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan;
+            parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (1000);  // calculate changes per 1000 m to use later for tree growth estimation
+            parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul;
+            parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * (1000);
             parameter[0].tempdiffort = 0;
-            parameter[0].precdiffort = parameter[0].precipitationlapse_year * current_elevation;
-            parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (current_elevation + 1000);
+            parameter[0].precdiffort = parameter[0].precipitationlapse_year;
+            parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (1000);
         } else if (parameter[0].lineartransect) {
             parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * parameter[0].locationshift;  // in m: negative values for northward/colder areas
             parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (parameter[0].locationshift + (double)treerows);

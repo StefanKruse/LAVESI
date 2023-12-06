@@ -42,7 +42,7 @@ cryogrid_slurm=0;					// (int 0,1) Should CryoGrid be called directly or via slu
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=5;					// (int) Resolution in m of DEM
-elevationoffset=-200;
+elevationoffset=0;
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 firemode=0;						// (int) Wildfire simulation switch
 										// 0==no fires
@@ -175,7 +175,7 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// ... 0==synchronous forcing per plot
 										// ... 1==linearly changing from south to north
-locationshift=-1000;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
+locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
 windsource=999

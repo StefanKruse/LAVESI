@@ -67,7 +67,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                        / speciestrait[tree.species].densityvaluemaximumatheight);
             }
 
-            double sapl_mort = speciestrait[tree.species].mortyouth * pow(exp((-1.0 * tree.dbasal) + (double)tree.dbasalmax / 1000), speciestrait[tree.species].mortyouthinfluenceexp);
+			double sapl_mort_factor = 0.3523;
+            double sapl_mort = (speciestrait[tree.species].mortyouth-sapl_mort_factor) * pow(exp((-1.0 * tree.dbasal) + (double)tree.dbasalmax / 1000), speciestrait[tree.species].mortyouthinfluenceexp);
             double age_mort = speciestrait[tree.species].mortage * agesmort * (10.0 * speciestrait[tree.species].mortbg);
             double growth_mort = speciestrait[tree.species].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp));
             double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert;

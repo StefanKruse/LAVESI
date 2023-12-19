@@ -37,8 +37,8 @@ thawing_depth=1;					// (int 0,1) Active layer calculation switch
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in dem)
 demresolution=5;					// (int) Resolution in m of DEM
-elevationoffset=-200
-slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
+elevationoffset=-10.1893;
+slopetwiratio=0.1388; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
 firemode=0;						// (int) Wildfire simulation switch
 										// 0==no fires
 										// >0==fixed fire return interval, burning the whole plot at 100% intensity every x years (e.g. 50 means fire occurs every 50 years)
@@ -54,7 +54,7 @@ firegapoutput_threshold=0.5		 	// (double 0.00,1.00) If firepapoutput=1, determi
 firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many years post-fire the output should be written (default=30)
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
 allow_pest_disturbances=1;			// (int 0,1 -> bool) Switch to allow calculation and impact of pest species (currently implemented for Alaska)
-pest_disturbances_impactfactor=0.01; // (double 0.00,1.00)can be 1 or a number between 0 and 1 to reduce the impact of direct mortality and defoliation mortality on the trees from pest species outbreak
+pest_disturbances_impactfactor=1.0; // (double 0.00,1.00)can be 1 or a number between 0 and 1 to reduce the impact of direct mortality and defoliation mortality on the trees from pest species outbreak
 
 // 0.4 Computation environment
 omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
@@ -251,9 +251,9 @@ pollengregoryc=0.6; 				// ... (double) pollen dispersal parameter
 pollengregorym=1.25;				// ... (double) pollen dispersal parameter
 
 // 1.5 -----> Growth function parameters and influences
-basalinfluenceoldyoung=1.0;			// (double) basal diameter influence for year's basal diameter growth 0=> maximum negative impact, 1=> as in formula defined, >1 weaker impact
+basalinfluenceoldyoung=0.5745;			// (double) basal diameter influence for year's basal diameter growth 0=> maximum negative impact, 1=> as in formula defined, >1 weaker impact
 relgrowthinfluence=1;				// (int 0,1) influence of current growth (reduced by density depending processes) on seed production and mortality estimation
-incfac=10;							// (int) factor for calculating area influenced by individual trees
+incfac=39.7218;							// (int) factor for calculating area influenced by individual trees
 calcinfarea=1;						// (int) calculation mode for area size determination
 									// ... 1==linearly increasing (8 m at basal diameter of 80 cm)
 									// ... 2==logistically increasing with maximum value of 8 m (reaching at c. 35 cm basal diameter)
@@ -275,7 +275,7 @@ densitytilecalc=1;					// (int 1) mode for density value integrating of all tree
 densitytiletree=2;					// (int 1,2) mode for calculating the influence of density values within tiles for each tree
 									// ... 1==sum of all values weighed by distance
 									// ... 2==multiplied by the current values of the trees influence on each tile (as in densitytreetile=0)
-desitymaxreduction=0.9;				// (double 0-1) maximum value the density value can reach
+desitymaxreduction=0.7463;				// (double 0-1) maximum value the density value can reach
 densityvaluedbasalinfluence=0;		// (double) exponent to scale the influence of the tree's diameter to its influencing density value 
 dichtheightrel=12;					// (int) interaction modification mode of tree height and density influence strength
 									// ... 1==three different constant values for the three height classes

@@ -598,11 +598,125 @@ void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climat
 		cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
 		cout << "weather_list.size() = " << weather_list.size() << endl;
 		    for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-				weather_list[iweather].pestoutbreakprobability.push_back(0.0);
+				// assess current weather and sum the probabilities (or mean?)
+				double pestoutbreakprobability_i = 0.0;
+				
+				for(unsigned short int climvari=1;climvari<=2;climvari++) {// for temp and prec
+					for(unsigned short int monthi=1;monthi<=12;monthi++) {// for 12 months
+						if(climvari==1) {//temp
+							if(monthi==1) {
+								// code snippet to find closest position
+								unsigned short int climpos_i = round(weather_list[iweather].temp1monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].jan_temp_resp[climpos_i];
+							}
+							if(monthi==2) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp2monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].feb_temp_resp[climpos_i];
+							}
+							if(monthi==3) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp3monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].mar_temp_resp[climpos_i];
+							}
+							if(monthi==4) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp4monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].apr_temp_resp[climpos_i];
+							}
+							if(monthi==5) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp5monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].may_temp_resp[climpos_i];
+							}
+							if(monthi==6) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp6monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].jun_temp_resp[climpos_i];
+							}
+							if(monthi==7) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp7monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].jul_temp_resp[climpos_i];
+							}
+							if(monthi==8) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp8monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].aug_temp_resp[climpos_i];
+							}
+							if(monthi==9) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp9monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].sep_temp_resp[climpos_i];
+							}
+							if(monthi==10) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp10monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].oct_temp_resp[climpos_i];
+							}
+							if(monthi==11) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp11monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].nov_temp_resp[climpos_i];
+							}
+							if(monthi==12) {
+								unsigned short int climpos_i = round(weather_list[iweather].temp12monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].dec_temp_resp[climpos_i];
+							}
+						} else if(climvari==2) {//prec
+							if(monthi==1) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec1monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].jan_prec_resp[climpos_i];
+							}
+							if(monthi==2) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec2monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].feb_prec_resp[climpos_i];
+							}
+							if(monthi==3) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec3monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].mar_prec_resp[climpos_i];
+							}
+							if(monthi==4) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec4monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].apr_prec_resp[climpos_i];
+							}
+							if(monthi==5) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec5monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].may_prec_resp[climpos_i];
+							}
+							if(monthi==6) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec6monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].jun_prec_resp[climpos_i];
+							}
+							if(monthi==7) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec7monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].jul_prec_resp[climpos_i];
+							}
+							if(monthi==8) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec8monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].aug_prec_resp[climpos_i];
+							}
+							if(monthi==9) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec9monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].sep_prec_resp[climpos_i];
+							}
+							if(monthi==10) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec10monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].oct_prec_resp[climpos_i];
+							}
+							if(monthi==11) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec11monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].nov_prec_resp[climpos_i];
+							}
+							if(monthi==12) {
+								unsigned short int climpos_i = round(weather_list[iweather].prec12monthmean * 10) + 500;
+								pestoutbreakprobability_i += pesttrait[pestspeciesi].dec_prec_resp[climpos_i];
+							}
+						} else {
+							cout << " no pest data to read " << endl;
+						}
+					}// month loop
+				}// temp prec loop
+
+
+				cout << " pestoutbreakprobability_i.mean (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i/24 << endl;
+				cout << " pestoutbreakprobability_i (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i << endl;
+				weather_list[iweather].pestoutbreakprobability.push_back(pestoutbreakprobability_i);
 			}// for each year
 			cout << " weather_list[0].pestoutbreakprobability.size() = " << weather_list[0].pestoutbreakprobability.size() << endl;
 	}// for each pest species
 }
+
 
 extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vector<Weather>>& world_weather_list) {
     char dateinametemp[250];
@@ -616,7 +730,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
     parameter[0].tempjuldiffortmin = 0.0;
     parameter[0].tempdiffortmin = 0.0;
     parameter[0].precdiffortmin = 0.0;
-
+if(false) {// only for testing
     if ((parameter[0].windsource != 0) && (parameter[0].windsource != 4) && (parameter[0].windsource != 5)) {
         int findyr1 = 0, findyr2 = -100, jahr = 0, cntr = 0;
 
@@ -1439,7 +1553,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
         jahr = 0;
     }
-
+}
     int aktort = 0;
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++) {
         vector<Weather>& weather_list = *posw;

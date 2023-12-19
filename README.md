@@ -1,22 +1,22 @@
-# LAVESI-WIND 1.0
-This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of the larch tree species <i>Larix gmelinii</i> (RUPR.) RUPR. which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug).
+# LAVESI-PEST 1.0
+This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of boreal forest taxa in Siberia or North America which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug). Additionally, this version includes dynamical fire disturbances and adds pest outbreak simulation.
 
 ### Version history:
 - The version of this code is based on LAVESI-WIND v1.0 
 - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
 
 ## CHANGELOG (only major changes in functionalities):
-- included a Hinterland seed input function to consider seed travel from the south into the plot area
+- includes reading pest disturbance impact and weather dependency table
+- outbreak control mortality and defoliation
  
 ### Authors:
 - Stefan Kruse - stefan.kruse@awi.de
-- Alexander Gerdes - alexander.gerdes@awi.de
-- Nadja J. Kath - nkath@uni-potsdam.de
+- Lisa Trimborn - lisa.trimborn@awi.de
 
 ## Containing files:
 1. Source code and header files: "....cpp" in/src/ and "....h" in /inc/ , and the makefile "Makefile"
-2. Parameter file: "parameter.txt"
-3. Forcing data in /input/
+2. Parameter file: "parameter.txt" and species parameter file "specieslist.csv"
+3. Forcing data in /input/ ... but additional is necessary for full functionality including environment (topographic) environment
 3.1. temperature and precipitation series
 		"[tmp/prc]weighted.csv" contain the climate data, which is the monthly mean temperature and precipitation sum supplied for six locations. It is extracted from the CRU TS 3.22 gridded data of grid cells which cover visited field sites (Harris et al., 2014 [1]). See parameter.txt for more information.
 3.2. wind data in /input/winddata/
@@ -30,7 +30,7 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
 1. compile the code with the help of the makefile: "make parallel"
 2. update the settings of the simulation run in the parameter file "parameter.txt"
 3. create a output folder if not existing, e.g. by "mkdir output"
-3. execute the program with "./LAVESI"
+3. execute the program with "./LAVESI_WIND"
 
 ## Prerequisites:
 - linux OS

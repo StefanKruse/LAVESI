@@ -237,6 +237,16 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].litterlayer) ? "true" : "false");
     }
 
+    strcpy(uebergabestring, "allow_pest_disturbances");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].allow_pest_disturbances = true;
+    } else {
+        parameter[0].allow_pest_disturbances = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].allow_pest_disturbances) ? "true" : "false");
+    }
+
     strcpy(uebergabestring, "omp_num_threads");
     parameter[0].omp_num_threads = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -882,12 +892,10 @@ void Parameterinput(void) {
     parameter[0].precdiffort = 0.0;
 }
 
-void Getspeciestraits(void)
-{	
+void Getspeciestraits(void) {	
 	FILE *f;
 	f = fopen("specieslist.csv","r"); 
-	if (f == NULL)
-	{
+	if (f == NULL) {
 		printf("speciestrait.csv file not available!\n");
 		exit(1);
 	}
@@ -897,10 +905,8 @@ void Getspeciestraits(void)
 	
 
 	// read in line by line
-	while( fgets(puffer,1255,f) !=NULL)
-	{
-		if (counter>=1)
-		{
+	while( fgets(puffer,1255,f) !=NULL ) {
+		if (counter>=1) {
 			speciestrait[counter].number= strtod(strtok(puffer, " "),NULL);
 			speciestrait[counter].species= strtok(NULL, " ");
 			speciestrait[counter].roi= strtod(strtok(NULL, " "),NULL);
@@ -966,5 +972,3 @@ void Getspeciestraits(void)
 	}
 	fclose(f);
 }
-
-

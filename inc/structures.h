@@ -193,6 +193,8 @@ struct Parameter {
 	double firegapoutput_threshold;
 	int firegapoutput_years;
 	int counter_fire_happened;
+	bool allow_pest_disturbances;
+	unsigned short int pest_species_max;
 
     // multi-core processing with omp
     int omp_num_threads;
@@ -486,6 +488,40 @@ struct Weather {
 	double FPR;
 	double tempmeanjja;
 	double precipitationsumjja;
+	vector<double> pestoutbreakprobability;
+};
+
+struct Pesttraits {
+	unsigned short int pestspecies;
+	string pestspeciesname;
+	
+	vector<double> weathervalsteps;
+	
+	vector<double> jan_temp_resp;
+	vector<double> feb_temp_resp;
+	vector<double> mar_temp_resp;
+	vector<double> apr_temp_resp;
+	vector<double> may_temp_resp;
+	vector<double> jun_temp_resp;
+	vector<double> jul_temp_resp;
+	vector<double> aug_temp_resp;
+	vector<double> sep_temp_resp;
+	vector<double> oct_temp_resp;
+	vector<double> nov_temp_resp;
+	vector<double> dec_temp_resp;
+	
+	vector<double> jan_prec_resp;
+	vector<double> feb_prec_resp;
+	vector<double> mar_prec_resp;
+	vector<double> apr_prec_resp;
+	vector<double> may_prec_resp;
+	vector<double> jun_prec_resp;
+	vector<double> jul_prec_resp;
+	vector<double> aug_prec_resp;
+	vector<double> sep_prec_resp;
+	vector<double> oct_prec_resp;
+	vector<double> nov_prec_resp;
+	vector<double> dec_prec_resp;
 };
 
 struct Evaluation {

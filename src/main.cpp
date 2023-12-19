@@ -9,6 +9,7 @@ using namespace std;
 
 Parameter parameter[1];
 Speciestraits speciestrait[99];
+Pesttraits pesttrait[99];
 
 int yearposition;
 

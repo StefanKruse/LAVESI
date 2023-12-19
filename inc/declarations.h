@@ -17,5 +17,7 @@ class Parameter;
 extern Parameter parameter[1];
 class Speciestraits;
 extern Speciestraits speciestrait[99];
+class Pesttraits;
+extern Pesttraits pesttrait[99];
 
 

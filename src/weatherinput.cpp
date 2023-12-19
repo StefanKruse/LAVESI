@@ -510,6 +510,100 @@ void passWeather() {
     }
 }
 
+void Getdisturbanceclimresponse(void) {	// read file and compute 
+	FILE *f;
+	f = fopen("pest_outbreak_prediction.csv","r"); 
+	if (f == NULL) {
+		printf("pest_outbreak_prediction.csv file not available!\n");
+		exit(1);
+	}
+	
+	char puffer[4*250000];
+	int counter=0;
+	
+
+	// read in line by line
+	while( fgets(puffer,4*250000,f) !=NULL ) {
+		if (counter>=1) {// first row is header ... content separated by spaces
+			// ... one row per pest, first column is name, second and following for each month and temperature and precipitation in range of -50 to +50 °C or mm by 0.1 steps => 1001 steps * 12 months * 2 (temperature, precipitation)
+			
+			pesttrait[counter].pestspecies = counter;								// number
+			pesttrait[counter].pestspeciesname = strtok(puffer, " ");				// name
+			
+			for(unsigned short int climvari=1;climvari<=2;climvari++) {// for temp and prec
+				// cout << "\n => climvari= " << climvari;
+				for(unsigned short int monthi=1;monthi<=12;monthi++) {// for 12 months
+					// cout << "\tmonthi= " << monthi << endl;
+					for(double climstepi=-500;climstepi<=500;climstepi++) {// for 0.1 climsteps from -50 to +50
+						// cout << " | climstepi= " << climstepi;
+						if(climvari==1 && monthi==1) // add once value step
+							pesttrait[counter].weathervalsteps.push_back(climstepi/10);
+						if(climvari==1) {//temp
+							if(monthi==1) pesttrait[counter].jan_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							// cout << pesttrait[counter].jan_temp_resp[pesttrait[counter].jan_temp_resp.size()] << " ";
+							if(monthi==2) pesttrait[counter].feb_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==3) pesttrait[counter].mar_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==4) pesttrait[counter].apr_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==5) pesttrait[counter].may_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==6) pesttrait[counter].jun_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==7) pesttrait[counter].jul_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==8) pesttrait[counter].aug_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==9) pesttrait[counter].sep_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==10) pesttrait[counter].oct_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==11) pesttrait[counter].nov_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==12) pesttrait[counter].dec_temp_resp.push_back(strtod(strtok(NULL, " "),NULL));
+						} else if(climvari==2){//prec
+							if(monthi==1) pesttrait[counter].jan_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==2) pesttrait[counter].feb_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==3) pesttrait[counter].mar_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==4) pesttrait[counter].apr_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==5) pesttrait[counter].may_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==6) pesttrait[counter].jun_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==7) pesttrait[counter].jul_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==8) pesttrait[counter].aug_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==9) pesttrait[counter].sep_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==10) pesttrait[counter].oct_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==11) pesttrait[counter].nov_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+							if(monthi==12) pesttrait[counter].dec_prec_resp.push_back(strtod(strtok(NULL, " "),NULL));
+						} else {
+							cout << " no pest data to read " << endl;
+						}
+					}// month loop
+				}// climstep loop
+			}// temp prec loop
+			
+			// test output 
+			cout << "Pest species number: " << pesttrait[counter].pestspecies <<
+					" -> species name: " << pesttrait[counter].pestspeciesname << endl;
+					// "JanT-50: " << pesttrait[counter].jan_temp_resp[0] <<
+					// "JanT+50: " << pesttrait[counter].jan_temp_resp[pesttrait[counter].jan_temp_resp.size()] <<
+					// "DecP-50: " << pesttrait[counter].dec_prec_resp[0] <<
+					// "DecP+50: " << pesttrait[counter].dec_prec_resp[pesttrait[counter].dec_prec_resp.size()]
+					// << endl;
+			// cout << "pesttrait[counter].jan_temp_resp contains:";
+			// for (unsigned i=0; i<pesttrait[counter].jan_temp_resp.size() ; i++)
+				// cout << ' ' << pesttrait[counter].jan_temp_resp[i];
+			// cout << '\n';
+		  
+		}
+		counter++;
+	}
+	fclose(f);
+}
+
+void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climate to year-by-year impact
+	// use current weather and extract for each pestspecies the probability of occurance
+	// pesttrait[counter].pestspecies // number 1-max number in initial version 7
+	for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
+		cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
+		cout << "weather_list.size() = " << weather_list.size() << endl;
+		    for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
+				weather_list[iweather].pestoutbreakprobability.push_back(0.0);
+			}// for each year
+			cout << " weather_list[0].pestoutbreakprobability.size() = " << weather_list[0].pestoutbreakprobability.size() << endl;
+	}// for each pest species
+}
+
 extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vector<Weather>>& world_weather_list) {
     char dateinametemp[250];
     char dateinameprec[250];
@@ -1456,5 +1550,26 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
     }
 
     passWeather();
-}
+	
+	if(parameter[0].allow_pest_disturbances) { // read and compute pest outbreaks based on weather
+		Getdisturbanceclimresponse();
+		cout << "Pest species present in simulation:";
+		for (int pest_species_counter = 1; pest_species_counter < 99; pest_species_counter++) {
+			cout << "pest_species_counter= " << pest_species_counter << " -> " << pesttrait[pest_species_counter].pestspecies << "   ";
+			if(pesttrait[pest_species_counter].pestspecies != pest_species_counter) {
+				parameter[0].pest_species_max = pest_species_counter-1;
+				break;
+			}
+		}
+		cout << parameter[0].pest_species_max << endl;
+		
+	    int aktort = 0;
+		for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++) {
+			vector<Weather>& weather_list = *posw;
+			aktort++;
 
+			Getdisturbanceimpact(weather_list);
+		}// for each weather element
+	}
+
+}

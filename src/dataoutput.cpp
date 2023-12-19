@@ -118,12 +118,10 @@ void Dataoutput(int t,
 					if (parameter[0].ivort % 100 == 0) { //write spatial output every 100 yrs
 						outputgriddedbiomass = true;
 						ausgabedensity = true;
-
 					}
 					if (parameter[0].ivort > 26000) { //write spatial output every 100 yrs
 						outputgriddedbiomass = true;
 						ausgabedensity = true;
-
 					}
 					if (parameter[0].firegapoutput == 1) { // if fire gap output is activated
 						if (parameter[0].counter_fire_happened > 0) { // If counter has been started but not yet finished
@@ -148,8 +146,8 @@ void Dataoutput(int t,
                     outputgriddedbiomass = true;
                 }
             } else if (parameter[0].outputmode == 99) {  // "test"
-                // if (parameter[0].ivort % 20 == 0) {
-                if ((parameter[0].ivort % 20 == 0) | (parameter[0].ivort % 21 == 0)) {
+				outputcurrencies = true;
+                if ((parameter[0].ivort % 20 == 0)) {
 					outputcurrencies = true;
                     ausgabedensity = true;
                     outputgriddedbiomass = true;

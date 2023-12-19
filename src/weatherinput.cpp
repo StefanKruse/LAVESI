@@ -575,10 +575,6 @@ void Getdisturbanceclimresponse(void) {	// read file and compute
 			// test output 
 			cout << "Pest species number: " << pesttrait[counter].pestspecies <<
 					" -> species name: " << pesttrait[counter].pestspeciesname << endl;
-					// "JanT-50: " << pesttrait[counter].jan_temp_resp[0] <<
-					// "JanT+50: " << pesttrait[counter].jan_temp_resp[pesttrait[counter].jan_temp_resp.size()] <<
-					// "DecP-50: " << pesttrait[counter].dec_prec_resp[0] <<
-					// "DecP+50: " << pesttrait[counter].dec_prec_resp[pesttrait[counter].dec_prec_resp.size()]
 					// << endl;
 			// cout << "pesttrait[counter].jan_temp_resp contains:";
 			// for (unsigned i=0; i<pesttrait[counter].jan_temp_resp.size() ; i++)
@@ -707,9 +703,6 @@ void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climat
 						}
 					}// month loop
 				}// temp prec loop
-
-
-				// cout << " pestoutbreakprobability_i.mean (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i/24 << endl;
 				// cout << " pestoutbreakprobability_i (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i << endl;
 				weather_list[iweather].pestoutbreakprobability.push_back(pestoutbreakprobability_i);
 			}// for each year

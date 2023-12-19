@@ -596,7 +596,7 @@ void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climat
 	// pesttrait[counter].pestspecies // number 1-max number in initial version 7
 	for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
 		cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
-		// cout << "weather_list.size() = " << weather_list.size() << endl;
+		cout << "weather_list.size() = " << weather_list.size() << endl;
 		    for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
 				// assess current weather and sum the probabilities (or mean?)
 				double pestoutbreakprobability_i = 0.0;
@@ -708,15 +708,14 @@ void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climat
 					}// month loop
 				}// temp prec loop
 
-
-				// cout << " pestoutbreakprobability_i.mean (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i/24 << endl;
-				// cout << " pestoutbreakprobability_i (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i << endl;
+				
+				cout << " pestoutbreakprobability_i.mean (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i/24 << endl;
+				cout << " pestoutbreakprobability_i (pest=" << pestspeciesi << ") = " << pestoutbreakprobability_i << endl;
 				weather_list[iweather].pestoutbreakprobability.push_back(pestoutbreakprobability_i);
 			}// for each year
 			cout << " weather_list[0].pestoutbreakprobability.size() = " << weather_list[0].pestoutbreakprobability.size() << endl;
 	}// for each pest species
 }
-
 
 extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vector<Weather>>& world_weather_list) {
     char dateinametemp[250];
@@ -730,7 +729,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
     parameter[0].tempjuldiffortmin = 0.0;
     parameter[0].tempdiffortmin = 0.0;
     parameter[0].precdiffortmin = 0.0;
-if(false) {// only for testing
+
     if ((parameter[0].windsource != 0) && (parameter[0].windsource != 4) && (parameter[0].windsource != 5)) {
         int findyr1 = 0, findyr2 = -100, jahr = 0, cntr = 0;
 
@@ -1553,7 +1552,7 @@ if(false) {// only for testing
 
         jahr = 0;
     }
-}
+
     int aktort = 0;
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++) {
         vector<Weather>& weather_list = *posw;

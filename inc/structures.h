@@ -42,6 +42,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
 	double firedamage;				// 2
     unsigned short int crownstart;          // 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
     unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
+    unsigned short int pestinfectancedamage;// 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced
@@ -194,6 +195,7 @@ struct Parameter {
 	int firegapoutput_years;
 	int counter_fire_happened;
 	bool allow_pest_disturbances;
+	double pest_disturbances_impactfactor;
 	unsigned short int pest_species_max;
 
     // multi-core processing with omp

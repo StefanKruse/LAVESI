@@ -218,7 +218,6 @@ void Treeestablishment(Parameter* parameter,
 						tree.soilhumidity = 1;
 						tree.crownstart = 0*10;
 						tree.relcrowndamage = 0*1000;
-						tree.pestinfectancedamage = 0*1000;
 
 						tree_list.add(std::move(tree));
 

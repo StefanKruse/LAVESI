@@ -5,9 +5,7 @@
 
 using namespace std;
 
-void Ageing(//Parameter* parameter, 
-			vector<VectorList<Tree>>& world_tree_list, 
-			vector<VectorList<Seed>>& world_seed_list) {
+void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list) {
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
 

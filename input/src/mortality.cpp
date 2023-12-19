@@ -31,7 +31,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			windthrowmort = speciestrait[tree.species].mwindthrow * ((double)tree.height / 10) / (65535 / 10);// scaled to maximum of height in model of 65 m
 			
 			double firecrowndamagemort = 0.0;
-			if ( (parameter[0].firemode == 112) || (parameter[0].fireintensitymode != 1.0) || (parameter[0].allow_pest_disturbances) ) {
+
+			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
 				firecrowndamagemort = (double)tree.relcrowndamage / 1000;
 				if(firecrowndamagemort < 0.0)
 					firecrowndamagemort = 0.0;
@@ -39,17 +40,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 					firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
 				tree.relcrowndamage = 0*1000;
 			}
-
-			double pestoutbreakmort = 0.0;
-			if( parameter[0].allow_pest_disturbances ) {
-				pestoutbreakmort = (double)tree.pestinfectancedamage / 1000;
-				if(pestoutbreakmort < 0.0)
-					pestoutbreakmort = 0.0;
-				else if(pestoutbreakmort >= 1.0)
-					pestoutbreakmort = 1.0;
-				tree.pestinfectancedamage = 0*1000; // reset value
-			}
-		
+			
+			
             // height dependent influences
             double wachstumrel = 1.0;
             if ((double)tree.height / 10 < 130) {
@@ -137,7 +129,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
-            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort + pestoutbreakmort;
+            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort;
 			
 			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
 			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {

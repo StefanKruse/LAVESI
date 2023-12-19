@@ -56,12 +56,6 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #endif
 	if(parameter[0].ivort > parameter[0].ivortmax)
 		Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
-	
-	Pestoutbreak(&parameter[0], 
-				 yearposition, 
-				 world_tree_list, 
-				 world_weather_list);
-	
 
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
@@ -118,8 +112,7 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Seedproduction(//&parameter[0], 
-				   world_tree_list);
+    Seedproduction(&parameter[0], world_tree_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;
@@ -215,9 +208,7 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
-    Ageing(//&parameter[0], 
-		   world_tree_list, 
-		   world_seed_list);
+    Ageing(&parameter[0], world_tree_list, world_seed_list);
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;

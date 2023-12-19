@@ -247,12 +247,6 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].allow_pest_disturbances) ? "true" : "false");
     }
 
-    strcpy(uebergabestring, "pest_disturbances_impactfactor");
-    parameter[0].pest_disturbances_impactfactor = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
-    if (parameter[0].parameterinputvis == true) {
-        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].pest_disturbances_impactfactor);
-    }
-
     strcpy(uebergabestring, "omp_num_threads");
     parameter[0].omp_num_threads = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

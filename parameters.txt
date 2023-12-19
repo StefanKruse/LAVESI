@@ -54,6 +54,7 @@ firegapoutput_threshold=0.5		 	// (double 0.00,1.00) If firepapoutput=1, determi
 firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many years post-fire the output should be written (default=30)
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
 allow_pest_disturbances=1;			// (int 0,1 -> bool) Switch to allow calculation and impact of pest species (currently implemented for Alaska)
+pest_disturbances_impactfactor=0.01; // (double 0.00,1.00)can be 1 or a number between 0 and 1 to reduce the impact of direct mortality and defoliation mortality on the trees from pest species outbreak
 
 // 0.4 Computation environment
 omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"

@@ -18,7 +18,9 @@ void Dataoutput(int t,
                 vector<vector<Envirgrid>>& world_plot_list,
                 vector<vector<Evaluation>>& world_evaluation_list);
 void Treedistribution(Parameter* parameter, int stringlengthmax);
-void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorList<Seed>>& world_seed_list, vector<vector<Weather>>& world_weather_list);
+void Hinterlandseedintro(Parameter* parameter, int yearposition,
+						 vector<VectorList<Seed>>& world_seed_list, 
+						 vector<vector<Weather>>& world_weather_list);
 void Environmentupdate(//Parameter* parameter,
                        int yearposition,
                        vector<vector<Envirgrid>>& world_plot_list,
@@ -29,7 +31,8 @@ void Seeddispersal(//int Jahr,
 				   Parameter* parameter, 
 				   vector<VectorList<Seed>>& world_seed_list, 
 				   vector<vector<Envirgrid>>& world_plot_list);
-void Seedproduction(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list);
+void Seedproduction(//Parameter* parameter, 
+					vector<VectorList<Tree>>& world_tree_list);
 void Treeestablishment(Parameter* parameter,
                        int yearposition,
                        vector<VectorList<Tree>>& world_tree_list,
@@ -42,13 +45,19 @@ void Fire(Parameter* parameter,
                        vector<VectorList<Seed>>& world_seed_list,
                        vector<vector<Weather>>& world_weather_list,
                        vector<vector<Envirgrid>>& world_plot_list);
+void Pestoutbreak(Parameter* parameter,
+                       int yearposition,
+                       vector<VectorList<Tree>>& world_tree_list,
+                       vector<vector<Weather>>& world_weather_list);
 void Mortality(Parameter* parameter,
                // int Jahr,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
                vector<vector<Weather>>& world_weather_list);
-void Ageing(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list, vector<VectorList<Seed>>& world_seed_list);
+void Ageing(//Parameter* parameter, 
+			vector<VectorList<Tree>>& world_tree_list, 
+			vector<VectorList<Seed>>& world_seed_list);
 void Pollinationprobability(double x,
                             double y,
                             Parameter* parameter,
@@ -72,7 +81,14 @@ void Pollinationprobability(double x,
                             int outputtreesiter,
                             double randomnumberwind,
                             double randomnumberwindfather);
-void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec, double randomnumberwind);
+void Seedwinddispersal(double rn, 
+					   double& dx, 
+					   double& dy, 
+					   double& windspeed, 
+					   double& winddirection, 
+					   double parhei, 
+					   int seedspec, 
+					   double randomnumberwind);
 void Parameterinput(void);
 void Getspeciestraits(void);
 void Getdisturbanceclimresponse(void);

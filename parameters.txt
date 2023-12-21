@@ -204,7 +204,7 @@ roi=1;								// (int) determine region of interest for species
 
 // 1.3 -----> Plot number
 mapxlength=1;						// (int) number of parallel executed plots for each climate
-mapylength=224;						// (int) number of plots along a south-north transect 
+mapylength=3;						// (int) number of plots along a south-north transect 
 									// ... for calibration in Siberia N=224 (1000001001 - 1000001224)
 									// ... ... Canada N=86 (1000002001 - 1000002086)
 									// ... ... Alaska N=34 (1000003000 - 1000003034)
@@ -223,8 +223,8 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=49;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=49;
+seedintro_maxy=100;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=100;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed

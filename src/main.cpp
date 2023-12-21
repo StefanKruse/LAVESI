@@ -497,71 +497,284 @@ void fillElevations() {
 
     if (parameter[0].mapylength == 1) {
 
-	long int plotcodeNum;
-	plotcodeNum = parameter[0].weatherchoice - 1000000000;
+	int plotcodeNum;
+	plotcodeNum = parameter[0].weatherchoice % 10000;
 	
 	std::stringstream plotcode;
-	plotcode << std::setw(3) << std::setfill('0') << plotcodeNum;
+	plotcode << plotcodeNum;
 
 	// ... read dem data
         FILE* f;
         char demfilename[250];
 		
-	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
+	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
 		if (treerows == 50) {
 			string deminputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/" + plotcode.str() + "_dem.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_dem.csv";
 			strcpy(demfilename, deminputbuf.c_str());
 		} else if (treerows == 990) {
 			string deminputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/" + plotcode.str() + "_dem.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_dem.csv";
 			strcpy(demfilename, deminputbuf.c_str());
 		} else if (treerows == 100) {
 			string deminputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/" + plotcode.str() + "_dem.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_dem.csv";
 			strcpy(demfilename, deminputbuf.c_str());
 		}
-	} else if (parameter[0].weatherchoice > 2000000000 && parameter[0].weatherchoice < 3000000000){
+	} else if (parameter[0].weatherchoice > 1000002000 && parameter[0].weatherchoice < 1000003000){
 		if (treerows == 50) {
 			string deminputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/" + plotcode.str() + "_dem.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_dem.csv";
 			strcpy(demfilename, deminputbuf.c_str());
 		} else if (treerows == 990) {
 			string deminputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/" + plotcode.str() + "_dem.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_dem.csv";
 			strcpy(demfilename, deminputbuf.c_str());
 		} else if (treerows == 100) {
 			string deminputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/" + plotcode.str() + "_dem.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_dem.csv";
 			strcpy(demfilename, deminputbuf.c_str());
 		}
-	} else if (parameter[0].weatherchoice == 50001) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Close_to_Fairbanks_EN23-611_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50002) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fielding_Lake_EN23-675_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50003) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_East_EN22-021_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50004) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_West_EN22-032_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50005) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50006) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Nutenvut_16KP03-V20_V39_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50007) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Ulu_EN21-201_219_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50008) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Mucho_Lake_EN22-065_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
-	} else if (parameter[0].weatherchoice == 50009) {
-		char deminputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_dem.csv"; //x=990, y=990
-		strcpy(demfilename, deminputbuf);
+	} else if (parameter[0].weatherchoice > 1000003000 && parameter[0].weatherchoice < 1000004000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1000004000 && parameter[0].weatherchoice < 1000005000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1000005000 && parameter[0].weatherchoice < 1000006000) {
+		string deminputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_dem.csv";
+		strcpy(demfilename, deminputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026001000 && parameter[0].weatherchoice < 1026002000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026002000 && parameter[0].weatherchoice < 1026003000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026003000 && parameter[0].weatherchoice < 1026004000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026004000 && parameter[0].weatherchoice < 1026005000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026005000 && parameter[0].weatherchoice < 1026006000) {
+		string deminputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_dem.csv";
+		strcpy(demfilename, deminputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045001000 && parameter[0].weatherchoice < 1045002000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045002000 && parameter[0].weatherchoice < 1045003000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045003000 && parameter[0].weatherchoice < 1045004000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045004000 && parameter[0].weatherchoice < 1045005000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045005000 && parameter[0].weatherchoice < 1045006000) {
+		string deminputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_dem.csv";
+		strcpy(demfilename, deminputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085001000 && parameter[0].weatherchoice < 1085002000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085002000 && parameter[0].weatherchoice < 1085003000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085003000 && parameter[0].weatherchoice < 1085004000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085004000 && parameter[0].weatherchoice < 1085005000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085005000 && parameter[0].weatherchoice < 1085006000) {
+		string deminputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_dem.csv";
+		strcpy(demfilename, deminputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 2000001000 && parameter[0].weatherchoice < 2000002000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 2000002000 && parameter[0].weatherchoice < 2000003000){
+		if (treerows == 50) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 990) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		} else if (treerows == 100) {
+			string deminputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+		}
 	}
 
 
@@ -594,61 +807,274 @@ void fillElevations() {
     // ... read slope data
         char slopefilename[250];
 		
-	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
+	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
 		if (treerows == 50) {
 			string slopeinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/" + plotcode.str() + "_slope.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_slope.csv";
 			strcpy(slopefilename, slopeinputbuf.c_str());
 		} else if (treerows == 990) {
 			string slopeinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/" + plotcode.str() + "_slope.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_slope.csv";
 			strcpy(slopefilename, slopeinputbuf.c_str());
 		} else if (treerows == 100) {
 			string slopeinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/" + plotcode.str() + "_slope.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_slope.csv";
 			strcpy(slopefilename, slopeinputbuf.c_str());
 		}
-	} else if (parameter[0].weatherchoice > 2000000000 && parameter[0].weatherchoice < 3000000000){
+	} else if (parameter[0].weatherchoice > 1000002000 && parameter[0].weatherchoice < 1000003000){
 		if (treerows == 50) {
 			string slopeinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/" + plotcode.str() + "_slope.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_slope.csv";
 			strcpy(slopefilename, slopeinputbuf.c_str());
 		} else if (treerows == 990) {
 			string slopeinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/" + plotcode.str() + "_slope.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_slope.csv";
 			strcpy(slopefilename, slopeinputbuf.c_str());
 		} else if (treerows == 100) {
 			string slopeinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/" + plotcode.str() + "_slope.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_slope.csv";
 			strcpy(slopefilename, slopeinputbuf.c_str());
 		}
-	} else if (parameter[0].weatherchoice == 50001) {
-	  char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Close_to_Fairbanks_EN23-611_slope.csv"; //x=990, y=990
-	  strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50002) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fielding_Lake_EN23-675_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50003) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_East_EN22-021_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50004) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_West_EN22-032_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50005) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50006) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Nutenvut_16KP03-V20_V39_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50007) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Ulu_EN21-201_219_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50008) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Mucho_Lake_EN22-065_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
-	} else if (parameter[0].weatherchoice == 50009) {
-		char slopeinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_slope.csv"; //x=990, y=990
-		strcpy(slopefilename, slopeinputbuf);
+	} else if (parameter[0].weatherchoice > 1000003000 && parameter[0].weatherchoice < 1000004000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1000004000 && parameter[0].weatherchoice < 1000005000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1000005000 && parameter[0].weatherchoice < 1000006000) {
+		string slopeinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_slope.csv";
+		strcpy(slopefilename, slopeinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026001000 && parameter[0].weatherchoice < 1026002000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026002000 && parameter[0].weatherchoice < 1026003000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026003000 && parameter[0].weatherchoice < 1026004000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026004000 && parameter[0].weatherchoice < 1026005000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026005000 && parameter[0].weatherchoice < 1026006000) {
+		string slopeinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_slope.csv";
+		strcpy(slopefilename, slopeinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045001000 && parameter[0].weatherchoice < 1045002000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045002000 && parameter[0].weatherchoice < 1045003000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045003000 && parameter[0].weatherchoice < 1045004000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045004000 && parameter[0].weatherchoice < 1045005000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045005000 && parameter[0].weatherchoice < 1045006000) {
+		string slopeinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_slope.csv";
+		strcpy(slopefilename, slopeinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085001000 && parameter[0].weatherchoice < 1085002000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085002000 && parameter[0].weatherchoice < 1085003000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085003000 && parameter[0].weatherchoice < 1085004000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085004000 && parameter[0].weatherchoice < 1085005000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085005000 && parameter[0].weatherchoice < 1085006000) {
+		string slopeinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_slope.csv";
+		strcpy(slopefilename, slopeinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 2000001000 && parameter[0].weatherchoice < 2000002000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 2000002000 && parameter[0].weatherchoice < 2000003000){
+		if (treerows == 50) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 990) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		} else if (treerows == 100) {
+			string slopeinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+		}
 	}
 
 
@@ -675,61 +1101,274 @@ void fillElevations() {
         // ... read twi data
         char twifilename[250];
 		
-	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
+	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
 		if (treerows == 50) {
 			string twiinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/" + plotcode.str() + "_twi.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_twi.csv";
 			strcpy(twifilename, twiinputbuf.c_str());
 		} else if (treerows == 990) {
 			string twiinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/" + plotcode.str() + "_twi.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_twi.csv";
 			strcpy(twifilename, twiinputbuf.c_str());
 		} else if (treerows == 100) {
 			string twiinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/" + plotcode.str() + "_twi.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_twi.csv";
 			strcpy(twifilename, twiinputbuf.c_str());
 		}
-	} else if (parameter[0].weatherchoice > 2000000000 && parameter[0].weatherchoice < 3000000000){
+	} else if (parameter[0].weatherchoice > 1000002000 && parameter[0].weatherchoice < 1000003000){
 		if (treerows == 50) {
 			string twiinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/" + plotcode.str() + "_twi.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_twi.csv";
 			strcpy(twifilename, twiinputbuf.c_str());
 		} else if (treerows == 990) {
 			string twiinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/" + plotcode.str() + "_twi.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_twi.csv";
 			strcpy(twifilename, twiinputbuf.c_str());
 		} else if (treerows == 100) {
 			string twiinputbuf = 
-			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/" + plotcode.str() + "_twi.csv";
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_twi.csv";
 			strcpy(twifilename, twiinputbuf.c_str());
 		}
-	} else if (parameter[0].weatherchoice == 50001) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Close_to_Fairbanks_EN23-611_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50002) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fielding_Lake_EN23-675_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50003) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_East_EN22-021_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50004) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Fort_Mc_Pherson_West_EN22-032_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50005) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50006) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Nutenvut_16KP03-V20_V39_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50007) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Lake_Ulu_EN21-201_219_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50008) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Mucho_Lake_EN22-065_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
-	} else if (parameter[0].weatherchoice == 50009) {
-		char twiinputbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountains/Road_to_Central_EN23-651_twi.csv"; //x=990, y=990
-		strcpy(twifilename, twiinputbuf);
+	} else if (parameter[0].weatherchoice > 1000003000 && parameter[0].weatherchoice < 1000004000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1000004000 && parameter[0].weatherchoice < 1000005000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1000005000 && parameter[0].weatherchoice < 1000006000) {
+		string twiinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_twi.csv";
+		strcpy(twifilename, twiinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026001000 && parameter[0].weatherchoice < 1026002000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026002000 && parameter[0].weatherchoice < 1026003000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026003000 && parameter[0].weatherchoice < 1026004000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026004000 && parameter[0].weatherchoice < 1026005000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1026005000 && parameter[0].weatherchoice < 1026006000) {
+		string twiinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_twi.csv";
+		strcpy(twifilename, twiinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045001000 && parameter[0].weatherchoice < 1045002000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045002000 && parameter[0].weatherchoice < 1045003000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045003000 && parameter[0].weatherchoice < 1045004000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045004000 && parameter[0].weatherchoice < 1045005000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1045005000 && parameter[0].weatherchoice < 1045006000) {
+		string twiinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_twi.csv";
+		strcpy(twifilename, twiinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085001000 && parameter[0].weatherchoice < 1085002000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085002000 && parameter[0].weatherchoice < 1085003000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085003000 && parameter[0].weatherchoice < 1085004000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Alaska/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085004000 && parameter[0].weatherchoice < 1085005000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/HengduanMt/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 1085005000 && parameter[0].weatherchoice < 1085006000) {
+		string twiinputbuf =
+		"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_mountainTreelines/" + plotcode.str() + "_twi.csv";
+		strcpy(twifilename, twiinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 2000001000 && parameter[0].weatherchoice < 2000002000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Siberia/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
+	} else if (parameter[0].weatherchoice > 2000002000 && parameter[0].weatherchoice < 2000003000){
+		if (treerows == 50) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 990) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_990x990/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		} else if (treerows == 100) {
+			string twiinputbuf = 
+			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_100x100/Canada/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+		}
 	}
 
 	

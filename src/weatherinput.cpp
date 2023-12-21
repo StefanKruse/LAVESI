@@ -522,6 +522,13 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
     parameter[0].tempjuldiffortmin = 0.0;
     parameter[0].tempdiffortmin = 0.0;
     parameter[0].precdiffortmin = 0.0;
+	
+	int plotcodeNum;
+	plotcodeNum = parameter[0].weatherchoice % 10000;
+	
+	std::stringstream plotcode;
+	plotcode << plotcodeNum;
+	
 
     if ((parameter[0].windsource != 0) && (parameter[0].windsource != 4) && (parameter[0].windsource != 5)) {
         int findyr1 = 0, findyr2 = -100, jahr = 0, cntr = 0;
@@ -532,747 +539,501 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         string item;
 
         // define input folder
-        if ((parameter[0].weatherchoice == 1000000283) /* ### FOR EN22-065 ### */ ||
-		(parameter[0].weatherchoice == 1000000284)) /* ### FOR EN22-066 ### */ {
-		foldername << "cell_1";
-		} else if ((parameter[0].weatherchoice == 1000000285) /* ### FOR EN22-067 ### */ ||
-		(parameter[0].weatherchoice == 1000000286) /* ### FOR EN22-068 ### */ ||
-		(parameter[0].weatherchoice == 1000000288) /* ### FOR EN22-070 ### */ ||
-		(parameter[0].weatherchoice == 1000000289) /* ### FOR EN22-071 ### */ ||
-		(parameter[0].weatherchoice == 1000000290) /* ### FOR EN22-072 ### */ ||
-		(parameter[0].weatherchoice == 1000000291) /* ### FOR EN22-073 ### */ ||
-		(parameter[0].weatherchoice == 1000000292)) /* ### FOR EN22-074 ### */ {
-		foldername << "cell_2";
-		} else if ((parameter[0].weatherchoice == 1000000287)) /* ### FOR EN22-069 ### */ {
-		foldername << "cell_3";
-		} else if ((parameter[0].weatherchoice == 1000000219) /* ### FOR EN22-001 ### */ ||
-		(parameter[0].weatherchoice == 1000000220) /* ### FOR EN22-002 ### */ ||
-		(parameter[0].weatherchoice == 1000000221) /* ### FOR EN22-003 ### */ ||
-		(parameter[0].weatherchoice == 1000000222) /* ### FOR EN22-004 ### */ ||
-		(parameter[0].weatherchoice == 1000000274) /* ### FOR EN22-056 ### */ ||
-		(parameter[0].weatherchoice == 1000000275) /* ### FOR EN22-057 ### */ ||
-		(parameter[0].weatherchoice == 1000000276) /* ### FOR EN22-058 ### */ ||
-		(parameter[0].weatherchoice == 1000000277) /* ### FOR EN22-059 ### */ ||
-		(parameter[0].weatherchoice == 1000000278)) /* ### FOR EN22-060 ### */ {
-		foldername << "cell_4";
-		} else if ((parameter[0].weatherchoice == 1000000279) /* ### FOR EN22-061 ### */ ||
-		(parameter[0].weatherchoice == 1000000280)) /* ### FOR EN22-062 ### */ {
-		foldername << "cell_5";
-		} else if ((parameter[0].weatherchoice == 1000000281) /* ### FOR EN22-063 ### */ ||
-		(parameter[0].weatherchoice == 1000000282) /* ### FOR EN22-064 ### */ ||
-		(parameter[0].weatherchoice == 1000000293)) /* ### FOR EN22-075 ### */ {
-		foldername << "cell_6";
-		} else if ((parameter[0].weatherchoice == 1000000148) /* ### FOR EN18075 ### */ ||
-		(parameter[0].weatherchoice == 1000000149) /* ### FOR EN18076 ### */ ||
-		(parameter[0].weatherchoice == 1000000150) /* ### FOR EN18077 ### */ ||
-		(parameter[0].weatherchoice == 1000000151) /* ### FOR EN18078 ### */ ||
-		(parameter[0].weatherchoice == 1000000152) /* ### FOR EN18079 ### */ ||
-		(parameter[0].weatherchoice == 1000000153) /* ### FOR EN18080 ### */ ||
-		(parameter[0].weatherchoice == 1000000154) /* ### FOR EN18081 ### */ ||
-		(parameter[0].weatherchoice == 1000000155) /* ### FOR EN18082 ### */ ||
-		(parameter[0].weatherchoice == 1000000156)) /* ### FOR EN18083 ### */ {
-			cout << "usingWinddata!" << endl;
-		foldername << "cell_7";
-		} else if ((parameter[0].weatherchoice == 1000000144) /* ### FOR EN18071 ### */ ||
-		(parameter[0].weatherchoice == 1000000145) /* ### FOR EN18072 ### */ ||
-		(parameter[0].weatherchoice == 1000000146) /* ### FOR EN18073 ### */ ||
-		(parameter[0].weatherchoice == 1000000147)) /* ### FOR EN18074 ### */ {
-		foldername << "cell_8";
-		} else if ((parameter[0].weatherchoice == 1000000132)) /* ### FOR EN18062 ### */ {
-		foldername << "cell_9";
-		} else if ((parameter[0].weatherchoice == 1000000131) /* ### FOR EN18061 ### */ ||
-		(parameter[0].weatherchoice == 1000000176) /* ### FOR EN21220 ### */ ||
-		(parameter[0].weatherchoice == 1000000177) /* ### FOR EN21221 ### */ ||
-		(parameter[0].weatherchoice == 1000000178) /* ### FOR EN21222 ### */ ||
-		(parameter[0].weatherchoice == 1000000179) /* ### FOR EN21223 ### */ ||
-		(parameter[0].weatherchoice == 1000000180) /* ### FOR EN21224 ### */ ||
-		(parameter[0].weatherchoice == 1000000181) /* ### FOR EN21225 ### */ ||
-		(parameter[0].weatherchoice == 1000000182) /* ### FOR EN21226 ### */ ||
-		(parameter[0].weatherchoice == 1000000183) /* ### FOR EN21227 ### */ ||
-		(parameter[0].weatherchoice == 1000000188) /* ### FOR EN21232 ### */ ||
-		(parameter[0].weatherchoice == 1000000189) /* ### FOR EN21233 ### */ ||
-		(parameter[0].weatherchoice == 1000000190) /* ### FOR EN21234 ### */ ||
-		(parameter[0].weatherchoice == 1000000191) /* ### FOR EN21235 ### */ ||
-		(parameter[0].weatherchoice == 1000000192) /* ### FOR EN21236 ### */ ||
-		(parameter[0].weatherchoice == 1000000193) /* ### FOR EN21237 ### */ ||
-		(parameter[0].weatherchoice == 1000000194) /* ### FOR EN21238 ### */ ||
-		(parameter[0].weatherchoice == 1000000195) /* ### FOR EN21239 ### */ ||
-		(parameter[0].weatherchoice == 1000000196) /* ### FOR EN21240 ### */ ||
-		(parameter[0].weatherchoice == 1000000197) /* ### FOR EN21241 ### */ ||
-		(parameter[0].weatherchoice == 1000000198) /* ### FOR EN21242 ### */ ||
-		(parameter[0].weatherchoice == 1000000199) /* ### FOR EN21243 ### */ ||
-		(parameter[0].weatherchoice == 1000000200) /* ### FOR EN21244 ### */ ||
-		(parameter[0].weatherchoice == 1000000201) /* ### FOR EN21245 ### */ ||
-		(parameter[0].weatherchoice == 1000000202) /* ### FOR EN21246 ### */ ||
-		(parameter[0].weatherchoice == 1000000203) /* ### FOR EN21247 ### */ ||
-		(parameter[0].weatherchoice == 1000000204) /* ### FOR EN21248 ### */ ||
-		(parameter[0].weatherchoice == 1000000205) /* ### FOR EN21249 ### */ ||
-		(parameter[0].weatherchoice == 1000000206) /* ### FOR EN21250 ### */ ||
-		(parameter[0].weatherchoice == 1000000207) /* ### FOR EN21251 ### */ ||
-		(parameter[0].weatherchoice == 1000000208) /* ### FOR EN21252 ### */ ||
-		(parameter[0].weatherchoice == 1000000209) /* ### FOR EN21253 ### */ ||
-		(parameter[0].weatherchoice == 1000000210) /* ### FOR EN21254 ### */ ||
-		(parameter[0].weatherchoice == 1000000211) /* ### FOR EN21255 ### */ ||
-		(parameter[0].weatherchoice == 1000000212) /* ### FOR EN21256 ### */ ||
-		(parameter[0].weatherchoice == 1000000213) /* ### FOR EN21257 ### */ ||
-		(parameter[0].weatherchoice == 1000000214) /* ### FOR EN21258 ### */ ||
-		(parameter[0].weatherchoice == 1000000215) /* ### FOR EN21259 ### */ ||
-		(parameter[0].weatherchoice == 1000000216) /* ### FOR EN21260 ### */ ||
-		(parameter[0].weatherchoice == 1000000217) /* ### FOR EN21261 ### */ ||
-		(parameter[0].weatherchoice == 1000000218)) /* ### FOR EN21262 ### */ {
-		foldername << "cell_10";
-		} else if ((parameter[0].weatherchoice == 1000000184) /* ### FOR EN21228 ### */ ||
-		(parameter[0].weatherchoice == 1000000185) /* ### FOR EN21229 ### */ ||
-		(parameter[0].weatherchoice == 1000000186) /* ### FOR EN21230 ### */ ||
-		(parameter[0].weatherchoice == 1000000187)) /* ### FOR EN21231 ### */ {
-		foldername << "cell_11";
-		} else if ((parameter[0].weatherchoice == 1000000256) /* ### FOR EN22-038 ### */ ||
-		(parameter[0].weatherchoice == 1000000257) /* ### FOR EN22-039 ### */ ||
-		(parameter[0].weatherchoice == 1000000258) /* ### FOR EN22-040 ### */ ||
-		(parameter[0].weatherchoice == 1000000259) /* ### FOR EN22-041 ### */ ||
-		(parameter[0].weatherchoice == 1000000260) /* ### FOR EN22-042 ### */ ||
-		(parameter[0].weatherchoice == 1000000261) /* ### FOR EN22-043 ### */ ||
-		(parameter[0].weatherchoice == 1000000262) /* ### FOR EN22-044 ### */ ||
-		(parameter[0].weatherchoice == 1000000263) /* ### FOR EN22-045 ### */ ||
-		(parameter[0].weatherchoice == 1000000264) /* ### FOR EN22-046 ### */ ||
-		(parameter[0].weatherchoice == 1000000265) /* ### FOR EN22-047 ### */ ||
-		(parameter[0].weatherchoice == 1000000266) /* ### FOR EN22-048 ### */ ||
-		(parameter[0].weatherchoice == 1000000267) /* ### FOR EN22-049 ### */ ||
-		(parameter[0].weatherchoice == 1000000268) /* ### FOR EN22-050 ### */ ||
-		(parameter[0].weatherchoice == 1000000269) /* ### FOR EN22-051 ### */ ||
-		(parameter[0].weatherchoice == 1000000270) /* ### FOR EN22-052 ### */ ||
-		(parameter[0].weatherchoice == 1000000271) /* ### FOR EN22-053 ### */ ||
-		(parameter[0].weatherchoice == 1000000272)) /* ### FOR EN22-054 ### */ {
-		foldername << "cell_12";
-		} else if ((parameter[0].weatherchoice == 1000000255) /* ### FOR EN22-037 ### */ ||
-		(parameter[0].weatherchoice == 1000000273)) /* ### FOR EN22-055 ### */ {
-		foldername << "cell_13";
-		} else if ((parameter[0].weatherchoice == 1000000137) /* ### FOR EN18067 ### */ ||
-		(parameter[0].weatherchoice == 1000000138) /* ### FOR EN18068 ### */ ||
-		(parameter[0].weatherchoice == 1000000140) /* ### FOR EN18070_centre ### */ ||
-		(parameter[0].weatherchoice == 1000000141) /* ### FOR EN18070_edge ### */ ||
-		(parameter[0].weatherchoice == 1000000142) /* ### FOR EN18070_end ### */ ||
-		(parameter[0].weatherchoice == 1000000143)) /* ### FOR EN18070_transition ### */ {
-		foldername << "cell_14";
-		} else if ((parameter[0].weatherchoice == 1000000139)) /* ### FOR EN18069 ### */ {
-		foldername << "cell_15";
-		} else if ((parameter[0].weatherchoice == 1000000133) /* ### FOR EN18063 ### */ ||
-		(parameter[0].weatherchoice == 1000000134) /* ### FOR EN18064 ### */ ||
-		(parameter[0].weatherchoice == 1000000135) /* ### FOR EN18065 ### */ ||
-		(parameter[0].weatherchoice == 1000000136)) /* ### FOR EN18066 ### */ {
-		foldername << "cell_16";
-		} else if ((parameter[0].weatherchoice == 1000000157) /* ### FOR EN21201 ### */ ||
-		(parameter[0].weatherchoice == 1000000159) /* ### FOR EN21203 ### */ ||
-		(parameter[0].weatherchoice == 1000000160) /* ### FOR EN21204 ### */ ||
-		(parameter[0].weatherchoice == 1000000161) /* ### FOR EN21205 ### */ ||
-		(parameter[0].weatherchoice == 1000000165) /* ### FOR EN21209 ### */ ||
-		(parameter[0].weatherchoice == 1000000166) /* ### FOR EN21210 ### */ ||
-		(parameter[0].weatherchoice == 1000000167) /* ### FOR EN21211 ### */ ||
-		(parameter[0].weatherchoice == 1000000171) /* ### FOR EN21215 ### */ ||
-		(parameter[0].weatherchoice == 1000000172) /* ### FOR EN21216 ### */ ||
-		(parameter[0].weatherchoice == 1000000173) /* ### FOR EN21217 ### */ ||
-		(parameter[0].weatherchoice == 1000000174) /* ### FOR EN21218 ### */ ||
-		(parameter[0].weatherchoice == 1000000175)) /* ### FOR EN21219 ### */ {
-		foldername << "cell_17";
-		} else if ((parameter[0].weatherchoice == 1000000158) /* ### FOR EN21202 ### */ ||
-		(parameter[0].weatherchoice == 1000000162) /* ### FOR EN21206 ### */ ||
-		(parameter[0].weatherchoice == 1000000163) /* ### FOR EN21207 ### */ ||
-		(parameter[0].weatherchoice == 1000000164) /* ### FOR EN21208 ### */ ||
-		(parameter[0].weatherchoice == 1000000168) /* ### FOR EN21212 ### */ ||
-		(parameter[0].weatherchoice == 1000000169) /* ### FOR EN21213 ### */ ||
-		(parameter[0].weatherchoice == 1000000170)) /* ### FOR EN21214 ### */ {
-		foldername << "cell_18";
-		} else if ((parameter[0].weatherchoice == 1000000080) /* ### FOR 16-KP-V20 ### */ ||
-		(parameter[0].weatherchoice == 1000000081) /* ### FOR 16-KP-V21 ### */ ||
-		(parameter[0].weatherchoice == 1000000082) /* ### FOR 16-KP-V22 ### */ ||
-		(parameter[0].weatherchoice == 1000000083) /* ### FOR 16-KP-V23 ### */ ||
-		(parameter[0].weatherchoice == 1000000084) /* ### FOR 16-KP-V24 ### */ ||
-		(parameter[0].weatherchoice == 1000000085) /* ### FOR 16-KP-V25 ### */ ||
-		(parameter[0].weatherchoice == 1000000086) /* ### FOR 16-KP-V26 ### */ ||
-		(parameter[0].weatherchoice == 1000000087) /* ### FOR 16-KP-V27 ### */ ||
-		(parameter[0].weatherchoice == 1000000088) /* ### FOR 16-KP-V28 ### */ ||
-		(parameter[0].weatherchoice == 1000000089) /* ### FOR 16-KP-V29 ### */ ||
-		(parameter[0].weatherchoice == 1000000090) /* ### FOR 16-KP-V30 ### */ ||
-		(parameter[0].weatherchoice == 1000000091) /* ### FOR 16-KP-V31 ### */ ||
-		(parameter[0].weatherchoice == 1000000092) /* ### FOR 16-KP-V32 ### */ ||
-		(parameter[0].weatherchoice == 1000000093) /* ### FOR 16-KP-V33 ### */ ||
-		(parameter[0].weatherchoice == 1000000094) /* ### FOR 16-KP-V34 ### */ ||
-		(parameter[0].weatherchoice == 1000000095) /* ### FOR 16-KP-V35 ### */ ||
-		(parameter[0].weatherchoice == 1000000096) /* ### FOR 16-KP-V36 ### */ ||
-		(parameter[0].weatherchoice == 1000000097) /* ### FOR 16-KP-V37 ### */ ||
-		(parameter[0].weatherchoice == 1000000098) /* ### FOR 16-KP-V38 ### */ ||
-		(parameter[0].weatherchoice == 1000000099)) /* ### FOR 16-KP-V39 ### */ {
-		foldername << "cell_19";
-		} else if ((parameter[0].weatherchoice == 1000000223) /* ### FOR EN22-005 ### */ ||
-		(parameter[0].weatherchoice == 1000000224) /* ### FOR EN22-006 ### */ ||
-		(parameter[0].weatherchoice == 1000000225) /* ### FOR EN22-007 ### */ ||
-		(parameter[0].weatherchoice == 1000000226) /* ### FOR EN22-008 ### */ ||
-		(parameter[0].weatherchoice == 1000000227) /* ### FOR EN22-009 ### */ ||
-		(parameter[0].weatherchoice == 1000000228) /* ### FOR EN22-010 ### */ ||
-		(parameter[0].weatherchoice == 1000000229) /* ### FOR EN22-011 ### */ ||
-		(parameter[0].weatherchoice == 1000000230) /* ### FOR EN22-012 ### */ ||
-		(parameter[0].weatherchoice == 1000000231) /* ### FOR EN22-013 ### */ ||
-		(parameter[0].weatherchoice == 1000000232) /* ### FOR EN22-014 ### */ ||
-		(parameter[0].weatherchoice == 1000000233) /* ### FOR EN22-015 ### */ ||
-		(parameter[0].weatherchoice == 1000000234) /* ### FOR EN22-016 ### */ ||
-		(parameter[0].weatherchoice == 1000000235) /* ### FOR EN22-017 ### */ ||
-		(parameter[0].weatherchoice == 1000000236) /* ### FOR EN22-018 ### */ ||
-		(parameter[0].weatherchoice == 1000000237) /* ### FOR EN22-019 ### */ ||
-		(parameter[0].weatherchoice == 1000000238) /* ### FOR EN22-020 ### */ ||
-		(parameter[0].weatherchoice == 1000000239) /* ### FOR EN22-021 ### */ ||
-		(parameter[0].weatherchoice == 1000000240) /* ### FOR EN22-022 ### */ ||
-		(parameter[0].weatherchoice == 1000000241) /* ### FOR EN22-023 ### */ ||
-		(parameter[0].weatherchoice == 1000000242) /* ### FOR EN22-024 ### */ ||
-		(parameter[0].weatherchoice == 1000000243) /* ### FOR EN22-025 ### */ ||
-		(parameter[0].weatherchoice == 1000000244) /* ### FOR EN22-026 ### */ ||
-		(parameter[0].weatherchoice == 1000000245) /* ### FOR EN22-027 ### */ ||
-		(parameter[0].weatherchoice == 1000000246) /* ### FOR EN22-028 ### */ ||
-		(parameter[0].weatherchoice == 1000000247) /* ### FOR EN22-029 ### */ ||
-		(parameter[0].weatherchoice == 1000000248) /* ### FOR EN22-030 ### */ ||
-		(parameter[0].weatherchoice == 1000000249) /* ### FOR EN22-031 ### */ ||
-		(parameter[0].weatherchoice == 1000000250) /* ### FOR EN22-032 ### */ ||
-		(parameter[0].weatherchoice == 1000000251) /* ### FOR EN22-033 ### */ ||
-		(parameter[0].weatherchoice == 1000000252) /* ### FOR EN22-034 ### */ ||
-		(parameter[0].weatherchoice == 1000000253) /* ### FOR EN22-035 ### */ ||
-		(parameter[0].weatherchoice == 1000000254)) /* ### FOR EN22-036 ### */ {
-		foldername << "cell_20";
-		} else if ((parameter[0].weatherchoice == 1000000129) /* ### FOR B19-T1 ### */ ||
-		(parameter[0].weatherchoice == 1000000130)) /* ### FOR B19-T2 ### */ {
-		foldername << "cell_21";
-		} else if ((parameter[0].weatherchoice == 1000000009) /* ### FOR 12-KO-02a ### */ ||
-		(parameter[0].weatherchoice == 1000000010) /* ### FOR 12-KO-02b ### */ ||
-		(parameter[0].weatherchoice == 1000000011) /* ### FOR 12-KO-03a ### */ ||
-		(parameter[0].weatherchoice == 1000000012) /* ### FOR 12-KO-03b ### */ ||
-		(parameter[0].weatherchoice == 1000000013) /* ### FOR 12-KO-04a ### */ ||
-		(parameter[0].weatherchoice == 1000000014) /* ### FOR 12-KO-04b ### */ ||
-		(parameter[0].weatherchoice == 1000000015)) /* ### FOR 12-KO-05 ### */ {
-		foldername << "cell_22";
-		} else if ((parameter[0].weatherchoice == 1000000073) /* ### FOR 16-KP-V13 ### */ ||
-		(parameter[0].weatherchoice == 1000000074) /* ### FOR 16-KP-V14 ### */ ||
-		(parameter[0].weatherchoice == 1000000075) /* ### FOR 16-KP-V15 ### */ ||
-		(parameter[0].weatherchoice == 1000000076) /* ### FOR 16-KP-V16 ### */ ||
-		(parameter[0].weatherchoice == 1000000077) /* ### FOR 16-KP-V17 ### */ ||
-		(parameter[0].weatherchoice == 1000000078) /* ### FOR 16-KP-V18 ### */ ||
-		(parameter[0].weatherchoice == 1000000079) /* ### FOR 16-KP-V19 ### */ ||
-		(parameter[0].weatherchoice == 1000000119) /* ### FOR 18-BIL-00-EN18000 ### */ ||
-		(parameter[0].weatherchoice == 1000000120) /* ### FOR 18-BIL-01-EN18028 ### */ ||
-		(parameter[0].weatherchoice == 1000000121) /* ### FOR 18-BIL-01-EN18029 ### */ ||
-		(parameter[0].weatherchoice == 1000000122) /* ### FOR 18-BIL-02-EN18030 ### */ ||
-		(parameter[0].weatherchoice == 1000000123) /* ### FOR 18-BIL-02-EN18031 ### */ ||
-		(parameter[0].weatherchoice == 1000000124) /* ### FOR 18-BIL-02-EN18032 ### */ ||
-		(parameter[0].weatherchoice == 1000000125) /* ### FOR 18-BIL-02-EN18033 ### */ ||
-		(parameter[0].weatherchoice == 1000000126) /* ### FOR 18-BIL-02-EN18034 ### */ ||
-		(parameter[0].weatherchoice == 1000000127)) /* ### FOR 18-BIL-02-EN18035 ### */ {
-		foldername << "cell_23";
-		} else if ((parameter[0].weatherchoice == 1000000061) /* ### FOR 16-KP-V01 ### */ ||
-		(parameter[0].weatherchoice == 1000000062) /* ### FOR 16-KP-V02 ### */ ||
-		(parameter[0].weatherchoice == 1000000063) /* ### FOR 16-KP-V03 ### */ ||
-		(parameter[0].weatherchoice == 1000000064) /* ### FOR 16-KP-V04 ### */ ||
-		(parameter[0].weatherchoice == 1000000065) /* ### FOR 16-KP-V05 ### */ ||
-		(parameter[0].weatherchoice == 1000000066) /* ### FOR 16-KP-V06 ### */ ||
-		(parameter[0].weatherchoice == 1000000067) /* ### FOR 16-KP-V07 ### */ ||
-		(parameter[0].weatherchoice == 1000000068) /* ### FOR 16-KP-V08 ### */ ||
-		(parameter[0].weatherchoice == 1000000069) /* ### FOR 16-KP-V09 ### */ ||
-		(parameter[0].weatherchoice == 1000000070) /* ### FOR 16-KP-V10 ### */ ||
-		(parameter[0].weatherchoice == 1000000071) /* ### FOR 16-KP-V11 ### */ ||
-		(parameter[0].weatherchoice == 1000000072) /* ### FOR 16-KP-V12 ### */ ||
-		(parameter[0].weatherchoice == 1000000100) /* ### FOR 16-KP-V40 ### */ ||
-		(parameter[0].weatherchoice == 1000000101) /* ### FOR 16-KP-V41 ### */ ||
-		(parameter[0].weatherchoice == 1000000102) /* ### FOR 16-KP-V42 ### */ ||
-		(parameter[0].weatherchoice == 1000000103) /* ### FOR 16-KP-V43 ### */ ||
-		(parameter[0].weatherchoice == 1000000104) /* ### FOR 16-KP-V44 ### */ ||
-		(parameter[0].weatherchoice == 1000000105) /* ### FOR 16-KP-V45 ### */ ||
-		(parameter[0].weatherchoice == 1000000106) /* ### FOR 16-KP-V46 ### */ ||
-		(parameter[0].weatherchoice == 1000000107) /* ### FOR 16-KP-V47 ### */ ||
-		(parameter[0].weatherchoice == 1000000108) /* ### FOR 16-KP-V48 ### */ ||
-		(parameter[0].weatherchoice == 1000000109) /* ### FOR 16-KP-V49 ### */ ||
-		(parameter[0].weatherchoice == 1000000110) /* ### FOR 16-KP-V50 ### */ ||
-		(parameter[0].weatherchoice == 1000000111) /* ### FOR 16-KP-V51 ### */ ||
-		(parameter[0].weatherchoice == 1000000112) /* ### FOR 16-KP-V52 ### */ ||
-		(parameter[0].weatherchoice == 1000000113) /* ### FOR 16-KP-V53 ### */ ||
-		(parameter[0].weatherchoice == 1000000114) /* ### FOR 16-KP-V54 ### */ ||
-		(parameter[0].weatherchoice == 1000000115) /* ### FOR 16-KP-V55 ### */ ||
-		(parameter[0].weatherchoice == 1000000116) /* ### FOR 16-KP-V56 ### */ ||
-		(parameter[0].weatherchoice == 1000000117) /* ### FOR 16-KP-V57 ### */ ||
-		(parameter[0].weatherchoice == 1000000118) /* ### FOR 16-KP-V58 ### */ ||
-		(parameter[0].weatherchoice == 1000000029) /* ### FOR 16-KP-01-EN18001 ### */ ||
-		(parameter[0].weatherchoice == 1000000030) /* ### FOR 16-KP-01-EN18002 ### */ ||
-		(parameter[0].weatherchoice == 1000000031) /* ### FOR 16-KP-01-EN18003 ### */ ||
-		(parameter[0].weatherchoice == 1000000032) /* ### FOR 16-KP-01-EN18004 ### */ ||
-		(parameter[0].weatherchoice == 1000000033) /* ### FOR 16-KP-01-EN18005 ### */ ||
-		(parameter[0].weatherchoice == 1000000034) /* ### FOR 16-KP-01-EN18006 ### */ ||
-		(parameter[0].weatherchoice == 1000000035) /* ### FOR 16-KP-01-EN18007 ### */ ||
-		(parameter[0].weatherchoice == 1000000036) /* ### FOR 16-KP-01-EN18008 ### */ ||
-		(parameter[0].weatherchoice == 1000000037) /* ### FOR 16-KP-01-EN18009 ### */ ||
-		(parameter[0].weatherchoice == 1000000038) /* ### FOR 16-KP-01-EN18010 ### */ ||
-		(parameter[0].weatherchoice == 1000000039) /* ### FOR 16-KP-01-EN18011 ### */ ||
-		(parameter[0].weatherchoice == 1000000040) /* ### FOR 16-KP-01-EN18012 ### */ ||
-		(parameter[0].weatherchoice == 1000000041) /* ### FOR 16-KP-01-EN18013 ### */ ||
-		(parameter[0].weatherchoice == 1000000042) /* ### FOR 16-KP-01-EN18014 ### */ ||
-		(parameter[0].weatherchoice == 1000000043) /* ### FOR 16-KP-01-EN18015 ### */ ||
-		(parameter[0].weatherchoice == 1000000044) /* ### FOR 16-KP-01-EN18016 ### */ ||
-		(parameter[0].weatherchoice == 1000000045) /* ### FOR 16-KP-01-EN18017 ### */ ||
-		(parameter[0].weatherchoice == 1000000046) /* ### FOR 16-KP-01-EN18018 ### */ ||
-		(parameter[0].weatherchoice == 1000000047) /* ### FOR 16-KP-01-EN18019 ### */ ||
-		(parameter[0].weatherchoice == 1000000048) /* ### FOR 16-KP-01-EN18020 ### */ ||
-		(parameter[0].weatherchoice == 1000000049) /* ### FOR 16-KP-01-EN18021 ### */ ||
-		(parameter[0].weatherchoice == 1000000050) /* ### FOR 16-KP-01-EN18022 ### */ ||
-		(parameter[0].weatherchoice == 1000000051) /* ### FOR 16-KP-01-EN18023 ### */ ||
-		(parameter[0].weatherchoice == 1000000052) /* ### FOR 16-KP-01-EN18024 ### */ ||
-		(parameter[0].weatherchoice == 1000000053) /* ### FOR 16-KP-01-EN18025 ### */ ||
-		(parameter[0].weatherchoice == 1000000054) /* ### FOR 16-KP-01-EN18026 ### */ ||
-		(parameter[0].weatherchoice == 1000000055) /* ### FOR 16-KP-01-EN18027 ### */ ||
-		(parameter[0].weatherchoice == 1000000056) /* ### FOR 16-KP-04-EN18051 ### */ ||
-		(parameter[0].weatherchoice == 1000000057) /* ### FOR 16-KP-04-EN18052 ### */ ||
-		(parameter[0].weatherchoice == 1000000058) /* ### FOR 16-KP-04-EN18053 ### */ ||
-		(parameter[0].weatherchoice == 1000000059) /* ### FOR 16-KP-04-EN18054 ### */ ||
-		(parameter[0].weatherchoice == 1000000060)) /* ### FOR 16-KP-04-EN18055 ### */ {
-		foldername << "cell_24";
-		} else if ((parameter[0].weatherchoice == 1000000003) /* ### FOR 11-CH-06I ### */ ||
-		(parameter[0].weatherchoice == 1000000004)) /* ### FOR 11-CH-06III ### */ {
-		foldername << "cell_25";
-		} else if ((parameter[0].weatherchoice == 1000000001) /* ### FOR 11-CH-02II ### */ ||
-		(parameter[0].weatherchoice == 1000000002) /* ### FOR 11-CH-02III ### */ ||
-		(parameter[0].weatherchoice == 1000000005) /* ### FOR 11-CH-12I ### */ ||
-		(parameter[0].weatherchoice == 1000000006) /* ### FOR 11-CH-12II ### */ ||
-		(parameter[0].weatherchoice == 1000000007) /* ### FOR 11-CH-17I ### */ ||
-		(parameter[0].weatherchoice == 1000000008) /* ### FOR 11-CH-17II ### */ ||
-		(parameter[0].weatherchoice == 1000000296) /* ### FOR TY07VI ### */ ||
-		(parameter[0].weatherchoice == 1000000297) /* ### FOR TY07VII ### */ ||
-		(parameter[0].weatherchoice == 1000000298) /* ### FOR TY09VI ### */ ||
-		(parameter[0].weatherchoice == 1000000299)) /* ### FOR TY09VII ### */ {
-		foldername << "cell_26";
-		} else if ((parameter[0].weatherchoice == 1000000016) /* ### FOR 13-TY-02-VI ### */ ||
-		(parameter[0].weatherchoice == 1000000017) /* ### FOR 13-TY-02-VII ### */ ||
-		(parameter[0].weatherchoice == 1000000294) /* ### FOR TY04VI ### */ ||
-		(parameter[0].weatherchoice == 1000000295)) /* ### FOR TY04VII ### */ {
-		foldername << "cell_27";
-		} else if ((parameter[0].weatherchoice == 1000000128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ {
-		foldername << "cell_28";
-		} else if ((parameter[0].weatherchoice == 1000000018) /* ### FOR 14-OM-02-V1 ### */ ||
-		(parameter[0].weatherchoice == 1000000019) /* ### FOR 14-OM-02-V2 ### */ ||
-		(parameter[0].weatherchoice == 1000000020) /* ### FOR 14-OM-11-V3 ### */ ||
-		(parameter[0].weatherchoice == 1000000021) /* ### FOR 14-OM-20-V4 ### */ ||
-		(parameter[0].weatherchoice == 1000000022) /* ### FOR 14-OM-TRANS1 ### */ ||
-		(parameter[0].weatherchoice == 1000000023) /* ### FOR 14-OM-TRANS2 ### */ ||
-		(parameter[0].weatherchoice == 1000000024) /* ### FOR 14-OM-TRANS3 ### */ ||
-		(parameter[0].weatherchoice == 1000000025) /* ### FOR 14-OM-TRANS4 ### */ ||
-		(parameter[0].weatherchoice == 1000000026) /* ### FOR 14-OM-TRANS5 ### */ ||
-		(parameter[0].weatherchoice == 1000000028) /* ### FOR 14-OM-TRANS6 ### */ ||
-		(parameter[0].weatherchoice == 1000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ {
-		foldername << "cell_29";
-		} else if ((parameter[0].weatherchoice == 2000000283) /* ### FOR EN22-065 ### */ ||
-		(parameter[0].weatherchoice == 2000000284)) /* ### FOR EN22-066 ### */ {
-		foldername << "cell_1";
-		} else if ((parameter[0].weatherchoice == 2000000285) /* ### FOR EN22-067 ### */ ||
-		(parameter[0].weatherchoice == 2000000286) /* ### FOR EN22-068 ### */ ||
-		(parameter[0].weatherchoice == 2000000288) /* ### FOR EN22-070 ### */ ||
-		(parameter[0].weatherchoice == 2000000289) /* ### FOR EN22-071 ### */ ||
-		(parameter[0].weatherchoice == 2000000290) /* ### FOR EN22-072 ### */ ||
-		(parameter[0].weatherchoice == 2000000291) /* ### FOR EN22-073 ### */ ||
-		(parameter[0].weatherchoice == 2000000292)) /* ### FOR EN22-074 ### */ {
-		foldername << "cell_2";
-		} else if ((parameter[0].weatherchoice == 2000000287)) /* ### FOR EN22-069 ### */ {
-		foldername << "cell_3";
-		} else if ((parameter[0].weatherchoice == 2000000219) /* ### FOR EN22-001 ### */ ||
-		(parameter[0].weatherchoice == 2000000220) /* ### FOR EN22-002 ### */ ||
-		(parameter[0].weatherchoice == 2000000221) /* ### FOR EN22-003 ### */ ||
-		(parameter[0].weatherchoice == 2000000222) /* ### FOR EN22-004 ### */ ||
-		(parameter[0].weatherchoice == 2000000274) /* ### FOR EN22-056 ### */ ||
-		(parameter[0].weatherchoice == 2000000275) /* ### FOR EN22-057 ### */ ||
-		(parameter[0].weatherchoice == 2000000276) /* ### FOR EN22-058 ### */ ||
-		(parameter[0].weatherchoice == 2000000277) /* ### FOR EN22-059 ### */ ||
-		(parameter[0].weatherchoice == 2000000278)) /* ### FOR EN22-060 ### */ {
-		foldername << "cell_4";
-		} else if ((parameter[0].weatherchoice == 2000000279) /* ### FOR EN22-061 ### */ ||
-		(parameter[0].weatherchoice == 2000000280)) /* ### FOR EN22-062 ### */ {
-		foldername << "cell_5";
-		} else if ((parameter[0].weatherchoice == 2000000281) /* ### FOR EN22-063 ### */ ||
-		(parameter[0].weatherchoice == 2000000282) /* ### FOR EN22-064 ### */ ||
-		(parameter[0].weatherchoice == 2000000293)) /* ### FOR EN22-075 ### */ {
-		foldername << "cell_6";
-		} else if ((parameter[0].weatherchoice == 2000000148) /* ### FOR EN18075 ### */ ||
-		(parameter[0].weatherchoice == 2000000149) /* ### FOR EN18076 ### */ ||
-		(parameter[0].weatherchoice == 2000000150) /* ### FOR EN18077 ### */ ||
-		(parameter[0].weatherchoice == 2000000151) /* ### FOR EN18078 ### */ ||
-		(parameter[0].weatherchoice == 2000000152) /* ### FOR EN18079 ### */ ||
-		(parameter[0].weatherchoice == 2000000153) /* ### FOR EN18080 ### */ ||
-		(parameter[0].weatherchoice == 2000000154) /* ### FOR EN18081 ### */ ||
-		(parameter[0].weatherchoice == 2000000155) /* ### FOR EN18082 ### */ ||
-		(parameter[0].weatherchoice == 2000000156)) /* ### FOR EN18083 ### */ {
-			cout << "usingWinddata2!" << endl;
-		foldername << "cell_7";
-		} else if ((parameter[0].weatherchoice == 2000000144) /* ### FOR EN18071 ### */ ||
-		(parameter[0].weatherchoice == 2000000145) /* ### FOR EN18072 ### */ ||
-		(parameter[0].weatherchoice == 2000000146) /* ### FOR EN18073 ### */ ||
-		(parameter[0].weatherchoice == 2000000147)) /* ### FOR EN18074 ### */ {
-		foldername << "cell_8";
-		} else if ((parameter[0].weatherchoice == 2000000132)) /* ### FOR EN18062 ### */ {
-		foldername << "cell_9";
-		} else if ((parameter[0].weatherchoice == 2000000131) /* ### FOR EN18061 ### */ ||
-		(parameter[0].weatherchoice == 2000000176) /* ### FOR EN21220 ### */ ||
-		(parameter[0].weatherchoice == 2000000177) /* ### FOR EN21221 ### */ ||
-		(parameter[0].weatherchoice == 2000000178) /* ### FOR EN21222 ### */ ||
-		(parameter[0].weatherchoice == 2000000179) /* ### FOR EN21223 ### */ ||
-		(parameter[0].weatherchoice == 2000000180) /* ### FOR EN21224 ### */ ||
-		(parameter[0].weatherchoice == 2000000181) /* ### FOR EN21225 ### */ ||
-		(parameter[0].weatherchoice == 2000000182) /* ### FOR EN21226 ### */ ||
-		(parameter[0].weatherchoice == 2000000183) /* ### FOR EN21227 ### */ ||
-		(parameter[0].weatherchoice == 2000000188) /* ### FOR EN21232 ### */ ||
-		(parameter[0].weatherchoice == 2000000189) /* ### FOR EN21233 ### */ ||
-		(parameter[0].weatherchoice == 2000000190) /* ### FOR EN21234 ### */ ||
-		(parameter[0].weatherchoice == 2000000191) /* ### FOR EN21235 ### */ ||
-		(parameter[0].weatherchoice == 2000000192) /* ### FOR EN21236 ### */ ||
-		(parameter[0].weatherchoice == 2000000193) /* ### FOR EN21237 ### */ ||
-		(parameter[0].weatherchoice == 2000000194) /* ### FOR EN21238 ### */ ||
-		(parameter[0].weatherchoice == 2000000195) /* ### FOR EN21239 ### */ ||
-		(parameter[0].weatherchoice == 2000000196) /* ### FOR EN21240 ### */ ||
-		(parameter[0].weatherchoice == 2000000197) /* ### FOR EN21241 ### */ ||
-		(parameter[0].weatherchoice == 2000000198) /* ### FOR EN21242 ### */ ||
-		(parameter[0].weatherchoice == 2000000199) /* ### FOR EN21243 ### */ ||
-		(parameter[0].weatherchoice == 2000000200) /* ### FOR EN21244 ### */ ||
-		(parameter[0].weatherchoice == 2000000201) /* ### FOR EN21245 ### */ ||
-		(parameter[0].weatherchoice == 2000000202) /* ### FOR EN21246 ### */ ||
-		(parameter[0].weatherchoice == 2000000203) /* ### FOR EN21247 ### */ ||
-		(parameter[0].weatherchoice == 2000000204) /* ### FOR EN21248 ### */ ||
-		(parameter[0].weatherchoice == 2000000205) /* ### FOR EN21249 ### */ ||
-		(parameter[0].weatherchoice == 2000000206) /* ### FOR EN21250 ### */ ||
-		(parameter[0].weatherchoice == 2000000207) /* ### FOR EN21251 ### */ ||
-		(parameter[0].weatherchoice == 2000000208) /* ### FOR EN21252 ### */ ||
-		(parameter[0].weatherchoice == 2000000209) /* ### FOR EN21253 ### */ ||
-		(parameter[0].weatherchoice == 2000000210) /* ### FOR EN21254 ### */ ||
-		(parameter[0].weatherchoice == 2000000211) /* ### FOR EN21255 ### */ ||
-		(parameter[0].weatherchoice == 2000000212) /* ### FOR EN21256 ### */ ||
-		(parameter[0].weatherchoice == 2000000213) /* ### FOR EN21257 ### */ ||
-		(parameter[0].weatherchoice == 2000000214) /* ### FOR EN21258 ### */ ||
-		(parameter[0].weatherchoice == 2000000215) /* ### FOR EN21259 ### */ ||
-		(parameter[0].weatherchoice == 2000000216) /* ### FOR EN21260 ### */ ||
-		(parameter[0].weatherchoice == 2000000217) /* ### FOR EN21261 ### */ ||
-		(parameter[0].weatherchoice == 2000000218)) /* ### FOR EN21262 ### */ {
-		foldername << "cell_10";
-		} else if ((parameter[0].weatherchoice == 2000000184) /* ### FOR EN21228 ### */ ||
-		(parameter[0].weatherchoice == 2000000185) /* ### FOR EN21229 ### */ ||
-		(parameter[0].weatherchoice == 2000000186) /* ### FOR EN21230 ### */ ||
-		(parameter[0].weatherchoice == 2000000187)) /* ### FOR EN21231 ### */ {
-		foldername << "cell_11";
-		} else if ((parameter[0].weatherchoice == 2000000256) /* ### FOR EN22-038 ### */ ||
-		(parameter[0].weatherchoice == 2000000257) /* ### FOR EN22-039 ### */ ||
-		(parameter[0].weatherchoice == 2000000258) /* ### FOR EN22-040 ### */ ||
-		(parameter[0].weatherchoice == 2000000259) /* ### FOR EN22-041 ### */ ||
-		(parameter[0].weatherchoice == 2000000260) /* ### FOR EN22-042 ### */ ||
-		(parameter[0].weatherchoice == 2000000261) /* ### FOR EN22-043 ### */ ||
-		(parameter[0].weatherchoice == 2000000262) /* ### FOR EN22-044 ### */ ||
-		(parameter[0].weatherchoice == 2000000263) /* ### FOR EN22-045 ### */ ||
-		(parameter[0].weatherchoice == 2000000264) /* ### FOR EN22-046 ### */ ||
-		(parameter[0].weatherchoice == 2000000265) /* ### FOR EN22-047 ### */ ||
-		(parameter[0].weatherchoice == 2000000266) /* ### FOR EN22-048 ### */ ||
-		(parameter[0].weatherchoice == 2000000267) /* ### FOR EN22-049 ### */ ||
-		(parameter[0].weatherchoice == 2000000268) /* ### FOR EN22-050 ### */ ||
-		(parameter[0].weatherchoice == 2000000269) /* ### FOR EN22-051 ### */ ||
-		(parameter[0].weatherchoice == 2000000270) /* ### FOR EN22-052 ### */ ||
-		(parameter[0].weatherchoice == 2000000271) /* ### FOR EN22-053 ### */ ||
-		(parameter[0].weatherchoice == 2000000272)) /* ### FOR EN22-054 ### */ {
-		foldername << "cell_12";
-		} else if ((parameter[0].weatherchoice == 2000000255) /* ### FOR EN22-037 ### */ ||
-		(parameter[0].weatherchoice == 2000000273)) /* ### FOR EN22-055 ### */ {
-		foldername << "cell_13";
-		} else if ((parameter[0].weatherchoice == 2000000137) /* ### FOR EN18067 ### */ ||
-		(parameter[0].weatherchoice == 2000000138) /* ### FOR EN18068 ### */ ||
-		(parameter[0].weatherchoice == 2000000140) /* ### FOR EN18070_centre ### */ ||
-		(parameter[0].weatherchoice == 2000000141) /* ### FOR EN18070_edge ### */ ||
-		(parameter[0].weatherchoice == 2000000142) /* ### FOR EN18070_end ### */ ||
-		(parameter[0].weatherchoice == 2000000143)) /* ### FOR EN18070_transition ### */ {
-		foldername << "cell_14";
-		} else if ((parameter[0].weatherchoice == 2000000139)) /* ### FOR EN18069 ### */ {
-		foldername << "cell_15";
-		} else if ((parameter[0].weatherchoice == 2000000133) /* ### FOR EN18063 ### */ ||
-		(parameter[0].weatherchoice == 2000000134) /* ### FOR EN18064 ### */ ||
-		(parameter[0].weatherchoice == 2000000135) /* ### FOR EN18065 ### */ ||
-		(parameter[0].weatherchoice == 2000000136)) /* ### FOR EN18066 ### */ {
-		foldername << "cell_16";
-		} else if ((parameter[0].weatherchoice == 2000000157) /* ### FOR EN21201 ### */ ||
-		(parameter[0].weatherchoice == 2000000159) /* ### FOR EN21203 ### */ ||
-		(parameter[0].weatherchoice == 2000000160) /* ### FOR EN21204 ### */ ||
-		(parameter[0].weatherchoice == 2000000161) /* ### FOR EN21205 ### */ ||
-		(parameter[0].weatherchoice == 2000000165) /* ### FOR EN21209 ### */ ||
-		(parameter[0].weatherchoice == 2000000166) /* ### FOR EN21210 ### */ ||
-		(parameter[0].weatherchoice == 2000000167) /* ### FOR EN21211 ### */ ||
-		(parameter[0].weatherchoice == 2000000171) /* ### FOR EN21215 ### */ ||
-		(parameter[0].weatherchoice == 2000000172) /* ### FOR EN21216 ### */ ||
-		(parameter[0].weatherchoice == 2000000173) /* ### FOR EN21217 ### */ ||
-		(parameter[0].weatherchoice == 2000000174) /* ### FOR EN21218 ### */ ||
-		(parameter[0].weatherchoice == 2000000175)) /* ### FOR EN21219 ### */ {
-		foldername << "cell_17";
-		} else if ((parameter[0].weatherchoice == 2000000158) /* ### FOR EN21202 ### */ ||
-		(parameter[0].weatherchoice == 2000000162) /* ### FOR EN21206 ### */ ||
-		(parameter[0].weatherchoice == 2000000163) /* ### FOR EN21207 ### */ ||
-		(parameter[0].weatherchoice == 2000000164) /* ### FOR EN21208 ### */ ||
-		(parameter[0].weatherchoice == 2000000168) /* ### FOR EN21212 ### */ ||
-		(parameter[0].weatherchoice == 2000000169) /* ### FOR EN21213 ### */ ||
-		(parameter[0].weatherchoice == 2000000170)) /* ### FOR EN21214 ### */ {
-		foldername << "cell_18";
-		} else if ((parameter[0].weatherchoice == 2000000080) /* ### FOR 16-KP-V20 ### */ ||
-		(parameter[0].weatherchoice == 2000000081) /* ### FOR 16-KP-V21 ### */ ||
-		(parameter[0].weatherchoice == 2000000082) /* ### FOR 16-KP-V22 ### */ ||
-		(parameter[0].weatherchoice == 2000000083) /* ### FOR 16-KP-V23 ### */ ||
-		(parameter[0].weatherchoice == 2000000084) /* ### FOR 16-KP-V24 ### */ ||
-		(parameter[0].weatherchoice == 2000000085) /* ### FOR 16-KP-V25 ### */ ||
-		(parameter[0].weatherchoice == 2000000086) /* ### FOR 16-KP-V26 ### */ ||
-		(parameter[0].weatherchoice == 2000000087) /* ### FOR 16-KP-V27 ### */ ||
-		(parameter[0].weatherchoice == 2000000088) /* ### FOR 16-KP-V28 ### */ ||
-		(parameter[0].weatherchoice == 2000000089) /* ### FOR 16-KP-V29 ### */ ||
-		(parameter[0].weatherchoice == 2000000090) /* ### FOR 16-KP-V30 ### */ ||
-		(parameter[0].weatherchoice == 2000000091) /* ### FOR 16-KP-V31 ### */ ||
-		(parameter[0].weatherchoice == 2000000092) /* ### FOR 16-KP-V32 ### */ ||
-		(parameter[0].weatherchoice == 2000000093) /* ### FOR 16-KP-V33 ### */ ||
-		(parameter[0].weatherchoice == 2000000094) /* ### FOR 16-KP-V34 ### */ ||
-		(parameter[0].weatherchoice == 2000000095) /* ### FOR 16-KP-V35 ### */ ||
-		(parameter[0].weatherchoice == 2000000096) /* ### FOR 16-KP-V36 ### */ ||
-		(parameter[0].weatherchoice == 2000000097) /* ### FOR 16-KP-V37 ### */ ||
-		(parameter[0].weatherchoice == 2000000098) /* ### FOR 16-KP-V38 ### */ ||
-		(parameter[0].weatherchoice == 2000000099)) /* ### FOR 16-KP-V39 ### */ {
-		foldername << "cell_19";
-		} else if ((parameter[0].weatherchoice == 2000000223) /* ### FOR EN22-005 ### */ ||
-		(parameter[0].weatherchoice == 2000000224) /* ### FOR EN22-006 ### */ ||
-		(parameter[0].weatherchoice == 2000000225) /* ### FOR EN22-007 ### */ ||
-		(parameter[0].weatherchoice == 2000000226) /* ### FOR EN22-008 ### */ ||
-		(parameter[0].weatherchoice == 2000000227) /* ### FOR EN22-009 ### */ ||
-		(parameter[0].weatherchoice == 2000000228) /* ### FOR EN22-010 ### */ ||
-		(parameter[0].weatherchoice == 2000000229) /* ### FOR EN22-011 ### */ ||
-		(parameter[0].weatherchoice == 2000000230) /* ### FOR EN22-012 ### */ ||
-		(parameter[0].weatherchoice == 2000000231) /* ### FOR EN22-013 ### */ ||
-		(parameter[0].weatherchoice == 2000000232) /* ### FOR EN22-014 ### */ ||
-		(parameter[0].weatherchoice == 2000000233) /* ### FOR EN22-015 ### */ ||
-		(parameter[0].weatherchoice == 2000000234) /* ### FOR EN22-016 ### */ ||
-		(parameter[0].weatherchoice == 2000000235) /* ### FOR EN22-017 ### */ ||
-		(parameter[0].weatherchoice == 2000000236) /* ### FOR EN22-018 ### */ ||
-		(parameter[0].weatherchoice == 2000000237) /* ### FOR EN22-019 ### */ ||
-		(parameter[0].weatherchoice == 2000000238) /* ### FOR EN22-020 ### */ ||
-		(parameter[0].weatherchoice == 2000000239) /* ### FOR EN22-021 ### */ ||
-		(parameter[0].weatherchoice == 2000000240) /* ### FOR EN22-022 ### */ ||
-		(parameter[0].weatherchoice == 2000000241) /* ### FOR EN22-023 ### */ ||
-		(parameter[0].weatherchoice == 2000000242) /* ### FOR EN22-024 ### */ ||
-		(parameter[0].weatherchoice == 2000000243) /* ### FOR EN22-025 ### */ ||
-		(parameter[0].weatherchoice == 2000000244) /* ### FOR EN22-026 ### */ ||
-		(parameter[0].weatherchoice == 2000000245) /* ### FOR EN22-027 ### */ ||
-		(parameter[0].weatherchoice == 2000000246) /* ### FOR EN22-028 ### */ ||
-		(parameter[0].weatherchoice == 2000000247) /* ### FOR EN22-029 ### */ ||
-		(parameter[0].weatherchoice == 2000000248) /* ### FOR EN22-030 ### */ ||
-		(parameter[0].weatherchoice == 2000000249) /* ### FOR EN22-031 ### */ ||
-		(parameter[0].weatherchoice == 2000000250) /* ### FOR EN22-032 ### */ ||
-		(parameter[0].weatherchoice == 2000000251) /* ### FOR EN22-033 ### */ ||
-		(parameter[0].weatherchoice == 2000000252) /* ### FOR EN22-034 ### */ ||
-		(parameter[0].weatherchoice == 2000000253) /* ### FOR EN22-035 ### */ ||
-		(parameter[0].weatherchoice == 2000000254)) /* ### FOR EN22-036 ### */ {
-		foldername << "cell_20";
-		} else if ((parameter[0].weatherchoice == 2000000129) /* ### FOR B19-T1 ### */ ||
-		(parameter[0].weatherchoice == 2000000130)) /* ### FOR B19-T2 ### */ {
-		foldername << "cell_21";
-		} else if ((parameter[0].weatherchoice == 2000000009) /* ### FOR 12-KO-02a ### */ ||
-		(parameter[0].weatherchoice == 2000000010) /* ### FOR 12-KO-02b ### */ ||
-		(parameter[0].weatherchoice == 2000000011) /* ### FOR 12-KO-03a ### */ ||
-		(parameter[0].weatherchoice == 2000000012) /* ### FOR 12-KO-03b ### */ ||
-		(parameter[0].weatherchoice == 2000000013) /* ### FOR 12-KO-04a ### */ ||
-		(parameter[0].weatherchoice == 2000000014) /* ### FOR 12-KO-04b ### */ ||
-		(parameter[0].weatherchoice == 2000000015)) /* ### FOR 12-KO-05 ### */ {
-		foldername << "cell_22";
-		} else if ((parameter[0].weatherchoice == 2000000073) /* ### FOR 16-KP-V13 ### */ ||
-		(parameter[0].weatherchoice == 2000000074) /* ### FOR 16-KP-V14 ### */ ||
-		(parameter[0].weatherchoice == 2000000075) /* ### FOR 16-KP-V15 ### */ ||
-		(parameter[0].weatherchoice == 2000000076) /* ### FOR 16-KP-V16 ### */ ||
-		(parameter[0].weatherchoice == 2000000077) /* ### FOR 16-KP-V17 ### */ ||
-		(parameter[0].weatherchoice == 2000000078) /* ### FOR 16-KP-V18 ### */ ||
-		(parameter[0].weatherchoice == 2000000079) /* ### FOR 16-KP-V19 ### */ ||
-		(parameter[0].weatherchoice == 2000000119) /* ### FOR 18-BIL-00-EN18000 ### */ ||
-		(parameter[0].weatherchoice == 2000000120) /* ### FOR 18-BIL-01-EN18028 ### */ ||
-		(parameter[0].weatherchoice == 2000000121) /* ### FOR 18-BIL-01-EN18029 ### */ ||
-		(parameter[0].weatherchoice == 2000000122) /* ### FOR 18-BIL-02-EN18030 ### */ ||
-		(parameter[0].weatherchoice == 2000000123) /* ### FOR 18-BIL-02-EN18031 ### */ ||
-		(parameter[0].weatherchoice == 2000000124) /* ### FOR 18-BIL-02-EN18032 ### */ ||
-		(parameter[0].weatherchoice == 2000000125) /* ### FOR 18-BIL-02-EN18033 ### */ ||
-		(parameter[0].weatherchoice == 2000000126) /* ### FOR 18-BIL-02-EN18034 ### */ ||
-		(parameter[0].weatherchoice == 2000000127)) /* ### FOR 18-BIL-02-EN18035 ### */ {
-		foldername << "cell_23";
-		} else if ((parameter[0].weatherchoice == 2000000061) /* ### FOR 16-KP-V01 ### */ ||
-		(parameter[0].weatherchoice == 2000000062) /* ### FOR 16-KP-V02 ### */ ||
-		(parameter[0].weatherchoice == 2000000063) /* ### FOR 16-KP-V03 ### */ ||
-		(parameter[0].weatherchoice == 2000000064) /* ### FOR 16-KP-V04 ### */ ||
-		(parameter[0].weatherchoice == 2000000065) /* ### FOR 16-KP-V05 ### */ ||
-		(parameter[0].weatherchoice == 2000000066) /* ### FOR 16-KP-V06 ### */ ||
-		(parameter[0].weatherchoice == 2000000067) /* ### FOR 16-KP-V07 ### */ ||
-		(parameter[0].weatherchoice == 2000000068) /* ### FOR 16-KP-V08 ### */ ||
-		(parameter[0].weatherchoice == 2000000069) /* ### FOR 16-KP-V09 ### */ ||
-		(parameter[0].weatherchoice == 2000000070) /* ### FOR 16-KP-V10 ### */ ||
-		(parameter[0].weatherchoice == 2000000071) /* ### FOR 16-KP-V11 ### */ ||
-		(parameter[0].weatherchoice == 2000000072) /* ### FOR 16-KP-V12 ### */ ||
-		(parameter[0].weatherchoice == 2000000100) /* ### FOR 16-KP-V40 ### */ ||
-		(parameter[0].weatherchoice == 2000000101) /* ### FOR 16-KP-V41 ### */ ||
-		(parameter[0].weatherchoice == 2000000102) /* ### FOR 16-KP-V42 ### */ ||
-		(parameter[0].weatherchoice == 2000000103) /* ### FOR 16-KP-V43 ### */ ||
-		(parameter[0].weatherchoice == 2000000104) /* ### FOR 16-KP-V44 ### */ ||
-		(parameter[0].weatherchoice == 2000000105) /* ### FOR 16-KP-V45 ### */ ||
-		(parameter[0].weatherchoice == 2000000106) /* ### FOR 16-KP-V46 ### */ ||
-		(parameter[0].weatherchoice == 2000000107) /* ### FOR 16-KP-V47 ### */ ||
-		(parameter[0].weatherchoice == 2000000108) /* ### FOR 16-KP-V48 ### */ ||
-		(parameter[0].weatherchoice == 2000000109) /* ### FOR 16-KP-V49 ### */ ||
-		(parameter[0].weatherchoice == 2000000110) /* ### FOR 16-KP-V50 ### */ ||
-		(parameter[0].weatherchoice == 2000000111) /* ### FOR 16-KP-V51 ### */ ||
-		(parameter[0].weatherchoice == 2000000112) /* ### FOR 16-KP-V52 ### */ ||
-		(parameter[0].weatherchoice == 2000000113) /* ### FOR 16-KP-V53 ### */ ||
-		(parameter[0].weatherchoice == 2000000114) /* ### FOR 16-KP-V54 ### */ ||
-		(parameter[0].weatherchoice == 2000000115) /* ### FOR 16-KP-V55 ### */ ||
-		(parameter[0].weatherchoice == 2000000116) /* ### FOR 16-KP-V56 ### */ ||
-		(parameter[0].weatherchoice == 2000000117) /* ### FOR 16-KP-V57 ### */ ||
-		(parameter[0].weatherchoice == 2000000118) /* ### FOR 16-KP-V58 ### */ ||
-		(parameter[0].weatherchoice == 2000000029) /* ### FOR 16-KP-01-EN18001 ### */ ||
-		(parameter[0].weatherchoice == 2000000030) /* ### FOR 16-KP-01-EN18002 ### */ ||
-		(parameter[0].weatherchoice == 2000000031) /* ### FOR 16-KP-01-EN18003 ### */ ||
-		(parameter[0].weatherchoice == 2000000032) /* ### FOR 16-KP-01-EN18004 ### */ ||
-		(parameter[0].weatherchoice == 2000000033) /* ### FOR 16-KP-01-EN18005 ### */ ||
-		(parameter[0].weatherchoice == 2000000034) /* ### FOR 16-KP-01-EN18006 ### */ ||
-		(parameter[0].weatherchoice == 2000000035) /* ### FOR 16-KP-01-EN18007 ### */ ||
-		(parameter[0].weatherchoice == 2000000036) /* ### FOR 16-KP-01-EN18008 ### */ ||
-		(parameter[0].weatherchoice == 2000000037) /* ### FOR 16-KP-01-EN18009 ### */ ||
-		(parameter[0].weatherchoice == 2000000038) /* ### FOR 16-KP-01-EN18010 ### */ ||
-		(parameter[0].weatherchoice == 2000000039) /* ### FOR 16-KP-01-EN18011 ### */ ||
-		(parameter[0].weatherchoice == 2000000040) /* ### FOR 16-KP-01-EN18012 ### */ ||
-		(parameter[0].weatherchoice == 2000000041) /* ### FOR 16-KP-01-EN18013 ### */ ||
-		(parameter[0].weatherchoice == 2000000042) /* ### FOR 16-KP-01-EN18014 ### */ ||
-		(parameter[0].weatherchoice == 2000000043) /* ### FOR 16-KP-01-EN18015 ### */ ||
-		(parameter[0].weatherchoice == 2000000044) /* ### FOR 16-KP-01-EN18016 ### */ ||
-		(parameter[0].weatherchoice == 2000000045) /* ### FOR 16-KP-01-EN18017 ### */ ||
-		(parameter[0].weatherchoice == 2000000046) /* ### FOR 16-KP-01-EN18018 ### */ ||
-		(parameter[0].weatherchoice == 2000000047) /* ### FOR 16-KP-01-EN18019 ### */ ||
-		(parameter[0].weatherchoice == 2000000048) /* ### FOR 16-KP-01-EN18020 ### */ ||
-		(parameter[0].weatherchoice == 2000000049) /* ### FOR 16-KP-01-EN18021 ### */ ||
-		(parameter[0].weatherchoice == 2000000050) /* ### FOR 16-KP-01-EN18022 ### */ ||
-		(parameter[0].weatherchoice == 2000000051) /* ### FOR 16-KP-01-EN18023 ### */ ||
-		(parameter[0].weatherchoice == 2000000052) /* ### FOR 16-KP-01-EN18024 ### */ ||
-		(parameter[0].weatherchoice == 2000000053) /* ### FOR 16-KP-01-EN18025 ### */ ||
-		(parameter[0].weatherchoice == 2000000054) /* ### FOR 16-KP-01-EN18026 ### */ ||
-		(parameter[0].weatherchoice == 2000000055) /* ### FOR 16-KP-01-EN18027 ### */ ||
-		(parameter[0].weatherchoice == 2000000056) /* ### FOR 16-KP-04-EN18051 ### */ ||
-		(parameter[0].weatherchoice == 2000000057) /* ### FOR 16-KP-04-EN18052 ### */ ||
-		(parameter[0].weatherchoice == 2000000058) /* ### FOR 16-KP-04-EN18053 ### */ ||
-		(parameter[0].weatherchoice == 2000000059) /* ### FOR 16-KP-04-EN18054 ### */ ||
-		(parameter[0].weatherchoice == 2000000060)) /* ### FOR 16-KP-04-EN18055 ### */ {
-		foldername << "cell_24";
-		} else if ((parameter[0].weatherchoice == 2000000003) /* ### FOR 11-CH-06I ### */ ||
-		(parameter[0].weatherchoice == 2000000004)) /* ### FOR 11-CH-06III ### */ {
-		foldername << "cell_25";
-		} else if ((parameter[0].weatherchoice == 2000000001) /* ### FOR 11-CH-02II ### */ ||
-		(parameter[0].weatherchoice == 2000000002) /* ### FOR 11-CH-02III ### */ ||
-		(parameter[0].weatherchoice == 2000000005) /* ### FOR 11-CH-12I ### */ ||
-		(parameter[0].weatherchoice == 2000000006) /* ### FOR 11-CH-12II ### */ ||
-		(parameter[0].weatherchoice == 2000000007) /* ### FOR 11-CH-17I ### */ ||
-		(parameter[0].weatherchoice == 2000000008) /* ### FOR 11-CH-17II ### */ ||
-		(parameter[0].weatherchoice == 2000000296) /* ### FOR TY07VI ### */ ||
-		(parameter[0].weatherchoice == 2000000297) /* ### FOR TY07VII ### */ ||
-		(parameter[0].weatherchoice == 2000000298) /* ### FOR TY09VI ### */ ||
-		(parameter[0].weatherchoice == 2000000299)) /* ### FOR TY09VII ### */ {
-		foldername << "cell_26";
-		} else if ((parameter[0].weatherchoice == 2000000016) /* ### FOR 13-TY-02-VI ### */ ||
-		(parameter[0].weatherchoice == 2000000017) /* ### FOR 13-TY-02-VII ### */ ||
-		(parameter[0].weatherchoice == 2000000294) /* ### FOR TY04VI ### */ ||
-		(parameter[0].weatherchoice == 2000000295)) /* ### FOR TY04VII ### */ {
-		foldername << "cell_27";
-		} else if ((parameter[0].weatherchoice == 2000000128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ {
-		foldername << "cell_28";
-		} else if ((parameter[0].weatherchoice == 2000000018) /* ### FOR 14-OM-02-V1 ### */ ||
-		(parameter[0].weatherchoice == 2000000019) /* ### FOR 14-OM-02-V2 ### */ ||
-		(parameter[0].weatherchoice == 2000000020) /* ### FOR 14-OM-11-V3 ### */ ||
-		(parameter[0].weatherchoice == 2000000021) /* ### FOR 14-OM-20-V4 ### */ ||
-		(parameter[0].weatherchoice == 2000000022) /* ### FOR 14-OM-TRANS1 ### */ ||
-		(parameter[0].weatherchoice == 2000000023) /* ### FOR 14-OM-TRANS2 ### */ ||
-		(parameter[0].weatherchoice == 2000000024) /* ### FOR 14-OM-TRANS3 ### */ ||
-		(parameter[0].weatherchoice == 2000000025) /* ### FOR 14-OM-TRANS4 ### */ ||
-		(parameter[0].weatherchoice == 2000000026) /* ### FOR 14-OM-TRANS5 ### */ ||
-		(parameter[0].weatherchoice == 2000000028) /* ### FOR 14-OM-TRANS6 ### */ ||
-		(parameter[0].weatherchoice == 2000000027)) /* ### FOR 14-OM-TRANS6-7 ### */ {
-		foldername << "cell_29";
-		} else if ((parameter[0].weatherchoice == 1000000401) /* ### FOR 2023051101 ### */ ||
-		(parameter[0].weatherchoice == 1000000402) /* ### FOR 2023051102 ### */ ||
-		(parameter[0].weatherchoice == 1000000403) /* ### FOR 2023051103 ### */ ||
-		(parameter[0].weatherchoice == 1000000404) /* ### FOR 2023051201 ### */ ||
-		(parameter[0].weatherchoice == 1000000405) /* ### FOR 2023051202 ### */ ||
-		(parameter[0].weatherchoice == 1000000406) /* ### FOR 2023051203 ### */ ||
-		(parameter[0].weatherchoice == 1000000407) /* ### FOR 2023051301 ### */ ||
-		(parameter[0].weatherchoice == 1000000408) /* ### FOR 2023051302 ### */ ||
-		(parameter[0].weatherchoice == 1000000409) /* ### FOR 2023051401 ### */ ||
-		(parameter[0].weatherchoice == 1000000410) /* ### FOR 2023051402 ### */ ||
-		(parameter[0].weatherchoice == 1000000463) /* ### FOR 2023060603 ### */ ||
-		(parameter[0].weatherchoice == 1000000464) /* ### FOR 2023060604 ### */ ||
-		(parameter[0].weatherchoice == 1000000465) /* ### FOR 2023060701 ### */ ||
-		(parameter[0].weatherchoice == 1000000466) /* ### FOR 2023060702 ### */ ||
-		(parameter[0].weatherchoice == 1000000467) /* ### FOR 2023060703 ### */ ||
-		(parameter[0].weatherchoice == 1000000468) /* ### FOR 2023060704 ### */ ||
-		(parameter[0].weatherchoice == 1000000469) /* ### FOR 2023060705 ### */ ||
-		(parameter[0].weatherchoice == 1000000470) /* ### FOR 2023060706 ### */ ||
-		(parameter[0].weatherchoice == 1000000471) /* ### FOR 2023060802 ### */ ||
-		(parameter[0].weatherchoice == 1000000472)) /* ### FOR 2023060803 ### */ {
-			foldername << "cell_40";
-		} else if ((parameter[0].weatherchoice == 1000000411) /* ### FOR 2023051701 ### */ ||
-		(parameter[0].weatherchoice == 1000000412) /* ### FOR 2023051702 ### */ ||
-		(parameter[0].weatherchoice == 1000000419) /* ### FOR 2023051808 ### */ ||
-		(parameter[0].weatherchoice == 1000000450) /* ### FOR 2023060101 ### */ ||
-		(parameter[0].weatherchoice == 1000000451)) /* ### FOR 2023060102 ### */ {
-			foldername << "cell_41";
-		} else if ((parameter[0].weatherchoice == 1000000458) /* ### FOR 2023060502 ### */ ||
-		(parameter[0].weatherchoice == 1000000459)) /* ### FOR 2023060503 ### */ {
-			foldername << "cell_42";
-		} else if ((parameter[0].weatherchoice == 1000000457) /* ### FOR 2023060301 ### */ ||
-		(parameter[0].weatherchoice == 1000000460) /* ### FOR 2023060504 ### */ ||
-		(parameter[0].weatherchoice == 1000000461) /* ### FOR 2023060505 ### */ ||
-		(parameter[0].weatherchoice == 1000000462)) /* ### FOR 2023060601 ### */ {
-			foldername << "cell_43";
-		} else if ((parameter[0].weatherchoice == 1000000413) /* ### FOR 2023051801 ### */ ||
-		(parameter[0].weatherchoice == 1000000414) /* ### FOR 2023051802 ### */ ||
-		(parameter[0].weatherchoice == 1000000415) /* ### FOR 2023051803 ### */ ||
-		(parameter[0].weatherchoice == 1000000416) /* ### FOR 2023051804 ### */ ||
-		(parameter[0].weatherchoice == 1000000417) /* ### FOR 2023051806 ### */ ||
-		(parameter[0].weatherchoice == 1000000418) /* ### FOR 2023051807 ### */ ||
-		(parameter[0].weatherchoice == 1000000420) /* ### FOR 2023051901 ### */ ||
-		(parameter[0].weatherchoice == 1000000421) /* ### FOR 2023051902 ### */ ||
-		(parameter[0].weatherchoice == 1000000422) /* ### FOR 2023052101 ### */ ||
-		(parameter[0].weatherchoice == 1000000423) /* ### FOR 2023052102 ### */ ||
-		(parameter[0].weatherchoice == 1000000424) /* ### FOR 2023052103 ### */ ||
-		(parameter[0].weatherchoice == 1000000425) /* ### FOR 2023052104 ### */ ||
-		(parameter[0].weatherchoice == 1000000426) /* ### FOR 2023052106 ### */ ||
-		(parameter[0].weatherchoice == 1000000427) /* ### FOR 2023052107 ### */ ||
-		(parameter[0].weatherchoice == 1000000438) /* ### FOR 2023052802 ### */ ||
-		(parameter[0].weatherchoice == 1000000439) /* ### FOR 2023052803 ### */ ||
-		(parameter[0].weatherchoice == 1000000440) /* ### FOR 2023052804 ### */ ||
-		(parameter[0].weatherchoice == 1000000441) /* ### FOR 2023052805 ### */ ||
-		(parameter[0].weatherchoice == 1000000442) /* ### FOR 2023052806 ### */ ||
-		(parameter[0].weatherchoice == 1000000443) /* ### FOR 2023052807 ### */ ||
-		(parameter[0].weatherchoice == 1000000444) /* ### FOR 2023052901 ### */ ||
-		(parameter[0].weatherchoice == 1000000445) /* ### FOR 2023052902 ### */ ||
-		(parameter[0].weatherchoice == 1000000446) /* ### FOR 2023052903 ### */ ||
-		(parameter[0].weatherchoice == 1000000447) /* ### FOR 2023053001 ### */ ||
-		(parameter[0].weatherchoice == 1000000448) /* ### FOR 2023053002 ### */ ||
-		(parameter[0].weatherchoice == 1000000449) /* ### FOR 2023053003 ### */ ||
-		(parameter[0].weatherchoice == 1000000452) /* ### FOR 2023060105 ### */ ||
-		(parameter[0].weatherchoice == 1000000453) /* ### FOR 2023060106 ### */ ||
-		(parameter[0].weatherchoice == 1000000454) /* ### FOR 2023060201 ### */ ||
-		(parameter[0].weatherchoice == 1000000455) /* ### FOR 2023060203 ### */ ||
-		(parameter[0].weatherchoice == 1000000456)) /* ### FOR 2023060204 ### */ {
-			foldername << "cell_44";
-		} else if ((parameter[0].weatherchoice == 50001)) /* ### FOR Close_to_Fairbanks_EN23-611 ### */ {
-			foldername << "cell_32";
-		} else if ((parameter[0].weatherchoice == 50002) /* ### FOR Fielding_Lake_EN23-675 ### */ ||
-		(parameter[0].weatherchoice == 50009)) /* ### FOR Road_to_Central_EN23-651 ### */ {
-			foldername << "cell_33";
-		} else if ((parameter[0].weatherchoice == 50003) /* ### FOR Fort_Mc_Pherson_East_EN22-021 ### */ ||
-		(parameter[0].weatherchoice == 50004)) /* ### FOR Fort_Mc_Pherson_West_EN22-032 ### */ {
-			foldername << "cell_20";
-		} else if ((parameter[0].weatherchoice == 50005)) /* ### FOR Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027 ### */ {
-			foldername << "cell_24";
-		} else if ((parameter[0].weatherchoice == 50006)) /* ### FOR Lake_Nutenvut_16KP03-V20_V39 ### */ {
-			foldername << "cell_19";
-		} else if ((parameter[0].weatherchoice == 50007)) /* ### FOR Lake_Ulu_EN21-201_219 ### */ {
+        if ((plotcodeNum == 1148) /* ### FOR EN18075 ### */ ||
+		(plotcodeNum == 1149) /* ### FOR EN18076 ### */ ||
+		(plotcodeNum == 1150) /* ### FOR EN18077 ### */ ||
+		(plotcodeNum == 1151) /* ### FOR EN18078 ### */ ||
+		(plotcodeNum == 1152) /* ### FOR EN18079 ### */ ||
+		(plotcodeNum == 1153) /* ### FOR EN18080 ### */ ||
+		(plotcodeNum == 1154) /* ### FOR EN18081 ### */ ||
+		(plotcodeNum == 1155) /* ### FOR EN18082 ### */ ||
+		(plotcodeNum == 1149) /* ### FOR EN18076 ### */ ||
+		(plotcodeNum == 1150) /* ### FOR EN18077 ### */ ||
+		(plotcodeNum == 1151) /* ### FOR EN18078 ### */ ||
+		(plotcodeNum == 1152) /* ### FOR EN18079 ### */ ||
+		(plotcodeNum == 1153) /* ### FOR EN18080 ### */ ||
+		(plotcodeNum == 1154) /* ### FOR EN18081 ### */ ||
+		(plotcodeNum == 1155) /* ### FOR EN18082 ### */ ||
+		(plotcodeNum == 1156)) /* ### FOR EN18083 ### */ {
+			foldername << "cell_7";
+		} else if ((plotcodeNum == 1144) /* ### FOR EN18071 ### */ ||
+		(plotcodeNum == 1145) /* ### FOR EN18072 ### */ ||
+		(plotcodeNum == 1146) /* ### FOR EN18073 ### */ ||
+		(plotcodeNum == 1147)) /* ### FOR EN18074 ### */ {
+			foldername << "cell_8";
+		} else if ((plotcodeNum == 1132)) /* ### FOR EN18062 ### */ {
+			foldername << "cell_9";
+		} else if ((plotcodeNum == 1131) /* ### FOR EN18061 ### */ ||
+		(plotcodeNum == 1176) /* ### FOR EN21220 ### */ ||
+		(plotcodeNum == 1177) /* ### FOR EN21221 ### */ ||
+		(plotcodeNum == 1178) /* ### FOR EN21222 ### */ ||
+		(plotcodeNum == 1179) /* ### FOR EN21223 ### */ ||
+		(plotcodeNum == 1180) /* ### FOR EN21224 ### */ ||
+		(plotcodeNum == 1181) /* ### FOR EN21225 ### */ ||
+		(plotcodeNum == 1182) /* ### FOR EN21226 ### */ ||
+		(plotcodeNum == 1183) /* ### FOR EN21227 ### */ ||
+		(plotcodeNum == 1188) /* ### FOR EN21232 ### */ ||
+		(plotcodeNum == 1189) /* ### FOR EN21233 ### */ ||
+		(plotcodeNum == 1190) /* ### FOR EN21234 ### */ ||
+		(plotcodeNum == 1191) /* ### FOR EN21235 ### */ ||
+		(plotcodeNum == 1192) /* ### FOR EN21236 ### */ ||
+		(plotcodeNum == 1193) /* ### FOR EN21237 ### */ ||
+		(plotcodeNum == 1194) /* ### FOR EN21238 ### */ ||
+		(plotcodeNum == 1195) /* ### FOR EN21239 ### */ ||
+		(plotcodeNum == 1196) /* ### FOR EN21240 ### */ ||
+		(plotcodeNum == 1197) /* ### FOR EN21241 ### */ ||
+		(plotcodeNum == 1198) /* ### FOR EN21242 ### */ ||
+		(plotcodeNum == 1199) /* ### FOR EN21243 ### */ ||
+		(plotcodeNum == 1200) /* ### FOR EN21244 ### */ ||
+		(plotcodeNum == 1201) /* ### FOR EN21245 ### */ ||
+		(plotcodeNum == 1202) /* ### FOR EN21246 ### */ ||
+		(plotcodeNum == 1203) /* ### FOR EN21247 ### */ ||
+		(plotcodeNum == 1204) /* ### FOR EN21248 ### */ ||
+		(plotcodeNum == 1205) /* ### FOR EN21249 ### */ ||
+		(plotcodeNum == 1206) /* ### FOR EN21250 ### */ ||
+		(plotcodeNum == 1207) /* ### FOR EN21251 ### */ ||
+		(plotcodeNum == 1208) /* ### FOR EN21252 ### */ ||
+		(plotcodeNum == 1209) /* ### FOR EN21253 ### */ ||
+		(plotcodeNum == 1210) /* ### FOR EN21254 ### */ ||
+		(plotcodeNum == 1211) /* ### FOR EN21255 ### */ ||
+		(plotcodeNum == 1212) /* ### FOR EN21256 ### */ ||
+		(plotcodeNum == 1213) /* ### FOR EN21257 ### */ ||
+		(plotcodeNum == 1214) /* ### FOR EN21258 ### */ ||
+		(plotcodeNum == 1215) /* ### FOR EN21259 ### */ ||
+		(plotcodeNum == 1216) /* ### FOR EN21260 ### */ ||
+		(plotcodeNum == 1217) /* ### FOR EN21261 ### */ ||
+		(plotcodeNum == 1218)) /* ### FOR EN21262 ### */ {
+			foldername << "cell_10";
+		} else if ((plotcodeNum == 1184) /* ### FOR EN21228 ### */ ||
+		(plotcodeNum == 1185) /* ### FOR EN21229 ### */ ||
+		(plotcodeNum == 1186) /* ### FOR EN21230 ### */ ||
+		(plotcodeNum == 1187)) /* ### FOR EN21231 ### */ {
+			foldername << "cell_11";
+		} else if ((plotcodeNum == 1137) /* ### FOR EN18067 ### */ ||
+		(plotcodeNum == 1138) /* ### FOR EN18068 ### */ ||
+		(plotcodeNum == 1140) /* ### FOR EN18070_centre ### */ ||
+		(plotcodeNum == 1141) /* ### FOR EN18070_edge ### */ ||
+		(plotcodeNum == 1142) /* ### FOR EN18070_end ### */ ||
+		(plotcodeNum == 1143)) /* ### FOR EN18070_transition ### */ {
+			foldername << "cell_14";
+		} else if ((plotcodeNum == 1139)) /* ### FOR EN18069 ### */ {
+			foldername << "cell_15";
+		} else if ((plotcodeNum == 1133) /* ### FOR EN18063 ### */ ||
+		(plotcodeNum == 1134) /* ### FOR EN18064 ### */ ||
+		(plotcodeNum == 1135) /* ### FOR EN18065 ### */ ||
+		(plotcodeNum == 1136)) /* ### FOR EN18066 ### */ {
+			foldername << "cell_16";
+		} else if ((plotcodeNum == 1157) /* ### FOR EN21201 ### */ ||
+		(plotcodeNum == 1159) /* ### FOR EN21203 ### */ ||
+		(plotcodeNum == 1160) /* ### FOR EN21204 ### */ ||
+		(plotcodeNum == 1161) /* ### FOR EN21205 ### */ ||
+		(plotcodeNum == 1165) /* ### FOR EN21209 ### */ ||
+		(plotcodeNum == 1166) /* ### FOR EN21210 ### */ ||
+		(plotcodeNum == 1167) /* ### FOR EN21211 ### */ ||
+		(plotcodeNum == 1171) /* ### FOR EN21215 ### */ ||
+		(plotcodeNum == 1172) /* ### FOR EN21216 ### */ ||
+		(plotcodeNum == 1173) /* ### FOR EN21217 ### */ ||
+		(plotcodeNum == 1174) /* ### FOR EN21218 ### */ ||
+		(plotcodeNum == 1175)) /* ### FOR EN21219 ### */ {
 			foldername << "cell_17";
-		} else if ((parameter[0].weatherchoice == 50008)) /* ### FOR Mucho_Lake_EN22-065 ### */ {
+		} else if ((plotcodeNum == 1158) /* ### FOR EN21202 ### */ ||
+		(plotcodeNum == 1162) /* ### FOR EN21206 ### */ ||
+		(plotcodeNum == 1163) /* ### FOR EN21207 ### */ ||
+		(plotcodeNum == 1164) /* ### FOR EN21208 ### */ ||
+		(plotcodeNum == 1168) /* ### FOR EN21212 ### */ ||
+		(plotcodeNum == 1169) /* ### FOR EN21213 ### */ ||
+		(plotcodeNum == 1170)) /* ### FOR EN21214 ### */ {
+			foldername << "cell_18";
+		} else if ((plotcodeNum == 1080) /* ### FOR 16-KP-V20 ### */ ||
+		(plotcodeNum == 1081) /* ### FOR 16-KP-V21 ### */ ||
+		(plotcodeNum == 1082) /* ### FOR 16-KP-V22 ### */ ||
+		(plotcodeNum == 1083) /* ### FOR 16-KP-V23 ### */ ||
+		(plotcodeNum == 1084) /* ### FOR 16-KP-V24 ### */ ||
+		(plotcodeNum == 1085) /* ### FOR 16-KP-V25 ### */ ||
+		(plotcodeNum == 1086) /* ### FOR 16-KP-V26 ### */ ||
+		(plotcodeNum == 1087) /* ### FOR 16-KP-V27 ### */ ||
+		(plotcodeNum == 1088) /* ### FOR 16-KP-V28 ### */ ||
+		(plotcodeNum == 1089) /* ### FOR 16-KP-V29 ### */ ||
+		(plotcodeNum == 1090) /* ### FOR 16-KP-V30 ### */ ||
+		(plotcodeNum == 1091) /* ### FOR 16-KP-V31 ### */ ||
+		(plotcodeNum == 1092) /* ### FOR 16-KP-V32 ### */ ||
+		(plotcodeNum == 1093) /* ### FOR 16-KP-V33 ### */ ||
+		(plotcodeNum == 1094) /* ### FOR 16-KP-V34 ### */ ||
+		(plotcodeNum == 1095) /* ### FOR 16-KP-V35 ### */ ||
+		(plotcodeNum == 1096) /* ### FOR 16-KP-V36 ### */ ||
+		(plotcodeNum == 1097) /* ### FOR 16-KP-V37 ### */ ||
+		(plotcodeNum == 1098) /* ### FOR 16-KP-V38 ### */ ||
+		(plotcodeNum == 1099)) /* ### FOR 16-KP-V39 ### */ {
+			foldername << "cell_19";
+		} else if ((plotcodeNum == 1129) /* ### FOR B19-T1 ### */ ||
+		(plotcodeNum == 1130)) /* ### FOR B19-T2 ### */ {
+			foldername << "cell_21";
+		} else if ((plotcodeNum == 1009) /* ### FOR 12-KO-02a ### */ ||
+		(plotcodeNum == 1010) /* ### FOR 12-KO-02b ### */ ||
+		(plotcodeNum == 1011) /* ### FOR 12-KO-03a ### */ ||
+		(plotcodeNum == 1012) /* ### FOR 12-KO-03b ### */ ||
+		(plotcodeNum == 1013) /* ### FOR 12-KO-04a ### */ ||
+		(plotcodeNum == 1014) /* ### FOR 12-KO-04b ### */ ||
+		(plotcodeNum == 1015)) /* ### FOR 12-KO-05 ### */ {
+			foldername << "cell_22";
+		} else if ((plotcodeNum == 1073) /* ### FOR 16-KP-V13 ### */ ||
+		(plotcodeNum == 1074) /* ### FOR 16-KP-V14 ### */ ||
+		(plotcodeNum == 1075) /* ### FOR 16-KP-V15 ### */ ||
+		(plotcodeNum == 1076) /* ### FOR 16-KP-V16 ### */ ||
+		(plotcodeNum == 1077) /* ### FOR 16-KP-V17 ### */ ||
+		(plotcodeNum == 1078) /* ### FOR 16-KP-V18 ### */ ||
+		(plotcodeNum == 1079) /* ### FOR 16-KP-V19 ### */ ||
+		(plotcodeNum == 1119) /* ### FOR 18-BIL-00-EN18000 ### */ ||
+		(plotcodeNum == 1120) /* ### FOR 18-BIL-01-EN18028 ### */ ||
+		(plotcodeNum == 1121) /* ### FOR 18-BIL-01-EN18029 ### */ ||
+		(plotcodeNum == 1122) /* ### FOR 18-BIL-02-EN18030 ### */ ||
+		(plotcodeNum == 1123) /* ### FOR 18-BIL-02-EN18031 ### */ ||
+		(plotcodeNum == 1124) /* ### FOR 18-BIL-02-EN18032 ### */ ||
+		(plotcodeNum == 1125) /* ### FOR 18-BIL-02-EN18033 ### */ ||
+		(plotcodeNum == 1126) /* ### FOR 18-BIL-02-EN18034 ### */ ||
+		(plotcodeNum == 1127)) /* ### FOR 18-BIL-02-EN18035 ### */ {
+			foldername << "cell_23";
+		} else if ((plotcodeNum == 1061) /* ### FOR 16-KP-V01 ### */ ||
+		(plotcodeNum == 1062) /* ### FOR 16-KP-V02 ### */ ||
+		(plotcodeNum == 1063) /* ### FOR 16-KP-V03 ### */ ||
+		(plotcodeNum == 1064) /* ### FOR 16-KP-V04 ### */ ||
+		(plotcodeNum == 1065) /* ### FOR 16-KP-V05 ### */ ||
+		(plotcodeNum == 1066) /* ### FOR 16-KP-V06 ### */ ||
+		(plotcodeNum == 1067) /* ### FOR 16-KP-V07 ### */ ||
+		(plotcodeNum == 1068) /* ### FOR 16-KP-V08 ### */ ||
+		(plotcodeNum == 1069) /* ### FOR 16-KP-V09 ### */ ||
+		(plotcodeNum == 1070) /* ### FOR 16-KP-V10 ### */ ||
+		(plotcodeNum == 1071) /* ### FOR 16-KP-V11 ### */ ||
+		(plotcodeNum == 1072) /* ### FOR 16-KP-V12 ### */ ||
+		(plotcodeNum == 1100) /* ### FOR 16-KP-V40 ### */ ||
+		(plotcodeNum == 1101) /* ### FOR 16-KP-V41 ### */ ||
+		(plotcodeNum == 1102) /* ### FOR 16-KP-V42 ### */ ||
+		(plotcodeNum == 1103) /* ### FOR 16-KP-V43 ### */ ||
+		(plotcodeNum == 1104) /* ### FOR 16-KP-V44 ### */ ||
+		(plotcodeNum == 1105) /* ### FOR 16-KP-V45 ### */ ||
+		(plotcodeNum == 1106) /* ### FOR 16-KP-V46 ### */ ||
+		(plotcodeNum == 1107) /* ### FOR 16-KP-V47 ### */ ||
+		(plotcodeNum == 1108) /* ### FOR 16-KP-V48 ### */ ||
+		(plotcodeNum == 1109) /* ### FOR 16-KP-V49 ### */ ||
+		(plotcodeNum == 1110) /* ### FOR 16-KP-V50 ### */ ||
+		(plotcodeNum == 1111) /* ### FOR 16-KP-V51 ### */ ||
+		(plotcodeNum == 1112) /* ### FOR 16-KP-V52 ### */ ||
+		(plotcodeNum == 1113) /* ### FOR 16-KP-V53 ### */ ||
+		(plotcodeNum == 1114) /* ### FOR 16-KP-V54 ### */ ||
+		(plotcodeNum == 1115) /* ### FOR 16-KP-V55 ### */ ||
+		(plotcodeNum == 1116) /* ### FOR 16-KP-V56 ### */ ||
+		(plotcodeNum == 1117) /* ### FOR 16-KP-V57 ### */ ||
+		(plotcodeNum == 1118) /* ### FOR 16-KP-V58 ### */ ||
+		(plotcodeNum == 1029) /* ### FOR 16-KP-01-EN18001 ### */ ||
+		(plotcodeNum == 1030) /* ### FOR 16-KP-01-EN18002 ### */ ||
+		(plotcodeNum == 1031) /* ### FOR 16-KP-01-EN18003 ### */ ||
+		(plotcodeNum == 1032) /* ### FOR 16-KP-01-EN18004 ### */ ||
+		(plotcodeNum == 1033) /* ### FOR 16-KP-01-EN18005 ### */ ||
+		(plotcodeNum == 1034) /* ### FOR 16-KP-01-EN18006 ### */ ||
+		(plotcodeNum == 1035) /* ### FOR 16-KP-01-EN18007 ### */ ||
+		(plotcodeNum == 1036) /* ### FOR 16-KP-01-EN18008 ### */ ||
+		(plotcodeNum == 1037) /* ### FOR 16-KP-01-EN18009 ### */ ||
+		(plotcodeNum == 1038) /* ### FOR 16-KP-01-EN18010 ### */ ||
+		(plotcodeNum == 1039) /* ### FOR 16-KP-01-EN18011 ### */ ||
+		(plotcodeNum == 1040) /* ### FOR 16-KP-01-EN18012 ### */ ||
+		(plotcodeNum == 1041) /* ### FOR 16-KP-01-EN18013 ### */ ||
+		(plotcodeNum == 1042) /* ### FOR 16-KP-01-EN18014 ### */ ||
+		(plotcodeNum == 1043) /* ### FOR 16-KP-01-EN18015 ### */ ||
+		(plotcodeNum == 1044) /* ### FOR 16-KP-01-EN18016 ### */ ||
+		(plotcodeNum == 1045) /* ### FOR 16-KP-01-EN18017 ### */ ||
+		(plotcodeNum == 1046) /* ### FOR 16-KP-01-EN18018 ### */ ||
+		(plotcodeNum == 1047) /* ### FOR 16-KP-01-EN18019 ### */ ||
+		(plotcodeNum == 1048) /* ### FOR 16-KP-01-EN18020 ### */ ||
+		(plotcodeNum == 1049) /* ### FOR 16-KP-01-EN18021 ### */ ||
+		(plotcodeNum == 1050) /* ### FOR 16-KP-01-EN18022 ### */ ||
+		(plotcodeNum == 1051) /* ### FOR 16-KP-01-EN18023 ### */ ||
+		(plotcodeNum == 1052) /* ### FOR 16-KP-01-EN18024 ### */ ||
+		(plotcodeNum == 1053) /* ### FOR 16-KP-01-EN18025 ### */ ||
+		(plotcodeNum == 1054) /* ### FOR 16-KP-01-EN18026 ### */ ||
+		(plotcodeNum == 1055) /* ### FOR 16-KP-01-EN18027 ### */ ||
+		(plotcodeNum == 1056) /* ### FOR 16-KP-04-EN18051 ### */ ||
+		(plotcodeNum == 1057) /* ### FOR 16-KP-04-EN18052 ### */ ||
+		(plotcodeNum == 1058) /* ### FOR 16-KP-04-EN18053 ### */ ||
+		(plotcodeNum == 1059) /* ### FOR 16-KP-04-EN18054 ### */ ||
+		(plotcodeNum == 1060)) /* ### FOR 16-KP-04-EN18055 ### */ {
+			foldername << "cell_24";
+		} else if ((plotcodeNum == 1003) /* ### FOR 11-CH-06I ### */ ||
+		(plotcodeNum == 1004)) /* ### FOR 11-CH-06III ### */ {
+			foldername << "cell_25";
+		} else if ((plotcodeNum == 1001) /* ### FOR 11-CH-02II ### */ ||
+		(plotcodeNum == 1002) /* ### FOR 11-CH-02III ### */ ||
+		(plotcodeNum == 1005) /* ### FOR 11-CH-12I ### */ ||
+		(plotcodeNum == 1006) /* ### FOR 11-CH-12II ### */ ||
+		(plotcodeNum == 1007) /* ### FOR 11-CH-17I ### */ ||
+		(plotcodeNum == 1008) /* ### FOR 11-CH-17II ### */ ||
+		(plotcodeNum == 1221) /* ### FOR TY07VI ### */ ||
+		(plotcodeNum == 1222) /* ### FOR TY07VII ### */ ||
+		(plotcodeNum == 1223) /* ### FOR TY09VI ### */ ||
+		(plotcodeNum == 1224)) /* ### FOR TY09VII ### */ {
+			foldername << "cell_26";
+		} else if ((plotcodeNum == 1016) /* ### FOR 13-TY-02-VI ### */ ||
+		(plotcodeNum == 1017) /* ### FOR 13-TY-02-VII ### */ ||
+		(plotcodeNum == 1219) /* ### FOR TY04VI ### */ ||
+		(plotcodeNum == 1220)) /* ### FOR TY04VII ### */ {
+			foldername << "cell_27";
+		} else if ((plotcodeNum == 1128)) /* ### FOR 18-LD-VP012-Tit-Ary ### */ {
+			foldername << "cell_28";
+		} else if ((plotcodeNum == 1018) /* ### FOR 14-OM-02-V1 ### */ ||
+		(plotcodeNum == 1019) /* ### FOR 14-OM-02-V2 ### */ ||
+		(plotcodeNum == 1020) /* ### FOR 14-OM-11-V3 ### */ ||
+		(plotcodeNum == 1021) /* ### FOR 14-OM-20-V4 ### */ ||
+		(plotcodeNum == 1022) /* ### FOR 14-OM-TRANS1 ### */ ||
+		(plotcodeNum == 1023) /* ### FOR 14-OM-TRANS2 ### */ ||
+		(plotcodeNum == 1024) /* ### FOR 14-OM-TRANS3 ### */ ||
+		(plotcodeNum == 1025) /* ### FOR 14-OM-TRANS4 ### */ ||
+		(plotcodeNum == 1026) /* ### FOR 14-OM-TRANS5 ### */ ||
+		(plotcodeNum == 1028) /* ### FOR 14-OM-TRANS6 ### */ ||
+		(plotcodeNum == 1027)) /* ### FOR 14-OM-TRANS6-7 ### */ {
+			foldername << "cell_29";
+		} else if ((plotcodeNum == 2065) /* ### FOR EN22-065 ### */ ||
+		(plotcodeNum == 2066)) /* ### FOR EN22-066 ### */ {
 			foldername << "cell_1";
+		} else if ((plotcodeNum == 2067) /* ### FOR EN22-067 ### */ ||
+		(plotcodeNum == 2068) /* ### FOR EN22-068 ### */ ||
+		(plotcodeNum == 2070) /* ### FOR EN22-070 ### */ ||
+		(plotcodeNum == 2071) /* ### FOR EN22-071 ### */ ||
+		(plotcodeNum == 2072) /* ### FOR EN22-072 ### */ ||
+		(plotcodeNum == 2073) /* ### FOR EN22-073 ### */ ||
+		(plotcodeNum == 2074)) /* ### FOR EN22-074 ### */ {
+			foldername << "cell_2";
+		} else if ((plotcodeNum == 2069)) /* ### FOR EN22-069 ### */ {
+			foldername << "cell_3";
+		} else if ((plotcodeNum == 2001) /* ### FOR EN22-001 ### */ ||
+		(plotcodeNum == 2002) /* ### FOR EN22-002 ### */ ||
+		(plotcodeNum == 2003) /* ### FOR EN22-003 ### */ ||
+		(plotcodeNum == 2004) /* ### FOR EN22-004 ### */ ||
+		(plotcodeNum == 2056) /* ### FOR EN22-056 ### */ ||
+		(plotcodeNum == 2057) /* ### FOR EN22-057 ### */ ||
+		(plotcodeNum == 2058) /* ### FOR EN22-058 ### */ ||
+		(plotcodeNum == 2059) /* ### FOR EN22-059 ### */ ||
+		(plotcodeNum == 2060)) /* ### FOR EN22-060 ### */ {
+			foldername << "cell_4";
+		} else if ((plotcodeNum == 2061) /* ### FOR EN22-061 ### */ ||
+		(plotcodeNum == 2062)) /* ### FOR EN22-062 ### */ {
+			foldername << "cell_5";
+		} else if ((plotcodeNum == 2063) /* ### FOR EN22-063 ### */ ||
+		(plotcodeNum == 2064) /* ### FOR EN22-064 ### */ ||
+		(plotcodeNum == 2075)) /* ### FOR EN22-075 ### */ {
+			foldername << "cell_6";
+		} else if ((plotcodeNum == 2038) /* ### FOR EN22-038 ### */ ||
+		(plotcodeNum == 2039) /* ### FOR EN22-039 ### */ ||
+		(plotcodeNum == 2040) /* ### FOR EN22-040 ### */ ||
+		(plotcodeNum == 2041) /* ### FOR EN22-041 ### */ ||
+		(plotcodeNum == 2042) /* ### FOR EN22-042 ### */ ||
+		(plotcodeNum == 2043) /* ### FOR EN22-043 ### */ ||
+		(plotcodeNum == 2044) /* ### FOR EN22-044 ### */ ||
+		(plotcodeNum == 2045) /* ### FOR EN22-045 ### */ ||
+		(plotcodeNum == 2046) /* ### FOR EN22-046 ### */ ||
+		(plotcodeNum == 2047) /* ### FOR EN22-047 ### */ ||
+		(plotcodeNum == 2048) /* ### FOR EN22-048 ### */ ||
+		(plotcodeNum == 2049) /* ### FOR EN22-049 ### */ ||
+		(plotcodeNum == 2050) /* ### FOR EN22-050 ### */ ||
+		(plotcodeNum == 2051) /* ### FOR EN22-051 ### */ ||
+		(plotcodeNum == 2052) /* ### FOR EN22-052 ### */ ||
+		(plotcodeNum == 2053) /* ### FOR EN22-053 ### */ ||
+		(plotcodeNum == 2054)) /* ### FOR EN22-054 ### */ {
+			foldername << "cell_12";
+		} else if ((plotcodeNum == 2037) /* ### FOR EN22-037 ### */ ||
+		(plotcodeNum == 2055)) /* ### FOR EN22-055 ### */ {
+			foldername << "cell_13";
+		} else if ((plotcodeNum == 2005) /* ### FOR EN22-005 ### */ ||
+		(plotcodeNum == 2006) /* ### FOR EN22-006 ### */ ||
+		(plotcodeNum == 2007) /* ### FOR EN22-007 ### */ ||
+		(plotcodeNum == 2008) /* ### FOR EN22-008 ### */ ||
+		(plotcodeNum == 2009) /* ### FOR EN22-009 ### */ ||
+		(plotcodeNum == 2010) /* ### FOR EN22-010 ### */ ||
+		(plotcodeNum == 2011) /* ### FOR EN22-011 ### */ ||
+		(plotcodeNum == 2012) /* ### FOR EN22-012 ### */ ||
+		(plotcodeNum == 2013) /* ### FOR EN22-013 ### */ ||
+		(plotcodeNum == 2014) /* ### FOR EN22-014 ### */ ||
+		(plotcodeNum == 2015) /* ### FOR EN22-015 ### */ ||
+		(plotcodeNum == 2016) /* ### FOR EN22-016 ### */ ||
+		(plotcodeNum == 2017) /* ### FOR EN22-017 ### */ ||
+		(plotcodeNum == 2018) /* ### FOR EN22-018 ### */ ||
+		(plotcodeNum == 2019) /* ### FOR EN22-019 ### */ ||
+		(plotcodeNum == 2020) /* ### FOR EN22-020 ### */ ||
+		(plotcodeNum == 2021) /* ### FOR EN22-021 ### */ ||
+		(plotcodeNum == 2022) /* ### FOR EN22-022 ### */ ||
+		(plotcodeNum == 2023) /* ### FOR EN22-023 ### */ ||
+		(plotcodeNum == 2024) /* ### FOR EN22-024 ### */ ||
+		(plotcodeNum == 2025) /* ### FOR EN22-025 ### */ ||
+		(plotcodeNum == 2026) /* ### FOR EN22-026 ### */ ||
+		(plotcodeNum == 2027) /* ### FOR EN22-027 ### */ ||
+		(plotcodeNum == 2028) /* ### FOR EN22-028 ### */ ||
+		(plotcodeNum == 2029) /* ### FOR EN22-029 ### */ ||
+		(plotcodeNum == 2030) /* ### FOR EN22-030 ### */ ||
+		(plotcodeNum == 2031) /* ### FOR EN22-031 ### */ ||
+		(plotcodeNum == 2032) /* ### FOR EN22-032 ### */ ||
+		(plotcodeNum == 2033) /* ### FOR EN22-033 ### */ ||
+		(plotcodeNum == 2034) /* ### FOR EN22-034 ### */ ||
+		(plotcodeNum == 2035) /* ### FOR EN22-035 ### */ ||
+		(plotcodeNum == 2036)) /* ### FOR EN22-036 ### */ {
+			foldername << "cell_20";
+		} else if ((plotcodeNum == 2078)) /* ### FOR PC11 ### */ {
+			foldername << "cell_57";
+		} else if ((plotcodeNum == 2084) /* ### FOR PC7 ### */ ||
+		(plotcodeNum == 2085)) /* ### FOR PC8 ### */ {
+			foldername << "cell_58";
+		} else if ((plotcodeNum == 2086)) /* ### FOR PC9 ### */ {
+			foldername << "cell_59";
+		} else if ((plotcodeNum == 2077)) /* ### FOR PC10 ### */ {
+			foldername << "cell_60";
+		} else if ((plotcodeNum == 2076) /* ### FOR PC1 ### */ ||
+		(plotcodeNum == 2079) /* ### FOR PC2 ### */ ||
+		(plotcodeNum == 2081)) /* ### FOR PC4 ### */ {
+			foldername << "cell_62";
+		} else if ((plotcodeNum == 2080)) /* ### FOR PC3 ### */ {
+			foldername << "cell_63";
+		} else if ((plotcodeNum == 2083)) /* ### FOR PC6 ### */ {
+			foldername << "cell_64";
+		} else if ((plotcodeNum == 2082)) /* ### FOR PC5 ### */ {
+			foldername << "cell_65";
+		} else if ((plotcodeNum == 3001) /* ### FOR EN23-601 ### */ ||
+		(plotcodeNum == 3002) /* ### FOR EN23-602 ### */ ||
+		(plotcodeNum == 3003)) /* ### FOR EN23-604 ### */ {
+			foldername << "cell_30";
+		} else if ((plotcodeNum == 3022) /* ### FOR EN23-689 ### */ ||
+		(plotcodeNum == 3023)) /* ### FOR EN23-700 ### */ {
+			foldername << "cell_31";
+		} else if ((plotcodeNum == 3004) /* ### FOR EN23-608 ### */ ||
+		(plotcodeNum == 3005) /* ### FOR EN23-611 ### */ ||
+		(plotcodeNum == 3007) /* ### FOR EN23-614 ### */ ||
+		(plotcodeNum == 3013) /* ### FOR EN23-644 ### */ ||
+		(plotcodeNum == 3014) /* ### FOR EN23-645 ### */ ||
+		(plotcodeNum == 3018) /* ### FOR EN23-668 ### */ ||
+		(plotcodeNum == 3019)) /* ### FOR EN23-669 ### */ {
+			foldername << "cell_32";
+		} else if ((plotcodeNum == 3006) /* ### FOR EN23-612 ### */ ||
+		(plotcodeNum == 3015) /* ### FOR EN23-652 ### */ ||
+		(plotcodeNum == 3016) /* ### FOR EN23-660 ### */ ||
+		(plotcodeNum == 3017) /* ### FOR EN23-666 ### */ ||
+		(plotcodeNum == 3020) /* ### FOR EN23-675 ### */ ||
+		(plotcodeNum == 3021)) /* ### FOR EN23-677 ### */ {
+			foldername << "cell_33";
+		} else if ((plotcodeNum == 3008) /* ### FOR EN23-619 ### */ ||
+		(plotcodeNum == 3009) /* ### FOR EN23-621 ### */ ||
+		(plotcodeNum == 3010) /* ### FOR EN23-623 ### */ ||
+		(plotcodeNum == 3011) /* ### FOR EN23-624 ### */ ||
+		(plotcodeNum == 3012)) /* ### FOR EN23-634 ### */ {
+			foldername << "cell_34";
+		} else if ((plotcodeNum == 3025)) /* ### FOR PA10 ### */ {
+			foldername << "cell_50";
+		} else if ((plotcodeNum == 3032)) /* ### FOR PA7 ### */ {
+			foldername << "cell_51";
+		} else if ((plotcodeNum == 3033)) /* ### FOR PA8 ### */ {
+			foldername << "cell_52";
+		} else if ((plotcodeNum == 3034)) /* ### FOR PA9 ### */ {
+			foldername << "cell_53";
+		} else if ((plotcodeNum == 3026)) /* ### FOR PA11 ### */ {
+			foldername << "cell_54";
+		} else if ((plotcodeNum == 3029) /* ### FOR PA4 ### */ ||
+		(plotcodeNum == 3030)) /* ### FOR PA5 ### */ {
+			foldername << "cell_55";
+		} else if ((plotcodeNum == 3024) /* ### FOR PA1 ### */ ||
+		(plotcodeNum == 3027) /* ### FOR PA2 ### */ ||
+		(plotcodeNum == 3028)) /* ### FOR PA3 ### */ {
+			foldername << "cell_56";
+		} else if ((plotcodeNum == 3031)) /* ### FOR PA6 ### */ {
+			foldername << "cell_61";
+		} else if ((plotcodeNum == 4001) /* ### FOR 2023051101 ### */ ||
+		(plotcodeNum == 4002) /* ### FOR 2023051102 ### */ ||
+		(plotcodeNum == 4003) /* ### FOR 2023051103 ### */ ||
+		(plotcodeNum == 4004) /* ### FOR 2023051201 ### */ ||
+		(plotcodeNum == 4005) /* ### FOR 2023051202 ### */ ||
+		(plotcodeNum == 4006) /* ### FOR 2023051203 ### */ ||
+		(plotcodeNum == 4007) /* ### FOR 2023051301 ### */ ||
+		(plotcodeNum == 4008) /* ### FOR 2023051302 ### */ ||
+		(plotcodeNum == 4009) /* ### FOR 2023051401 ### */ ||
+		(plotcodeNum == 4010) /* ### FOR 2023051402 ### */ ||
+		(plotcodeNum == 4063) /* ### FOR 2023060603 ### */ ||
+		(plotcodeNum == 4064) /* ### FOR 2023060604 ### */ ||
+		(plotcodeNum == 4065) /* ### FOR 2023060701 ### */ ||
+		(plotcodeNum == 4066) /* ### FOR 2023060702 ### */ ||
+		(plotcodeNum == 4067) /* ### FOR 2023060703 ### */ ||
+		(plotcodeNum == 4068) /* ### FOR 2023060704 ### */ ||
+		(plotcodeNum == 4069) /* ### FOR 2023060705 ### */ ||
+		(plotcodeNum == 4070) /* ### FOR 2023060706 ### */ ||
+		(plotcodeNum == 4071) /* ### FOR 2023060802 ### */ ||
+		(plotcodeNum == 4072)) /* ### FOR 2023060803 ### */ {
+			foldername << "cell_40";
+		} else if ((plotcodeNum == 4011) /* ### FOR 2023051701 ### */ ||
+		(plotcodeNum == 4012) /* ### FOR 2023051702 ### */ ||
+		(plotcodeNum == 4019) /* ### FOR 2023051808 ### */ ||
+		(plotcodeNum == 4050) /* ### FOR 2023060101 ### */ ||
+		(plotcodeNum == 4051)) /* ### FOR 2023060102 ### */ {
+			foldername << "cell_41";
+		} else if ((plotcodeNum == 4058) /* ### FOR 2023060502 ### */ ||
+		(plotcodeNum == 4059)) /* ### FOR 2023060503 ### */ {
+			foldername << "cell_42";
+		} else if ((plotcodeNum == 4057) /* ### FOR 2023060301 ### */ ||
+		(plotcodeNum == 4060) /* ### FOR 2023060504 ### */ ||
+		(plotcodeNum == 4061) /* ### FOR 2023060505 ### */ ||
+		(plotcodeNum == 4062)) /* ### FOR 2023060601 ### */ {
+			foldername << "cell_43";
+		} else if ((plotcodeNum == 4013) /* ### FOR 2023051801 ### */ ||
+		(plotcodeNum == 4014) /* ### FOR 2023051802 ### */ ||
+		(plotcodeNum == 4015) /* ### FOR 2023051803 ### */ ||
+		(plotcodeNum == 4016) /* ### FOR 2023051804 ### */ ||
+		(plotcodeNum == 4017) /* ### FOR 2023051806 ### */ ||
+		(plotcodeNum == 4018) /* ### FOR 2023051807 ### */ ||
+		(plotcodeNum == 4020) /* ### FOR 2023051901 ### */ ||
+		(plotcodeNum == 4021) /* ### FOR 2023051902 ### */ ||
+		(plotcodeNum == 4022) /* ### FOR 2023052101 ### */ ||
+		(plotcodeNum == 4023) /* ### FOR 2023052102 ### */ ||
+		(plotcodeNum == 4024) /* ### FOR 2023052103 ### */ ||
+		(plotcodeNum == 4025) /* ### FOR 2023052104 ### */ ||
+		(plotcodeNum == 4026) /* ### FOR 2023052106 ### */ ||
+		(plotcodeNum == 4027) /* ### FOR 2023052107 ### */ ||
+		(plotcodeNum == 4038) /* ### FOR 2023052802 ### */ ||
+		(plotcodeNum == 4039) /* ### FOR 2023052803 ### */ ||
+		(plotcodeNum == 4040) /* ### FOR 2023052804 ### */ ||
+		(plotcodeNum == 4041) /* ### FOR 2023052805 ### */ ||
+		(plotcodeNum == 4042) /* ### FOR 2023052806 ### */ ||
+		(plotcodeNum == 4043) /* ### FOR 2023052807 ### */ ||
+		(plotcodeNum == 4044) /* ### FOR 2023052901 ### */ ||
+		(plotcodeNum == 4045) /* ### FOR 2023052902 ### */ ||
+		(plotcodeNum == 4046) /* ### FOR 2023052903 ### */ ||
+		(plotcodeNum == 4047) /* ### FOR 2023053001 ### */ ||
+		(plotcodeNum == 4048) /* ### FOR 2023053002 ### */ ||
+		(plotcodeNum == 4049) /* ### FOR 2023053003 ### */ ||
+		(plotcodeNum == 4052) /* ### FOR 2023060105 ### */ ||
+		(plotcodeNum == 4053) /* ### FOR 2023060106 ### */ ||
+		(plotcodeNum == 4054) /* ### FOR 2023060201 ### */ ||
+		(plotcodeNum == 4055) /* ### FOR 2023060203 ### */ ||
+		(plotcodeNum == 4056)) /* ### FOR 2023060204 ### */ {
+			foldername << "cell_44";
+		} else if ((plotcodeNum == 4028) /* ### FOR 2023052301 ### */ ||
+		(plotcodeNum == 4029) /* ### FOR 2023052302 ### */ ||
+		(plotcodeNum == 4030) /* ### FOR 2023052401 ### */ ||
+		(plotcodeNum == 4031) /* ### FOR 2023052402 ### */ ||
+		(plotcodeNum == 4032) /* ### FOR 2023052403 ### */ ||
+		(plotcodeNum == 4033) /* ### FOR 2023052404 ### */ ||
+		(plotcodeNum == 4034) /* ### FOR 2023052501 ### */ ||
+		(plotcodeNum == 4035) /* ### FOR 2023052601 ### */ ||
+		(plotcodeNum == 4036) /* ### FOR 2023052602 ### */ ||
+		(plotcodeNum == 4037)) /* ### FOR 2023052604 ### */ {
+			foldername << "cell_45";
+		} else if ((plotcodeNum == 5008)) /* ### FOR Mucho_Lake ### */ {
+			foldername << "cell_1";
+		} else if ((plotcodeNum == 5001)) /* ### FOR Close_to_Fairbanks ### */ {
+			foldername << "cell_32";
+		} else if ((plotcodeNum == 5009) /* ### FOR Road_to_Central ### */ ||
+		(plotcodeNum == 5002)) /* ### FOR Fielding_Lake ### */ {
+			foldername << "cell_33";
+		} else if ((plotcodeNum == 5007)) /* ### FOR Lake_Ulu ### */ {
+			foldername << "cell_17";
+		} else if ((plotcodeNum == 5006)) /* ### FOR Lake_Nutenvut ### */ {
+			foldername << "cell_19";
+		} else if ((plotcodeNum == 5003) /* ### FOR Fort_Mc_Pherson_East ### */ ||
+		(plotcodeNum == 5004)) /* ### FOR Fort_Mc_Pherson_West ### */ {
+			foldername << "cell_20";
+		} else if ((plotcodeNum == 5005)) /* ### FOR Lake_Illerney ### */ {
+			foldername << "cell_24";																														
 		} else {
 			cout << "No wind data for weather choice available, reading data for Chukotka!X" << endl;
             foldername << "wind_Chukotka";
@@ -1301,6 +1062,34 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
             ss.str("");
             ss.clear();
+			
+			ostringstream path; 
+			long int plotcodeNum_scenario;
+			plotcodeNum_scenario = parameter[0].weatherchoice % 100000000;
+	
+			if (plotcodeNum_scenario < 100000) {
+				path << "past25kyr_until2020_wind";
+			} else if (plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000) {
+				path << "past25kyr_until2100_wind";
+			} else if (plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000) {
+				path << "past25kyr_until2100_wind";
+			} else if (plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000) {
+				path << "past25kyr_until2100_wind";
+			}
+			
+			ostringstream region;
+			
+			if (plotcodeNum > 1000 && plotcodeNum < 2000) {
+				region << "Siberia";
+			} else if (plotcodeNum > 2000 && plotcodeNum < 3000) {
+				region << "Canada";
+			} else if (plotcodeNum > 3000 && plotcodeNum < 4000) {
+				region << "Alaska";
+			} else if (plotcodeNum > 4000 && plotcodeNum < 5000) {
+				region << "MountainTreeline";
+			}
+			
+			
 
             if ((jahr < findyr2 + 1) && (jahr > findyr1 - 1)) {
                 ss << jahr;
@@ -1309,10 +1098,20 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                     filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
                 } else if (parameter[0].windsource == 10) {
 					filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
-				} else if (parameter[0].windsource == 999) {
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/wind_last25kyr_fromYearlyData/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+				//} else if (parameter[0].windsource == 999) { //old version
+				//	filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/wind_last25kyr_fromYearlyData/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+				//} else if (parameter[0].windsource == 998) { //old version
+				//	filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/wind_last25kyr_from100yrMeans/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario < 100000){
+					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000){
+					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000){
+					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000){
+					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				} else if (parameter[0].windsource == 998) {
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/wind_last25kyr_from100yrMeans/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM1_2_from100yrMeans/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				}
 
                 ifstream fileinp(filename.c_str());
@@ -1352,68 +1151,116 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         aktort++;
 
     // depending on the weather choice different files will be opened and read line by line
- 	long int plotcodeNum;
-	plotcodeNum = parameter[0].weatherchoice - 1000000000;
-	
-	std::stringstream plotcode;
-	plotcode << std::setw(3) << std::setfill('0') << plotcodeNum;
-
-		
-	if (parameter[0].weatherchoice > 1000000000 && parameter[0].weatherchoice < 2000000000){
-		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/" + plotcode.str() + "_temp1.csv";
-		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/" + plotcode.str() + "_prec1.csv";
+ 	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Siberia/" + plotcode.str() + "_temp1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Siberia/" + plotcode.str() + "_prec1.csv";
 		strcpy(dateinametemp, tempbuf.c_str());
 		strcpy(dateinameprec, precbuf.c_str());
-	} else if (parameter[0].weatherchoice > 2000000000 && parameter[0].weatherchoice < 3000000000){
-		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_from100yrMeans/" + plotcode.str() + "_temp2.csv";
-		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_from100yrMeans/" + plotcode.str() + "_prec2.csv";
+	} else if (parameter[0].weatherchoice > 1000002000 && parameter[0].weatherchoice < 1000003000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Canada/" + plotcode.str() + "_temp1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Canada/" + plotcode.str() + "_prec1.csv";
 		strcpy(dateinametemp, tempbuf.c_str());
 		strcpy(dateinameprec, precbuf.c_str());
-	} else if (parameter[0].weatherchoice == 50001) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Close_to_Fairbanks_EN23-611_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Close_to_Fairbanks_EN23-611_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50002) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fielding_Lake_EN23-675_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fielding_Lake_EN23-675_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50003) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_East_EN22-021_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_East_EN22-021_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50004) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_West_EN22-032_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Fort_Mc_Pherson_West_EN22-032_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50005) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Illerney_16KP01-V1_V20_Chukotka_2018_001-027_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50006) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Nutenvut_16KP03-V20_V39_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Nutenvut_16KP03-V20_V39_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50007) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Ulu_EN21-201_219_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Lake_Ulu_EN21-201_219_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50008) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Mucho_Lake_EN22-065_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Mucho_Lake_EN22-065_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
-	} else if (parameter[0].weatherchoice == 50009) {
-		char tempbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Road_to_Central_EN23-651_temp1.csv";
-		char precbuf[] = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/temp_prec_last25kyr_fromYearlyData/Road_to_Central_EN23-651_prec1.csv";
-		strcpy(dateinametemp, tempbuf);
-		strcpy(dateinameprec, precbuf);
+	} else if (parameter[0].weatherchoice > 1000003000 && parameter[0].weatherchoice < 1000004000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Alaska/" + plotcode.str() + "_temp1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Alaska/" + plotcode.str() + "_prec1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1000004000 && parameter[0].weatherchoice < 1000005000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/HengduanMt/" + plotcode.str() + "_temp1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/HengduanMt/" + plotcode.str() + "_prec1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1000005000 && parameter[0].weatherchoice < 1000006000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/MountainTreeline/" + plotcode.str() + "_temp1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/MountainTreeline/" + plotcode.str() + "_prec1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026001000 && parameter[0].weatherchoice < 1026002000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Siberia/" + plotcode.str() + "_temp26_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Siberia/" + plotcode.str() + "_prec26_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026002000 && parameter[0].weatherchoice < 1026003000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Canada/" + plotcode.str() + "_temp26_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Canada/" + plotcode.str() + "_prec26_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026003000 && parameter[0].weatherchoice < 1026004000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Alaska/" + plotcode.str() + "_temp26_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Alaska/" + plotcode.str() + "_prec26_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026004000 && parameter[0].weatherchoice < 1026005000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/HengduanMt/" + plotcode.str() + "_temp26_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/HengduanMt/" + plotcode.str() + "_prec26_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1026005000 && parameter[0].weatherchoice < 1026006000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/MountainTreeline/" + plotcode.str() + "_temp26_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/MountainTreeline/" + plotcode.str() + "_prec26_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045001000 && parameter[0].weatherchoice < 1045002000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Siberia/" + plotcode.str() + "_temp45_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Siberia/" + plotcode.str() + "_prec45_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045002000 && parameter[0].weatherchoice < 1045003000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Canada/" + plotcode.str() + "_temp45_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Canada/" + plotcode.str() + "_prec45_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045003000 && parameter[0].weatherchoice < 1045004000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Alaska/" + plotcode.str() + "_temp45_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Alaska/" + plotcode.str() + "_prec45_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045004000 && parameter[0].weatherchoice < 1045005000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/HengduanMt/" + plotcode.str() + "_temp45_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/HengduanMt/" + plotcode.str() + "_prec45_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1045005000 && parameter[0].weatherchoice < 1045006000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/MountainTreeline/" + plotcode.str() + "_temp45_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/MountainTreeline/" + plotcode.str() + "_prec45_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085001000 && parameter[0].weatherchoice < 1085002000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Siberia/" + plotcode.str() + "_temp85_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Siberia/" + plotcode.str() + "_prec85_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085002000 && parameter[0].weatherchoice < 1085003000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Canada/" + plotcode.str() + "_temp85_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Canada/" + plotcode.str() + "_prec85_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085003000 && parameter[0].weatherchoice < 1085004000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Alaska/" + plotcode.str() + "_temp85_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Alaska/" + plotcode.str() + "_prec85_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085004000 && parameter[0].weatherchoice < 1085005000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/HengduanMt/" + plotcode.str() + "_temp85_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/HengduanMt/" + plotcode.str() + "_prec85_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1085005000 && parameter[0].weatherchoice < 1085006000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/MountainTreeline/" + plotcode.str() + "_temp85_cd1.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/MountainTreeline/" + plotcode.str() + "_prec85_cd1.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 2000001000 && parameter[0].weatherchoice < 2000002000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Siberia/" + plotcode.str() + "_temp2.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Siberia/" + plotcode.str() + "_prec2.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
+	} else if (parameter[0].weatherchoice > 2000002000 && parameter[0].weatherchoice < 2000003000){
+		string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_temp2.csv";
+		string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_prec2.csv";
+		strcpy(dateinametemp, tempbuf.c_str());
+		strcpy(dateinameprec, precbuf.c_str());
 	}
 
 

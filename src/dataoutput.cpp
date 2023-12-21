@@ -64,10 +64,11 @@ void Dataoutput(int t,
 
         aktort++;
 
-        // calculation of the current location in a world grid // currently not used
-        // int aktortyworldcoo = (aktort - 1) / parameter[0].mapxlength;
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
-
+		signed int weatherchoicelocal = 1000000000 + (parameter[0].roi*1000);		// ... for calibration in Siberia N=224 (1000001001 - 1000001224)
+																					// ... ... Canada N=86 (1000002001 - 1000002086)
+																					// ... ... Alaska N=34 (1000003000 - 1000003034)
+									
+		parameter[0].weatherchoice = weatherchoicelocal + aktort;
 
         // define output based on parameter setting
         if (parameter[0].dataoutput == true) {

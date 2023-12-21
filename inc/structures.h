@@ -272,6 +272,7 @@ struct Parameter {
     double dbreastheightalloexp;
     double dbasalheightslopenonlin;
     double dbreastheightslopenonlin;
+	double envirgrowthimpacttree_mod;
 
     // density evaluation
     int densitymode;
@@ -321,12 +322,19 @@ struct Parameter {
     double mdrought;
     double seedconemort;
     double seedfloormort;
-	double seedfiremort; // seed mortality fire-related
     int gmelseedmaxage;
 
+	// fire
+	double seedfiremort; // seed mortality fire-related
+	double litterlayerburn_mod;
+	double fireimpactareasize_mod;
     // ancestry
     int nameakt;
     int lineakt;
+
+    bool globalstoprepeat;
+
+	double sapl_mort_factor; // calibration
 };
 
 struct Speciestraits {
@@ -486,6 +494,9 @@ struct Weather {
 	double FPR;
 	double tempmeanjja;
 	double precipitationsumjja;
+	vector<vector<double>> windspd;
+	vector<vector<double>> winddir;
+	vector<int> globalyears;
 };
 
 struct Evaluation {

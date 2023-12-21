@@ -237,6 +237,7 @@ void Fire(Parameter* parameter,
 				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
 				fireimpactareasize = 5 * treecols; // To cover the complete plot area
 				}
+			fireimpactareasize = fireimpactareasize * parameter[0].fireimpactareasize_mod;  // fix for tuning
 			
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 

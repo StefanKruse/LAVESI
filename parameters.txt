@@ -18,7 +18,7 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=57;  						// (int) choice of data output files=> all yearly output of currencies 
+outputmode=56;  						// (int) choice of data output files=> all yearly output of currencies 
 										// 0=="full"						=> all each year
 										// 1=="normal, gridded" 			=> every 20 years grid output
 										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
@@ -39,7 +39,7 @@ demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dime
 demresolution=5;					// (int) Resolution in m of DEM
 elevationoffset=-200
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
-firemode=0;						// (int) Wildfire simulation switch
+firemode=112;						// (int) Wildfire simulation switch
 										// 0==no fires
 										// >0==fixed fire return interval, burning the whole plot at 100% intensity every x years (e.g. 50 means fire occurs every 50 years)
 										// 112==full dynamic fire module
@@ -173,7 +173,7 @@ lineartransect=0;					// (int 0,1) approximation of temperature and precipitatio
 locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
-windsource=999
+windsource=999;
 										// ... 0==random dispersal direction and not depending on wind speed
 										// ... 1==EraInterim
 										// ... 10==ERA5 (Lake Satagay 2000-2020 CE)
@@ -182,9 +182,9 @@ windsource=999
 									
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=25070;			// (int) determined by the input data series (final year + 1)
-simduration=15070;					// (int) duration of the simulation period depending on the available weather data series
+simduration=500;					// (int) duration of the simulation period depending on the available weather data series
 stopatyear=25071;					// (int) simulation is stopped after this year
-runs=1;								// (int) number of repeated simulations
+runs=1000000;								// (int) number of repeated simulations
 ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										// ...   0==without spin up phase
 										// ... >10==with spin up phase
@@ -204,7 +204,10 @@ roi=1;								// (int) determine region of interest for species
 
 // 1.3 -----> Plot number
 mapxlength=1;						// (int) number of parallel executed plots for each climate
-mapylength=1;						// (int) number of plots along a south-north transect
+mapylength=224;						// (int) number of plots along a south-north transect 
+									// ... for calibration in Siberia N=224 (1000001001 - 1000001224)
+									// ... ... Canada N=86 (1000002001 - 1000002086)
+									// ... ... Alaska N=34 (1000003000 - 1000003034)
 sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determines a 20 cm sub grid
 	
 // 1.4 -----> Dispersal

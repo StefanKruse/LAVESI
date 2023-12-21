@@ -25,10 +25,11 @@ void Environmentupdate(//Parameter* parameter,
                        vector<VectorList<Tree>>& world_tree_list,
                        vector<vector<Weather>>& world_weather_list);
 void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& world_tree_list, vector<vector<Weather>>& world_weather_list);
-void Seeddispersal(//int Jahr, 
+void Seeddispersal(int t,
 				   Parameter* parameter, 
 				   vector<VectorList<Seed>>& world_seed_list, 
-				   vector<vector<Envirgrid>>& world_plot_list);
+				   vector<vector<Envirgrid>>& world_plot_list,
+				   vector<vector<Weather>>& world_weather_list);													
 void Seedproduction(Parameter* parameter, vector<VectorList<Tree>>& world_tree_list);
 void Treeestablishment(Parameter* parameter,
                        int yearposition,
@@ -43,7 +44,7 @@ void Fire(Parameter* parameter,
                        vector<vector<Weather>>& world_weather_list,
                        vector<vector<Envirgrid>>& world_plot_list);
 void Mortality(Parameter* parameter,
-               // int Jahr,
+               int t,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,

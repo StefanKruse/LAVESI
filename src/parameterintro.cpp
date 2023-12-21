@@ -880,6 +880,9 @@ void Parameterinput(void) {
     // further variables
     parameter[0].tempdiffort = 0.0;
     parameter[0].precdiffort = 0.0;
+	parameter[0].litterlayerburn_mod = 1.0;
+	parameter[0].fireimpactareasize_mod = 1.0;
+	parameter[0].envirgrowthimpacttree_mod = 1.0;
 }
 
 void Getspeciestraits(void)

@@ -257,6 +257,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					tree.twi = sumtwi;
 				}
 
+				tree.envirimpact = parameter[0].envirgrowthimpacttree_mod * tree.envirimpact; // for tuning
+
 				tree.densitywert = tree.densitywert
 								   * pow((1.0 - (0.01 / tree.dbasal)),
 										 parameter[0].densityvaluedbasalinfluence);  // increasing influence by increasing tree height

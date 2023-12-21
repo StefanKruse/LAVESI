@@ -4,6 +4,8 @@
 
 using namespace std;
 
+extern vector<double> wdir, wspd;
+					 
 void Seedoutput(int aktort, double dispersaldistance, float direction, int neueweltcoo) {
     FILE* filepointer;
     string dateiname;
@@ -43,10 +45,11 @@ void Seedoutput(int aktort, double dispersaldistance, float direction, int neuew
     fclose(filepointer);
 }
 
-void Seeddispersal(//int jahr, 
+void Seeddispersal(int yearposition, 
 				   Parameter* parameter, 
 				   vector<VectorList<Seed>>& world_seed_list, 
-				   vector<vector<Envirgrid>>& world_plot_list) {
+				   vector<vector<Envirgrid>>& world_plot_list,
+				   vector<vector<Weather>>& world_weather_list) {
     int aktort = 0;
 
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
@@ -54,9 +57,32 @@ void Seeddispersal(//int jahr,
 
         vector<vector<Envirgrid>>::iterator world_positon_b = (world_plot_list.begin() + aktort);
         vector<Envirgrid>& plot_list = *world_positon_b;
+        vector<vector<Weather>>::iterator world_positon_c = (world_weather_list.begin() + aktort);
+        vector<Weather>& weather_list = *world_positon_c;
 
         // determine the current location, so that in long distance dispersal the target can be determined
         aktort++;
+
+		wspd.clear();
+		wdir.clear();
+		wspd.shrink_to_fit();
+		wdir.shrink_to_fit();
+ 
+		for (int i = 0; i < (signed)weather_list[0].globalyears.size(); i++) {
+			if (weather_list[0].globalyears[i] == yearposition) {
+				const auto& winddir_p = weather_list[0].winddir[i];
+				std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
+				const auto& windspd_p = weather_list[0].windspd[i];
+				std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
+			}
+		}
+		if(wspd.size() == 0) {
+			cout << " Warning, no wind data found, filling with the first available data! " << endl;
+				const auto& winddir_p = weather_list[0].winddir[0];
+				std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
+				const auto& windspd_p = weather_list[0].windspd[0];
+				std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
+		}
 
         // variable for displaying seeds crossing the borders // TODO: move to only used when debugging mode
         int seedleftN = 0, seedleftE = 0, seedleftS = 0, seedleftW = 0;

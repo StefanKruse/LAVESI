@@ -4,6 +4,8 @@
 
 using namespace std;
 
+extern vector<double> wdir, wspd;
+
 void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<Tree>& tree_list) {
     // abiotic influence: calculation of the factors in a function that adds a mortality rate impact
 	// multiple species integration
@@ -59,7 +61,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                        / speciestrait[tree.species].densityvaluemaximumatheight);
             }
 
-            double sapl_mort = speciestrait[tree.species].mortyouth * pow(exp((-1.0 * tree.dbasal) + (double)tree.dbasalmax / 1000), speciestrait[tree.species].mortyouthinfluenceexp);
+            double sapl_mort = (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor) * pow(exp((-1.0 * tree.dbasal) + (double)tree.dbasalmax / 1000), speciestrait[tree.species].mortyouthinfluenceexp);
             double age_mort = speciestrait[tree.species].mortage * agesmort * (10.0 * speciestrait[tree.species].mortbg);
             double growth_mort = speciestrait[tree.species].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp));
             double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert;
@@ -173,7 +175,7 @@ cout << endl;
 }
 
 void Mortality(Parameter* parameter,
-               // int Jahr,
+               int t,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
@@ -187,6 +189,30 @@ void Mortality(Parameter* parameter,
         vector<VectorList<Seed>>::iterator world_positon_s = (world_seed_list.begin() + aktort);
         VectorList<Seed>& seed_list = *world_positon_s;
         aktort++;
+
+		wspd.clear();
+		wdir.clear();
+		wspd.shrink_to_fit();
+		wdir.shrink_to_fit();
+ 
+cout << " weather_list[0].globalyears.size() = " << weather_list[0].globalyears.size() << endl;
+		for (int i = 0; i < (signed)weather_list[0].globalyears.size(); i++) {
+// cout << " yearposition = " << yearposition << " ++ t = " << t << " ---> weather_list[0].globalyears[i] = " << weather_list[0].globalyears[i] << endl;
+			//if (weather_list[0].globalyears[i] == yearposition) {
+			if (weather_list[0].globalyears[i] == (t-1)) {
+				const auto& winddir_p = weather_list[0].winddir[i];
+				std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
+				const auto& windspd_p = weather_list[0].windspd[i];
+				std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
+			}
+		}
+		if(wspd.size() == 0) {
+			cout << " Warning, no wind data found, filling with the first available data! " << endl;
+				const auto& winddir_p = weather_list[0].winddir[0];
+				std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
+				const auto& windspd_p = weather_list[0].windspd[0];
+				std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
+		}
 
 #pragma omp parallel default(shared)
         {

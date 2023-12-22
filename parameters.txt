@@ -79,7 +79,7 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1000000239;				// 50001 is close to Fairbanks
+weatherchoice=1000002075;			// (long int) defines weather and according environmental input
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02

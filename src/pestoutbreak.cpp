@@ -19,6 +19,33 @@ void Pestoutbreak(Parameter* parameter,
 		
 		RandomNumber<double> uniform(0, 1);
 		
+		// structures for output
+		vector<unsigned short int> out_pestoutbreak; // true == 1 
+		// assemble file name:
+		string filename;
+		filename = "output/pestoutbreaks.csv";
+		
+		// trying to open the file for reading
+		FILE* filepointer;
+		filepointer = fopen(filename.c_str(), "r+");
+		// if fopen fails, open a new file + header output
+		if (filepointer == NULL) {
+			filepointer = fopen(filename.c_str(), "w+");
+
+			fprintf(filepointer, "Progress;");
+			fprintf(filepointer, "Yearposition;");
+			fprintf(filepointer, "Pestspeciesname;");
+			fprintf(filepointer, "Pestnumber;");
+			fprintf(filepointer, "Probability;");
+			fprintf(filepointer, "OutbreakIf1;");
+			fprintf(filepointer, "\n");
+
+			if (filepointer == NULL) {
+				fprintf(stderr, "Error: output file for pest outbreaks is missing!\n");
+				exit(1);
+			}
+		}
+
 		// use weather list and pest outbreak probability to compute wether a pest outbreak happens or not. 
 		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
 			cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
@@ -26,6 +53,7 @@ void Pestoutbreak(Parameter* parameter,
 			cout << " weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1] = " << weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1] << endl; 
 			double pestproba_i = weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1];//first elememt is 0
 			if(uniform.draw() < pestproba_i) {//outbreak happens
+				out_pestoutbreak.push_back(1); // record for output
 				// assess which species are affected and how
 				// depending on the pest species number check which trees are affected and by which +mortality=> pestinfectancedamage(fraction 0 to 1, 1000 precision) and +defoliation => defoliation(fraction 0 to 1, 1000 precision)
 				vector<int> treespeciesaffected;		// number of the species following the specieslist definition
@@ -117,7 +145,23 @@ void Pestoutbreak(Parameter* parameter,
 				
 				
 			} // end outbreak happens
+			else {
+				out_pestoutbreak.push_back(0); // record for output
+			}
 		}// end loop pest species		   
+		
+		// data evaluation and output		
+		fseek(filepointer, 0, SEEK_END);
+		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
+			fprintf(filepointer, "%d;", parameter[0].ivort);
+			fprintf(filepointer, "%d;", yearposition);
+			fprintf(filepointer, "%s;", pesttrait[pestspeciesi].pestspeciesname.c_str());
+			fprintf(filepointer, "%d;", pesttrait[pestspeciesi].pestspecies);
+			fprintf(filepointer, "%4.4f;", weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1]);
+			fprintf(filepointer, "%d;", out_pestoutbreak[pestspeciesi-1]);
+			fprintf(filepointer, "\n");
+		}
+		fclose(filepointer);
 	}// end world loop
 
 

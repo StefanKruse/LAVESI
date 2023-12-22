@@ -973,6 +973,7 @@ void Getspeciestraits(void) {
 			speciestrait[counter].biomasswoodfaca= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].biomasswoodfacb= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].lightdemand= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].biomasswoodongree= strtod(strtok(NULL, " "),NULL) ;
 		}
 		counter++;
 	}

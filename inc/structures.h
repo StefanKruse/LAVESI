@@ -396,6 +396,7 @@ struct Speciestraits {
 	double  biomasswoodfaca;
 	double  biomasswoodfacb;
 	int  lightdemand;
+	double biomasswoodongree;
 };
 
 struct Weather {

@@ -81,6 +81,15 @@ void Dataoutput(int t,
                     outputindividuals = true;
                     ausgabedensity = true;
                 }
+            } else if (parameter[0].outputmode == 88888) {  // "normal,gridded"
+                outputcurrencies = true;
+ 
+				if (parameter[0].ivort == 1)  // write full Envirgrid once on sim start
+                    ausgabedensity = true;
+
+                if ( (parameter[0].ivort > 16000) && (parameter[0].ivort < 18000) ) { // for exporting yearly gridded data in a time slot
+                    outputgriddedbiomass = true;
+                }
             } else if (parameter[0].outputmode == 1) {  // "normal,gridded"
                 outputcurrencies = true;
 
@@ -1206,9 +1215,21 @@ void Dataoutput(int t,
 									   unsigned int grid_i = floor((double)tree.ycoo / 1000 / 90) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 90); //90 entered here (before: 30, changed because of DEM resolution)
 
 									   // calculate biomass values for each tree
-									   AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
-									   AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
-
+									   if(speciestrait[tree.species].roi == 1 | speciestrait[tree.species].roi == 2) { 
+											AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
+											AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
+									   } else if(speciestrait[tree.species].roi == 3) {
+										   if (((double)tree.height / 10) > 130) {
+											   double biomasstotal = exp(speciestrait[tree.species].biomassleaffacb + speciestrait[tree.species].biomassleaffaca * log((double) tree.dbreast/10000));
+											   
+											   if(biomasstotal<0) biomasstotal=0.0;
+											   
+											   AGBneedleliving[grid_i] += biomasstotal * (1.0 - speciestrait[tree.species].biomasswoodongree);
+											   AGBwoodliving[grid_i] += biomasstotal * speciestrait[tree.species].biomasswoodongree;
+										   }
+									   } else {
+										   cout << " error region not yet biomass equation" << endl;
+									   }
 									   // aggregate stand level variables
 									   if (((double)tree.height / 10) > 130) {
 													  Stemcount[grid_i]++;

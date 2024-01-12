@@ -134,7 +134,7 @@ void getTemp(	//int aktort,
 
             // pWeather.yworldcoo = aktortyworldcoo;
             // pWeather.xworldcoo = aktortxworldcoo;
-            pWeather.jahr = counter + parameter[0].startjahr - 2;
+            pWeather.jahr = counter - 2;
             pWeather.tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
             if (parameter[0].tempjandiffort != 0.0)
                 pWeather.temp1monthmean = temp1monthmeanbuf + parameter[0].tempjandiffort;
@@ -1243,7 +1243,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             cntr = 0;
 
             jahr = parameter[0].startjahr + t;
-
+			
             if (parameter[0].windsource == 1) {
                 findyr1 = 1979;
                 findyr2 = 2018;
@@ -1252,19 +1252,19 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 findyr2 = 2020;
 			} else if (parameter[0].windsource == 999) {
 				findyr1 = 1;
-				findyr2 = 25070;
+				findyr2 = parameter[0].lastyearweatherdata;
 			} else if (parameter[0].windsource == 998) {
 				findyr1 = 1;
-				findyr2 = 25070;
+				findyr2 = parameter[0].lastyearweatherdata;
 			}
-
+			
             ss.str("");
             ss.clear();
 			
 			ostringstream path; 
 			long int plotcodeNum_scenario;
 			plotcodeNum_scenario = parameter[0].weatherchoice % 100000000;
-	
+			
 			if (plotcodeNum_scenario < 100000) {
 				path << "past25kyr_until2020_wind";
 			} else if (plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000) {

@@ -276,7 +276,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
             // hinterland_maxlength is cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
             for (int yposhint = -10; yposhint > -1 * parameter[0].hinterland_maxlength; yposhint = yposhint - 20) {
                 double jultempi =
-                    weather_list[yearposition].temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
+                    weather_list[yearposition-1].temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
 
                 double hinterheightsi = logmodel_heights_K / (1 + exp(logmodel_heights_Po + logmodel_heights_r * jultempi));
                 int hinterseedsi = (parameter[0].seedflightrate * logmodel_seeds_K

@@ -152,7 +152,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					// calculate the influence of the thawing depth on the tree growth
 
 					if ( (parameter[0].thawing_depth == true) && (cur_plot.maxthawing_depth < speciestrait[tree.species].minactivelayer*10) ) {
-						tree.thawing_depthinfluence = (unsigned short)((200.0 / (speciestrait[tree.species].minactivelayer*10)) * (double)cur_plot.maxthawing_depth);
+						tree.thawing_depthinfluence = (unsigned short) (100 * ((double)cur_plot.maxthawing_depth / speciestrait[tree.species].minactivelayer*10));
 					} else {
 						tree.thawing_depthinfluence = 100;
 					}
@@ -241,7 +241,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					sumthawing_depth /= anzahlflaechen;
 
 					if (sumthawing_depth < (speciestrait[tree.species].minactivelayer*10))
-						tree.thawing_depthinfluence = (unsigned short)((200.0 / (speciestrait[tree.species].minactivelayer*10)) * sumthawing_depth);
+						tree.thawing_depthinfluence = (unsigned short) (100 * (sumthawing_depth / speciestrait[tree.species].minactivelayer*10));
 					else
 						tree.thawing_depthinfluence = 100;
 
@@ -256,6 +256,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					sumtwi /= anzahlflaechen;
 					tree.twi = sumtwi;
 				}
+				
+				tree.envirimpact = tree.envirimpact * 1.4232;
 
 				tree.densitywert = tree.densitywert
 								   * pow((1.0 - (0.01 / tree.dbasal)),
@@ -362,14 +364,11 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 			}
 				// water stress update
 				// ... dependency on local site conditions
-// if(tree.height/10 > 130) cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 				tree.soilhumidity = pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
-// if(tree.height/10 > 130) cout << " ... between: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 				if( (tree.soilhumidity < speciestrait[tree.species].minsoilwater*100) | (tree.soilhumidity > speciestrait[tree.species].maxsoilwater*100) )
 					tree.soilhumidity=0;
 				else
 					tree.soilhumidity=1;
-// if(tree.height/10 > 130) cout << " ... after: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 		}
 	}
 }
@@ -464,7 +463,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				// 1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 				1000.0 * (1.0 - daempfung) * 0.050*4 * std::sqrt(
 				
-					weather_list[yearposition].degreday + elefactor*(weather_list[yearposition].degredaymin - weather_list[yearposition].degreday) // reduction based on per 1000 m
+					weather_list[yearposition-1].degreday + elefactor*(weather_list[yearposition-1].degredaymin - weather_list[yearposition-1].degreday) // reduction based on per 1000 m
 				
 				)*8; // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 4 assumed use for tuning ALT
 // cout << maxthawing_depth << " | " << daempfung << " | " << weather_list[yearposition].degreday<< " & " << weather_list[yearposition].degredaymin << " & " << elefactor << " & " << ((double)pEnvirgrid.elevation / 10) << endl;

@@ -43,6 +43,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int crownstart;          // 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
     unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
     unsigned short int pestinfectancedamage;// 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
+    unsigned long int pestinfection; // numeric value encoding which pest species had an impact on this tree
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced

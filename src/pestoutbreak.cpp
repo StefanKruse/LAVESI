@@ -21,6 +21,8 @@ void Pestoutbreak(Parameter* parameter,
 		
 		// structures for output
 		vector<unsigned short int> out_pestoutbreak; // true == 1 
+		vector<unsigned long int> out_pestdeaths; // true == 1 
+		vector<unsigned long int> out_pestdefoliated; // true == 1 
 		// assemble file name:
 		string filename;
 		filename = "output/pestoutbreaks.csv";
@@ -38,6 +40,8 @@ void Pestoutbreak(Parameter* parameter,
 			fprintf(filepointer, "Pestnumber;");
 			fprintf(filepointer, "Probability;");
 			fprintf(filepointer, "OutbreakIf1;");
+			fprintf(filepointer, "KilledTreeNumber;");
+			fprintf(filepointer, "DefoliatedTreeNumber;");
 			fprintf(filepointer, "\n");
 
 			if (filepointer == NULL) {
@@ -48,12 +52,17 @@ void Pestoutbreak(Parameter* parameter,
 
 		// use weather list and pest outbreak probability to compute wether a pest outbreak happens or not. 
 		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
-			cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
-			
-			cout << " weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1] = " << weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1] << endl; 
-			double pestproba_i = weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1];//first elememt is 0
+
+			if (parameter[0].yearlyvis == true) {
+				cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
+				cout << " weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] = " << weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] << endl; 
+			}
+
+			double pestproba_i = weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1];//first elememt is 0
 			if(uniform.draw() < pestproba_i) {//outbreak happens
 				out_pestoutbreak.push_back(1); // record for output
+				unsigned long int out_pestdeaths_i = 0; // record for output
+				unsigned long int out_pestdefoliated_i = 0; // record for output
 				// assess which species are affected and how
 				// depending on the pest species number check which trees are affected and by which +mortality=> pestinfectancedamage(fraction 0 to 1, 1000 precision) and +defoliation => defoliation(fraction 0 to 1, 1000 precision)
 				vector<int> treespeciesaffected;		// number of the species following the specieslist definition
@@ -135,18 +144,46 @@ void Pestoutbreak(Parameter* parameter,
 							auto& tree = tree_list[tree_i];
 							if(tree.species == treespeciesaffected_i && (uniform.draw() < (treespeciesmortality[i]/100))) {//impact mortality
 								tree.pestinfectancedamage = parameter[0].pest_disturbances_impactfactor * 1.00 * 1000; // 100 percent mortality
+#pragma omp critical
+{
+								out_pestdeaths_i++;
+}
+								if(pestspeciesi == 1) {tree.pestinfection = tree.pestinfection +        1;}
+								if(pestspeciesi == 2) {tree.pestinfection = tree.pestinfection +       10;}
+								if(pestspeciesi == 3) {tree.pestinfection = tree.pestinfection +      100;}
+								if(pestspeciesi == 4) {tree.pestinfection = tree.pestinfection +     1000;}
+								if(pestspeciesi == 5) {tree.pestinfection = tree.pestinfection +    10000;}
+								if(pestspeciesi == 6) {tree.pestinfection = tree.pestinfection +   100000;}
+								if(pestspeciesi == 7) {tree.pestinfection = tree.pestinfection +  1000000;}
 							}
 							if(tree.species == treespeciesaffected_i && (uniform.draw() < (treespeciesdefoliation[i]/100))) {//impact mortality
 								tree.relcrowndamage += parameter[0].pest_disturbances_impactfactor * (treespeciesdefoliationmort[i]/100) * 1000;//add to the damage by fire
+#pragma omp critical
+{
+								out_pestdefoliated_i++;
+}
+								if(tree.pestinfection == 0) {
+									if(pestspeciesi == 1) {tree.pestinfection = tree.pestinfection +        1;}
+									if(pestspeciesi == 2) {tree.pestinfection = tree.pestinfection +       10;}
+									if(pestspeciesi == 3) {tree.pestinfection = tree.pestinfection +      100;}
+									if(pestspeciesi == 4) {tree.pestinfection = tree.pestinfection +     1000;}
+									if(pestspeciesi == 5) {tree.pestinfection = tree.pestinfection +    10000;}
+									if(pestspeciesi == 6) {tree.pestinfection = tree.pestinfection +   100000;}
+									if(pestspeciesi == 7) {tree.pestinfection = tree.pestinfection +  1000000;}
+								}
 							}
 						}// end loop each tree
 					}// end loop impacted species
 				}// if any treespecies are impacted
+				out_pestdeaths.push_back(out_pestdeaths_i);
+				out_pestdefoliated.push_back(out_pestdefoliated_i);
 				
 				
 			} // end outbreak happens
 			else {
 				out_pestoutbreak.push_back(0); // record for output
+				out_pestdeaths.push_back(0);
+				out_pestdefoliated.push_back(0);
 			}
 		}// end loop pest species		   
 		
@@ -157,8 +194,10 @@ void Pestoutbreak(Parameter* parameter,
 			fprintf(filepointer, "%d;", yearposition);
 			fprintf(filepointer, "%s;", pesttrait[pestspeciesi].pestspeciesname.c_str());
 			fprintf(filepointer, "%d;", pesttrait[pestspeciesi].pestspecies);
-			fprintf(filepointer, "%4.4f;", weather_list[yearposition].pestoutbreakprobability[pestspeciesi-1]);
+			fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1]);
 			fprintf(filepointer, "%d;", out_pestoutbreak[pestspeciesi-1]);
+			fprintf(filepointer, "%lu;", out_pestdeaths[pestspeciesi-1]);
+			fprintf(filepointer, "%lu;", out_pestdefoliated[pestspeciesi-1]);
 			fprintf(filepointer, "\n");
 		}
 		fclose(filepointer);

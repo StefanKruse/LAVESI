@@ -11,24 +11,24 @@ double getMaxbasalwachstum(int yearposition,
         if (parameter[0].thawing_depth) {
 			maxbw_help =
 				exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)
-				* (weather_list[yearposition].weatherfactor[tree.species]
-				   + ((weather_list[yearposition].weatherfactormin[tree.species] - weather_list[yearposition].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
+				* (weather_list[yearposition-1].weatherfactor[tree.species]
+				   + ((weather_list[yearposition-1].weatherfactormin[tree.species] - weather_list[yearposition-1].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
 					  / ((double)treerows)))
 				* (((double)tree.thawing_depthinfluence) / 100);
         } else {
 			maxbw_help =
 				exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)
-				* (weather_list[yearposition].weatherfactor[tree.species]
-				   + ((weather_list[yearposition].weatherfactormin[tree.species] - weather_list[yearposition].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
+				* (weather_list[yearposition-1].weatherfactor[tree.species]
+				   + ((weather_list[yearposition-1].weatherfactormin[tree.species] - weather_list[yearposition-1].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
 					  / ((double)treerows)));
         }
     } else if (parameter[0].demlandscape) {
         if (parameter[0].thawing_depth) {
 			maxbw_help =
 				exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)
-				* ((weather_list[yearposition].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+				* ((weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
 					/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-				   + (weather_list[yearposition].weatherfactormin[tree.species]
+				   + (weather_list[yearposition-1].weatherfactormin[tree.species]
 					  * (1
 						 - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
 							   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
@@ -36,9 +36,9 @@ double getMaxbasalwachstum(int yearposition,
         } else {
 			maxbw_help =
 				exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)
-				* ((weather_list[yearposition].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+				* ((weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
 					/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-				   + (weather_list[yearposition].weatherfactormin[tree.species]
+				   + (weather_list[yearposition-1].weatherfactormin[tree.species]
 					  * (1
 						 - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
 							   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))));
@@ -47,11 +47,11 @@ double getMaxbasalwachstum(int yearposition,
         if (parameter[0].thawing_depth) {
                 maxbw_help =
                     exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)
-                    * weather_list[yearposition].weatherfactor[tree.species] * (((double)tree.thawing_depthinfluence) / 100);
+                    * weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.thawing_depthinfluence) / 100);
         } else {
                 maxbw_help =
                     exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)
-                    * weather_list[yearposition].weatherfactor[tree.species];
+                    * weather_list[yearposition-1].weatherfactor[tree.species];
         }
     }
 
@@ -67,24 +67,24 @@ double getMaxbreastwachstum(int yearposition,
         if (parameter[0].thawing_depth == true) {
                 maxbrw_help = exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast
                                   + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast)
-                              * (weather_list[yearposition].weatherfactor[tree.species]
-                                 + ((weather_list[yearposition].weatherfactormin[tree.species] - weather_list[yearposition].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
+                              * (weather_list[yearposition-1].weatherfactor[tree.species]
+                                 + ((weather_list[yearposition-1].weatherfactormin[tree.species] - weather_list[yearposition-1].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
                                     / ((double)treerows)))
                               * (((double)tree.thawing_depthinfluence) / 100);
         } else {
                 maxbrw_help = exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast
                                   + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast)
-                              * (weather_list[yearposition].weatherfactor[tree.species]
-                                 + ((weather_list[yearposition].weatherfactormin[tree.species] - weather_list[yearposition].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
+                              * (weather_list[yearposition-1].weatherfactor[tree.species]
+                                 + ((weather_list[yearposition-1].weatherfactormin[tree.species] - weather_list[yearposition-1].weatherfactor[tree.species]) * ((double)tree.ycoo / 1000)
                                     / ((double)treerows)));
         }
     } else if (parameter[0].demlandscape) {
         if (parameter[0].thawing_depth) {
                 maxbrw_help =
                     exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast)
-                    * ((weather_list[yearposition].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                    * ((weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                         / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                       + (weather_list[yearposition].weatherfactormin[tree.species]
+                       + (weather_list[yearposition-1].weatherfactormin[tree.species]
                           * (1
                              - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                    / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
@@ -92,9 +92,9 @@ double getMaxbreastwachstum(int yearposition,
         } else {
                 maxbrw_help = exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast
                                   + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast)
-                              * ((weather_list[yearposition].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                              * ((weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                                 + (weather_list[yearposition].weatherfactormin[tree.species]
+                                 + (weather_list[yearposition-1].weatherfactormin[tree.species]
                                     * (1
                                        - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                              / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))));
@@ -103,12 +103,12 @@ double getMaxbreastwachstum(int yearposition,
         if (parameter[0].thawing_depth == true) {
                 maxbrw_help = exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast
                                   + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast)
-                              * weather_list[yearposition].weatherfactor[tree.species] * (((double)tree.thawing_depthinfluence) / 100);
+                              * weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.thawing_depthinfluence) / 100);
         } else {
                 maxbrw_help = exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast
                                   + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast)
-                              * weather_list[yearposition].weatherfactor[tree.species];
-        }
+                              * weather_list[yearposition-1].weatherfactor[tree.species];
+		}
     }
     return (maxbrw_help);
 }
@@ -150,6 +150,8 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 					cout << "tree growth unlimited" << basalwachstum << endl;
 					cout << "tree.dbasal = " << tree.dbasal << endl;
 					basalwachstum = 0.0;
+				}
+
 				if (tree.growing == true) {
 					tree.dbasal += basalwachstum;
 				}
@@ -203,16 +205,18 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						cout << "tree growth breast unlimited = " << breastwachstum << endl;
 						cout << "tree.dbreast = " << tree.dbreast << endl;
 						breastwachstum = 0.0;
+					}
 					if (tree.growing == true) {
 						tree.dbreast += breastwachstum;
 					}
 
 					tree.dbreastrel = 1000;
 					if (parameter[0].relgrowthinfluence == 1) {
-						if (maxbreastwachstum <= 0.0)
+						if (maxbreastwachstum <= 0.0) {
 							tree.dbreastrel = 0;
-						else
+						} else {
 							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum) * tree.soilhumidity;
+						}
 					}
 				}
 			}

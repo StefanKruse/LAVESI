@@ -54,7 +54,7 @@ firegapoutput=0;					// (int 0,1) Annual "fire gap" output switch
 firegapoutput_threshold=0.5		 	// (double 0.00,1.00) If firepapoutput=1, determine here the threshold of fire probability/intensity above which fire gap output should be written (default = 0.5)
 firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many years post-fire the output should be written (default=30)
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
-allow_pest_disturbances=1;			// (int 0,1 -> bool) Switch to allow calculation and impact of pest species (currently implemented for Alaska)
+allow_pest_disturbances=0;			// (int 0,1 -> bool) Switch to allow calculation and impact of pest species (currently implemented for Alaska)
 pest_disturbances_impactfactor=1.0; // (double 0.00,1.00)can be 1 or a number between 0 and 1 to reduce the impact of direct mortality and defoliation mortality on the trees from pest species outbreak
 
 // 0.4 Computation environment
@@ -79,7 +79,7 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1000002075;			// (long int) defines weather and according environmental input
+weatherchoice=1026003023;			// (long int) defines weather and according environmental input , now example is future
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -184,9 +184,9 @@ windsource=999
 										// ... 998==climate data 2 for all plots
 									
 // 1.2 -----> Simulation run characteristics
-lastyearweatherdata=25070;			// (int) determined by the input data series (final year + 1)
-simduration=15070;					// (int) duration of the simulation period depending on the available weather data series
-stopatyear=25071;					// (int) simulation is stopped after this year
+lastyearweatherdata=25150;			// (int) determined by the input data series (final year + 1)
+simduration=25150;					// (int) duration of the simulation period depending on the available weather data series
+stopatyear=25151;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										// ...   0==without spin up phase
@@ -204,6 +204,7 @@ roi=3;								// (int) determine region of interest for species
 									// ... 0== all
 									// ... 1==Siberia
 									// ... 2==North America
+									// ... 3==Alaska
 
 // 1.3 -----> Plot number
 mapxlength=1;						// (int) number of parallel executed plots for each climate

@@ -11,11 +11,33 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 		if(speciestrait[species_counter].number == 0)
 			break;
 
-		speciestrait[species_counter].yearlycalcofanstiegweathermort=(60*weather_list[yearposition_help].janisothermrestriktion[species_counter]+60*weather_list[yearposition_help].julisothermrestriktion+60*weather_list[yearposition_help].nddrestriktion); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
-		speciestrait[species_counter].yearlycalcofanstiegweathermortmin=(60*weather_list[yearposition_help].janisothermrestriktionmin[species_counter]+60*weather_list[yearposition_help].julisothermrestriktion+60*weather_list[yearposition_help].nddrestriktion); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
+		speciestrait[species_counter].yearlycalcofanstiegweathermort=(60*weather_list[yearposition_help-1].janisothermrestriktion[species_counter]+60*weather_list[yearposition_help-1].julisothermrestriktion+60*weather_list[yearposition_help-1].nddrestriktion); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
+		speciestrait[species_counter].yearlycalcofanstiegweathermortmin=(60*weather_list[yearposition_help-1].janisothermrestriktionmin[species_counter]+60*weather_list[yearposition_help-1].julisothermrestriktion+60*weather_list[yearposition_help-1].nddrestriktion); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
 	}
 
     RandomNumber<double> uniform(0, 1);
+	unsigned int pestdeaths1 = 0;
+	unsigned int pestdeaths2 = 0;
+	unsigned int pestdeaths3 = 0;
+	unsigned int pestdeaths4 = 0;
+	unsigned int pestdeaths5 = 0;
+	unsigned int pestdeaths6 = 0;
+	unsigned int pestdeaths7 = 0;
+	unsigned int pestcrowndamage1 = 0;
+	unsigned int pestcrowndamage2 = 0;
+	unsigned int pestcrowndamage3 = 0;
+	unsigned int pestcrowndamage4 = 0;
+	unsigned int pestcrowndamage5 = 0;
+	unsigned int pestcrowndamage6 = 0;
+	unsigned int pestcrowndamage7 = 0;
+	unsigned int pestcrowndamagesurvivor1 = 0;
+	unsigned int pestcrowndamagesurvivor2 = 0;
+	unsigned int pestcrowndamagesurvivor3 = 0;
+	unsigned int pestcrowndamagesurvivor4 = 0;
+	unsigned int pestcrowndamagesurvivor5 = 0;
+	unsigned int pestcrowndamagesurvivor6 = 0;
+	unsigned int pestcrowndamagesurvivor7 = 0;
+
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
     for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
         auto& tree = tree_list[tree_i];
@@ -23,9 +45,6 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
         if (tree.growing == true) {
             double agesmort = 0.0;
 			agesmort = tree.age / speciestrait[tree.species].maximumage;
-            // if (tree.age > speciestrait[tree.species].maximumage) {  // if maximal age is exceeded an additional factor occurs
-                // agesmort = 1.0;
-            // }
 			
             double windthrowmort = 0.0;
 			windthrowmort = speciestrait[tree.species].mwindthrow * ((double)tree.height / 10) / (65535 / 10);// scaled to maximum of height in model of 65 m
@@ -37,7 +56,6 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 					firecrowndamagemort = 0.0;
 				else if(firecrowndamagemort >= 1.0)
 					firecrowndamagemort = 1.0 - speciestrait[tree.species].resprouting*speciestrait[tree.species].relbarkthickness;
-				tree.relcrowndamage = 0*1000;
 			}
 
 			double pestoutbreakmort = 0.0;
@@ -67,7 +85,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                        / speciestrait[tree.species].densityvaluemaximumatheight);
             }
 
-			double sapl_mort_factor = 0.3523;
+			double sapl_mort_factor = 0.3948;
             double sapl_mort = (speciestrait[tree.species].mortyouth-sapl_mort_factor) * pow(exp((-1.0 * tree.dbasal) + (double)tree.dbasalmax / 1000), speciestrait[tree.species].mortyouthinfluenceexp);
             double age_mort = speciestrait[tree.species].mortage * agesmort * (10.0 * speciestrait[tree.species].mortbg);
             double growth_mort = speciestrait[tree.species].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp));
@@ -81,8 +99,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                                         + (((1.0 - 0.5) / 0.5)
                                            * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort
                                                   - ((speciestrait[tree.species].yearlycalcofanstiegweathermort - speciestrait[tree.species].yearlycalcofanstiegweathermort) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                                 * (weather_list[yearposition_help].weatherfactor[tree.species]
-                                                    + ((weather_list[yearposition_help].weatherfactormin[tree.species] - weather_list[yearposition_help].weatherfactor[tree.species])
+                                                 * (weather_list[yearposition_help-1].weatherfactor[tree.species]
+                                                    + ((weather_list[yearposition_help-1].weatherfactormin[tree.species] - weather_list[yearposition_help-1].weatherfactor[tree.species])
                                                        * ((double)tree.ycoo / 1000) / ((double)treerows)))
                                                  * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
                                                        + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
@@ -94,9 +112,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                           + (((1.0 - 0.5) / 0.5)
                              * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort
                                     - ((speciestrait[tree.species].yearlycalcofanstiegweathermort - speciestrait[tree.species].yearlycalcofanstiegweathermort) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                   * ((weather_list[yearposition_help].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                   * ((weather_list[yearposition_help-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                        / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                                      + (weather_list[yearposition_help].weatherfactormin[tree.species]
+                                      + (weather_list[yearposition_help-1].weatherfactormin[tree.species]
                                          * (1
                                             - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                                   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
@@ -107,7 +125,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                                   - (1.0
                                      / (1.0
                                         + (((1.0 - 0.5) / 0.5)
-                                           * exp(speciestrait[tree.species].yearlycalcofanstiegweathermort * weather_list[yearposition_help].weatherfactor[tree.species]
+                                           * exp(speciestrait[tree.species].yearlycalcofanstiegweathermort * weather_list[yearposition_help-1].weatherfactor[tree.species]
                                                  * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
                                                        + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
             }
@@ -120,40 +138,35 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             double dry_mort = 0.0;
             if (parameter[0].lineartransect) {
                 dry_mort = speciestrait[tree.species].mdrought
-                           * (weather_list[yearposition_help].droughtmort
-                              + ((weather_list[yearposition_help].droughtmortmin - weather_list[yearposition_help].droughtmort) * ((double)tree.ycoo / 1000)
+                           * (weather_list[yearposition_help-1].droughtmort
+                              + ((weather_list[yearposition_help-1].droughtmortmin - weather_list[yearposition_help-1].droughtmort) * ((double)tree.ycoo / 1000)
                                  / ((double)treerows)))
                            * pow((1.0 / (double)tree.height / 10), 0.5);
             } else if (parameter[0].demlandscape) {
                 dry_mort = speciestrait[tree.species].mdrought
-                           * ((weather_list[yearposition_help].droughtmort * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                           * ((weather_list[yearposition_help-1].droughtmort * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                              + (weather_list[yearposition_help].droughtmortmin
+                              + (weather_list[yearposition_help-1].droughtmortmin
                                  * (1
                                     - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
                                           / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
                            * pow((1.0 / (double)tree.height / 10), 0.5);
             } else {
-                dry_mort = speciestrait[tree.species].mdrought * weather_list[yearposition_help].droughtmort * pow((1.0 / (double)tree.height / 10), 0.5);
+                dry_mort = speciestrait[tree.species].mdrought * weather_list[yearposition_help-1].droughtmort * pow((1.0 / (double)tree.height / 10), 0.5);
             }
 
             // calculating the mortality rate of the tree considering the factors of each mortality rate
             double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort + pestoutbreakmort;
 			
-			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
+			// adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
 			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
-			// treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); // -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
-			treemortality = treemortality + (double)tree.firedamage * pow((100*1/(double)tree.height), 0.5*0.5); //adapted version
+			treemortality = treemortality + (double)tree.firedamage * pow((100*1/(double)tree.height), 0.5*0.5);
 			
 			} else if ((parameter[0].firemode != 0) & (parameter[0].firemode != 112)) {
 				treemortality = treemortality + (double)tree.firedamage;
 			} else if (parameter[0].firemode == 0) {
 				treemortality = treemortality;
 			}
-			
-			// if (tree.firedamage > 0) {
-			// cout << "treemortality: " << treemortality << " - tree.firedamage: " << tree.firedamage << endl;
-			// }
 
             if (treemortality > 1.0) {
                 treemortality = 1.0;
@@ -161,24 +174,112 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                 treemortality = 0.0;
             }
 
-		// if((double)tree.height / 10 > 10)
-		// cout << (double)tree.height / 10 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort <<  " - " << tree.soilhumidity << endl;
-
             // determine if a tree dies
 			if ( ((double) uniform.draw() < treemortality) || (tree.envirimpact <= 0) ) {
+				// add output for pest outbreak 
+				if(tree.pestinfection > 0) {
+#pragma omp critical
+{
+					if(tree.pestinfection ==        1) {pestdeaths1++;if(tree.relcrowndamage > 0) {pestcrowndamage1++;}}
+					if(tree.pestinfection ==       10) {pestdeaths2++;if(tree.relcrowndamage > 0) {pestcrowndamage2++;}}
+					if(tree.pestinfection ==      100) {pestdeaths3++;if(tree.relcrowndamage > 0) {pestcrowndamage3++;}}
+					if(tree.pestinfection ==     1000) {pestdeaths4++;if(tree.relcrowndamage > 0) {pestcrowndamage4++;}}
+					if(tree.pestinfection ==    10000) {pestdeaths5++;if(tree.relcrowndamage > 0) {pestcrowndamage5++;}}
+					if(tree.pestinfection ==   100000) {pestdeaths6++;if(tree.relcrowndamage > 0) {pestcrowndamage6++;}}
+					if(tree.pestinfection ==  1000000) {pestdeaths7++;if(tree.relcrowndamage > 0) {pestcrowndamage7++;}}
+}
+				}
                 tree.growing = false;
-				// if (tree.firedamage > 0)
-					// cout << "tree_list[tree_i].growing = " << tree_list[tree_i].growing;
-                tree_list.remove(tree_i);
-                // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
-				// if (tree.firedamage > 0)
-					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;				
-			// cout << " ### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | tree.firedamage=" << (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)) << " | Treemortg=" << Treemortg << endl;
+                tree_list.remove(tree_i);		
+            } else {
+				if(tree.pestinfection > 0) {// count not dead but damaged trees
+#pragma omp critical
+{
+					if(tree.pestinfection ==        1) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor1++;}}
+					if(tree.pestinfection ==       10) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor2++;}}
+					if(tree.pestinfection ==      100) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor3++;}}
+					if(tree.pestinfection ==     1000) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor4++;}}
+					if(tree.pestinfection ==    10000) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor5++;}}
+					if(tree.pestinfection ==   100000) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor6++;}}
+					if(tree.pestinfection ==  1000000) {if(tree.relcrowndamage > 0) {pestcrowndamagesurvivor7++;}}
+}
+				}
+				tree.relcrowndamage = 0*1000;
+				tree.pestinfection = 0;								 
             }
         }
     }
     tree_list.consolidate();
-cout << endl;
+	
+	// output mortality by pest outbreaks
+		string filename;
+		filename = "output/pestoutbreaks_mortality.csv";
+		// trying to open the file for reading
+		FILE* filepointer;
+		filepointer = fopen(filename.c_str(), "r+");
+		// if fopen fails, open a new file + header output
+		if (filepointer == NULL) {
+			filepointer = fopen(filename.c_str(), "w+");
+
+			fprintf(filepointer, "Progress;");
+			fprintf(filepointer, "Yearposition;");
+			fprintf(filepointer, "Pest1deaths;");
+			fprintf(filepointer, "Pest2deaths;");
+			fprintf(filepointer, "Pest3deaths;");
+			fprintf(filepointer, "Pest4deaths;");
+			fprintf(filepointer, "Pest5deaths;");
+			fprintf(filepointer, "Pest6deaths;");
+			fprintf(filepointer, "Pest7deaths;");
+			fprintf(filepointer, "Pest1defoliated;");
+			fprintf(filepointer, "Pest2defoliated;");
+			fprintf(filepointer, "Pest3defoliated;");
+			fprintf(filepointer, "Pest4defoliated;");
+			fprintf(filepointer, "Pest5defoliated;");
+			fprintf(filepointer, "Pest6defoliated;");
+			fprintf(filepointer, "Pest7defoliated;");
+			fprintf(filepointer, "Pest1defoliatedSurvivor;");
+			fprintf(filepointer, "Pest2defoliatedSurvivor;");
+			fprintf(filepointer, "Pest3defoliatedSurvivor;");
+			fprintf(filepointer, "Pest4defoliatedSurvivor;");
+			fprintf(filepointer, "Pest5defoliatedSurvivor;");
+			fprintf(filepointer, "Pest6defoliatedSurvivor;");
+			fprintf(filepointer, "Pest7defoliatedSurvivor;");
+			fprintf(filepointer, "\n");
+
+			if (filepointer == NULL) {
+				fprintf(stderr, "Error: output file for pest outbreaks is missing!\n");
+				exit(1);
+			}
+		}
+
+		// data utput		
+		fseek(filepointer, 0, SEEK_END);
+			fprintf(filepointer, "%d;", parameter[0].ivort);
+			fprintf(filepointer, "%d;", yearposition_help-1);
+			fprintf(filepointer, "%d;", pestdeaths1);
+			fprintf(filepointer, "%d;", pestdeaths2);
+			fprintf(filepointer, "%d;", pestdeaths3);
+			fprintf(filepointer, "%d;", pestdeaths4);
+			fprintf(filepointer, "%d;", pestdeaths5);
+			fprintf(filepointer, "%d;", pestdeaths6);
+			fprintf(filepointer, "%d;", pestdeaths7);
+			fprintf(filepointer, "%d;", pestcrowndamage1);
+			fprintf(filepointer, "%d;", pestcrowndamage2);
+			fprintf(filepointer, "%d;", pestcrowndamage3);
+			fprintf(filepointer, "%d;", pestcrowndamage4);
+			fprintf(filepointer, "%d;", pestcrowndamage5);
+			fprintf(filepointer, "%d;", pestcrowndamage6);
+			fprintf(filepointer, "%d;", pestcrowndamage7);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor1);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor2);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor3);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor4);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor5);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor6);
+			fprintf(filepointer, "%d;", pestcrowndamagesurvivor7);
+			fprintf(filepointer, "\n");
+
+		fclose(filepointer);
 }
 
 void Mortality(Parameter* parameter,

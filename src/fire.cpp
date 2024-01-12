@@ -57,122 +57,122 @@ void Fire(Parameter* parameter,
 		// unsigned short int firethresh3 = 7.5;
 		
 		// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
-		if (weather_list[yearposition].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
-		} else if ((weather_list[yearposition].fireindex1 >= firethresh1) && (weather_list[yearposition].fireindex1 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
+		} else if ((weather_list[yearposition-1].fireindex1 >= firethresh1) && (weather_list[yearposition-1].fireindex1 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex1 > firethresh2) && (weather_list[yearposition].fireindex1 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex1 > firethresh2) && (weather_list[yearposition-1].fireindex1 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex1 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex1 > firethresh3){
 			n_extremeweather++;
 		}
 			
 		// cout << "February fire index =" << weather_list[yearposition].fireindex2  << endl;
-		if (weather_list[yearposition].fireindex2 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex2 >= firethresh1) && (weather_list[yearposition].fireindex2 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex2 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex2 >= firethresh1) && (weather_list[yearposition-1].fireindex2 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex2 > firethresh2) && (weather_list[yearposition].fireindex2 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex2 > firethresh2) && (weather_list[yearposition-1].fireindex2 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex2 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex2 > firethresh3){
 			n_extremeweather++;
 		}
 			
 		// cout << "March fire index =" << weather_list[yearposition].fireindex3  << endl;
-		if (weather_list[yearposition].fireindex3 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex3 >= firethresh1) && (weather_list[yearposition].fireindex3 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex3 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex3 >= firethresh1) && (weather_list[yearposition-1].fireindex3 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex3 > firethresh2) && (weather_list[yearposition].fireindex3 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex3 > firethresh2) && (weather_list[yearposition-1].fireindex3 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex3 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex3 > firethresh3){
 			n_extremeweather++;
 		}
 			
 		// cout << "April fire index =" << weather_list[yearposition].fireindex4  << endl;
-		if (weather_list[yearposition].fireindex4 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex4 >= firethresh1) && (weather_list[yearposition].fireindex4 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex4 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex4 >= firethresh1) && (weather_list[yearposition-1].fireindex4 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex4 > firethresh2) && (weather_list[yearposition].fireindex4 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex4 > firethresh2) && (weather_list[yearposition-1].fireindex4 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex4 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex4 > firethresh3){
 			n_extremeweather++;
 		}
 			
 		// cout << "May fire index =" << weather_list[yearposition].fireindex5  << endl;
-		if (weather_list[yearposition].fireindex5 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex5 >= firethresh1) && (weather_list[yearposition].fireindex5 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex5 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex5 >= firethresh1) && (weather_list[yearposition-1].fireindex5 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex5 > firethresh2) && (weather_list[yearposition].fireindex5 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex5 > firethresh2) && (weather_list[yearposition-1].fireindex5 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex5 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex5 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "June fire index =" << weather_list[yearposition].fireindex6  << endl;
-		if (weather_list[yearposition].fireindex6 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex6 >= firethresh1) && (weather_list[yearposition].fireindex6 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex6 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex6 >= firethresh1) && (weather_list[yearposition-1].fireindex6 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex6 > firethresh2) && (weather_list[yearposition].fireindex6 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex6 > firethresh2) && (weather_list[yearposition-1].fireindex6 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex6 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex6 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "July fire index =" << weather_list[yearposition].fireindex7  << endl;
-		if (weather_list[yearposition].fireindex7 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex7 >= firethresh1) && (weather_list[yearposition].fireindex7 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex7 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex7 >= firethresh1) && (weather_list[yearposition-1].fireindex7 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex7 > firethresh2) && (weather_list[yearposition].fireindex7 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex7 > firethresh2) && (weather_list[yearposition-1].fireindex7 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex7 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex7 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "August fire index =" << weather_list[yearposition].fireindex8  << endl;
-		if (weather_list[yearposition].fireindex8 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex8 >= firethresh1) && (weather_list[yearposition].fireindex8 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex8 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex8 >= firethresh1) && (weather_list[yearposition-1].fireindex8 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex8 > firethresh2) && (weather_list[yearposition].fireindex8 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex8 > firethresh2) && (weather_list[yearposition-1].fireindex8 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex8 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex8 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "September fire index =" << weather_list[yearposition].fireindex9  << endl;
-		if (weather_list[yearposition].fireindex9 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex9 >= firethresh1) && (weather_list[yearposition].fireindex9 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex9 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex9 >= firethresh1) && (weather_list[yearposition-1].fireindex9 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex9 > firethresh2) && (weather_list[yearposition].fireindex9 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex9 > firethresh2) && (weather_list[yearposition-1].fireindex9 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex9 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex9 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "October fire index =" << weather_list[yearposition].fireindex10  << endl;
-		if (weather_list[yearposition].fireindex10 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex10 >= firethresh1) && (weather_list[yearposition].fireindex10 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex10 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex10 >= firethresh1) && (weather_list[yearposition-1].fireindex10 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex10 > firethresh2) && (weather_list[yearposition].fireindex10 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex10 > firethresh2) && (weather_list[yearposition-1].fireindex10 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex10 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex10 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "November fire index =" << weather_list[yearposition].fireindex11  << endl;
-		if (weather_list[yearposition].fireindex11 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex11 >= firethresh1) && (weather_list[yearposition].fireindex11 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex11 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex11 >= firethresh1) && (weather_list[yearposition-1].fireindex11 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex11 > firethresh2) && (weather_list[yearposition].fireindex11 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex11 > firethresh2) && (weather_list[yearposition-1].fireindex11 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex11 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex11 > firethresh3){
 			n_extremeweather++;
 		}
 
 		// cout << "December fire index =" << weather_list[yearposition].fireindex12  << endl;
-		if (weather_list[yearposition].fireindex12 < firethresh1){
-		} else if ((weather_list[yearposition].fireindex12 >= firethresh1) && (weather_list[yearposition].fireindex12 <= firethresh2)){
+		if (weather_list[yearposition-1].fireindex12 < firethresh1){
+		} else if ((weather_list[yearposition-1].fireindex12 >= firethresh1) && (weather_list[yearposition-1].fireindex12 <= firethresh2)){
 			n_mildweather++;
-		} else if ((weather_list[yearposition].fireindex12 > firethresh2) && (weather_list[yearposition].fireindex12 <= firethresh3)){
+		} else if ((weather_list[yearposition-1].fireindex12 > firethresh2) && (weather_list[yearposition-1].fireindex12 <= firethresh3)){
 			n_severeweather++;
-		} else if (weather_list[yearposition].fireindex12 > firethresh3){
+		} else if (weather_list[yearposition-1].fireindex12 > firethresh3){
 			n_extremeweather++;
 		}
 		
@@ -189,12 +189,14 @@ void Fire(Parameter* parameter,
 			fireprobabilityrating = 1;
 		}
 		
-		weather_list[yearposition].FPR = fireprobabilityrating;
-		cout << endl << "\tn_mildweather:" << (n_mildweather) << endl;	// optional output during simulation
-		cout << "\tn_severeweather:" << (n_severeweather) << endl;	// optional output during simulation
-		cout << "\tn_extremeweather:" << (n_extremeweather) << endl;	// optional output during simulation
-		cout << "\tAnnual FPR:" << fireprobabilityrating << endl;	// optional output during simulation
+		weather_list[yearposition-1].FPR = fireprobabilityrating;
 		
+        if (parameter[0].yearlyvis == true) {
+			cout << endl << "\tn_mildweather:" << (n_mildweather) << endl;	// optional output during simulation
+			cout << "\tn_severeweather:" << (n_severeweather) << endl;	// optional output during simulation
+			cout << "\tn_extremeweather:" << (n_extremeweather) << endl;	// optional output during simulation
+			cout << "\tAnnual FPR:" << fireprobabilityrating << endl;	// optional output during simulation
+		}
 
 		// ####################################	
 		// ########## Fire occurence ########################################################################################################
@@ -237,7 +239,7 @@ void Fire(Parameter* parameter,
 				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
 				fireimpactareasize = 5 * treecols; // To cover the complete plot area
 				}
-			
+	fireimpactareasize = 	fireimpactareasize * 601.9219;	
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 
 			// double fireimpactareasize = fireprobabilityrating * (treecols*treerows); // determines affected area; currently depending on FPR range (0-1) - so if FPR = 0.1, then 10% of the area burn.

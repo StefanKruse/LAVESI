@@ -77,14 +77,13 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
         if (parameter[0].windsource == 1) {
             findyr1 = 1979;
-            findyr2 = 2012;  // TODO: adjust to available data
+            findyr2 = 2012;
         } else if (parameter[0].windsource == 999) {
 			findyr1 = 1;
-			findyr2 = 25070;
+			findyr2 = parameter[0].lastyearweatherdata;
 	} else if (parameter[0].windsource == 998) {
 			findyr1 = 1;
-			findyr2 = 25070;
-
+			findyr2 = parameter[0].lastyearweatherdata;
 		}
     }
 
@@ -163,25 +162,6 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     cout << "Treeestablishment(" << elapsed.count() << ")+";
 #endif
 
-/*	if(parameter[0].ivort % 20 == 0){// test fire impact
-        for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
-            VectorList<Tree>& tree_list = *posw;
-
-#pragma omp parallel for default(shared) private(uniform) schedule(guided)
-			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
-				auto& tree = tree_list[tree_i];
-
-				if (tree.growing == true){
-					if(tree.xcoo/1000 > 2500){ // half of the plot for testing
-						tree.crownstart = 500*10; // flames reach 500 cm high
-						tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000; // update relative crown damage for mortality
-// cout << tree.xcoo << " <- " << tree.crownstart/10 << " ... " << tree.height/10 << " ... " << tree.relcrowndamage/1000 << endl;
-					}
-				}
-			}
-		}
-	}
-*/
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
@@ -239,7 +219,6 @@ void Spinupphase() {
 
         printf("\nSpin up phase:");
         do {
-            parameter[0].ivort++;
 
             int firstyear = 0;
             int lastyear = 0;
@@ -261,6 +240,7 @@ void Spinupphase() {
             // go through all functions for vegetation dynamics
             vegetationDynamics(yearposition, jahr, t);
 
+            parameter[0].ivort++;
         } while (parameter[0].ivort < parameter[0].ivortmax);
 
     } else if (parameter[0].ivortmax > 0 && parameter[0].stabilperiod == true) {
@@ -272,8 +252,6 @@ void Spinupphase() {
         double stabilerrorthreshold = 0.1;
         bool stabilized = false;
         do {
-            parameter[0].ivort++;
-
             int firstyear = 0, lastyear = 0;
             int startlag = 5;
 
@@ -355,6 +333,8 @@ void Spinupphase() {
                 || stabilerror <= stabilerrorthreshold || parameter[0].ivort > parameter[0].ivortmax) {
                 stabilized = true;
             }
+			
+            parameter[0].ivort++;
         } while (stabilized != true);
     }
 
@@ -364,7 +344,7 @@ void Spinupphase() {
 void Yearsteps() {
     printf("\n\nstarting yearly time steps...\n");
 
-    for (int t = 0; t < parameter[0].simduration; t++) {
+    for (int t = 1; t <= parameter[0].simduration; t++) {
         parameter[0].ivort++;
 
         // calculate current year and print a summary of the year
@@ -375,6 +355,13 @@ void Yearsteps() {
         if (parameter[0].yearlyvis == true) {
             printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr,
                    t, parameter[0].simduration);
+
+				cout << " parameter[0].ivort = " << parameter[0].ivort << endl;
+				cout << " jahr = " << jahr << endl;
+				cout << " yearposition = " << yearposition << endl;
+				cout << " t = " << t << endl;
+				cout << " world_weather_list[0][0].jahr = " << world_weather_list[0][0].jahr << endl;
+	 
         }
 
         // go through all functions for vegetation dynamics
@@ -435,7 +422,6 @@ void Yearsteps() {
                 cout << "     Length of a simulation=" << ((parameter[0].simduration - (2011 - parameter[0].resetyear)) + 1) << endl;
 
                 for (int t = ((parameter[0].simduration - (2011 - parameter[0].resetyear)) + 1); t < parameter[0].simduration; t++) {
-                    parameter[0].ivort++;
 
                     int jahr = parameter[0].startjahr + t;
 
@@ -461,6 +447,8 @@ void Yearsteps() {
                         Savealllists();
                         cout << "At year= " << jahr << " all saved!" << endl << endl;
                     }
+
+                    parameter[0].ivort++;
                 }
 
                 // restore initial values

@@ -156,12 +156,18 @@ void Dataoutput(int t,
                 }
             } else if (parameter[0].outputmode == 99) {  // "test"
 				outputcurrencies = true;
-                if ((parameter[0].ivort % 20 == 0)) {
+                if ((parameter[0].ivort % 100 == 0)) {
 					outputcurrencies = true;
                     ausgabedensity = true;
                     outputgriddedbiomass = true;
                     outputindividuals = true;
                 }
+                if ( ((int)parameter[0].ivort >= (parameter[0].simduration-100)) && (parameter[0].ivort % 5 == 0) ) {// last 100 years more detailed output
+					outputcurrencies = true;
+                    ausgabedensity = true;
+                    outputgriddedbiomass = true;
+                    outputindividuals = true;
+                }							 
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
                
                 if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
@@ -451,7 +457,7 @@ void Dataoutput(int t,
 		for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
 			vector<Weather>& weather_list = *posw;
 			
-			fireprobabilityrating = weather_list[yearposition].FPR;
+			fireprobabilityrating = weather_list[yearposition-1].FPR;
 			
 		}
 
@@ -727,17 +733,17 @@ void Dataoutput(int t,
             // weather
             fprintf(filepointer, "%ld;", parameter[0].weatherchoice);
             // fprintf(filepointer, "%d;", parameter[0].starttrees);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempyearmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp1monthmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].temp7monthmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].tempmeanjja);
-            fprintf(filepointer, "%d;", weather_list[yearposition].vegetationperiodlength);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].activeairtemp);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].degreday);
-            fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsum);
-            fprintf(filepointer, "%4.2f;", weather_list[yearposition].precipitationsumjja);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[1]);//TODO: add here for all species output
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition].weatherfactor[2]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].tempyearmean);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp1monthmean);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp7monthmean);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].tempmeanjja);
+            fprintf(filepointer, "%d;", weather_list[yearposition-1].vegetationperiodlength);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].activeairtemp);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].degreday);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition-1].precipitationsum);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition-1].precipitationsumjja);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].weatherfactor[1]);//TODO: add here for all species output
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].weatherfactor[2]);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 			// Fire
 			fprintf(filepointer, "%d;", firecells); // ###FIRE###
@@ -1175,6 +1181,10 @@ void Dataoutput(int t,
 					AGBneedleliving.resize(deminputdimension_y * deminputdimension_x, 0);
 					vector<double> AGBwoodliving;
 					AGBwoodliving.resize(deminputdimension_y * deminputdimension_x, 0);
+					vector<double> AGBneedleliving_recruits;
+					AGBneedleliving_recruits.resize(deminputdimension_y * deminputdimension_x, 0);
+					vector<double> AGBwoodliving_recruits;
+					AGBwoodliving_recruits.resize(deminputdimension_y * deminputdimension_x, 0);
 					vector<unsigned int> Stemcount;
 					Stemcount.resize(deminputdimension_y * deminputdimension_x, 0);
 					vector<double> Basalarea;
@@ -1212,20 +1222,27 @@ void Dataoutput(int t,
 					  
 					   if ((tree.species == speciesnumber_i) & (tree.growing == true)) {
 									  // calculate grid position from x/y coordinates
-									   unsigned int grid_i = floor((double)tree.ycoo / 1000 / 90) * deminputdimension_x + floor((double)tree.xcoo / 1000 / 90); //90 entered here (before: 30, changed because of DEM resolution)
+									   unsigned int grid_i = floor((double)tree.ycoo / 1000 / parameter[0].demresolution) * deminputdimension_x + floor((double)tree.xcoo / 1000 / parameter[0].demresolution);
 
 									   // calculate biomass values for each tree
-									   if(speciestrait[tree.species].roi == 1 | speciestrait[tree.species].roi == 2) { 
+									   if( (speciestrait[tree.species].roi == 1) | (speciestrait[tree.species].roi == 2) ) { 
 											AGBneedleliving[grid_i] += speciestrait[tree.species].biomassleafbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomassleaffaca) / speciestrait[tree.species].biomassleaffacb));
 											AGBwoodliving[grid_i] += speciestrait[tree.species].biomasswoodbase / (1 + exp(-1.0 * ((double)tree.height / 10 - speciestrait[tree.species].biomasswoodfaca) / speciestrait[tree.species].biomasswoodfacb));
 									   } else if(speciestrait[tree.species].roi == 3) {
 										   if (((double)tree.height / 10) > 130) {
-											   double biomasstotal = exp(speciestrait[tree.species].biomassleaffacb + speciestrait[tree.species].biomassleaffaca * log((double) tree.dbreast/10000));
+											   double biomasstotal = exp(speciestrait[tree.species].biomassleaffacb + speciestrait[tree.species].biomassleaffaca * log((double) tree.dbreast));
 											   
 											   if(biomasstotal<0) biomasstotal=0.0;
 											   
 											   AGBneedleliving[grid_i] += biomasstotal * (1.0 - speciestrait[tree.species].biomasswoodongree);
 											   AGBwoodliving[grid_i] += biomasstotal * speciestrait[tree.species].biomasswoodongree;
+										   } else {
+											   double biomasstotal = exp(speciestrait[tree.species].biomassleaffacb) * ((double)tree.height/10 )/130;
+
+											   if(biomasstotal<0) biomasstotal=0.0;
+											   
+											   AGBneedleliving_recruits[grid_i] += biomasstotal * (1.0 - speciestrait[tree.species].biomasswoodongree);
+											   AGBwoodliving_recruits[grid_i] += biomasstotal * speciestrait[tree.species].biomasswoodongree;
 										   }
 									   } else {
 										   cout << " error region not yet biomass equation" << endl;
@@ -1285,6 +1302,8 @@ void Dataoutput(int t,
 							fprintf(filepointer, "y;");
 							fprintf(filepointer, "AGBneedleliving;");
 							fprintf(filepointer, "AGBwoodliving;");
+							fprintf(filepointer, "AGBneedleliving_recruits;");
+							fprintf(filepointer, "AGBwoodliving_recruits;");
 							fprintf(filepointer, "Stemcount;");
 							fprintf(filepointer, "Basalarea;");
 							fprintf(filepointer, "Individuals_0_10cm;");
@@ -1318,23 +1337,25 @@ void Dataoutput(int t,
 			 
 							fprintf(filepointer, "%d;", x);
 							fprintf(filepointer, "%d;", y);
-							fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i] / 1000 / (90 * 90));    // in kg/sq.m.		//90 entered for all lines 1316-1332 (before: 30, changed because of DEM resolution)
-							fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i] / 1000 / (90 * 90));      // in kg/sq.m.
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Stemcount[grid_i]);  // in stems/ha
-							fprintf(filepointer, "%4.8f;", ((100 * 100) / (90 * 90)) * Basalarea[grid_i]);
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_10[grid_i]);          // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_40[grid_i]);          // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_100[grid_i]);         // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_200[grid_i]);         // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_300[grid_i]);         // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_400[grid_i]);         // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_500[grid_i]);         // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_750[grid_i]);         // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_1000[grid_i]);        // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_1250[grid_i]);        // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_1500[grid_i]);        // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_2000[grid_i]);        // in individuals/ha
-							fprintf(filepointer, "%d;", (((100 * 100) / (90 * 90))) * Indicount_larger2000[grid_i]);  // in individuals/ha
+							fprintf(filepointer, "%4.8f;", AGBneedleliving[grid_i] / (parameter[0].demresolution * parameter[0].demresolution));    // in kg/sq.m.		//90 entered for all lines 1316-1332 (before: 30, changed because of DEM resolution)
+							fprintf(filepointer, "%4.8f;", AGBwoodliving[grid_i] / (parameter[0].demresolution * parameter[0].demresolution));      // in kg/sq.m.
+							fprintf(filepointer, "%4.8f;", AGBneedleliving_recruits[grid_i] / (parameter[0].demresolution * parameter[0].demresolution));    // in kg/sq.m.		//90 entered for all lines 1316-1332 (before: 30, changed because of DEM resolution)
+							fprintf(filepointer, "%4.8f;", AGBwoodliving_recruits[grid_i] / (parameter[0].demresolution * parameter[0].demresolution));      // in kg/sq.m.
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Stemcount[grid_i]);  // in stems/ha
+							fprintf(filepointer, "%4.8f;", ((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution)) * Basalarea[grid_i]);
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_10[grid_i]);          // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_40[grid_i]);          // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_100[grid_i]);         // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_200[grid_i]);         // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_300[grid_i]);         // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_400[grid_i]);         // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_500[grid_i]);         // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_750[grid_i]);         // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_1000[grid_i]);        // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_1250[grid_i]);        // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_1500[grid_i]);        // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_2000[grid_i]);        // in individuals/ha
+							fprintf(filepointer, "%d;", (((100 * 100) / (parameter[0].demresolution * parameter[0].demresolution))) * Indicount_larger2000[grid_i]);  // in individuals/ha
 							fprintf(filepointer, "\n");
 							// }
 						}

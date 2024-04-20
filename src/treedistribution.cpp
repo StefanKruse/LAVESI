@@ -82,7 +82,11 @@ void Seedin() {
                     printf("... reason: no choice of a seed dispersal mode");
                     exit(1);
                 }
-
+				
+				// calculate based on weather_choice
+				long int plotcodeNum;
+				plotcodeNum = parameter[0].weatherchoice % 1000; //1026003022
+				
                 int rn_species = 0;
 				// multiple species implementation
                 if (parameter[0].specpres == 0) {
@@ -94,12 +98,14 @@ void Seedin() {
 						// TODO later for quicker computation move to global declaration
 						vector<int> speciesinroi;
 						for (int species_counter = 1; species_counter < 99; species_counter++) {
-							if(parameter[0].roi == speciestrait[species_counter].roi) {
+							// if( (parameter[0].roi == speciestrait[species_counter].roi) && (parameter[0].ivort >= speciescolonizationtimes[aktort].speciestimes[species_counter]) ) {
+							if( (parameter[0].roi == speciestrait[species_counter].roi) && (parameter[0].ivort >= speciescolonizationtimes[plotcodeNum].speciestimes[species_counter]) ) {
 								speciesinroi.push_back(species_counter);
 							}
 						}
 						// sample one out of this
 						rn_species = speciesinroi[(int) 1 + (uniform.draw() * (speciesinroi.size()))-1];
+// cout << rn_species << endl;
 					}
 				} else {
 					rn_species = parameter[0].specpres;

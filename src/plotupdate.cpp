@@ -17,7 +17,10 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
 			// assess the size of the area the current tree influences
 			double impactareasize = 0.0;
 			if (parameter[0].calcinfarea == 1)  // linearly increasing
-				impactareasize = tree.dbasal * parameter[0].incfac / 100.0;
+				// impactareasize = tree.dbasal * parameter[0].incfac / 100.0;
+				// impactareasize = tree.dbasal * parameter[0].incfac;
+				// impactareasize = tree.height/10;
+				impactareasize = (tree.height/10) / 100; // in m!
 			else if (parameter[0].calcinfarea == 2)  // linearly increasing
 				impactareasize = tree.dbasal * (2 / 3) * parameter[0].incfac / 100.0;
 			else if (parameter[0].calcinfarea == 3)  // linearly increasing
@@ -40,6 +43,10 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
 													   * pow(tree.dbasal, parameter[0].densitytreetile),
 												   parameter[0].densityvaluemanipulatorexp);
 				++cur_plot.Treenumber;
+				if(tree.height > cur_plot.maxtreeheight) {
+					cur_plot.maxtreeheight = tree.height;
+				}
+				
 				tree.densitywert =
 					pow(pow(tree.dbasal, parameter[0].densitytreetile) * pow(impactareasize / (1.0 / parameter[0].sizemagnif), parameter[0].densitysmallweighing),
 						parameter[0].densityvaluemanipulatorexp);
@@ -64,8 +71,11 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
 								const auto density =
 									std::pow(std::pow(tree.dbasal, parameter[0].densitytreetile) / (entfrastpos + 1.0), parameter[0].densityvaluemanipulatorexp);
 								cur_plot.Treedensityvalue += 10000 * density;
-								++cur_plot.Treenumber;
+								++cur_plot.Treenumber;								
 								sumdensitywert += density;
+								if(tree.height > cur_plot.maxtreeheight) {
+									cur_plot.maxtreeheight = tree.height;
+								}
 							}
 						}
 					}
@@ -92,7 +102,9 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 			} else {
 				double impactareasize = 0.0;
 				if (parameter[0].calcinfarea == 1)  // linearly increasing
-					impactareasize = tree.dbasal * parameter[0].incfac / 100.0;
+					// impactareasize = tree.dbasal * parameter[0].incfac / 100.0;
+					// impactareasize = tree.height/10;
+					impactareasize = (tree.height/10) / 100; // in m!
 				else if (parameter[0].calcinfarea == 2)  // linearly increasing
 					impactareasize = tree.dbasal * (2 / 3) * parameter[0].incfac / 100.0;
 				else if (parameter[0].calcinfarea == 3)  // linearly increasing
@@ -152,11 +164,19 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					// calculate the influence of the thawing depth on the tree growth
 
 					if ( (parameter[0].thawing_depth == true) && (cur_plot.maxthawing_depth < speciestrait[tree.species].minactivelayer*10) ) {
+						// tree.thawing_depthinfluence = (unsigned short)((200.0 / (speciestrait[tree.species].minactivelayer*10)) * (double)cur_plot.maxthawing_depth);
 						tree.thawing_depthinfluence = (unsigned short) (100 * ((double)cur_plot.maxthawing_depth / speciestrait[tree.species].minactivelayer*10));
 					} else {
 						tree.thawing_depthinfluence = 100;
 					}
-					
+if (parameter[0].qualiyearlyvis == true) {// output for a quick check
+#pragma omp critical 
+cout << " UPDATE:: tree.species = " << tree.species 
+	<< " tree.thawing_depthinfluence = " << tree.thawing_depthinfluence 
+	<< " (speciestrait[tree.species].minactivelayer*10 = " << speciestrait[tree.species].minactivelayer*10 
+	<< " (double)cur_plot.maxthawing_depth = " << (double)cur_plot.maxthawing_depth
+	<< endl;
+} 
 					// dem sensing
 					if (parameter[0].demlandscape && (cur_plot.elevation < 32767)) {  // dem sensing
 						tree.elevation = cur_plot.elevation;
@@ -165,6 +185,8 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					// assess humidity which influences growth
 					tree.soilhumidity = cur_plot.soilhumidity;
 					tree.twi = cur_plot.twi;
+					
+					tree.heightsubordination = cur_plot.maxtreeheight;//store in between the tallest value in reach
 					
 				} else {  // ... if the tree influences more than one section
 					// determine dimensions of the considered grid around a tree
@@ -228,6 +250,10 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 									// assess humidity which influences growth
 									sumsoilhumidity += (double)cur_plot.soilhumidity;
 									sumtwi += (double)cur_plot.twi;
+
+									if(cur_plot.maxtreeheight > tree.heightsubordination) {
+										tree.heightsubordination = cur_plot.maxtreeheight;//store in between the tallest value in reach
+									}
 								}
 							}
 						}
@@ -241,6 +267,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					sumthawing_depth /= anzahlflaechen;
 
 					if (sumthawing_depth < (speciestrait[tree.species].minactivelayer*10))
+						// tree.thawing_depthinfluence = (unsigned short)((200.0 / (speciestrait[tree.species].minactivelayer*10)) * sumthawing_depth);
 						tree.thawing_depthinfluence = (unsigned short) (100 * (sumthawing_depth / speciestrait[tree.species].minactivelayer*10));
 					else
 						tree.thawing_depthinfluence = 100;
@@ -251,14 +278,21 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					}
 
 					// assess humidity which influences growth
+// #pragma omp critical
+// cout << "sumsoilhumidity = " << sumsoilhumidity <<
+		// endl;
 					sumsoilhumidity /= anzahlflaechen;
 					tree.soilhumidity = sumsoilhumidity;
 					sumtwi /= anzahlflaechen;
 					tree.twi = sumtwi;
+// #pragma omp critical
+// cout << "sumsoilhumidity = " << sumsoilhumidity << 
+		// " anzahlflaechen = " << anzahlflaechen << 
+		// " tree.soilhumidity = " << tree.soilhumidity << 
+		// "sumtwi = " << sumtwi << 
+		// endl;
 				}
-				
-				tree.envirimpact = tree.envirimpact * 1.4232;
-
+				tree.envirimpact = parameter[0].envirgrowthimpacttree_mod * tree.envirimpact;
 				tree.densitywert = tree.densitywert
 								   * pow((1.0 - (0.01 / tree.dbasal)),
 										 parameter[0].densityvaluedbasalinfluence);  // increasing influence by increasing tree height
@@ -360,15 +394,31 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 
 				// set to maximal value if density value is greater than it (rescaling)
 				if (tree.densitywert > parameter[0].desitymaxreduction)
-					tree.densitywert = parameter[0].desitymaxreduction;			
+					tree.densitywert = parameter[0].desitymaxreduction;
+
+				if (tree.heightsubordination > tree.height) {// if a tree is smaller than the tallest tree in reach
+					// tree.heightsubordination = pow(1.0/exp((double)tree.height/(double)tree.heightsubordination),0.25);
+					// tree.heightsubordination = pow(1.0/exp((double)tree.height/(double)tree.heightsubordination),1.0);
+					tree.heightsubordination = pow(1.0/exp((double)tree.height/(double)tree.heightsubordination),2.0);
+				} else {
+					tree.heightsubordination = 0.0;
+				}
+
 			}
 				// water stress update
 				// ... dependency on local site conditions
+// if(tree.height/10 > 130) cout << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 				tree.soilhumidity = pow(tree.twi/(6.25*100), 0.5*0.25) * tree.soilhumidity;
+// #pragma omp critical
+// cout <<
+		// "tree.soilhumidity = " << tree.soilhumidity <<
+		// endl;
+// if(tree.height/10 > 130) cout << " ... between: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 				if( (tree.soilhumidity < speciestrait[tree.species].minsoilwater*100) | (tree.soilhumidity > speciestrait[tree.species].maxsoilwater*100) )
 					tree.soilhumidity=0;
 				else
 					tree.soilhumidity=1;
+// if(tree.height/10 > 130) cout << " ... after: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
 		}
 	}
 }
@@ -470,6 +520,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 			pEnvirgrid.maxthawing_depth = maxthawing_depth;
 			pEnvirgrid.Treedensityvalue = 0;
 			pEnvirgrid.Treenumber = 0;
+			pEnvirgrid.maxtreeheight = 0;
 			pEnvirgrid.fire = 0;
 			pEnvirgrid.envirfireimpact = 0;
 		}
@@ -479,6 +530,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
             auto& pEnvirgrid = plot_list[kartenpos];
             pEnvirgrid.Treedensityvalue = 0;
             pEnvirgrid.Treenumber = 0;
+			pEnvirgrid.maxtreeheight = 0;
 			pEnvirgrid.fire = 0;
 			pEnvirgrid.envirfireimpact = 0;
         }

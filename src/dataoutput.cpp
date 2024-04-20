@@ -162,12 +162,13 @@ void Dataoutput(int t,
                     outputgriddedbiomass = true;
                     outputindividuals = true;
                 }
-                if ( ((int)parameter[0].ivort >= (parameter[0].simduration-100)) && (parameter[0].ivort % 5 == 0) ) {// last 100 years more detailed output
+                // if ( (parameter[0].ivort>2500) && (parameter[0].ivort % 5 == 0) ) {
+                if ( (parameter[0].ivort>=600) && (parameter[0].ivort % 5 == 0) ) {
 					outputcurrencies = true;
                     ausgabedensity = true;
                     outputgriddedbiomass = true;
                     outputindividuals = true;
-                }							 
+                }
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
                
                 if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
@@ -521,7 +522,22 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Stemcount_species5;");
                 fprintf(filepointer, "Stemcount_species6;");
                 fprintf(filepointer, "Stemcount_species7;");
-// add here more for each species present in model
+                fprintf(filepointer, "Stemcount_species8;");
+                fprintf(filepointer, "Stemcount_species9;");
+                fprintf(filepointer, "Stemcount_species10;");
+                fprintf(filepointer, "Stemcount_species11;");
+                fprintf(filepointer, "Stemcount_species12;");
+                fprintf(filepointer, "Stemcount_species13;");
+                fprintf(filepointer, "Stemcount_species14;");
+                fprintf(filepointer, "Stemcount_species15;");
+                fprintf(filepointer, "Stemcount_species16;");
+                fprintf(filepointer, "Stemcount_species17;");
+                fprintf(filepointer, "Stemcount_species18;");
+                fprintf(filepointer, "Stemcount_species19;");
+                fprintf(filepointer, "Stemcount_species20;");
+                fprintf(filepointer, "Stemcount_species21;");
+                fprintf(filepointer, "Stemcount_species22;");															
+                fprintf(filepointer, "Stemcount_species23;");															
                 fprintf(filepointer, "Seed_produced_currently;");
                 fprintf(filepointer, "Seed_produced_total;");
                 fprintf(filepointer, "N_trees_Lgmel;");
@@ -570,7 +586,29 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", jahr);
 
             // declarations
-            int stemcount_species1 = 0, stemcount_species2 = 0, stemcount_species3 = 0, stemcount_species4 = 0, stemcount_species5 = 0, stemcount_species6 = 0, stemcount_species7 = 0;
+            int stemcount_species1 = 0, 
+				stemcount_species2 = 0, 
+				stemcount_species3 = 0, 
+				stemcount_species4 = 0, 
+				stemcount_species5 = 0, 
+				stemcount_species6 = 0, 
+				stemcount_species7 = 0, 
+				stemcount_species8 = 0, 
+				stemcount_species9 = 0, 
+				stemcount_species10 = 0, 
+				stemcount_species11 = 0, 
+				stemcount_species12 = 0, 
+				stemcount_species13 = 0, 
+				stemcount_species14 = 0, 
+				stemcount_species15 = 0, 
+				stemcount_species16 = 0, 
+				stemcount_species17 = 0, 
+				stemcount_species18 = 0, 
+				stemcount_species19 = 0, 
+				stemcount_species20 = 0, 
+				stemcount_species21 = 0, 
+				stemcount_species22 = 0,
+				stemcount_species23 = 0; 
             int gesamtseedAKT = 0, gesamtseedSUM = 0;
             int spectree1 = 0, spectree2 = 0;
             double yposmax = 0.0;
@@ -580,7 +618,29 @@ void Dataoutput(int t,
 #pragma omp parallel default(shared)
         {
             // declarations
-            int stemcount_local_species1 = 0, stemcount_local_species2 = 0, stemcount_local_species3 = 0, stemcount_local_species4 = 0, stemcount_local_species5 = 0, stemcount_local_species6 = 0, stemcount_local_species7 = 0;
+            int stemcount_local_species1 = 0, 
+				stemcount_local_species2 = 0, 
+				stemcount_local_species3 = 0, 
+				stemcount_local_species4 = 0, 
+				stemcount_local_species5 = 0, 
+				stemcount_local_species6 = 0, 
+				stemcount_local_species7 = 0, 
+				stemcount_local_species8 = 0, 
+				stemcount_local_species9 = 0, 
+				stemcount_local_species10 = 0, 
+				stemcount_local_species11 = 0, 
+				stemcount_local_species12 = 0, 
+				stemcount_local_species13 = 0, 
+				stemcount_local_species14 = 0, 
+				stemcount_local_species15 = 0, 
+				stemcount_local_species16 = 0, 
+				stemcount_local_species17 = 0, 
+				stemcount_local_species18 = 0, 
+				stemcount_local_species19 = 0, 
+				stemcount_local_species20 = 0, 
+				stemcount_local_species21 = 0, 
+				stemcount_local_species22 = 0,
+				stemcount_local_species23 = 0;
             int localgesamtseedAKT = 0, localgesamtseedSUM = 0;
             int localspectree1 = 0, localspectree2 = 0;
             double localyposmax = 0.0;
@@ -610,6 +670,38 @@ void Dataoutput(int t,
 								stemcount_local_species6++;
 							} else if (tree.species == 7) {
 								stemcount_local_species7++;
+							} else if (tree.species == 8) {
+								stemcount_local_species8++;
+							} else if (tree.species == 9) {
+								stemcount_local_species9++;
+							} else if (tree.species == 10) {
+								stemcount_local_species10++;
+							} else if (tree.species == 11) {
+								stemcount_local_species11++;
+							} else if (tree.species == 12) {
+								stemcount_local_species12++;
+							} else if (tree.species == 13) {
+								stemcount_local_species13++;
+							} else if (tree.species == 14) {
+								stemcount_local_species14++;
+							} else if (tree.species == 15) {
+								stemcount_local_species15++;
+							} else if (tree.species == 16) {
+								stemcount_local_species16++;
+							} else if (tree.species == 17) {
+								stemcount_local_species17++;
+							} else if (tree.species == 18) {
+								stemcount_local_species18++;
+							} else if (tree.species == 19) {
+								stemcount_local_species19++;
+							} else if (tree.species == 20) {
+								stemcount_local_species20++;
+							} else if (tree.species == 21) {
+								stemcount_local_species21++;
+							} else if (tree.species == 22) {
+								stemcount_local_species22++;
+							} else if (tree.species == 23) {
+								stemcount_local_species23++;
 							}
 						}
 
@@ -644,6 +736,22 @@ void Dataoutput(int t,
 				stemcount_species5 += stemcount_local_species5;
 				stemcount_species6 += stemcount_local_species6;
 				stemcount_species7 += stemcount_local_species7;
+				stemcount_species8 += stemcount_local_species8;
+				stemcount_species9 += stemcount_local_species9;
+				stemcount_species10 += stemcount_local_species10;
+				stemcount_species11 += stemcount_local_species11;
+				stemcount_species12 += stemcount_local_species12;
+				stemcount_species13 += stemcount_local_species13;
+				stemcount_species14 += stemcount_local_species14;
+				stemcount_species15 += stemcount_local_species15;
+				stemcount_species16 += stemcount_local_species16;
+				stemcount_species17 += stemcount_local_species17;
+				stemcount_species18 += stemcount_local_species18;
+				stemcount_species19 += stemcount_local_species19;
+				stemcount_species20 += stemcount_local_species20;
+				stemcount_species21 += stemcount_local_species21;
+				stemcount_species22 += stemcount_local_species22;
+				stemcount_species23 += stemcount_local_species23;
 				gesamtseedAKT += localgesamtseedAKT; 
 				gesamtseedSUM += localgesamtseedSUM;
 				spectree1 += localspectree1; 
@@ -721,6 +829,22 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", stemcount_species5);
             fprintf(filepointer, "%d;", stemcount_species6);
             fprintf(filepointer, "%d;", stemcount_species7);
+            fprintf(filepointer, "%d;", stemcount_species8);
+            fprintf(filepointer, "%d;", stemcount_species9);
+            fprintf(filepointer, "%d;", stemcount_species10);
+            fprintf(filepointer, "%d;", stemcount_species11);
+            fprintf(filepointer, "%d;", stemcount_species12);
+            fprintf(filepointer, "%d;", stemcount_species13);
+            fprintf(filepointer, "%d;", stemcount_species14);
+            fprintf(filepointer, "%d;", stemcount_species15);
+            fprintf(filepointer, "%d;", stemcount_species16);
+            fprintf(filepointer, "%d;", stemcount_species17);
+            fprintf(filepointer, "%d;", stemcount_species18);
+            fprintf(filepointer, "%d;", stemcount_species19);
+            fprintf(filepointer, "%d;", stemcount_species20);
+            fprintf(filepointer, "%d;", stemcount_species21);
+            fprintf(filepointer, "%d;", stemcount_species22);															
+            fprintf(filepointer, "%d;", stemcount_species23);															
             fprintf(filepointer, "%d;", gesamtseedAKT);
             fprintf(filepointer, "%d;", gesamtseedSUM);
             fprintf(filepointer, "%d;", spectree1);
@@ -1231,7 +1355,7 @@ void Dataoutput(int t,
 									   } else if(speciestrait[tree.species].roi == 3) {
 										   if (((double)tree.height / 10) > 130) {
 											   double biomasstotal = exp(speciestrait[tree.species].biomassleaffacb + speciestrait[tree.species].biomassleaffaca * log((double) tree.dbreast));
-											   
+
 											   if(biomasstotal<0) biomasstotal=0.0;
 											   
 											   AGBneedleliving[grid_i] += biomasstotal * (1.0 - speciestrait[tree.species].biomasswoodongree);
@@ -1518,10 +1642,10 @@ void Dataoutput(int t,
                             & (ycooi <= ymaxwindow * parameter[0].sizemagnif)))) {  // output only if tree density values >0
 							
 				*/
-				if(parameter[0].demlandscape & 
-					(((int)xcooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0) &	// xcooi is gridcell resolution in envirgrid == 20 cm steps // => every 90 m/demresolution output
-					(((int)ycooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0)) {
-							
+				// if(parameter[0].demlandscape & 
+					// (((int)xcooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0) &	// xcooi is gridcell resolution in envirgrid == 20 cm steps // => every 90 m/demresolution output
+					// (((int)ycooi % (parameter[0].sizemagnif * parameter[0].demresolution)) == 0)) {
+	
                     fprintf(filepointer, "%d;", parameter[0].repeati);
                     // fprintf(filepointer, "%d;", pEnvirgrid.yworldcoo);
                     // fprintf(filepointer, "%d;", pEnvirgrid.xworldcoo);
@@ -1539,7 +1663,7 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%f;", pEnvirgrid.fire);
 					fprintf(filepointer, "%d;", pEnvirgrid.twi / 100);
                     fprintf(filepointer, "\n");
-                }
+                // }
 				
             }
 

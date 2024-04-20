@@ -10,6 +10,7 @@ using namespace std;
 Parameter parameter[1];
 Speciestraits speciestrait[99];
 Pesttraits pesttrait[99];
+Speciescolonizationtimes speciescolonizationtimes[99];
 
 int yearposition;
 
@@ -77,13 +78,15 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
         if (parameter[0].windsource == 1) {
             findyr1 = 1979;
-            findyr2 = 2012;
+            findyr2 = 2012;  // TODO: adjust to available data
         } else if (parameter[0].windsource == 999) {
 			findyr1 = 1;
+			// findyr2 = 25070;
 			findyr2 = parameter[0].lastyearweatherdata;
 	} else if (parameter[0].windsource == 998) {
 			findyr1 = 1;
-			findyr2 = parameter[0].lastyearweatherdata;
+			findyr2 = 25070;
+
 		}
     }
 
@@ -162,6 +165,25 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     cout << "Treeestablishment(" << elapsed.count() << ")+";
 #endif
 
+/*	if(parameter[0].ivort % 20 == 0){// test fire impact
+        for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
+            VectorList<Tree>& tree_list = *posw;
+
+#pragma omp parallel for default(shared) private(uniform) schedule(guided)
+			for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+				auto& tree = tree_list[tree_i];
+
+				if (tree.growing == true){
+					if(tree.xcoo/1000 > 2500){ // half of the plot for testing
+						tree.crownstart = 500*10; // flames reach 500 cm high
+						tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10))*1000; // update relative crown damage for mortality
+// cout << tree.xcoo << " <- " << tree.crownstart/10 << " ... " << tree.height/10 << " ... " << tree.relcrowndamage/1000 << endl;
+					}
+				}
+			}
+		}
+	}
+*/
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
@@ -239,8 +261,9 @@ void Spinupphase() {
 
             // go through all functions for vegetation dynamics
             vegetationDynamics(yearposition, jahr, t);
-
+			
             parameter[0].ivort++;
+
         } while (parameter[0].ivort < parameter[0].ivortmax);
 
     } else if (parameter[0].ivortmax > 0 && parameter[0].stabilperiod == true) {
@@ -252,6 +275,7 @@ void Spinupphase() {
         double stabilerrorthreshold = 0.1;
         bool stabilized = false;
         do {
+
             int firstyear = 0, lastyear = 0;
             int startlag = 5;
 
@@ -335,6 +359,7 @@ void Spinupphase() {
             }
 			
             parameter[0].ivort++;
+
         } while (stabilized != true);
     }
 
@@ -344,8 +369,7 @@ void Spinupphase() {
 void Yearsteps() {
     printf("\n\nstarting yearly time steps...\n");
 
-    for (int t = 1; t <= parameter[0].simduration; t++) {
-        parameter[0].ivort++;
+    for (int t = 0; t <= parameter[0].simduration; t++) {
 
         // calculate current year and print a summary of the year
         int jahr = parameter[0].startjahr + t;
@@ -356,15 +380,14 @@ void Yearsteps() {
             printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr,
                    t, parameter[0].simduration);
 
-				cout << " parameter[0].ivort = " << parameter[0].ivort << endl;
-				cout << " jahr = " << jahr << endl;
-				cout << " yearposition = " << yearposition << endl;
-				cout << " t = " << t << endl;
-				cout << " world_weather_list[0][0].jahr = " << world_weather_list[0][0].jahr << endl;
-	 
+			cout << " parameter[0].ivort = " << parameter[0].ivort << endl;
+			cout << " jahr = " << jahr << endl;
+			cout << " yearposition = " << yearposition << endl;
+			cout << " t = " << t << endl;
+			cout << " world_weather_list[0][0].jahr = " << world_weather_list[0][0].jahr << endl;
         }
-
-        // go through all functions for vegetation dynamics
+		
+		// go through all functions for vegetation dynamics
         vegetationDynamics(yearposition, jahr, t);
 
         // if the year towards which the whole simulation should be resetted is reached, save all data
@@ -378,6 +401,8 @@ void Yearsteps() {
             cout << "Simulation aborted as requested in parameter.txt->stopatyear!" << endl;
             exit(1);
         }
+		
+        parameter[0].ivort++;
 
     }  // year step
 
@@ -447,8 +472,9 @@ void Yearsteps() {
                         Savealllists();
                         cout << "At year= " << jahr << " all saved!" << endl << endl;
                     }
-
+					
                     parameter[0].ivort++;
+
                 }
 
                 // restore initial values
@@ -495,7 +521,7 @@ void fillElevations() {
 
     if (parameter[0].mapylength == 1) {
 
-	int plotcodeNum;
+	long int plotcodeNum;
 	plotcodeNum = parameter[0].weatherchoice % 10000;
 	
 	std::stringstream plotcode;
@@ -1543,7 +1569,8 @@ void initialiseMaps() {
 						  
 						 // Here, initial grid values are prepared. For the values check structures.h L100 following!  
                          // {initialelevation, 0, 0, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1, 0, 0}); // ###Fire version from before merging### Last digit resembles initial fire counter, put to "false" for bool variant
-                         {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0, 0, 0, 0}); //new version after merging; added last three 0s for fire
+                         // {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0, 0, 0, 0}); //new version after merging; added last three 0s for fire
+                         {initialelevation, 0, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0, 0, 0, 0}); //new version after merging; added last three 0s for fire
 						 
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
@@ -1670,6 +1697,36 @@ int main() {
 
     // run repeated simulations
     for (int nruns = 0; nruns < parameter[0].runs; nruns++) {
+		
+		 // (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor)
+		parameter[0].sapl_mort_factor = 0.25;
+		speciestrait[15].mortyouth = 0.25+0.049;
+		speciestrait[16].mortyouth = 0.25+0.049;
+		speciestrait[17].mortyouth = 0.50;	// TSME
+		speciestrait[18].mortyouth = 0.45;	//PIMA
+		speciestrait[19].mortyouth = 0.35;	//PISI
+		speciestrait[20].mortyouth = 0.55;	// PIGL
+		speciestrait[21].mortyouth = 0.25+0.049;
+		speciestrait[22].mortyouth = 0.25+0.049;
+		
+		// maybe depending on minimum growth!
+		// speciestrait[15].mindiametergrowth
+	// c("LALA",-0.001754597,0.142935778,-2.966958393,0.001822,0.023225),
+	// c("BENE",-0.002893947,0.136437824,-3.479336714,0.004,0.129),
+	// c("TSME",-0.001234403,0.040404475,-1.895297753,0.05786,0.28625),
+	// c("PIMA",-0.1556574,0.3235318,-2.6760696,0.008,0.08),
+	// c("PISI",-0.001236552,0.046709691,-2.610931447,0.024,0.1455),
+	// c("PIGL",-0.04012891,0.12235996,-2.16180999,0.014,0.16275),
+	// c("POTR",-0.5203286,1.0559242,-2.2313453,0.02742,0.1795),
+	// c("POBA",-0.1140205,0.6212088,-3.1148959,0.007,0.142)
+		
+		// parameter[0].desitymaxreduction = 1.0;
+		parameter[0].desitymaxreduction = 0.9;
+		parameter[0].dichtheightrel = 0;									 
+
+		for(int spi = 15; spi <= 22; spi++)
+			speciestrait[spi].mdensity = 0.25;
+
         parameter[0].starter = false;
 
         parameter[0].repeati++;

@@ -8,6 +8,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     double dbasal;                  // 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision; could be replaced
     double dbreast;                 // 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision; could be replaced
     double densitywert;             // 8->2	---> need to check range of values for replacment
+	double heightsubordination;		// is 0 when tallest tree and increases towards 1 when smaller
     double thawing_depthinfluence;  // 8->2	---> need to check range of values for replacment
     unsigned int xcoo;  // 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 
                         // km long/wide simulations // TODO really only positive? -> see compiler warnings
@@ -74,9 +75,11 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
 struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     short int elevation;  // 2	---> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km
                           // elevation range (8 -> 2 bytes)
-    unsigned short int Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
+    // unsigned long int Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
+    double Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
                                           // and 65.535 with precision of 1/10000 which is sufficient
     unsigned short int Treenumber;        // 2	---> only for ouput; should in all cases below 65535
+    unsigned int maxtreeheight;        // 2	---> only for ouput; should in all cases below 65535
     unsigned short maxthawing_depth;      // 2
 	unsigned short litterheight0;			// 2	 
 	unsigned short litterheight1;			// 2 
@@ -103,9 +106,10 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 
     // constructor
     Envirgrid(short int elevation = 0,
-              unsigned short int Treedensityvalue = 0,
+              // unsigned long int Treedensityvalue = 0,
+              double Treedensityvalue = 0,
               unsigned short int Treenumber = 0,
-
+			  unsigned int maxtreeheight = 0,
               unsigned short maxthawing_depth = 100*10,
 			  unsigned short litterheight0 = 1000,					// 2 
 			  unsigned short litterheight1 = 1000,					// 2	
@@ -131,6 +135,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
           Treenumber(Treenumber),
+          maxtreeheight(maxtreeheight),
           maxthawing_depth(maxthawing_depth),
           litterheight0(litterheight0),
           litterheight1(litterheight1),
@@ -146,7 +151,6 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
           envirgrowthimpact(envirgrowthimpact),
 		  soilhumidity(soilhumidity),
 		  twi(twi),
-		  
           envirfireimpact(envirfireimpact),
 		  fire(fire),
 		  firecells(firecells),
@@ -277,6 +281,7 @@ struct Parameter {
     double dbreastheightalloexp;
     double dbasalheightslopenonlin;
     double dbreastheightslopenonlin;
+	double envirgrowthimpacttree_mod;
 
     // density evaluation
     int densitymode;
@@ -326,12 +331,19 @@ struct Parameter {
     double mdrought;
     double seedconemort;
     double seedfloormort;
-	double seedfiremort; // seed mortality fire-related
     int gmelseedmaxage;
 
+	// fire
+	double seedfiremort; // seed mortality fire-related
+	double litterlayerburn_mod;
+	double fireimpactareasize_mod;
     // ancestry
     int nameakt;
     int lineakt;
+
+    bool globalstoprepeat;
+
+	double sapl_mort_factor; // calibration
 };
 
 struct Speciestraits {
@@ -346,6 +358,8 @@ struct Speciestraits {
 	double	seedprodfactor;
 	double	germinationrate;
 	double	germinationweatherinfluence;
+	double  mindiametergrowth;
+	double  meangrowthq75p;						
 	double	gdbasalfacq;
 	double	gdbasalfac;
 	double	gdbasalconst;
@@ -398,6 +412,34 @@ struct Speciestraits {
 	double  biomasswoodfacb;
 	int  lightdemand;
 	double biomasswoodongree;
+	double growthmod;
+};
+
+struct Speciescolonizationtimes { // for each aktort
+	int	location;
+	vector<int> speciestimes;
+	// int	sp01t;
+	// int	sp02t;
+	// int	sp03t;
+	// int	sp04t;
+	// int	sp05t;
+	// int	sp06t;
+	// int	sp07t;
+	// int	sp08t;
+	// int	sp09t;
+	// int	sp10t;
+	// int	sp11t;
+	// int	sp12t;
+	// int	sp13t;
+	// int	sp14t;
+	// int	sp15t;
+	// int	sp16t;
+	// int	sp17t;
+	// int	sp18t;
+	// int	sp19t;
+	// int	sp20t;
+	// int	sp21t;
+	// int	sp22t;
 };
 
 struct Weather {

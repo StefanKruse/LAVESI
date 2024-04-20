@@ -24,6 +24,7 @@ void Ageing(//Parameter* parameter,
             }
         }
         seed_list.consolidate();
+		} // world seed list
 
         int mat_age_length = 183;  // length of array maturationheight
         // height values in percent (0-99) computed externally
@@ -49,6 +50,7 @@ void Ageing(//Parameter* parameter,
 					tree.age++;
 
 					if (tree.cone == false) {
+/*						// new
 						if (tree.coneheight == 65535) {
 							// trees reaching the maturation age are assigned a minimum height value for them to bear cones
 							if (tree.age > speciestrait[tree.species].coneage) {
@@ -71,11 +73,18 @@ void Ageing(//Parameter* parameter,
 								tree.cone = true;
 							}
 						}
+*/
+						if (tree.age > speciestrait[tree.species].coneage) {
+							if(uniform.draw() < 0.1) {
+								tree.cone = true;
+								tree.seednewly_produced = 0;
+							}
+						}
+							
 					} else if (tree.cone == true) {
 						tree.seednewly_produced = 0;
 					}
 				}
-			}
         }  // tree list
     }  // world list
 }

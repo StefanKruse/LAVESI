@@ -134,6 +134,7 @@ void getTemp(	//int aktort,
 
             // pWeather.yworldcoo = aktortyworldcoo;
             // pWeather.xworldcoo = aktortxworldcoo;
+            // pWeather.jahr = counter + parameter[0].startjahr - 2;
             pWeather.jahr = counter - 2;
             pWeather.tempyearmean = tempyearmeanbuf + parameter[0].tempdiffort;
             if (parameter[0].tempjandiffort != 0.0)
@@ -297,6 +298,15 @@ void passWeather() {
                             + weather_list[iweather].prec8monthmean;
             double precgsmin = weather_list[iweather].prec5monthmeanmin + weather_list[iweather].prec6monthmeanmin + weather_list[iweather].prec7monthmeanmin
                                + weather_list[iweather].prec8monthmeanmin;
+			if (parameter[0].qualiyearlyvis == true) {// check for never 0!
+				if(precgs<=0) {
+					cout << "precgs == " << precgs << endl;
+				}
+				if(precgsmin<=0) {
+					cout << "precgsmin == " << precgsmin << endl;
+				}
+			}
+
             double duerreindex = parameter[0].evapod * weather_list[iweather].vegetationperiodlength / precgs;
             double duerreindexmin = parameter[0].evapod * weather_list[iweather].vegetationperiodlengthmin / precgsmin;
             if (duerreindex > 1) {
@@ -332,12 +342,17 @@ void passWeather() {
 					break;
 				
 				// for growth
-				weather_list[iweather].weatherfactor[species_counter]=(double) (((speciestrait[species_counter].weathervariablea/(1+exp(speciestrait[species_counter].weathervariableb-weather_list[iweather].temp7monthmean)))+speciestrait[species_counter].weathervariablec)-speciestrait[species_counter].weathervariablec)/(speciestrait[species_counter].weathervariabled-speciestrait[species_counter].weathervariablec);
-				weather_list[iweather].weatherfactormin[species_counter]=(double) (((speciestrait[species_counter].weathervariablea/(1+exp(speciestrait[species_counter].weathervariableb-weather_list[iweather].temp7monthmeanmin)))+speciestrait[species_counter].weathervariablec)-speciestrait[species_counter].weathervariablec)/(speciestrait[species_counter].weathervariabled-speciestrait[species_counter].weathervariablec);
+				weather_list[iweather].weatherfactor[species_counter]=speciestrait[species_counter].growthmod * (double) (((speciestrait[species_counter].weathervariablea/(1+exp(speciestrait[species_counter].weathervariableb-weather_list[iweather].temp7monthmean)))+speciestrait[species_counter].weathervariablec)-speciestrait[species_counter].weathervariablec)/(speciestrait[species_counter].weathervariabled-speciestrait[species_counter].weathervariablec);
+				weather_list[iweather].weatherfactormin[species_counter]=speciestrait[species_counter].growthmod * (double) (((speciestrait[species_counter].weathervariablea/(1+exp(speciestrait[species_counter].weathervariableb-weather_list[iweather].temp7monthmeanmin)))+speciestrait[species_counter].weathervariablec)-speciestrait[species_counter].weathervariablec)/(speciestrait[species_counter].weathervariabled-speciestrait[species_counter].weathervariablec);
+// cout << "s(" << species_counter << ") => speciestrait[species_counter].growthmod = " << speciestrait[species_counter].growthmod << " -> "; 
+// cout << "weather_list[iweather].weatherfactor[species_counter] = " << weather_list[iweather].weatherfactor[species_counter] << endl; 
 				
 				// restrictions
 				if (weather_list[iweather].temp1monthmeaniso < (speciestrait[species_counter].janthresholdtemp)) {
 					weather_list[iweather].janisothermrestriktion[species_counter]=1.0;
+if (parameter[0].qualiyearlyvis == true) {// output for a quick check
+cout << " weather_list[iweather].temp1monthmeaniso = " << weather_list[iweather].temp1monthmeaniso << " / speciestrait[species_counter].janthresholdtemp = " << speciestrait[species_counter].janthresholdtemp << endl;
+}
 				} else {
 					weather_list[iweather].janisothermrestriktion[species_counter]=1.0-fabs(speciestrait[species_counter].janthresholdtempcalcvalue*(weather_list[iweather].temp1monthmeaniso-speciestrait[species_counter].janthresholdtemp)/(-speciestrait[species_counter].janthresholdtemp));
 				}
@@ -347,12 +362,13 @@ void passWeather() {
 					weather_list[iweather].janisothermrestriktionmin[species_counter]=1.0-fabs(speciestrait[species_counter].janthresholdtempcalcvalue*(weather_list[iweather].temp1monthmeanisomin-speciestrait[species_counter].janthresholdtemp)/(-speciestrait[species_counter].janthresholdtemp));
 				}
 				
-				// output for a quick check
-				// cout << speciestrait[species_counter].number << "::" << speciestrait[species_counter].species << " => ";
-				// cout << " ; wfac: " << weather_list[iweather].weatherfactor[species_counter];
-				// cout << " ; wfacmin: " << weather_list[iweather].weatherfactormin[species_counter];
-				// cout << " ; janthresh: " << weather_list[iweather].janisothermrestriktion[species_counter] << endl;
-				// cout << " ; janthreshmin: " << weather_list[iweather].janisothermrestriktionmin[species_counter] << endl;
+				if (parameter[0].qualiyearlyvis == true) {// output for a quick check
+					cout << speciestrait[species_counter].number << "::" << speciestrait[species_counter].species << " => ";
+					cout << " ; wfac: " << weather_list[iweather].weatherfactor[species_counter];
+					cout << " ; wfacmin: " << weather_list[iweather].weatherfactormin[species_counter];
+					cout << " ; janthresh: " << weather_list[iweather].janisothermrestriktion[species_counter];
+					cout << " ; janthreshmin: " << weather_list[iweather].janisothermrestriktionmin[species_counter] << endl;
+				}
 			}
 
             // July temp for both
@@ -482,28 +498,28 @@ void passWeather() {
 			weather_list[iweather].precipitationsumjja = weather_list[iweather].prec6monthmean + weather_list[iweather].prec7monthmean + weather_list[iweather].prec8monthmean;
 			
             // output to check weather
-            FILE* fdir;
-            char filenamechar[50];
-            sprintf(filenamechar, "data_weatherprocessingcheck");
-            string output = "output/" + string(filenamechar) + ".csv";
-            fdir = fopen(output.c_str(), "a+");
+            // FILE* fdir;
+            // char filenamechar[50];
+            // sprintf(filenamechar, "data_weatherprocessingcheck");
+            // string output = "output/" + string(filenamechar) + ".csv";
+            // fdir = fopen(output.c_str(), "a+");
 
-            fprintf(fdir,
-                    "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t "
-                    "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n",
-                    weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp1monthmeanisomin, weather_list[iweather].temp7monthmeaniso,
-                    weather_list[iweather].temp7monthmeanisomin, weather_list[iweather].droughtmort, weather_list[iweather].droughtmortmin,
-                    (double)weather_list[iweather].vegetationperiodlengthiso, (double)weather_list[iweather].vegetationperiodlengthisomin, precgs, precgsmin,
-                    weather_list[iweather].janisothermrestriktion[1], weather_list[iweather].janisothermrestriktionmin[1],
-                    weather_list[iweather].janisothermrestriktion[2], weather_list[iweather].janisothermrestriktionmin[2],
-                    weather_list[iweather].julisothermrestriktion, weather_list[iweather].julisothermrestriktionmin, weather_list[iweather].nddrestriktion,
-                    weather_list[iweather].nddrestriktionmin, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactormin[1],
-                    weather_list[iweather].weatherfactor[2], weather_list[iweather].weatherfactormin[2]);
+            // fprintf(fdir,
+                    // "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t "
+                    // "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n",
+                    // weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp1monthmeanisomin, weather_list[iweather].temp7monthmeaniso,
+                    // weather_list[iweather].temp7monthmeanisomin, weather_list[iweather].droughtmort, weather_list[iweather].droughtmortmin,
+                    // (double)weather_list[iweather].vegetationperiodlengthiso, (double)weather_list[iweather].vegetationperiodlengthisomin, precgs, precgsmin,
+                    // weather_list[iweather].janisothermrestriktion[1], weather_list[iweather].janisothermrestriktionmin[1],
+                    // weather_list[iweather].janisothermrestriktion[2], weather_list[iweather].janisothermrestriktionmin[2],
+                    // weather_list[iweather].julisothermrestriktion, weather_list[iweather].julisothermrestriktionmin, weather_list[iweather].nddrestriktion,
+                    // weather_list[iweather].nddrestriktionmin, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactormin[1],
+                    // weather_list[iweather].weatherfactor[2], weather_list[iweather].weatherfactormin[2]);
 
-            fclose(fdir);
+            // fclose(fdir);
 			
             if (parameter[0].qualiyearlyvis == true) {
-                printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\n", weather_list[iweather].jahr, iweather, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactor[2], weather_list[iweather].droughtmort);
+                printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\t", weather_list[iweather].jahr, iweather, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactor[2], weather_list[iweather].droughtmort);
                 printf("\tJanT10=%4.2f, JuliT10=%4.2f, NDD10=%d\n", weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp7monthmeaniso, weather_list[iweather].vegetationperiodlengthiso);
             }
         }
@@ -724,7 +740,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
     parameter[0].tempdiffortmin = 0.0;
     parameter[0].precdiffortmin = 0.0;
 
-	int plotcodeNum;
+	long int plotcodeNum;
 	plotcodeNum = parameter[0].weatherchoice % 10000;
 	
 	std::stringstream plotcode;
@@ -1243,7 +1259,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             cntr = 0;
 
             jahr = parameter[0].startjahr + t;
-			
+
             if (parameter[0].windsource == 1) {
                 findyr1 = 1979;
                 findyr2 = 2018;
@@ -1252,19 +1268,20 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 findyr2 = 2020;
 			} else if (parameter[0].windsource == 999) {
 				findyr1 = 1;
-				findyr2 = parameter[0].lastyearweatherdata;
+				findyr2 = 25150;
+				//findyr2 = 25070;
 			} else if (parameter[0].windsource == 998) {
 				findyr1 = 1;
-				findyr2 = parameter[0].lastyearweatherdata;
+				findyr2 = 25070;
 			}
-			
+
             ss.str("");
             ss.clear();
 			
 			ostringstream path; 
 			long int plotcodeNum_scenario;
 			plotcodeNum_scenario = parameter[0].weatherchoice % 100000000;
-			
+	
 			if (plotcodeNum_scenario < 100000) {
 				path << "past25kyr_until2020_wind";
 			} else if (plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000) {
@@ -1458,13 +1475,22 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 		}
 
         if (parameter[0].demlandscape) {
-            parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan;
+            parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * 0;
+            // parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan;
             parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * 1000;  // calculate changes per 1000 m to use later for tree growth estimation
-            parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul;
+			
+            parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * 0;
             parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * 1000;
+				// parameter[0].tempjuldiffort = -1000 * parameter[0].temperaturelapse_jul * 0;
+				// parameter[0].tempjuldiffortmin = -1000 * parameter[0].temperaturelapse_jul * 1000;
+			
             parameter[0].tempdiffort = 0;
+			
+			// precipitationlapse_year=0.20;
             parameter[0].precdiffort = parameter[0].precipitationlapse_year;
             parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * 1000;
+				// parameter[0].precdiffort = (12*200) * parameter[0].precipitationlapse_year;
+				// parameter[0].precdiffortmin = (12*200) * parameter[0].precipitationlapse_year * 1000;
         } else if (parameter[0].lineartransect) {
             parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * parameter[0].locationshift;  // in m: negative values for northward/colder areas
             parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (parameter[0].locationshift + (double)treerows);

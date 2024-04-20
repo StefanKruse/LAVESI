@@ -52,12 +52,12 @@ void Pestoutbreak(Parameter* parameter,
 
 		// use weather list and pest outbreak probability to compute wether a pest outbreak happens or not. 
 		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
-
+			
 			if (parameter[0].yearlyvis == true) {
 				cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
 				cout << " weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] = " << weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] << endl; 
 			}
-
+		
 			double pestproba_i = weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1];//first elememt is 0
 			if(uniform.draw() < pestproba_i) {//outbreak happens
 				out_pestoutbreak.push_back(1); // record for output

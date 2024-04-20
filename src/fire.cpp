@@ -239,7 +239,7 @@ void Fire(Parameter* parameter,
 				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
 				fireimpactareasize = 5 * treecols; // To cover the complete plot area
 				}
-	fireimpactareasize = 	fireimpactareasize * 601.9219;	
+	fireimpactareasize = 	fireimpactareasize * parameter[0].fireimpactareasize_mod;	
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 
 			// double fireimpactareasize = fireprobabilityrating * (treecols*treerows); // determines affected area; currently depending on FPR range (0-1) - so if FPR = 0.1, then 10% of the area burn.
@@ -295,7 +295,16 @@ void Fire(Parameter* parameter,
 								}
 								
 								// Fire damage on litter layer
-								cur_plot.litterheight0 = cur_plot.litterheight0 - (cur_plot.litterheight0 * cur_plot.fire);
+								//cur_plot.litterheight0 = cur_plot.litterheight0 - (cur_plot.litterheight0 * cur_plot.fire);
+								
+
+                                if( (cur_plot.litterheight0 * cur_plot.fire * parameter[0].litterlayerburn_mod) < cur_plot.litterheight0 ) {
+
+                                 cur_plot.litterheight0 = cur_plot.litterheight0 - (cur_plot.litterheight0 * cur_plot.fire * parameter[0].litterlayerburn_mod);
+                                } else { 
+									cur_plot.litterheight0 = 0;
+
+                                }
 							}
 						}
 					}

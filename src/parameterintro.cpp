@@ -896,9 +896,13 @@ void Parameterinput(void) {
     // further variables
     parameter[0].tempdiffort = 0.0;
     parameter[0].precdiffort = 0.0;
+	parameter[0].litterlayerburn_mod = 1.0;
+	parameter[0].fireimpactareasize_mod = 1.0;
+	parameter[0].envirgrowthimpacttree_mod = 1.0;										   
 }
 
 void Getspeciestraits(void) {	
+	// first trait information
 	FILE *f;
 	f = fopen("specieslist.csv","r"); 
 	if (f == NULL) {
@@ -924,6 +928,8 @@ void Getspeciestraits(void) {
 			speciestrait[counter].seedprodfactor= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].germinationrate= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].germinationweatherinfluence= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].mindiametergrowth= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].meangrowthq75p= strtod(strtok(NULL, " "),NULL) ;																	  
 			speciestrait[counter].gdbasalfacq= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].gdbasalfac= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].gdbasalconst= strtod(strtok(NULL, " "),NULL) ;
@@ -974,8 +980,60 @@ void Getspeciestraits(void) {
 			speciestrait[counter].biomasswoodfacb= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].lightdemand= strtod(strtok(NULL, " "),NULL) ;
 			speciestrait[counter].biomasswoodongree= strtod(strtok(NULL, " "),NULL) ;
+			speciestrait[counter].growthmod= 1 ;
+
 		}
 		counter++;
 	}
 	fclose(f);
+
+	// second colonization times
+	FILE *f2;
+	f2 = fopen("speciescolonizationtimes_AK.csv","r"); 
+	if (f2 == NULL) {
+		printf("speciescolonizationtimes_AK.csv file not available!\n");
+		exit(1);
+	}
+	
+	char puffer2[1255];
+	int counter2=0;
+	
+
+	// read in line by line
+	while( fgets(puffer2,1255,f2) !=NULL) {
+		if (counter2>=1) { // skip header line
+			speciescolonizationtimes[counter2].location= stoi(strtok(puffer2, " "));
+			speciescolonizationtimes[counter2].speciestimes.push_back( 0 );
+			for(int i=1; i<=22; i++) {
+				// speciescolonizationtimes[counter2].speciestimes.push_back( strtok(puffer2, " ") );
+				speciescolonizationtimes[counter2].speciestimes.push_back( stoi(strtok(NULL, " "),NULL) );
+																//       strtod(strtok(NULL, " "),NULL);
+			}
+			// speciescolonizationtimes[counter2].sp01t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp02t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp03t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp04t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp05t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp06t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp07t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp08t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp09t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp10t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp11t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp12t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp13t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp14t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp15t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp16t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp17t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp18t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp19t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp20t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp21t= strtok(puffer2, " ");
+			// speciescolonizationtimes[counter2].sp22t= strtok(puffer2, " ");
+cout << speciescolonizationtimes[counter2].location << " :: " << speciescolonizationtimes[counter2].speciestimes.back() << endl;
+		}
+		counter2++;
+	}
+	fclose(f2);
 }

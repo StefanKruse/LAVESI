@@ -523,10 +523,20 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
     }
 
+    strcpy(uebergabestring, "seedintro_miny");
+    parameter[0].seedintro_miny = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintro_maxy);
+    }
     strcpy(uebergabestring, "seedintro_maxy");
     parameter[0].seedintro_maxy = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintro_maxy);
+    }
+    strcpy(uebergabestring, "seedintro_minx");
+    parameter[0].seedintro_minx = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintro_maxx);
     }
     strcpy(uebergabestring, "seedintro_maxx");
     parameter[0].seedintro_maxx = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
@@ -892,6 +902,17 @@ void Parameterinput(void) {
 
     strcpy(uebergabestring, "pollengregorym");
     parameter[0].pollengregorym = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+
+    strcpy(uebergabestring, "snowcomputation");
+    if (((int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0])) == 1) {
+        parameter[0].snowcomputation = true;
+    } else {
+        parameter[0].snowcomputation = false;
+    };
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].weathercalcgradient) ? "true" : "false");
+    }
+
 
     // further variables
     parameter[0].tempdiffort = 0.0;

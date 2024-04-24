@@ -97,12 +97,12 @@ cout << " ESTAB:: seed.species = " << seed.species
 							// }
 							
 							maxbw_help = maxbw_help 
-								* ((weather_list[yearposition-1].weatherfactor[seed.species] * (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+								* ((weather_list[yearposition-1].weatherfactor[seed.species] * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
 																								  
 										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
 										+ (weather_list[yearposition-1].weatherfactormin[seed.species]
 										   * (1
-											  - (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+											  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
 													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
 								* (((double)thawing_depthinfluence_help) / 100);
 // #pragma omp critical 
@@ -184,6 +184,8 @@ cout << " ESTAB:: seed.species = " << seed.species
 
                 // update growth
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
+				
+
 // if(basalgrowth_help>10)
 	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
 	
@@ -206,11 +208,11 @@ cout << " ESTAB:: seed.species = " << seed.species
 								   + pow((basalgrowth_help / maxbw_help),2.0) // rel growth on position is density dependent
 										 * speciestrait[seed.species].germinationweatherinfluence
 										 * pow(((weather_list[yearposition-1].weatherfactor[seed.species]
-												 * (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+												 * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
 												 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
 												+ (weather_list[yearposition-1].weatherfactormin[seed.species]
 												   * (1
-													  - (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+													  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
 															/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))),
 											   2.0)                           // weather influence
 										 * germinationlitterheightinfluence;  // litter layer dependency
@@ -223,7 +225,14 @@ cout << " ESTAB:: seed.species = " << seed.species
 				} else {
 					germinationprobability = speciestrait[seed.species].germinationrate;
 				}
-
+				
+				// snow impact
+				if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+					germinationprobability = germinationprobability + 0.3 * (plot_list[curposi].snowdepth/100);
+					
+					germinationprobability = germinationprobability + (1.0-(weather_list[yearposition-1].snow_off_dayofyear / 110))/2.0;
+				}
+				
 				double rn = uniform.draw();
  /*
  // output to check establisment

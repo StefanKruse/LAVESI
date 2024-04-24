@@ -218,7 +218,12 @@ void getTemp(	//int aktort,
                         sumacttempmin = sumacttempmin + tagestempmin;
                     }
                 }
-            }
+            
+				// store daily temperatures for later use
+				pWeather.dailytemp.push_back(tagestemp);
+				pWeather.dailytempmin.push_back(tagestempmin);
+			
+			}
 
             pWeather.activeairtemp = sumacttemp * 0.84630;
             pWeather.activeairtempmin = sumacttempmin * 0.84630;
@@ -497,26 +502,402 @@ cout << " weather_list[iweather].temp1monthmeaniso = " << weather_list[iweather]
 			weather_list[iweather].tempmeanjja = (weather_list[iweather].temp6monthmean + weather_list[iweather].temp7monthmean + weather_list[iweather].temp8monthmean) / 3;
 			weather_list[iweather].precipitationsumjja = weather_list[iweather].prec6monthmean + weather_list[iweather].prec7monthmean + weather_list[iweather].prec8monthmean;
 			
+			/// Snow addition calculations
+// # fill daily rainfall vector July-1 till September
+vector<double> dailyrain;
+// for(int i=1;i<=31;i++) {// July-1
+	// dailyrain.push_back(weather_list[iweather-1].prec7monthmean/31);
+// }
+// for(int i=1;i<=31;i++) {// August-1
+	// dailyrain.push_back(weather_list[iweather-1].prec8monthmean/31);
+// }
+// for(int i=1;i<=30;i++) {// September-1
+	// dailyrain.push_back(weather_list[iweather-1].prec9monthmean/30);
+// }
+for(int i=1;i<=31;i++) {// Januar
+	dailyrain.push_back(weather_list[iweather].prec1monthmean/31);
+}
+for(int i=1;i<=28;i++) {// Februar
+	dailyrain.push_back(weather_list[iweather].prec2monthmean/28);
+}
+for(int i=1;i<=31;i++) {// March
+	dailyrain.push_back(weather_list[iweather].prec3monthmean/31);
+}
+for(int i=1;i<=30;i++) {// April
+	dailyrain.push_back(weather_list[iweather].prec4monthmean/30);
+}
+for(int i=1;i<=31;i++) {// May
+	dailyrain.push_back(weather_list[iweather].prec5monthmean/31);
+}
+for(int i=1;i<=30;i++) {// June
+	dailyrain.push_back(weather_list[iweather].prec6monthmean/30);
+}
+for(int i=1;i<=31;i++) {// July
+	dailyrain.push_back(weather_list[iweather].prec7monthmean/31);
+}
+for(int i=1;i<=31;i++) {// August
+	dailyrain.push_back(weather_list[iweather].prec8monthmean/31);
+}
+for(int i=1;i<=30;i++) {// September
+	dailyrain.push_back(weather_list[iweather].prec9monthmean/30);
+}
+for(int i=1;i<=31;i++) {// Oktober
+	dailyrain.push_back(weather_list[iweather].prec10monthmean/31);
+}
+for(int i=1;i<=30;i++) {// November
+	dailyrain.push_back(weather_list[iweather].prec11monthmean/30);
+}
+for(int i=1;i<=31;i++) {// Dezember
+	dailyrain.push_back(weather_list[iweather].prec12monthmean/31);
+}
+// Januar	31
+// Februar	28
+// März	31
+// April	30
+// Mai	31
+// Juni	30
+// Juli	31
+// August	31
+// September	30
+// Oktober	31
+// November	30
+// Dezember	31
+	// 365
+// # extract same length daily temperatures
+// cout <<
+		// "weather_list[iweather].dailytemp.size() = " <<
+		// weather_list[iweather].dailytemp.size() <<
+		// "  dailyrain.size() = " <<
+		// dailyrain.size() <<
+		// endl;
+
+// for(double soiltempfac1 = -10; soiltempfac1 <= 30; ) {
+	// soiltempfac1 += 10;
+// for(double soiltempfac2 = 0; soiltempfac2 <= 5; ) {
+	// soiltempfac2 += 1;
+double pool_snow_daily = 0;
+double pool_snow_dailymin = 0;
+if(iweather>0) {
+	pool_snow_daily = weather_list[iweather-1].snow_pool_lastday;
+	pool_snow_dailymin = weather_list[iweather-1].snow_pool_lastdaymin;
+}
+vector<double> snow_depth_daily;
+vector<double> snow_depth_dailymin;
+double prec_snow_fac = 0.25; // linearly changes amount of snow
+double prec_snow_exp = 2.0; // decreases amount of snowfall
+double soiltempfac1 = 15;// adds to soil temp
+double soiltempfac2 = 1; // flattenes soil temp
+double swe = 10 * 0.5; // 10 standard * factor as basic compression etc. impacts
+double snowdepthtreshhold = 1.0; // cm below what snow pool depth is snow free
+for(int dayi = 0; dayi<365; dayi++) {
+	// empiric snow fraction and melting following Sato et al.
+	double prec_snow = prec_snow_fac * dailyrain[dayi] / pow((1+exp(0.75*weather_list[iweather].dailytemp[dayi]-1.5)), prec_snow_exp);
+	// double prec_snowmin = prec_snow_fac * dailyrain[dayi] / pow((1+exp(0.75*(weather_list[iweather].dailytemp[dayi]+parameter[0].temperaturelapse_jul*10)-1.5)),prec_snow_exp);
+	double prec_snowmin = prec_snow_fac * dailyrain[dayi] / pow((1+exp(0.75*(weather_list[iweather].dailytemp[dayi]+parameter[0].temperaturelapse_jul)-1.5)),prec_snow_exp);
+	double tw = pool_snow_daily / (1+exp(-0.3*(((soiltempfac1+weather_list[iweather].dailytemp[dayi])/soiltempfac2)-10)));
+	// double twmin = pool_snow_daily / (1+exp(-0.3*(((soiltempfac1+(weather_list[iweather].dailytemp[dayi]+parameter[0].temperaturelapse_jul*10))/soiltempfac2)-10)));
+	double twmin = pool_snow_daily / (1+exp(-0.3*(((soiltempfac1+(weather_list[iweather].dailytemp[dayi]+parameter[0].temperaturelapse_jul))/soiltempfac2)-10)));
+	pool_snow_daily += prec_snow - tw;
+	pool_snow_dailymin += prec_snowmin - twmin;
+	
+	// transform to snow depth
+	double snow_depth_i = pool_snow_daily*swe;
+	double snow_depth_imin = pool_snow_dailymin*swe;
+	if(snow_depth_i<snowdepthtreshhold) {
+		snow_depth_i = 0.0;
+	}
+	if(snow_depth_imin<snowdepthtreshhold) {
+		snow_depth_imin = 0.0;
+	}
+	snow_depth_daily.push_back(snow_depth_i);
+	snow_depth_dailymin.push_back(snow_depth_imin);
+	// cout <<
+		// "snow depth = " <<
+		// snow_depth_daily.back() <<
+		// " / snow depth min = " <<
+		// snow_depth_dailymin.back() <<
+		// endl;
+}
+	weather_list[iweather].snow_pool_lastday = pool_snow_daily;
+	weather_list[iweather].snow_pool_lastdaymin = pool_snow_dailymin;
+	// vector<double> dailytemp;
+	// double snow_pool_lastday;
+	// double snow_pool_lastdaymin;
+	
+// find max snow depth in winter
+double snow_depth_winterspring_max = 0;
+double snow_depth_winterspring_maxmin= 0;
+double snow_depth_fallwinter_max = 0;
+double snow_depth_fallwinter_maxmin = 0;
+// find last day with snow in a year
+signed short int lastsnowday = 0;
+signed short int lastsnowdaymin = 0;
+// find length of snow off days
+signed short int snowfreedays = 0;
+signed short int snowfreedaysmin = 0;
+bool snowoff = false;
+bool snowoffmin = false;
+for(int dayi = 0; dayi<365; dayi++) {
+	if( (dayi <= (365/2)) && (snow_depth_daily[dayi] > snow_depth_winterspring_max)) {
+		snow_depth_winterspring_max = snow_depth_daily[dayi];
+	}
+	if( (dayi > (365/2)) && (snow_depth_daily[dayi] > snow_depth_fallwinter_max)) {
+		snow_depth_fallwinter_max = snow_depth_daily[dayi];
+	}
+	if(snow_depth_daily[dayi] == 0) {
+		++snowfreedays;
+		if(snowoff == false) {
+			snowoff = true;
+		} else if (lastsnowday == 0) {
+			lastsnowday = dayi;
+		}
+	}
+	// for min
+	if( (dayi <= (365/2)) && (snow_depth_dailymin[dayi] > snow_depth_winterspring_maxmin)) {
+		snow_depth_winterspring_maxmin = snow_depth_dailymin[dayi];
+	}
+	if( (dayi > (365/2)) && (snow_depth_dailymin[dayi] > snow_depth_fallwinter_maxmin)) {
+		snow_depth_fallwinter_maxmin = snow_depth_dailymin[dayi];
+	}
+	if(snow_depth_dailymin[dayi] == 0) {
+		++snowfreedaysmin;
+		if(snowoffmin == false) {
+			snowoffmin = true;
+		} else if (lastsnowdaymin == 0) {
+			lastsnowdaymin = dayi;
+		}
+	}
+}
+weather_list[iweather].snow_depth_winterspring_max = snow_depth_winterspring_max;
+weather_list[iweather].snow_depth_winterspring_maxmin = snow_depth_winterspring_maxmin;
+weather_list[iweather].snow_depth_fallwinter_max = snow_depth_fallwinter_max;
+weather_list[iweather].snow_depth_fallwinter_maxmin = snow_depth_fallwinter_maxmin;
+weather_list[iweather].snow_off_dayofyear = lastsnowday;
+weather_list[iweather].snow_off_dayofyearmin = lastsnowdaymin;
+weather_list[iweather].snow_free_period = snowfreedays;
+weather_list[iweather].snow_free_periodmin = snowfreedaysmin;
+	// double snow_depth_winterspring_max;
+	// double snow_depth_winterspring_maxmin;
+	// double snow_depth_fallwinter_max;
+	// double snow_depth_fallwinter_maxmin;
+	// double snow_off_dayofyear;
+	// double snow_off_dayofyearmin;
+	// double snow_free_period;
+	// double snow_free_periodmin;
+	
+if(iweather > 0) {
+	if(snow_depth_winterspring_max>weather_list[iweather-1].snow_depth_fallwinter_max) {
+		weather_list[iweather].snow_max_winterdepth = snow_depth_winterspring_max;
+	} else {
+		weather_list[iweather].snow_max_winterdepth = weather_list[iweather-1].snow_depth_fallwinter_max;
+	}
+	// min
+	if(snow_depth_winterspring_maxmin>weather_list[iweather-1].snow_depth_fallwinter_maxmin) {
+		weather_list[iweather].snow_max_winterdepthmin = snow_depth_winterspring_maxmin;
+	} else {
+		weather_list[iweather].snow_max_winterdepthmin = weather_list[iweather-1].snow_depth_fallwinter_maxmin;
+	}
+} else {
+	weather_list[iweather].snow_max_winterdepth = snow_depth_winterspring_max;
+	weather_list[iweather].snow_max_winterdepthmin = snow_depth_winterspring_maxmin;
+}
+	// double snow_max_winterdepth;
+	// double snow_max_winterdepthmin;
+
+	// cout <<
+		// " snow_depth_winterspring_max = " <<
+		// snow_depth_winterspring_max <<
+		// " snow_depth_fallwinter_max = " <<
+		// snow_depth_fallwinter_max <<
+		// " / lastsnowday = " <<
+		// lastsnowday <<
+		// " / snowfreedaysv = " <<
+		// snowfreedays <<
+		// endl;
+
+// for output tuning
+			FILE* fdir2;
+            char filenamechar2[50];
+            sprintf(filenamechar2, "snowcheck");
+            string output2 = "output/" + string(filenamechar2) + ".csv";
+            fdir2 = fopen(output2.c_str(), "a+");
+
+            fprintf(fdir2,
+                    "%d\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\n",
+						iweather,
+						soiltempfac1,
+						soiltempfac2,
+						weather_list[iweather].snow_depth_winterspring_max,
+						weather_list[iweather].snow_depth_winterspring_maxmin,
+						weather_list[iweather].snow_depth_fallwinter_max,
+						weather_list[iweather].snow_depth_fallwinter_maxmin,
+						weather_list[iweather].snow_off_dayofyear,
+						weather_list[iweather].snow_off_dayofyearmin,
+						weather_list[iweather].snow_free_period,
+						weather_list[iweather].snow_free_periodmin,
+						weather_list[iweather].snow_max_winterdepth,
+						weather_list[iweather].snow_max_winterdepthmin
+					);
+
+            fclose(fdir2);
+	// }}// tunign end here loop
+
+
+
+// TODO add snowfall with temp_lapse to calculate differences in topography
+			/*
+			double snowfall = 0;// in mm height per squaremeter
+			double swe = 10.0;
+			if(iweather>0) {// very simple
+				// fall to winter of preceding year
+				if(weather_list[iweather-1].temp7monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec7monthmean;
+				if(weather_list[iweather-1].temp8monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec8monthmean;
+				if(weather_list[iweather-1].temp9monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec9monthmean;
+				if(weather_list[iweather-1].temp10monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec10monthmean;
+				if(weather_list[iweather-1].temp11monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec11monthmean;
+				if(weather_list[iweather-1].temp12monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec12monthmean;
+				// winter to spring of actual year
+				if(weather_list[iweather-1].temp1monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec1monthmean;
+				if(weather_list[iweather-1].temp2monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec2monthmean;
+				if(weather_list[iweather-1].temp3monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec3monthmean;
+				if(weather_list[iweather-1].temp4monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec4monthmean;
+				if(weather_list[iweather-1].temp5monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec5monthmean;
+				if(weather_list[iweather-1].temp6monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec6monthmean;
+			} 
+			*/
+			// Sato et al... daily
+/*
+	# test r
+	temperatureair=c(15,8,2,-5,-20,-30, -40,-30,-20,-5,2,12)
+	temperatureair = approx(y=temperatureair,x=1:12,n=365)$y
+	precmm=rep(500/length(temperatureair),length(temperatureair))
+(prec_snow = precmm / (1+exp(0.75*temperatureair-1.5)))
+pool_snow = 0
+soiltempfac1 = 10
+soiltempfac2 = 2
+snow_pool_out = NULL
+for(prec_snow_i in 1:length(prec_snow)) {
+	#// tw = pool_snow / (1+exp(-0.3*(temperaturesoil-10)))
+	tw = pool_snow / (1+exp(-0.3*(((soiltempfac1+temperatureair[prec_snow_i])/soiltempfac2)-10)))
+	#// tmpsoil = soil temperature at 10 cm depth (°C)
+	(pool_snow = pool_snow + prec_snow[prec_snow_i] - tw)
+	snow_pool_out = rbind(snow_pool_out,data.frame(time=prec_snow_i,tw,pool_snow))
+}
+snow_pool_out
+snow_pool_out$smallersnow = 1
+snow_pool_out$smallersnow[snow_pool_out$pool_snow<1] = 0
+ggplot(snow_pool_out, aes(y=pool_snow,x=time)) + geom_line(size=2)
+ggplot(snow_pool_out, aes(y=pool_snow,x=time,color=factor(smallersnow))) + geom_point(size=2)
+	# tune soiltempfac1=10 und soiltempfac2=2 to fit observed !snow_off + !height via factor of mm->cm snow 10:1 incrasing with cold temp when falling
+	# get daily temp
+
+			if(iweather>0) {
+				// fall to winter of preceding year
+				if(weather_list[iweather-1].temp7monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec7monthmean;
+				if(weather_list[iweather-1].temp8monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec8monthmean;
+				if(weather_list[iweather-1].temp9monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec9monthmean;
+				if(weather_list[iweather-1].temp10monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec10monthmean;
+				if(weather_list[iweather-1].temp11monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec11monthmean;
+				if(weather_list[iweather-1].temp12monthmean < 0) 
+					snowfall += swe * weather_list[iweather-1].prec12monthmean;
+				// winter to spring of actual year
+				if(weather_list[iweather-1].temp1monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec1monthmean;
+				if(weather_list[iweather-1].temp2monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec2monthmean;
+				if(weather_list[iweather-1].temp3monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec3monthmean;
+				if(weather_list[iweather-1].temp4monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec4monthmean;
+				if(weather_list[iweather-1].temp5monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec5monthmean;
+				if(weather_list[iweather-1].temp6monthmean < 0) 
+					snowfall += swe * weather_list[iweather].prec6monthmean;
+			}
+			weather_list[iweather].snowfall += snowfall;
+cout << iweather << " : snowfall = " << snowfall << endl;
+output
+	... max snow depth in winter (July year before until June actual year)
+	... last day of snow (threshold?!)
+	... snow free days
+*/		
+
+
+
+
             // output to check weather
-            // FILE* fdir;
-            // char filenamechar[50];
-            // sprintf(filenamechar, "data_weatherprocessingcheck");
-            // string output = "output/" + string(filenamechar) + ".csv";
-            // fdir = fopen(output.c_str(), "a+");
+            FILE* fdir;
+            char filenamechar[50];
+            sprintf(filenamechar, "data_weatherprocessingcheck");
+            string output = "output/" + string(filenamechar) + ".csv";
+            fdir = fopen(output.c_str(), "a+");
 
-            // fprintf(fdir,
-                    // "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t "
-                    // "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n",
-                    // weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp1monthmeanisomin, weather_list[iweather].temp7monthmeaniso,
-                    // weather_list[iweather].temp7monthmeanisomin, weather_list[iweather].droughtmort, weather_list[iweather].droughtmortmin,
-                    // (double)weather_list[iweather].vegetationperiodlengthiso, (double)weather_list[iweather].vegetationperiodlengthisomin, precgs, precgsmin,
-                    // weather_list[iweather].janisothermrestriktion[1], weather_list[iweather].janisothermrestriktionmin[1],
-                    // weather_list[iweather].janisothermrestriktion[2], weather_list[iweather].janisothermrestriktionmin[2],
-                    // weather_list[iweather].julisothermrestriktion, weather_list[iweather].julisothermrestriktionmin, weather_list[iweather].nddrestriktion,
-                    // weather_list[iweather].nddrestriktionmin, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactormin[1],
-                    // weather_list[iweather].weatherfactor[2], weather_list[iweather].weatherfactormin[2]);
+            fprintf(fdir,
+                    "%4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t %4.4f \t \n",
+                    weather_list[iweather].temp1monthmeaniso, weather_list[iweather].temp1monthmeanisomin, weather_list[iweather].temp7monthmeaniso,
+                    weather_list[iweather].temp7monthmeanisomin, weather_list[iweather].droughtmort, weather_list[iweather].droughtmortmin,
+                    (double)weather_list[iweather].vegetationperiodlengthiso, (double)weather_list[iweather].vegetationperiodlengthisomin, precgs, precgsmin,
+                    weather_list[iweather].janisothermrestriktion[1], weather_list[iweather].janisothermrestriktionmin[1],
+                    weather_list[iweather].janisothermrestriktion[2], weather_list[iweather].janisothermrestriktionmin[2],
+                    weather_list[iweather].julisothermrestriktion, weather_list[iweather].julisothermrestriktionmin, weather_list[iweather].nddrestriktion,
+                    weather_list[iweather].nddrestriktionmin, 
+					
+					weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactormin[1],
+                    weather_list[iweather].weatherfactor[4], weather_list[iweather].weatherfactormin[4]
+						, pow( speciestrait[1].mindiametergrowth + exp(-0.5 * speciestrait[1].meangrowthq75p * 0.0),0.5 ) // maxbwgrowth from establisment
+						, pow( speciestrait[4].mindiametergrowth + exp(-0.5 * speciestrait[4].meangrowthq75p * 0.0),0.5 ) // maxbwgrowth from establisment
+						, ((weather_list[iweather].weatherfactor[1] * (300 - (parameter[0].elevationoffset + 1000))
+																								  
+										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										+ (weather_list[iweather].weatherfactormin[1]
+										   * (1
+											  - (300 - (parameter[0].elevationoffset + 1000))
+													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+								* 1.0 // multiplicator for maxbwhelp from establisment
+						, ((weather_list[iweather].weatherfactor[4] * (300 - (parameter[0].elevationoffset + 1000))
+																								  
+										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										+ (weather_list[iweather].weatherfactormin[4]
+										   * (1
+											  - (300 - (parameter[0].elevationoffset + 1000))
+													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+								* 1.0 // multiplicator for maxbwhelp from establisment
+						, ((weather_list[iweather].weatherfactor[1] * (600 - (parameter[0].elevationoffset + 1000))
+																								  
+										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										+ (weather_list[iweather].weatherfactormin[1]
+										   * (1
+											  - (600 - (parameter[0].elevationoffset + 1000))
+													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+								* 1.0 // multiplicator for maxbwhelp from establisment
+						, ((weather_list[iweather].weatherfactor[4] * (600 - (parameter[0].elevationoffset + 1000))
+																								  
+										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										+ (weather_list[iweather].weatherfactormin[4]
+										   * (1
+											  - (600 - (parameter[0].elevationoffset + 1000))
+													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+								* 1.0 // multiplicator for maxbwhelp from establisment
+					);
 
-            // fclose(fdir);
+            fclose(fdir);
 			
             if (parameter[0].qualiyearlyvis == true) {
                 printf("	weather(%d; iweather=%d): weatherfactorg=%4.4f, weatherfactors=%4.4f ===> \ndroughtmort=%4.5f\t", weather_list[iweather].jahr, iweather, weather_list[iweather].weatherfactor[1], weather_list[iweather].weatherfactor[2], weather_list[iweather].droughtmort);
@@ -1300,7 +1681,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 				region << "Canada";
 			} else if (plotcodeNum > 3000 && plotcodeNum < 4000) {
 				region << "Alaska";
-			} else if (plotcodeNum > 4000 && plotcodeNum < 5000) {
+			} else if (plotcodeNum > 5000 && plotcodeNum < 6000) {
 				region << "MountainTreeline";
 			}
 			
@@ -1486,11 +1867,17 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 			
             parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * 0;
             parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * 1000;
-				// parameter[0].tempjuldiffort = -1000 * parameter[0].temperaturelapse_jul * 0;
-				// parameter[0].tempjuldiffortmin = -1000 * parameter[0].temperaturelapse_jul * 1000;
-			
-            parameter[0].tempdiffort = 0;
-			
+				// parameter[0].tempjuldiffort = -500 * parameter[0].temperaturelapse_jul ;
+				// parameter[0].tempjuldiffortmin = -500 * parameter[0].temperaturelapse_jul * 1000;
+					// ca 3°C wärmer
+            // parameter[0].tempdiffort = 0;
+				// parameter[0].tempdiffort = 2.0;
+				// parameter[0].tempdiffortmin = 2.0;
+				parameter[0].tempdiffort = 4.0;
+				parameter[0].tempdiffortmin = 4.0;
+				// parameter[0].tempdiffort = 6.0;
+				// parameter[0].tempdiffortmin = 6.0;
+
 			// precipitationlapse_year=0.20;
             parameter[0].precdiffort = parameter[0].precipitationlapse_year;
             parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * 1000;

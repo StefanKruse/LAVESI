@@ -45,6 +45,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int relcrowndamage;      // 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
     unsigned short int pestinfectancedamage;// 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
     unsigned long int pestinfection; // numeric value encoding which pest species had an impact on this tree
+	unsigned short int snowdepth;			// 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced
@@ -103,6 +104,7 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     unsigned short int soilhumidity;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
     unsigned short int twi;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
 
+	double snowdepth;
 
     // constructor
     Envirgrid(short int elevation = 0,
@@ -130,7 +132,8 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 			  double fire = 0.0,
 			  unsigned short int firecells = 0,
 			  double fireintensitymax = 0,
-			  double fireintensitymean = 0)	
+			  double fireintensitymean = 0,
+			  double snowdepth = 0)	
 			  
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
@@ -155,7 +158,8 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 		  fire(fire),
 		  firecells(firecells),
           fireintensitymax(fireintensitymax),
-		  fireintensitymean(fireintensitymean) {}
+		  fireintensitymean(fireintensitymean),
+		  snowdepth(snowdepth) {}
 };
 
 struct Parameter {
@@ -232,7 +236,9 @@ struct Parameter {
     int seedwinddispersalmode;
     int seedintronumber;
     int seedintronumberpermanent;
+    unsigned int seedintro_miny;
     unsigned int seedintro_maxy;
+    unsigned int seedintro_minx;
     unsigned int seedintro_maxx;
     bool seedtravelbetween;
     int starttrees;
@@ -344,6 +350,11 @@ struct Parameter {
     bool globalstoprepeat;
 
 	double sapl_mort_factor; // calibration
+	
+	short int maxele;
+	short int minele;
+	
+	bool snowcomputation;
 };
 
 struct Speciestraits {
@@ -535,6 +546,20 @@ struct Weather {
 	double tempmeanjja;
 	double precipitationsumjja;
 	vector<double> pestoutbreakprobability;
+	vector<double> dailytemp;
+    vector<double> dailytempmin;
+	double snow_pool_lastday;
+	double snow_pool_lastdaymin;
+	double snow_depth_winterspring_max;
+	double snow_depth_winterspring_maxmin;
+	double snow_depth_fallwinter_max;
+	double snow_depth_fallwinter_maxmin;
+	double snow_max_winterdepth;
+	double snow_max_winterdepthmin;
+	double snow_off_dayofyear;
+	double snow_off_dayofyearmin;
+	double snow_free_period;
+	double snow_free_periodmin;
 };
 
 struct Pesttraits {

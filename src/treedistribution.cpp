@@ -44,14 +44,17 @@ void Seedin() {
                 // set limits
                 double maxx = (double)(treecols - 1);
                 if ( (parameter[0].seedintro_maxx > 0) & (parameter[0].seedintro_maxx < (treecols - 1)) )
-                    maxx = (double)parameter[0].seedintro_maxx;
+                    // maxx = (double)parameter[0].seedintro_maxx;
+                    maxx = (double)(parameter[0].seedintro_maxx - parameter[0].seedintro_minx);
 
                 double maxy = (double)(treerows - 1);
                 if ( (parameter[0].seedintro_maxy > 0) & (parameter[0].seedintro_maxy < (treerows - 1)) )
-                    maxy = (double)parameter[0].seedintro_maxy;
+                    // maxy = (double)parameter[0].seedintro_maxy;
+                    maxy = (double)(parameter[0].seedintro_maxy - parameter[0].seedintro_miny);
 
                 // seedwinddispersalmode==1 => randomly from the south border.
                 if (parameter[0].seedwinddispersalmode == 1) {
+                    // jseed = maxx * uniform.draw();
                     jseed = maxx * uniform.draw();
 
                     double dispersaldistance;
@@ -72,8 +75,8 @@ void Seedin() {
                 }
                 // seedwinddispersalmode==2 => randomly all over the plot
                 else if (parameter[0].seedwinddispersalmode == 2) {
-                    jseed = maxx * uniform.draw();
-                    iseed = maxy * uniform.draw();
+                    jseed = (double)parameter[0].seedintro_minx + (maxx * uniform.draw());
+                    iseed = (double)parameter[0].seedintro_miny + (maxy * uniform.draw());
 
                     seedeintragen = true;
                 } else {

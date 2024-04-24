@@ -143,11 +143,11 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                           + (((1.0 - 0.5) / 0.5)
                              * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort
                                     - ((speciestrait[tree.species].yearlycalcofanstiegweathermort - speciestrait[tree.species].yearlycalcofanstiegweathermort) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                   * ((weather_list[yearposition_help-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                   * ((weather_list[yearposition_help-1].weatherfactor[tree.species] * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
                                        / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
                                       + (weather_list[yearposition_help-1].weatherfactormin[tree.species]
                                          * (1
-                                            - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                            - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
                                                   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
                                    * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
                                          + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
@@ -175,11 +175,11 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                            * pow((1.0 / (double)tree.height / 10), 0.5);
             } else if (parameter[0].demlandscape) {
                 dry_mort = speciestrait[tree.species].mdrought
-                           * ((weather_list[yearposition_help-1].droughtmort * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                           * ((weather_list[yearposition_help-1].droughtmort * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
                                / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
                               + (weather_list[yearposition_help-1].droughtmortmin
                                  * (1
-                                    - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000))
+                                    - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
                                           / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
                            * pow((1.0 / (double)tree.height / 10), 0.5);
             } else {
@@ -189,8 +189,18 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				dry_mort = 0;
 			}
 
+			// snow mortality
+			double snow_mort = 0;
+			if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+				if((((double)tree.height) / 10.0) > (((double)tree.snowdepth) / 10.0)) {
+					if((((double)tree.height) / 10.0) < 500) {// only trees smaller than 5 m are affected with decreasing impact
+						snow_mort = ( 0.5 * (1-((((double)tree.height) / 10.0)/500)) ) / 10.0;
+					}
+				}
+			}
+
             // calculating the mortality rate of the tree considering the factors of each mortality rate
-            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort + lightavailability_mort + pestoutbreakmort;
+            double treemortality = 0.0 + speciestrait[tree.species].mortbg + sapl_mort + age_mort + growth_mort + dens_mort + weather_mort + dry_mort + windthrowmort + firecrowndamagemort + lightavailability_mort + pestoutbreakmort + snow_mort;
 			
 			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
 			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {

@@ -186,8 +186,7 @@ cout << " UPDATE:: tree.species = " << tree.species
 					tree.soilhumidity = cur_plot.soilhumidity;
 					tree.twi = cur_plot.twi;
 					
-					tree.heightsubordination = cur_plot.maxtreeheight;//store in between the tallest value in reach
-					
+					tree.heightsubordination = cur_plot.maxtreeheight;//store in between the tallest value in reach					
 				} else {  // ... if the tree influences more than one section
 					// determine dimensions of the considered grid around a tree
 					int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
@@ -419,6 +418,12 @@ cout << " UPDATE:: tree.species = " << tree.species
 				else
 					tree.soilhumidity=1;
 // if(tree.height/10 > 130) cout << " ... after: " << tree.twi << "\t" << tree.soilhumidity << "\t" << tree.envirimpact << endl;
+			// snow depth
+			if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+				const std::size_t curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif) + static_cast<std::size_t>(j);
+				auto& cur_plot = plot_list[curposi];
+				tree.snowdepth = 10 * cur_plot.snowdepth;
+			}
 		}
 	}
 }
@@ -537,6 +542,106 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
     }
 }
 
+
+void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
+    const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
+                           * static_cast<std::size_t>(parameter[0].sizemagnif);
+
+	if (parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+        // RandomNumber<double> uniform(0, 1);
+
+// #pragma omp parallel for default(shared) private(uniform) schedule(guided)
+#pragma omp parallel for default(shared) schedule(guided)
+		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+			auto& pEnvirgrid = plot_list[kartenpos];
+
+			// global snow accumulation from weather cell
+				pEnvirgrid.snowdepth = weather_list[yearposition-1].snow_max_winterdepth;
+			
+			// deviating from centre value of elevation snow will be distributed by temperature lapse
+				// weather_list[yearposition-1].snow_max_winterdepthmin // means 100 m upwards in elevation
+				// pEnvirgrid.elevation
+				// (double)parameter[0].maxele/10
+				// (double)parameter[0].minele/10
+				// pEnvirgrid.snowdepth = weather_list[yearposition-1].snow_max_winterdepth + ( ((((double)pEnvirgrid.elevation/10) - (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10))) / (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10)) ) * (weather_list[yearposition-1].snow_max_winterdepthmin-weather_list[yearposition-1].snow_max_winterdepth) );
+			
+// #pragma omp critical
+	// cout << "elevation = " << ((double)pEnvirgrid.elevation/10)
+		 // << " > maxele = " << (double)parameter[0].maxele/10
+		 // << " > minele = " << (double)parameter[0].minele/10
+		 // << " > snow_max_winterdepth = " << weather_list[yearposition-1].snow_max_winterdepth
+		 // << " > snow_max_winterdepthmin = " << weather_list[yearposition-1].snow_max_winterdepthmin
+		 // << " > pEnvirgrid.snowdepth = " << pEnvirgrid.snowdepth
+		 // << endl;
+
+			// snow accumulation dependency on surface roughness
+				// pEnvirgrid.Treedensityvalue
+			
+		}
+	} else {
+		cout << " no snow computation " << endl;
+	}
+}
+
+void ReworkSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
+    const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
+                           * static_cast<std::size_t>(parameter[0].sizemagnif);
+
+	if (parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+        // RandomNumber<double> uniform(0, 1);
+
+/*
+ // currently not functional dynamic!
+		// find order along elevation from uppermost to lowermost position // maybe only once on initialization
+		// ... from https://stackoverflow.com/questions/1577475/c-sorting-and-keeping-track-of-indexes
+		vector<pair<int,int> >a;
+
+		// for (i = 0 ;i < n ; i++) {
+		int i = 0;
+		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+			auto& pEnvirgrid = plot_list[kartenpos];
+			
+			// filling the original array
+			// cin >> k;
+			a.push_back (make_pair (pEnvirgrid.elevation,i)); // k = value, i = original index
+			i++;
+		}
+
+		sort(a.begin(),a.end());
+
+		for (int i = 0 ; i < n ; i++){
+			cout << a[i].first << " " << a[i].second << "\n";
+		}
+*/
+
+// #pragma omp parallel for default(shared) private(uniform) schedule(guided)
+#pragma omp parallel for default(shared) schedule(guided)
+		// for (std::size_t kartenpos = 0; kartenpos < a.size(); ++kartenpos) {
+		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+			auto& pEnvirgrid = plot_list[kartenpos];
+
+			// snow wind distribution and downslope plus dependency on surface roughness
+					double snowbefore = pEnvirgrid.snowdepth;
+				// ... more exposed less snow and vice versa
+					pEnvirgrid.snowdepth = pEnvirgrid.snowdepth * ( (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10)) / ((double)pEnvirgrid.elevation/10) ) ;
+					double snowmiddle = pEnvirgrid.snowdepth;
+				// ... more dense more accumulation e.g. 200% more in stands with tall trees maxtreeheight/10 => cm or pEnvirgrid.Treedensityvalue
+					pEnvirgrid.snowdepth = pEnvirgrid.snowdepth * 1.0+pow(((double)pEnvirgrid.maxtreeheight/10)/10000, 0.25);// scaled to 100 m tall trees, meaning tree with 1 m = 31% more snow depth, 10 m = 56% more
+			
+			
+
+// #pragma omp critical
+			// cout << "pEnvirgrid.elevation = " << ((double)pEnvirgrid.elevation/10)
+				 // << " > maxele-minele = " << (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10))
+				 // << " > snowbefore = " << snowbefore
+				 // << " > snowmiddle = " << snowmiddle
+				 // << " > pEnvirgrid.snowdepth = " << pEnvirgrid.snowdepth
+				 // << endl;
+		}
+	}// end if snow
+}// end function declare
+
+
 /****************************************************************************************/
 /**
  * \brief update density maps and active layer depth
@@ -563,6 +668,9 @@ void Environmentupdate(//Parameter* parameter,
         vector<Weather>& weather_list = *posiwelt;
 
         aktort++;
+
+		DistributeSnow(yearposition, plot_list, weather_list); // before ResetMaps as uses density and other variables
+		ReworkSnow(yearposition, plot_list, weather_list); // before ResetMaps as uses density and other variables
 
         ResetMaps(yearposition, plot_list, weather_list);
 

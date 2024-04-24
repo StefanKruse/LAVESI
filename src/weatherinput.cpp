@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include "RandomNumber.h"
 
 using namespace std;
 
@@ -11,6 +12,14 @@ extern vector<double> wdir, wspd;
 extern vector<vector<double>> windspd;
 extern vector<vector<double>> winddir;
 extern vector<int> globalyears;
+
+double drawsnowevent() {
+	RandomNumber<double> uniform(0, 1);
+	double y = (uniform() * 6.373232);	// total range
+	// y^0.27 = -15.39633 * x^0.01 + -15.93463
+	double rn = pow((pow(y,0.27) -  15.93463)/(-15.39633),1/0.01);
+	return(rn);
+};
 
 void getPrec(char dateinameprec[250], vector<Weather>& weather_list, int maximal_word_length) {
     FILE* fp;
@@ -514,42 +523,257 @@ vector<double> dailyrain;
 // for(int i=1;i<=30;i++) {// September-1
 	// dailyrain.push_back(weather_list[iweather-1].prec9monthmean/30);
 // }
-for(int i=1;i<=31;i++) {// Januar
-	dailyrain.push_back(weather_list[iweather].prec1monthmean/31);
+
+bool stochasticsnow = true;
+
+vector<double> dailyrain_temp;
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// Januar
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// Januar
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec1monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// Januar
+		dailyrain_temp.push_back(weather_list[iweather].prec1monthmean/31);
+	}
 }
-for(int i=1;i<=28;i++) {// Februar
-	dailyrain.push_back(weather_list[iweather].prec2monthmean/28);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+if(stochasticsnow == true) {
+	// draw 28 events
+	double localsum = 0;
+	for(int i=1;i<=28;i++) {// February
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=28;i++) {// February
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec2monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=28;i++) {// February
+		dailyrain_temp.push_back(weather_list[iweather].prec2monthmean/31);
+	}
 }
-for(int i=1;i<=31;i++) {// March
-	dailyrain.push_back(weather_list[iweather].prec3monthmean/31);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// March
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// March
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec3monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// March
+		dailyrain_temp.push_back(weather_list[iweather].prec3monthmean/31);
+	}
 }
-for(int i=1;i<=30;i++) {// April
-	dailyrain.push_back(weather_list[iweather].prec4monthmean/30);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 30 events
+	double localsum = 0;
+	for(int i=1;i<=30;i++) {// April
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=30;i++) {// April
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec4monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=30;i++) {// April
+		dailyrain_temp.push_back(weather_list[iweather].prec4monthmean/31);
+	}
 }
-for(int i=1;i<=31;i++) {// May
-	dailyrain.push_back(weather_list[iweather].prec5monthmean/31);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// May
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// May
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec5monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// May
+		dailyrain_temp.push_back(weather_list[iweather].prec5monthmean/31);
+	}
 }
-for(int i=1;i<=30;i++) {// June
-	dailyrain.push_back(weather_list[iweather].prec6monthmean/30);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 30 events
+	double localsum = 0;
+	for(int i=1;i<=30;i++) {// June
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=30;i++) {// June
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec6monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=30;i++) {// June
+		dailyrain_temp.push_back(weather_list[iweather].prec6monthmean/31);
+	}
 }
-for(int i=1;i<=31;i++) {// July
-	dailyrain.push_back(weather_list[iweather].prec7monthmean/31);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// July
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// July
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec7monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// July
+		dailyrain_temp.push_back(weather_list[iweather].prec7monthmean/31);
+	}
 }
-for(int i=1;i<=31;i++) {// August
-	dailyrain.push_back(weather_list[iweather].prec8monthmean/31);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// August
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// August
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec8monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// August
+		dailyrain_temp.push_back(weather_list[iweather].prec8monthmean/31);
+	}
 }
-for(int i=1;i<=30;i++) {// September
-	dailyrain.push_back(weather_list[iweather].prec9monthmean/30);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 30 events
+	double localsum = 0;
+	for(int i=1;i<=30;i++) {// September
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=30;i++) {// September
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec9monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=30;i++) {// September
+		dailyrain_temp.push_back(weather_list[iweather].prec9monthmean/31);
+	}
 }
-for(int i=1;i<=31;i++) {// Oktober
-	dailyrain.push_back(weather_list[iweather].prec10monthmean/31);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+
+
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// October
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// October
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec10monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// October
+		dailyrain_temp.push_back(weather_list[iweather].prec10monthmean/31);
+	}
 }
-for(int i=1;i<=30;i++) {// November
-	dailyrain.push_back(weather_list[iweather].prec11monthmean/30);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+if(stochasticsnow == true) {
+	// draw 30 events
+	double localsum = 0;
+	for(int i=1;i<=30;i++) {// November
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=30;i++) {// November
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec11monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=30;i++) {// November
+		dailyrain_temp.push_back(weather_list[iweather].prec11monthmean/31);
+	}
 }
-for(int i=1;i<=31;i++) {// Dezember
-	dailyrain.push_back(weather_list[iweather].prec12monthmean/31);
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
+
+
+
+if(stochasticsnow == true) {
+	// draw 31 events
+	double localsum = 0;
+	for(int i=1;i<=31;i++) {// December
+		dailyrain_temp.push_back(drawsnowevent());
+		localsum += dailyrain_temp.back();
+	}
+	// scale to have max precipitation as given
+	for(int i=1;i<=31;i++) {// December
+		dailyrain_temp[i-1] = dailyrain_temp[i-1] * weather_list[iweather].prec12monthmean/localsum; // check later to correct smaller 
+		// cout << "snow " << i << " = " << dailyrain_temp[i-1] << endl;
+	}
+} else {
+	for(int i=1;i<=31;i++) {// December
+		dailyrain_temp.push_back(weather_list[iweather].prec12monthmean/31);
+	}
 }
+dailyrain.insert(dailyrain.end(),dailyrain_temp.begin(),dailyrain_temp.end());
 // Januar	31
 // Februar	28
 // März	31
@@ -564,6 +788,16 @@ for(int i=1;i<=31;i++) {// Dezember
 // Dezember	31
 	// 365
 // # extract same length daily temperatures
+
+
+/// deterimine extreme events (snowfall)
+//	... define threshold e.g. 7.1 mm (99%percentile of observations)
+//  ... strenght is PRCP_i/threshold
+//  ... multiply with temperature function as warm/wet snow is more problematic
+
+
+
+
 // cout <<
 		// "weather_list[iweather].dailytemp.size() = " <<
 		// weather_list[iweather].dailytemp.size() <<

@@ -1314,15 +1314,20 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
                 } else if (parameter[0].windsource == 10) {
 					filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
 				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario < 100000){
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000){
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000){
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000){
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				} else if (parameter[0].windsource == 998) {
-					filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM1_2_from100yrMeans/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM1_2_from100yrMeans/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+					filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM1_2_from100yrMeans/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
 				}
 
                 ifstream fileinp(filename.c_str());

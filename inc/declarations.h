@@ -20,5 +20,5 @@ extern Speciestraits speciestrait[99];
 class Pesttraits;
 extern Pesttraits pesttrait[99];
 class Speciescolonizationtimes;
-extern Speciescolonizationtimes speciescolonizationtimes[99];
+extern Speciescolonizationtimes speciescolonizationtimes[300];
 

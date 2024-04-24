@@ -10,7 +10,7 @@ using namespace std;
 Parameter parameter[1];
 Speciestraits speciestrait[99];
 Pesttraits pesttrait[99];
-Speciescolonizationtimes speciescolonizationtimes[99];
+Speciescolonizationtimes speciescolonizationtimes[300];
 
 int yearposition;
 
@@ -1700,6 +1700,14 @@ int main() {
 		
 		 // (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor)
 		parameter[0].sapl_mort_factor = 0.25;
+		// roi = 1
+		speciestrait[1].mortyouth = 0.25+0.049; //LAGM
+		speciestrait[2].mortyouth = 0.25+0.049; //LASI
+		speciestrait[3].mortyouth = 0.25+0.049; //LACA
+		speciestrait[4].mortyouth = 0.25+0.049; //PIOB
+		speciestrait[5].mortyouth = 0.25+0.049; //PISY
+		speciestrait[6].mortyouth = 0.25+0.049; //PISI
+		speciestrait[7].mortyouth = 0.25+0.049; //BEPE
 		// roi = 2
 		speciestrait[8].mortyouth = 0.25+0.049; //LALA
 		speciestrait[9].mortyouth = 0.25+0.049; //PIGL

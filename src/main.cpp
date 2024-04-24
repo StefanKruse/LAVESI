@@ -1700,6 +1700,15 @@ int main() {
 		
 		 // (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor)
 		parameter[0].sapl_mort_factor = 0.25;
+		// roi = 2
+		speciestrait[8].mortyouth = 0.25+0.049; //LALA
+		speciestrait[9].mortyouth = 0.25+0.049; //PIGL
+		speciestrait[10].mortyouth = 0.25+0.049; //PIMA
+		speciestrait[11].mortyouth = 0.25+0.049; //BEPA
+		speciestrait[12].mortyouth = 0.25+0.049; //POTR
+		speciestrait[13].mortyouth = 0.25+0.049; //POBA
+		speciestrait[14].mortyouth = 0.25+0.049; //PICO
+		// roi = 3
 		speciestrait[15].mortyouth = 0.25+0.049;
 		speciestrait[16].mortyouth = 0.25+0.049;
 		speciestrait[17].mortyouth = 0.50;	// TSME
@@ -1724,8 +1733,10 @@ int main() {
 		parameter[0].desitymaxreduction = 0.9;
 		parameter[0].dichtheightrel = 0;									 
 
-		for(int spi = 15; spi <= 22; spi++)
+		// for(int spi = 15; spi <= 22; spi++)
+		for(int spi = 1; spi <= 22; spi++)
 			speciestrait[spi].mdensity = 0.25;
+			// speciestrait[spi].mdensity = 0.5;
 
         parameter[0].starter = false;
 

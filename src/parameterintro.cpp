@@ -989,7 +989,13 @@ void Getspeciestraits(void) {
 
 	// second colonization times
 	FILE *f2;
-	f2 = fopen("speciescolonizationtimes_AK.csv","r"); 
+	if(parameter[0].roi==1) {// RU
+		f2 = fopen("speciescolonizationtimes_RU.csv","r"); 
+	} else if(parameter[0].roi==2) {// CA
+		f2 = fopen("speciescolonizationtimes_CA.csv","r"); 
+	} else if(parameter[0].roi==3) {// AK
+		f2 = fopen("speciescolonizationtimes_AK.csv","r"); 
+	}
 	if (f2 == NULL) {
 		printf("speciescolonizationtimes_AK.csv file not available!\n");
 		exit(1);

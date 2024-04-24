@@ -46,6 +46,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
     unsigned short int pestinfectancedamage;// 2	relative; 0-1 -> precision /1000 lead to 0.001 precision
     unsigned long int pestinfection; // numeric value encoding which pest species had an impact on this tree
 	unsigned short int snowdepth;			// 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
+	unsigned short int avalancheimpact;		// 2	counter of 0 to 10
 };
 
 struct Seed {  // sizeof variable //TODO: further could be replaced
@@ -105,7 +106,10 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
     unsigned short int twi;  // 2	---> use of unsigned short int (max=32767), as only between 0 and 100, precision of 0.02, so 1/100
 
 	double snowdepth;
-
+	
+	double avalanchepower;
+	vector<unsigned long long int> upslopecells; // store the positions of upslope cells in order starting at actual cell and increasing elevation until limit is reached or no further upslope
+	
     // constructor
     Envirgrid(short int elevation = 0,
               // unsigned long int Treedensityvalue = 0,
@@ -133,7 +137,8 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 			  unsigned short int firecells = 0,
 			  double fireintensitymax = 0,
 			  double fireintensitymean = 0,
-			  double snowdepth = 0)	
+			  double snowdepth = 0,
+			  double avalanchepower = 0)	
 			  
         : elevation(elevation),
           Treedensityvalue(Treedensityvalue),
@@ -159,7 +164,8 @@ struct Envirgrid {        // sizeof variable //TODO: further could be replaced
 		  firecells(firecells),
           fireintensitymax(fireintensitymax),
 		  fireintensitymean(fireintensitymean),
-		  snowdepth(snowdepth) {}
+		  snowdepth(snowdepth),
+		  avalanchepower(avalanchepower) {}
 };
 
 struct Parameter {
@@ -355,6 +361,28 @@ struct Parameter {
 	short int minele;
 	
 	bool snowcomputation;
+	
+	// impact factor analyse
+	double if_growingseasonlength;
+	double if_summertemperature;
+	double if_wintertemperature;
+	double if_summerprecipitation;
+	double if_winterprecipitation;
+	double if_windspeed;
+	double if_windexposure;
+	double if_seedproduction;
+	double if_maturationage;
+	double if_seedintronumberpermanent;
+	double if_dispersaldistance;
+	double if_longdistancedispersal;
+	double if_seedlingestablishment;
+	double if_seedlingmortality;
+	double if_overagingmortality;
+	double if_slope;
+	double if_twi;
+	double if_seedbedavailability;
+	double if_activelayer;
+	double if_facilitation;
 };
 
 struct Speciestraits {

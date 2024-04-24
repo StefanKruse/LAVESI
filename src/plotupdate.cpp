@@ -522,7 +522,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				
 				)*8; // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 4 assumed use for tuning ALT
 // cout << maxthawing_depth << " | " << daempfung << " | " << weather_list[yearposition].degreday<< " & " << weather_list[yearposition].degredaymin << " & " << elefactor << " & " << ((double)pEnvirgrid.elevation / 10) << endl;
-			pEnvirgrid.maxthawing_depth = maxthawing_depth;
+			pEnvirgrid.maxthawing_depth = maxthawing_depth * parameter[0].if_activelayer;
 			pEnvirgrid.Treedensityvalue = 0;
 			pEnvirgrid.Treenumber = 0;
 			pEnvirgrid.maxtreeheight = 0;
@@ -542,8 +542,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
     }
 }
 
-
 void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
+cout << " start distribute snow computations! " << endl;
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
 
@@ -641,6 +641,60 @@ void ReworkSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>&
 	}// end if snow
 }// end function declare
 
+void SnowAvalanches(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
+cout << " start avalanche computations! " << endl;
+    const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
+                           * static_cast<std::size_t>(parameter[0].sizemagnif);
+
+	if (parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+        RandomNumber<double> uniform(0, 1);
+
+
+		// assess if winter is extreme and avalanche risk is high
+			// weather_list[iweather].snow_max_winterdepth 100cm
+			// double avalanchesnowdepthpasspoint = 81.17; // 99th percentile of snow_max_winterdepth values
+			double avalanchesnowdepthpasspoint = 97.96; // 99.9th percentile of snow_max_winterdepth values
+			double avalancherisk = weather_list[yearposition-1].snow_max_winterdepth/avalanchesnowdepthpasspoint;
+			
+		// dra random number and stochastic avalanche trigger
+			cout << " - avalanche risk = " << avalancherisk;
+			if(uniform()<avalancherisk) {
+cout << " =>  avalanche happens! " << endl;
+			
+// #pragma omp parallel for default(shared) private(uniform) schedule(guided)
+#pragma omp parallel for default(shared) schedule(guided)
+			// for (std::size_t kartenpos = 0; kartenpos < a.size(); ++kartenpos) {
+			for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+				// auto& pEnvirgrid = plot_list[kartenpos];
+				plot_list[kartenpos].avalanchepower = 0; // reset value
+				// if(plot_list[kartenpos].Treedensityvalue > 0) {
+// cout << " avalanche happens! " << plot_list[kartenpos].Treedensityvalue << endl;
+					
+					// if avalanache is triggered
+					// start at highest point and compute avalanche impact
+					// ... reduced by treedensity or height? 
+						// ((double)pEnvirgrid.maxtreeheight/10) ... height in cm
+						// pEnvirgrid.snowdepth ...
+						double avalanchepower = 100*avalancherisk;
+						// reverse along this vector is position 
+						
+						// cout << "next" << endl;
+						// for (auto it = plot_list[kartenpos].upslopecells.rbegin(); it != plot_list[kartenpos].upslopecells.rend(); ++it) { 
+						for (unsigned long int it = 0; it < plot_list[kartenpos].upslopecells.size(); ++it) { 
+							// avalanchepower = avalanchepower - (double)plot_list[*it].Treedensityvalue/10000;
+							avalanchepower = avalanchepower - (double)plot_list[plot_list[kartenpos].upslopecells[it]].Treedensityvalue/10000;
+							// cout << plot_list[*it].Treedensityvalue << " " << avalanchepower << endl;
+						}
+						// if(avalanchepower>=0) {
+							plot_list[kartenpos].avalanchepower = avalanchepower;
+						// }
+					// } // end if trepresence
+				} // end individual tile loop
+			} // end avalanche
+	}// end if snow
+	cout << endl;
+}// end function declare
+
 
 /****************************************************************************************/
 /**
@@ -671,7 +725,8 @@ void Environmentupdate(//Parameter* parameter,
 
 		DistributeSnow(yearposition, plot_list, weather_list); // before ResetMaps as uses density and other variables
 		ReworkSnow(yearposition, plot_list, weather_list); // before ResetMaps as uses density and other variables
-
+		SnowAvalanches(yearposition, plot_list, weather_list);// before ResetMaps as uses density and other variables
+		
         ResetMaps(yearposition, plot_list, weather_list);
 
         AddTreeDensity(tree_list, plot_list);

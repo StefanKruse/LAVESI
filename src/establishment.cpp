@@ -46,6 +46,7 @@ void Treeestablishment(Parameter* parameter,
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
                 // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
 // cout << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
+				germinationlitterheightinfluence = germinationlitterheightinfluence * parameter[0].if_seedbedavailability;
                 if (germinationlitterheightinfluence < 0.01) {// minimum 1%
                     germinationlitterheightinfluence = 0.01;
                 }
@@ -269,6 +270,7 @@ cout << " ESTAB:: seed.species = " << seed.species
 }
 */
 
+				germinationprobability = germinationprobability * parameter[0].if_seedlingestablishment;
 				if (rn < germinationprobability) {
 // cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
 					if ( (IsFiniteNumber2( basalgrowth_help ) == true) && (basalgrowth_help < 10.0) ) { // otherwise can not survive
@@ -330,6 +332,7 @@ cout << " ESTAB:: seed.species = " << seed.species
 							tree.relcrowndamage = 0*1000;
 							tree.pestinfectancedamage = 0*1000;
 							tree.pestinfection = 0;
+							tree.avalancheimpact = 0;
 
 							tree_list.add(std::move(tree));
 

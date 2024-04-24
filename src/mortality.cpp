@@ -98,17 +98,25 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				}
 				
 				sapl_mort = sapl_mort*tree.heightsubordination;
-				
+				sapl_mort = sapl_mort * parameter[0].if_seedlingmortality;
 				if(sapl_mort < 0) {
 					sapl_mort=0;
 				} else if (sapl_mort>1.0) {
 					sapl_mort = 1.0;
 				}
             double age_mort = speciestrait[tree.species].mortage * agesmort * (10.0 * speciestrait[tree.species].mortbg);
+			age_mort = age_mort * parameter[0].if_overagingmortality;
             double growth_mort = speciestrait[tree.species].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp));
             // double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert;
             // double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert * tree.heightsubordination;
             double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert * pow(tree.heightsubordination,2.0);
+			if( (tree.densitywert > 0.0) & (tree.densitywert <= 0.5) ) {
+				dens_mort = dens_mort * (1.0 - ((tree.densitywert/0.5) * parameter[0].if_facilitation));
+			}
+			if( (tree.densitywert > 0.5) & (tree.densitywert < 1.0) ) {
+				dens_mort = dens_mort * ((1.0-parameter[0].if_facilitation) - ((1.0-tree.densitywert/0.5) * parameter[0].if_facilitation));
+			}
+
 			double lightavailability_mort = speciestrait[tree.species].mdensity * tree.densitywert / speciestrait[tree.species].lightdemand; // value between 0 and 1 // the lightdemand is 1, 2 or 3 and means that 3 is a shadow tolerant species, assuming more density is usually by larger trees or generally causing more shadow we can reduce this value, so that a value of 3 would reduce this to 0 additional mortality and 1
 				if(tree.dbasal>0.25) {
 					lightavailability_mort = lightavailability_mort * pow((1/(tree.dbasal+0.75)),2.0);
@@ -192,9 +200,21 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			// snow mortality
 			double snow_mort = 0;
 			if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
+				// snow based
 				if((((double)tree.height) / 10.0) > (((double)tree.snowdepth) / 10.0)) {
 					if((((double)tree.height) / 10.0) < 500) {// only trees smaller than 5 m are affected with decreasing impact
 						snow_mort = ( 0.5 * (1-((((double)tree.height) / 10.0)/500)) ) / 10.0;
+					}
+				}
+				// avalanches
+				if(plot_list[kartenpos].avalanchepower>90) {
+					double avalpowerlocal = (plot_list[kartenpos].avalanchepower - 90)/10;
+					snow_mort = snow_mort + avalpowerlocal; // rescaling to 0-1
+					if(avalpowerlocal>1) {
+						avalpowerlocal = 1;
+					}
+					if(avalpowerlocal>0) {
+						tree.avalancheimpact = tree.avalancheimpact + (unsigned short int)(10*avalpowerlocal);//samenproductionnegimpact for max 10 years linear increasing based on the power
 					}
 				}
 			}
@@ -218,6 +238,15 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			// if (tree.firedamage > 0) {
 			// cout << "treemortality: " << treemortality << " - tree.firedamage: " << tree.firedamage << endl;
 			// }
+double windexposuremort = 0.0; // percent extra damage/mortality
+if(( (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10)) / ((double)tree.elevation/10) ) < 1.0) {
+	double windexposuremortfactor = (( (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10)) / ((double)tree.elevation/10) )*(1.0+(double)tree.densitywert));
+	if(windexposuremortfactor<1.0) {
+		windexposuremort = 1.0 - windexposuremortfactor;
+		windexposuremort = windexposuremort * parameter[0].if_windexposure;
+	}
+}
+treemortality = treemortality + windexposuremort;
 
             if (treemortality > 1.0) {
                 treemortality = 1.0;

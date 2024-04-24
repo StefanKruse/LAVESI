@@ -1524,6 +1524,8 @@ void fillElevations() {
                         // calculate environment-growth-impact (value between 0 and 1)
                         // f(TWI)		= slope * TWI + intercept
                         // f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
+						slopeinter = slopeinter * parameter[0].if_slope;
+						twiinter = twiinter * parameter[0].if_twi;
                         double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
                                                    + (1 - parameter[0].slopetwiratio)
                                                          * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
@@ -1590,7 +1592,7 @@ void initialiseMaps() {
 						 // Here, initial grid values are prepared. For the values check structures.h L100 following!  
                          // {initialelevation, 0, 0, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1, 0, 0}); // ###Fire version from before merging### Last digit resembles initial fire counter, put to "false" for bool variant
                          // {initialelevation, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0, 0, 0, 0}); //new version after merging; added last three 0s for fire
-                         {initialelevation, 0, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0, 0, 0, 0}); //new version after merging; added last three 0s for fire
+                         {initialelevation, 0, 0, 0, 100*10, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 10*100, 1, 30*100, (unsigned short int)6.25*100, 0, 0, 0, 0, 0, 0}); //new version after merging; added last three 0s for fire
 						 
         auto time_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed;
@@ -1646,6 +1648,277 @@ void initialiseMaps() {
     cout << " ... ... ended initialise Maps " << endl;
 }
 
+void FindUpslopeCells() {// go through all cells of envirgrid and find stepwise upslope path and store the position only once on start
+	// upslopecells is a vector<unsigned long long int> upslopecells; in struct 
+	for (vector<vector<Envirgrid>>::iterator posw = world_plot_list.begin(); posw != world_plot_list.end(); posw++) {
+		vector<Envirgrid>& plot_list = *posw;
+		
+		/*
+		pseudocode start
+		store startcellid in upslopecells.push_back(ID)
+		find in adjacent cells highest elevation and store id upslopecells.push_back(ID)
+		... repeat until no further higher cell exists
+		*/
+		
+		// create lookuptable to find next higher elevation cell
+		unsigned long long int maxposition = ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif);
+		vector<unsigned long long int> plot_list_nextupslope_kartenpos(maxposition, maxposition+1); // initialize with a value of +1 the max possible length of the envirgrid
+// test with mean per y values
+unsigned long long int maxyposition = floor((double)maxposition / (treecols * parameter[0].sizemagnif));
+vector<unsigned long long int > elevation_mean(maxyposition,0);
+vector<unsigned long long int > elevation_mean_count(maxyposition,0);
+
+#pragma omp parallel for default(shared) schedule(guided)
+		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos++) {
+			unsigned long long int kartenpos_next_usplope_cell = kartenpos;
+            
+			// find position of surrounding cells
+			// double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+            // double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+			
+			// test flipping
+			double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+			// double ycoo = (treerows*parameter[0].sizemagnif) - (floor((double)kartenpos / (treecols * parameter[0].sizemagnif)));
+            double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+			
+			// test with reaching for step jumps to look farther
+			double stepsize = 60; // a value of 50 is 10 m, 30 worked
+			if( ( (ycoo > stepsize) & (ycoo < ((treerows * parameter[0].sizemagnif)-stepsize)) ) & ( (xcoo > stepsize) & (xcoo < ((treecols * parameter[0].sizemagnif)-stepsize)) ) ) {
+			// get elevation values
+// test with mean per y values
+if( (plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo].elevation) < 32767) {
+	elevation_mean[ycoo] += plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo].elevation;
+	++elevation_mean_count[ycoo];
+}
+
+			// TODO: what about NA values (water bodies or border zone?)
+				// upper row
+				short int m1p1 = plot_list[(ycoo-stepsize) * (treecols * parameter[0].sizemagnif) + xcoo-stepsize].elevation; // access of the current position value
+				short int m0p1 = plot_list[(ycoo-stepsize) * (treecols * parameter[0].sizemagnif) + xcoo].elevation; // access of the current position value
+				short int p1p1 = plot_list[(ycoo-stepsize) * (treecols * parameter[0].sizemagnif) + xcoo+stepsize].elevation; // access of the current position value
+				// centre row
+				short int m1p0 = plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo-stepsize].elevation; // access of the current position value
+				short int m0p0 = plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo].elevation; // access of the current position value
+				short int p1p0 = plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo+stepsize].elevation; // access of the current position value
+				// lower row
+				short int m1m1 = plot_list[(ycoo+stepsize) * (treecols * parameter[0].sizemagnif) + xcoo-stepsize].elevation; // access of the current position value
+				short int m0m1 = plot_list[(ycoo+stepsize) * (treecols * parameter[0].sizemagnif) + xcoo].elevation; // access of the current position value
+				short int p1m1 = plot_list[(ycoo+stepsize) * (treecols * parameter[0].sizemagnif) + xcoo+stepsize].elevation; // access of the current position value
+						
+			
+			/*
+			if( ( (ycoo > 1) & (ycoo < (treerows * parameter[0].sizemagnif)) ) & ( (xcoo > 1) & (xcoo < (treecols * parameter[0].sizemagnif)) ) ) {
+			// get elevation values
+			// TODO: what about NA values (water bodies or border zone?)
+				// upper row
+				short int m1p1 = plot_list[(ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo-1].elevation; // access of the current position value
+				short int m0p1 = plot_list[(ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo].elevation; // access of the current position value
+				short int p1p1 = plot_list[(ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo+1].elevation; // access of the current position value
+				// centre row
+				short int m1p0 = plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo-1].elevation; // access of the current position value
+				short int m0p0 = plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo].elevation; // access of the current position value
+				short int p1p0 = plot_list[ycoo * (treecols * parameter[0].sizemagnif) + xcoo+1].elevation; // access of the current position value
+				// lower row
+				short int m1m1 = plot_list[(ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo-1].elevation; // access of the current position value
+				short int m0m1 = plot_list[(ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo].elevation; // access of the current position value
+				short int p1m1 = plot_list[(ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo+1].elevation; // access of the current position value
+			*/	
+			
+			/*
+			// get position
+				kartenpos_next_usplope_cell = ycoo * (treecols * parameter[0].sizemagnif) + xcoo;//1st
+				if( (m1p1!=32767) & (m1p1>m0p0) )
+					kartenpos_next_usplope_cell = (ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo-1;//1st
+				if( (m0p1!=32767) & (m0p1>m1p1) )
+					kartenpos_next_usplope_cell = (ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo;
+				if( (p1p1!=32767) & (p1p1>m0p1) )
+					kartenpos_next_usplope_cell = (ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo+1;
+				if( (m1p0!=32767) & (m1p0>p1p1) )
+					kartenpos_next_usplope_cell = ycoo * (treecols * parameter[0].sizemagnif) + xcoo-1;
+				if( (p1p0!=32767) & (p1p0>m1p0) )
+					kartenpos_next_usplope_cell = ycoo * (treecols * parameter[0].sizemagnif) + xcoo+1;
+				if( (m1m1!=32767) & (m1m1>p1p0) )
+					kartenpos_next_usplope_cell = (ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo-1;
+				if( (m0m1!=32767) & (m0m1>m1m1) )
+					kartenpos_next_usplope_cell = (ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo;
+				if( (p1m1!=32767) & (p1m1>m0m1) )
+					kartenpos_next_usplope_cell = (ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo+1;
+				*/
+			// get position
+				kartenpos_next_usplope_cell = ycoo * (treecols * parameter[0].sizemagnif) + xcoo;//1st
+// cout << m1p1 << " / "
+	 // << m0p1 << " / "
+	 // << p1p1 << " / "
+	 // << m1p0 << " / ("
+	 // << m0p0 << ") / "
+	 // << p1p0 << " / "
+	 // << m1m1 << " / "
+	 // << m0m1 << " / "
+	 // << p1m1 << " / "
+	 // << endl;
+				// with stepsizes steps
+				if( (m1p1!=32767) & (m1p1>m0p0) )
+					kartenpos_next_usplope_cell = (ycoo-stepsize) * (treecols * parameter[0].sizemagnif) + xcoo-stepsize;//1st
+				if( (m0p1!=32767) & (m0p1>m1p1) )
+					kartenpos_next_usplope_cell = (ycoo-stepsize) * (treecols * parameter[0].sizemagnif) + xcoo;
+				if( (p1p1!=32767) & (p1p1>m0p1) )
+					kartenpos_next_usplope_cell = (ycoo-stepsize) * (treecols * parameter[0].sizemagnif) + xcoo+stepsize;
+				if( (m1p0!=32767) & (m1p0>p1p1) )
+					kartenpos_next_usplope_cell = ycoo * (treecols * parameter[0].sizemagnif) + xcoo-stepsize;
+				if( (p1p0!=32767) & (p1p0>m1p0) )
+					kartenpos_next_usplope_cell = ycoo * (treecols * parameter[0].sizemagnif) + xcoo+stepsize;
+				if( (m1m1!=32767) & (m1m1>p1p0) )
+					kartenpos_next_usplope_cell = (ycoo+stepsize) * (treecols * parameter[0].sizemagnif) + xcoo-stepsize;
+				if( (m0m1!=32767) & (m0m1>m1m1) )
+					kartenpos_next_usplope_cell = (ycoo+stepsize) * (treecols * parameter[0].sizemagnif) + xcoo;
+				if( (p1m1!=32767) & (p1m1>m0m1) )
+					kartenpos_next_usplope_cell = (ycoo+stepsize) * (treecols * parameter[0].sizemagnif) + xcoo+stepsize;
+
+
+			} // only if not on border zone
+			plot_list_nextupslope_kartenpos[kartenpos] = kartenpos_next_usplope_cell;
+			// if(kartenpos_next_usplope_cell != kartenpos)
+				// cout << "kartenpos_next_usplope_cell= " << kartenpos_next_usplope_cell << endl;
+		} // end lookup table grid_cell loop
+
+#pragma omp critical
+{
+		FILE* fdir;
+		char filenamechar[50];
+		sprintf(filenamechar, "upslopetest");
+		string output = "output/" + string(filenamechar) + ".csv";
+		fdir = fopen(output.c_str(), "a+");
+
+		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos++) {	
+            
+			// find position of surrounding cells
+			double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+            double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+			
+            fprintf(fdir,
+					"%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\n",
+					(double)kartenpos,
+					(double)ycoo,
+					(double)xcoo,
+					(double)plot_list_nextupslope_kartenpos[kartenpos],
+					(double)plot_list[kartenpos].elevation
+                   );
+		}
+		fclose(fdir);
+}
+
+FILE* fdir2;
+char filenamechar2[150];
+sprintf(filenamechar2, "upslopetest_ele");
+string output2 = "output/" + string(filenamechar2) + ".csv";
+fdir2 = fopen(output2.c_str(), "a+");
+
+vector<unsigned long long int > elevation_mean_smoothed(maxyposition,0);//initialized with max value
+for(unsigned long int ycooi = 0; ycooi < elevation_mean.size(); ycooi++) {
+	if( (elevation_mean_count[ycooi]>0) ) {
+		elevation_mean[ycooi] = elevation_mean[ycooi] / elevation_mean_count[ycooi];
+		// cout << ycooi << ": elevation = " << elevation_mean[ycooi] << " || "; 
+	}
+	// runmean forward
+	unsigned long int meanwidth = 30;
+	if( (ycooi > meanwidth) & (ycooi < (elevation_mean.size()-2*meanwidth))) {
+		int counti = 0;
+		for(unsigned long int i = 0; i < meanwidth; i++) {
+			if(elevation_mean[ycooi+i]>0) {
+				elevation_mean_smoothed[ycooi] += elevation_mean[ycooi+i];
+				counti++;
+			}
+		}
+		if(counti>0) {
+			elevation_mean_smoothed[ycooi] = elevation_mean_smoothed[ycooi]/counti;
+		}
+	}
+	
+		fprintf(fdir2, 
+				"%d\t%d\t%d\t%d\n",
+				(int)ycooi,
+				(int)elevation_mean_count[ycooi],
+				(int)elevation_mean[ycooi],
+				(int)elevation_mean_smoothed[ycooi]
+				);
+}
+fclose(fdir2);
+/// 300 ycooi steps to be sure on inc/dec slope position next step without smoothing
+
+
+		vector<unsigned long long int> plot_list_nextupslope_kartenpos_mean(maxposition, maxposition+1); // initialize with a value of +1 the max possible length of the envirgrid
+#pragma omp parallel for default(shared) schedule(guided)
+		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos++) {
+			unsigned long long int kartenpos_next_usplope_cell = kartenpos;
+            
+			// find position of surrounding cells
+			// double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+            // double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+			
+			// test flipping
+			double ycoo = floor((double)kartenpos / (treecols * parameter[0].sizemagnif));
+			double xcoo = (double)kartenpos - ycoo * (treecols * parameter[0].sizemagnif);
+			
+			if( (ycoo>150) & (ycoo<(elevation_mean.size()-150)) ) {
+				unsigned long long int base = elevation_mean[ycoo];
+				unsigned long long int ahead = elevation_mean[ycoo+150];
+				unsigned long long int before = elevation_mean[ycoo-150];
+				
+				// compare
+				if(ahead>base)
+					kartenpos_next_usplope_cell = (ycoo+1) * (treecols * parameter[0].sizemagnif) + xcoo;
+				if(before>ahead)
+					kartenpos_next_usplope_cell = (ycoo-1) * (treecols * parameter[0].sizemagnif) + xcoo;
+				
+				plot_list_nextupslope_kartenpos_mean[kartenpos] = kartenpos_next_usplope_cell;
+			}
+
+		}
+
+
+
+		// follow next higher elevation for each gridcell
+#pragma omp parallel for default(shared) schedule(guided)
+		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos++) {
+			// check current value if == kartenpos no further looking
+			// ... if number diff then check the number there if that ist the diff number no further looking otherwise ..... until unlim
+			unsigned long long int currentpos = kartenpos;
+			// unsigned long long int nextpos = plot_list_nextupslope_kartenpos[kartenpos]; // original version no mean
+			unsigned long long int nextpos = plot_list_nextupslope_kartenpos_mean[kartenpos];
+			plot_list[kartenpos].upslopecells.push_back(currentpos);
+			// cause of memory reasons only store every ith position along path
+			unsigned long long int stepi = 1;
+			if(currentpos != nextpos) {// if elevation is higher in another cell, go on track the top
+				do {
+					stepi++;
+					currentpos = nextpos;
+					// nextpos = plot_list_nextupslope_kartenpos[currentpos];//original versoin no mean
+					nextpos = plot_list_nextupslope_kartenpos_mean[currentpos];
+					if((stepi % (3*50)) == 0) {//3*10 m steps
+						plot_list[kartenpos].upslopecells.push_back(currentpos);
+					}
+				}
+				while ( (currentpos != nextpos) & (stepi<50000) );
+			}
+// #pragma omp critical
+// {
+			// cout << "size=" << plot_list[kartenpos].upslopecells.size() << endl;
+// }
+		} // end grid_cell upslope tracking loop
+cout << "end all loop" << endl;
+		
+		/*
+		// check
+		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos++) {
+			cout << kartenpos << ": ";
+			for(const int& i : plot_list[kartenpos].upslopecells) 
+				cout << i << " / ";
+			cout << endl;
+		}// end check
+		*/
+	} // end go through all envirgrids
+}
+
 void runSimulation() {
     createLists();
 
@@ -1653,10 +1926,11 @@ void runSimulation() {
 
     // plot and evaluation list preparation for each location on the transect
     initialiseMaps();
-
     // compute dem for each envir grid tile from read in data
-    if (parameter[0].demlandscape)
+    if (parameter[0].demlandscape) {
         fillElevations();
+		FindUpslopeCells();
+	}
 
     // tree input from files and/or seed input
     Treedistribution(&parameter[0], stringlengthmax);

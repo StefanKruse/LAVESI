@@ -913,13 +913,116 @@ void Parameterinput(void) {
         printf("read:	%s <= %s ==> Main \n", uebergabestring, (parameter[0].weathercalcgradient) ? "true" : "false");
     }
 
+	// impact factor analyses
+    strcpy(uebergabestring, "if_growingseasonlength");
+    parameter[0].if_growingseasonlength = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_growingseasonlength);
+    }
+    strcpy(uebergabestring, "if_summertemperature");
+    parameter[0].if_summertemperature = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_summertemperature);
+    }
+    strcpy(uebergabestring, "if_wintertemperature");
+    parameter[0].if_wintertemperature = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_wintertemperature);
+    }
+    strcpy(uebergabestring, "if_summerprecipitation");
+    parameter[0].if_summerprecipitation = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_summerprecipitation);
+    }
+    strcpy(uebergabestring, "if_winterprecipitation");
+    parameter[0].if_winterprecipitation = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_winterprecipitation);
+    }
+    strcpy(uebergabestring, "if_windspeed");
+    parameter[0].if_windspeed = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_windspeed);
+    }
+    strcpy(uebergabestring, "if_windexposure");
+    parameter[0].if_windexposure = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_windexposure);
+    }
+    strcpy(uebergabestring, "if_maturationage");
+    parameter[0].if_maturationage = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_maturationage);
+    }
+    strcpy(uebergabestring, "if_maturationage");
+    parameter[0].if_maturationage = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_maturationage);
+    }
+    strcpy(uebergabestring, "if_seedintronumberpermanent");
+    parameter[0].if_seedintronumberpermanent = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_seedintronumberpermanent);
+    }
+	parameter[0].seedintronumberpermanent = (int) parameter[0].seedintronumberpermanent * parameter[0].if_seedintronumberpermanent;
+    strcpy(uebergabestring, "if_dispersaldistance");
+    parameter[0].if_dispersaldistance = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_dispersaldistance);
+    }
+    strcpy(uebergabestring, "if_longdistancedispersal");
+    parameter[0].if_longdistancedispersal = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_longdistancedispersal);
+    }
+    strcpy(uebergabestring, "if_seedlingestablishment");
+    parameter[0].if_seedlingestablishment = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_seedlingestablishment);
+    }
+    strcpy(uebergabestring, "if_seedlingmortality");
+    parameter[0].if_seedlingmortality = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_seedlingmortality);
+    }
+    strcpy(uebergabestring, "if_overagingmortality");
+    parameter[0].if_overagingmortality = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_overagingmortality);
+    }
+    strcpy(uebergabestring, "if_slope");
+    parameter[0].if_slope = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_slope);
+    }
+    strcpy(uebergabestring, "if_twi");
+    parameter[0].if_twi = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_twi);
+    }
+    strcpy(uebergabestring, "if_seedbedavailability");
+    parameter[0].if_seedbedavailability = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_seedbedavailability);
+    }
+    strcpy(uebergabestring, "if_activelayer");
+    parameter[0].if_activelayer = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_activelayer);
+    }
+    strcpy(uebergabestring, "if_facilitation");
+    parameter[0].if_facilitation = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_facilitation);
+    }
 
     // further variables
     parameter[0].tempdiffort = 0.0;
     parameter[0].precdiffort = 0.0;
 	parameter[0].litterlayerburn_mod = 1.0;
 	parameter[0].fireimpactareasize_mod = 1.0;
-	parameter[0].envirgrowthimpacttree_mod = 1.0;										   
+	parameter[0].envirgrowthimpacttree_mod = 1.0;
+	
 }
 
 void Getspeciestraits(void) {	

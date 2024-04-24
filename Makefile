@@ -7,7 +7,7 @@ OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 all: LAVESI_WIND
 
 clean:
-	@rm -rf data*.csv nohup.out output/data*.csv t_*.txt pollDist* output/windgen*.txt output/*.png output/*.mp4 output/firegap/*_firegap.csv output/firegap/firegap_*.txt output/*.gif t_*.txt output/pestoutbreaks.csv output/pestoutbreaks_mortality.csv output/establishmentcheck.csv output/mortalitycheck.csv output/growthcheck.csv output/snowcheck.csv build LAVESI_WIND
+	@rm -rf data*.csv nohup.out output/data*.csv t_*.txt pollDist* output/windgen*.txt output/*.png output/*.mp4 output/firegap/*_firegap.csv output/firegap/firegap_*.txt output/*.gif t_*.txt output/pestoutbreaks.csv output/pestoutbreaks_mortality.csv output/establishmentcheck.csv output/mortalitycheck.csv output/growthcheck.csv output/snowcheck.csv output/upslopetest.csv output/upslopetest_ele.csv build LAVESI_WIND
 
 cleanoutput:
 	@rm -rf data*.csv output/data*.csv t_*.txt

@@ -118,6 +118,7 @@ double getEntfernung(double D, double ratiorn_help) {
         double gaussfatratio = 2.0;
         double gaussweite = D, gaussmaxh = 1, gaussposcenter = 0;
         double fatalpha = 0.5;
+		fatalpha = fatalpha * parameter[0].if_longdistancedispersal;
         entf_help = (0.5
                      * (gaussfatratio * (sqrt(2 * pow(gaussweite, 2) * (-1 * log(ratiorn_help / gaussmaxh))) + gaussposcenter)
                         + (1 / gaussfatratio) * parameter[0].distanceratio * (pow(ratiorn_help, (-1 * (1 + fatalpha))))));
@@ -151,6 +152,8 @@ void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, dou
     maxdispersaldistance = (velocity * 0.75 * parhei * 0.01 / (speciestrait[seedspec].seeddescent));
 
     dispersaldistance = getEntfernung(maxdispersaldistance, rn);
+
+	dispersaldistance = dispersaldistance * parameter[0].if_dispersaldistance;
 
     // set return variables
     dy = cos(direction) * dispersaldistance;

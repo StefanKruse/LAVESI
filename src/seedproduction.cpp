@@ -14,9 +14,12 @@ void Seedproduction(//Parameter* parameter,
 			if (tree.growing == true) {
 				if (tree.cone == true) {
 					int newseedsproduced = speciestrait[tree.species].seedprodfactor                           // seed production in dependence of a factor
+											* parameter[0].if_seedproduction
 											* ((double)tree.height / 10 / 100)                     // ... the tree's  height in m...
 											* ((double)tree.dbasalrel / 1000)                       // ... the tree's current growth in cm...
-											* (1.0 - (1.0 / ((double)tree.height / 10 / 50)));  // ... height.
+											* (1.0 - (1.0 / ((double)tree.height / 10 / 50)))		// ... height
+											* (1.0 - ((double)tree.avalancheimpact/10))				// .. avalanche impact
+											;  
 					if (newseedsproduced > 0) {
 // if(newseedsproduced>1000)
 	// cout << " ... seedprod>1000 = " << newseedsproduced << " <- " << tree.height / 10 << " ... " << tree.dbasalrel / 1000 << " ... " << speciestrait[tree.species].seedprodfactor << endl;
@@ -26,6 +29,13 @@ void Seedproduction(//Parameter* parameter,
 						tree.seednewly_produced = 0;
 					}
 				}
+				// count down avalanche impact
+				if(avalancheimpact>0) {
+					tree.avalancheimpact = tree.avalancheimpact - 1;
+				} else {
+					tree.avalancheimpact = 0;
+				}
+				
 			}
         }
     }

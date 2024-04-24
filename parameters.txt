@@ -10,7 +10,7 @@
 
 
 // 0.1 -----> Display in console
-parameterinputvis=0;				// (int 0,1) show read-in of parameters
+parameterinputvis=1;				// (int 0,1) show read-in of parameters
 yearlyvis=1;						// (int 0,1) yearly steps => year,basal area,seed information,HeightClassesDistr
 qualiyearlyvis=0;					// (int 0,1) year characteristics => Weather info: AAT,Growth,...
 seedwinddispersalvis=1;				// (int 0,1) seed dispersal
@@ -54,7 +54,7 @@ firegapoutput=0;					// (int 0,1) Annual "fire gap" output switch
 firegapoutput_threshold=0.5		 	// (double 0.00,1.00) If firepapoutput=1, determine here the threshold of fire probability/intensity above which fire gap output should be written (default = 0.5)
 firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many years post-fire the output should be written (default=30)
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
-allow_pest_disturbances=1;			// (int 0,1 -> bool) Switch to allow calculation and impact of pest species (currently implemented for Alaska)
+allow_pest_disturbances=0;			// (int 0,1 -> bool) Switch to allow calculation and impact of pest species (currently implemented for Alaska)
 pest_disturbances_impactfactor=0; // (double 0.00,1.00)can be 1 or a number between 0 and 1 to reduce the impact of direct mortality and defoliation mortality on the trees from pest species outbreak
 
 snowcomputation=1;					// (bool, int 0,1) Snow computation switch
@@ -376,4 +376,24 @@ seedfloormort=0.55803;				// (double 0-1) mortality rate of seeds at the ground	
 
 
 
-
+// 2.5 ------> Impact factor testing
+if_growingseasonlength=1.00;		// (double) factor multiplying the corresponding variable to change it e.g. by +10% means 1.10
+if_summertemperature=1.00;		
+if_wintertemperature=1.00;
+if_summerprecipitation=1.00;
+if_winterprecipitation=1.00;
+if_windspeed=1.00;
+if_windexposure=1.00;
+if_seedproduction=1.00;			// species-specific "seedprodfactor"
+if_maturationage=1.00;			// species-specific "seedprodfactor"
+if_seedintronumberpermanent=1.00;
+if_dispersaldistance=1.00;
+if_longdistancedispersal=1.00;
+if_seedlingestablishment=1.00;
+if_seedlingmortality=1.00;
+if_overagingmortality=1.00;
+if_slope=1.00;
+if_twi=1.00;
+if_seedbedavailability=1.00;
+if_activelayer=1.00;
+if_facilitation=0.00;	

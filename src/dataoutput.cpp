@@ -1615,6 +1615,7 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Fire_intensity;");	// ###FIRE###
 				fprintf(filepointer, "TWI;");
 				fprintf(filepointer, "Snow_depth;");
+				fprintf(filepointer, "avalanchepower;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -1664,6 +1665,7 @@ void Dataoutput(int t,
                     fprintf(filepointer, "%f;", pEnvirgrid.fire);
 					fprintf(filepointer, "%d;", pEnvirgrid.twi / 100);
 					fprintf(filepointer, "%4.4f;", pEnvirgrid.snowdepth);
+					fprintf(filepointer, "%4.4f;", pEnvirgrid.avalanchepower);
                     fprintf(filepointer, "\n");
                 // }
 				

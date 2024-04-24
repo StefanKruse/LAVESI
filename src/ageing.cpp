@@ -74,7 +74,7 @@ void Ageing(//Parameter* parameter,
 							}
 						}
 */
-						if (tree.age > speciestrait[tree.species].coneage) {
+						if (tree.age > (speciestrait[tree.species].coneage * parameter[0].if_maturationage)) {
 							if(uniform.draw() < 0.1) {
 								tree.cone = true;
 								tree.seednewly_produced = 0;

@@ -423,6 +423,13 @@ cout << " UPDATE:: tree.species = " << tree.species
 				const std::size_t curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif) + static_cast<std::size_t>(j);
 				auto& cur_plot = plot_list[curposi];
 				tree.snowdepth = 10 * cur_plot.snowdepth;
+				tree.avalancheimpact = 10 * cur_plot.avalanchepower;	// rescale 0...100 percent values from double to short int 0...1000
+				if(tree.avalancheimpact>1000) {
+					tree.avalancheimpact = 1000;
+				}
+				if(tree.avalancheimpact<0) {
+					tree.avalancheimpact = 0;
+				}
 			}
 		}
 	}
@@ -649,6 +656,12 @@ cout << " start avalanche computations! " << endl;
 	if (parameter[0].snowcomputation == true && parameter[0].ivort>0) {
         RandomNumber<double> uniform(0, 1);
 
+#pragma omp parallel for default(shared) schedule(guided)
+			// for (std::size_t kartenpos = 0; kartenpos < a.size(); ++kartenpos) {
+			for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
+				// auto& pEnvirgrid = plot_list[kartenpos];
+				plot_list[kartenpos].avalanchepower = 0; // reset value
+			}
 
 		// assess if winter is extreme and avalanche risk is high
 			// weather_list[iweather].snow_max_winterdepth 100cm
@@ -666,7 +679,7 @@ cout << " =>  avalanche happens! " << endl;
 			// for (std::size_t kartenpos = 0; kartenpos < a.size(); ++kartenpos) {
 			for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 				// auto& pEnvirgrid = plot_list[kartenpos];
-				plot_list[kartenpos].avalanchepower = 0; // reset value
+				// plot_list[kartenpos].avalanchepower = 0; // reset value
 				// if(plot_list[kartenpos].Treedensityvalue > 0) {
 // cout << " avalanche happens! " << plot_list[kartenpos].Treedensityvalue << endl;
 					

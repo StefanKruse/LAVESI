@@ -1,8 +1,8 @@
-# LAVESI-PEST 1.0
-This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of boreal forest taxa in Siberia or North America which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug). Additionally, this version includes dynamical fire disturbances and adds pest outbreak simulation.
+# LAVESI-Mountain Treelines 1.0
+This source code can be compiled to build the <i>Larix</i> vegetation simulator LAVESI-WIND, with wind-dependent seed dispersal and pollination and parallelisation of computational intensive parts of the code. This program simulates the vegetation dynamics of northern boreal forest taxa in Siberia or North America which are driven by monthly temperature and precipitation data series, as well as wind data from the vegetation period (May-Aug). It has dynamical fire disturbances and pest outbreak simulation. Additionally, this version includes more processes necessary at moutain treelines. 
 
 ### Version history:
-- The version of this code is based on LAVESI-WIND v1.0 
+- The version of this code is based on LAVESI-WIND v1.0 and LAVESI-PEST v1.0
 - The former version LAVESI v1.01 and its building process and application is described in the publication in Ecological Modelling: Stefan Kruse, Mareike Wieczorek, Florian Jeltsch and Ulrike Herzschuh (2016) Treeline dynamics in Siberia under changing climates as inferred from an individual-based model for Larix. Ecological Modelling, 338, 101–121. http://dx.doi.org/10.1016/j.ecolmodel.2016.08.003 Additional data and results are available at https://doi.pangaea.de/10.1594/PANGAEA.863584 Code available at https://doi.org/10.5281/zenodo.1155486
 
 ## CHANGELOG (only major changes in functionalities):
@@ -11,7 +11,11 @@ This source code can be compiled to build the <i>Larix</i> vegetation simulator 
  
 ### Authors:
 - Stefan Kruse - stefan.kruse@awi.de
+- Sarah Haupt - sarah.haupt@awi.de
+- Katharina Schildt - katharina.schildt@awi.de
 - Lisa Trimborn - lisa.trimborn@awi.de
+- Luca Farkas - luca.farkas@awi.de
+- Josias Gloy - josias.gloy@awi.de
 
 ## Containing files:
 1. Source code and header files: "....cpp" in/src/ and "....h" in /inc/ , and the makefile "Makefile"

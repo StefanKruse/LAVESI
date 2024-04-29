@@ -18,7 +18,7 @@ void Seedproduction(//Parameter* parameter,
 											* ((double)tree.height / 10 / 100)                     // ... the tree's  height in m...
 											* ((double)tree.dbasalrel / 1000)                       // ... the tree's current growth in cm...
 											* (1.0 - (1.0 / ((double)tree.height / 10 / 50)))		// ... height
-											* (1.0 - ((double)tree.avalancheimpact/10))				// .. avalanche impact
+											* (1.0 - ((double)tree.avalancheimpact/1000))				// .. avalanche impact
 											;  
 					if (newseedsproduced > 0) {
 // if(newseedsproduced>1000)
@@ -30,8 +30,19 @@ void Seedproduction(//Parameter* parameter,
 					}
 				}
 				// count down avalanche impact
-				if(avalancheimpact>0) {
-					tree.avalancheimpact = tree.avalancheimpact - 1;
+				if(tree.avalancheimpact>0) {
+					if(tree.avalancheimpact>=100) {
+						tree.avalancheimpact = tree.avalancheimpact - 100;
+						
+						if(tree.avalancheimpact>1000) {
+							tree.avalancheimpact = 1000;
+						}
+						if(tree.avalancheimpact<0) {
+							tree.avalancheimpact = 0;
+						}
+					} else {
+						tree.avalancheimpact = 0;
+					}
 				} else {
 					tree.avalancheimpact = 0;
 				}

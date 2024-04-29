@@ -207,15 +207,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 					}
 				}
 				// avalanches
-				if(plot_list[kartenpos].avalanchepower>90) {
-					double avalpowerlocal = (plot_list[kartenpos].avalanchepower - 90)/10;
+				if(tree.avalancheimpact>900) {
+					double avalpowerlocal = ((double)tree.avalancheimpact - (90*10))/(10*10);
 					snow_mort = snow_mort + avalpowerlocal; // rescaling to 0-1
-					if(avalpowerlocal>1) {
-						avalpowerlocal = 1;
-					}
-					if(avalpowerlocal>0) {
-						tree.avalancheimpact = tree.avalancheimpact + (unsigned short int)(10*avalpowerlocal);//samenproductionnegimpact for max 10 years linear increasing based on the power
-					}
 				}
 			}
 

@@ -949,10 +949,10 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_windexposure);
     }
-    strcpy(uebergabestring, "if_maturationage");
-    parameter[0].if_maturationage = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    strcpy(uebergabestring, "if_seedproduction");
+    parameter[0].if_seedproduction = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
-        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_maturationage);
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].if_seedproduction);
     }
     strcpy(uebergabestring, "if_maturationage");
     parameter[0].if_maturationage = (double)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);

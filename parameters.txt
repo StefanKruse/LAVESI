@@ -81,7 +81,7 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1026005005; mal testen
+weatherchoice=1026005004; mal testen
 									// ... 22==TY02
 									// ... 22==CH17
 									// ... 23==CH02
@@ -205,7 +205,7 @@ specpres=0;							// (int) which larch species should be present in the model
 									// ... 1==only Larix gmelinii
 									// ... 2==only Larix sibirica
 									// ... ... as order in species list
-roi=1;								// (int) determine region of interest for species
+roi=2;								// (int) determine region of interest for species
 									// ... 0== all
 									// ... 1==Siberia
 									// ... 2==Canada

@@ -1407,15 +1407,9 @@ void Dataoutput(int t,
 						}
 					}
 
-					// check for content and if not then no output
-					bool presenceofdata = false;
-					for (unsigned int grid_i = 0; grid_i < AGBneedleliving.size(); ++grid_i) {
-						if(AGBneedleliving[grid_i]>0) {
-							presenceofdata = true;
-						}
-					}
+					// write output
 
-					if(presenceofdata == true) {
+
 						// trying to open the file for reading
 						filepointer = fopen(dateiname.c_str(), "r+");
 						// if fopen fails, open a new file + header output
@@ -1485,7 +1479,7 @@ void Dataoutput(int t,
 						}
 			 
 						fclose(filepointer);
-					}
+			
 			}// for each species loop
 		}  // gridded tree biomass output
 

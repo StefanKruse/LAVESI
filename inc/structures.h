@@ -198,6 +198,11 @@ struct Parameter {
 	unsigned short int roi;
     unsigned short int species_max;
 	int firemode;
+	int globalfireradius;
+	double firelocdistance;
+	double threshold_mild;
+	double threshold_medium;
+	double threshold_severe;
 	double fireintensitymode;
 	int firegapoutput;
 	double firegapoutput_threshold;
@@ -246,6 +251,8 @@ struct Parameter {
 
     // climate processing
     long int weatherchoice;
+	double plotcentre_lat;
+	double plotcentre_lon;
     int precweather;
     double precthreshold;
     double tempjandiffort;
@@ -343,6 +350,7 @@ struct Parameter {
 	double seedfiremort; // seed mortality fire-related
 	double litterlayerburn_mod;
 	double fireimpactareasize_mod;
+	
     // ancestry
     int nameakt;
     int lineakt;
@@ -619,4 +627,23 @@ struct Evaluation {
     vector<double> meantreeheightrunmeanliste;
     vector<double> meantreeageliste;
     vector<double> meantreeagerunmeanliste;
+};
+
+struct GlobalFireParameter {
+	int	number;
+	double	distance;
+	double	latitude;
+	double	longitude;
+	double	parameter1;
+	double	parameter2;
+	double	parameter3;
+	double	parameter4;
+	double	parameter5;
+	double	parameter6;
+	double	parameter7;
+	double	parameter8;
+	double	parameter9;
+	double	threshold_mild;
+	double	threshold_medium;
+	double	threshold_severe;
 };

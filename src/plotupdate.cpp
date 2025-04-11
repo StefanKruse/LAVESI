@@ -621,10 +621,10 @@ void ReworkSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>&
 			auto& pEnvirgrid = plot_list[kartenpos];
 
 			// snow wind distribution and downslope plus dependency on surface roughness
-					double snowbefore = pEnvirgrid.snowdepth;
+					// double snowbefore = pEnvirgrid.snowdepth;
 				// ... more exposed less snow and vice versa
 					pEnvirgrid.snowdepth = pEnvirgrid.snowdepth * ( (((double)parameter[0].maxele/10) - ((double)parameter[0].minele/10)) / ((double)pEnvirgrid.elevation/10) ) ;
-					double snowmiddle = pEnvirgrid.snowdepth;
+					// double snowmiddle = pEnvirgrid.snowdepth;
 				// ... more dense more accumulation e.g. 200% more in stands with tall trees maxtreeheight/10 => cm or pEnvirgrid.Treedensityvalue
 					pEnvirgrid.snowdepth = pEnvirgrid.snowdepth * 1.0+pow(((double)pEnvirgrid.maxtreeheight/10)/10000, 0.25);// scaled to 100 m tall trees, meaning tree with 1 m = 31% more snow depth, 10 m = 56% more
 			

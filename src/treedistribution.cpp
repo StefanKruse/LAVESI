@@ -102,7 +102,7 @@ void Seedin() {
 						vector<int> speciesinroi;
 						for (int species_counter = 1; species_counter < 99; species_counter++) {
 							// if( (parameter[0].roi == speciestrait[species_counter].roi) && (parameter[0].ivort >= speciescolonizationtimes[aktort].speciestimes[species_counter]) ) {
-							if( (parameter[0].roi == speciestrait[species_counter].roi) && (parameter[0].ivort >= speciescolonizationtimes[plotcodeNum].speciestimes[species_counter]) ) {
+							if( (parameter[0].roi == (unsigned int)speciestrait[species_counter].roi) && (parameter[0].ivort >= (unsigned int)speciescolonizationtimes[plotcodeNum].speciestimes[species_counter]) ) {
 								speciesinroi.push_back(species_counter);
 							}
 						}

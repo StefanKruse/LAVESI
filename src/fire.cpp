@@ -45,11 +45,19 @@ void Fire(Parameter* parameter,
 		unsigned short int n_extremeweather = 0;
 		
 		// determine thresholds that decide monthly fire weather severity
-		
+		// global assigment
+		double firethresh1 = globalfireparameter[0].threshold_mild;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
+		double firethresh2 = globalfireparameter[0].threshold_medium;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
+		double firethresh3 = globalfireparameter[0].threshold_severe;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
+cout << endl << "FIRE: " << 
+	firethresh1 << " | " <<
+	firethresh2 << " | " <<
+	firethresh3 << " | " <<
+	endl;
 		// Used for Lake Satagay localization 
-		double firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
-		double firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
-		double firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
+		// double firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
+		// double firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
+		// double firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
 		
 		// Used for Lake Khamra localization
 		// unsigned short int firethresh1 = 4.0;	// determine thresholds that decide monthly fire weather severity (previous values: 3.48, 6.9, 8.3)
@@ -239,7 +247,7 @@ void Fire(Parameter* parameter,
 				} else if ((parameter[0].firemode > 0) & (parameter[0].firemode != 112)) {
 				fireimpactareasize = 5 * treecols; // To cover the complete plot area
 				}
-	fireimpactareasize = 	fireimpactareasize * parameter[0].fireimpactareasize_mod;	
+			fireimpactareasize = fireimpactareasize * parameter[0].fireimpactareasize_mod;
 			int i = yfirecenter* parameter[0].sizemagnif; // gridcell coordinate in envirgird
 			int j = xfirecenter* parameter[0].sizemagnif; 
 			// double fireimpactareasize = fireprobabilityrating * (treecols*treerows); // determines affected area; currently depending on FPR range (0-1) - so if FPR = 0.1, then 10% of the area burn.
@@ -247,7 +255,6 @@ void Fire(Parameter* parameter,
 			// cout << "Fire Y coordinate:" << i << endl;	// optional output during simulation
 			// cout << "\tImpacted area: " << printf("%.2f", (pi * pow(2.0, fireimpactareasize))) << " m2 or " << printf("%.0f",((pi * pow(2.0, fireimpactareasize))/(treecols*treerows)))*100 << "% of total plot area" << endl; // optional output during simulation
 			// cout << "Total area (m2) from treecols*treerows: " << treecols*treerows << endl; // optional output during simulation
-
 			// check which gridcells fall into fire scar
 			if (fireimpactareasize > 0) {  // if there is an impacted area
 				// determine dimensions of the grid
@@ -385,7 +392,9 @@ void Fire(Parameter* parameter,
 								}
 								
 								// fire sensing
-								tree.firedamage = firedamage / (double) firedamagecells;	// Tree gets assigned the mean cur_plot.fire value of all included gridcells
+								if(firedamagecells > 0) { // Tree gets assigned the mean cur_plot.fire value of all included gridcells
+									tree.firedamage = firedamage / (double) firedamagecells;
+								}
 							}
 							
 							// Fire intensity mediated by bark thickness (only if firemode == 112, otherwise if firemode > 0 it's always 1 - OR if custom fireintensity is given)
@@ -399,18 +408,18 @@ void Fire(Parameter* parameter,
 							if (tree.firedamage <= 0) {
 								tree.firedamage = 0;
 							}
-							
 							// Flame height depending on tree fire damage (only if firemode == 112 OR if custom fireintensity is given)
 							if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
 								tree.crownstart = tree.firedamage * 5000 * 10; // flames reach 5000 cm high
-								tree.relcrowndamage = ((tree.crownstart / 10) / (tree.height / 10)) * 10;
+								if(tree.height > 0) {
+									tree.relcrowndamage = (((double)tree.crownstart / 10) / ((double)tree.height / 10)) * 10;
+								}
 							} else {
 								tree.relcrowndamage = 0.0;
 							}	
 						}
 					}
 				}
-				
 				
 			// ################################
 			// ##### Fire impact on seeds #####
@@ -513,4 +522,4 @@ void Fire(Parameter* parameter,
 			// }
 		} // End: Fire gap output
 	}
-}	
+}

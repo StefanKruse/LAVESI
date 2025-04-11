@@ -19,7 +19,7 @@ double drawsnowevent() {
 	// y^0.27 = -15.39633 * x^0.01 + -15.93463
 	double rn = pow((pow(y,0.27) -  15.93463)/(-15.39633),1/0.01);
 	return(rn);
-};
+}
 
 void getPrec(char dateinameprec[250], vector<Weather>& weather_list, int maximal_word_length) {
     FILE* fp;
@@ -409,103 +409,120 @@ cout << " weather_list[iweather].temp1monthmeaniso = " << weather_list[iweather]
                 weather_list[iweather].nddrestriktionmin = 1.0 - fabs((((double)weather_list[iweather].vegetationperiodlengthisomin) - 60.0) / 60.0);
             }
 
-			// Fire index calculation for each month (for Lake Satagay)
-			double T1 = weather_list[iweather].temp1monthmean;
-			double P1 = weather_list[iweather].prec1monthmean;
-			weather_list[iweather].fireindex1 = 0.11816*(((T1 + 12.03) * 0.7213351) + ((P1 - 39.14) * 0.6925862)) + (-0.12372*(((T1 + 12.03) * -0.6925862) + ((P1 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T2 = weather_list[iweather].temp2monthmean;
-			double P2 = weather_list[iweather].prec2monthmean;
-			weather_list[iweather].fireindex2 = 0.11816*(((T2 + 12.03) * 0.7213351) + ((P2 - 39.14) * 0.6925862)) + (-0.12372*(((T2 + 12.03) * -0.6925862) + ((P2 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T3 = weather_list[iweather].temp3monthmean;
-			double P3 = weather_list[iweather].prec3monthmean;
-			weather_list[iweather].fireindex3 = 0.11816*(((T3 + 12.03) * 0.7213351) + ((P3 - 39.14) * 0.6925862)) + (-0.12372*(((T3 + 12.03) * -0.6925862) + ((P3 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T4 = weather_list[iweather].temp4monthmean;
-			double P4 = weather_list[iweather].prec4monthmean;
-			weather_list[iweather].fireindex4 = 0.11816*(((T4 + 12.03) * 0.7213351) + ((P4 - 39.14) * 0.6925862)) + (-0.12372*(((T4 + 12.03) * -0.6925862) + ((P4 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T5 = weather_list[iweather].temp5monthmean;
-			double P5 = weather_list[iweather].prec5monthmean;
-			weather_list[iweather].fireindex5 = 0.11816*(((T5 + 12.03) * 0.7213351) + ((P5 - 39.14) * 0.6925862)) + (-0.12372*(((T5 + 12.03) * -0.6925862) + ((P5 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T6 = weather_list[iweather].temp6monthmean;
-			double P6 = weather_list[iweather].prec6monthmean;
-			weather_list[iweather].fireindex6 = 0.11816*(((T6 + 12.03) * 0.7213351) + ((P6 - 39.14) * 0.6925862)) + (-0.12372*(((T6 + 12.03) * -0.6925862) + ((P6 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T7 = weather_list[iweather].temp7monthmean;
-			double P7 = weather_list[iweather].prec7monthmean;
-			weather_list[iweather].fireindex7 = 0.11816*(((T7 + 12.03) * 0.7213351) + ((P7 - 39.14) * 0.6925862)) + (-0.12372*(((T7 + 12.03) * -0.6925862) + ((P7 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T8 = weather_list[iweather].temp8monthmean;
-			double P8 = weather_list[iweather].prec8monthmean;
-			weather_list[iweather].fireindex8 = 0.11816*(((T8 + 12.03) * 0.7213351) + ((P8 - 39.14) * 0.6925862)) + (-0.12372*(((T8 + 12.03) * -0.6925862) + ((P8 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T9 = weather_list[iweather].temp9monthmean;
-			double P9 = weather_list[iweather].prec9monthmean;
-			weather_list[iweather].fireindex9 = 0.11816*(((T9 + 12.03) * 0.7213351) + ((P9 - 39.14) * 0.6925862)) + (-0.12372*(((T9 + 12.03) * -0.6925862) + ((P9 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T10 = weather_list[iweather].temp10monthmean;
-			double P10 = weather_list[iweather].prec10monthmean;
-			weather_list[iweather].fireindex10 = 0.11816*(((T10 + 12.03) * 0.7213351) + ((P10 - 39.14) * 0.6925862)) + (-0.12372*(((T10 + 12.03) * -0.6925862) + ((P10 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T11 = weather_list[iweather].temp11monthmean;
-			double P11 = weather_list[iweather].prec11monthmean;
-			weather_list[iweather].fireindex11 = 0.11816*(((T11 + 12.03) * 0.7213351) + ((P11 - 39.14) * 0.6925862)) + (-0.12372*(((T11 + 12.03) * -0.6925862) + ((P11 - 39.14) * 0.7213351)))+1.46818;
-			
-			double T12 = weather_list[iweather].temp12monthmean;
-			double P12 = weather_list[iweather].prec12monthmean;
-			weather_list[iweather].fireindex12 = 0.11816*(((T12 + 12.03) * 0.7213351) + ((P12 - 39.14) * 0.6925862)) + (-0.12372*(((T12 + 12.03) * -0.6925862) + ((P12 - 39.14) * 0.7213351)))+1.46818;
+			if(parameter[0].firemode>0) {
+				// cout << "Fire parameters will be calculated" << endl;
+				// Fire index calculation for each month (for global calculation)
+				weather_list[iweather].fireindex1 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp1monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec1monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp1monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec1monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex2 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp2monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec2monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp2monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec2monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex3 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp3monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec3monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp3monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec3monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex4 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp4monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec4monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp4monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec4monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex5 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp5monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec5monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp5monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec5monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex6 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp6monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec6monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp6monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec6monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex7 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp7monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec7monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp7monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec7monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex8 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp8monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec8monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp8monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec8monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex9 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp9monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec9monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp9monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec9monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex10 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp10monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec10monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp10monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec10monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex11 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp11monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec11monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp11monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec11monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
+				weather_list[iweather].fireindex12 = globalfireparameter[0].parameter1*(((weather_list[iweather].temp12monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter3) + ((weather_list[iweather].prec12monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter5)) + (globalfireparameter[0].parameter6*(((weather_list[iweather].temp12monthmean + globalfireparameter[0].parameter2) * globalfireparameter[0].parameter7) + ((weather_list[iweather].prec12monthmean - globalfireparameter[0].parameter4) * globalfireparameter[0].parameter8)))+globalfireparameter[0].parameter9;
 
-			//Fire index calculation for each month (for Lake Khamra)
-			// double T1 = weather_list[iweather].temp1monthmean;
-			// double P1 = weather_list[iweather].prec1monthmean;
-			// weather_list[iweather].fireindex1 = 0.10336*(((T1 + 6.19) * 0.6291112) + ((P1 - 34.99) * 0.7773153)) + (-0.17637*(((T1 + 6.19) * -0.7773153) + ((P1 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T2 = weather_list[iweather].temp2monthmean;
-			// double P2 = weather_list[iweather].prec2monthmean;
-			// weather_list[iweather].fireindex2 = 0.10336*(((T2 + 6.19) * 0.6291112) + ((P2 - 34.99) * 0.7773153)) + (-0.17637*(((T2 + 6.19) * -0.7773153) + ((P2 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T3 = weather_list[iweather].temp3monthmean;
-			// double P3 = weather_list[iweather].prec3monthmean;
-			// weather_list[iweather].fireindex3 = 0.10336*(((T3 + 6.19) * 0.6291112) + ((P3 - 34.99) * 0.7773153)) + (-0.17637*(((T3 + 6.19) * -0.7773153) + ((P3 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T4 = weather_list[iweather].temp4monthmean;
-			// double P4 = weather_list[iweather].prec4monthmean;
-			// weather_list[iweather].fireindex4 = 0.10336*(((T4 + 6.19) * 0.6291112) + ((P4 - 34.99) * 0.7773153)) + (-0.17637*(((T4 + 6.19) * -0.7773153) + ((P4 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T5 = weather_list[iweather].temp5monthmean;
-			// double P5 = weather_list[iweather].prec5monthmean;
-			// weather_list[iweather].fireindex5 = 0.10336*(((T5 + 6.19) * 0.6291112) + ((P5 - 34.99) * 0.7773153)) + (-0.17637*(((T5 + 6.19) * -0.7773153) + ((P5 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T6 = weather_list[iweather].temp6monthmean;
-			// double P6 = weather_list[iweather].prec6monthmean;
-			// weather_list[iweather].fireindex6 = 0.10336*(((T6 + 6.19) * 0.6291112) + ((P6 - 34.99) * 0.7773153)) + (-0.17637*(((T6 + 6.19) * -0.7773153) + ((P6 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T7 = weather_list[iweather].temp7monthmean;
-			// double P7 = weather_list[iweather].prec7monthmean;
-			// weather_list[iweather].fireindex7 = 0.10336*(((T7 + 6.19) * 0.6291112) + ((P7 - 34.99) * 0.7773153)) + (-0.17637*(((T7 + 6.19) * -0.7773153) + ((P7 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T8 = weather_list[iweather].temp8monthmean;
-			// double P8 = weather_list[iweather].prec8monthmean;
-			// weather_list[iweather].fireindex8 = 0.10336*(((T8 + 6.19) * 0.6291112) + ((P8 - 34.99) * 0.7773153)) + (-0.17637*(((T8 + 6.19) * -0.7773153) + ((P8 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T9 = weather_list[iweather].temp9monthmean;
-			// double P9 = weather_list[iweather].prec9monthmean;
-			// weather_list[iweather].fireindex9 = 0.10336*(((T9 + 6.19) * 0.6291112) + ((P9 - 34.99) * 0.7773153)) + (-0.17637*(((T9 + 6.19) * -0.7773153) + ((P9 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T10 = weather_list[iweather].temp10monthmean;
-			// double P10 = weather_list[iweather].prec10monthmean;
-			// weather_list[iweather].fireindex10 = 0.10336*(((T10 + 6.19) * 0.6291112) + ((P10 - 34.99) * 0.7773153)) + (-0.17637*(((T10 + 6.19) * -0.7773153) + ((P10 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T11 = weather_list[iweather].temp11monthmean;
-			// double P11 = weather_list[iweather].prec11monthmean;
-			// weather_list[iweather].fireindex11 = 0.10336*(((T11 + 6.19) * 0.6291112) + ((P11 - 34.99) * 0.7773153)) + (-0.17637*(((T11 + 6.19) * -0.7773153) + ((P11 - 34.99) * 0.6291112)))+0.69034;
-			
-			// double T12 = weather_list[iweather].temp12monthmean;
-			// double P12 = weather_list[iweather].prec12monthmean;
-			// weather_list[iweather].fireindex12 = 0.10336*(((T12 + 6.19) * 0.6291112) + ((P12 - 34.99) * 0.7773153)) + (-0.17637*(((T12 + 6.19) * -0.7773153) + ((P12 - 34.99) * 0.6291112)))+0.69034;
+				// Fire index calculation for each month (for Lake Satagay)
+				// double T1 = weather_list[iweather].temp1monthmean;
+				// double P1 = weather_list[iweather].prec1monthmean;
+				// weather_list[iweather].fireindex1 = 0.11816*(((T1 + 12.03) * 0.7213351) + ((P1 - 39.14) * 0.6925862)) + (-0.12372*(((T1 + 12.03) * -0.6925862) + ((P1 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T2 = weather_list[iweather].temp2monthmean;
+				// double P2 = weather_list[iweather].prec2monthmean;
+				// weather_list[iweather].fireindex2 = 0.11816*(((T2 + 12.03) * 0.7213351) + ((P2 - 39.14) * 0.6925862)) + (-0.12372*(((T2 + 12.03) * -0.6925862) + ((P2 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T3 = weather_list[iweather].temp3monthmean;
+				// double P3 = weather_list[iweather].prec3monthmean;
+				// weather_list[iweather].fireindex3 = 0.11816*(((T3 + 12.03) * 0.7213351) + ((P3 - 39.14) * 0.6925862)) + (-0.12372*(((T3 + 12.03) * -0.6925862) + ((P3 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T4 = weather_list[iweather].temp4monthmean;
+				// double P4 = weather_list[iweather].prec4monthmean;
+				// weather_list[iweather].fireindex4 = 0.11816*(((T4 + 12.03) * 0.7213351) + ((P4 - 39.14) * 0.6925862)) + (-0.12372*(((T4 + 12.03) * -0.6925862) + ((P4 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T5 = weather_list[iweather].temp5monthmean;
+				// double P5 = weather_list[iweather].prec5monthmean;
+				// weather_list[iweather].fireindex5 = 0.11816*(((T5 + 12.03) * 0.7213351) + ((P5 - 39.14) * 0.6925862)) + (-0.12372*(((T5 + 12.03) * -0.6925862) + ((P5 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T6 = weather_list[iweather].temp6monthmean;
+				// double P6 = weather_list[iweather].prec6monthmean;
+				// weather_list[iweather].fireindex6 = 0.11816*(((T6 + 12.03) * 0.7213351) + ((P6 - 39.14) * 0.6925862)) + (-0.12372*(((T6 + 12.03) * -0.6925862) + ((P6 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T7 = weather_list[iweather].temp7monthmean;
+				// double P7 = weather_list[iweather].prec7monthmean;
+				// weather_list[iweather].fireindex7 = 0.11816*(((T7 + 12.03) * 0.7213351) + ((P7 - 39.14) * 0.6925862)) + (-0.12372*(((T7 + 12.03) * -0.6925862) + ((P7 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T8 = weather_list[iweather].temp8monthmean;
+				// double P8 = weather_list[iweather].prec8monthmean;
+				// weather_list[iweather].fireindex8 = 0.11816*(((T8 + 12.03) * 0.7213351) + ((P8 - 39.14) * 0.6925862)) + (-0.12372*(((T8 + 12.03) * -0.6925862) + ((P8 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T9 = weather_list[iweather].temp9monthmean;
+				// double P9 = weather_list[iweather].prec9monthmean;
+				// weather_list[iweather].fireindex9 = 0.11816*(((T9 + 12.03) * 0.7213351) + ((P9 - 39.14) * 0.6925862)) + (-0.12372*(((T9 + 12.03) * -0.6925862) + ((P9 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T10 = weather_list[iweather].temp10monthmean;
+				// double P10 = weather_list[iweather].prec10monthmean;
+				// weather_list[iweather].fireindex10 = 0.11816*(((T10 + 12.03) * 0.7213351) + ((P10 - 39.14) * 0.6925862)) + (-0.12372*(((T10 + 12.03) * -0.6925862) + ((P10 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T11 = weather_list[iweather].temp11monthmean;
+				// double P11 = weather_list[iweather].prec11monthmean;
+				// weather_list[iweather].fireindex11 = 0.11816*(((T11 + 12.03) * 0.7213351) + ((P11 - 39.14) * 0.6925862)) + (-0.12372*(((T11 + 12.03) * -0.6925862) + ((P11 - 39.14) * 0.7213351)))+1.46818;
+				
+				// double T12 = weather_list[iweather].temp12monthmean;
+				// double P12 = weather_list[iweather].prec12monthmean;
+				// weather_list[iweather].fireindex12 = 0.11816*(((T12 + 12.03) * 0.7213351) + ((P12 - 39.14) * 0.6925862)) + (-0.12372*(((T12 + 12.03) * -0.6925862) + ((P12 - 39.14) * 0.7213351)))+1.46818;
+
+				//Fire index calculation for each month (for Lake Khamra)
+				// double T1 = weather_list[iweather].temp1monthmean;
+				// double P1 = weather_list[iweather].prec1monthmean;
+				// weather_list[iweather].fireindex1 = 0.10336*(((T1 + 6.19) * 0.6291112) + ((P1 - 34.99) * 0.7773153)) + (-0.17637*(((T1 + 6.19) * -0.7773153) + ((P1 - 34.99) * 0.6291112)))+0.69034;
+
+				// double T2 = weather_list[iweather].temp2monthmean;
+				// double P2 = weather_list[iweather].prec2monthmean;
+				// weather_list[iweather].fireindex2 = 0.10336*(((T2 + 6.19) * 0.6291112) + ((P2 - 34.99) * 0.7773153)) + (-0.17637*(((T2 + 6.19) * -0.7773153) + ((P2 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T3 = weather_list[iweather].temp3monthmean;
+				// double P3 = weather_list[iweather].prec3monthmean;
+				// weather_list[iweather].fireindex3 = 0.10336*(((T3 + 6.19) * 0.6291112) + ((P3 - 34.99) * 0.7773153)) + (-0.17637*(((T3 + 6.19) * -0.7773153) + ((P3 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T4 = weather_list[iweather].temp4monthmean;
+				// double P4 = weather_list[iweather].prec4monthmean;
+				// weather_list[iweather].fireindex4 = 0.10336*(((T4 + 6.19) * 0.6291112) + ((P4 - 34.99) * 0.7773153)) + (-0.17637*(((T4 + 6.19) * -0.7773153) + ((P4 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T5 = weather_list[iweather].temp5monthmean;
+				// double P5 = weather_list[iweather].prec5monthmean;
+				// weather_list[iweather].fireindex5 = 0.10336*(((T5 + 6.19) * 0.6291112) + ((P5 - 34.99) * 0.7773153)) + (-0.17637*(((T5 + 6.19) * -0.7773153) + ((P5 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T6 = weather_list[iweather].temp6monthmean;
+				// double P6 = weather_list[iweather].prec6monthmean;
+				// weather_list[iweather].fireindex6 = 0.10336*(((T6 + 6.19) * 0.6291112) + ((P6 - 34.99) * 0.7773153)) + (-0.17637*(((T6 + 6.19) * -0.7773153) + ((P6 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T7 = weather_list[iweather].temp7monthmean;
+				// double P7 = weather_list[iweather].prec7monthmean;
+				// weather_list[iweather].fireindex7 = 0.10336*(((T7 + 6.19) * 0.6291112) + ((P7 - 34.99) * 0.7773153)) + (-0.17637*(((T7 + 6.19) * -0.7773153) + ((P7 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T8 = weather_list[iweather].temp8monthmean;
+				// double P8 = weather_list[iweather].prec8monthmean;
+				// weather_list[iweather].fireindex8 = 0.10336*(((T8 + 6.19) * 0.6291112) + ((P8 - 34.99) * 0.7773153)) + (-0.17637*(((T8 + 6.19) * -0.7773153) + ((P8 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T9 = weather_list[iweather].temp9monthmean;
+				// double P9 = weather_list[iweather].prec9monthmean;
+				// weather_list[iweather].fireindex9 = 0.10336*(((T9 + 6.19) * 0.6291112) + ((P9 - 34.99) * 0.7773153)) + (-0.17637*(((T9 + 6.19) * -0.7773153) + ((P9 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T10 = weather_list[iweather].temp10monthmean;
+				// double P10 = weather_list[iweather].prec10monthmean;
+				// weather_list[iweather].fireindex10 = 0.10336*(((T10 + 6.19) * 0.6291112) + ((P10 - 34.99) * 0.7773153)) + (-0.17637*(((T10 + 6.19) * -0.7773153) + ((P10 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T11 = weather_list[iweather].temp11monthmean;
+				// double P11 = weather_list[iweather].prec11monthmean;
+				// weather_list[iweather].fireindex11 = 0.10336*(((T11 + 6.19) * 0.6291112) + ((P11 - 34.99) * 0.7773153)) + (-0.17637*(((T11 + 6.19) * -0.7773153) + ((P11 - 34.99) * 0.6291112)))+0.69034;
+				
+				// double T12 = weather_list[iweather].temp12monthmean;
+				// double P12 = weather_list[iweather].prec12monthmean;
+				// weather_list[iweather].fireindex12 = 0.10336*(((T12 + 6.19) * 0.6291112) + ((P12 - 34.99) * 0.7773153)) + (-0.17637*(((T12 + 6.19) * -0.7773153) + ((P12 - 34.99) * 0.6291112)))+0.69034;
+			}
 			
 			// JJA temperature and precipitation for output
 			weather_list[iweather].tempmeanjja = (weather_list[iweather].temp6monthmean + weather_list[iweather].temp7monthmean + weather_list[iweather].temp8monthmean) / 3;
@@ -1139,6 +1156,76 @@ output
             }
         }
     }
+}
+
+void passFire() {
+    for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++) {
+        vector<Weather>& weather_list = *posw;
+
+		cout << "globalfireparameter[0].threshold_mild = " << globalfireparameter[0].threshold_mild<< endl;
+
+		vector<double> fpr; // for all values per month
+
+		// fill vector
+        for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
+			if(weather_list[iweather].fireindex1 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex1);
+			}
+			if(weather_list[iweather].fireindex2 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex2);
+			}
+			if(weather_list[iweather].fireindex3 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex3);
+			}
+			if(weather_list[iweather].fireindex4 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex4);
+			}
+			if(weather_list[iweather].fireindex5 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex5);
+			}
+			if(weather_list[iweather].fireindex6 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex6);
+			}
+			if(weather_list[iweather].fireindex7 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex7);
+			}
+			if(weather_list[iweather].fireindex8 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex8);
+			}
+			if(weather_list[iweather].fireindex9 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex9);
+			}
+			if(weather_list[iweather].fireindex10 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex10);
+			}
+			if(weather_list[iweather].fireindex11 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex11);
+			}
+			if(weather_list[iweather].fireindex12 > globalfireparameter[0].threshold_mild) {
+				fpr.push_back(weather_list[iweather].fireindex12);
+			}
+		} // End weather list
+		
+		// per gridcell
+		// ... sort vector
+		sort(fpr.begin(), fpr.end());
+		
+		// ... calculate third quartile == 75%
+		int n_fpr = fpr.size();
+		int n_fpr_q1 = 0.25 * n_fpr;
+		int n_fpr_q3 = 0.75 * n_fpr;
+		globalfireparameter[0].threshold_medium = fpr[n_fpr_q3-1];
+		cout << "globalfireparameter[0].threshold_medium = " << globalfireparameter[0].threshold_medium << endl;
+		
+		// ... calculate third quartile multiplied with 1.5 times inter quartile range
+		double fpr_iqr = fpr[n_fpr_q3-1] - fpr[n_fpr_q1-1];
+		globalfireparameter[0].threshold_severe = fpr[n_fpr_q3-1] + 1.5 * fpr_iqr; // Q3 + 1.5 * IQR
+		cout << "n_fpr_q1 = " << n_fpr_q1 << endl;
+		cout << "n_fpr_q3 = " << n_fpr_q3 << endl;
+		cout << "fpr_iqr = " << fpr_iqr << endl;
+		cout << "globalfireparameter[0].threshold_severe = " << globalfireparameter[0].threshold_severe << endl;
+			
+	} // End world list
 }
 
 void Getdisturbanceclimresponse(void) {	// read file and compute 
@@ -2154,6 +2241,10 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
 			Getdisturbanceimpact(weather_list);
 		}// for each weather element
+	}
+
+	if(parameter[0].globalfireradius>0) { // compute thresholds from read in fire values
+		passFire();
 	}
 
 }

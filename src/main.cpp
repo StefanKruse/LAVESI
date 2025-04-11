@@ -11,6 +11,7 @@ Parameter parameter[1];
 Speciestraits speciestrait[99];
 Pesttraits pesttrait[99];
 Speciescolonizationtimes speciescolonizationtimes[300];
+GlobalFireParameter globalfireparameter[20];
 
 int yearposition;
 
@@ -1689,8 +1690,18 @@ int main() {
         "\n");
     printf("\n<----\n");
 
+
     // read in all simulation parameters from parameters.txt
     Parameterinput();
+
+	cout << endl << "Weather chosen: " << parameter[0].weatherchoice << endl;
+	cout << "Simulation area width: " << treecols << " & height: " << treerows << " meters" << endl << endl;
+	
+	if(parameter[0].globalfireradius>0) {
+		cout << "Global fire parameters will be read for " << parameter[0].globalfireradius << " km radius." << endl;
+		ReadFire();
+		cout << "..." << endl;
+	}
 	
 	Getspeciestraits();
 	// print the present species in this simulation and find maximum possible species

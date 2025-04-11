@@ -91,6 +91,7 @@ void Seedwinddispersal(double rn,
 					   double randomnumberwind);
 void Parameterinput(void);
 void Getspeciestraits(void);
+void ReadFire(void);
 void Getdisturbanceclimresponse(void);
 void Getdisturbanceimpact(vector<Weather>& weather_list);
 void Savealllists(void);

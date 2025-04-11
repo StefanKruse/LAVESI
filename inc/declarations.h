@@ -1,12 +1,8 @@
 #pragma once
 
 // plot dimensions rows==y, cols==x
-// constexpr unsigned int treerows = 100;	
-// constexpr unsigned int treecols = 100;
-constexpr unsigned int treerows = 1005;	//full area 5315;	
-constexpr unsigned int treecols = 105;	//full area 5080;
-
-
+constexpr unsigned int treerows = 100;	
+constexpr unsigned int treecols = 100;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;
@@ -20,4 +16,5 @@ class Pesttraits;
 extern Pesttraits pesttrait[99];
 class Speciescolonizationtimes;
 extern Speciescolonizationtimes speciescolonizationtimes[300];
-
+class GlobalFireParameter;
+extern GlobalFireParameter globalfireparameter[20];

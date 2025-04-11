@@ -132,6 +132,16 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].firemode);
     }
+	strcpy(uebergabestring, "globalfireradius");
+    parameter[0].globalfireradius = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].globalfireradius);
+    }
+	strcpy(uebergabestring, "firelocdistance");
+    parameter[0].firelocdistance = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].firelocdistance);
+    }
 	
 	strcpy(uebergabestring, "fireintensitymode");
     parameter[0].fireintensitymode = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
@@ -263,6 +273,17 @@ void Parameterinput(void) {
     parameter[0].weatherchoice = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %ld ==> Main\n", uebergabestring, parameter[0].weatherchoice);
+    }
+	
+    strcpy(uebergabestring, "plotcentre_lat");
+    parameter[0].plotcentre_lat = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].plotcentre_lat);
+    }
+	strcpy(uebergabestring, "plotcentre_lon");
+    parameter[0].plotcentre_lon = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main \n", uebergabestring, parameter[0].plotcentre_lon);
     }
 
     if (parameter[0].parameterinputvis == true) {
@@ -1032,35 +1053,127 @@ void Getspeciestraits(void) {
 			speciescolonizationtimes[counter2].location= stoi(strtok(puffer2, " "));
 			speciescolonizationtimes[counter2].speciestimes.push_back( 0 );
 			for(int i=1; i<=22; i++) {
-				// speciescolonizationtimes[counter2].speciestimes.push_back( strtok(puffer2, " ") );
 				speciescolonizationtimes[counter2].speciestimes.push_back( stoi(strtok(NULL, " "),NULL) );
-																//       strtod(strtok(NULL, " "),NULL);
 			}
-			// speciescolonizationtimes[counter2].sp01t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp02t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp03t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp04t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp05t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp06t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp07t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp08t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp09t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp10t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp11t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp12t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp13t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp14t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp15t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp16t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp17t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp18t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp19t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp20t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp21t= strtok(puffer2, " ");
-			// speciescolonizationtimes[counter2].sp22t= strtok(puffer2, " ");
+
 cout << speciescolonizationtimes[counter2].location << " :: " << speciescolonizationtimes[counter2].speciestimes.back() << endl;
 		}
 		counter2++;
 	}
 	fclose(f2);
 }
+
+void ReadFire(void) {
+	cout << "Global fire input startet." << endl;
+	
+	FILE *f_fire;
+if(parameter[0].globalfireradius==300) {
+		f_fire = fopen("fireparameters_300km.csv","r"); 
+	} else if(parameter[0].globalfireradius==100) {
+		f_fire = fopen("fireparameters_100km.csv","r"); 
+	} else if(parameter[0].globalfireradius==50) {
+		f_fire = fopen("fireparameters_50km.csv","r"); 
+	}
+	if (f_fire == NULL) {
+		printf("fireparameters_...km.csv file not available!\n");
+		exit(1);
+	}
+	
+	char buffer[1255];
+	int counter = 0;
+	
+	// read in line by line
+	// .. only keep those needed for memory reasons
+	int counter_inradius = 0;
+	cout << "Reading glocal fire input ... ";
+	while( fgets(buffer,1255,f_fire) != NULL ) {
+		if (counter>=1) { // skip header line
+			//  lat lon model_r2 model_r2_adj model_sig par1 par2 par3 par4 par5 par6 par7 par8 par9 threshold_mild
+			int number_i = stoi(strtok(buffer, " "),NULL);
+			double lat_i = strtod(strtok(NULL, " " ),NULL);
+			double lon_i = strtod(strtok(NULL, " " ),NULL);
+			//calculate distance
+			double distance = 0;
+			bool closelocation = false;
+			if( (fabs(parameter[0].plotcentre_lat-lat_i) < parameter[0].firelocdistance) // 1 degree distance allowed and 0.5 degrees steps
+				& (fabs(parameter[0].plotcentre_lon-lon_i) < parameter[0].firelocdistance)
+			) {
+				closelocation = true;
+				counter_inradius++;
+				// calculate euclidean distance
+				distance = sqrt(pow(parameter[0].plotcentre_lat-lat_i,2) + pow(parameter[0].plotcentre_lon,2));
+			} else {
+				cout << ".";
+			}
+			
+			if(closelocation == true) {
+				//store information
+				globalfireparameter[counter_inradius].number = number_i;
+				globalfireparameter[counter_inradius].distance = distance;
+					cout << endl << "In radius, row: " << counter_inradius << " => " << globalfireparameter[counter_inradius].number ;
+				globalfireparameter[counter_inradius].latitude = lat_i;
+				globalfireparameter[counter_inradius].longitude = lon_i;
+					cout << " / Latitude: " << globalfireparameter[counter_inradius].latitude;
+					cout << " & Longitude: " << globalfireparameter[counter_inradius].longitude << endl;
+					cout << "model_r2: " << strtod(strtok(NULL, " "),NULL);
+					cout << " / model_r2_adj: " << strtod(strtok(NULL, " "),NULL);
+					cout << " / model_sig: " << strtod(strtok(NULL, " "),NULL) << endl;
+				globalfireparameter[counter_inradius].parameter1 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter2 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter3 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter4 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter5 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter6 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter7 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter8 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].parameter9 = strtod(strtok(NULL, " " ),NULL);
+				globalfireparameter[counter_inradius].threshold_mild = strtod(strtok(NULL, " " ),NULL);
+				// globalfireparameter[counter_inradius].threshold_medium = 0;
+				// globalfireparameter[counter_inradius].threshold_severe = 0;
+					cout << "threshold_mild: " << globalfireparameter[counter_inradius].threshold_mild << endl;
+			}
+		}
+		counter++;
+	}
+	fclose(f_fire);
+	
+	// process read data
+	// ... get mean parameters of all and store in location 0 as 1ff are the read in parameters
+	// ... calculate sum of distances for weight calculation
+	double sum_distance = 0.0;
+	for(int counter_inradius_i = 1; counter_inradius_i <= counter_inradius; counter_inradius_i++) {
+		sum_distance += globalfireparameter[counter_inradius_i].distance;
+	}
+	double sum_distance_perm = 0.0;
+	for(int counter_inradius_i = 1; counter_inradius_i <= counter_inradius; counter_inradius_i++) {
+		sum_distance_perm += sum_distance/globalfireparameter[counter_inradius_i].distance;
+	}
+	cout << " ... sum_distance = " << sum_distance << endl;
+		globalfireparameter[0].parameter1 = 0.0;
+		globalfireparameter[0].parameter2 = 0.0;
+		globalfireparameter[0].parameter3 = 0.0;
+		globalfireparameter[0].parameter4 = 0.0;
+		globalfireparameter[0].parameter5 = 0.0;
+		globalfireparameter[0].parameter6 = 0.0;
+		globalfireparameter[0].parameter7 = 0.0;
+		globalfireparameter[0].parameter8 = 0.0;
+		globalfireparameter[0].parameter9 = 0.0;
+		globalfireparameter[0].threshold_mild = 0.0;
+	for(int counter_inradius_i = 1; counter_inradius_i <= counter_inradius; counter_inradius_i++) {
+		double weight_i = ((sum_distance/globalfireparameter[counter_inradius_i].distance)/sum_distance_perm);
+		globalfireparameter[0].parameter1 += globalfireparameter[counter_inradius_i].parameter1 * weight_i;
+		globalfireparameter[0].parameter2 += globalfireparameter[counter_inradius_i].parameter2 * weight_i;
+		globalfireparameter[0].parameter3 += globalfireparameter[counter_inradius_i].parameter3 * weight_i;
+		globalfireparameter[0].parameter4 += globalfireparameter[counter_inradius_i].parameter4 * weight_i;
+		globalfireparameter[0].parameter5 += globalfireparameter[counter_inradius_i].parameter5 * weight_i;
+		globalfireparameter[0].parameter6 += globalfireparameter[counter_inradius_i].parameter6 * weight_i;
+		globalfireparameter[0].parameter7 += globalfireparameter[counter_inradius_i].parameter7 * weight_i;
+		globalfireparameter[0].parameter8 += globalfireparameter[counter_inradius_i].parameter8 * weight_i;
+		globalfireparameter[0].parameter9 += globalfireparameter[counter_inradius_i].parameter9 * weight_i;
+		if(globalfireparameter[counter_inradius_i].threshold_mild == 99999) {
+			globalfireparameter[counter_inradius_i].threshold_mild = 0.0;
+		}
+		globalfireparameter[0].threshold_mild += globalfireparameter[counter_inradius_i].threshold_mild * weight_i;
+	}
+	
+} // End function ReadFire

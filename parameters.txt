@@ -83,8 +83,8 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-plotcentre_lat=59.988;			// (double) location of plot for global fire computation; degrees North
-plotcentre_lon=112.984;			// degrees East
+plotcentre_lat=0;			// (double) location of plot for global fire computation; degrees North for weatherchoice=1026003013 => 59.988
+plotcentre_lon=0;			// degrees East for weatherchoice=1026003013 => 112.984
 weatherchoice=1026003013;
 									// ... 22==TY02
 									// ... 22==CH17

@@ -1,0 +1,38 @@
+# help e.g. under https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+
+# exclude executable
+/LAVESI_FIRE
+# exclude redirected output streams
+nohup.out
+
+# exclude o(bject) and a(rchive)
+*.[oa]
+# exclude build folder
+build/
+
+# exclude temporary files
+*~
+
+# exclude output files in output dir
+output/*.csv
+output/*.txt
+output/*.png
+output/*.pdf
+output/*.mp4
+output/*.gif
+output/species_over_time_spatial/*.png
+output/Previous runs/
+
+# exclude time usage output files
+t_*.txt
+# exclude pollen-dispersal output files
+pollDist*
+
+# exclude postprocessing-output files
+postprocessing/*.png
+
+# exclude Windows-files
+Thumbs.db
+
+# exclude core dump files
+core

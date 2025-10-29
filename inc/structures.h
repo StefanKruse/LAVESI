@@ -91,6 +91,9 @@ struct Envirgrid {        // sizeof variable
                                            // units precision (8 -> 2 bytes)
 	double fire;
 	unsigned short int firecells;	// for writing output
+	unsigned short int firecells_mild;	// for writing output
+	unsigned short int firecells_moderate;	// for writing output
+	unsigned short int firecells_extreme;	// for writing output
 	double fireintensitymax;	// for writing output
 	double fireintensitymean;	// for writing output
 
@@ -122,6 +125,9 @@ struct Envirgrid {        // sizeof variable
 			  unsigned short int envirfireimpact = 0,
 			  double fire = 0.0,
 			  unsigned short int firecells = 0,
+			  unsigned short int firecells_mild = 0,
+			  unsigned short int firecells_moderate = 0,
+			  unsigned short int firecells_extreme = 0,
 			  double fireintensitymax = 0,
 			  double fireintensitymean = 0)	
 			  
@@ -147,6 +153,9 @@ struct Envirgrid {        // sizeof variable
           envirfireimpact(envirfireimpact),
 		  fire(fire),
 		  firecells(firecells),
+		  firecells_mild(firecells_mild),
+		  firecells_moderate(firecells_moderate),
+		  firecells_extreme(firecells_extreme),
           fireintensitymax(fireintensitymax),
 		  fireintensitymean(fireintensitymean) {}
 };
@@ -191,6 +200,10 @@ struct Parameter {
 	double firegapoutput_threshold;
 	int firegapoutput_years;
 	int counter_fire_happened;
+	int fuelexperiment;
+	double fuelavailability;
+	int yearcounter;
+	int fuelreductionstart;
 
     // multi-core processing with omp
     int omp_num_threads;

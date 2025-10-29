@@ -186,6 +186,9 @@ void Dataoutput(int t,
         int stemcount = 0;
         double meantreeheight = 0.0, meantreeage = 0.0;
 		int firecells = 0;
+		int firecells_mild = 0;
+		int firecells_moderate = 0;
+		int firecells_extreme = 0;
 		double fireprobabilityrating = 0.0;
 		double fireintensitymax = 0.0;
 		double fireintensitymean = 0.0;
@@ -384,6 +387,16 @@ void Dataoutput(int t,
 				if (pEnvirgrid.fire > 0) {
 					// counting burned gridcells
 					firecells++;
+					// counting burned gridcells in "fire intensity/severity" classes
+					if (pEnvirgrid.fire > 0 && pEnvirgrid.fire <= 0.33) {
+					firecells_mild++;
+					}
+					if (pEnvirgrid.fire > 0.33 && pEnvirgrid.fire <= 0.66) {
+					firecells_moderate++;
+					}
+					if (pEnvirgrid.fire > 0.66 && pEnvirgrid.fire <= 1) {
+					firecells_extreme++;
+					}
 					// checking for maximum intensity
 					if (pEnvirgrid.fire > fireintensitymax){
 					fireintensitymax = pEnvirgrid.fire;
@@ -494,6 +507,9 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Thawing_depth_influence;");
 				// Fire
 				fprintf(filepointer, "N_firecells;");
+				fprintf(filepointer, "N_firecells_mild;");
+				fprintf(filepointer, "N_firecells_moderate;");
+				fprintf(filepointer, "N_firecells_extreme;");
 				fprintf(filepointer, "FPR_annual;");
 				fprintf(filepointer, "FI_max;");
 				fprintf(filepointer, "FI_mean;");
@@ -689,6 +705,9 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 			// Fire
 			fprintf(filepointer, "%d;", firecells); // fire module
+			fprintf(filepointer, "%d;", firecells_mild); // fire module
+			fprintf(filepointer, "%d;", firecells_moderate); // fire module
+			fprintf(filepointer, "%d;", firecells_extreme); // fire module
 			fprintf(filepointer, "%f;", fireprobabilityrating); // fire module
 			fprintf(filepointer, "%f;", fireintensitymax); // fire module
 			fprintf(filepointer, "%f;", fireintensitymean); // fire module

@@ -32,6 +32,9 @@ void Fire(Parameter* parameter,
 		double xfirecenter = 0.0; // declaration here to be available for fire gap output
 		double yfirecenter = 0.0;
 		double fireimpactareasize = 0.0;
+		
+		
+		
 				
 		// ##################################	
 		// ########## Fire weather ##########################################################################################################
@@ -44,12 +47,12 @@ void Fire(Parameter* parameter,
 		unsigned short int n_severeweather = 0;
 		unsigned short int n_extremeweather = 0;
 		
-		// determine thresholds that decide monthly fire weather severity	
-		// Used for Lake Satagay localization 
-		double firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
-		double firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
-		double firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
-		
+		// determine thresholds that decide monthly fire weather severity		
+		// Used for Lake 449 localization (using MODIS fires from 200 km buffer centered on Yakutsk)		
+		double firethresh1 = 7.61;
+		double firethresh2 = 8.37;
+		double firethresh3 = 9.20;
+
 		// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
 		if (weather_list[yearposition].fireindex1 < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
 		} else if ((weather_list[yearposition].fireindex1 >= firethresh1) && (weather_list[yearposition].fireindex1 <= firethresh2)){
@@ -189,6 +192,16 @@ void Fire(Parameter* parameter,
 		cout << "\tn_extremeweather:" << (n_extremeweather) << endl;	// optional output during simulation
 		cout << "\tAnnual FPR:" << fireprobabilityrating << endl;	// optional output during simulation
 		
+		// Obtain current year in CE
+		parameter[0].yearcounter++;
+		int year_ce = (parameter[0].lastyearweatherdata - parameter[0].simduration) + parameter[0].yearcounter;
+		//cout << "Year = " << year_ce << " CE" << endl;
+		if (parameter[0].fuelexperiment == 1) {
+			if (year_ce >= parameter[0].fuelreductionstart) {
+				cout << "Fuel reduction experiment is active!" << endl;
+			}
+		}
+		
 
 		// ####################################	
 		// ########## Fire occurence ########################################################################################################
@@ -281,10 +294,50 @@ void Fire(Parameter* parameter,
 									//cout << " - Fire intensity: " << cur_plot.fire << endl;	// optional output during simulation
 								}
 								
+								
+								// ##############################
+								// ##### Fuel-fire feedback #####
+								// ##############################
+								
+								// Note: Max litterlayerheight0 is 3000 (= 30 cm) -> divide by 3000 -> value between 0-1 -> 0.5 = no effect, lower = decrease of cur_plot.fire, higher = increase
+								
+								double fuelfactor = 0.0;
+								
+								if (parameter[0].fuelexperiment == 1 && parameter[0].fuelreductionstart != 9999) {
+									if (year_ce >= parameter[0].fuelreductionstart) {
+										fuelfactor = -1 * (0.5 - (((double)cur_plot.litterheight0 / 3000) * parameter[0].fuelavailability)); // For litter layer of 13 cm: fuelfactor ca. -0.066; 5 cm: ca. -0.33
+										fuelfactor = fuelfactor + (((double)cur_plot.Treedensityvalue / 65535) * parameter[0].fuelavailability);
+										cur_plot.fire = cur_plot.fire + fuelfactor;
+									} else if (year_ce < parameter[0].fuelreductionstart) {
+										fuelfactor = -1 * (0.5 - ((double)cur_plot.litterheight0 / 3000));
+										fuelfactor = fuelfactor + ((double)cur_plot.Treedensityvalue / 65535);
+										cur_plot.fire = cur_plot.fire + fuelfactor;
+									}
+								} else if (parameter[0].fuelexperiment == 1 && parameter[0].fuelreductionstart == 9999) {
+									fuelfactor = -1 * (0.5 - ((double)cur_plot.litterheight0 / 3000));
+									fuelfactor = fuelfactor + ((double)cur_plot.Treedensityvalue / 65535);
+									cur_plot.fire = cur_plot.fire + fuelfactor;
+								}
+								
+								// cout << "litterheight0: " << (double)cur_plot.litterheight0 / 3000 << " - Treedensityvalue: " << (double)cur_plot.Treedensityvalue / 65535 << " - fuelfactor = " << fuelfactor << endl;	// optional output during simulation
+								
+								// if (cur_plot.litterheight0 > 0) {
+									// cout << "cur_plot.litterheight0: " << (double)cur_plot.litterheight0 / 3000 << endl;	// optional output during simulation
+								// }
+								
+								// if (cur_plot.Treedensityvalue > 0) {
+									// cout << "cur_plot.Treedensityvalue: " << (double)cur_plot.Treedensityvalue / 65535 << endl;	// optional output during simulation
+								// }						
+														
+								
 								// Fire intensity stays between 0-1
 								if (cur_plot.fire > 1.0) {
 									cur_plot.fire = 1.0;
+								} else if (cur_plot.fire < 0.0) {
+									cur_plot.fire = 0.0;
 								}
+								
+								
 								
 								// Fire damage on litter layer
 								cur_plot.litterheight0 = cur_plot.litterheight0 - (cur_plot.litterheight0 * cur_plot.fire);

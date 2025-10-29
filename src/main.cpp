@@ -472,7 +472,8 @@ void fillElevations() {
         // ... read dem data
         FILE* f;
         char demfilename[250];
-		char deminputbuf[] = "input/dem_90m_satagay_x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; //x=990, y=990 - for Lake Satagay
+		// char deminputbuf[] = "input/dem_90m_satagay_x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; //x=990, y=990 - for Lake Satagay
+		char deminputbuf[] = "input/dem_30m_l449_x580266.985221-582246.985221m_y6845968.841241-6847948.841241m.csv"; //x=1980, y=1980 - for Lake 449
 
         strcpy(demfilename, deminputbuf);
         f = fopen(demfilename, "r");
@@ -501,7 +502,8 @@ void fillElevations() {
 
         // ... read slope data
         char slopefilename[250];
-		char slopeinputbuf[] = "input/slope_90m_satagay_x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; //x=990, y=990 - for Lake Satagay
+		// char slopeinputbuf[] = "input/slope_90m_satagay_x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; //x=990, y=990 - for Lake Satagay
+		char slopeinputbuf[] = "input/slope_30m_l449_x580266.985221-582246.985221m_y6845968.841241-6847948.841241m.csv"; //x=1980, y=1980 - for Lake 449
 
        strcpy(slopefilename, slopeinputbuf);
 	   
@@ -526,7 +528,8 @@ void fillElevations() {
 
         // ... read twi data
         char twifilename[250];
-		char twiinputbuf[] = "input/twi_90m_satagay_x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; //x=990, y=990 - for Lake Satagay
+		// char twiinputbuf[] = "input/twi_90m_satagay_x246083.210065-247073.210065m_y7003813.795713-7004803.795713m.csv"; //x=990, y=990 - for Lake Satagay
+		char twiinputbuf[] = "input/twi_30m_l449_x580266.985221-582246.985221m_y6845968.841241-6847948.841241m.csv"; //x=1980, y=1980 - for Lake 449
 
        strcpy(twifilename, twiinputbuf);
 
@@ -781,11 +784,11 @@ int main() {
     // console output of the version and general information
     printf("\n---->\tLAVESI-FIRE\n");
     printf(
-        "\n You have started  LAVESI-FIRE, "
+        "\nYou have started LAVESI-FIRE, "
         "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests and wildfires in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 1.0 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-FIRE)"
-        "\n Date:\t\t 10.07.2023"
+        "\n\n Version:\t 1.1 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-FIRE)"
+        "\n Date:\t\t 29.10.2025"
 		"\n"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"

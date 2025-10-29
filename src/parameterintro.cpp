@@ -166,6 +166,30 @@ void Parameterinput(void) {
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].counter_fire_happened);
     }
+	
+	strcpy(uebergabestring, "fuelexperiment");
+    parameter[0].fuelexperiment = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].fuelexperiment);
+    }
+	
+	strcpy(uebergabestring, "fuelavailability");
+    parameter[0].fuelavailability = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %4.3f ==> Main\n", uebergabestring, parameter[0].fuelavailability);
+    }
+	
+	strcpy(uebergabestring, "yearcounter");
+    parameter[0].yearcounter = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].yearcounter);
+    }
+	
+	strcpy(uebergabestring, "fuelreductionstart");
+    parameter[0].fuelreductionstart = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].fuelreductionstart);
+    }
 
     strcpy(uebergabestring, "temperaturelapse_jan");
     parameter[0].temperaturelapse_jan = Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);

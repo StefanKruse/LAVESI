@@ -34,9 +34,11 @@ outputall=1;						// (int 0,1) sampling area determination
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
 litterlayer=1;						// (int 0,1) Representation of an organic layer switch
 demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dimension of plot is set to fit the read in DEM)
-demresolution=90;					// (int) Resolution in m of DEM
+demresolution=30;					// (int) Resolution in m of DEM
 elevationoffset=0.0;				// (double) in m adjust baselevel of climate input
-slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
+slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used
+
+// Fire module 
 firemode=112;							// (int) LAVESI_FIRE wildfire simulation switch
 										// 0==no fires
 										// >0==fixed fire return interval, burning the whole plot at 100% intensity every x years (e.g. 50 means fire occurs every 50 years)
@@ -51,9 +53,20 @@ firegapoutput=0;					// (int 0,1) Annual "fire gap" output switch
 firegapoutput_threshold=0.5		 	// (double 0.00,1.00) If firepapoutput=1, determine here the threshold of fire probability/intensity above which fire gap output should be written (default = 0.5)
 firegapoutput_years=30			 	// (int) If firepapoutput=1, determine here how many years post-fire the output should be written (default=30)
 counter_fire_happened=0;			// (int 0) Don't change - initialization of counter if firegapoutput=1
+yearcounter=0;						// (int 0) Don't change - initialization of annual counter of year progression
+fuelexperiment=1;					// (int 0,1) Should a fuel reduction experiment be simulated?
+										// 0 = No (ignore following fuel-related parameters)
+										// 1 = Yes (Apply settings specified in following fuel-related parameters)
+fuelreductionstart=9999;			// (int) Should fuel be artificially reduced?
+										// 9999 = No
+										// Any other number = Year in CE where fuel reduction starts (until simulation end)
+fuelavailability=1.0;				// (double 0.00,1.00) Fuel availability for fire component after year indicated in fire.cpp (default = 1.0; year currently set as 1000)
+										// 0.0==no fuel available 
+										// 0.0<x<1.0==reduced fuel, relative to defaut simulation setup
+										// 1.0==100% fuel availability (default simulation setup)
 
 // 0.4 Computation environment
-omp_num_threads=24;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
+omp_num_threads=12;					// (int 1,system specific maximum) Number of cores used for computation, set internally on runtime by "omp_set_num_threads(omp_num_threads)"
 									// ... the dynamic teams are disabled for multi-core processing by "omp_set_dynamic(0)" in the source files
 
 
@@ -74,7 +87,7 @@ omp_num_threads=24;					// (int 1,system specific maximum) Number of cores used 
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-weatherchoice=1822406;			// (int) Type of weather forcing series 
+weatherchoice=214497;			// (int) Type of weather forcing series 
 									// ... ### Trace21ka ###
 									// 1822403 == Lake Satagay combined CRU-adjusted TraCE-21ka + CMIP6 (CRU-adjusted TraCE: 20049-1849 CE, CMIP6: 1850-2100 CE; total of 22150 yrs; last year 2100+1)
 									// ... ### MPI-ESM1.2 25ka ###
@@ -84,6 +97,9 @@ weatherchoice=1822406;			// (int) Type of weather forcing series
 									// 1822411 == 1822406, but P is -5% (used for sensitivity analysis)
 									// 1822412 == 1822406, but P is +5% (used for sensitivity analysis)
 									// 1822413 == Lake Satagay CRU-adjusted COMPLETE MPI-ESM-CR (Marie Kapsch) + CMIP6 (23050 BCE-2100 CE; total of 25151 yrs; last year 2100+1)
+									
+									// Lake 449
+									// 214497 == Lake 449 CRU-adjusted MPI-ESM-CR (23050 BCE - 1949 CE; total of 25000 yrs; last year 1949+1)
 
 temperaturelapse_jan=0.004318;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 									// Chukotka elevation:	0.001722
@@ -133,8 +149,8 @@ windsource=10;						// (int) source of wind data
 										// ... 10==ERA5 (Lake Satagay 2000-2020 CE)
 									
 // 1.2 -----> Simulation run characteristics
-lastyearweatherdata=2101;			// (int) determined by the input data series (final year + 1)
-simduration=25051;					// (int) duration of the simulation period depending on the available weather data series
+lastyearweatherdata=1950;			// (int) determined by the input data series (final year + 1)
+simduration=25000;					// (int) duration of the simulation period depending on the available weather data series
 stopatyear=30000;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=500;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
@@ -168,8 +184,8 @@ realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the init
 seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
-seedintro_maxy=990;					// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
-seedintro_maxx=990;
+seedintro_maxy=1980;				// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxx=1980;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
 boundaryconditions=0;				// (int 0,1,2) periodic boundary conditions for seeds crossing plot boundaries
 									// ... 0==seeds passing the borders are removed

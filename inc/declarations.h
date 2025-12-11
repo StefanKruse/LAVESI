@@ -1,8 +1,12 @@
 #pragma once
 
+#include <vector>
+
 // plot dimensions rows==y, cols==x
-constexpr unsigned int treerows = 100;	
-constexpr unsigned int treecols = 100;
+// constexpr unsigned int treerows = 100;	
+// constexpr unsigned int treecols = 100;
+constexpr unsigned int treerows = 200000; // transect length
+constexpr unsigned int treecols = 20;
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

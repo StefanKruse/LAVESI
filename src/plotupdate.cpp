@@ -58,10 +58,11 @@ void AddTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_list) {
 				for (int rastposi = (i + xyquerrastpos); rastposi > (i - (xyquerrastpos + 1)); rastposi--) {
 					for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
 						if ((rastposi <= (int)((treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
-							&& (rastposj <= (int)((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  // TODO directly use in for loop boundaries
+							&& (rastposj <= (int)((treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {  
 							// distance calculation to determine the influence of the density value in spatial units ...
 							// ... and inserting the value at every position
-							double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+							// double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+							double entfrastpos = std::hypot(double(i - rastposi), double(j - rastposj));
 							// only if the current grid cell is part of the influence area, a value is assigned
 							if (entfrastpos <= (double)xyquerrastpos) {
 								std::size_t curposii =
@@ -152,7 +153,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 							{
 								tree.densitywert = (1.0 - (tree.densitywert / ((double)cur_plot.Treedensityvalue / 10000)));
 								//                           density_desired(at position) / density_currently(at position)
-							} else if (parameter[0].densitytiletree == 2)  // multiplication of values
+						 	} else if (parameter[0].densitytiletree == 2)  // multiplication of values
 							{
 								tree.densitywert = (1.0 - (tree.densitywert / (((double)cur_plot.Treedensityvalue / 10000) * tree.densitywert)));
 							}
@@ -169,18 +170,26 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 					} else {
 						tree.thawing_depthinfluence = 100;
 					}
-if (parameter[0].qualiyearlyvis == true) {// output for a quick check
+					
+					if (parameter[0].qualiyearlyvis == true) {// output for a quick check
 #pragma omp critical 
-cout << " UPDATE:: tree.species = " << tree.species 
-	<< " tree.thawing_depthinfluence = " << tree.thawing_depthinfluence 
-	<< " (speciestrait[tree.species].minactivelayer*10 = " << speciestrait[tree.species].minactivelayer*10 
-	<< " (double)cur_plot.maxthawing_depth = " << (double)cur_plot.maxthawing_depth
-	<< endl;
-} 
+					cout << " UPDATE:: tree.species = " << tree.species 
+						<< " tree.thawing_depthinfluence = " << tree.thawing_depthinfluence 
+						<< " (speciestrait[tree.species].minactivelayer*10 = " << speciestrait[tree.species].minactivelayer*10 
+						<< " (double)cur_plot.maxthawing_depth = " << (double)cur_plot.maxthawing_depth
+						<< endl;
+					}
+
 					// dem sensing
-					if (parameter[0].demlandscape && (cur_plot.elevation < 32767)) {  // dem sensing
-						tree.elevation = cur_plot.elevation;
-						tree.envirimpact = cur_plot.envirgrowthimpact;
+					if (parameter[0].demlandscape) {  // dem sensing
+						if ( (cur_plot.elevation >=0) && (cur_plot.elevation < 32767) ) {
+							tree.elevation = cur_plot.elevation;
+							tree.envirimpact = cur_plot.envirgrowthimpact;
+						} else {
+							tree.growing = false;
+							tree_list.remove(tree_i);
+							continue;
+						}
 					}
 					// assess humidity which influences growth
 					tree.soilhumidity = cur_plot.soilhumidity;
@@ -190,7 +199,8 @@ cout << " UPDATE:: tree.species = " << tree.species
 				} else {  // ... if the tree influences more than one section
 					// determine dimensions of the considered grid around a tree
 					int xyquerrastpos = impactareasize * parameter[0].sizemagnif;
-					double maxdist = sqrt(pow(double(xyquerrastpos), 2) + pow(double(xyquerrastpos), 2));
+					// double maxdist = sqrt(pow(double(xyquerrastpos), 2) + pow(double(xyquerrastpos), 2));
+					double maxdist = std::hypot(double(xyquerrastpos), double(xyquerrastpos));
 
 					// determine rescaled coordinates and summation of the density value
 					double sumdensitywert = 0;
@@ -209,7 +219,8 @@ cout << " UPDATE:: tree.species = " << tree.species
 						for (int rastposj = (j - xyquerrastpos); rastposj < (j + xyquerrastpos + 1); rastposj++) {
 							if ((rastposi <= ((int)(treerows - 1) * parameter[0].sizemagnif) && rastposi >= 0)
 								&& (rastposj <= ((int)(treecols - 1) * parameter[0].sizemagnif) && rastposj >= 0)) {
-								double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+								// double entfrastpos = sqrt(pow(double(i - rastposi), 2) + pow(double(j - rastposj), 2));
+								double entfrastpos = std::hypot(double(i - rastposi), double(j - rastposj));
 
 								if (entfrastpos <= (double)xyquerrastpos) {
 									int icurr = rastposi;
@@ -272,8 +283,14 @@ cout << " UPDATE:: tree.species = " << tree.species
 						tree.thawing_depthinfluence = 100;
 
 					if (parameter[0].demlandscape) {  // dem sensing by mean value of gridcells in range
-						tree.elevation = 10 * sumelevation / (double)countelevation;
-						tree.envirimpact = 10000 * sumenvirgrowthimpact / (double)countelevation;
+						if (countelevation > 0) {
+							tree.elevation = 10 * sumelevation / (double)countelevation;
+							tree.envirimpact = 10000 * sumenvirgrowthimpact / (double)countelevation;
+						} else {
+							tree.growing = false;
+							tree_list.remove(tree_i);
+							continue;
+						}
 					}
 
 					// assess humidity which influences growth
@@ -291,6 +308,12 @@ cout << " UPDATE:: tree.species = " << tree.species
 		// "sumtwi = " << sumtwi << 
 		// endl;
 				}
+				if ( (tree.elevation > parameter[0].maxeleinput) || (tree.elevation < parameter[0].mineleinput) ) {
+					tree.growing = false;
+					tree_list.remove(tree_i);
+					continue;
+				}
+				
 				tree.envirimpact = parameter[0].envirgrowthimpacttree_mod * tree.envirimpact;
 				tree.densitywert = tree.densitywert
 								   * pow((1.0 - (0.01 / tree.dbasal)),
@@ -426,6 +449,7 @@ cout << " UPDATE:: tree.species = " << tree.species
 			}
 		}
 	}
+	tree_list.consolidate();
 }
 
 /****************************************************************************************/
@@ -440,8 +464,8 @@ cout << " UPDATE:: tree.species = " << tree.species
  *******************************************************************************************/
 
 void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
-    const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
-                           * static_cast<std::size_t>(parameter[0].sizemagnif);
+    const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif);
+	double transectstart = treerows - parameter[0].locationshift;
 
 	if (parameter[0].thawing_depth == true) {
         RandomNumber<double> uniform(0, 1);
@@ -449,7 +473,8 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
 		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 			auto& pEnvirgrid = plot_list[kartenpos];
-
+			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+			
 			if (parameter[0].litterlayer==true) {
 				// stochastic disturbance effect
 				auto rn = uniform.draw();
@@ -514,14 +539,21 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 													// changed from elefactor = ((double)pEnvirgrid.elevation / 10) / (1000 + parameter[0].elevationoffset)
 													//changes are based on use of elevationoffset in establishment.cpp (line 76-78)
 
-			const unsigned short maxthawing_depth =
+			unsigned short maxthawing_depth = 0;
+			if (parameter[0].n_weather_along_grid>0) { 
+				maxthawing_depth = 
+				1000.0 * (1.0 - daempfung) * 0.050*4 * std::sqrt(
+					weighmeanweathervar(weather_list[yearposition-1].degreday,ycooi-transectstart) + elefactor*(weighmeanweathervar(weather_list[yearposition-1].degredaymin,ycooi-transectstart) - weighmeanweathervar(weather_list[yearposition-1].degreday,ycooi-transectstart)) // reduction based on per 1000 m
+				)*8;
+			} else {
+				maxthawing_depth = 
 				// 1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
 				1000.0 * (1.0 - daempfung) * 0.050*4 * std::sqrt(
-				
-					weather_list[yearposition-1].degreday + elefactor*(weather_list[yearposition-1].degredaymin - weather_list[yearposition-1].degreday) // reduction based on per 1000 m
-				
+					weather_list[yearposition-1].degreday[0] + elefactor*(weather_list[yearposition-1].degredaymin[0] - weather_list[yearposition-1].degreday[0]) // reduction based on per 1000 m
 				)*8; // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 4 assumed use for tuning ALT
-// cout << maxthawing_depth << " | " << daempfung << " | " << weather_list[yearposition].degreday<< " & " << weather_list[yearposition].degredaymin << " & " << elefactor << " & " << ((double)pEnvirgrid.elevation / 10) << endl;
+				// cout << maxthawing_depth << " | " << daempfung << " | " << weather_list[yearposition].degreday<< " & " << weather_list[yearposition].degredaymin << " & " << elefactor << " & " << ((double)pEnvirgrid.elevation / 10) << endl;
+			}
+			
 			pEnvirgrid.maxthawing_depth = maxthawing_depth;
 			pEnvirgrid.Treedensityvalue = 0;
 			pEnvirgrid.Treenumber = 0;
@@ -546,6 +578,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
+	double transectstart = treerows - parameter[0].locationshift;
 
 	if (parameter[0].snowcomputation == true && parameter[0].ivort>0) {
         // RandomNumber<double> uniform(0, 1);
@@ -554,9 +587,14 @@ void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weath
 #pragma omp parallel for default(shared) schedule(guided)
 		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 			auto& pEnvirgrid = plot_list[kartenpos];
+			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
 
 			// global snow accumulation from weather cell
-				pEnvirgrid.snowdepth = weather_list[yearposition-1].snow_max_winterdepth;
+				if (parameter[0].n_weather_along_grid>0) {
+					pEnvirgrid.snowdepth = weighmeanweathervar(weather_list[yearposition-1].snow_max_winterdepth,ycooi-transectstart);
+				} else {
+					pEnvirgrid.snowdepth = weather_list[yearposition-1].snow_max_winterdepth[0];
+				}
 			
 			// deviating from centre value of elevation snow will be distributed by temperature lapse
 				// weather_list[yearposition-1].snow_max_winterdepthmin // means 100 m upwards in elevation
@@ -583,7 +621,10 @@ void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weath
 	}
 }
 
-void ReworkSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
+void ReworkSnow(//int yearposition, 
+				vector<Envirgrid>& plot_list 
+				//,vector<Weather>& weather_list
+				) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
 
@@ -670,7 +711,10 @@ void Environmentupdate(//Parameter* parameter,
         aktort++;
 
 		DistributeSnow(yearposition, plot_list, weather_list); // before ResetMaps as uses density and other variables
-		ReworkSnow(yearposition, plot_list, weather_list); // before ResetMaps as uses density and other variables
+		ReworkSnow(//yearposition, 
+					plot_list 
+					//,weather_list
+					); // before ResetMaps as uses density and other variables
 
         ResetMaps(yearposition, plot_list, weather_list);
 

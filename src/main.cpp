@@ -13,8 +13,9 @@ Pesttraits pesttrait[99];
 Speciescolonizationtimes speciescolonizationtimes[300];
 GlobalFireParameter globalfireparameter[20];
 
+// general declarations
 int yearposition;
-
+std::vector<int> speciesinroi; // container for species numbers present in simulation
 // lists and pointers
 vector<VectorList<Tree>> world_tree_list;
 vector<VectorList<Seed>> world_seed_list;
@@ -28,12 +29,53 @@ vector<VectorList<Seed>> world_seed_list_copy;
 vector<vector<Envirgrid>> world_plot_list_copy;
 vector<vector<Evaluation>> world_evaluation_list_copy;
 
-// wind data
-vector<int> globalyears;
-vector<vector<double>> windspd;
-vector<vector<double>> winddir;
+// structures for wind data 
+// const int maxnumberyears = 25151;
+// const int maxnumberwindelements = 1460;
+// std::vector<int> globalyears(maxnumberyears);
+// std::vector<std::vector<double>> windspd(maxnumberyears, std::vector<double>(maxnumberwindelements));
+// std::vector<std::vector<double>> winddir(maxnumberyears, std::vector<double>(maxnumberwindelements));
+const int maxnumberyears = 25151;
+const int maxnumberwindelements = 1460;
+std::array<int, maxnumberyears> globalyears;
+std::array<std::array<double, maxnumberwindelements>, maxnumberyears> windspd;
+std::array<std::array<double, maxnumberwindelements>, maxnumberyears> winddir;
 int cntr;
 vector<double> wdir, wspd;
+
+// helper functions
+double weighmeanweathervararray(array<array<double,22>,100>& data, double posongrid, int speciesnumber) {// weighted mean value along grid
+	int firstgrid = floor(posongrid/10000);// steps of 10 km; variable posongrid in m
+	double posbetweenfirstandsecondgrid = (posongrid/10000)-firstgrid;
+	double meanval = 0;
+	if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
+	   (firstgrid >= 0)) {// take values of closest weather data and calculate weighted mean
+		meanval = data[firstgrid][speciesnumber]*(1-posbetweenfirstandsecondgrid) + data[firstgrid+1][speciesnumber]*posbetweenfirstandsecondgrid;
+	} else if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
+			  (firstgrid < 0)) {// linear extrapolation below transect
+		meanval = (data[0][speciesnumber] - data[1][speciesnumber]) * (-1 * posongrid / 10000) + data[0][speciesnumber];
+// std::cout << "posongrid=" << posongrid << " + meanval=" << meanval << " + interpol=" << ((data[0] + data[1]) / 2)<< endl;
+	} else {
+		meanval = data[firstgrid][speciesnumber];
+	}
+	return(meanval);
+}
+double weighmeanweathervar(array<double,100>& data, double posongrid) {// weighted mean value along grid
+	int firstgrid = floor(posongrid/10000);// steps of 10 km; variable posongrid in m
+	double posbetweenfirstandsecondgrid = (posongrid/10000)-firstgrid;
+	double meanval = 0;
+	if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
+	   (firstgrid >= 0)) {// take values of closest weather data and calculate weighted mean
+		meanval = data[firstgrid]*(1-posbetweenfirstandsecondgrid) + data[firstgrid+1]*posbetweenfirstandsecondgrid;
+	} else if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
+			  (firstgrid < 0)) {// linear extrapolation below transect
+		meanval = (data[0] - data[1]) * (-1 * posongrid / 10000) + data[0];
+// std::cout << "posongrid=" << posongrid << " + meanval=" << meanval << " + interpol=" << ((data[0] + data[1]) / 2)<< endl;
+	} else {
+		meanval = data[firstgrid];
+	}
+	return(meanval);
+}
 
 void vegetationDynamics(int yearposition, int jahr, int t) {
     RandomNumber<double> uniform(0, 1);
@@ -56,8 +98,9 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     elapsed = time_end - time_start;
     cout << "envirupdate(" << elapsed.count() << ")+";
 #endif
-	if(parameter[0].ivort > parameter[0].ivortmax)
+	if( (parameter[0].firemode > 0) && (parameter[0].ivort > parameter[0].ivortmax) ) {
 		Fire(&parameter[0], yearposition, world_tree_list, world_seed_list, world_weather_list, world_plot_list);
+	}
 	
 	Pestoutbreak(&parameter[0], 
 				 yearposition, 
@@ -79,10 +122,9 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
     if (parameter[0].windsource != 0 && parameter[0].windsource != 4 && parameter[0].windsource != 5) {
         if (parameter[0].windsource == 1) {
             findyr1 = 1979;
-            findyr2 = 2012;  // TODO: adjust to available data
+            findyr2 = 2012;  // adjust to available data
         } else if (parameter[0].windsource == 999) {
 			findyr1 = 1;
-			// findyr2 = 25070;
 			findyr2 = parameter[0].lastyearweatherdata;
 	} else if (parameter[0].windsource == 998) {
 			findyr1 = 1;
@@ -99,6 +141,8 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 
     for (int i = 0; i < (signed)globalyears.size(); i++) {
         if (globalyears[i] == yr) {
+			wdir.clear();
+			wspd.clear();
             const auto& winddir_p = winddir[i];
             std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
             const auto& windspd_p = windspd[i];
@@ -370,7 +414,7 @@ void Spinupphase() {
 void Yearsteps() {
     printf("\n\nstarting yearly time steps...\n");
 
-    for (int t = 0; t <= parameter[0].simduration; t++) {
+    for (int t = parameter[0].startatyear; t <= parameter[0].simduration; t++) {
 
         // calculate current year and print a summary of the year
         int jahr = parameter[0].startjahr + t;
@@ -378,14 +422,13 @@ void Yearsteps() {
                        + t;  // calculate actual year position in the weather-list, according to first year in the Weather-List and the Start-Year
 
         if (parameter[0].yearlyvis == true) {
-            printf("\nSites per location\tyear\ttimestep\tSimulation length\n%zu/%d\t\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr,
-                   t, parameter[0].simduration);
+            printf("\nSites\tyear\ttimestep\tSimulation length\n%zu/%d\t%d\t%d\t\t%d\n", world_tree_list.size(), parameter[0].mapylength, jahr, parameter[0].ivort, parameter[0].simduration);
 
-			cout << " parameter[0].ivort = " << parameter[0].ivort << endl;
-			cout << " jahr = " << jahr << endl;
-			cout << " yearposition = " << yearposition << endl;
-			cout << " t = " << t << endl;
-			cout << " world_weather_list[0][0].jahr = " << world_weather_list[0][0].jahr << endl;
+			// cout << " parameter[0].ivort = " << parameter[0].ivort << endl;
+			// cout << " jahr = " << jahr << endl;
+			// cout << " yearposition = " << yearposition << endl;
+			// cout << " t = " << t << endl;
+			// cout << " world_weather_list[0][0].jahr = " << world_weather_list[0][0].jahr << endl;
         }
 		
 		// go through all functions for vegetation dynamics
@@ -496,7 +539,6 @@ void createLists() {
 
             world_seed_list.emplace_back(parameter[0].omp_num_threads);  // include new seed_list in corresponding world list
 
-            // TODO use resize for the following
             world_weather_list.emplace_back();     // include new weather_list in corresponding world list
             world_plot_list.emplace_back();        // include new plot_list in corresponding world list
             world_evaluation_list.emplace_back();  // include new evaluation_list in corresponding world list
@@ -518,7 +560,6 @@ void fillElevations() {
     // 0. only once at initializing & if(parameter[0].mapylength==1)
     // 1. load elevation data on coars resolution (e.g. 30 m)
     // 2. go over each point and interpolate (weighted mean) within a buffer radius of 15 m (minimum 1 point falls in)
-    // TODO: add fileinput to be set by parameter.txt
 
     if (parameter[0].mapylength == 1) {
 
@@ -532,7 +573,11 @@ void fillElevations() {
         FILE* f;
         char demfilename[250];
 		
-	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
+	if (parameter[0].weatherchoice > 8000007000 && parameter[0].weatherchoice < 9000000000){ // circumarctic-treeline-transects
+			// string deminputbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + plotcode.str() + "_dem.csv";
+			string deminputbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/CircumArcticTransects/" + plotcode.str() + "_dem.csv";
+			strcpy(demfilename, deminputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
 		if (treerows == 50) {
 			string deminputbuf = 
 			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_dem.csv";
@@ -807,8 +852,10 @@ void fillElevations() {
 	}
 
 
+		// storing min and max values
+		parameter[0].maxeleinput = 0;
+		parameter[0].mineleinput = 1000;
 
-		
         f = fopen(demfilename, "r");
         if (f == NULL) {
             printf("DEM file not available!\n");
@@ -829,14 +876,24 @@ void fillElevations() {
                 counter++;  // rows
                 elevationinput[counter] = strtod(allelements, NULL);
 				allelements = strtok(NULL, " "); // set to next
+				// cout << elevationinput[counter] << " / ";
+						if(elevationinput[counter] > ((double)parameter[0].maxeleinput/10)) {
+							parameter[0].maxeleinput = 10 * elevationinput[counter];
+						}
+						if(elevationinput[counter] < ((double)parameter[0].mineleinput/10)) {
+							parameter[0].minele = 10 * elevationinput[counter];
+						}
 			}
         }
         fclose(f);
 
     // ... read slope data
-        char slopefilename[250];
-		
-	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
+	char slopefilename[250];
+	if (parameter[0].weatherchoice > 8000007000 && parameter[0].weatherchoice < 9000000000){ // circumarctic-treeline-transects
+			// string slopeinputbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + plotcode.str() + "_slope.csv";
+			string slopeinputbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/CircumArcticTransects/" + plotcode.str() + "_slope.csv";
+			strcpy(slopefilename, slopeinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
 		if (treerows == 50) {
 			string slopeinputbuf = 
 			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_slope.csv";
@@ -1131,10 +1188,13 @@ void fillElevations() {
         }
         fclose(f);
 
-        // ... read twi data
-        char twifilename[250];
-		
-	if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
+	// ... read twi data
+	char twifilename[250];
+	if (parameter[0].weatherchoice > 8000007000 && parameter[0].weatherchoice < 9000000000){ // circumarctic-treeline-transects
+			// string twiinputbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + plotcode.str() + "_twi.csv";
+			string twiinputbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/CircumArcticTransects/" + plotcode.str() + "_twi.csv";
+			strcpy(twifilename, twiinputbuf.c_str());
+	} else if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
 		if (treerows == 50) {
 			string twiinputbuf = 
 			"/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_environmental_data_50x50/Siberia/" + plotcode.str() + "_twi.csv";
@@ -1447,87 +1507,52 @@ void fillElevations() {
                 double xcoodemmod = xcoodem - floor(xcoodem);
                 xcoodem = floor(xcoodem);
 
-                // elevation is filled with elevationoffset from parameters needs to sense elevation from input of 4 corners of grid cell
-                if ((ycoodem < (deminputdimension_y - 1)) && (xcoodem < (deminputdimension_x - 1)))  // only if in range leaving out border
-                {
-                    double eleinter = (
-                                          // upper left
-                                          elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1 - ycoodemmod)
-                                          + elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
-                                          // lower left
-                                          + elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-                                          + elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
-                                          // upper right
-                                          + elevationinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (1 - ycoodemmod)
-                                          + elevationinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod)
-                                          // lower right
-                                          + elevationinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (ycoodemmod)
-                                          + elevationinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod))
-                                      / 4;
-                    double slopeinter = (
-                                            // upper left
-                                            slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1 - ycoodemmod)
-                                            + slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
-                                            // lower left
-                                            + slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-                                            + slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
-                                            // upper right
-                                            + slopeinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (1 - ycoodemmod)
-                                            + slopeinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod)
-                                            // lower right
-                                            + slopeinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (ycoodemmod)
-                                            + slopeinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod))
-                                        / 4;
-                    double twiinter = (
-                                          // upper left
-                                          twiinput[ycoodem * deminputdimension_x + xcoodem] * (1 - ycoodemmod)
-                                          + twiinput[ycoodem * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
-                                          // lower left
-                                          + twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (ycoodemmod)
-                                          + twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
-                                          // upper right
-                                          + twiinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (1 - ycoodemmod)
-                                          + twiinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod)
-                                          // lower right
-                                          + twiinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (ycoodemmod)
-                                          + twiinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod))
-                                      / 4;
+				double eleinter = 0.0;
+				double slopeinter = 0.0;
+				double twiinter = 0.0;
+                // elevation is filled with elevationoffset from parameters needs to sense elevation from input of 2 adjacent cells 
+                if ( (parameter[0].weatherchoice > 8000007000 && parameter[0].weatherchoice < 9000000000)
+					 && (ycoodem < (deminputdimension_y - 1))
+					) {  // only if in range leaving out border + circumarctic-treeline-transects
+					// interpolation only along y-position
+					eleinter = ( elevationinput[ycoodem * deminputdimension_x + xcoodem] + elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] ) / 2;
+					slopeinter = ( slopeinput[ycoodem * deminputdimension_x + xcoodem] + slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] ) / 2;
+					twiinter = ( twiinput[ycoodem * deminputdimension_x + xcoodem] + twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] ) / 2;
 
-                    int countwatercells = 0;
-                    if ((elevationinput[ycoodem * deminputdimension_x + xcoodem] == 9999) || (slopeinput[ycoodem * deminputdimension_x + xcoodem] == 9999)
-                        || (twiinput[ycoodem * deminputdimension_x + xcoodem] == 9999))
-                        countwatercells++;
-                    if ((elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
-                        || (slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
-                        || (twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999))
-                        countwatercells++;
-                    if ((elevationinput[ycoodem * deminputdimension_x + (xcoodem + 1)] == 9999)
-                        || (slopeinput[ycoodem * deminputdimension_x + (xcoodem + 1)] == 9999)
-                        || (twiinput[ycoodem * deminputdimension_x + (xcoodem + 1)] == 9999))
-                        countwatercells++;
-                    if ((elevationinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] == 9999)
-                        || (slopeinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] == 9999)
-                        || (twiinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] == 9999))
-                        countwatercells++;
-                    // in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
-                    // 32767
-                    if (countwatercells == 0) {
-                        plot_list[kartenpos].elevation += 10 * eleinter;
+					int countwatercells = 0;
+					if ((elevationinput[ycoodem * deminputdimension_x + xcoodem] == 9999) 
+						|| (slopeinput[ycoodem * deminputdimension_x + xcoodem] == 9999) 
+						|| (twiinput[ycoodem * deminputdimension_x + xcoodem] == 9999)
+						) // up
+						countwatercells++;
+					if ((elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
+						|| (slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
+						|| (twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
+						) // down
+						countwatercells++;
+					
+					// cout << " countwatercells = " << countwatercells << endl;
+					// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
+					// 32767
+					if (countwatercells == 0) {
+						plot_list[kartenpos].elevation += 10 * eleinter;
 						if(eleinter> ((double)parameter[0].maxele/10)) {// save max elevation for growth impact
 							parameter[0].maxele = 10 * eleinter;
 						}
 						if(eleinter<((double)parameter[0].minele/10)) {// save min elevation for growth impact
 							parameter[0].minele = 10 * eleinter;
 						}
-                        // plot_list[kartenpos]->slope = slopeinter;
-                        plot_list[kartenpos].twi += twiinter*100;
+						// cout << " plot_list[kartenpos].elevation = " << plot_list[kartenpos].elevation << endl;
 
-                        // calculate environment-growth-impact (value between 0 and 1)
-                        // f(TWI)		= slope * TWI + intercept
-                        // f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
-                        double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
-                                                   + (1 - parameter[0].slopetwiratio)
-                                                         * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
+						// plot_list[kartenpos]->slope = slopeinter;
+						plot_list[kartenpos].twi += twiinter*100;
+
+						// calculate environment-growth-impact (value between 0 and 1)
+						// f(TWI)		= slope * TWI + intercept
+						// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
+						double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
+												   + (1 - parameter[0].slopetwiratio)
+														 * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
 						
 						envirgrowthimpact = envirgrowthimpact + 0.3; //before: + 0.4
 						
@@ -1537,23 +1562,128 @@ void fillElevations() {
 						// envirgrowthimpact = pow( envirgrowthimpact, 0.5*0.5); // double square root
 						// envirgrowthimpact = pow( envirgrowthimpact, 0.5); // single square root
 
-                        // plausibility check
-                        if (envirgrowthimpact > 1.0)
-                            envirgrowthimpact = 1.0;
-                        if (envirgrowthimpact < 0.0)
-                            envirgrowthimpact = 0.0;
+						// plausibility check
+						if (envirgrowthimpact > 1.0)
+							envirgrowthimpact = 1.0;
+						if (envirgrowthimpact < 0.0)
+							envirgrowthimpact = 0.0;
 
-                        // adjust by factor
-                        double envirgrowthimpactfactor = 1.0;
-                        plot_list[kartenpos].envirgrowthimpact = 10000 * envirgrowthimpactfactor * envirgrowthimpact;
+						// adjust by factor
+						double envirgrowthimpactfactor = 1.0;
+						plot_list[kartenpos].envirgrowthimpact = 10000 * envirgrowthimpactfactor * envirgrowthimpact;
 						
 						
-                        plot_list[kartenpos].envirfireimpact = 1-(twiinter/25) * 10000;// scale: 10000 meaning value ==1 ... 10000 == very dry places
-                    } else {
-                        plot_list[kartenpos].elevation = 32767;
-                        plot_list[kartenpos].envirgrowthimpact = 0;
-                        plot_list[kartenpos].twi = 25*100;
-                    }
+						plot_list[kartenpos].envirfireimpact = 1-(twiinter/25) * 10000;// scale: 10000 meaning value ==1 ... 10000 == very dry places
+					} else {
+						plot_list[kartenpos].elevation = 32767;
+						plot_list[kartenpos].envirgrowthimpact = 0;
+						plot_list[kartenpos].twi = 25*100;
+					}
+				} else if ((ycoodem < (deminputdimension_y - 1)) && (xcoodem < (deminputdimension_x - 1))) { // only if in range leaving out border
+					eleinter = (
+									  // upper left
+									  elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1 - ycoodemmod)
+									  + elevationinput[ycoodem * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
+									  // lower left
+									  + elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+									  + elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
+									  // upper right
+									  + elevationinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (1 - ycoodemmod)
+									  + elevationinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod)
+									  // lower right
+									  + elevationinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (ycoodemmod)
+									  + elevationinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod))
+								  / 4;
+					slopeinter = (
+										// upper left
+										slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1 - ycoodemmod)
+										+ slopeinput[ycoodem * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
+										// lower left
+										+ slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+										+ slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
+										// upper right
+										+ slopeinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (1 - ycoodemmod)
+										+ slopeinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod)
+										// lower right
+										+ slopeinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (ycoodemmod)
+										+ slopeinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod))
+									/ 4;
+					twiinter = (
+									  // upper left
+									  twiinput[ycoodem * deminputdimension_x + xcoodem] * (1 - ycoodemmod)
+									  + twiinput[ycoodem * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
+									  // lower left
+									  + twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (ycoodemmod)
+									  + twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] * (1 - xcoodemmod)
+									  // upper right
+									  + twiinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (1 - ycoodemmod)
+									  + twiinput[ycoodem * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod)
+									  // lower right
+									  + twiinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (ycoodemmod)
+									  + twiinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] * (xcoodemmod))
+								  / 4;
+
+					int countwatercells = 0;
+					if ((elevationinput[ycoodem * deminputdimension_x + xcoodem] == 9999) || (slopeinput[ycoodem * deminputdimension_x + xcoodem] == 9999)
+						|| (twiinput[ycoodem * deminputdimension_x + xcoodem] == 9999))
+						countwatercells++;
+					if ((elevationinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
+						|| (slopeinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999)
+						|| (twiinput[(ycoodem + 1) * deminputdimension_x + xcoodem] == 9999))
+						countwatercells++;
+					if ((elevationinput[ycoodem * deminputdimension_x + (xcoodem + 1)] == 9999)
+						|| (slopeinput[ycoodem * deminputdimension_x + (xcoodem + 1)] == 9999)
+						|| (twiinput[ycoodem * deminputdimension_x + (xcoodem + 1)] == 9999))
+						countwatercells++;
+					if ((elevationinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] == 9999)
+						|| (slopeinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] == 9999)
+						|| (twiinput[(ycoodem + 1) * deminputdimension_x + (xcoodem + 1)] == 9999))
+						countwatercells++;
+					// in case of water (or rock which would need to be implemented) are in the vicinity of the current envir grid cell the value will be set to
+					// 32767
+					if (countwatercells == 0) {
+						plot_list[kartenpos].elevation += 10 * eleinter;
+						if(eleinter> ((double)parameter[0].maxele/10)) {// save max elevation for growth impact
+							parameter[0].maxele = 10 * eleinter;
+						}
+						if(eleinter<((double)parameter[0].minele/10)) {// save min elevation for growth impact
+							parameter[0].minele = 10 * eleinter;
+						}
+						// plot_list[kartenpos]->slope = slopeinter;
+						plot_list[kartenpos].twi += twiinter*100;
+
+						// calculate environment-growth-impact (value between 0 and 1)
+						// f(TWI)		= slope * TWI + intercept
+						// f(slope) 	= k * exp(-1/2 * (xp - mu)^2/sigma^2)
+						double envirgrowthimpact = parameter[0].slopetwiratio * (-0.045999 * twiinter + 0.994066)
+												   + (1 - parameter[0].slopetwiratio)
+														 * (0.85654 * exp((-0.5) * ((slopeinter - 8.78692) * (slopeinter - 8.78692)) / (6.90743 * 6.90743)));
+						
+						envirgrowthimpact = envirgrowthimpact + 0.3; //before: + 0.4
+						
+						// envirgrowthimpact = sqrt(envirgrowthimpact); //added to tune low envirgrowthimpact values at Khamra
+
+						// relaxing the impact 
+						// envirgrowthimpact = pow( envirgrowthimpact, 0.5*0.5); // double square root
+						// envirgrowthimpact = pow( envirgrowthimpact, 0.5); // single square root
+
+						// plausibility check
+						if (envirgrowthimpact > 1.0)
+							envirgrowthimpact = 1.0;
+						if (envirgrowthimpact < 0.0)
+							envirgrowthimpact = 0.0;
+
+						// adjust by factor
+						double envirgrowthimpactfactor = 1.0;
+						plot_list[kartenpos].envirgrowthimpact = 10000 * envirgrowthimpactfactor * envirgrowthimpact;
+						
+						
+						plot_list[kartenpos].envirfireimpact = 1-(twiinter/25) * 10000;// scale: 10000 meaning value ==1 ... 10000 == very dry places
+					} else {
+						plot_list[kartenpos].elevation = 32767;
+						plot_list[kartenpos].envirgrowthimpact = 0;
+						plot_list[kartenpos].twi = 25*100;
+					}
                 } else {
                     plot_list[kartenpos].elevation = 32767;
                     plot_list[kartenpos].envirgrowthimpact = 0;
@@ -1562,7 +1692,15 @@ void fillElevations() {
             }
         }
     }
+	
+	cout << " Elevation from files (min-max) = " << parameter[0].mineleinput << "-" << parameter[0].maxeleinput << endl;
+	cout << " Elevation interpolated (min-max) = " << parameter[0].minele << "-" << parameter[0].maxele << endl;
     cout << " ... end dem and slope input" << endl;
+	
+	// code to wait
+	// cout << "Press Enter to continue...";
+	// cin.get();   // Waits for user to press Enter
+	// cout << "Program resumed!" << endl;
 }
 
 void initialiseMaps() {
@@ -1677,27 +1815,29 @@ int main() {
     // console output of the version and general information
     printf("\n---->\tLAVESI\n");
     printf(
-        "\n You have started  LAVESI-FIRE, "
+        "\n You have started  LAVESI-FIRE-TRANSECT, "
         "An individual-based and spatially explicit simulation model for vegetation dynamics of boreal forests and wildfires in a 3-dimensional landscape "
         "- driven by temperature, precipitation and wind data."
-        "\n\n Version:\t 2.01 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-FIRE)"
-        "\n Date:\t\t 14.04.2021"
+        "\n\n Version:\t 5.beta1 (LAVESI-WIND-3DENVIR-MULTIPLESPECIES-FIRE-TRANSECT)"
+        "\n Date:\t\t 22.10.2025"
         "\n authors:"
         "\n\t Stefan Kruse\tstefan.kruse@awi.de"
-        "\n\t Josias Gloy"
+        "\n\t Ramesh Glückler"
+        "\n\t Luca Farkas"
         "\n\t of prior versions:"
-        "\n\t Alexander Gerdes, Nadja Kath, Mareike Wieczorek"
+        "\n\t Sarah Haupt, Josias Gloy, Lisa Trimborn, Katharina Schildt, Alexander Gerdes, Nadja Kath, Mareike Wieczorek"
         "\n");
     printf("\n<----\n");
 
 
     // read in all simulation parameters from parameters.txt
+	speciesinroi.reserve(30);
     Parameterinput();
 
 	cout << endl << "Weather chosen: " << parameter[0].weatherchoice << endl;
 	cout << "Simulation area width: " << treecols << " & height: " << treerows << " meters" << endl << endl;
 	
-	if(parameter[0].globalfireradius>0) {
+	if( (parameter[0].firemode > 0) && (parameter[0].globalfireradius > 0) ) {
 		cout << "Global fire parameters will be read for " << parameter[0].globalfireradius << " km radius." << endl;
 		ReadFire();
 		cout << "..." << endl;
@@ -1712,7 +1852,7 @@ int main() {
 			break;
 		}
 
-		cout << speciestrait[species_counter].number << " -> " << speciestrait[species_counter].species << " | min ALD: " << speciestrait[species_counter].minactivelayer << " | min biomasswoodfacb: " << speciestrait[species_counter].biomasswoodfacb << endl;
+		cout << speciestrait[species_counter].number << " -> " << speciestrait[species_counter].species << " | min ALD: " << speciestrait[species_counter].minactivelayer << " | weathervariableb: " << speciestrait[species_counter].weathervariableb << endl;
 	}
 
     // pragma omp initializing

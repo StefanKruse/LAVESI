@@ -156,19 +156,23 @@ void Dataoutput(int t,
                 }
             } else if (parameter[0].outputmode == 99) {  // "test"
 				outputcurrencies = true;
-                if ((parameter[0].ivort % 100 == 0)) {
-					outputcurrencies = true;
-                    ausgabedensity = true;
-                    outputgriddedbiomass = true;
-                    outputindividuals = true;
-                }
-                // if ( (parameter[0].ivort>2500) && (parameter[0].ivort % 5 == 0) ) {
-                if ( (parameter[0].ivort>=600) && (parameter[0].ivort % 5 == 0) ) {
-					outputcurrencies = true;
-                    ausgabedensity = true;
-                    outputgriddedbiomass = true;
-                    outputindividuals = true;
-                }
+                if ((parameter[0].ivort == 1)) {
+					ausgabedensity = true;
+				}
+                if ((parameter[0].ivort % 10 == 0)) {
+					outputtransects = true;
+				}
+                // if ((parameter[0].ivort % 100 == 0)) {
+                    // ausgabedensity = true;
+                    // outputgriddedbiomass = true;
+                    // outputindividuals = true;
+                // }
+                // if ( (parameter[0].ivort>=600) && (parameter[0].ivort % 5 == 0) ) {
+					// outputcurrencies = true;
+                    // ausgabedensity = true;
+                    // outputgriddedbiomass = true;
+                    // outputindividuals = true;
+                // }
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
                
                 if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
@@ -458,7 +462,7 @@ void Dataoutput(int t,
 		for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
 			vector<Weather>& weather_list = *posw;
 			
-			fireprobabilityrating = weather_list[yearposition-1].FPR;
+			fireprobabilityrating = weather_list[yearposition-1].FPR[0]; // TODO: only for first position, if all are needed program extra function
 			
 		}
 
@@ -513,8 +517,8 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Stemcount;");
                 fprintf(filepointer, "Mean_tree_height;");
                 fprintf(filepointer, "Mean_tree_age;");
-                fprintf(filepointer, "Turningpoint_year;");
-                fprintf(filepointer, "Equillibrium_year;");
+                // fprintf(filepointer, "Turningpoint_year;");
+                // fprintf(filepointer, "Equillibrium_year;");
                 fprintf(filepointer, "Stemcount_species1;");
                 fprintf(filepointer, "Stemcount_species2;");
                 fprintf(filepointer, "Stemcount_species3;");
@@ -551,10 +555,13 @@ void Dataoutput(int t,
                 fprintf(filepointer, "Weather_type;");
                 // fprintf(filepointer, "Start_trees;");
                 fprintf(filepointer, "Temperature_mean_year;");
-                fprintf(filepointer, "Temperature_mean_january;");
-                fprintf(filepointer, "Temperature_mean_july;");
+                fprintf(filepointer, "Temperature_mean_january_start;");
+                fprintf(filepointer, "Temperature_mean_january_end;");
+                fprintf(filepointer, "Temperature_mean_july_start;");
+                fprintf(filepointer, "Temperature_mean_july_end;");
                 fprintf(filepointer, "Temperature_mean_jja;");
-                fprintf(filepointer, "Vegetation_period_length;");
+                fprintf(filepointer, "Vegetation_period_length_start;");
+                fprintf(filepointer, "Vegetation_period_length_end;");
                 fprintf(filepointer, "AAT;");
                 fprintf(filepointer, "DDT;");
                 fprintf(filepointer, "Precipitation_sum_year;");
@@ -820,8 +827,8 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", pEvaluation.stemcountliste[pEvaluation.stemcountliste.size() - 1]);
             fprintf(filepointer, "%6.4f;", pEvaluation.meantreeheightliste[pEvaluation.meantreeheightliste.size() - 1]);
             fprintf(filepointer, "%6.4f;", pEvaluation.meantreeageliste[pEvaluation.meantreeageliste.size() - 1]);
-            fprintf(filepointer, "%d;", pEvaluation.yearofturningpoint);
-            fprintf(filepointer, "%d;", pEvaluation.yearofequilibrium);
+            // fprintf(filepointer, "%d;", pEvaluation.yearofturningpoint);
+            // fprintf(filepointer, "%d;", pEvaluation.yearofequilibrium);
             fprintf(filepointer, "%d;", stemcount_species1);
             fprintf(filepointer, "%d;", stemcount_species2);
             fprintf(filepointer, "%d;", stemcount_species3);
@@ -855,19 +862,22 @@ void Dataoutput(int t,
             fprintf(filepointer, "%d;", specseed2);
             fprintf(filepointer, "%4.2f;", yposmax);
             // weather
-            fprintf(filepointer, "%ld;", parameter[0].weatherchoice);
+            fprintf(filepointer, "%lld;", parameter[0].weatherchoice);
             // fprintf(filepointer, "%d;", parameter[0].starttrees);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].tempyearmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp1monthmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp7monthmean);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].tempmeanjja);
-            fprintf(filepointer, "%d;", weather_list[yearposition-1].vegetationperiodlength);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].activeairtemp);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].degreday);
-            fprintf(filepointer, "%4.2f;", weather_list[yearposition-1].precipitationsum);
-            fprintf(filepointer, "%4.2f;", weather_list[yearposition-1].precipitationsumjja);
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].weatherfactor[1]);//TODO: add here for all species output
-            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].weatherfactor[2]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].tempyearmean[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp1monthmean[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp1monthmean[parameter[0].n_weather_along_grid]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp7monthmean[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp7monthmean[parameter[0].n_weather_along_grid]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].tempmeanjja[0]);
+            fprintf(filepointer, "%d;", weather_list[yearposition-1].vegetationperiodlength[0]);
+            fprintf(filepointer, "%d;", weather_list[yearposition-1].vegetationperiodlength[parameter[0].n_weather_along_grid]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].activeairtemp[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].degreday[0]);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition-1].precipitationsum[0]);
+            fprintf(filepointer, "%4.2f;", weather_list[yearposition-1].precipitationsumjja[0]);
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].weatherfactor[0][1]);//add here for all species output if relevant
+            fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].weatherfactor[0][2]);
             fprintf(filepointer, "%d;", parameter[0].thawing_depth);
 			// Fire
 			fprintf(filepointer, "%d;", firecells); // ###FIRE###
@@ -1005,7 +1015,7 @@ void Dataoutput(int t,
 							// fprintf(filepointer, "%d;", tree.xworldcoo);
 							fprintf(filepointer, "%d;", parameter[0].ivort);
 							fprintf(filepointer, "%d;", jahr);
-							fprintf(filepointer, "%ld;", parameter[0].weatherchoice);
+							fprintf(filepointer, "%lld;", parameter[0].weatherchoice);
 							fprintf(filepointer, "%4.4f;", tree.dbasal);
 							fprintf(filepointer, "%4.4f;", tree.dbreast);
 							fprintf(filepointer, "%4.4f;", (double)tree.height / 10);
@@ -1278,8 +1288,7 @@ void Dataoutput(int t,
 
 		if (outputgriddedbiomass == true) {  // gridded tree biomass output
 			ostringstream s_speciesname;
-			for(signed short int speciesnumber_i = 1; speciesnumber_i <= parameter[0].species_max; ++speciesnumber_i) {
-// increase here number to +1 of included species
+			for(signed short int speciesnumber_i = 1; speciesnumber_i <= parameter[0].species_max; ++speciesnumber_i) {// increase here number to +1 of included species
 					// assemble file name
 					s1 << parameter[0].repeati;
 					s2 << parameter[0].weatherchoice;
@@ -1495,6 +1504,10 @@ void Dataoutput(int t,
 		// #########################
 
         if (outputtransects == true) {  // transect output
+			// declarations
+			signed int stepsizeinm = 1000;
+			// constexpr size_t steps = ceil(treerows/stepsizeinm) + 1;
+			size_t steps = static_cast<size_t>(std::ceil(static_cast<double>(treerows) / stepsizeinm)) + 1;
             // assemble file name
             s1 << parameter[0].repeati;
             s2 << parameter[0].weatherchoice;
@@ -1516,10 +1529,10 @@ void Dataoutput(int t,
                 filepointer = fopen(dateiname.c_str(), "w+");
 
                 fprintf(filepointer, "Y;");
-                fprintf(filepointer, "Species1_stems;");
-                fprintf(filepointer, "Species2_stems;");
-                fprintf(filepointer, "Species1_seedlings;");
-                fprintf(filepointer, "Species2_seedlings;");
+                fprintf(filepointer, "Species;");
+                fprintf(filepointer, "Stemcount;");
+                fprintf(filepointer, "Seedlings;");
+                fprintf(filepointer, "Elevation;");
 
                 fprintf(filepointer, "\n");
 
@@ -1532,46 +1545,47 @@ void Dataoutput(int t,
             fseek(filepointer, 0, SEEK_END);
 
             // aggregate output for y-transects on m-precision
-            vector<int> Species1_stems;
-            vector<int> Species2_stems;
-            vector<int> Species1_seedlings;
-            vector<int> Species2_seedlings;
+			std::vector<std::vector<int>> stems(steps, std::vector<int>(22+1, 0));	
+			std::vector<std::vector<int>> seedlings(steps, std::vector<int>(22+1, 0));	
+			std::vector<std::vector<int>> elevation(steps, std::vector<int>(22+1, 0));	
+			// std::array<std::array<int, 22>, steps> stems = {};
+            // std::array<std::array<int, 22>, steps> seedlings = {};
             // fill vectors with zeros
-            Species1_stems.resize(treerows, 0);
-            Species2_stems.resize(treerows, 0);
-            Species1_seedlings.resize(treerows, 0);
-            Species2_seedlings.resize(treerows, 0);
+            // Species1_stems.resize(treerows, 0);
+            // Species2_stems.resize(treerows, 0);
+            // Species1_seedlings.resize(treerows, 0);
+            // Species2_seedlings.resize(treerows, 0);
 
 #pragma omp parallel for default(shared) schedule(guided)
             for (unsigned long long int tree_i = 0; tree_i < (unsigned long long int) tree_list.size(); ++tree_i) {
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {
-					unsigned int yposi = tree.ycoo / 1000;
+					unsigned int yposi = (tree.ycoo / 1000) / stepsizeinm;
 
 					// aggregate variables
 					if (((double)tree.height / 10) > 130) {
-						if (tree.species == 1)
-							Species1_stems[yposi]++;
-						else
-							Species2_stems[yposi]++;
+						stems[yposi][tree.species]++;
 					} else {
-						if (tree.species == 1)
-							Species1_seedlings[yposi]++;
-						else
-							Species2_seedlings[yposi]++;
+						seedlings[yposi][tree.species]++;
+					}
+					// store elevation
+					if(elevation[yposi][tree.species] == 0) {
+						elevation[yposi][tree.species] = tree.elevation;
 					}
 				}
             }
 
             // add data to file
-            for (std::size_t yposi = 0; yposi < treerows; ++yposi) {
-                fprintf(filepointer, "%ld;", yposi);
-                fprintf(filepointer, "%d;", Species1_stems[yposi]);
-                fprintf(filepointer, "%d;", Species2_stems[yposi]);
-                fprintf(filepointer, "%d;", Species1_seedlings[yposi]);
-                fprintf(filepointer, "%d;", Species2_seedlings[yposi]);
-                fprintf(filepointer, "\n");
+            for (std::size_t yposi = 0; yposi < steps; ++yposi) { // loop for steps
+				for(int speciesi=1; speciesi<=22; speciesi++) { // loop for species
+					fprintf(filepointer, "%ld;", yposi*stepsizeinm);
+					fprintf(filepointer, "%d;", speciesi);
+					fprintf(filepointer, "%d;", stems[yposi][speciesi]);
+					fprintf(filepointer, "%d;", seedlings[yposi][speciesi]);
+					fprintf(filepointer, "%d;", elevation[yposi][speciesi]);
+					fprintf(filepointer, "\n");
+				}
             }
 
             fclose(filepointer);

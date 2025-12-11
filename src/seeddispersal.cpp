@@ -4,6 +4,8 @@
 
 using namespace std;
 
+extern std::vector<int> speciesinroi; // container for species numbers present in simulation
+
 void Seedoutput(int aktort, double dispersaldistance, float direction, int neueweltcoo) {
     FILE* filepointer;
     string dateiname;
@@ -177,7 +179,7 @@ void Seeddispersal(//int jahr,
                         }
                     } else if (seed.ycoo < 0) {
                         if ((parameter[0].boundaryconditions == 1)) {
-                            seed.ycoo = 1000 * ((double)(treerows - 1) + fmod((double)seed.ycoo / 1000, (double)(treerows - 1)));  // TODO fix
+                            seed.ycoo = 1000 * ((double)(treerows - 1) + fmod((double)seed.ycoo / 1000, (double)(treerows - 1))); 
                             // seed.namem = 0;
                             // seed.namep = 0;
                         } else if ((parameter[0].boundaryconditions == 3)) {
@@ -190,7 +192,8 @@ void Seeddispersal(//int jahr,
                     }
                     if (seed.xcoo < 0) {
                         if ((parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3)) {
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1);  // TODO fix
+                            // seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1);
+							seed.xcoo = 1000 * std::fmod(std::fmod((double)seed.xcoo / 1000, (double)(treecols - 1)) + (double)(treecols - 1), (double)(treecols - 1));
                             // seed.namem = 0;
                             // seed.namep = 0;
                         } else {
@@ -199,12 +202,11 @@ void Seeddispersal(//int jahr,
                         }
                     } else if ((double)seed.xcoo / 1000 > (double)(treecols - 1)) {
                         if (parameter[0].boundaryconditions == 1 || parameter[0].boundaryconditions == 3) {
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1));  // TODO fix
+                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1)); 
                             // seed.namem = 0;
                             // seed.namep = 0;
-
                         } else if ((parameter[0].boundaryconditions == 2) && (uniform.draw() < 0.5)) {  // Reducing seed introduction on the western border:
-                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1));  // TODO fix
+                            seed.xcoo = 1000 * fmod((double)seed.xcoo / 1000, (double)(treecols - 1));  
                         } else {
                             sameausserhalb = true;
                             seedleftE++;
@@ -213,8 +215,8 @@ void Seeddispersal(//int jahr,
 
                     if ((sameausserhalb == false)
                         && ((seed.ycoo < 0) || (seed.ycoo > 1000 * ((int)treerows - 1)) || (seed.xcoo < 0) || (seed.xcoo > 1000 * ((int)treecols - 1)))) {
-                        printf("\n\nLaVeSi was exited ");
-                        printf("in Seeddispersal.cpp\n");
+                        printf("\n\nLAVESI was exited ");
+                        printf("in seeddispersal.cpp\n");
                         printf("... Reason: dispersed seed is, after deleting it, still part of the simulated plot (Pos(Y=%4.2f,X=%4.2f))\n",
                                (double)seed.ycoo / 1000, (double)seed.xcoo / 1000);
                         exit(1);

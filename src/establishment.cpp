@@ -24,6 +24,8 @@ void Treeestablishment(Parameter* parameter,
         vector<Envirgrid>& plot_list = *world_positon_k;
         aktort++;
 
+		double transectstart = treerows - parameter[0].locationshift;
+
         RandomNumber<double> uniform(0, 1);
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
         for (unsigned int i_seed = 0; i_seed < seed_list.size(); ++i_seed) {
@@ -44,7 +46,7 @@ void Treeestablishment(Parameter* parameter,
 
                 double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
-                // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // TODO: check litterheight implementation
+                // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // check litterheight implementation
 // cout << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
                 if (germinationlitterheightinfluence < 0.01) {// minimum 1%
                     germinationlitterheightinfluence = 0.01;
@@ -74,46 +76,52 @@ cout << " ESTAB:: seed.species = " << seed.species
 					if (parameter[0].thawing_depth) {
 						maxbw_help =
 							exp(speciestrait[seed.species].gdbasalconst + speciestrait[seed.species].gdbasalfac * 0.0 + speciestrait[seed.species].gdbasalfacq * 0.0 * 0.0)
-							* (weather_list[yearposition-1].weatherfactor[seed.species]
-							   + ((weather_list[yearposition-1].weatherfactormin[seed.species] - weather_list[yearposition-1].weatherfactor[seed.species]) * ((double)seed.ycoo / 1000)
+							* (weather_list[yearposition-1].weatherfactor[0][seed.species]
+							   + ((weather_list[yearposition-1].weatherfactormin[0][seed.species] - weather_list[yearposition-1].weatherfactor[0][seed.species]) * ((double)seed.ycoo / 1000)
 								  / ((double)treerows)))
 							* (((double)thawing_depthinfluence_help) / 100);
 					} else {
 						maxbw_help =
 							exp(speciestrait[seed.species].gdbasalconst + speciestrait[seed.species].gdbasalfac * 0.0 + speciestrait[seed.species].gdbasalfacq * 0.0 * 0.0)
-							* (weather_list[yearposition-1].weatherfactor[seed.species]
-							   + ((weather_list[yearposition-1].weatherfactormin[seed.species] - weather_list[yearposition-1].weatherfactor[seed.species]) * ((double)seed.ycoo / 1000)
+							* (weather_list[yearposition-1].weatherfactor[0][seed.species]
+							   + ((weather_list[yearposition-1].weatherfactormin[0][seed.species] - weather_list[yearposition-1].weatherfactor[0][seed.species]) * ((double)seed.ycoo / 1000)
 								  / ((double)treerows)));
 					}
 				} else if (parameter[0].demlandscape) {
 					if (parameter[0].thawing_depth) {
-						// maxbw_help =
-							// exp(speciestrait[seed.species].gdbasalconst + speciestrait[seed.species].gdbasalfac * 0.0 + speciestrait[seed.species].gdbasalfacq * 0.0 * 0.0) + speciestrait[seed.species].meangrowthq75p;
-						maxbw_help = pow( speciestrait[seed.species].mindiametergrowth + exp(-0.5 * speciestrait[seed.species].meangrowthq75p * 0.0),0.5 );
-// #pragma omp critical 
-// cout << "0. = " << maxbw_help << endl;
-							// if ( maxbw_help < speciestrait[seed.species].mindiametergrowth ) {
-								// maxbw_help = speciestrait[seed.species].mindiametergrowth;
-							// }
+						if (parameter[0].n_weather_along_grid>0) {
 							
-							maxbw_help = maxbw_help 
-								* ((weather_list[yearposition-1].weatherfactor[seed.species] * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+							maxbw_help = pow( speciestrait[seed.species].mindiametergrowth + exp(-0.5 * speciestrait[seed.species].meangrowthq75p * 0.0),0.5 );
+							
+							maxbw_help = maxbw_help
+								* ((weighmeanweathervararray(weather_list[yearposition-1].weatherfactor,((double)seed.ycoo/1000)-transectstart,seed.species) * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
 																								  
 										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-										+ (weather_list[yearposition-1].weatherfactormin[seed.species]
+										+ (weighmeanweathervararray(weather_list[yearposition-1].weatherfactormin,((double)seed.ycoo/1000)-transectstart,seed.species)
 										   * (1
 											  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
 													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
 								* (((double)thawing_depthinfluence_help) / 100);
-// #pragma omp critical 
-// cout << "1. = " << maxbw_help << endl;
+						} else {
+							maxbw_help = pow( speciestrait[seed.species].mindiametergrowth + exp(-0.5 * speciestrait[seed.species].meangrowthq75p * 0.0),0.5 );
+							
+							maxbw_help = maxbw_help 
+								* ((weather_list[yearposition-1].weatherfactor[0][seed.species] * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+																								  
+										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										+ (weather_list[yearposition-1].weatherfactormin[0][seed.species]
+										   * (1
+											  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+								* (((double)thawing_depthinfluence_help) / 100);
+						}
 					} else {
 						maxbw_help =
 							exp(speciestrait[seed.species].gdbasalconst + speciestrait[seed.species].gdbasalfac * 0.0 + speciestrait[seed.species].gdbasalfacq * 0.0 * 0.0)
-							* ((weather_list[yearposition-1].weatherfactor[seed.species] * (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
+							* ((weather_list[yearposition-1].weatherfactor[0][seed.species] * (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
 																								  
 										 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-										+ (weather_list[yearposition-1].weatherfactormin[seed.species]
+										+ (weather_list[yearposition-1].weatherfactormin[0][seed.species]
 										   * (1
 											  - (((double)plot_list[curposi].elevation / 10) - (parameter[0].elevationoffset + 1000))
 													/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))));
@@ -122,11 +130,11 @@ cout << " ESTAB:: seed.species = " << seed.species
 					if (parameter[0].thawing_depth) {
 							maxbw_help =
 								exp(speciestrait[seed.species].gdbasalconst + speciestrait[seed.species].gdbasalfac * 0.0 + speciestrait[seed.species].gdbasalfacq * 0.0 * 0.0)
-								* weather_list[yearposition-1].weatherfactor[seed.species] * (((double)thawing_depthinfluence_help) / 100);
+								* weather_list[yearposition-1].weatherfactor[0][seed.species] * (((double)thawing_depthinfluence_help) / 100);
 					} else {
 							maxbw_help =
 								exp(speciestrait[seed.species].gdbasalconst + speciestrait[seed.species].gdbasalfac * 0.0 + speciestrait[seed.species].gdbasalfacq * 0.0 * 0.0)
-								* weather_list[yearposition-1].weatherfactor[seed.species];
+								* weather_list[yearposition-1].weatherfactor[0][seed.species];
 					}
 				}
 				
@@ -196,30 +204,45 @@ cout << " ESTAB:: seed.species = " << seed.species
 						germinationprobability = speciestrait[seed.species].germinationrate       // background germination rate
 								   + (basalgrowth_help / maxbw_help)  // rel growth on position is density dependent
 										 * speciestrait[seed.species].germinationweatherinfluence
-										 * pow((weather_list[yearposition-1].weatherfactor[seed.species]
-												+ ((weather_list[yearposition-1].weatherfactormin[seed.species] - weather_list[yearposition-1].weatherfactor[seed.species])
+										 * pow((weather_list[yearposition-1].weatherfactor[0][seed.species]
+												+ ((weather_list[yearposition-1].weatherfactormin[0][seed.species] - weather_list[yearposition-1].weatherfactor[0][seed.species])
 												   * ((double)seed.ycoo / 1000) / ((double)treerows))),
 											   2.0)                           // weather influence
 										 * germinationlitterheightinfluence;  // litter layer dependency
 					 } else if (parameter[0].demlandscape) {
-						// germinationprobability = speciestrait[seed.species].germinationrate       // background germination rate
-						germinationprobability = 0.0       // background germination rate
-								   // + (basalgrowth_help / maxbw_help)  // rel growth on position is density dependent
-								   + pow((basalgrowth_help / maxbw_help),2.0) // rel growth on position is density dependent
-										 * speciestrait[seed.species].germinationweatherinfluence
-										 * pow(((weather_list[yearposition-1].weatherfactor[seed.species]
-												 * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
-												 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-												+ (weather_list[yearposition-1].weatherfactormin[seed.species]
-												   * (1
-													  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
-															/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))),
-											   2.0)                           // weather influence
-										 * germinationlitterheightinfluence;  // litter layer dependency
+						if (parameter[0].n_weather_along_grid>0) {
+							germinationprobability = 0.0       // background germination rate
+									   + pow((basalgrowth_help / maxbw_help),2.0) // rel growth on position is density dependent
+											 * speciestrait[seed.species].germinationweatherinfluence
+											 * pow(((weighmeanweathervararray(weather_list[yearposition-1].weatherfactor,((double)seed.ycoo/1000)-transectstart,seed.species)
+													 * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+													 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+													+ (weighmeanweathervararray(weather_list[yearposition-1].weatherfactormin,((double)seed.ycoo/1000)-transectstart,seed.species)
+													   * (1
+														  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+																/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))),
+												   2.0)                           // weather influence
+											 * germinationlitterheightinfluence;  // litter layer dependency
+						} else {
+							// germinationprobability = speciestrait[seed.species].germinationrate       // background germination rate
+							germinationprobability = 0.0       // background germination rate
+									   // + (basalgrowth_help / maxbw_help)  // rel growth on position is density dependent
+									   + pow((basalgrowth_help / maxbw_help),2.0) // rel growth on position is density dependent
+											 * speciestrait[seed.species].germinationweatherinfluence
+											 * pow(((weather_list[yearposition-1].weatherfactor[0][seed.species]
+													 * (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+													 / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+													+ (weather_list[yearposition-1].weatherfactormin[0][seed.species]
+													   * (1
+														  - (((double)(plot_list[curposi].elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+																/ (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))),
+												   2.0)                           // weather influence
+											 * germinationlitterheightinfluence;  // litter layer dependency
+						}
 				   } else {
 						germinationprobability = speciestrait[seed.species].germinationrate       // background germination rate
 								   + (basalgrowth_help / maxbw_help)  // rel growth on position is density dependent
-										 * speciestrait[seed.species].germinationweatherinfluence * pow(weather_list[yearposition-1].weatherfactor[seed.species], 2.0)  // weather influence
+										 * speciestrait[seed.species].germinationweatherinfluence * pow(weather_list[yearposition-1].weatherfactor[0][seed.species], 2.0)  // weather influence
 										 * germinationlitterheightinfluence;                                                              // litter layer dependency
 				   }
 				} else {
@@ -230,7 +253,11 @@ cout << " ESTAB:: seed.species = " << seed.species
 				if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
 					germinationprobability = germinationprobability + 0.3 * (plot_list[curposi].snowdepth/100);
 					
-					germinationprobability = germinationprobability + (1.0-(weather_list[yearposition-1].snow_off_dayofyear / 110))/2.0;
+					if (parameter[0].n_weather_along_grid>0) {
+						germinationprobability = germinationprobability + (1.0-(weighmeanweathervar(weather_list[yearposition-1].snow_off_dayofyear,((double)seed.ycoo/1000)-transectstart) / 110))/2.0;
+					} else {
+						germinationprobability = germinationprobability + (1.0-(weather_list[yearposition-1].snow_off_dayofyear[0] / 110))/2.0;
+					}
 				}
 				
 				double rn = uniform.draw();
@@ -336,7 +363,7 @@ cout << " ESTAB:: seed.species = " << seed.species
 							seed.dead = true;
 							seed_list.remove(i_seed);
 						}
-					} else {
+					} else if ( (IsFiniteNumber2( basalgrowth_help ) == true) && (basalgrowth_help >= 10.0) ) {
 						cout << "tree initial growth unlimited" << basalgrowth_help << endl;
 					}
                     // seed.dead = true;

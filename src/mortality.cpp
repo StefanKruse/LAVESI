@@ -7,12 +7,15 @@ using namespace std;
 void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<Tree>& tree_list) {
     // abiotic influence: calculation of the factors in a function that adds a mortality rate impact
 	// multiple species integration
+	double transectstart = treerows - parameter[0].locationshift;
+
 	for (int species_counter = 1; species_counter < 99; species_counter++) {
 		if(speciestrait[species_counter].number == 0)
 			break;
-
-		speciestrait[species_counter].yearlycalcofanstiegweathermort=(60*weather_list[yearposition_help-1].janisothermrestriktion[species_counter]+60*weather_list[yearposition_help-1].julisothermrestriktion+60*weather_list[yearposition_help-1].nddrestriktion); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
-		speciestrait[species_counter].yearlycalcofanstiegweathermortmin=(60*weather_list[yearposition_help-1].janisothermrestriktionmin[species_counter]+60*weather_list[yearposition_help-1].julisothermrestriktion+60*weather_list[yearposition_help-1].nddrestriktion); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
+		for(unsigned int i=0; i<=parameter[0].n_weather_along_grid; i++) { // new code for reading  1 to n_weather_along_grid=61 e.g. for chukotka
+			speciestrait[species_counter].yearlycalcofanstiegweathermort[i]=(60*weather_list[yearposition_help-1].janisothermrestriktion[i][species_counter]+60*weather_list[yearposition_help-1].julisothermrestriktion[i]+60*weather_list[yearposition_help-1].nddrestriktion[i]); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
+			speciestrait[species_counter].yearlycalcofanstiegweathermortmin[i]=(60*weather_list[yearposition_help-1].janisothermrestriktionmin[i][species_counter]+60*weather_list[yearposition_help-1].julisothermrestriktion[i]+60*weather_list[yearposition_help-1].nddrestriktion[i]); // access via: speciestrait[tree.species].yearlycalcofanstiegweathermort
+		} // end loop transect grid
 	}
 
     RandomNumber<double> uniform(0, 1);
@@ -84,7 +87,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             if ((double)tree.height / 10 < (speciestrait[tree.species].densityvaluemaximumatheight * 2)) {
                 heightnkugeleinfluss =
                     heightnkugeleinfluss
-                    + (sqrt(pow(speciestrait[tree.species].densityvaluemaximumatheight, 2) - pow((double)tree.height / 10 - speciestrait[tree.species].densityvaluemaximumatheight, 2))
+                    // + (sqrt(pow(speciestrait[tree.species].densityvaluemaximumatheight, 2) - pow((double)tree.height / 10 - speciestrait[tree.species].densityvaluemaximumatheight, 2))
+					+ (std::hypot(double(speciestrait[tree.species].densityvaluemaximumatheight), double((double)tree.height / 10 - speciestrait[tree.species].densityvaluemaximumatheight))
                        / speciestrait[tree.species].densityvaluemaximumatheight);
             }
 
@@ -123,40 +127,58 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				}
 
             double weathermortadd;
-            if (parameter[0].lineartransect) {
+			if (parameter[0].lineartransect) {
                 weathermortadd = 1.0
                                   - (1.0
                                      / (1.0
                                         + (((1.0 - 0.5) / 0.5)
-                                           * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort
-                                                  - ((speciestrait[tree.species].yearlycalcofanstiegweathermort - speciestrait[tree.species].yearlycalcofanstiegweathermort) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                                 * (weather_list[yearposition_help-1].weatherfactor[tree.species]
-                                                    + ((weather_list[yearposition_help-1].weatherfactormin[tree.species] - weather_list[yearposition_help-1].weatherfactor[tree.species])
+                                           * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort[0]
+                                                  - ((speciestrait[tree.species].yearlycalcofanstiegweathermort[0] - speciestrait[tree.species].yearlycalcofanstiegweathermort[0]) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
+                                                 * (weather_list[yearposition_help-1].weatherfactor[0][tree.species]
+                                                    + ((weather_list[yearposition_help-1].weatherfactormin[0][tree.species] - weather_list[yearposition_help-1].weatherfactor[0][tree.species])
                                                        * ((double)tree.ycoo / 1000) / ((double)treerows)))
                                                  * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
                                                        + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
             } else if (parameter[0].demlandscape) {
-                weathermortadd =
-                    1.0
-                    - (1.0
-                       / (1.0
-                          + (((1.0 - 0.5) / 0.5)
-                             * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort
-                                    - ((speciestrait[tree.species].yearlycalcofanstiegweathermort - speciestrait[tree.species].yearlycalcofanstiegweathermort) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
-                                   * ((weather_list[yearposition_help-1].weatherfactor[tree.species] * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
-                                       / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                                      + (weather_list[yearposition_help-1].weatherfactormin[tree.species]
-                                         * (1
-                                            - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
-                                                  / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
-                                   * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
-                                         + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
-            } else {
+				if (parameter[0].n_weather_along_grid>0) {
+					weathermortadd =
+						1.0
+						- (1.0
+						   / (1.0
+							  + (((1.0 - 0.5) / 0.5)
+								 * exp((weighmeanweathervar(speciestrait[tree.species].yearlycalcofanstiegweathermort,((double)tree.ycoo/1000)-transectstart)
+										- ((weighmeanweathervar(speciestrait[tree.species].yearlycalcofanstiegweathermort,((double)tree.ycoo/1000)-transectstart) - weighmeanweathervar(speciestrait[tree.species].yearlycalcofanstiegweathermort,((double)tree.ycoo/1000)-transectstart)) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
+									   * ((weighmeanweathervararray(weather_list[yearposition_help-1].weatherfactor,((double)tree.ycoo/1000)-transectstart,tree.species) * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+										   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										  + (weighmeanweathervararray(weather_list[yearposition_help-1].weatherfactormin,((double)tree.ycoo/1000)-transectstart,tree.species)
+											 * (1
+												- (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+													  / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+									   * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
+											 + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
+				} else {
+					weathermortadd =
+						1.0
+						- (1.0
+						   / (1.0
+							  + (((1.0 - 0.5) / 0.5)
+								 * exp((speciestrait[tree.species].yearlycalcofanstiegweathermort[0]
+										- ((speciestrait[tree.species].yearlycalcofanstiegweathermort[0] - speciestrait[tree.species].yearlycalcofanstiegweathermort[0]) * 1.0 / (((double)treerows) / (double)tree.ycoo / 1000)))
+									   * ((weather_list[yearposition_help-1].weatherfactor[0][tree.species] * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+										   / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+										  + (weather_list[yearposition_help-1].weatherfactormin[0][tree.species]
+											 * (1
+												- (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+													  / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+									   * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
+											 + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
+				}
+			} else {
                 weathermortadd = 1.0
                                   - (1.0
                                      / (1.0
                                         + (((1.0 - 0.5) / 0.5)
-                                           * exp(speciestrait[tree.species].yearlycalcofanstiegweathermort * weather_list[yearposition_help-1].weatherfactor[tree.species]
+                                           * exp(speciestrait[tree.species].yearlycalcofanstiegweathermort[0] * weather_list[yearposition_help-1].weatherfactor[0][tree.species]
                                                  * exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal
                                                        + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal)))));
             }
@@ -169,21 +191,32 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             double dry_mort = 0.0;
             if (parameter[0].lineartransect) {
                 dry_mort = speciestrait[tree.species].mdrought
-                           * (weather_list[yearposition_help-1].droughtmort
-                              + ((weather_list[yearposition_help-1].droughtmortmin - weather_list[yearposition_help-1].droughtmort) * ((double)tree.ycoo / 1000)
+                           * (weather_list[yearposition_help-1].droughtmort[0]
+                              + ((weather_list[yearposition_help-1].droughtmortmin[0] - weather_list[yearposition_help-1].droughtmort[0]) * ((double)tree.ycoo / 1000)
                                  / ((double)treerows)))
                            * pow((1.0 / (double)tree.height / 10), 0.5);
             } else if (parameter[0].demlandscape) {
-                dry_mort = speciestrait[tree.species].mdrought
-                           * ((weather_list[yearposition_help-1].droughtmort * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+				if (parameter[0].n_weather_along_grid>0) {
+					dry_mort = speciestrait[tree.species].mdrought
+                           * ((weighmeanweathervar(weather_list[yearposition_help-1].droughtmort,((double)tree.ycoo/1000)-transectstart) * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
                                / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-                              + (weather_list[yearposition_help-1].droughtmortmin
+                              + (weighmeanweathervar(weather_list[yearposition_help-1].droughtmortmin,((double)tree.ycoo/1000)-transectstart)
                                  * (1
                                     - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
                                           / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
                            * pow((1.0 / (double)tree.height / 10), 0.5);
+				} else {
+					dry_mort = speciestrait[tree.species].mdrought
+                           * ((weather_list[yearposition_help-1].droughtmort[0] * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+                               / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+                              + (weather_list[yearposition_help-1].droughtmortmin[0]
+                                 * (1
+                                    - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000))
+                                          / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
+                           * pow((1.0 / (double)tree.height / 10), 0.5);
+				}
             } else {
-                dry_mort = speciestrait[tree.species].mdrought * weather_list[yearposition_help-1].droughtmort * pow((1.0 / (double)tree.height / 10), 0.5);
+                dry_mort = speciestrait[tree.species].mdrought * weather_list[yearposition_help-1].droughtmort[0] * pow((1.0 / (double)tree.height / 10), 0.5);
             }
 			if(dry_mort<0) {
 				dry_mort = 0;
@@ -492,7 +525,7 @@ void Mortality(Parameter* parameter,
 								if ((Vname.size() > 0) && (parameter[0].pollination == 1 || parameter[0].pollination == 9)) {
 									// int iran = uniform() * (Vname.size() - 1);
 									// seed.namep = Vname.at(iran);
-									// TODO: add here properties that are passed down from the father tree
+									// add here properties that are passed down from the father tree
 									seed.thawing_depthinfluence = 100;
 								} else {
 									// seed.namep = 0;

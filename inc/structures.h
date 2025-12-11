@@ -70,7 +70,7 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
     bool incone;               // 1
     bool longdispersed;        // 1
     bool dead = false;         // 1
-	int firemort;				// ###CHANGED### for fire mortality
+	int firemort;
 };
 
 struct Envirgrid {        // sizeof variable //TODO: further could be replaced
@@ -177,6 +177,7 @@ struct Parameter {
     // time steps and repeats
     int lastyearweatherdata;
     int simduration;
+    int startatyear;
     int stopatyear;
     int startjahr;
     int runs;
@@ -220,6 +221,7 @@ struct Parameter {
     int mapylength;
     bool weathercalcgradient;
     bool lineartransect;
+    unsigned int n_weather_along_grid;
     double locationshift;
     double nposmax;
     double nposmin;
@@ -250,9 +252,13 @@ struct Parameter {
     int hinterland_maxlength;
 
     // climate processing
-    long int weatherchoice;
+    long long int weatherchoice;
 	double plotcentre_lat;
 	double plotcentre_lon;
+	double plotcentre_lat_start;
+	double plotcentre_lon_start;
+	double plotcentre_lat_end;
+	double plotcentre_lon_end;
     int precweather;
     double precthreshold;
     double tempjandiffort;
@@ -359,6 +365,8 @@ struct Parameter {
 
 	double sapl_mort_factor; // calibration
 	
+	short int maxeleinput;
+	short int mineleinput;
 	short int maxele;
 	short int minele;
 	
@@ -415,8 +423,8 @@ struct Speciestraits {
 	double	weathervariableb;
 	double	weathervariablec;
 	double	weathervariabled;
-	double  yearlycalcofanstiegweathermort;
-	double  yearlycalcofanstiegweathermortmin;
+	std::array<double, 100> yearlycalcofanstiegweathermort;
+	std::array<double, 100> yearlycalcofanstiegweathermortmin;
 	double  minactivelayer;	
 	double  minsoilwater;	
 	double  maxsoilwater;	
@@ -436,7 +444,7 @@ struct Speciestraits {
 
 struct Speciescolonizationtimes { // for each aktort
 	int	location;
-	vector<int> speciestimes;
+	std::array<int,99> speciestimes;
 	// int	sp01t;
 	// int	sp02t;
 	// int	sp03t;
@@ -462,112 +470,115 @@ struct Speciescolonizationtimes { // for each aktort
 };
 
 struct Weather {
-    int xworldcoo;
-    int yworldcoo;
+    std::array<int, 100> xworldcoo;
+    std::array<int, 100> yworldcoo;
     int jahr;
-    double temp1monthmean;
-    double temp1monthmeanmin;
-    double temp1monthmeaniso;
-    double temp1monthmeanisomin;
-    double temp2monthmean;
-    double temp3monthmean;
-    double temp4monthmean;
-    double temp5monthmean;
-    double temp6monthmean;
-    double temp7monthmean;
-    double temp7monthmeanmin;
-    double temp7monthmeaniso;
-    double temp7monthmeanisomin;
-    double temp8monthmean;
-    double temp9monthmean;
-    double temp10monthmean;
-    double temp11monthmean;
-    double temp12monthmean;
-    double tempyearmean;
-    double tempyearmeanmin;
-    double prec1monthmean;
-    double prec2monthmean;
-    double prec3monthmean;
-    double prec4monthmean;
-    double prec5monthmean;
-    double prec6monthmean;
-    double prec7monthmean;
-    double prec8monthmean;
-    double prec9monthmean;
-    double prec10monthmean;
-    double prec11monthmean;
-    double prec12monthmean;
-    double prec1monthmeanmin;
-    double prec2monthmeanmin;
-    double prec3monthmeanmin;
-    double prec4monthmeanmin;
-    double prec5monthmeanmin;
-    double prec6monthmeanmin;
-    double prec7monthmeanmin;
-    double prec8monthmeanmin;
-    double prec9monthmeanmin;
-    double prec10monthmeanmin;
-    double prec11monthmeanmin;
-    double prec12monthmeanmin;
-    int vegetationperiodlength;
-    int vegetationperiodlengthmin;
-    int vegetationperiodlengthiso;
-    int vegetationperiodlengthisomin;
-    double activeairtemp;
-    double activeairtempmin;
-    double degreday;
-    double degredaymin;
-    double precipitationsum;
-    double precipitationsummin;
-    vector<double> weatherfactor;
-    vector<double> weatherfactormin;
-    // double weatherfactorg;
-    // double weatherfactorming;
-    // double weatherfactors;
-    // double weatherfactormins;
-    double droughtmort;
-    double droughtmortmin;
-    vector<double> janisothermrestriktion;
-    vector<double> janisothermrestriktionmin;
+    std::array<double, 100> temp1monthmean;
+    std::array<double, 100> temp1monthmeanmin;
+    std::array<double, 100> temp1monthmeaniso;
+    std::array<double, 100> temp1monthmeanisomin;
+    std::array<double, 100> temp2monthmean;
+    std::array<double, 100> temp3monthmean;
+    std::array<double, 100> temp4monthmean;
+    std::array<double, 100> temp5monthmean;
+    std::array<double, 100> temp6monthmean;
+    std::array<double, 100> temp7monthmean;
+    std::array<double, 100> temp7monthmeanmin;
+    std::array<double, 100> temp7monthmeaniso;
+    std::array<double, 100> temp7monthmeanisomin;
+    std::array<double, 100> temp8monthmean;
+    std::array<double, 100> temp9monthmean;
+    std::array<double, 100> temp10monthmean;
+    std::array<double, 100> temp11monthmean;
+    std::array<double, 100> temp12monthmean;
+    std::array<double, 100> tempyearmean;
+    std::array<double, 100> tempyearmeanmin;
+    std::array<double, 100> prec1monthmean;
+    std::array<double, 100> prec2monthmean;
+    std::array<double, 100> prec3monthmean;
+    std::array<double, 100> prec4monthmean;
+    std::array<double, 100> prec5monthmean;
+    std::array<double, 100> prec6monthmean;
+    std::array<double, 100> prec7monthmean;
+    std::array<double, 100> prec8monthmean;
+    std::array<double, 100> prec9monthmean;
+    std::array<double, 100> prec10monthmean;
+    std::array<double, 100> prec11monthmean;
+    std::array<double, 100> prec12monthmean;
+    std::array<double, 100> prec1monthmeanmin;
+    std::array<double, 100> prec2monthmeanmin;
+    std::array<double, 100> prec3monthmeanmin;
+    std::array<double, 100> prec4monthmeanmin;
+    std::array<double, 100> prec5monthmeanmin;
+    std::array<double, 100> prec6monthmeanmin;
+    std::array<double, 100> prec7monthmeanmin;
+    std::array<double, 100> prec8monthmeanmin;
+    std::array<double, 100> prec9monthmeanmin;
+    std::array<double, 100> prec10monthmeanmin;
+    std::array<double, 100> prec11monthmeanmin;
+    std::array<double, 100> prec12monthmeanmin;
+    std::array<int, 100> vegetationperiodlength;
+    std::array<int, 100> vegetationperiodlengthmin;
+    std::array<int, 100> vegetationperiodlengthiso;
+    std::array<int, 100> vegetationperiodlengthisomin;
+    std::array<double, 100> activeairtemp;
+    std::array<double, 100> activeairtempmin;
+    std::array<double, 100> degreday;
+    std::array<double, 100> degredaymin;
+    std::array<double, 100> precipitationsum;
+    std::array<double, 100> precipitationsummin;
+    std::array<std::array<double,22>, 100> weatherfactor;	// need to change to array with fixed length - check for species=N=22 and Pest=N=X or Days=N=365
+    std::array<std::array<double,22>, 100> weatherfactormin;	
+    // double weatherfactorg;	
+    // double weatherfactorming;		
+    // double weatherfactors;	
+    // double weatherfactormins;	
+    std::array<double, 100> droughtmort;
+    std::array<double, 100> droughtmortmin;
+    std::array<std::array<double,22>, 100> janisothermrestriktion;
+    std::array<std::array<double,22>, 100> janisothermrestriktionmin;
     // double janisothermrestriktions;
     // double janisothermrestriktionsmin;
     // double janisothermrestriktiong;
     // double janisothermrestriktiongmin;
-    double julisothermrestriktion;
-    double julisothermrestriktionmin;
-    double nddrestriktion;
-    double nddrestriktionmin;
-    double janmorttemp;
-	double fireindex1;
-	double fireindex2;
-	double fireindex3;
-	double fireindex4;
-	double fireindex5;
-	double fireindex6;
-	double fireindex7;
-	double fireindex8;
-	double fireindex9;
-	double fireindex10;
-	double fireindex11;
-	double fireindex12;
-	double FPR;
-	double tempmeanjja;
-	double precipitationsumjja;
-	vector<double> pestoutbreakprobability;
-	vector<double> dailytemp;
-    vector<double> dailytempmin;
-	double snow_pool_lastday;
-	double snow_pool_lastdaymin;
-	double snow_depth_winterspring_max;
-	double snow_depth_winterspring_maxmin;
-	double snow_depth_fallwinter_max;
-	double snow_depth_fallwinter_maxmin;
-	double snow_max_winterdepth;
-	double snow_max_winterdepthmin;
-	double snow_off_dayofyear;
-	double snow_off_dayofyearmin;
-	double snow_free_period;
-	double snow_free_periodmin;
+    std::array<double, 100> julisothermrestriktion;
+    std::array<double, 100> julisothermrestriktionmin;
+    std::array<double, 100> nddrestriktion;
+    std::array<double, 100> nddrestriktionmin;
+    std::array<double, 100> janmorttemp;
+	std::array<double, 100> fireindex1;
+	std::array<double, 100> fireindex2;
+	std::array<double, 100> fireindex3;
+	std::array<double, 100> fireindex4;
+	std::array<double, 100> fireindex5;
+	std::array<double, 100> fireindex6;
+	std::array<double, 100> fireindex7;
+	std::array<double, 100> fireindex8;
+	std::array<double, 100> fireindex9;
+	std::array<double, 100> fireindex10;
+	std::array<double, 100> fireindex11;
+	std::array<double, 100> fireindex12;
+	std::array<double, 100> FPR;
+	std::array<double, 100> tempmeanjja;	
+	std::array<double, 100> precipitationsumjja;
+	// vector<double> pestoutbreakprobability;					// ?? CHECK
+	std::array<std::array<double,10>, 100> pestoutbreakprobability;					// ?? CHECK
+	// vector<double> dailytemp;	
+	std::array<std::array<double,365>, 100> dailytemp;
+    // vector<double> dailytempmin;	
+	std::array<std::array<double,365>, 100> dailytempmin;
+	std::array<double, 100> snow_pool_lastday;
+	std::array<double, 100> snow_pool_lastdaymin;	
+	std::array<double, 100> snow_depth_winterspring_max;	
+	std::array<double, 100> snow_depth_winterspring_maxmin;		
+	std::array<double, 100> snow_depth_fallwinter_max;		
+	std::array<double, 100> snow_depth_fallwinter_maxmin;
+	std::array<double, 100> snow_max_winterdepth;
+	std::array<double, 100> snow_max_winterdepthmin;	
+	std::array<double, 100> snow_off_dayofyear;
+	std::array<double, 100> snow_off_dayofyearmin;
+	std::array<double, 100> snow_free_period;
+	std::array<double, 100> snow_free_periodmin;
 };
 
 struct Pesttraits {
@@ -630,20 +641,21 @@ struct Evaluation {
 };
 
 struct GlobalFireParameter {
-	int	number;
-	double	distance;
-	double	latitude;
-	double	longitude;
-	double	parameter1;
-	double	parameter2;
-	double	parameter3;
-	double	parameter4;
-	double	parameter5;
-	double	parameter6;
-	double	parameter7;
-	double	parameter8;
-	double	parameter9;
-	double	threshold_mild;
-	double	threshold_medium;
-	double	threshold_severe;
+	std::array<int, 100>	number;
+	std::array<double, 100>	distance;
+	std::array<double, 100>	latitude;
+	std::array<double, 100>	longitude;
+	std::array<double, 100>	parameter1;
+	std::array<double, 100>	parameter2;
+	std::array<double, 100>	parameter3;
+	std::array<double, 100>	parameter4;
+	std::array<double, 100>	parameter5;
+	std::array<double, 100>	parameter6;
+	std::array<double, 100>	parameter7;
+	std::array<double, 100>	parameter8;
+	std::array<double, 100>	parameter9;
+	std::array<double, 100>	threshold_mild;
+	std::array<double, 100>	threshold_medium;
+	std::array<double, 100>	threshold_severe;
 };
+

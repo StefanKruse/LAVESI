@@ -4,9 +4,19 @@
 
 using namespace std;
 
-// TODO temporary here
+extern std::vector<int> speciesinroi; // container for species numbers present in simulation
+
 extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
+
+int getrandomspeciesnumber() {
+    RandomNumber<double> uniform(0, 1);
+	
+	int rn_index = (int) (uniform.draw() * speciesinroi.size());
+	int rn_species = speciesinroi[rn_index];
+	
+	return(rn_species);
+};
 
 void Seedin() {
     RandomNumber<double> uniform(0, 1);
@@ -29,13 +39,19 @@ void Seedin() {
         }
 
         if (seedinput == true) {
-            int seednobuffer;
+            signed long int seednobuffer;
             if (parameter[0].yearswithseedintro <= 0) {
                 seednobuffer = parameter[0].seedintronumberpermanent;
             } else {
                 seednobuffer = parameter[0].seedintronumber;
             }
-
+			cout << " Number of seeds introduced = " << seednobuffer << endl;
+			
+			cout << " Potential seed species numbers are: ";
+			for (const auto& species : speciesinroi) {
+				cout << species << " ";
+			}
+			cout << endl;
             for (int n = 0; n < seednobuffer; n++) {
                 // calculate post-dispersal position
                 double jseed, iseed;
@@ -86,29 +102,13 @@ void Seedin() {
                     exit(1);
                 }
 				
-				// calculate based on weather_choice
-				long int plotcodeNum;
-				plotcodeNum = parameter[0].weatherchoice % 1000; //1026003022
-				
-                int rn_species = 0;
+				int rn_species = 0;
 				// multiple species implementation
                 if (parameter[0].specpres == 0) {
 					if (parameter[0].roi == 0) {
 						rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
 					} else {
-						// make vector with species number that are in roi
-						// https://en.cppreference.com/w/cpp/container/vector
-						// TODO later for quicker computation move to global declaration
-						vector<int> speciesinroi;
-						for (int species_counter = 1; species_counter < 99; species_counter++) {
-							// if( (parameter[0].roi == speciestrait[species_counter].roi) && (parameter[0].ivort >= speciescolonizationtimes[aktort].speciestimes[species_counter]) ) {
-							if( (parameter[0].roi == (unsigned int)speciestrait[species_counter].roi) && (parameter[0].ivort >= (unsigned int)speciescolonizationtimes[plotcodeNum].speciestimes[species_counter]) ) {
-								speciesinroi.push_back(species_counter);
-							}
-						}
-						// sample one out of this
-						rn_species = speciesinroi[(int) 1 + (uniform.draw() * (speciesinroi.size()))-1];
-// cout << rn_species << endl;
+						rn_species = getrandomspeciesnumber();
 					}
 				} else {
 					rn_species = parameter[0].specpres;
@@ -285,7 +285,7 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
             // hinterland_maxlength is cut into 20 m-long pieces, start at 10 with steps of by 20 to determine the centre for each seed introduction nuclei
             for (int yposhint = -10; yposhint > -1 * parameter[0].hinterland_maxlength; yposhint = yposhint - 20) {
                 double jultempi =
-                    weather_list[yearposition-1].temp7monthmean + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
+                    weather_list[yearposition-1].temp7monthmean[0] + (-0.3508 * yposhint / (111120));  // conversion to degree latitude see...weatherinput.cpp
 
                 double hinterheightsi = logmodel_heights_K / (1 + exp(logmodel_heights_Po + logmodel_heights_r * jultempi));
                 int hinterseedsi = (parameter[0].seedflightrate * logmodel_seeds_K
@@ -306,7 +306,11 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
 					int rn_species = 0;
 					// multiple species implementation
 					if (parameter[0].specpres == 0) {
-						rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+						if (parameter[0].roi == 0) {
+							rn_species = (int) 1 + (uniform.draw() * (parameter[0].species_max-1));
+						} else {
+							rn_species = getrandomspeciesnumber();
+						}					
 					} else {
 						rn_species = parameter[0].specpres;
 					}

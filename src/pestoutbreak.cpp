@@ -9,7 +9,7 @@ void Pestoutbreak(Parameter* parameter,
                        int yearposition,
                        vector<VectorList<Tree>>& world_tree_list,
                        vector<vector<Weather>>& world_weather_list) {
-						   
+	cout << "pest outbreak computation" << endl;
 	int aktort = 0;
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); ++posw) {
         vector<Weather>& weather_list = *posw;
@@ -52,117 +52,103 @@ void Pestoutbreak(Parameter* parameter,
 
 		// use weather list and pest outbreak probability to compute wether a pest outbreak happens or not. 
 		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
+			for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) { // weather grids in weather list
+
+				if (parameter[0].yearlyvis == true) {
+					cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
+					cout << " weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] = " << weather_list[yearposition-1].pestoutbreakprobability[i][pestspeciesi] << endl; 
+				}
 			
-			if (parameter[0].yearlyvis == true) {
-				cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
-				cout << " weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] = " << weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1] << endl; 
-			}
-		
-			double pestproba_i = weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1];//first elememt is 0
-			if(uniform.draw() < pestproba_i) {//outbreak happens
-				out_pestoutbreak.push_back(1); // record for output
-				unsigned long int out_pestdeaths_i = 0; // record for output
-				unsigned long int out_pestdefoliated_i = 0; // record for output
-				// assess which species are affected and how
-				// depending on the pest species number check which trees are affected and by which +mortality=> pestinfectancedamage(fraction 0 to 1, 1000 precision) and +defoliation => defoliation(fraction 0 to 1, 1000 precision)
-				vector<int> treespeciesaffected;		// number of the species following the specieslist definition
-				vector<double> treespeciesmortality;	// 0 or fration to 1
-				vector<double> treespeciesdefoliation; 	// 0 or fraction to 1
-				vector<double> treespeciesdefoliationmort; 	// 0 or fraction to 1
-				
-				if(pestspeciesi == 1) {//pest == aspen_leafminer
-					treespeciesaffected.push_back(22);//POBA
-					treespeciesmortality.push_back(0.0);
-					treespeciesdefoliation.push_back(30.75);
-					treespeciesdefoliationmort.push_back(14.44); // percentage defoliated, will be directly increase moratlity
+				double pestproba_i = weather_list[yearposition-1].pestoutbreakprobability[i][pestspeciesi];//first elememt is 0
+				if(uniform.draw() < pestproba_i) {//outbreak happens
+					out_pestoutbreak.push_back(1); // record for output
+					unsigned long int out_pestdeaths_i = 0; // record for output
+					unsigned long int out_pestdefoliated_i = 0; // record for output
+					// assess which species are affected and how
+					// depending on the pest species number check which trees are affected and by which +mortality=> pestinfectancedamage(fraction 0 to 1, 1000 precision) and +defoliation => defoliation(fraction 0 to 1, 1000 precision)
+					vector<int> treespeciesaffected;		// number of the species following the specieslist definition
+					vector<double> treespeciesmortality;	// 0 or fration to 1
+					vector<double> treespeciesdefoliation; 	// 0 or fraction to 1
+					vector<double> treespeciesdefoliationmort; 	// 0 or fraction to 1
 					
-					treespeciesaffected.push_back(21);//POTR
-					treespeciesmortality.push_back(0.0);
-					treespeciesdefoliation.push_back(31.0);
-					treespeciesdefoliationmort.push_back(14.44);
-				}
-				if(pestspeciesi == 2) {//pest == spruce_beetle
-					treespeciesaffected.push_back(18);//PIMA 
-					treespeciesmortality.push_back(25.30769231);
-					treespeciesdefoliation.push_back(0.0);
-					treespeciesdefoliationmort.push_back(0.0);
+					if(pestspeciesi == 1) {//pest == aspen_leafminer
+						treespeciesaffected.push_back(22);//POBA
+						treespeciesmortality.push_back(0.0);
+						treespeciesdefoliation.push_back(30.75);
+						treespeciesdefoliationmort.push_back(14.44); // percentage defoliated, will be directly increase moratlity
+						
+						treespeciesaffected.push_back(21);//POTR
+						treespeciesmortality.push_back(0.0);
+						treespeciesdefoliation.push_back(31.0);
+						treespeciesdefoliationmort.push_back(14.44);
+					}
+					if(pestspeciesi == 2) {//pest == spruce_beetle
+						treespeciesaffected.push_back(18);//PIMA 
+						treespeciesmortality.push_back(25.30769231);
+						treespeciesdefoliation.push_back(0.0);
+						treespeciesdefoliationmort.push_back(0.0);
+						
+						treespeciesaffected.push_back(19);// PISI 
+						treespeciesmortality.push_back(21.68571429);
+						treespeciesdefoliation.push_back(0.0);
+						treespeciesdefoliationmort.push_back(0.0);
+						
+						treespeciesaffected.push_back(20);//PIGL
+						treespeciesmortality.push_back(28.8);
+						treespeciesdefoliation.push_back(0.0);
+						treespeciesdefoliationmort.push_back(0.0);
+					}
+					// if(pestspeciesi == 3) {//pest == willow_leaf_blotchminer -> host salix currently not simulated
+					// }
+					if(pestspeciesi == 4) {//pest == western_blackheaded_budworm
+						treespeciesaffected.push_back(19);//PISI 
+						treespeciesmortality.push_back(0.0);
+						treespeciesdefoliation.push_back(50.0);// second defoliation not considered
+						treespeciesdefoliationmort.push_back(10.0);
+						
+						treespeciesaffected.push_back(17);// TSME
+						treespeciesmortality.push_back(0.0);
+						treespeciesdefoliation.push_back(38.09090909);
+						treespeciesdefoliationmort.push_back(7.0);
+					}
+					if(pestspeciesi == 5) {//pest == larch_sawfly
+						treespeciesaffected.push_back(23);//LALA
+						treespeciesmortality.push_back(0.0);
+						treespeciesdefoliation.push_back(30.0);
+						treespeciesdefoliationmort.push_back(80.0);
+					}
+					if(pestspeciesi == 6) {//pest == hemlock_sawfly
+						treespeciesaffected.push_back(17);//TSME 
+						treespeciesmortality.push_back(28.8);
+						treespeciesdefoliation.push_back(28.8);
+						treespeciesdefoliationmort.push_back(7.0);
+						
+						treespeciesaffected.push_back(19);// PISI
+						treespeciesmortality.push_back(28.8);
+						treespeciesdefoliation.push_back(28.8);
+						treespeciesdefoliationmort.push_back(7.0);
+					}
+					if(pestspeciesi == 7) {//pest == birch_leafminer
+						treespeciesaffected.push_back(16);//BENE
+						treespeciesmortality.push_back(0.0);
+						treespeciesdefoliation.push_back(37.38297872);
+						treespeciesdefoliationmort.push_back(10.0);
+					}
 					
-					treespeciesaffected.push_back(19);// PISI 
-					treespeciesmortality.push_back(21.68571429);
-					treespeciesdefoliation.push_back(0.0);
-					treespeciesdefoliationmort.push_back(0.0);
-					
-					treespeciesaffected.push_back(20);//PIGL
-					treespeciesmortality.push_back(28.8);
-					treespeciesdefoliation.push_back(0.0);
-					treespeciesdefoliationmort.push_back(0.0);
-				}
-				// if(pestspeciesi == 3) {//pest == willow_leaf_blotchminer -> host salix currently not simulated
-				// }
-				if(pestspeciesi == 4) {//pest == western_blackheaded_budworm
-					treespeciesaffected.push_back(19);//PISI 
-					treespeciesmortality.push_back(0.0);
-					treespeciesdefoliation.push_back(50.0);// second defoliation not considered
-					treespeciesdefoliationmort.push_back(10.0);
-					
-					treespeciesaffected.push_back(17);// TSME
-					treespeciesmortality.push_back(0.0);
-					treespeciesdefoliation.push_back(38.09090909);
-					treespeciesdefoliationmort.push_back(7.0);
-				}
-				if(pestspeciesi == 5) {//pest == larch_sawfly
-					treespeciesaffected.push_back(23);//LALA
-					treespeciesmortality.push_back(0.0);
-					treespeciesdefoliation.push_back(30.0);
-					treespeciesdefoliationmort.push_back(80.0);
-				}
-				if(pestspeciesi == 6) {//pest == hemlock_sawfly
-					treespeciesaffected.push_back(17);//TSME 
-					treespeciesmortality.push_back(28.8);
-					treespeciesdefoliation.push_back(28.8);
-					treespeciesdefoliationmort.push_back(7.0);
-					
-					treespeciesaffected.push_back(19);// PISI
-					treespeciesmortality.push_back(28.8);
-					treespeciesdefoliation.push_back(28.8);
-					treespeciesdefoliationmort.push_back(7.0);
-				}
-				if(pestspeciesi == 7) {//pest == birch_leafminer
-					treespeciesaffected.push_back(16);//BENE
-					treespeciesmortality.push_back(0.0);
-					treespeciesdefoliation.push_back(37.38297872);
-					treespeciesdefoliationmort.push_back(10.0);
-				}
-				
-				// impact
-				if(treespeciesaffected.size() > 0) {// if any treespecies are impacted
-					for(unsigned short int i=0;i<=treespeciesaffected.size();i++) {//for each element in treespeciesaffected
-						unsigned short int treespeciesaffected_i = treespeciesaffected[i];
-						// for each tree add impact
+					// impact
+					if(treespeciesaffected.size() > 0) {// if any treespecies are impacted
+						for(unsigned short int i=0;i<=treespeciesaffected.size();i++) {//for each element in treespeciesaffected
+							unsigned short int treespeciesaffected_i = treespeciesaffected[i];
+							// for each tree add impact
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
-						for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
-							auto& tree = tree_list[tree_i];
-							if(tree.species == treespeciesaffected_i && (uniform.draw() < (treespeciesmortality[i]/100))) {//impact mortality
-								tree.pestinfectancedamage = parameter[0].pest_disturbances_impactfactor * 1.00 * 1000; // 100 percent mortality
+							for (unsigned int tree_i = 0; tree_i < tree_list.size(); ++tree_i) {
+								auto& tree = tree_list[tree_i];
+								if(tree.species == treespeciesaffected_i && (uniform.draw() < (treespeciesmortality[i]/100))) {//impact mortality
+									tree.pestinfectancedamage = parameter[0].pest_disturbances_impactfactor * 1.00 * 1000; // 100 percent mortality
 #pragma omp critical
 {
-								out_pestdeaths_i++;
+									out_pestdeaths_i++;
 }
-								if(pestspeciesi == 1) {tree.pestinfection = tree.pestinfection +        1;}
-								if(pestspeciesi == 2) {tree.pestinfection = tree.pestinfection +       10;}
-								if(pestspeciesi == 3) {tree.pestinfection = tree.pestinfection +      100;}
-								if(pestspeciesi == 4) {tree.pestinfection = tree.pestinfection +     1000;}
-								if(pestspeciesi == 5) {tree.pestinfection = tree.pestinfection +    10000;}
-								if(pestspeciesi == 6) {tree.pestinfection = tree.pestinfection +   100000;}
-								if(pestspeciesi == 7) {tree.pestinfection = tree.pestinfection +  1000000;}
-							}
-							if(tree.species == treespeciesaffected_i && (uniform.draw() < (treespeciesdefoliation[i]/100))) {//impact mortality
-								tree.relcrowndamage += parameter[0].pest_disturbances_impactfactor * (treespeciesdefoliationmort[i]/100) * 1000;//add to the damage by fire
-#pragma omp critical
-{
-								out_pestdefoliated_i++;
-}
-								if(tree.pestinfection == 0) {
 									if(pestspeciesi == 1) {tree.pestinfection = tree.pestinfection +        1;}
 									if(pestspeciesi == 2) {tree.pestinfection = tree.pestinfection +       10;}
 									if(pestspeciesi == 3) {tree.pestinfection = tree.pestinfection +      100;}
@@ -171,35 +157,53 @@ void Pestoutbreak(Parameter* parameter,
 									if(pestspeciesi == 6) {tree.pestinfection = tree.pestinfection +   100000;}
 									if(pestspeciesi == 7) {tree.pestinfection = tree.pestinfection +  1000000;}
 								}
-							}
-						}// end loop each tree
-					}// end loop impacted species
-				}// if any treespecies are impacted
-				out_pestdeaths.push_back(out_pestdeaths_i);
-				out_pestdefoliated.push_back(out_pestdefoliated_i);
-				
-				
-			} // end outbreak happens
-			else {
-				out_pestoutbreak.push_back(0); // record for output
-				out_pestdeaths.push_back(0);
-				out_pestdefoliated.push_back(0);
-			}
+								if(tree.species == treespeciesaffected_i && (uniform.draw() < (treespeciesdefoliation[i]/100))) {//impact mortality
+									tree.relcrowndamage += parameter[0].pest_disturbances_impactfactor * (treespeciesdefoliationmort[i]/100) * 1000;//add to the damage by fire
+#pragma omp critical
+{
+									out_pestdefoliated_i++;
+}
+									if(tree.pestinfection == 0) {
+										if(pestspeciesi == 1) {tree.pestinfection = tree.pestinfection +        1;}
+										if(pestspeciesi == 2) {tree.pestinfection = tree.pestinfection +       10;}
+										if(pestspeciesi == 3) {tree.pestinfection = tree.pestinfection +      100;}
+										if(pestspeciesi == 4) {tree.pestinfection = tree.pestinfection +     1000;}
+										if(pestspeciesi == 5) {tree.pestinfection = tree.pestinfection +    10000;}
+										if(pestspeciesi == 6) {tree.pestinfection = tree.pestinfection +   100000;}
+										if(pestspeciesi == 7) {tree.pestinfection = tree.pestinfection +  1000000;}
+									}
+								}
+							}// end loop each tree
+						}// end loop impacted species
+					}// if any treespecies are impacted
+					out_pestdeaths.push_back(out_pestdeaths_i);
+					out_pestdefoliated.push_back(out_pestdefoliated_i);
+					
+					
+				} // end outbreak happens
+				else {
+					out_pestoutbreak.push_back(0); // record for output
+					out_pestdeaths.push_back(0);
+					out_pestdefoliated.push_back(0);
+				}
+			}// end loop grids
 		}// end loop pest species		   
 		
 		// data evaluation and output		
 		fseek(filepointer, 0, SEEK_END);
-		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
-			fprintf(filepointer, "%d;", parameter[0].ivort);
-			fprintf(filepointer, "%d;", yearposition);
-			fprintf(filepointer, "%s;", pesttrait[pestspeciesi].pestspeciesname.c_str());
-			fprintf(filepointer, "%d;", pesttrait[pestspeciesi].pestspecies);
-			fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].pestoutbreakprobability[pestspeciesi-1]);
-			fprintf(filepointer, "%d;", out_pestoutbreak[pestspeciesi-1]);
-			fprintf(filepointer, "%lu;", out_pestdeaths[pestspeciesi-1]);
-			fprintf(filepointer, "%lu;", out_pestdefoliated[pestspeciesi-1]);
-			fprintf(filepointer, "\n");
-		}
+		for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) { // weather grids in weather list
+			for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
+				fprintf(filepointer, "%d;", parameter[0].ivort);
+				fprintf(filepointer, "%d;", yearposition);
+				fprintf(filepointer, "%s;", pesttrait[pestspeciesi].pestspeciesname.c_str());
+				fprintf(filepointer, "%d;", pesttrait[pestspeciesi].pestspecies);
+				fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].pestoutbreakprobability[i][pestspeciesi-1]);
+				fprintf(filepointer, "%d;", out_pestoutbreak[pestspeciesi-1]);
+				fprintf(filepointer, "%lu;", out_pestdeaths[pestspeciesi-1]);
+				fprintf(filepointer, "%lu;", out_pestdefoliated[pestspeciesi-1]);
+				fprintf(filepointer, "\n");
+			}
+		}// end loop grid
 		fclose(filepointer);
 	}// end world loop
 

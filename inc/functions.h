@@ -6,6 +6,8 @@
 
 using namespace std;
 
+double weighmeanweathervararray(array<array<double,22>,100>& data, double posongrid, int speciesnumber);
+double weighmeanweathervar(array<double,100>& data, double posongrid);
 double Parameterinput(const char* uebergabestring, int stringlengthmax, const char* divisionsign, Parameter* parameter);
 void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vector<Weather>>& world_weather_list);
 void Dataoutput(int t,

@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// TODO temporary here
 extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 extern vector<vector<Weather>> world_weather_list;

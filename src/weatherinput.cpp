@@ -260,7 +260,8 @@ ostringstream crugridnumber, transectname, rcpscenario, s4, s5, s6, s7, s8;
 
         // string inputcrugridname = "input/transect_dev/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
         // string inputcrugridname = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/prec_long_" + transectname.str() + "_transect_point_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-        string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/prec_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+        // string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/prec_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/prec_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
 
 		if(parameter[0].n_weather_along_grid > 0)
 			strcpy(dateinameprec, inputcrugridname.c_str());
@@ -468,7 +469,8 @@ void getTemp(	//int aktort,
 
         // string inputcrugridname = "input/transect_dev/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
         // string inputcrugridname = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/temp_long_" + transectname.str() + "_transect_point_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-        string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+        // string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
 
 
 		if(parameter[0].n_weather_along_grid > 0)

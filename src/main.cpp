@@ -881,7 +881,7 @@ void fillElevations() {
 							parameter[0].maxeleinput = 10 * elevationinput[counter];
 						}
 						if(elevationinput[counter] < ((double)parameter[0].mineleinput/10)) {
-							parameter[0].minele = 10 * elevationinput[counter];
+							parameter[0].mineleinput = 10 * elevationinput[counter];
 						}
 			}
         }

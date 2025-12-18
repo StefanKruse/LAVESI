@@ -193,7 +193,38 @@ void Fire(Parameter* parameter,
 			// mild conditions: Fire every c. 50 yrs
 			// severe conditions: Fire every c. 5 yrs
 			// extreme conditions: Fire every c. 2 yrs
-			// Whole forumla results in a mean annual FPR of 0.03 accross the whole 25ka period, meaning on average a fire may occurr once every c. 33 years
+
+			// adjusting FPR empirically to local climate and conditions
+			double i_step = (double) i / parameter[0].n_weather_along_grid;
+			double latitude = parameter[0].plotcentre_lat_start + i_step * (parameter[0].plotcentre_lat_end - parameter[0].plotcentre_lat);
+			// TODO safeguard: latitude must be >0 and smaller 80
+			if ( (latitude < 0) || (latitude > 80) ) {
+				cout << "Warning: latitude was set to " << latitude << " which is not correct, set to 65°!" << endl;
+				latitude = 65;
+			}
+			
+			int latitudepos = i_step*(treerows-50) * parameter[0].sizemagnif / 1000; // -50 for safe boundary
+			int longitudepos = (treecols/2) * parameter[0].sizemagnif / 1000; // treecols/2 for mid position
+			const std::size_t curposi = static_cast<std::size_t>(latitudepos) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif) + static_cast<std::size_t>(longitudepos);
+			auto& cur_plot = plot_list[curposi];				
+			double elevation = cur_plot.elevation; // mean elevation of the current cell
+			// safeguard: elevation must be within possible limits
+			if (elevation < (double)parameter[0].mineleinput/10) {
+				cout << "Warning: elevation was with " << elevation << " lower than possible, set to " << (double)parameter[0].mineleinput/10 << endl;
+				elevation = (double)parameter[0].mineleinput/10;
+			}
+			if (elevation > (double)parameter[0].maxeleinput/10) {
+				cout << "Warning: elevation was with " << elevation << " higher than possible, set to " << (double)parameter[0].maxeleinput/10 << endl;
+				elevation = (double)parameter[0].maxeleinput/10;
+			}
+			
+
+			// calculate factor based on empirical fitted formula
+			double mean_temperature_jja = (weather_list[yearposition-1].temp6monthmean[i] + weather_list[yearposition-1].temp7monthmean[i] + weather_list[yearposition-1].temp8monthmean[i]) / 3;
+			double mean_precipitation_jja = (weather_list[yearposition-1].prec6monthmean[i] + weather_list[yearposition-1].prec7monthmean[i] + weather_list[yearposition-1].prec8monthmean[i]) / 3;
+			double local_fpr_factor = -6.726101332 + 0.07909051804 * mean_temperature_jja + 0.009169321985 * mean_precipitation_jja - 0.00004268947269 * elevation + 0.004373278921 * weather_list[yearposition-1].vegetationperiodlength[i] + 0.07278687969 * latitude - 0.0005100039459 * mean_temperature_jja * mean_precipitation_jja;
+			cout << "Lat: " << latitude << " & Ele: " << elevation << " & factor_FPR: " << local_fpr_factor << endl;
+			fireprobabilityrating = fireprobabilityrating * local_fpr_factor;
 			
 			if (fireprobabilityrating > 1) {
 				fireprobabilityrating = 1;

@@ -4,15 +4,15 @@
 
 using namespace std;
 
-struct Tree {                       // sizeof variable //TODO: further could be replaced
+struct Tree {
     double dbasal;                  // 8->4	---> in cm, 0 to few meters -> unsigned int 4294967295 /10000 precision; could be replaced
     double dbreast;                 // 8->4	---> in cm, 0 to meters -> unsigned int 4294967295 /10000 precision; could be replaced
     double densitywert;             // 8->2	---> need to check range of values for replacment
 	double heightsubordination;		// is 0 when tallest tree and increases towards 1 when smaller
     double thawing_depthinfluence;  // 8->2	---> need to check range of values for replacment
     unsigned int xcoo;  // 4	---> was double ---> only positive, -> unsigned int 4294967295 /1000 precision => mm which is sufficient and allows still 
-                        // km long/wide simulations // TODO really only positive? -> see compiler warnings
-    unsigned int ycoo;  // 4	---> was double // TODO really only positive? -> see compiler warnings
+                        // km long/wide simulations
+    unsigned int ycoo;  // 4	---> was double
     // double dispersaldistance;			// 8	-> not in use right now
     // int xworldcoo;						// 4	-> not in use right now
     // int yworldcoo;						// 4	-> not in use right now
@@ -48,7 +48,7 @@ struct Tree {                       // sizeof variable //TODO: further could be 
 	unsigned short int snowdepth;			// 2	in cm; max 65 m -> unsigned short int /10 still has 0.1 cm precision
 };
 
-struct Seed {  // sizeof variable //TODO: further could be replaced
+struct Seed {
     // double weight;					// 8	-> not in use right now
     // double dispersaldistance;		// 8	-> not in use right now
     // double maxgrowth;				// 8	-> not in use right now
@@ -73,7 +73,7 @@ struct Seed {  // sizeof variable //TODO: further could be replaced
 	int firemort;
 };
 
-struct Envirgrid {        // sizeof variable //TODO: further could be replaced
+struct Envirgrid {
     short int elevation;  // 2	---> for memory consumptiom optimization use: signed short int (max 32767), therefore precision only 10 cm max +/-3.2767 km
                           // elevation range (8 -> 2 bytes)
     // unsigned long int Treedensityvalue;  // 2	---> values 0-1, but depending on setting could be also 5-10 -> max 65535 factor 10000 allows values between 0
@@ -173,6 +173,7 @@ struct Parameter {
     int outputmode;
     int parameteri;
     int outputall;
+	unsigned short int simumode;
 
     // time steps and repeats
     int lastyearweatherdata;

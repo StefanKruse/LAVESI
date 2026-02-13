@@ -52,7 +52,7 @@ void Pestoutbreak(Parameter* parameter,
 
 		// use weather list and pest outbreak probability to compute wether a pest outbreak happens or not. 
 		for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
-			for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) { // weather grids in weather list
+			for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) { // weather grids in weather list
 
 				if (parameter[0].yearlyvis == true) {
 					cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
@@ -191,7 +191,7 @@ void Pestoutbreak(Parameter* parameter,
 		
 		// data evaluation and output		
 		fseek(filepointer, 0, SEEK_END);
-		for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) { // weather grids in weather list
+		for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) { // weather grids in weather list
 			for(unsigned short int pestspeciesi=1;pestspeciesi<=parameter[0].pest_species_max;pestspeciesi++) {
 				fprintf(filepointer, "%d;", parameter[0].ivort);
 				fprintf(filepointer, "%d;", yearposition);

@@ -30,47 +30,39 @@ double getMaxbasalwachstum(int yearposition, vector<Weather>& weather_list, Tree
 						* ((weighmeanweathervararray(weather_list[yearposition-1].weatherfactor,((double)tree.ycoo/1000)-transectstart,tree.species) * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))) + (weighmeanweathervararray(weather_list[yearposition-1].weatherfactormin,((double)tree.ycoo/1000)-transectstart,tree.species) * (1 - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
 					* (((double)tree.thawing_depthinfluence) / (100*100) );
 			} else {
-				// maxbw_help = exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal) + speciestrait[tree.species].meangrowthq75p;
-				// maxbw_help = pow( speciestrait[tree.species].mindiametergrowth * exp(-0.5 * speciestrait[tree.species].meangrowthq75p * tree.dbasal), 0.5 );
 				maxbw_help = pow( speciestrait[tree.species].mindiametergrowth + exp(-0.5 * speciestrait[tree.species].meangrowthq75p * pow(tree.dbasal,0.5)), 0.5 );
-				// double maxbw_help_2 = maxbw_help;
-					// if ( (tree.dbasal > 50) || (maxbw_help < speciestrait[tree.species].mindiametergrowth) ) {
-					// if ( maxbw_help < speciestrait[tree.species].mindiametergrowth ) {
-						// maxbw_help = speciestrait[tree.species].mindiametergrowth;
-					// }
 					
 				maxbw_help = maxbw_help 
-					// * (
-						// (weather_list[yearposition-1].weatherfactor[tree.species] * (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-						// + (weather_list[yearposition-1].weatherfactormin[tree.species] * (1 -(((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))))
-						// )
 						* ((weather_list[yearposition-1].weatherfactor[0][tree.species] * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))) + (weather_list[yearposition-1].weatherfactormin[0][tree.species] * (1 - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
 					* (((double)tree.thawing_depthinfluence) / (100*100) );
-					
-				// if(maxbw_help>1) {// write to file
-				// #pragma omp critical 
-				// cout << " species = " <<
-					// tree.species
-					// <<" grow1 = " <<
-					// maxbw_help_2
-					// <<" grow2 = " <<
-					// maxbw_help
-					// <<" dbasal = " <<
-					// tree.dbasal
-					// <<" elevation = " <<
-					// (double)tree.elevation / 10
-					// <<" wfac = " <<
-					// weather_list[yearposition-1].weatherfactor[tree.species]
-					// <<" fac1 = " <<
-					// (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))
-					// <<" wfacmin = " <<
-					// weather_list[yearposition-1].weatherfactormin[tree.species]
-					// <<" fac2 = " <<
-					// (1 - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
-					// <<" aldinfl = " <<
-					// (((double)tree.thawing_depthinfluence) / (100*100))
-					// << endl;
-				// }
+
+				/*
+				// checking values
+				if(maxbw_help>1) {
+				#pragma omp critical 
+				cout << " species = " <<
+					tree.species
+					<<" grow1 = " <<
+					maxbw_help_2
+					<<" grow2 = " <<
+					maxbw_help
+					<<" dbasal = " <<
+					tree.dbasal
+					<<" elevation = " <<
+					(double)tree.elevation / 10
+					<<" wfac = " <<
+					weather_list[yearposition-1].weatherfactor[tree.species]
+					<<" fac1 = " <<
+					(((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))
+					<<" wfacmin = " <<
+					weather_list[yearposition-1].weatherfactormin[tree.species]
+					<<" fac2 = " <<
+					(1 - (((double)tree.elevation / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))
+					<<" aldinfl = " <<
+					(((double)tree.thawing_depthinfluence) / (100*100))
+					<< endl;
+				}
+				*/
 			}
         } else {
 			maxbw_help =
@@ -129,8 +121,6 @@ double getMaxbreastwachstum(int yearposition, vector<Weather>& weather_list, Tre
                     * ((weighmeanweathervararray(weather_list[yearposition-1].weatherfactor,((double)tree.ycoo/1000)-transectstart,tree.species) * (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000))) + (weighmeanweathervararray(weather_list[yearposition-1].weatherfactormin,((double)tree.ycoo/1000)-transectstart,tree.species) * (1 - (((double)(tree.elevation-parameter[0].maxele) / 10) - (parameter[0].elevationoffset + 1000)) / (parameter[0].elevationoffset - (parameter[0].elevationoffset + 1000)))))
                     * (((double)tree.thawing_depthinfluence) / (100*100));
 			} else {
-				// maxbrw_help = exp(speciestrait[tree.species].gdbreastconst + speciestrait[tree.species].gdbreastfac * tree.dbreast + speciestrait[tree.species].gdbreastfacq * tree.dbreast * tree.dbreast) + speciestrait[tree.species].meangrowthq75p;
-				// maxbrw_help = pow( speciestrait[tree.species].mindiametergrowth * exp(-0.5 * speciestrait[tree.species].meangrowthq75p * tree.dbreast),0.5 );
 				maxbrw_help = pow( speciestrait[tree.species].mindiametergrowth + exp(-0.5 * speciestrait[tree.species].meangrowthq75p * pow(tree.dbreast,0.5)),0.5 );
 
 				if ( (tree.dbreast > 50) || (maxbrw_help < speciestrait[tree.species].mindiametergrowth) ) {
@@ -185,19 +175,14 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 			
 			if (tree.growing == true) {
 				double maxbasalwachstum = 0.0;
-				// maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
 				maxbasalwachstum = gfac * getMaxbasalwachstum(yearposition, weather_list, tree);
-				// maxbasalwachstum = gfac * (speciestrait[tree.species].mindiametergrowth + getMaxbasalwachstum(yearposition, weather_list, tree));
-// cout << "Basal dia = " << tree.dbasal << " -> " << maxbasalwachstum << endl;
+
 				tree.dbasalmax = 1000 * maxbasalwachstum;
 
 				double basalwachstum = maxbasalwachstum * (1.0 - (tree.densitywert*tree.heightsubordination));
-				// basalwachstum = basalwachstum + basalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal;
 
 				if (parameter[0].demlandscape) {
 					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
-// if(basalwachstum>10)
-	// cout << " basalwachstum = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
 				}
 
 				if (basalwachstum < 0.0) {
@@ -212,44 +197,32 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						basalwachstum = 0.0;
 					}
 				}
+// output for checking
+/*
+#pragma omp critical
+{
+			FILE* fdir;
+            char filenamechar[50];
+            sprintf(filenamechar, "growthcheck");
+            string output = "output/" + string(filenamechar) + ".csv";
+            fdir = fopen(output.c_str(), "a+");
 
-// #pragma omp critical
-            // printf("%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\n",
-					// (double)tree.age,
-					// (double)tree.species,
-					// (double)maxbasalwachstum,
-					// (double)basalwachstum,
-					// (double)tree.envirimpact / 10000,
-					// (double)tree.dbasal,
-					// (double)tree.densitywert,
-					// (double)weather_list[yearposition-1].weatherfactor[tree.species],
-					// (double)tree.thawing_depthinfluence
-					// );
+            fprintf(fdir,
+					"%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\n",
+					(double)tree.age,
+					(double)tree.species,
+					(double)maxbasalwachstum,
+					(double)basalwachstum,
+					(double)tree.envirimpact / 10000,
+					(double)tree.dbasal,
+					(double)tree.densitywert,
+					(double)weather_list[yearposition-1].weatherfactor[tree.species],
+					(double)tree.thawing_depthinfluence
+					);
 
-
-// #pragma omp critical
-// {
-			// FILE* fdir;
-            // char filenamechar[50];
-            // sprintf(filenamechar, "growthcheck");
-            // string output = "output/" + string(filenamechar) + ".csv";
-            // fdir = fopen(output.c_str(), "a+");
-
-            // fprintf(fdir,
-					// "%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\t%4.4f\n",
-					// (double)tree.age,
-					// (double)tree.species,
-					// (double)maxbasalwachstum,
-					// (double)basalwachstum,
-					// (double)tree.envirimpact / 10000,
-					// (double)tree.dbasal,
-					// (double)tree.densitywert,
-					// (double)weather_list[yearposition-1].weatherfactor[tree.species],
-					// (double)tree.thawing_depthinfluence
-					// );
-
-            // fclose(fdir);
-// }
+            fclose(fdir);
+}
+*/
 
 				// snow impact
 				if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
@@ -261,24 +234,18 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				if (tree.growing == true) {
 					tree.dbasal += basalwachstum;
 				}
-// cout << "Basal dia .... after = " << tree.dbasal << endl;
 
 				tree.dbasalrel = 1000;
 				if(parameter[0].relgrowthinfluence == 1) {
 					if (maxbasalwachstum <= 0.0) {
 						tree.dbasalrel = 0;
 					} else {
-						// tree.dbasalrel = 1000 * (basalwachstum / (maxbasalwachstum + maxbasalwachstum * parameter[0].basalinfluenceoldyoung * tree.dbasal)) * tree.soilhumidity;
 						tree.dbasalrel = 1000 * (basalwachstum / maxbasalwachstum) * tree.soilhumidity;
 					}
 				}
-// if(tree.dbasal > 100)
-	// cout << " Basal dia = " << tree.dbasal << " -> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << " ... " << tree.elevation/10 << " ... " << tree.soilhumidity << endl;
-
 
 				// tree height update
 				if (parameter[0].allometryfunctiontype == 3) {// logistic growth
-					// tree.height = 10 * exp(speciestrait[tree.species].heightloga/(1+exp((speciestrait[tree.species].heightlogb-log(tree.dbasal*10))/speciestrait[tree.species].heightlogc)));
 					double meandbasaly2 = 2.818182;	
 					double slope = 260/meandbasaly2;
 					if(tree.dbasal < meandbasaly2) {// weighted mean
@@ -289,11 +256,6 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 					} else {
 						tree.height = 10 * exp(speciestrait[tree.species].heightloga/(1+exp((speciestrait[tree.species].heightlogb-log(tree.dbasal*5*10))/speciestrait[tree.species].heightlogc)));
 					}
-
-// #pragma omp critical
-// cout << "maxbasalw= " << maxbasalwachstum << " => basalw = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << " / densitywert = " << tree.densitywert << " / heightsubordination = " <<tree.heightsubordination << " / dbasalrel = " << tree.dbasalrel << " / soilhumidity = " << tree.soilhumidity << endl;
-
-// cout << "H = " << tree.height << endl;
 				} else {
 					if ((double)tree.height / 10 < 130) {
 						if (parameter[0].allometryfunctiontype == 1) {
@@ -314,11 +276,8 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				double breastwachstum = 0;
 
 				if ((double)tree.height / 10 >= 130) {
-					// maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
 					maxbreastwachstum = gfac * getMaxbreastwachstum(yearposition, weather_list, tree);
-					// maxbreastwachstum = gfac * (speciestrait[tree.species].mindiametergrowth + getMaxbreastwachstum(yearposition, weather_list, tree));
 
-					// breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
 					breastwachstum = maxbreastwachstum * (1.0 - (tree.densitywert*tree.heightsubordination));
 
 					if (parameter[0].demlandscape) {
@@ -347,7 +306,6 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						else
 							tree.dbreastrel = 1000 * (breastwachstum / maxbreastwachstum) * tree.soilhumidity;
 					}
-// cout << "-> breasrel= " << tree.dbreastrel << " <- " << breastwachstum << " / " << maxbreastwachstum << " * " << tree.soilhumidity << endl;
 				}
 			}
 		}

@@ -3,8 +3,7 @@
 
 using namespace std;
 
-void Seedproduction(//Parameter* parameter, 
-					vector<VectorList<Tree>>& world_tree_list) {
+void Seedproduction( vector<VectorList<Tree>>& world_tree_list ) {
     for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); ++posw) {
         VectorList<Tree>& tree_list = *posw;
 
@@ -18,9 +17,6 @@ void Seedproduction(//Parameter* parameter,
 											* ((double)tree.dbasalrel / 1000)                       // ... the tree's current growth in cm...
 											* (1.0 - (1.0 / ((double)tree.height / 10 / 50)));  // ... height.
 					if (newseedsproduced > 0) {
-// if(newseedsproduced>1000)
-	// cout << " ... seedprod>1000 = " << newseedsproduced << " <- " << tree.height / 10 << " ... " << tree.dbasalrel / 1000 << " ... " << speciestrait[tree.species].seedprodfactor << endl;
-	// cout << " seedprod = " << newseedsproduced << " <- " << (double)tree.height / 10 << " ... " << (double)tree.dbasalrel / 1000 << " ... " << speciestrait[tree.species].seedprodfactor << endl;
 						tree.seednewly_produced = newseedsproduced;
 					} else {
 						tree.seednewly_produced = 0;

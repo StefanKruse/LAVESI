@@ -13,6 +13,9 @@ build/
 # exclude temporary files
 *~
 
+# exclude input files
+input/
+
 # exclude output files in output dir
 output/*.csv
 output/*.txt

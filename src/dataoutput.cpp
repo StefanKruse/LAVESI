@@ -162,17 +162,6 @@ void Dataoutput(int t,
                 if ((parameter[0].ivort % 10 == 0)) {
 					outputtransects = true;
 				}
-                // if ((parameter[0].ivort % 100 == 0)) {
-                    // ausgabedensity = true;
-                    // outputgriddedbiomass = true;
-                    // outputindividuals = true;
-                // }
-                // if ( (parameter[0].ivort>=600) && (parameter[0].ivort % 5 == 0) ) {
-					// outputcurrencies = true;
-                    // ausgabedensity = true;
-                    // outputgriddedbiomass = true;
-                    // outputindividuals = true;
-                // }
             } else if (parameter[0].outputmode == 11) {  // "normal,gridded,large area"
                
                 if ((parameter[0].ivort % 100 == 0) || ((parameter[0].ivort >= 1500) && (parameter[0].ivort % 5 == 0)))
@@ -213,7 +202,6 @@ void Dataoutput(int t,
 
 				if(parameter[0].ivort >= 1)// write once sim start (after spinup)
 					ausgabedensity = true;
-					//outputgriddedbiomass = true; // each sim step!
 				
             } else if (parameter[0].outputmode == 2) {  // "OMP"
                 outputcurrencies = true;
@@ -574,6 +562,8 @@ void Dataoutput(int t,
 				fprintf(filepointer, "FPR_annual;");
 				fprintf(filepointer, "FI_max;");
 				fprintf(filepointer, "FI_mean;");
+				fprintf(filepointer, "Latitude;");
+				fprintf(filepointer, "Longitude;");
                 fprintf(filepointer, "\n");
 
                 if (filepointer == NULL) {
@@ -884,6 +874,9 @@ void Dataoutput(int t,
 			fprintf(filepointer, "%f;", fireprobabilityrating); // ###FIRE###
 			fprintf(filepointer, "%f;", fireintensitymax); // ###FIRE###
 			fprintf(filepointer, "%f;", fireintensitymean); // ###FIRE###
+			
+            fprintf(filepointer, "%4.4f;", parameter[0].plotcentre_lat);
+            fprintf(filepointer, "%4.4f;", parameter[0].plotcentre_lon);
             fprintf(filepointer, "\n");
 
             fclose(filepointer);

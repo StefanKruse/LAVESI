@@ -16,7 +16,7 @@ int getrandomspeciesnumber() {
 	int rn_species = speciesinroi[rn_index];
 	
 	return(rn_species);
-};
+}
 
 void Seedin() {
     RandomNumber<double> uniform(0, 1);
@@ -24,8 +24,6 @@ void Seedin() {
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
         VectorList<Seed>& seed_list = *posw;
         aktort++;
-        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
         bool seedinput;
 
@@ -60,17 +58,14 @@ void Seedin() {
                 // set limits
                 double maxx = (double)(treecols - 1);
                 if ( (parameter[0].seedintro_maxx > 0) & (parameter[0].seedintro_maxx < (treecols - 1)) )
-                    // maxx = (double)parameter[0].seedintro_maxx;
                     maxx = (double)(parameter[0].seedintro_maxx - parameter[0].seedintro_minx);
 
                 double maxy = (double)(treerows - 1);
                 if ( (parameter[0].seedintro_maxy > 0) & (parameter[0].seedintro_maxy < (treerows - 1)) )
-                    // maxy = (double)parameter[0].seedintro_maxy;
                     maxy = (double)(parameter[0].seedintro_maxy - parameter[0].seedintro_miny);
 
                 // seedwinddispersalmode==1 => randomly from the south border.
                 if (parameter[0].seedwinddispersalmode == 1) {
-                    // jseed = maxx * uniform.draw();
                     jseed = maxx * uniform.draw();
 
                     double dispersaldistance;
@@ -151,8 +146,6 @@ void TreesIni(int maximal_word_length) {
         for (vector<VectorList<Tree>>::iterator posw = world_tree_list.begin(); posw != world_tree_list.end(); posw++) {
             VectorList<Tree>& tree_list = *posw;
             aktort++;
-            // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
-            // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
             if (parameter[0].starttrees == 12) {
                 f = fopen("input/CH17I_Treevert2011.csv", "r");
@@ -265,8 +258,6 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
         vector<vector<Weather>>::iterator world_positon_weather = (world_weather_list.begin() + aktort);
         vector<Weather>& weather_list = *world_positon_weather;
         aktort++;
-        // int aktortyworldcoo = (double)(aktort - 1) / parameter[0].mapxlength;
-        // int aktortxworldcoo = (aktort - 1) - (aktortyworldcoo * parameter[0].mapxlength);
 
 #ifdef DEBUG
         cout << " ... seed_list.size=" << seed_list.size() << endl;

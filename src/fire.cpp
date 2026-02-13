@@ -30,7 +30,7 @@ void Fire(Parameter* parameter,
 		RandomNumber<double> uniform(0, 1);
 		bool firehappend = false;
 
-		for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+		for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 			double xfirecenter = 0.0; // declaration here to be available for fire gap output
 			double yfirecenter = 0.0;
 			double fireimpactareasize = 0.0;
@@ -51,20 +51,6 @@ void Fire(Parameter* parameter,
 			double firethresh1 = globalfireparameter[0].threshold_mild[i];	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
 			double firethresh2 = globalfireparameter[0].threshold_medium[i];  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
 			double firethresh3 = globalfireparameter[0].threshold_severe[i];	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
-			// cout << endl << "FIRE: " << 
-				// firethresh1 << " | " <<
-				// firethresh2 << " | " <<
-				// firethresh3 << " | " <<
-				// endl;
-			// Used for Lake Satagay localization 
-			// double firethresh1 = 6.6;	// Minimum of boxplot for predicted values for months with observed fires (i.e., below would be false positives)	
-			// double firethresh2 = 7.0;  // Range of Lake Satagay monthly FPR values from minimum (6.6) to Q3 (~7.0)
-			// double firethresh3 = 7.46;	// Maximum of Lake Satagay monthly FPR values (Q4 = 7.46; i.e. above are extreme outliers)
-			
-			// Used for Lake Khamra localization
-			// unsigned short int firethresh1 = 4.0;	// determine thresholds that decide monthly fire weather severity (previous values: 3.48, 6.9, 8.3)
-			// unsigned short int firethresh2 = 6.5;
-			// unsigned short int firethresh3 = 7.5;
 			
 			// cout << "January fire index =" << weather_list[yearposition].fireindex1  << endl;
 			if (weather_list[yearposition-1].fireindex1[i] < firethresh1){	// print fire weather severity depending on calculated FPR, and if fire weather occurs increase counter of fire weather occurences 
@@ -194,6 +180,8 @@ void Fire(Parameter* parameter,
 			// severe conditions: Fire every c. 5 yrs
 			// extreme conditions: Fire every c. 2 yrs
 
+		if( (parameter[0].simumode==1) && (parameter[0].n_weather_along_grid>0) ) {
+
 			// adjusting FPR empirically to local climate and conditions
 			double i_step = (double) i / parameter[0].n_weather_along_grid;
 			double latitude = parameter[0].plotcentre_lat_start + i_step * (parameter[0].plotcentre_lat_end - parameter[0].plotcentre_lat);
@@ -222,15 +210,21 @@ void Fire(Parameter* parameter,
 			// calculate factor based on empirical fitted formula
 			double mean_temperature_jja = (weather_list[yearposition-1].temp6monthmean[i] + weather_list[yearposition-1].temp7monthmean[i] + weather_list[yearposition-1].temp8monthmean[i]) / 3;
 			double mean_precipitation_jja = (weather_list[yearposition-1].prec6monthmean[i] + weather_list[yearposition-1].prec7monthmean[i] + weather_list[yearposition-1].prec8monthmean[i]) / 3;
+			// double local_fpr_factor = 1.0;
 			double local_fpr_factor = -6.726101332 + 0.07909051804 * mean_temperature_jja + 0.009169321985 * mean_precipitation_jja - 0.00004268947269 * elevation + 0.004373278921 * weather_list[yearposition-1].vegetationperiodlength[i] + 0.07278687969 * latitude - 0.0005100039459 * mean_temperature_jja * mean_precipitation_jja;
 			cout << "Lat: " << latitude << " & Ele: " << elevation << " & factor_FPR: " << local_fpr_factor << endl;
 			fireprobabilityrating = fireprobabilityrating * local_fpr_factor;
+		} else {
+			
+		}
 			
 			if (fireprobabilityrating > 1) {
 				fireprobabilityrating = 1;
 			}
 			
 			weather_list[yearposition-1].FPR[i] = fireprobabilityrating;
+			
+			cout << " fireprobabilityrating = " << fireprobabilityrating << endl;
 			
 			// if (parameter[0].yearlyvis == true) {
 				// cout << endl << "\tn_mildweather:" << (n_mildweather) << endl;	// optional output during simulation
@@ -290,10 +284,10 @@ void Fire(Parameter* parameter,
 					}
 				fireimpactareasize = fireimpactareasize * parameter[0].fireimpactareasize_mod;
 
-				if(true) {/// fire output
+				if(parameter[0].simumode==2) {// fire output
 					// assemble file name:
-					dateiname = "output/firedimensions.csv";
-					
+					dateiname = "output/firedimensions_" + std::to_string(parameter[0].weatherchoice) + ".csv";
+	
 					// trying to open the file for reading
 					filepointer = fopen(dateiname.c_str(), "r+");
 					// if fopen fails, open a new file + header output
@@ -305,6 +299,8 @@ void Fire(Parameter* parameter,
 						fprintf(filepointer, "Firecenter_Y;");
 						fprintf(filepointer, "fireimpactareasize;");
 						fprintf(filepointer, "fireprobabilityrating;");
+						fprintf(filepointer, "temperatureJuly;");
+						fprintf(filepointer, "Year;");
 						fprintf(filepointer, "\n");
 
 						if (filepointer == NULL) {
@@ -321,6 +317,8 @@ void Fire(Parameter* parameter,
 					fprintf(filepointer, "%4.4f;", yfirecenter* parameter[0].sizemagnif);
 					fprintf(filepointer, "%4.4f;", fireimpactareasize);
 					fprintf(filepointer, "%4.4f;", fireprobabilityrating);
+					fprintf(filepointer, "%4.4f;", weather_list[yearposition-1].temp7monthmean[i]);
+					fprintf(filepointer, "%d;", weather_list[yearposition-1].jahr+2001);
 					fprintf(filepointer, "\n");
 
 					fclose(filepointer);
@@ -448,15 +446,6 @@ void Fire(Parameter* parameter,
 						fclose(filepointer);
 					}
 				}
-				
-				//if (parameter[0].counter_fire_happened > 0) { // If counter has been started but not yet finished
-					//counter_fire_output = true; // write output
-					// parameter[0].counter_fire_happened--; // subtract one year
-					// cout << "\tWriting fire gap output. " << parameter[0].counter_fire_happened << " more years will follow." << endl;
-				// } else {
-					//counter_fire_output = false; 
-					// cout << "\tNo fire gap output will be produced. Counter = 0." << parameter[0].counter_fire_happened << endl;
-				// }
 			} // End: Fire gap output
 		} // end loop weather grids
 		if(firehappend == true) {

@@ -23,18 +23,15 @@ void Treedistribution(Parameter* parameter, int stringlengthmax);
 void Hinterlandseedintro(Parameter* parameter, int yearposition,
 						 vector<VectorList<Seed>>& world_seed_list, 
 						 vector<vector<Weather>>& world_weather_list);
-void Environmentupdate(//Parameter* parameter,
-                       int yearposition,
+void Environmentupdate(int yearposition,
                        vector<vector<Envirgrid>>& world_plot_list,
                        vector<VectorList<Tree>>& world_tree_list,
                        vector<vector<Weather>>& world_weather_list);
 void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& world_tree_list, vector<vector<Weather>>& world_weather_list);
-void Seeddispersal(//int Jahr, 
-				   Parameter* parameter, 
+void Seeddispersal(Parameter* parameter, 
 				   vector<VectorList<Seed>>& world_seed_list, 
 				   vector<vector<Envirgrid>>& world_plot_list);
-void Seedproduction(//Parameter* parameter, 
-					vector<VectorList<Tree>>& world_tree_list);
+void Seedproduction(vector<VectorList<Tree>>& world_tree_list);
 void Treeestablishment(Parameter* parameter,
                        int yearposition,
                        vector<VectorList<Tree>>& world_tree_list,
@@ -52,13 +49,11 @@ void Pestoutbreak(Parameter* parameter,
                        vector<VectorList<Tree>>& world_tree_list,
                        vector<vector<Weather>>& world_weather_list);
 void Mortality(Parameter* parameter,
-               // int Jahr,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
                vector<vector<Weather>>& world_weather_list);
-void Ageing(//Parameter* parameter, 
-			vector<VectorList<Tree>>& world_tree_list, 
+void Ageing(vector<VectorList<Tree>>& world_tree_list, 
 			vector<VectorList<Seed>>& world_seed_list);
 void Pollinationprobability(double x,
                             double y,
@@ -80,7 +75,6 @@ void Pollinationprobability(double x,
                             double m,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
-                            int outputtreesiter,
                             double randomnumberwind,
                             double randomnumberwindfather);
 void Seedwinddispersal(double rn, 

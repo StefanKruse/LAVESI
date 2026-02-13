@@ -350,20 +350,20 @@ void getTemp(	//int aktort,
 		snprintf(str, 3, "%02d", i);
 		crugridnumber << str;
 		cout << " crugridnumber = " << crugridnumber.str() << endl;
-            // ... 501 == start year
-            // ... ...3000 == final year
-            // ... .......2 == Transect 2 Taimyr Peninsula
-            // ... .......3 == Transect 3 Buor Khaya
-            // ... .......4 == Transect 4 Kolyma
-            // ... .......5 == Transect 5 Chukotka
-            // ... ........1 == rcp2.6
-            // ... ........2 == rcp4.5
-            // ... ........3 == rcp8.5
-            // ... ........4 == rcp2.6 half => 1.3
-            // ... ........5 == rcp2.6 				+  cooling after 2300 back to 1901:1987
-            // ... ........6 == rcp2.6 half => 1.3 	+  cooling after 2300 back to 1901:1987
-            // ... ........7 == rcp4.5 				+  cooling after 2300 back to 1901:1987
-            // ... ........8 == rcp8.5 				+  cooling after 2300 back to 1901:1987
+			// ... 501 == start year
+			// ... ...3000 == final year
+			// ... .......2 == Transect 2 Taimyr Peninsula
+			// ... .......3 == Transect 3 Buor Khaya
+			// ... .......4 == Transect 4 Kolyma
+			// ... .......5 == Transect 5 Chukotka
+			// ... ........1 == rcp2.6
+			// ... ........2 == rcp4.5
+			// ... ........3 == rcp8.5
+			// ... ........4 == rcp2.6 half => 1.3
+			// ... ........5 == rcp2.6 				+  cooling after 2300 back to 1901:1987
+			// ... ........6 == rcp2.6 half => 1.3 	+  cooling after 2300 back to 1901:1987
+			// ... ........7 == rcp4.5 				+  cooling after 2300 back to 1901:1987
+			// ... ........8 == rcp8.5 				+  cooling after 2300 back to 1901:1987
 
 		if(parameter[0].weatherchoice == 501300021 || 
 		   parameter[0].weatherchoice == 501300022 || 
@@ -376,7 +376,7 @@ void getTemp(	//int aktort,
 			transectname << "Taimyr Peninsula";
 			parameter[0].tempjandiffort = -0.9015152;
 			parameter[0].tempjuldiffort = -0.6449302;
-            parameter[0].precdiffort = -4.153904;
+			parameter[0].precdiffort = -4.153904;
 		} else if(parameter[0].weatherchoice == 501300031 || 
 				  parameter[0].weatherchoice == 501300032 || 
 				  parameter[0].weatherchoice == 501300033 || 
@@ -388,7 +388,7 @@ void getTemp(	//int aktort,
 			transectname << "Buor Khaya";
 			parameter[0].tempjandiffort = -0.1907051;
 			parameter[0].tempjuldiffort = -2.065972;
-            parameter[0].precdiffort = -24.06063;
+			parameter[0].precdiffort = -24.06063;
 		} else if(parameter[0].weatherchoice == 501300041 || 
 				  parameter[0].weatherchoice == 501300042 || 
 				  parameter[0].weatherchoice == 501300043 || 
@@ -400,7 +400,7 @@ void getTemp(	//int aktort,
 			transectname << "Kolyma";
 			parameter[0].tempjandiffort = 3.582945;
 			parameter[0].tempjuldiffort = 1.433178;
-            parameter[0].precdiffort = 97.82596;
+			parameter[0].precdiffort = 97.82596;
 		} else if(parameter[0].weatherchoice == 501300051 || 
 				  parameter[0].weatherchoice == 501300052 || 
 				  parameter[0].weatherchoice == 501300053 || 
@@ -412,7 +412,7 @@ void getTemp(	//int aktort,
 			transectname << "Chukotka";
 			parameter[0].tempjandiffort = 4.460894;
 			parameter[0].tempjuldiffort = 4.300536;
-            parameter[0].precdiffort = 8.156439;
+			parameter[0].precdiffort = 8.156439;
 		}
 			
 		if(parameter[0].weatherchoice == 501300021 || 
@@ -460,21 +460,23 @@ void getTemp(	//int aktort,
 			transectname << "7001";
 			parameter[0].tempjandiffort = 0.0;
 			parameter[0].tempjuldiffort = 0.0;
-            parameter[0].precdiffort = 0.0;
+			parameter[0].precdiffort = 0.0;
 		}
 		
 		if(parameter[0].weatherchoice == 8000007001)
 		// temp_long_NWCanada_transect_point_73.csv
 			rcpscenario << "";
 
-        // string inputcrugridname = "input/transect_dev/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
-        // string inputcrugridname = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/temp_long_" + transectname.str() + "_transect_point_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-        // string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+		// string inputcrugridname = "input/transect_dev/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
+		// string inputcrugridname = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/temp_long_" + transectname.str() + "_transect_point_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+		// string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
 		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
 
 
 		if(parameter[0].n_weather_along_grid > 0)
 			strcpy(dateinametemp, inputcrugridname.c_str());
+
+	
 
 		cout << endl << "Temp file for transect input: dateinametemp = " << dateinametemp;
 
@@ -493,6 +495,10 @@ void getTemp(	//int aktort,
 		// read in line by line, partially preprocess data
 		while (fgets(puffer, 255, f) != NULL) {
 			if (counter >= 2) {
+				if (puffer[0] == 'N') { // prevent NA values to be read
+					cout << "puffer = " << puffer << endl;
+					exit(1); 
+				}
 				temp1monthmeanbuf = strtod(strtok(puffer, " "), NULL);
 				temp2monthmeanbuf = strtod(strtok(NULL, " "), NULL);
 				temp3monthmeanbuf = strtod(strtok(NULL, " "), NULL);
@@ -745,7 +751,7 @@ void passWeather() {
 
 #pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-			for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+			for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 				double jantempsum = 0;
 				double jantempsummin = 0;
 				double jultempsum = 0;
@@ -838,10 +844,6 @@ void passWeather() {
 				weather_list[iweather].nddrestriktionmin[i] = 0.0;
 
 				// multiple species integration
-				// weather_list[iweather].weatherfactor[i].resize(99,0);
-				// weather_list[iweather].weatherfactormin[i].resize(99,0);
-				// weather_list[iweather].janisothermrestriktion[i].resize(99,0);
-				// weather_list[iweather].janisothermrestriktionmin[i].resize(99,0);
 				for (int species_counter = 1; species_counter < 99; species_counter++) {
 					if(speciestrait[species_counter].number == 0)
 						break;
@@ -916,104 +918,6 @@ void passWeather() {
 					weather_list[iweather].fireindex10[i] = globalfireparameter[0].parameter1[i]*(((weather_list[iweather].temp10monthmean[i] + globalfireparameter[0].parameter2[i]) * globalfireparameter[0].parameter3[i]) + ((weather_list[iweather].prec10monthmean[i] - globalfireparameter[0].parameter4[i]) * globalfireparameter[0].parameter5[i])) + (globalfireparameter[0].parameter6[i]*(((weather_list[iweather].temp10monthmean[i] + globalfireparameter[0].parameter2[i]) * globalfireparameter[0].parameter7[i]) + ((weather_list[iweather].prec10monthmean[i] - globalfireparameter[0].parameter4[i]) * globalfireparameter[0].parameter8[i])))+globalfireparameter[0].parameter9[i];
 					weather_list[iweather].fireindex11[i] = globalfireparameter[0].parameter1[i]*(((weather_list[iweather].temp11monthmean[i] + globalfireparameter[0].parameter2[i]) * globalfireparameter[0].parameter3[i]) + ((weather_list[iweather].prec11monthmean[i] - globalfireparameter[0].parameter4[i]) * globalfireparameter[0].parameter5[i])) + (globalfireparameter[0].parameter6[i]*(((weather_list[iweather].temp11monthmean[i] + globalfireparameter[0].parameter2[i]) * globalfireparameter[0].parameter7[i]) + ((weather_list[iweather].prec11monthmean[i] - globalfireparameter[0].parameter4[i]) * globalfireparameter[0].parameter8[i])))+globalfireparameter[0].parameter9[i];
 					weather_list[iweather].fireindex12[i] = globalfireparameter[0].parameter1[i]*(((weather_list[iweather].temp12monthmean[i] + globalfireparameter[0].parameter2[i]) * globalfireparameter[0].parameter3[i]) + ((weather_list[iweather].prec12monthmean[i] - globalfireparameter[0].parameter4[i]) * globalfireparameter[0].parameter5[i])) + (globalfireparameter[0].parameter6[i]*(((weather_list[iweather].temp12monthmean[i] + globalfireparameter[0].parameter2[i]) * globalfireparameter[0].parameter7[i]) + ((weather_list[iweather].prec12monthmean[i] - globalfireparameter[0].parameter4[i]) * globalfireparameter[0].parameter8[i])))+globalfireparameter[0].parameter9[i];
-
-					// Fire index calculation for each month (for Lake Satagay)
-					// double T1 = weather_list[iweather].temp1monthmean;
-					// double P1 = weather_list[iweather].prec1monthmean;
-					// weather_list[iweather].fireindex1 = 0.11816*(((T1 + 12.03) * 0.7213351) + ((P1 - 39.14) * 0.6925862)) + (-0.12372*(((T1 + 12.03) * -0.6925862) + ((P1 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T2 = weather_list[iweather].temp2monthmean;
-					// double P2 = weather_list[iweather].prec2monthmean;
-					// weather_list[iweather].fireindex2 = 0.11816*(((T2 + 12.03) * 0.7213351) + ((P2 - 39.14) * 0.6925862)) + (-0.12372*(((T2 + 12.03) * -0.6925862) + ((P2 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T3 = weather_list[iweather].temp3monthmean;
-					// double P3 = weather_list[iweather].prec3monthmean;
-					// weather_list[iweather].fireindex3 = 0.11816*(((T3 + 12.03) * 0.7213351) + ((P3 - 39.14) * 0.6925862)) + (-0.12372*(((T3 + 12.03) * -0.6925862) + ((P3 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T4 = weather_list[iweather].temp4monthmean;
-					// double P4 = weather_list[iweather].prec4monthmean;
-					// weather_list[iweather].fireindex4 = 0.11816*(((T4 + 12.03) * 0.7213351) + ((P4 - 39.14) * 0.6925862)) + (-0.12372*(((T4 + 12.03) * -0.6925862) + ((P4 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T5 = weather_list[iweather].temp5monthmean;
-					// double P5 = weather_list[iweather].prec5monthmean;
-					// weather_list[iweather].fireindex5 = 0.11816*(((T5 + 12.03) * 0.7213351) + ((P5 - 39.14) * 0.6925862)) + (-0.12372*(((T5 + 12.03) * -0.6925862) + ((P5 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T6 = weather_list[iweather].temp6monthmean;
-					// double P6 = weather_list[iweather].prec6monthmean;
-					// weather_list[iweather].fireindex6 = 0.11816*(((T6 + 12.03) * 0.7213351) + ((P6 - 39.14) * 0.6925862)) + (-0.12372*(((T6 + 12.03) * -0.6925862) + ((P6 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T7 = weather_list[iweather].temp7monthmean;
-					// double P7 = weather_list[iweather].prec7monthmean;
-					// weather_list[iweather].fireindex7 = 0.11816*(((T7 + 12.03) * 0.7213351) + ((P7 - 39.14) * 0.6925862)) + (-0.12372*(((T7 + 12.03) * -0.6925862) + ((P7 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T8 = weather_list[iweather].temp8monthmean;
-					// double P8 = weather_list[iweather].prec8monthmean;
-					// weather_list[iweather].fireindex8 = 0.11816*(((T8 + 12.03) * 0.7213351) + ((P8 - 39.14) * 0.6925862)) + (-0.12372*(((T8 + 12.03) * -0.6925862) + ((P8 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T9 = weather_list[iweather].temp9monthmean;
-					// double P9 = weather_list[iweather].prec9monthmean;
-					// weather_list[iweather].fireindex9 = 0.11816*(((T9 + 12.03) * 0.7213351) + ((P9 - 39.14) * 0.6925862)) + (-0.12372*(((T9 + 12.03) * -0.6925862) + ((P9 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T10 = weather_list[iweather].temp10monthmean;
-					// double P10 = weather_list[iweather].prec10monthmean;
-					// weather_list[iweather].fireindex10 = 0.11816*(((T10 + 12.03) * 0.7213351) + ((P10 - 39.14) * 0.6925862)) + (-0.12372*(((T10 + 12.03) * -0.6925862) + ((P10 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T11 = weather_list[iweather].temp11monthmean;
-					// double P11 = weather_list[iweather].prec11monthmean;
-					// weather_list[iweather].fireindex11 = 0.11816*(((T11 + 12.03) * 0.7213351) + ((P11 - 39.14) * 0.6925862)) + (-0.12372*(((T11 + 12.03) * -0.6925862) + ((P11 - 39.14) * 0.7213351)))+1.46818;
-					
-					// double T12 = weather_list[iweather].temp12monthmean;
-					// double P12 = weather_list[iweather].prec12monthmean;
-					// weather_list[iweather].fireindex12 = 0.11816*(((T12 + 12.03) * 0.7213351) + ((P12 - 39.14) * 0.6925862)) + (-0.12372*(((T12 + 12.03) * -0.6925862) + ((P12 - 39.14) * 0.7213351)))+1.46818;
-
-					//Fire index calculation for each month (for Lake Khamra)
-					// double T1 = weather_list[iweather].temp1monthmean;
-					// double P1 = weather_list[iweather].prec1monthmean;
-					// weather_list[iweather].fireindex1 = 0.10336*(((T1 + 6.19) * 0.6291112) + ((P1 - 34.99) * 0.7773153)) + (-0.17637*(((T1 + 6.19) * -0.7773153) + ((P1 - 34.99) * 0.6291112)))+0.69034;
-
-					// double T2 = weather_list[iweather].temp2monthmean;
-					// double P2 = weather_list[iweather].prec2monthmean;
-					// weather_list[iweather].fireindex2 = 0.10336*(((T2 + 6.19) * 0.6291112) + ((P2 - 34.99) * 0.7773153)) + (-0.17637*(((T2 + 6.19) * -0.7773153) + ((P2 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T3 = weather_list[iweather].temp3monthmean;
-					// double P3 = weather_list[iweather].prec3monthmean;
-					// weather_list[iweather].fireindex3 = 0.10336*(((T3 + 6.19) * 0.6291112) + ((P3 - 34.99) * 0.7773153)) + (-0.17637*(((T3 + 6.19) * -0.7773153) + ((P3 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T4 = weather_list[iweather].temp4monthmean;
-					// double P4 = weather_list[iweather].prec4monthmean;
-					// weather_list[iweather].fireindex4 = 0.10336*(((T4 + 6.19) * 0.6291112) + ((P4 - 34.99) * 0.7773153)) + (-0.17637*(((T4 + 6.19) * -0.7773153) + ((P4 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T5 = weather_list[iweather].temp5monthmean;
-					// double P5 = weather_list[iweather].prec5monthmean;
-					// weather_list[iweather].fireindex5 = 0.10336*(((T5 + 6.19) * 0.6291112) + ((P5 - 34.99) * 0.7773153)) + (-0.17637*(((T5 + 6.19) * -0.7773153) + ((P5 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T6 = weather_list[iweather].temp6monthmean;
-					// double P6 = weather_list[iweather].prec6monthmean;
-					// weather_list[iweather].fireindex6 = 0.10336*(((T6 + 6.19) * 0.6291112) + ((P6 - 34.99) * 0.7773153)) + (-0.17637*(((T6 + 6.19) * -0.7773153) + ((P6 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T7 = weather_list[iweather].temp7monthmean;
-					// double P7 = weather_list[iweather].prec7monthmean;
-					// weather_list[iweather].fireindex7 = 0.10336*(((T7 + 6.19) * 0.6291112) + ((P7 - 34.99) * 0.7773153)) + (-0.17637*(((T7 + 6.19) * -0.7773153) + ((P7 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T8 = weather_list[iweather].temp8monthmean;
-					// double P8 = weather_list[iweather].prec8monthmean;
-					// weather_list[iweather].fireindex8 = 0.10336*(((T8 + 6.19) * 0.6291112) + ((P8 - 34.99) * 0.7773153)) + (-0.17637*(((T8 + 6.19) * -0.7773153) + ((P8 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T9 = weather_list[iweather].temp9monthmean;
-					// double P9 = weather_list[iweather].prec9monthmean;
-					// weather_list[iweather].fireindex9 = 0.10336*(((T9 + 6.19) * 0.6291112) + ((P9 - 34.99) * 0.7773153)) + (-0.17637*(((T9 + 6.19) * -0.7773153) + ((P9 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T10 = weather_list[iweather].temp10monthmean;
-					// double P10 = weather_list[iweather].prec10monthmean;
-					// weather_list[iweather].fireindex10 = 0.10336*(((T10 + 6.19) * 0.6291112) + ((P10 - 34.99) * 0.7773153)) + (-0.17637*(((T10 + 6.19) * -0.7773153) + ((P10 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T11 = weather_list[iweather].temp11monthmean;
-					// double P11 = weather_list[iweather].prec11monthmean;
-					// weather_list[iweather].fireindex11 = 0.10336*(((T11 + 6.19) * 0.6291112) + ((P11 - 34.99) * 0.7773153)) + (-0.17637*(((T11 + 6.19) * -0.7773153) + ((P11 - 34.99) * 0.6291112)))+0.69034;
-					
-					// double T12 = weather_list[iweather].temp12monthmean;
-					// double P12 = weather_list[iweather].prec12monthmean;
-					// weather_list[iweather].fireindex12 = 0.10336*(((T12 + 6.19) * 0.6291112) + ((P12 - 34.99) * 0.7773153)) + (-0.17637*(((T12 + 6.19) * -0.7773153) + ((P12 - 34.99) * 0.6291112)))+0.69034;
 				}
 				
 				// JJA temperature and precipitation for output
@@ -1294,20 +1198,6 @@ void passWeather() {
 				//  ... strenght is PRCP_i/threshold
 				//  ... multiply with temperature function as warm/wet snow is more problematic
 
-
-
-
-				// cout <<
-						// "weather_list[iweather].dailytemp.size() = " <<
-						// weather_list[iweather].dailytemp.size() <<
-						// "  dailyrain.size() = " <<
-						// dailyrain.size() <<
-						// endl;
-
-				// for(double soiltempfac1 = -10; soiltempfac1 <= 30; ) {
-					// soiltempfac1 += 10;
-				// for(double soiltempfac2 = 0; soiltempfac2 <= 5; ) {
-					// soiltempfac2 += 1;
 				double pool_snow_daily = 0;
 				double pool_snow_dailymin = 0;
 				if(iweather>0) {
@@ -1342,18 +1232,9 @@ void passWeather() {
 					}
 					snow_depth_daily.push_back(snow_depth_i);
 					snow_depth_dailymin.push_back(snow_depth_imin);
-					// cout <<
-						// "snow depth = " <<
-						// snow_depth_daily.back() <<
-						// " / snow depth min = " <<
-						// snow_depth_dailymin.back() <<
-						// endl;
 				}
 				weather_list[iweather].snow_pool_lastday[i] = pool_snow_daily;
 				weather_list[iweather].snow_pool_lastdaymin[i] = pool_snow_dailymin;
-				// vector<double> dailytemp;
-				// double snow_pool_lastday;
-				// double snow_pool_lastdaymin;
 					
 				// find max snow depth in winter
 				double snow_depth_winterspring_max = 0;
@@ -1407,14 +1288,6 @@ void passWeather() {
 				weather_list[iweather].snow_off_dayofyearmin[i] = lastsnowdaymin;
 				weather_list[iweather].snow_free_period[i] = snowfreedays;
 				weather_list[iweather].snow_free_periodmin[i] = snowfreedaysmin;
-					// double snow_depth_winterspring_max;
-					// double snow_depth_winterspring_maxmin;
-					// double snow_depth_fallwinter_max;
-					// double snow_depth_fallwinter_maxmin;
-					// double snow_off_dayofyear;
-					// double snow_off_dayofyearmin;
-					// double snow_free_period;
-					// double snow_free_periodmin;
 					
 				if(iweather > 0) {
 					if(snow_depth_winterspring_max>weather_list[iweather-1].snow_depth_fallwinter_max[i]) {
@@ -1432,19 +1305,6 @@ void passWeather() {
 					weather_list[iweather].snow_max_winterdepth[i] = snow_depth_winterspring_max;
 					weather_list[iweather].snow_max_winterdepthmin[i] = snow_depth_winterspring_maxmin;
 				}
-					// double snow_max_winterdepth;
-					// double snow_max_winterdepthmin;
-
-					// cout <<
-						// " snow_depth_winterspring_max = " <<
-						// snow_depth_winterspring_max <<
-						// " snow_depth_fallwinter_max = " <<
-						// snow_depth_fallwinter_max <<
-						// " / lastsnowday = " <<
-						// lastsnowday <<
-						// " / snowfreedaysv = " <<
-						// snowfreedays <<
-						// endl;
 
 					/*
 					// snow related output for tuning
@@ -1657,13 +1517,15 @@ void passFire() {
         vector<Weather>& weather_list = *posw;
 
 
-		for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+		for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 			cout << "globalfireparameter[0].threshold_mild = " << globalfireparameter[0].threshold_mild[i]<< endl;
 
 			vector<double> fpr; // for all values per month
 
 			// fill vector
 			for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
+// cout << "i = " << i << "fireind1_i = " << weather_list[iweather].fireindex1[i] << endl;
+				
 				if(weather_list[iweather].fireindex1[i] > globalfireparameter[0].threshold_mild[i]) {
 					fpr.push_back(weather_list[iweather].fireindex1[i]);
 				}
@@ -1703,23 +1565,31 @@ void passFire() {
 			} // End weather list
 			
 			// per gridcell
+cout << "fpr.size() = " << fpr.size() << endl;
 			// ... sort vector
 			sort(fpr.begin(), fpr.end());
 			
 			// ... calculate third quartile == 75%
 			int n_fpr = fpr.size();
-			int n_fpr_q1 = 0.25 * n_fpr;
-			int n_fpr_q3 = 0.75 * n_fpr;
-			globalfireparameter[0].threshold_medium[i] = fpr[n_fpr_q3-1];
-			cout << "globalfireparameter[0].threshold_medium = " << globalfireparameter[0].threshold_medium[i] << endl;
-			
-			// ... calculate third quartile multiplied with 1.5 times inter quartile range
-			double fpr_iqr = fpr[n_fpr_q3-1] - fpr[n_fpr_q1-1];
-			globalfireparameter[0].threshold_severe[i] = fpr[n_fpr_q3-1] + 1.5 * fpr_iqr; // Q3 + 1.5 * IQR
-			cout << "n_fpr_q1 = " << n_fpr_q1 << endl;
-			cout << "n_fpr_q3 = " << n_fpr_q3 << endl;
-			cout << "fpr_iqr = " << fpr_iqr << endl;
-			cout << "globalfireparameter[0].threshold_severe = " << globalfireparameter[0].threshold_severe[i] << endl;
+			if(n_fpr > 0) {
+				int n_fpr_q1 = 0.25 * n_fpr;
+				int n_fpr_q3 = 0.75 * n_fpr;
+				globalfireparameter[0].threshold_medium[i] = fpr[n_fpr_q3-1];
+				cout << "globalfireparameter[0].threshold_medium = " << globalfireparameter[0].threshold_medium[i] << endl;
+				
+				// ... calculate third quartile multiplied with 1.5 times inter quartile range
+				double fpr_iqr = fpr[n_fpr_q3-1] - fpr[n_fpr_q1-1];
+				globalfireparameter[0].threshold_severe[i] = fpr[n_fpr_q3-1] + 1.5 * fpr_iqr; // Q3 + 1.5 * IQR
+				cout << "n_fpr_q1 = " << n_fpr_q1 << endl;
+				cout << "n_fpr_q3 = " << n_fpr_q3 << endl;
+				cout << "fpr_iqr = " << fpr_iqr << endl;
+				cout << "globalfireparameter[0].threshold_severe = " << globalfireparameter[0].threshold_severe[i] << endl;
+			} else {
+				globalfireparameter[0].threshold_medium[i] = 5;
+				cout << "globalfireparameter[0].threshold_medium = " << globalfireparameter[0].threshold_medium[i] << endl;
+				globalfireparameter[0].threshold_severe[i] = 15;
+				cout << "globalfireparameter[0].threshold_severe = " << globalfireparameter[0].threshold_severe[i] << endl;
+			}
 		}// end loop weather grids
 	} // End world list
 }
@@ -1808,7 +1678,7 @@ void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climat
 		cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
 		// cout << "weather_list.size() = " << weather_list.size() << endl;
 		for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-			for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+			for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 				// assess current weather and sum the probabilities (or mean?)
 				double pestoutbreakprobability_i = 0.0;
 				
@@ -1950,6 +1820,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 	plotcode << plotcodeNum;
 	cout << " ... plotcodeNum = " << plotcodeNum;
 	
+if(parameter[0].simumode==1) {
 	cout << endl << " ... reading wind data ... " << endl;
 	if ((parameter[0].windsource != 0) && (parameter[0].windsource != 4) && (parameter[0].windsource != 5)) {
         int findyr1 = 0, findyr2 = -100;//, jahr = 0;//, cntr = 0;
@@ -2623,7 +2494,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
         // jahr = 0;
     }
-	
+} // end simumode==1	
 	
 	
 	cout << endl << " ... reading temp/prec data ... " << endl;
@@ -2633,146 +2504,251 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
         aktort++;
 
 		// depending on the weather choice different files will be opened and read line by line
-		if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Siberia/" + plotcode.str() + "_temp1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Siberia/" + plotcode.str() + "_prec1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1000002000 && parameter[0].weatherchoice < 1000003000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Canada/" + plotcode.str() + "_temp1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Canada/" + plotcode.str() + "_prec1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1000003000 && parameter[0].weatherchoice < 1000004000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Alaska/" + plotcode.str() + "_temp1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Alaska/" + plotcode.str() + "_prec1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1000004000 && parameter[0].weatherchoice < 1000005000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/HengduanMt/" + plotcode.str() + "_temp1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/HengduanMt/" + plotcode.str() + "_prec1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1000005000 && parameter[0].weatherchoice < 1000006000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/MountainTreeline/" + plotcode.str() + "_temp1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/MountainTreeline/" + plotcode.str() + "_prec1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1026001000 && parameter[0].weatherchoice < 1026002000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Siberia/" + plotcode.str() + "_temp26_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Siberia/" + plotcode.str() + "_prec26_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1026002000 && parameter[0].weatherchoice < 1026003000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Canada/" + plotcode.str() + "_temp26_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Canada/" + plotcode.str() + "_prec26_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1026003000 && parameter[0].weatherchoice < 1026004000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Alaska/" + plotcode.str() + "_temp26_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Alaska/" + plotcode.str() + "_prec26_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1026004000 && parameter[0].weatherchoice < 1026005000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/HengduanMt/" + plotcode.str() + "_temp26_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/HengduanMt/" + plotcode.str() + "_prec26_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1026005000 && parameter[0].weatherchoice < 1026006000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/MountainTreeline/" + plotcode.str() + "_temp26_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/MountainTreeline/" + plotcode.str() + "_prec26_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1045001000 && parameter[0].weatherchoice < 1045002000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Siberia/" + plotcode.str() + "_temp45_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Siberia/" + plotcode.str() + "_prec45_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1045002000 && parameter[0].weatherchoice < 1045003000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Canada/" + plotcode.str() + "_temp45_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Canada/" + plotcode.str() + "_prec45_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1045003000 && parameter[0].weatherchoice < 1045004000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Alaska/" + plotcode.str() + "_temp45_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Alaska/" + plotcode.str() + "_prec45_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1045004000 && parameter[0].weatherchoice < 1045005000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/HengduanMt/" + plotcode.str() + "_temp45_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/HengduanMt/" + plotcode.str() + "_prec45_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1045005000 && parameter[0].weatherchoice < 1045006000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/MountainTreeline/" + plotcode.str() + "_temp45_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/MountainTreeline/" + plotcode.str() + "_prec45_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1085001000 && parameter[0].weatherchoice < 1085002000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Siberia/" + plotcode.str() + "_temp85_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Siberia/" + plotcode.str() + "_prec85_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1085002000 && parameter[0].weatherchoice < 1085003000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Canada/" + plotcode.str() + "_temp85_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Canada/" + plotcode.str() + "_prec85_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1085003000 && parameter[0].weatherchoice < 1085004000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Alaska/" + plotcode.str() + "_temp85_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Alaska/" + plotcode.str() + "_prec85_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1085004000 && parameter[0].weatherchoice < 1085005000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/HengduanMt/" + plotcode.str() + "_temp85_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/HengduanMt/" + plotcode.str() + "_prec85_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 1085005000 && parameter[0].weatherchoice < 1085006000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/MountainTreeline/" + plotcode.str() + "_temp85_cd1.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/MountainTreeline/" + plotcode.str() + "_prec85_cd1.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 2000001000 && parameter[0].weatherchoice < 2000002000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Siberia/" + plotcode.str() + "_temp2.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Siberia/" + plotcode.str() + "_prec2.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 2000002000 && parameter[0].weatherchoice < 2000003000){
-			string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_temp2.csv";
-			string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_prec2.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		} else if (parameter[0].weatherchoice > 8000007000 && parameter[0].weatherchoice < 8000008000){
-			// string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_temp2.csv";
-			string tempbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/temp_long_NWCanada_transect_point_01.csv";
-			// string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_prec2.csv";
-			string precbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/prec_long_NWCanada_transect_point_01.csv";
-			strcpy(dateinametemp, tempbuf.c_str());
-			strcpy(dateinameprec, precbuf.c_str());
-		}
-
-        if (parameter[0].demlandscape) {
-            parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * 0;
-            parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * 1000;  // calculate changes per 1000 m to use later for tree growth estimation
+		if(parameter[0].simumode==2) {
 			
-            parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * 0;
-            parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * 1000;
+			// get current filename
+			const double lat = parameter[0].plotcentre_lat;
+			const double lon =  parameter[0].plotcentre_lon;
 
-			parameter[0].tempdiffort = 4.0;
-			parameter[0].tempdiffortmin = 4.0;
+			auto toHemisphere = [](double lat, double lon) {
+				char ns = (lat >= 0.0) ? 'N' : 'S';
+				char ew = (lon >= 0.0) ? 'E' : 'W';
+				return std::pair<char,char>(ns, ew);
+			};
 
-            parameter[0].precdiffort = parameter[0].precipitationlapse_year;
-            parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * 1000;
-        } else if (parameter[0].lineartransect) {
-            parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * parameter[0].locationshift;  // in m: negative values for northward/colder areas
-            parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (parameter[0].locationshift + (double)treerows);
-            parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * parameter[0].locationshift;
-            parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * (parameter[0].locationshift + (double)treerows);
-            parameter[0].tempdiffort = 0;
-            parameter[0].precdiffort = parameter[0].precipitationlapse_year * parameter[0].locationshift;
-            parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (parameter[0].locationshift + (double)treerows);
-        }
+			auto ns_ew = toHemisphere(lat, lon);
+			char ns = ns_ew.first;
+			char ew = ns_ew.second;
+
+			int lat_code = static_cast<int>(std::round(std::fabs(lat) * 100.0));
+			int lon_code = static_cast<int>(std::round(std::fabs(lon) * 100.0));
+			std::string latstring = std::to_string(lat_code);
+			std::string lonstring = std::to_string(lon_code);
+			// ensure at least 3 digits: "25" -> "025"
+			while (latstring.size() < 3) latstring.insert(latstring.begin(), '0');
+			while (lonstring.size() < 3) lonstring.insert(lonstring.begin(), '0');
+				
+				
+			std::string name = "glob_";
+			name += ns;
+			name += latstring;
+			name += "_";
+			name += ew;
+			name += lonstring;
+			name += ".csv";
+		
+		
+		/*	
+			std::string encode_lat(double lat) {
+				// decide hemisphere
+				char hemi = (lat < 0.0) ? 'S' : 'N';
+
+				// work with absolute value
+				double abs_lat = std::fabs(lat);
+
+				// convert to string with fixed 2 decimal places: 0.25 -> "0.25"
+				std::ostringstream os;
+				os << std::fixed << std::setprecision(2) << abs_lat;
+				std::string s = os.str();
+
+				// remove the dot: "0.25" -> "025"
+				s.erase(std::remove(s.begin(), s.end(), '.'), s.end());
+
+				// ensure at least 3 digits: "25" -> "025"
+				while (s.size() < 3) s.insert(s.begin(), '0');
+
+				// prepend hemisphere: "025" -> "N025" or "S025"
+				s.insert(s.begin(), hemi);
+
+				return s;
+			}
+			std:string lat_string=encode_lat(parameter[0].plotcentre_lat);
+			
+			std::string encode_lon(double lon) {
+				// decide hemisphere
+				char e_w = (lon < 0.0) ? 'W' : 'E';
+
+				// work with absolute value
+				double abs_lon = std::fabs(lon);
+
+				// convert to string with fixed 2 decimal places: 0.25 -> "0.25"
+				std::ostringstream os;
+				os << std::fixed << std::setprecision(2) << abs_lon;
+				std::string s = os.str();
+
+				// remove the dot: "0.25" -> "025"
+				s.erase(std::remove(s.begin(), s.end(), '.'), s.end());
+
+				// ensure at least 3 digits: "25" -> "025"
+				while (s.size() < 3) s.insert(s.begin(), '0');
+
+				// prepend hemisphere: "025" -> "E025" or "W025"
+				s.insert(s.begin(), e_w);
+
+				return s;
+			}
+			std:string lon_string=encode_lon(parameter[0].plotcentre_lon);
+		*/
+		
+			std::cout << "Coordinates translated to: " << name << " from Lat = " << parameter[0].plotcentre_lat << " & Lon " << parameter[0].plotcentre_lon << endl;
+			
+			
+			// set filenames for reading the data
+			string tempbuf = "/albedo/scratch/projects/p_lavesi_scratch/global_fire_calibration/LAVESI/input/temperature/temp_" + name;
+			string precbuf = "/albedo/scratch/projects/p_lavesi_scratch/global_fire_calibration/LAVESI/input/precipitation/prec_" + name;
+			strcpy(dateinametemp, tempbuf.c_str());
+			strcpy(dateinameprec, precbuf.c_str());
+			
+			// set coordinates for fire parameter input
+				// double plotcentre_lat;
+				// double plotcentre_lon;
+				// double plotcentre_lat_start;
+				// double plotcentre_lon_start;
+				// double plotcentre_lat_end;
+				// double plotcentre_lon_end;
+		} else {
+			if (parameter[0].weatherchoice > 1000001000 && parameter[0].weatherchoice < 1000002000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Siberia/" + plotcode.str() + "_temp1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Siberia/" + plotcode.str() + "_prec1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1000002000 && parameter[0].weatherchoice < 1000003000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Canada/" + plotcode.str() + "_temp1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Canada/" + plotcode.str() + "_prec1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1000003000 && parameter[0].weatherchoice < 1000004000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Alaska/" + plotcode.str() + "_temp1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Alaska/" + plotcode.str() + "_prec1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1000004000 && parameter[0].weatherchoice < 1000005000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/HengduanMt/" + plotcode.str() + "_temp1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/HengduanMt/" + plotcode.str() + "_prec1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1000005000 && parameter[0].weatherchoice < 1000006000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/MountainTreeline/" + plotcode.str() + "_temp1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/MountainTreeline/" + plotcode.str() + "_prec1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1026001000 && parameter[0].weatherchoice < 1026002000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Siberia/" + plotcode.str() + "_temp26_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Siberia/" + plotcode.str() + "_prec26_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1026002000 && parameter[0].weatherchoice < 1026003000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Canada/" + plotcode.str() + "_temp26_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Canada/" + plotcode.str() + "_prec26_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1026003000 && parameter[0].weatherchoice < 1026004000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Alaska/" + plotcode.str() + "_temp26_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/Alaska/" + plotcode.str() + "_prec26_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1026004000 && parameter[0].weatherchoice < 1026005000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/HengduanMt/" + plotcode.str() + "_temp26_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/HengduanMt/" + plotcode.str() + "_prec26_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1026005000 && parameter[0].weatherchoice < 1026006000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/MountainTreeline/" + plotcode.str() + "_temp26_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/MountainTreeline/" + plotcode.str() + "_prec26_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1045001000 && parameter[0].weatherchoice < 1045002000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Siberia/" + plotcode.str() + "_temp45_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Siberia/" + plotcode.str() + "_prec45_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1045002000 && parameter[0].weatherchoice < 1045003000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Canada/" + plotcode.str() + "_temp45_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Canada/" + plotcode.str() + "_prec45_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1045003000 && parameter[0].weatherchoice < 1045004000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Alaska/" + plotcode.str() + "_temp45_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/Alaska/" + plotcode.str() + "_prec45_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1045004000 && parameter[0].weatherchoice < 1045005000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/HengduanMt/" + plotcode.str() + "_temp45_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/HengduanMt/" + plotcode.str() + "_prec45_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1045005000 && parameter[0].weatherchoice < 1045006000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/MountainTreeline/" + plotcode.str() + "_temp45_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/MountainTreeline/" + plotcode.str() + "_prec45_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1085001000 && parameter[0].weatherchoice < 1085002000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Siberia/" + plotcode.str() + "_temp85_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Siberia/" + plotcode.str() + "_prec85_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1085002000 && parameter[0].weatherchoice < 1085003000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Canada/" + plotcode.str() + "_temp85_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Canada/" + plotcode.str() + "_prec85_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1085003000 && parameter[0].weatherchoice < 1085004000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Alaska/" + plotcode.str() + "_temp85_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/Alaska/" + plotcode.str() + "_prec85_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1085004000 && parameter[0].weatherchoice < 1085005000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/HengduanMt/" + plotcode.str() + "_temp85_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/HengduanMt/" + plotcode.str() + "_prec85_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 1085005000 && parameter[0].weatherchoice < 1085006000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/MountainTreeline/" + plotcode.str() + "_temp85_cd1.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2100_temp_prec/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/MountainTreeline/" + plotcode.str() + "_prec85_cd1.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 2000001000 && parameter[0].weatherchoice < 2000002000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Siberia/" + plotcode.str() + "_temp2.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Siberia/" + plotcode.str() + "_prec2.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 2000002000 && parameter[0].weatherchoice < 2000003000){
+				string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_temp2.csv";
+				string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_prec2.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			} else if (parameter[0].weatherchoice > 8000007000 && parameter[0].weatherchoice < 8000008000){
+				// string tempbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_temp2.csv";
+				string tempbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/temp_long_NWCanada_transect_point_01.csv";
+				// string precbuf = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/TransientMPI-ESM1_2_from100yrMeans/Canada/" + plotcode.str() + "_prec2.csv";
+				string precbuf = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/prec_long_NWCanada_transect_point_01.csv";
+				strcpy(dateinametemp, tempbuf.c_str());
+				strcpy(dateinameprec, precbuf.c_str());
+			}
+
+			if (parameter[0].demlandscape) {
+				parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * 0;
+				parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * 1000;  // calculate changes per 1000 m to use later for tree growth estimation
+				
+				parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * 0;
+				parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * 1000;
+
+				parameter[0].tempdiffort = 4.0;
+				parameter[0].tempdiffortmin = 4.0;
+
+				parameter[0].precdiffort = parameter[0].precipitationlapse_year;
+				parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * 1000;
+			} else if (parameter[0].lineartransect) {
+				parameter[0].tempjandiffort = parameter[0].temperaturelapse_jan * parameter[0].locationshift;  // in m: negative values for northward/colder areas
+				parameter[0].tempjandiffortmin = parameter[0].temperaturelapse_jan * (parameter[0].locationshift + (double)treerows);
+				parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * parameter[0].locationshift;
+				parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * (parameter[0].locationshift + (double)treerows);
+				parameter[0].tempdiffort = 0;
+				parameter[0].precdiffort = parameter[0].precipitationlapse_year * parameter[0].locationshift;
+				parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * (parameter[0].locationshift + (double)treerows);
+			}
+		} // end else from if global fire calibration or normal simumode
+
 
         getTemp(	//aktort, 
 					dateinametemp, 

@@ -45,28 +45,26 @@ void Treeestablishment(Parameter* parameter,
                 }
 
                 double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
-                // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
-                // (1.0 - 0.01) / (200.0 - 600.0) * ((double) plot_list[curposi].litterheight) + 1.495; // check litterheight implementation
-// cout << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
+
                 if (germinationlitterheightinfluence < 0.01) {// minimum 1%
                     germinationlitterheightinfluence = 0.01;
                 }
-// if(plot_list[curposi].litterheight0!=1000)
-	// cout << " ... after: " << plot_list[curposi].litterheight0 << " => " << germinationlitterheightinfluence << endl;
 
                 // calculate the thawing depth influence on the tree growth
                 double thawing_depthinfluence_help = 100;
-                if ( (parameter[0].thawing_depth == true) && (plot_list[curposi].maxthawing_depth < (speciestrait[seed.species].minactivelayer*10)) ) {  // TODO: check calculation only during spinup
+                if ( (parameter[0].thawing_depth == true) && (plot_list[curposi].maxthawing_depth < (speciestrait[seed.species].minactivelayer*10)) ) {
                     thawing_depthinfluence_help = (unsigned short) (100 * ((double)plot_list[curposi].maxthawing_depth / (speciestrait[seed.species].minactivelayer*10)));
                 }
-if (parameter[0].qualiyearlyvis == true) {// output for a quick check
-#pragma omp critical 
-cout << " ESTAB:: seed.species = " << seed.species 
-	<< " thawing_depthinfluence_help = " << thawing_depthinfluence_help 
-	<< " (speciestrait[seed.species].minactivelayer*10 = " << speciestrait[seed.species].minactivelayer*10 
-	<< " (double)plot_list[curposi].maxthawing_depth = " << (double)plot_list[curposi].maxthawing_depth
-	<< endl;
-}
+
+				if (parameter[0].qualiyearlyvis == true) {// output for a quick check
+				#pragma omp critical 
+				cout << " ESTAB:: seed.species = " << seed.species 
+					<< " thawing_depthinfluence_help = " << thawing_depthinfluence_help 
+					<< " (speciestrait[seed.species].minactivelayer*10 = " << speciestrait[seed.species].minactivelayer*10 
+					<< " (double)plot_list[curposi].maxthawing_depth = " << (double)plot_list[curposi].maxthawing_depth
+					<< endl;
+				}
+
                 // ... and weather.
                 // calculate the latest growth performance
                 // TODO: merge with general growth functions
@@ -140,17 +138,12 @@ cout << " ESTAB:: seed.species = " << seed.species
 				
 				double gfac = 1.0;
 				maxbw_help = gfac * maxbw_help;
-				// maxbw_help = gfac * (speciestrait[seed.species].mindiametergrowth + maxbw_help);
 				
-// #pragma omp critical 
-// cout << "mb: " << maxbw_help << endl;
                 // individual seedling growth depends on density
                 // define seedlings density value
                 double flaechengroesze = 0.0;
                 if (parameter[0].calcinfarea == 1)  // linearly increasing
-                    // flaechengroesze = maxbw_help * parameter[0].incfac / 100.0;
                     flaechengroesze = maxbw_help * parameter[0].incfac;
-                    // flaechengroesze =  tree.height/10;
                 else if (parameter[0].calcinfarea == 2)  // linearly increasing
                     flaechengroesze = maxbw_help * (2 / 3) * parameter[0].incfac / 100.0;
                 else if (parameter[0].calcinfarea == 3)  // linearly increasing
@@ -193,10 +186,9 @@ cout << " ESTAB:: seed.species = " << seed.species
                 // update growth
                 double basalgrowth_help = maxbw_help * (1.0 - density_help);
 				
-
 // if(basalgrowth_help>10)
 	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
-	
+
                 // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
                 double germinationprobability = 0.0;
 				if(maxbw_help > 0.0) {
@@ -297,7 +289,6 @@ cout << " ESTAB:: seed.species = " << seed.species
 */
 
 				if (rn < germinationprobability) {
-// cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
 					if ( (IsFiniteNumber2( basalgrowth_help ) == true) && (basalgrowth_help < 10.0) ) { // otherwise can not survive
 						if(maxbw_help > 0.0){
 							Tree tree;
@@ -320,7 +311,6 @@ cout << " ESTAB:: seed.species = " << seed.species
 
 							// tree height update
 							if (parameter[0].allometryfunctiontype == 3) {// logistic growth
-								// tree.height = 10 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*10))/speciestrait[seed.species].heightlogc)));
 								double meandbasaly2 = 2.818182;	
 								double slope = 260/meandbasaly2;
 								if(tree.dbasal < meandbasaly2) {// weighted mean
@@ -331,7 +321,6 @@ cout << " ESTAB:: seed.species = " << seed.species
 								} else {
 									tree.height = 10 * exp(speciestrait[seed.species].heightloga/(1+exp((speciestrait[seed.species].heightlogb-log(tree.dbasal*5*10))/speciestrait[seed.species].heightlogc)));
 								}
-			// cout << "H = " << tree.height << endl;
 							} else if (parameter[0].allometryfunctiontype == 1) {
 								tree.height = 10 * speciestrait[seed.species].dbasalheightalloslope * pow(maxbw_help, speciestrait[seed.species].dbasalheightalloexp);
 							} else {
@@ -366,8 +355,6 @@ cout << " ESTAB:: seed.species = " << seed.species
 					} else if ( (IsFiniteNumber2( basalgrowth_help ) == true) && (basalgrowth_help >= 10.0) ) {
 						cout << "tree initial growth unlimited" << basalgrowth_help << endl;
 					}
-                    // seed.dead = true;
-                    // seed_list.remove(i_seed);
                 }
 			}
         }  // seed_list loop

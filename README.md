@@ -12,6 +12,7 @@ This source code can be compiled to build the boreal forest dynamic vegetation s
  
 ### Authors:
 - Stefan Kruse - stefan.kruse@awi.de
+- Luca Farkas - luca.farkas@awi.de
 - Lisa Trimborn - lisa.trimborn@awi.de
 - Fenja Sevke - fenja.sevke@awi.de
 
@@ -34,4 +35,4 @@ This source code can be compiled to build the boreal forest dynamic vegetation s
 ## Further hints: 
 1. start in background not bound to your console session by "nohup ./LAVESI_WIND &"
 2. change the area size of simulation in /inc/declarations.h at "...treerows" and "...cols", values given in meters
-3. include environment and forcing files (available by the authors) and update path to them in code
+3. include environment and forcing files (available by the authors) and update according path variables in code

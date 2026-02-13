@@ -18,7 +18,7 @@ mortvis=0;							// (int 0,1) mortality of trees >200 cm
 
 // 0.2 -----> Output
 dataoutput=1;						// (int 0,1) write data to files 
-outputmode=99;  						// (int) choice of data output files=> all yearly output of currencies 
+outputmode=56;  						// (int) choice of data output files=> all yearly output of currencies 
 										// 0=="full"						=> all each year
 										// 1=="normal, gridded" 			=> every 20 years grid output
 										// 11=="normal,gridded,large area"	=> every 100 years grid output and for years 2000-2020 in yearly steps, followed by 10 year steps until the end of the simulation
@@ -32,6 +32,7 @@ outputmode=99;  						// (int) choice of data output files=> all yearly output o
 outputall=1;						// (int 0,1) sampling area determination
 										// 0==only central 20x20 m area 
 										// 1==output of all tree data on the plot
+simumode=2;						// (int 1,2) 1:normal, 2:glob_fire_calibration
 
 // 0.3 -----> Submodules
 thawing_depth=1;					// (int 0,1) Active layer calculation switch
@@ -40,7 +41,7 @@ demlandscape=1;						// (int 0,1) Read in of real landscape DEM (check that dime
 demresolution=20;					// (int) Resolution in m of DEM
 elevationoffset=0;
 slopetwiratio=0.50; 				// (double 0.00,1.00) ratio for growthimpact calculation of TWI and slope; can be 0.00 to 1.00 when 0==100%slope and 0%twi will be used 
-firemode=0;	//112;						// (int) Wildfire simulation switch
+firemode=112;						// (int) Wildfire simulation switch
 										// 0==no fires
 										// >0==fixed fire return interval, burning the whole plot at 100% intensity every x years (e.g. 50 means fire occurs every 50 years)
 										// 112==full dynamic fire module
@@ -83,13 +84,13 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-plotcentre_lat=60.0;			// (double) location of plot for global fire computation; degrees North for weatherchoice=1026003013 => 59.988
-plotcentre_lon=120.0;			// degrees East for weatherchoice=1026003013 => 112.984
+plotcentre_lat=0.25;
+plotcentre_lon=100.25;
 plotcentre_lat_end=70.0;		// if defined and also start then used for transect calculations
 plotcentre_lon_end=133.0;
-weatherchoice=8000007001;
+weatherchoice=1;
 temperaturelapse_jan=-0.0060; 			//0.004318;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
-// The lapse rate is the rate at which an atmospheric variable, normally temperature in Earth's atmosphere, falls with altitude.[1][2] Lapse rate arises from the word lapse, in the sense of a gradual fall. In dry air, the adiabatic lapse rate (i.e., decrease in temperature of a parcel of air that rises in the atmosphere without exchange energy with surrounding air) is 9.8 Â°C/km (5.4 Â°F per 1,000 ft). The saturated air lapse rate (SALR), or moist adiabatic lapse rate (MALR), is the decrease in temperature of a parcel of water-saturated air that rises in the atmosphere. It varies with the temperature and pressure of the parcel and is often in the range 3.6 to 9.2 Â°C/km (2 to 5 Â°F/1000 ft), as obtained from the International Civil Aviation Organization (ICAO). The  // https://en.wikipedia.org/wiki/Lapse_rate
+// The lapse rate is the rate at which an atmospheric variable, normally temperature in Earth's atmosphere, falls with altitude.[1][2] Lapse rate arises from the word lapse, in the sense of a gradual fall. In dry air, the adiabatic lapse rate (i.e., decrease in temperature of a parcel of air that rises in the atmosphere without exchange energy with surrounding air) is 9.8 °C/km (5.4 °F per 1,000 ft). The saturated air lapse rate (SALR), or moist adiabatic lapse rate (MALR), is the decrease in temperature of a parcel of water-saturated air that rises in the atmosphere. It varies with the temperature and pressure of the parcel and is often in the range 3.6 to 9.2 °C/km (2 to 5 °F/1000 ft), as obtained from the International Civil Aviation Organization (ICAO). The  // https://en.wikipedia.org/wiki/Lapse_rate
 									// Chukotka elevation:	0.001722
 									// .      . transect:	(-0.03304366/1000)=-0.00003304366 // ori per km
 									// Taimyr . transect:	(-0.007512627/1000)=-0.000007512627 // ori per km
@@ -106,7 +107,7 @@ temperaturelapse_jul=-0.0060;			//-0.006764;		// temperature lapse rate for janu
 									// Spasskaya Pad 100 km radius = -0.006764
 											
 precipitationlapse_year=0.20;			//0.197;	// precipitation lapse rate for whole year in mm prec per meter elevation
-//0.21 Â± 0.12% mâˆ’1
+//0.21 ± 0.12% m-1
 									// Chukotka elevation:	0.01709
 									// .      . transect:	(-0.06041807/1000)=-0.00006041807
 									// Taimyr . transect:	(-0.03461587/1000)=-0.00003461587 // ori per km
@@ -123,17 +124,17 @@ evapod=1.5;							// (double) Evapotranspiration based on Dolmann, 2004
 weathercalcgradient=0;				// (int 0,1) Approximation of temperature and precipitation values on a gradient depending on their latidudinal position
 										// ... 0==without a gradient
 										// ... 1==calculation of a linear gradient
-nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northernmost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625Â° N)
+nposmax=72.267;						// ... (double) (IF weathercalcgradient==1) the northernmost plot's position, if more than one plot is to be simulated along a transect (site ch17 is e.g. 72.2625° N)
 nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmost plot's position
 										// 111 km == 1 decimal degree
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// ... 0==synchronous forcing per plot
 										// ... 1==linearly changing from south to north
-n_weather_along_grid=21; 			// (int) 0 by default for only one location, >1 depending on scenario of available data and is for 10 km steps e.g. 30 km long, 3+1 grid cells
+n_weather_along_grid=0; 			// (int) 0 by default for only one location, >1 depending on scenario of available data and is for 10 km steps e.g. 30 km long, 3+1 grid cells
 locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
-windsource=998
+windsource=0;
 										// ... 0==random dispersal direction and not depending on wind speed
 										// ... 1==EraInterim
 										// ... 10==ERA5 (Lake Satagay 2000-2020 CE)
@@ -141,10 +142,10 @@ windsource=998
 										// ... 998==climate data 2 for all plots 25070 files meaning end 2020 CE
 									
 // 1.2 -----> Simulation run characteristics
-lastyearweatherdata=25071;	//25151;			// (int) determined by the input data series (final year + 1)
-simduration=25070;	//25150;					// (int) duration of the simulation period depending on the available weather data series
-startatyear=0;		//11700;					// (int) pushes the start year to this to exclude the prior time
-stopatyear=25071;	//25151;					// (int) simulation is stopped after this year
+lastyearweatherdata=24;			// (int) determined by the input data series (final year + 1)
+simduration=24;					// (int) duration of the simulation period depending on the available weather data series
+startatyear=0;					// (int) pushes the start year to this to exclude the prior time
+stopatyear=24;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
 										// ...   0==without spin up phase
@@ -171,10 +172,10 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 	
 // 1.4 -----> Dispersal
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
-seedintro=1;						// (int 0,1) seed input to simulated plot(s)
-yearswithseedintro=10; 			// ... (int) years of seed introduction at the beginning of each simulation
+seedintro=0;						// (int 0,1) seed input to simulated plot(s)
+yearswithseedintro=0; 			// ... (int) years of seed introduction at the beginning of each simulation
 seedintronumber=500;				// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
-seedintropermanent=1;				// (int 0,1) should seeds permanently introduced
+seedintropermanent=0;				// (int 0,1) should seeds permanently introduced
 seedintronumberpermanent=200;		//100;		    // ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
@@ -197,7 +198,7 @@ starttrees=0;						// (int) type of initial tree set up
 									// ... 12==CH17
 									// ... SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
 									// ... ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
-hinterland_maxlength=500; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
+hinterland_maxlength=0; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
 										
 // 1.4.2 -----> Pollen dispersal
 pollination=0;						// (int 0,1,2) allow pollen dispersal

@@ -87,15 +87,10 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
             if ((double)tree.height / 10 < (speciestrait[tree.species].densityvaluemaximumatheight * 2)) {
                 heightnkugeleinfluss =
                     heightnkugeleinfluss
-                    // + (sqrt(pow(speciestrait[tree.species].densityvaluemaximumatheight, 2) - pow((double)tree.height / 10 - speciestrait[tree.species].densityvaluemaximumatheight, 2))
 					+ (std::hypot(double(speciestrait[tree.species].densityvaluemaximumatheight), double((double)tree.height / 10 - speciestrait[tree.species].densityvaluemaximumatheight))
                        / speciestrait[tree.species].densityvaluemaximumatheight);
             }
 
-			// double sapl_mort_factor = 0.2104;
-			// double sapl_mort_factor = 0.39;
-            // double sapl_mort = (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor) * pow(exp((-1.0 * tree.dbasal) + (double)tree.dbasalmax / 1000), speciestrait[tree.species].mortyouthinfluenceexp);
-            // double sapl_mort = (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor) * pow(exp(-1.0 * tree.dbasal), speciestrait[tree.species].mortyouthinfluenceexp);
             double sapl_mort = (speciestrait[tree.species].mortyouth-parameter[0].sapl_mort_factor) * pow(exp(-3.0 * tree.dbasal), speciestrait[tree.species].mortyouthinfluenceexp)/10.0;
 				if(tree.dbasal>0.5) {
 					sapl_mort = sapl_mort * pow((1/(tree.dbasal+0.5)),2.0);
@@ -110,8 +105,6 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				}
             double age_mort = speciestrait[tree.species].mortage * agesmort * (10.0 * speciestrait[tree.species].mortbg);
             double growth_mort = speciestrait[tree.species].mgrowth * (1.0 - pow(wachstumrel, parameter[0].relgrowthmortinfluenceexp));
-            // double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert;
-            // double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert * tree.heightsubordination;
             double dens_mort = speciestrait[tree.species].mdensity * heightnkugeleinfluss * tree.densitywert * pow(tree.heightsubordination,2.0);
 			double lightavailability_mort = speciestrait[tree.species].mdensity * tree.densitywert / speciestrait[tree.species].lightdemand; // value between 0 and 1 // the lightdemand is 1, 2 or 3 and means that 3 is a shadow tolerant species, assuming more density is usually by larger trees or generally causing more shadow we can reduce this value, so that a value of 3 would reduce this to 0 additional mortality and 1
 				if(tree.dbasal>0.25) {
@@ -237,9 +230,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			
 			// Adding firedamage from cur_plot.fire (fire intensity), mediated by tree traits (only if firemode == 112)
 			if (parameter[0].firemode == 112 || parameter[0].fireintensitymode != 1.0) {
-				// treemortality = treemortality + (((double)tree.firedamage) * (1 / ((double)tree.height / 100) / 150)); // -> 10 cm tree firemort (fm) = fm*15, 100 cm = fm*1.5, 200 cm = fm*0.75
 				if( (double)tree.firedamage > 0 ) {
-					treemortality = treemortality + (double)tree.firedamage * pow((100*1/(double)tree.height), 0.5*0.5); //adapted version
+					treemortality = treemortality + (double)tree.firedamage * pow((100*1/(double)tree.height), 0.5*0.5);
 				}
 				
 			} else if ((parameter[0].firemode != 0) & (parameter[0].firemode != 112)) {
@@ -247,10 +239,6 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			} else if (parameter[0].firemode == 0) {
 				treemortality = treemortality;
 			}
-			
-			// if (tree.firedamage > 0) {
-			// cout << "treemortality: " << treemortality << " - tree.firedamage: " << tree.firedamage << endl;
-			// }
 
             if (treemortality > 1.0) {
                 treemortality = 1.0;
@@ -258,13 +246,8 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
                 treemortality = 0.0;
             }
 
-		// if((double)tree.age > 500) {
-// #pragma omp critical
-			// cout << tree.species <<   " - " <<  speciestrait[tree.species].mortbg << " - " << (double)tree.firedamage << " - " << (double)tree.height / 10 << " ..... " << treemortality << " <<< " << wachstumrel << " + " << tree.dbasal << " - " << tree.dbasalrel<< "..." << tree.dbreast << " - " << tree.dbreastrel << " | " << sapl_mort  << " - " <<   age_mort  << " - " <<   growth_mort  << " - " <<   dens_mort  << " - " <<   weather_mort  << " - " <<   dry_mort << " - " << windthrowmort <<  " - " << firecrowndamagemort <<  " - " << lightavailability_mort <<  " - " << pestoutbreakmort <<  " - " << agesmort <<  " - " << tree.soilhumidity << endl;
-		// }
-		
-		
-/*		 // output to check mortality
+// output to check mortality	
+/*
 #pragma omp critical
 {
 			FILE* fdir;
@@ -307,8 +290,6 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 }
 */
 
-// cout << "tree.pestinfection = " << tree.pestinfection << endl;
-
             // determine if a tree dies
 			if ( ((double) uniform.draw() < treemortality) || (tree.envirimpact <= 0) ) {
 				// add output for pest outbreak 
@@ -326,14 +307,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 				}
 				
                 tree.growing = false;
-				// if (tree.firedamage > 0)
-					// cout << "tree_list[tree_i].growing = " << tree_list[tree_i].growing;
-                tree_list.remove(tree_i);
-                // TODO: alternatively set variables to dead and not growing: negative ages could be used for rotting deadwood
-				// if (tree.firedamage > 0)
-					// cout << " = after death => tree_list[tree_i].growing = " << tree_list[tree_i].growing << endl;				
-			// cout << " ### tree.height= " << (double)tree.height/100 << " | sapl_mort_gmel=" << sapl_mort_gmel << " | age_mort=" << age_mort << " | growth_mort=" << growth_mort << " | dens_mort=" << dens_mort << " | weather_mort_gmel=" << weather_mort_gmel << " | dry_mort=" << dry_mort << " | tree.firedamage=" << (((double)tree.firedamage / 3) * (1 / ((double)tree.height / 100) / 150)) << " | Treemortg=" << Treemortg << endl;
-				
+                tree_list.remove(tree_i);				
             } else {
 				if(tree.pestinfection > 0) {// count not dead but damaged trees
 #pragma omp critical
@@ -422,12 +396,9 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			fprintf(filepointer, "%d;", pestcrowndamagesurvivor7);
 			fprintf(filepointer, "\n");
 		fclose(filepointer);
-		
-// cout << endl;
 }
 
 void Mortality(Parameter* parameter,
-               // int Jahr,
                int yearposition,
                vector<VectorList<Tree>>& world_tree_list,
                vector<VectorList<Seed>>& world_seed_list,
@@ -443,11 +414,11 @@ void Mortality(Parameter* parameter,
         aktort++;
 
 #pragma omp parallel default(shared)
-        {
+{
             RandomNumber<double> uniform(0, 1);
             double direction = 0.0;
             double velocity = 0.0;
-            unsigned int ripm = 0;//, cntr = 0;
+            unsigned int ripm = 0;
             double p = 0.0, kappa = pow(180 / (parameter[0].pollendirectionvariance * M_PI), 2), phi = 0.0, dr = 0.0, dx = 0.0, dy = 0.0;
             double I0kappa = 0.0;
             double pe = 0.01;
@@ -455,7 +426,6 @@ void Mortality(Parameter* parameter,
             double m = parameter[0].pollengregorym;
             vector<int> Vname;
             vector<double> Vthdpth;
-            int n_trees = 0;
 
             // mortality of seeds
 #pragma omp for schedule(guided)
@@ -466,8 +436,7 @@ void Mortality(Parameter* parameter,
                         seed.dead = true;
                         seed_list.remove(i);
                     } else {
-					// if (!seed.incone)
-					// cout << " seed survived on ground !!! " << endl;
+						// seed survived on ground
 					}
                 }
             }
@@ -477,8 +446,6 @@ void Mortality(Parameter* parameter,
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {
-					++n_trees;  // for calculating mean of computation times // TODO still necessary
-
 					if (tree.seednewly_produced > 0) {
 						bool pollinated = false;
 						for (int sna = 0; sna < tree.seednewly_produced; sna++) {
@@ -506,7 +473,6 @@ void Mortality(Parameter* parameter,
 														   m, 
 														   Vname, 
 														   Vthdpth, 
-														   n_trees, 
 														   randomnumberwind,
 														   randomnumberwindfather);
 									pollinated = true;
@@ -514,8 +480,6 @@ void Mortality(Parameter* parameter,
 
 								Seed seed;
 
-								// seed.yworldcoo = aktortyworldcoo;
-								// seed.xworldcoo = aktortxworldcoo;
 								seed.xcoo = tree.xcoo;
 								seed.ycoo = tree.ycoo;
 								// seed.namem = tree.name;
@@ -546,7 +510,7 @@ void Mortality(Parameter* parameter,
 					}
 				}
             }  // main tree loop on each core
-        }      // parallel region
+} // parallel region
         seed_list.consolidate();
 
         TreeMort(yearposition, weather_list, tree_list);

@@ -25,7 +25,6 @@ void Pollinationprobability(double x,
                             double m,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
-                            int outputtreesiter,
                             double randomnumberwind,
                             double randomnumberwindfather) {
     VectorList<Tree>& tree_list = *world_positon_b;
@@ -84,7 +83,7 @@ void Pollinationprobability(double x,
 					// pName.push_back(tree_copy.name);
 					thdpthinfl.push_back(100);
 					// data output for pollen flight analysis
-					if (parameter[0].pollination == 1 && parameter[0].omp_num_threads == 1 && outputtreesiter <= 5 && parameter[0].ivort >= 1046) {
+					if (parameter[0].pollination == 1 && parameter[0].omp_num_threads == 1 && parameter[0].ivort >= 1046) {
 						FILE* fdir;
 						char filenamechar[25];
 						sprintf(filenamechar, "IVORT%.4d_REP%.3d", parameter[0].ivort, parameter[0].repeati);

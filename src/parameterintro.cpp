@@ -928,6 +928,12 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].outputall);
     }
 
+    strcpy(uebergabestring, "simumode");
+    parameter[0].simumode = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].simumode);
+    }
+
     strcpy(uebergabestring, "pollination");
     parameter[0].pollination = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {
@@ -1126,7 +1132,7 @@ void Getspeciestraits(void) {
 void ReadFire(void) {
 	cout << "Global fire input started." << endl;
 
-	for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+	for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 
 		// get current location coordinates if in parameters not specified (==0)
 		if( (parameter[0].plotcentre_lat==0) & (parameter[0].plotcentre_lon==0) & (parameter[0].plotcentre_lat_end==0) & (parameter[0].plotcentre_lon_end==0) ) {
@@ -2422,7 +2428,7 @@ void ReadFire(void) {
 			parameter[0].plotcentre_lon = parameter[0].plotcentre_lon_start + i_step * (parameter[0].plotcentre_lon_end - parameter[0].plotcentre_lon);
 		}
 		
-		FILE *f_fire;
+		FILE *f_fire = NULL;
 		if(parameter[0].globalfireradius==300) {
 			f_fire = fopen("fireparameters_300km.csv","r"); 
 		} else if(parameter[0].globalfireradius==100) {

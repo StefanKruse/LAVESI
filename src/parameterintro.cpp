@@ -2422,7 +2422,7 @@ void ReadFire(void) {
 			parameter[0].plotcentre_lon = parameter[0].plotcentre_lon_start + i_step * (parameter[0].plotcentre_lon_end - parameter[0].plotcentre_lon);
 		}
 		
-		FILE *f_fire;
+		FILE *f_fire = NULL;
 		if(parameter[0].globalfireradius==300) {
 			f_fire = fopen("fireparameters_300km.csv","r"); 
 		} else if(parameter[0].globalfireradius==100) {

@@ -465,7 +465,7 @@ void IndividualTreeDensity(VectorList<Tree>& tree_list, vector<Envirgrid>& plot_
 
 void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif);
-	double transectstart = treerows - parameter[0].locationshift;
+	double transectstart = 0.0 - parameter[0].locationshift; // fixed from treerows in place of 0.0 that led to negative locations in any cases
 
 	if (parameter[0].thawing_depth == true) {
         RandomNumber<double> uniform(0, 1);
@@ -473,8 +473,9 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
 		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 			auto& pEnvirgrid = plot_list[kartenpos];
-			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
-			
+			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif)) / (double)parameter[0].sizemagnif; 
+			// double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif)); 
+
 			if (parameter[0].litterlayer==true) {
 				// stochastic disturbance effect
 				auto rn = uniform.draw();
@@ -541,10 +542,12 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 
 			unsigned short maxthawing_depth = 0;
 			if (parameter[0].n_weather_along_grid>0) { 
-				maxthawing_depth = 
-				1000.0 * (1.0 - daempfung) * 0.050*4 * std::sqrt(
-					weighmeanweathervar(weather_list[yearposition-1].degreday,ycooi-transectstart) + elefactor*(weighmeanweathervar(weather_list[yearposition-1].degredaymin,ycooi-transectstart) - weighmeanweathervar(weather_list[yearposition-1].degreday,ycooi-transectstart)) // reduction based on per 1000 m
-				)*8;
+				 maxthawing_depth = 
+				 1000.0 * (1.0 - daempfung) * 0.050*4 * std::sqrt(
+					 weighmeanweathervar(weather_list[yearposition-1].degreday,ycooi-transectstart) + elefactor*(weighmeanweathervar(weather_list[yearposition-1].degredaymin,ycooi-transectstart) - weighmeanweathervar(weather_list[yearposition-1].degreday,ycooi-transectstart)) // reduction based on per 1000 m
+				 )*8;
+				
+				// maxthawing_depth = 2000; // test unabhängiges ALT
 			} else {
 				maxthawing_depth = 
 				// 1000.0 * (1.0 - daempfung) * 0.050 * weather_list[yearposition].degreday_sqrt;  // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019)
@@ -553,6 +556,13 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 				)*8; // 1000 (scaling from m to mm)*edaphicfactor=0.050 (SD=0.019) // factor 4 assumed use for tuning ALT
 				// cout << maxthawing_depth << " | " << daempfung << " | " << weather_list[yearposition].degreday<< " & " << weather_list[yearposition].degredaymin << " & " << elefactor << " & " << ((double)pEnvirgrid.elevation / 10) << endl;
 			}
+			
+//#pragma omp critical
+//{
+//	cout << endl << "ycooi: " << ycooi << "maxthaw: " << maxthawing_depth << endl;    // ycooi sollte zwischen 0 und 353000 m sein.
+//}
+
+
 			
 			pEnvirgrid.maxthawing_depth = maxthawing_depth;
 			pEnvirgrid.Treedensityvalue = 0;
@@ -578,7 +588,7 @@ void ResetMaps(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& 
 void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weather>& weather_list) {
     const auto loop_size = static_cast<std::size_t>(treerows) * static_cast<std::size_t>(parameter[0].sizemagnif) * static_cast<std::size_t>(treecols)
                            * static_cast<std::size_t>(parameter[0].sizemagnif);
-	double transectstart = treerows - parameter[0].locationshift;
+	double transectstart = 0.0 - parameter[0].locationshift; // fixed from treerows in place of 0.0 that led to negative locations in any cases
 
 	if (parameter[0].snowcomputation == true && parameter[0].ivort>0) {
         // RandomNumber<double> uniform(0, 1);
@@ -587,7 +597,7 @@ void DistributeSnow(int yearposition, vector<Envirgrid>& plot_list, vector<Weath
 #pragma omp parallel for default(shared) schedule(guided)
 		for (std::size_t kartenpos = 0; kartenpos < loop_size; ++kartenpos) {
 			auto& pEnvirgrid = plot_list[kartenpos];
-			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif))  / (double)parameter[0].sizemagnif;
 
 			// global snow accumulation from weather cell
 				if (parameter[0].n_weather_along_grid>0) {

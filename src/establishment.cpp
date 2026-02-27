@@ -7,6 +7,7 @@ bool IsFiniteNumber2(double x) {
         return (x <= DBL_MAX && x >= -DBL_MAX); 
 } 
 
+
 void Treeestablishment(Parameter* parameter,
                        int yearposition,
                        vector<VectorList<Tree>>& world_tree_list,
@@ -24,7 +25,7 @@ void Treeestablishment(Parameter* parameter,
         vector<Envirgrid>& plot_list = *world_positon_k;
         aktort++;
 
-		double transectstart = treerows - parameter[0].locationshift;
+		double transectstart = 0.0 - parameter[0].locationshift; // fixed from treerows in place of 0.0 that led to negative locations in any cases
 
         RandomNumber<double> uniform(0, 1);
 #pragma omp parallel for default(shared) private(uniform) schedule(guided)
@@ -34,15 +35,27 @@ void Treeestablishment(Parameter* parameter,
                 // determine if the seed germinates, depending on the density around it and the litter layer
                 int i = seed.ycoo * parameter[0].sizemagnif / 1000;
                 int j = seed.xcoo * parameter[0].sizemagnif / 1000;
+				 
+				// --- Bounds check due to curposi Seg fault ---
+				if (i < 0 || j < 0) {
+					seed.dead = true;        // or just continue;
+					continue;
+				}
 
                 const auto curposi = static_cast<std::size_t>(i) * static_cast<std::size_t>(treecols) * static_cast<std::size_t>(parameter[0].sizemagnif)
                                      + static_cast<std::size_t>(j);
-
-                if ((parameter[0].demlandscape) && (plot_list[curposi].elevation == 32767)) {
-                    seed.dead = true;
-                    seed_list.remove(i_seed);
-                    continue;
-                }
+									 
+				// --- Final safety check for seg fault ---
+				if (curposi >= plot_list.size()) {
+					seed.dead = true;
+					continue;
+				}
+		
+                //if ((parameter[0].demlandscape) && (plot_list[curposi].elevation == 32767)) {
+                //    seed.dead = true;
+                //    seed_list.remove(i_seed);
+                //    continue;
+                //}
 
                 double germinationlitterheightinfluence = (1.0 - 0.01) / (0 - 1000.0) * (double) plot_list[curposi].litterheight0 + 1;
                 // double germinationlitterheightinfluence = (1.0 - 0.01) / (200.0 - 600.0) * 200 + 1.495;
@@ -59,6 +72,7 @@ void Treeestablishment(Parameter* parameter,
                 if ( (parameter[0].thawing_depth == true) && (plot_list[curposi].maxthawing_depth < (speciestrait[seed.species].minactivelayer*10)) ) {  // TODO: check calculation only during spinup
                     thawing_depthinfluence_help = (unsigned short) (100 * ((double)plot_list[curposi].maxthawing_depth / (speciestrait[seed.species].minactivelayer*10)));
                 }
+				
 if (parameter[0].qualiyearlyvis == true) {// output for a quick check
 #pragma omp critical 
 cout << " ESTAB:: seed.species = " << seed.species 
@@ -70,6 +84,8 @@ cout << " ESTAB:: seed.species = " << seed.species
                 // ... and weather.
                 // calculate the latest growth performance
                 // TODO: merge with general growth functions
+
+// weather_list[yearposition-1].weatherfactor	//array<array<double,22>,100>& data	
                 double maxbw_help = 0;
 
 				if (parameter[0].lineartransect) {
@@ -141,9 +157,7 @@ cout << " ESTAB:: seed.species = " << seed.species
 				double gfac = 1.0;
 				maxbw_help = gfac * maxbw_help;
 				// maxbw_help = gfac * (speciestrait[seed.species].mindiametergrowth + maxbw_help);
-				
-// #pragma omp critical 
-// cout << "mb: " << maxbw_help << endl;
+
                 // individual seedling growth depends on density
                 // define seedlings density value
                 double flaechengroesze = 0.0;
@@ -196,6 +210,7 @@ cout << " ESTAB:: seed.species = " << seed.species
 
 // if(basalgrowth_help>10)
 	// cout << "basalgrowth_help=" << basalgrowth_help << " ... maxbw= " << maxbw_help << " ... " << seed.species << " ... " << ((double)plot_list[curposi].elevation / 10) << " density_help= " << density_help << endl;
+		
 	
                 // minimal germination rate is roughly estimated // TODO: adjust for multiple species representation
                 double germinationprobability = 0.0;
@@ -248,7 +263,7 @@ cout << " ESTAB:: seed.species = " << seed.species
 				} else {
 					germinationprobability = speciestrait[seed.species].germinationrate;
 				}
-				
+
 				// snow impact
 				if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {
 					germinationprobability = germinationprobability + 0.3 * (plot_list[curposi].snowdepth/100);
@@ -297,7 +312,11 @@ cout << " ESTAB:: seed.species = " << seed.species
 */
 
 				if (rn < germinationprobability) {
-// cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
+//cout << "germ prob = " << germinationprobability << " --> random number = " << rn << endl;
+//cout << "maxbw_help = " << maxbw_help  << endl;
+//cout << "basalgrowth_help = " << basalgrowth_help  << endl;
+//cout << "basalgrowth_help = " << basalgrowth_help  << endl;
+//cout << "seed.species = " << seed.species  << endl;
 					if ( (IsFiniteNumber2( basalgrowth_help ) == true) && (basalgrowth_help < 10.0) ) { // otherwise can not survive
 						if(maxbw_help > 0.0){
 							Tree tree;
@@ -375,4 +394,3 @@ cout << " ESTAB:: seed.species = " << seed.species
         tree_list.consolidate();
     }
 }
-

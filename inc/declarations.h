@@ -5,8 +5,10 @@
 // plot dimensions rows==y, cols==x
 // constexpr unsigned int treerows = 100;	
 // constexpr unsigned int treecols = 100;
-constexpr unsigned int treerows = 200000; // transect length
+constexpr unsigned int treerows = 353060; // transect length = 70xx_dem.csv row count * 20(m)
 constexpr unsigned int treecols = 20;
+
+
 
 // parameter input
 constexpr unsigned int stringlengthmax = 255;

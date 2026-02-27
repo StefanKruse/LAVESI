@@ -83,11 +83,11 @@ omp_num_threads=128;					// (int 1,system specific maximum) Number of cores used
 
 // 1.1 -----> Weather data
 // 1.1.1 -----> Temperature and precipitation
-plotcentre_lat=60.0;			// (double) location of plot for global fire computation; degrees North for weatherchoice=1026003013 => 59.988
-plotcentre_lon=120.0;			// degrees East for weatherchoice=1026003013 => 112.984
-plotcentre_lat_end=70.0;		// if defined and also start then used for transect calculations
-plotcentre_lon_end=133.0;
-weatherchoice=8000007001;
+plotcentre_lat=65.0184;			// (double) location of plot for global fire computation; degrees North for weatherchoice=1026003013 => 59.988
+plotcentre_lon=-157.4927;			// degrees East for weatherchoice=1026003013 => 112.984
+plotcentre_lat_end=64.9817;		// if defined and also start then used for transect calculations
+plotcentre_lon_end=-164.9521;
+weatherchoice=8000007003;
 temperaturelapse_jan=-0.0060; 			//0.004318;		// temperature lapse rate for januar (coldest month) in degree celsius per meter elevation
 // The lapse rate is the rate at which an atmospheric variable, normally temperature in Earth's atmosphere, falls with altitude.[1][2] Lapse rate arises from the word lapse, in the sense of a gradual fall. In dry air, the adiabatic lapse rate (i.e., decrease in temperature of a parcel of air that rises in the atmosphere without exchange energy with surrounding air) is 9.8 °C/km (5.4 °F per 1,000 ft). The saturated air lapse rate (SALR), or moist adiabatic lapse rate (MALR), is the decrease in temperature of a parcel of water-saturated air that rises in the atmosphere. It varies with the temperature and pressure of the parcel and is often in the range 3.6 to 9.2 °C/km (2 to 5 °F/1000 ft), as obtained from the International Civil Aviation Organization (ICAO). The  // https://en.wikipedia.org/wiki/Lapse_rate
 									// Chukotka elevation:	0.001722
@@ -129,7 +129,7 @@ nposmin=72.2625; 					// ... (double) (IF weathercalcgradient==1) the southernmo
 lineartransect=0;					// (int 0,1) approximation of temperature and precipitation values on a south-north gradient on each simulated plot
 										// ... 0==synchronous forcing per plot
 										// ... 1==linearly changing from south to north
-n_weather_along_grid=21; 			// (int) 0 by default for only one location, >1 depending on scenario of available data and is for 10 km steps e.g. 30 km long, 3+1 grid cells
+n_weather_along_grid=33; 			// (int) 0 by default for only one location, >1 depending on scenario of available data and is for 10 km steps e.g. 30 km long, 3+1 grid cells
 locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
@@ -143,7 +143,7 @@ windsource=998
 // 1.2 -----> Simulation run characteristics
 lastyearweatherdata=25071;	//25151;			// (int) determined by the input data series (final year + 1)
 simduration=25070;	//25150;					// (int) duration of the simulation period depending on the available weather data series
-startatyear=0;		//11700;					// (int) pushes the start year to this to exclude the prior time
+startatyear=8000;		//11700;					// (int) pushes the start year to this to exclude the prior time
 stopatyear=25071;	//25151;					// (int) simulation is stopped after this year
 runs=1;								// (int) number of repeated simulations
 ivortmax=0;						// (int) spin up phase before the simulation period and maximum simulation years when stabilperiod==1 (s. below)
@@ -173,9 +173,9 @@ sizemagnif=5;						// (int) resolution of the density grid; a value of 5 determi
 // 1.4.1 -----> Seed dispersal type and handling + seed introduction
 seedintro=1;						// (int 0,1) seed input to simulated plot(s)
 yearswithseedintro=10; 			// ... (int) years of seed introduction at the beginning of each simulation
-seedintronumber=500;				// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
+seedintronumber=0;				// ... (int) number of seeds introduced per ha per year (FOR EACH yearswithseedintro) and plot
 seedintropermanent=1;				// (int 0,1) should seeds permanently introduced
-seedintronumberpermanent=200;		//100;		    // ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot
+seedintronumberpermanent=80;		//100;		    // ... (int) if seedintropermanent==1 number of seeds introduced per ha  per year and plot
 realseedconnect=0;					// (int 0,1) (IF mapylength>1) plot position for the initial seed introduction
 									// ... 0==into all plots along a transect
 									// ... 1==only southernmost plot
@@ -183,7 +183,7 @@ seedwinddispersalmode=2;			// (int 1,2) positions for introduced seeds
 									// ... 1==neg. exp. from south border 
 									// ... 2==randomly into the plot
 seedintro_miny=0;
-seedintro_maxy=0;	//190000;		// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
+seedintro_maxy=386100;	//190000;		// (unsigned int 1,max treerows-1) limit of area of seeintroduction in m; similar for x; only if !=0
 seedintro_minx=0;
 seedintro_maxx=0;
 seedtravelbetween=0;				// (int 0,1) (IF mapylength>1) seed travel between plots along a transect
@@ -197,7 +197,7 @@ starttrees=0;						// (int) type of initial tree set up
 									// ... 12==CH17
 									// ... SSAAAATTT: first 2 positions (S:SITE) define the site, next 4 positions (A:AREA)for area width (currently implemented: 0100 100x100, 0500 500x500 1000 1000x1000) and additionally final 3 positions (T:TRANSECT) for transects beginning in the south in kilometers (currently implemented: 100x500000 meters)
 									// ... ... don't give the last numbers TTT when quadratic area set up is needed (e.g. 120100)
-hinterland_maxlength=500; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
+hinterland_maxlength=0; 			// (int, 0=off,>10=on) maximum length in meters to the south for additional seed introduction from Hinterland
 										
 // 1.4.2 -----> Pollen dispersal
 pollination=0;						// (int 0,1,2) allow pollen dispersal

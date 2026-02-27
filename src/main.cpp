@@ -46,20 +46,26 @@ vector<double> wdir, wspd;
 // helper functions
 double weighmeanweathervararray(array<array<double,22>,100>& data, double posongrid, int speciesnumber) {// weighted mean value along grid
 	int firstgrid = floor(posongrid/10000);// steps of 10 km; variable posongrid in m
+	double meanval = 0;	
 	double posbetweenfirstandsecondgrid = (posongrid/10000)-firstgrid;
-	double meanval = 0;
+	
 	if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
 	   (firstgrid >= 0)) {// take values of closest weather data and calculate weighted mean
+
 		meanval = data[firstgrid][speciesnumber]*(1-posbetweenfirstandsecondgrid) + data[firstgrid+1][speciesnumber]*posbetweenfirstandsecondgrid;
+
 	} else if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
 			  (firstgrid < 0)) {// linear extrapolation below transect
 		meanval = (data[0][speciesnumber] - data[1][speciesnumber]) * (-1 * posongrid / 10000) + data[0][speciesnumber];
-// std::cout << "posongrid=" << posongrid << " + meanval=" << meanval << " + interpol=" << ((data[0] + data[1]) / 2)<< endl;
-	} else {
-		meanval = data[firstgrid][speciesnumber];
+
+	} else if (firstgrid > ((int)parameter[0].n_weather_along_grid) ) {
+		
+		meanval = data[(int)parameter[0].n_weather_along_grid][speciesnumber];
 	}
+
 	return(meanval);
 }
+
 double weighmeanweathervar(array<double,100>& data, double posongrid) {// weighted mean value along grid
 	int firstgrid = floor(posongrid/10000);// steps of 10 km; variable posongrid in m
 	double posbetweenfirstandsecondgrid = (posongrid/10000)-firstgrid;
@@ -70,9 +76,8 @@ double weighmeanweathervar(array<double,100>& data, double posongrid) {// weight
 	} else if((firstgrid < (int)parameter[0].n_weather_along_grid) & 
 			  (firstgrid < 0)) {// linear extrapolation below transect
 		meanval = (data[0] - data[1]) * (-1 * posongrid / 10000) + data[0];
-// std::cout << "posongrid=" << posongrid << " + meanval=" << meanval << " + interpol=" << ((data[0] + data[1]) / 2)<< endl;
-	} else {
-		meanval = data[firstgrid];
+	} else if (firstgrid > ((int)parameter[0].n_weather_along_grid) ) {
+		meanval = data[(int)parameter[0].n_weather_along_grid];
 	}
 	return(meanval);
 }
@@ -867,6 +872,7 @@ void fillElevations() {
         char puffer[6000];
         vector<double> elevationinput;
         elevationinput.resize(deminputdimension_y * deminputdimension_x, 0);
+// cout << " elevationinput.size() = " << elevationinput.size() << endl;
         int counter = -1;
         // read in line by line, and fill dem input vector (dimension e.g. 3x3 km each data point is pixel of 30 m resolution, so a 100x100 matrix with 10000
         // entries)
@@ -875,14 +881,19 @@ void fillElevations() {
 			while(allelements != NULL) {
                 counter++;  // rows
                 elevationinput[counter] = strtod(allelements, NULL);
+
 				allelements = strtok(NULL, " "); // set to next
-				// cout << elevationinput[counter] << " / ";
+// cout << elevationinput[counter] << " / ";
+				if((elevationinput[counter] < 9999) 
+					& (elevationinput[counter] >= 0) 
+				) {
 						if(elevationinput[counter] > ((double)parameter[0].maxeleinput/10)) {
 							parameter[0].maxeleinput = 10 * elevationinput[counter];
 						}
 						if(elevationinput[counter] < ((double)parameter[0].mineleinput/10)) {
 							parameter[0].mineleinput = 10 * elevationinput[counter];
 						}
+				}
 			}
         }
         fclose(f);

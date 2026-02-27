@@ -431,7 +431,7 @@ void Dataoutput(int t,
 		// Assigning annual firecells (counter for gridcells burned), fireintensitymax (maximum intensity), fireintensitymean (mean intensity)
 		for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
 			auto& pEnvirgrid = plot_list[kartenpos];
-			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+			double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif)); 
 			double xcooi = (double)kartenpos - (ycooi * ((double)treecols * (double)parameter[0].sizemagnif));	
 			
 			if(parameter[0].demlandscape & 
@@ -1561,7 +1561,7 @@ void Dataoutput(int t,
                 auto& tree = tree_list[tree_i];
 				
 				if (tree.growing == true) {
-					unsigned int yposi = (tree.ycoo / 1000) / stepsizeinm;
+					unsigned int yposi = ((double)tree.ycoo / 1000.0) / (double)stepsizeinm;
 
 					// aggregate variables
 					if (((double)tree.height / 10) > 130) {
@@ -1642,7 +1642,7 @@ void Dataoutput(int t,
             // data evaluation and output
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
                 auto& pEnvirgrid = plot_list[kartenpos];
-                double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+                double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif)); 
                 double xcooi = (double)kartenpos - (ycooi * ((double)treecols * (double)parameter[0].sizemagnif));
                 /*
 					if ((parameter[0].demlandscape
@@ -1733,7 +1733,7 @@ void Dataoutput(int t,
             // data evaluation and output
             for (unsigned long long int kartenpos = 0; kartenpos < ((unsigned long long int)treerows * (unsigned long long int)parameter[0].sizemagnif * (unsigned long long int)treecols * (unsigned long long int)parameter[0].sizemagnif); kartenpos = kartenpos + parameter[0].sizemagnif * parameter[0].demresolution) {
                 auto& pEnvirgrid = plot_list[kartenpos];
-                double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif));
+                double ycooi = floor((double)kartenpos / ((double)treecols * (double)parameter[0].sizemagnif)); 
                 double xcooi = (double)kartenpos - (ycooi * ((double)treecols * (double)parameter[0].sizemagnif));
 
 				if(parameter[0].demlandscape & 

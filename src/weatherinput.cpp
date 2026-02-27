@@ -248,20 +248,19 @@ ostringstream crugridnumber, transectname, rcpscenario, s4, s5, s6, s7, s8;
 		   parameter[0].weatherchoice == 501300058) 
 			rcpscenario << "85";
 
-		if(parameter[0].weatherchoice == 8000007001) { 
-			transectname << "7001";
+		if(parameter[0].weatherchoice == 8000007003) { 
+			transectname << "7003";
 			parameter[0].tempjandiffort = 0.0;
 			parameter[0].tempjuldiffort = 0.0;
             parameter[0].precdiffort = 0.0;
 		}
 		
-		if(parameter[0].weatherchoice == 8000007001)
+		if(parameter[0].weatherchoice == 8000007003)
 			rcpscenario << "";
 
         // string inputcrugridname = "input/transect_dev/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
         // string inputcrugridname = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/prec_long_" + transectname.str() + "_transect_point_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-        // string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/prec_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/prec_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/7003/prec_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
 
 		if(parameter[0].n_weather_along_grid > 0)
 			strcpy(dateinameprec, inputcrugridname.c_str());
@@ -456,21 +455,20 @@ void getTemp(	//int aktort,
 		   parameter[0].weatherchoice == 501300058) 
 			rcpscenario << "85cool";
 
-		if(parameter[0].weatherchoice == 8000007001) { 
-			transectname << "7001";
+		if(parameter[0].weatherchoice == 8000007003) { 
+			transectname << "7003";
 			parameter[0].tempjandiffort = 0.0;
 			parameter[0].tempjuldiffort = 0.0;
             parameter[0].precdiffort = 0.0;
 		}
 		
-		if(parameter[0].weatherchoice == 8000007001)
+		if(parameter[0].weatherchoice == 8000007003)
 		// temp_long_NWCanada_transect_point_73.csv
 			rcpscenario << "";
 
         // string inputcrugridname = "input/transect_dev/transect" + transectname.str() + "_" + crugridnumber.str() + "up_RCP" + rcpscenario.str() + "temp_501-3000.csv";
         // string inputcrugridname = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/temp_long_" + transectname.str() + "_transect_point_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-        // string inputcrugridname = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
-		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
+		string inputcrugridname = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_temp_prec/CircumArcticTransects/7003/temp_" + transectname.str() + "_" + crugridnumber.str() + rcpscenario.str() + ".csv";
 
 
 		if(parameter[0].n_weather_along_grid > 0)
@@ -745,7 +743,7 @@ void passWeather() {
 
 #pragma omp parallel for default(shared) schedule(guided)
         for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-			for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+			for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 				double jantempsum = 0;
 				double jantempsummin = 0;
 				double jultempsum = 0;
@@ -868,13 +866,13 @@ void passWeather() {
 						weather_list[iweather].janisothermrestriktionmin[i][species_counter]=1.0-fabs(speciestrait[species_counter].janthresholdtempcalcvalue*(weather_list[iweather].temp1monthmeanisomin[i]-speciestrait[species_counter].janthresholdtemp)/(-speciestrait[species_counter].janthresholdtemp));
 					}
 					
-					if (parameter[0].qualiyearlyvis == true) {// output for a quick check
+					 if (parameter[0].qualiyearlyvis == true) {// output for a quick check
 						cout << speciestrait[species_counter].number << "::" << speciestrait[species_counter].species << " => ";
 						cout << " ; wfac: " << weather_list[iweather].weatherfactor[i][species_counter];
 						cout << " ; wfacmin: " << weather_list[iweather].weatherfactormin[i][species_counter];
 						cout << " ; janthresh: " << weather_list[iweather].janisothermrestriktion[i][species_counter];
 						cout << " ; janthreshmin: " << weather_list[iweather].janisothermrestriktionmin[i][species_counter] << endl;
-					}
+					 }
 				}
 
 				// July temp for both
@@ -1657,7 +1655,7 @@ void passFire() {
         vector<Weather>& weather_list = *posw;
 
 
-		for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+		for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 			cout << "globalfireparameter[0].threshold_mild = " << globalfireparameter[0].threshold_mild[i]<< endl;
 
 			vector<double> fpr; // for all values per month
@@ -1808,7 +1806,7 @@ void Getdisturbanceimpact(vector<Weather>& weather_list) {// process pest climat
 		cout << " ... processing pestspecies (#=" <<  pestspeciesi << ") : " << pesttrait[pestspeciesi].pestspeciesname << endl;
 		// cout << "weather_list.size() = " << weather_list.size() << endl;
 		for (unsigned int iweather = 0; iweather < weather_list.size(); ++iweather) {
-			for (unsigned int i = 0; i < parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
+			for (unsigned int i = 0; i <= parameter[0].n_weather_along_grid; ++i) {// weather grids in weather list
 				// assess current weather and sum the probabilities (or mean?)
 				double pestoutbreakprobability_i = 0.0;
 				
@@ -1950,6 +1948,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 	plotcode << plotcodeNum;
 	cout << " ... plotcodeNum = " << plotcodeNum;
 	
+if(true) {
 	cout << endl << " ... reading wind data ... " << endl;
 	if ((parameter[0].windsource != 0) && (parameter[0].windsource != 4) && (parameter[0].windsource != 5)) {
         int findyr1 = 0, findyr2 = -100;//, jahr = 0;//, cntr = 0;
@@ -2623,7 +2622,7 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
 
         // jahr = 0;
     }
-	
+}
 	
 	
 	cout << endl << " ... reading temp/prec data ... " << endl;
@@ -2759,8 +2758,8 @@ extern void Weatherinput(Parameter* parameter, int stringlengthmax, vector<vecto
             parameter[0].tempjuldiffort = parameter[0].temperaturelapse_jul * 0;
             parameter[0].tempjuldiffortmin = parameter[0].temperaturelapse_jul * 1000;
 
-			parameter[0].tempdiffort = 4.0;
-			parameter[0].tempdiffortmin = 4.0;
+			parameter[0].tempdiffort = 1;     // PARAMETER_ANCHOR_JO
+			parameter[0].tempdiffortmin = 1;  // PARAMETER_ANCHOR_JO
 
             parameter[0].precdiffort = parameter[0].precipitationlapse_year;
             parameter[0].precdiffortmin = parameter[0].precipitationlapse_year * 1000;

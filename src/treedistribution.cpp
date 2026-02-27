@@ -16,7 +16,7 @@ int getrandomspeciesnumber() {
 	int rn_species = speciesinroi[rn_index];
 	
 	return(rn_species);
-};
+}
 
 void Seedin() {
     RandomNumber<double> uniform(0, 1);

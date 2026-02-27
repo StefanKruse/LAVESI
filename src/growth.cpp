@@ -5,7 +5,7 @@ using namespace std;
 
 double getMaxbasalwachstum(int yearposition, vector<Weather>& weather_list, Tree tree) {
     double maxbw_help = 0;
-	double transectstart = treerows - parameter[0].locationshift;
+	double transectstart = 0.0 - parameter[0].locationshift; // fixed from treerows in place of 0.0 that led to negative locations in any cases
 
     if (parameter[0].lineartransect) {
         if (parameter[0].thawing_depth) {
@@ -99,7 +99,7 @@ double getMaxbasalwachstum(int yearposition, vector<Weather>& weather_list, Tree
 
 double getMaxbreastwachstum(int yearposition, vector<Weather>& weather_list, Tree tree) {
     double maxbrw_help = 0;
-	double transectstart = treerows - parameter[0].locationshift;
+	double transectstart = 0.0 - parameter[0].locationshift; // fixed from treerows in place of 0.0 that led to negative locations in any cases
 
     if (parameter[0].lineartransect == true) {
         if (parameter[0].thawing_depth == true) {

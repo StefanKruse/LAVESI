@@ -7,7 +7,7 @@ using namespace std;
 void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<Tree>& tree_list) {
     // abiotic influence: calculation of the factors in a function that adds a mortality rate impact
 	// multiple species integration
-	double transectstart = treerows - parameter[0].locationshift;
+	double transectstart = 0.0 - parameter[0].locationshift; // fixed from treerows in place of 0.0 that led to negative locations in any cases
 
 	for (int species_counter = 1; species_counter < 99; species_counter++) {
 		if(speciestrait[species_counter].number == 0)
@@ -221,7 +221,7 @@ void TreeMort(int yearposition_help, vector<Weather>& weather_list, VectorList<T
 			if(dry_mort<0) {
 				dry_mort = 0;
 			}
-
+			
 			// snow mortality
 			double snow_mort = 0;
 			if(parameter[0].snowcomputation == true && parameter[0].ivort>0) {

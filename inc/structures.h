@@ -325,6 +325,7 @@ struct Parameter {
     double seeddescentg;
     double seeddescents;
     double distanceratio;
+	int windgridscomputation;
     int windsource;
     int boundaryconditions;
     double pollendirectionvariance;

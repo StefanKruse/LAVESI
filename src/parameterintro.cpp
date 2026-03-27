@@ -916,6 +916,12 @@ void Parameterinput(void) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].windsource);
     }
 
+    strcpy(uebergabestring, "windgridscomputation");
+    parameter[0].windgridscomputation = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].windgridscomputation);
+    }
+
     strcpy(uebergabestring, "boundaryconditions");
     parameter[0].boundaryconditions = (int)Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]);
     if (parameter[0].parameterinputvis == true) {

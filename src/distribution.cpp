@@ -3,10 +3,13 @@
 
 using namespace std;
 
-extern vector<double> wdir, wspd;
+// extern const int maxnumberwindelements = 1460;
+// extern vector<double> wdir, wspd;
+extern std::vector<std::vector<double>> wdir; // TODO fixed now for 5 elements == 500 km
+extern std::vector<std::vector<double>> wspd; // TODO fixed now for 5 elements == 500 km
 
 void Pollinationprobability(double x,
-                            double y,
+                            double y,	// tree.ycoo in m
                             Parameter* parameter,
                             vector<VectorList<Tree>>::iterator world_positon_b,
                             double direction,
@@ -26,6 +29,7 @@ void Pollinationprobability(double x,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
                             int outputtreesiter,
+                            double randomnumbergrid,
                             double randomnumberwind,
                             double randomnumberwindfather) {
     VectorList<Tree>& tree_list = *world_positon_b;
@@ -48,10 +52,28 @@ void Pollinationprobability(double x,
     thdpthinfl.clear();
     thdpthinfl.shrink_to_fit();
 
+	// based on location determine which wind file grid data randomly to pick here from
+	// random number then either floor pos by 100 km steps 0 or 1
+	unsigned short int gridpos_selection = 0;
+	unsigned short int gridpos_base = floor(y / 100000);
+	double gridpos_relative = ( (int)y % 100000)/100000; // should be between 0 and 1
+	// weighted mean
+	if(randomnumbergrid < gridpos_relative) {
+		gridpos_selection = gridpos_base;
+	} else {
+		gridpos_selection = gridpos_base + 1;
+	}
+	// if (gridpos_selection < 0) {
+		// gridpos_selection = 0;
+	// }
+	if (gridpos_selection > 4) {
+		gridpos_selection = 4;
+	}
+
     if (parameter[0].windsource == 1 || parameter[0].windsource == 999) {  // EraInterim
-        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
-        direction = M_PI * (wdir.at(ripm) / 180);
-        velocity = wspd.at(ripm);
+        ripm = (int)(0.5 * wdir[gridpos_selection].size() + wdir[gridpos_selection].size() / 6 * (1 - 2 * randomnumberwind));
+        direction = M_PI * (wdir[gridpos_selection].at(ripm) / 180);
+        velocity = wspd[gridpos_selection].at(ripm);
     } else {  // random
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.777;
@@ -130,18 +152,46 @@ double getEntfernung(double D, double ratiorn_help) {
     return (entf_help);
 }
 
-void Seedwinddispersal(double rn, double& dx, double& dy, double& windspeed, double& winddirection, double parhei, int seedspec, double randomnumberwind) {
+void Seedwinddispersal(	double y,
+						double rn, 
+						double& dx, 
+						double& dy, 
+						double& windspeed, 
+						double& winddirection, 
+						double parhei, 
+						int seedspec, 
+						double randomnumbergrid,
+						double randomnumberwind
+						) {
     int ripm = 0;
     double dispersaldistance = 0;
     double maxdispersaldistance = 0;
     double direction = 0.0;
     double velocity = 0.0;
 
+	// based on location determine which wind file grid data randomly to pick here from
+	// random number then either floor pos by 100 km steps 0 or 1
+	unsigned short int gridpos_selection = 0;
+	unsigned short int gridpos_base = floor(y / 100000);
+	double gridpos_relative = ( (int)y % 100000)/100000; // should be between 0 and 1
+	// weighted mean
+	if(randomnumbergrid < gridpos_relative) {
+		gridpos_selection = gridpos_base;
+	} else {
+		gridpos_selection = gridpos_base + 1;
+	}
+	// if (gridpos_selection < 0) {
+		// gridpos_selection = 0;
+	// }
+	if (gridpos_selection > 4) {
+		gridpos_selection = 4;
+	}
+
     if (parameter[0].windsource == 1 || parameter[0].windsource == 999 || parameter[0].windsource == 998) {  // EraInterim
         // choose a month between May and September:
-        ripm = (int)(0.5 * wdir.size() + wdir.size() / 6 * (1 - 2 * randomnumberwind));
-        direction = M_PI * (wdir.at(ripm) / 180);
-        velocity = (wspd.at(ripm));
+        ripm = (int)(0.5 * wdir[gridpos_selection].size() + wdir[gridpos_selection].size() / 6 * (1 - 2 * randomnumberwind));
+        direction = M_PI * (wdir[gridpos_selection].at(ripm) / 180);
+        velocity = (wspd[gridpos_selection].at(ripm));
     } else {  // random
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
         velocity = 2.7777;

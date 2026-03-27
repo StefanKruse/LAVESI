@@ -80,8 +80,9 @@ void Seeddispersal(//int jahr,
                     double jquer = 0.0;
                     double iquer = 0.0;
 
+                    double randomnumbergrid = uniform.draw();
                     double randomnumberwind = uniform.draw();
-                    Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double)seed.releaseheight / 10, seed.species, randomnumberwind);
+                    Seedwinddispersal(seed.ycoo/1000, ratiorn, jquer, iquer, velocity, wdirection, (double)seed.releaseheight / 10, seed.species, randomnumbergrid, randomnumberwind);
 
                     // disperal limitation by elevation
                     if (parameter[0].demlandscape) {

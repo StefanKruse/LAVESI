@@ -2,6 +2,9 @@ HEADERS=$(wildcard inc/*.h)
 FLAGS=-O3 -flto -fno-fat-lto-objects -std=c++11 -I inc -Wall -pedantic -Wextra -Wno-reorder
 OBJS=$(patsubst src/%.cpp,build/%.o,$(wildcard src/*.cpp))
 
+CXX+= -mcmodel=large
+FLAGS+= -mcmodel=large
+
 .PHONY: all clean cleanoutput debug debugparallel format parallel
 
 all: LAVESI_WIND

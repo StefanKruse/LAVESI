@@ -17,9 +17,10 @@ extern vector<vector<Weather>> world_weather_list;
 // extern vector<int> globalyears;
 extern const int maxnumberyears = 25151;
 extern const int maxnumberwindelements = 1460;
-extern std::array<int, maxnumberyears> globalyears;
-extern std::array<std::array<double, maxnumberwindelements>, maxnumberyears> windspd;
-extern std::array<std::array<double, maxnumberwindelements>, maxnumberyears> winddir;
+// extern std::array<std::array<int, 5>, maxnumberyears> globalyears;
+extern std::array<std::array<int, maxnumberyears>, 5> globalyears;
+extern std::array<std::array<std::array<double, 5>, maxnumberwindelements>, maxnumberyears> windspd;
+extern std::array<std::array<std::array<double, 5>, maxnumberwindelements>, maxnumberyears> winddir;
 
 /*
 void process_month_temp_data() {
@@ -2458,173 +2459,240 @@ if(true) {
             foldername << "wind_Chukotka";
 		}
 
-#pragma omp parallel for
-        for (int t = 0; t < parameter[0].simduration; ++t) {
-			// std::vector<double> wdir_local;//(1461);
-			// std::vector<double> wspd_local;//(1461);
-            // cntr = 0;
-			string filename;
-			string filename_in;
-			std::ostringstream ss;
-			string item;
+		// determine number of wind input files
+		int max_cells = 1;
+		if ( (parameter[0].windgridscomputation == 1) & (parameter[0].n_weather_along_grid > 0) ) {
+			max_cells = static_cast<int>(treerows/100000) + 1; // determine necessary wind grid cells for wind sensing by individuals in 100 km steps
+		}
 
-            int year_local = parameter[0].startjahr + t;
+		// progress bar implementation : total iterations
+		const int total_iters = max_cells * parameter[0].simduration;
+		int completed = 0;   // shared counter
 
-            if (parameter[0].windsource == 1) {
-                findyr1 = 1979;
-                findyr2 = 2018;
-            } else if (parameter[0].windsource == 10) {
-				findyr1 = 2000;
-                findyr2 = 2020;
-			} else if (parameter[0].windsource == 999) {
-				findyr1 = 1;
-				findyr2 = 25150;
-			} else if (parameter[0].windsource == 998) {
-				findyr1 = 1;
-				findyr2 = 25070;
-			}
-
-            ss.str("");
-            ss.clear();
-			
-			std::ostringstream path; 
-			long int plotcodeNum_scenario;
-			plotcodeNum_scenario = parameter[0].weatherchoice % 100000000;
-	
-			if (plotcodeNum_scenario < 100000) {
-				path << "past25kyr_until2020_wind";
-			} else if (plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000) {
-				path << "past25kyr_until2100_wind";
-			} else if (plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000) {
-				path << "past25kyr_until2100_wind";
-			} else if (plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000) {
-				path << "past25kyr_until2100_wind";
-			}
-			
-			std::ostringstream region;
-			
-			if (plotcodeNum > 1000 && plotcodeNum < 2000) {
-				region << "Siberia";
-			} else if (plotcodeNum > 2000 && plotcodeNum < 3000) {
-				region << "Canada";
-			} else if (plotcodeNum > 3000 && plotcodeNum < 4000) {
-				region << "Alaska";
-			} else if (plotcodeNum > 5000 && plotcodeNum < 6000) {
-				region << "MountainTreeline";
-			} else if (plotcodeNum > 7000 && plotcodeNum < 8000) {
-				region << "CircumArcticTransects";
-			}
-			
-			
-            if ((year_local < findyr2 + 1) && (year_local > findyr1 - 1)) {
-                ss << year_local;
-
-                if(parameter[0].n_weather_along_grid == 0) {// no transect computation
-					if (parameter[0].windsource == 1) {
-						filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
-					} else if (parameter[0].windsource == 10) {
-						filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
-					} else if (parameter[0].windsource == 999 && plotcodeNum_scenario < 100000){
-						// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-						filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-					} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000){
-						// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-						filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-					} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000){
-						// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-						filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-					} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000){
-						// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-						filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-					} else if (parameter[0].windsource == 998) {
-						// filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM1_2_from100yrMeans/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-						filename = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
-					}
-				} else { // transect computation
-					if (parameter[0].windsource == 998) {
-						// filename = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + region.str() + "/winddata_" + foldername.str() + "_rounded.dat";
-						filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + region.str() + "/winddata_" + foldername.str() + ".dat";
-						if((year_local==1) || (year_local==findyr2)) {
-							cout << " Wind data input file: " << filename << endl;
-						}
-					}
-				}
-
-				const int lines_per_year = 1460;
-				int start_line = ((year_local - 1) * lines_per_year) + 1;
-				int end_line = year_local * lines_per_year;
-				ifstream fileinp(filename.c_str());
-				if (!fileinp) {
-					std::cerr << "Error: Could not open file " << filename << std::endl;
-					std::exit(EXIT_FAILURE); // Or: return 1; if in main()
-				}
-				std::string line;
-				int cntr = 0;
-                // while (fileinp >> item) {
-                    // cntr++;
-					// float value = stof(item);
-                    // if (cntr % 2) {
-                        // if (value >= 0 && value <= 360) {
-                            // wdir.push_back(value);
-                        // } else {
-                            // wdir.push_back(0);
-                        // }
-                    // } else {
-                        // wspd.push_back(value);
-                    // }
-                // }
-				while (std::getline(fileinp, line)) {
-					cntr++;
-					if (cntr < start_line)
-						continue;
-					if (cntr > end_line)
-						break;
-
-					std::istringstream iss(line);
-					float value1, value2;
-					iss >> value1 >> value2;
-
-					// First column processing (wdir_local)
-					if (value1 >= 0 && value1 <= 360) {
-						// wdir_local.push_back(value1);
-						winddir[t][cntr-start_line] = value1;
-					} else {
-						// wdir_local.push_back(0);
-						winddir[t][cntr-start_line] = 0;
-					}
-
-					// Second column processing (wspd_local)
-					// wspd_local.push_back(value2);
-					windspd[t][cntr-start_line] = value2;
-					
-					if (cntr == start_line) {
-						globalyears[t] = year_local;
-						// cout << year_local << " ";
-					}
+#pragma omp parallel for collapse(2)
+		for (int windgrid_i = 0; windgrid_i < max_cells; ++windgrid_i) { // to loop over the 5 potential wind cells if parameter[0].n_weather_along_grid > 0
+			for (int t = 0; t < parameter[0].simduration; ++t) {
+				if (t == 1) {
+					cout << "processing wind grid file: " << windgrid_i << " of " << max_cells << endl;
 				}
 				
-				/* // join all together per year in the global structure
-                if (cntr > 0) {
-                    // windspd.push_back(wspd);
-                    // winddir.push_back(wdir);
-                    // globalyears.push_back(year_local);
-					windspd[t] = wspd_local;
-                    winddir[t] = wdir_local;
-                    globalyears[t] = year_local;
-                } */
+				// std::vector<double> wdir_local;//(1461);
+				// std::vector<double> wspd_local;//(1461);
+				// cntr = 0;
+				string filename;
+				string filename_in;
+				std::ostringstream ss;
+				std::ostringstream ss_grid;
+				string item;
 
-                // wspd.clear();
-                // wdir.clear();
-                // wspd.shrink_to_fit(); // for performance keep the memory allocation
-                // wdir.shrink_to_fit();
-            }
-        }
+				int year_local = parameter[0].startjahr + t;
 
+				if (parameter[0].windsource == 1) {
+					findyr1 = 1979;
+					findyr2 = 2018;
+				} else if (parameter[0].windsource == 10) {
+					findyr1 = 2000;
+					findyr2 = 2020;
+				} else if (parameter[0].windsource == 999) {
+					findyr1 = 1;
+					findyr2 = 25150;
+				} else if (parameter[0].windsource == 998) {
+					findyr1 = 1;
+					findyr2 = 25070;
+				}
+
+				ss.str("");
+				ss.clear();
+				ss_grid.str("");
+				ss_grid.clear();
+				
+				std::ostringstream path; 
+				long int plotcodeNum_scenario;
+				plotcodeNum_scenario = parameter[0].weatherchoice % 100000000;
+		
+				if (plotcodeNum_scenario < 100000) {
+					path << "past25kyr_until2020_wind";
+				} else if (plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000) {
+					path << "past25kyr_until2100_wind";
+				} else if (plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000) {
+					path << "past25kyr_until2100_wind";
+				} else if (plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000) {
+					path << "past25kyr_until2100_wind";
+				}
+				
+				std::ostringstream region;
+				
+				if (plotcodeNum > 1000 && plotcodeNum < 2000) {
+					region << "Siberia";
+				} else if (plotcodeNum > 2000 && plotcodeNum < 3000) {
+					region << "Canada";
+				} else if (plotcodeNum > 3000 && plotcodeNum < 4000) {
+					region << "Alaska";
+				} else if (plotcodeNum > 5000 && plotcodeNum < 6000) {
+					region << "MountainTreeline";
+				} else if (plotcodeNum > 7000 && plotcodeNum < 8000) {
+					// region << "CircumArcticTransects";
+					region << "Transects";
+				}
+				
+				
+				if ((year_local < findyr2 + 1) && (year_local > findyr1 - 1)) {
+					ss << year_local;
+					ss_grid << windgrid_i;
+
+					if(parameter[0].n_weather_along_grid == 0) {// no transect computation
+						if (parameter[0].windsource == 1) {
+							filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_EraInterim.dat";
+						} else if (parameter[0].windsource == 10) {
+							filename = "input/" + foldername.str() + "/winddata" + ss.str() + "_ERA5.dat";
+						} else if (parameter[0].windsource == 999 && plotcodeNum_scenario < 100000){
+							// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+							filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+						} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 26000000 && plotcodeNum_scenario < 27000000){
+							// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+							filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp126/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+						} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 45000000 && plotcodeNum_scenario < 46000000){
+							// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+							filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp245/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+						} else if (parameter[0].windsource == 999 && plotcodeNum_scenario > 85000000 && plotcodeNum_scenario < 86000000){
+							// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+							filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/CMIP6_ssp585/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+						} else if (parameter[0].windsource == 998) {
+							// filename = "/albedo/scratch/projects/p_lavesi_scratch/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/TransientMPI-ESM1_2_from100yrMeans/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+							filename = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + region.str() + "/" + foldername.str() + "/winddata_" + ss.str() + ".dat";
+						}
+					} else { // transect computation
+						// old local version:
+						// if (parameter[0].windsource == 998) {
+							// filename = "/bioing/user/stkruse/LAVESI_transect_fire_fusion/Branch_Fire/input/transect_dev_NA/" + region.str() + "/winddata_" + foldername.str() + "_rounded.dat";
+							// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + region.str() + "/winddata_" + foldername.str() + ".dat";
+							// if((year_local==1) || (year_local==findyr2)) {
+								// cout << " Wind data input file: " << filename << endl;
+							// }
+						// }
+						if (parameter[0].windsource == 998) {
+							// /albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/past25kyr_until2020_wind/TransientMPI-ESM_Glac1d-P3_fromYearlyData/Transects/7002
+							filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/"+ path.str() + "/TransientMPI-ESM_Glac1d-P3_fromYearlyData/" + region.str()  + "/" + foldername.str() + "/winddata_" + ss_grid.str() + ".dat";
+							// five choices == 100 km spacing
+							// hard coded right now, make dynamic based on user setting or fixed with length of set transect!
+							// if (windgrid_i == 0) {
+								// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + "TransientMPI-ESM_Glac1d-P3_fromYearlyData" + "/Transects" + "/7002" + "/winddata_1.dat";
+							// } else if (windgrid_i == 1) {
+								// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + "TransientMPI-ESM_Glac1d-P3_fromYearlyData" + "/Transects" + "/7002" + "/winddata_14.dat";
+							// } else if (windgrid_i == 2) {
+								// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + "TransientMPI-ESM_Glac1d-P3_fromYearlyData" + "/Transects" + "/7002" + "/winddata_27.dat";
+							// } else if (windgrid_i == 3) {
+								// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + "TransientMPI-ESM_Glac1d-P3_fromYearlyData" + "/Transects" + "/7002" + "/winddata_40.dat";
+							// } else if (windgrid_i == 4) {
+								// filename = "/albedo/work/projects/p_lavesi/LAVESI_input/LAVESI_input_climate_data/" + path.str() + "/" + "TransientMPI-ESM_Glac1d-P3_fromYearlyData" + "/Transects" + "/7002" + "/winddata_53.dat";
+							// }
+							if((year_local==1) || (year_local==findyr2)) {
+								cout << " Wind data input file: " << filename << endl;
+							}
+						}
+					}
+
+					const int lines_per_year = 1460;
+					int start_line = ((year_local - 1) * lines_per_year) + 1;
+					int end_line = year_local * lines_per_year;
+					ifstream fileinp(filename.c_str());
+					if (!fileinp) {
+						std::cerr << "Error: Could not open file " << filename << std::endl;
+						std::exit(EXIT_FAILURE); // Or: return 1; if in main()
+					}
+					std::string line;
+					int cntr = 0;
+					// while (fileinp >> item) {
+						// cntr++;
+						// float value = stof(item);
+						// if (cntr % 2) {
+							// if (value >= 0 && value <= 360) {
+								// wdir.push_back(value);
+							// } else {
+								// wdir.push_back(0);
+							// }
+						// } else {
+							// wspd.push_back(value);
+						// }
+					// }
+					while (std::getline(fileinp, line)) {
+						cntr++;
+						if (cntr < start_line)
+							continue;
+						if (cntr > end_line)
+							break;
+
+						std::istringstream iss(line);
+						float value1, value2;
+						iss >> value1 >> value2;
+
+						// First column processing (wdir_local)
+						if (value1 >= 0 && value1 <= 360) {
+							// wdir_local.push_back(value1);
+							winddir[t][cntr-start_line][windgrid_i] = value1;
+						} else {
+							// wdir_local.push_back(0);
+							winddir[t][cntr-start_line][windgrid_i] = 0;
+						}
+
+						// Second column processing (wspd_local)
+						// wspd_local.push_back(value2);
+						windspd[t][cntr-start_line][windgrid_i] = value2;
+						
+						// if ( (cntr == start_line) && (windgrid_i == 0) ) { // only for the first time a wind grid is read
+						if ( cntr == start_line ) { // only for the first time a wind grid is read
+							globalyears[windgrid_i][t] = year_local;
+							// cout << year_local << " ";
+						}
+					}
+					
+					/* // join all together per year in the global structure
+					if (cntr > 0) {
+						// windspd.push_back(wspd);
+						// winddir.push_back(wdir);
+						// globalyears.push_back(year_local);
+						windspd[t] = wspd_local;
+						winddir[t] = wdir_local;
+						globalyears[t] = year_local;
+					} */
+
+					// wspd.clear();
+					// wdir.clear();
+					// wspd.shrink_to_fit(); // for performance keep the memory allocation
+					// wdir.shrink_to_fit();
+					
+					// update progress bar (only one thread at a time)
+#pragma omp atomic
+					++completed;
+
+					// print progress roughly every N iterations (avoid spam)
+					if (completed % 1000 == 0 || completed == total_iters) {
+#pragma omp critical
+{
+							double progress = (double)completed / total_iters;
+							int bar_width = 50;
+							int pos = progress * bar_width;
+
+							std::cerr << "\r[";
+							for (int i = 0; i < bar_width; ++i) {
+								if (i < pos) std::cerr << "=";
+								else if (i == pos) std::cerr << ">";
+								else std::cerr << " ";
+							}
+							std::cerr << "] " << std::fixed << std::setprecision(1)
+									  << (progress * 100) << "% (" << completed
+									  << "/" << total_iters << ")";
+							std::cerr.flush();
+}
+					}
+				}
+			} // end grid cell
+		} //end multiple grid cells
         // jahr = 0;
     }
-}
-	
-	
+	std::cerr << std::endl; // progress bar : finish the line
+} // end wind section
+		
 	cout << endl << " ... reading temp/prec data ... " << endl;
     int aktort = 0;
     for (vector<vector<Weather>>::iterator posw = world_weather_list.begin(); posw != world_weather_list.end(); posw++) {

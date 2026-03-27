@@ -484,6 +484,7 @@ void Mortality(Parameter* parameter,
 						for (int sna = 0; sna < tree.seednewly_produced; sna++) {
 							if (uniform.draw() >= speciestrait[tree.species].seedconemort) {
 								if (!pollinated && ((parameter[0].pollination == 1 && parameter[0].ivort > 1045) || (parameter[0].pollination == 9))) {
+									double randomnumbergrid = uniform.draw();
 									double randomnumberwind = uniform.draw();
 									double randomnumberwindfather = uniform.draw();
 									Pollinationprobability((double)tree.xcoo / 1000, 
@@ -507,6 +508,7 @@ void Mortality(Parameter* parameter,
 														   Vname, 
 														   Vthdpth, 
 														   n_trees, 
+														   randomnumbergrid,
 														   randomnumberwind,
 														   randomnumberwindfather);
 									pollinated = true;

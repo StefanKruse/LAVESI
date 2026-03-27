@@ -81,15 +81,18 @@ void Pollinationprobability(double x,
                             vector<int>& pName,
                             vector<double>& thdpthinfl,
                             int outputtreesiter,
+                            double randomnumbergrid,
                             double randomnumberwind,
                             double randomnumberwindfather);
-void Seedwinddispersal(double rn, 
+void Seedwinddispersal(double y,
+					   double rn, 
 					   double& dx, 
 					   double& dy, 
 					   double& windspeed, 
 					   double& winddirection, 
 					   double parhei, 
 					   int seedspec, 
+					   double randomnumbergrid,
 					   double randomnumberwind);
 void Parameterinput(void);
 void Getspeciestraits(void);

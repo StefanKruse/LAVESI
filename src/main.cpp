@@ -37,11 +37,13 @@ vector<vector<Evaluation>> world_evaluation_list_copy;
 // std::vector<std::vector<double>> winddir(maxnumberyears, std::vector<double>(maxnumberwindelements));
 const int maxnumberyears = 25151;
 const int maxnumberwindelements = 1460;
-std::array<int, maxnumberyears> globalyears;
-std::array<std::array<double, maxnumberwindelements>, maxnumberyears> windspd;
-std::array<std::array<double, maxnumberwindelements>, maxnumberyears> winddir;
+std::array<std::array<int, maxnumberyears>, 5> globalyears;
+std::array<std::array<std::array<double, 5>, maxnumberwindelements>, maxnumberyears> windspd;
+std::array<std::array<std::array<double, 5>, maxnumberwindelements>, maxnumberyears> winddir;
 int cntr;
-vector<double> wdir, wspd;
+// vector<double> wdir, wspd;
+std::vector<std::vector<double>> wdir(5, std::vector<double>(maxnumberwindelements)); // TODO fixed now for 5 elements == 500 km
+std::vector<std::vector<double>> wspd(5, std::vector<double>(maxnumberwindelements)); // TODO fixed now for 5 elements == 500 km
 
 // helper functions
 double weighmeanweathervararray(array<array<double,22>,100>& data, double posongrid, int speciesnumber) {// weighted mean value along grid
@@ -144,16 +146,27 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
         yr = jahr;
     }
 
-    for (int i = 0; i < (signed)globalyears.size(); i++) {
-        if (globalyears[i] == yr) {
-			wdir.clear();
-			wspd.clear();
-            const auto& winddir_p = winddir[i];
-            std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir));
-            const auto& windspd_p = windspd[i];
-            std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd));
-        }
-    }
+		// determine number of wind input files
+		int max_cells = 1;
+		if ( (parameter[0].windgridscomputation == 1) & (parameter[0].n_weather_along_grid > 0) ) {
+			max_cells = static_cast<int>(treerows/100000) + 1; // determine necessary wind grid cells for wind sensing by individuals in 100 km steps
+		}
+#pragma omp parallel for schedule(dynamic)
+		for (int windgrid_i = 0; windgrid_i < max_cells; ++windgrid_i) { // to loop over the 5 potential wind cells if parameter[0].n_weather_along_grid > 0
+			for (int i = 0; i < (signed)globalyears[windgrid_i].size(); i++) { // TODO
+				if (globalyears[windgrid_i][i] == yr) { // TODO 
+					wdir[windgrid_i].clear();
+					wspd[windgrid_i].clear();
+					wspd[windgrid_i].shrink_to_fit();
+					wdir[windgrid_i].shrink_to_fit();
+					const auto& winddir_p = winddir[i][windgrid_i]; 
+					std::copy(std::begin(winddir_p), std::end(winddir_p), std::back_inserter(wdir[windgrid_i]));
+					const auto& windspd_p = windspd[i][windgrid_i]; 
+					std::copy(std::begin(windspd_p), std::end(windspd_p), std::back_inserter(wspd[windgrid_i]));
+				}
+			}
+		} // end wind grid cell loop
+
 #ifdef OUTPUT_COMP_DURATION
     time_start = chrono::high_resolution_clock::now();
 #endif
@@ -254,10 +267,10 @@ void vegetationDynamics(int yearposition, int jahr, int t) {
 			  world_tree_list, 
 			  world_seed_list, 
 			  world_weather_list);
-    wspd.clear();
-    wdir.clear();
-    wspd.shrink_to_fit();
-    wdir.shrink_to_fit();
+    // wspd.clear();
+    // wdir.clear();
+    // wspd.shrink_to_fit();
+    // wdir.shrink_to_fit();
 #ifdef OUTPUT_COMP_DURATION
     time_end = chrono::high_resolution_clock::now();
     elapsed = time_end - time_start;

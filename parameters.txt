@@ -133,6 +133,7 @@ n_weather_along_grid=33; 			// (int) 0 by default for only one location, >1 depe
 locationshift=0;					// (double) offset shift of climate gradient in meter e.g. 100 m means to the north thus colder temperatures
 
 // 1.1.1 -----> Wind
+windgridscomputation=1;					// (int) 0 means only 1 grid cell and if multiple are available the first one is used. 1 means for every 100 km step of simulated area 1 grid cell is loaded
 windsource=998
 										// ... 0==random dispersal direction and not depending on wind speed
 										// ... 1==EraInterim

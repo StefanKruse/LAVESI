@@ -323,8 +323,9 @@ void Hinterlandseedintro(Parameter* parameter, int yearposition, vector<VectorLi
                     double jquer = 0;
                     double iquer = 0;
 
+                    double randomnumbergrid = uniform.draw();
                     double randomnumberwind = uniform.draw();
-                    Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, rn_species, randomnumberwind);
+                    Seedwinddispersal(yseed, ratiorn, jquer, iquer, velocity, wdirection, hinterheightsi, rn_species, randomnumbergrid, randomnumberwind);
 
                     xseed = xseed + jquer;
                     yseed = yseed + iquer;

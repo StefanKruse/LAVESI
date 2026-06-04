@@ -1,12 +1,14 @@
 #pragma once
 
 // plot dimensions rows==y, cols==x
-//constexpr unsigned int treerows = 5530;	
-//constexpr unsigned int treecols = 5720;
-//constexpr unsigned int treerows = 100;	
-//constexpr unsigned int treecols = 100;
-constexpr unsigned int treerows = 50;	
-constexpr unsigned int treecols = 50;
+//constexpr unsigned int treerows = 339700;
+//constexpr unsigned int treecols = 60;
+//constexpr unsigned int treerows = 339700;
+//constexpr unsigned int treecols = 60;
+//constexpr unsigned int treerows = 339700;
+//constexpr unsigned int treecols = 60;
+constexpr unsigned int treerows = 339700;
+constexpr unsigned int treecols = 60;
 
 
 // parameter input

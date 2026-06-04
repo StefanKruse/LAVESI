@@ -55,7 +55,7 @@ void Pollinationprobability(double x,
         velocity = wspd.at(ripm);
     } else {  // random
         direction = 0.0 + ((double)(2 * M_PI) * randomnumberwind);
-        velocity = 2.777;
+        velocity = 4.777;
     }
     pe = parameter[0].pollenfall / velocity;
 
@@ -115,8 +115,8 @@ double getEntfernung(double D, double ratiorn_help) {
         double gaussweite = D, gaussmaxh = 1, gaussposcenter = 0;
         entf_help = parameter[0].distanceratio * sqrt(2 * pow(gaussweite, 2) * (-1 * log(ratiorn_help / gaussmaxh))) + gaussposcenter;
     } else if (parameter[0].dispersalmode == 4 || parameter[0].dispersalmode == 5) {  // gaussian combined with fat tailed:
-        double gaussfatratio = 2.0;
-        double gaussweite = D, gaussmaxh = 1, gaussposcenter = 0;
+        double gaussfatratio = 1.0;
+        double gaussweite = D * 100.0, gaussmaxh = 1, gaussposcenter = 0;
         double fatalpha = 0.5;
         entf_help = (0.5
                      * (gaussfatratio * (sqrt(2 * pow(gaussweite, 2) * (-1 * log(ratiorn_help / gaussmaxh))) + gaussposcenter)

@@ -78,6 +78,16 @@ void Seeddispersal(//int jahr,
                     double jquer = 0.0;
                     double iquer = 0.0;
 
+				if(parameter[0].dispersalmode == 8) {
+					seed.xcoo = (double)uniform.draw() * (double)(treecols - 1); // within 0 to max x pos
+					double steps = 1000; // every x meters e.g. 1000 means every 1 thousand meters a stretch with 100 m seed input
+					double yrandomnumbernotscaled = (double)uniform.draw() * (double)(treerows - 1)/steps; // first number along 
+					
+					int stepalong = (int)yrandomnumbernotscaled;
+					double yposinstep = yrandomnumbernotscaled - stepalong;
+					seed.ycoo = (stepalong * steps) + (yposinstep * 100);
+					
+				} else {
                     double randomnumberwind = uniform.draw();
                     Seedwinddispersal(ratiorn, jquer, iquer, velocity, wdirection, (double)seed.releaseheight / 10, seed.species, randomnumberwind);
 
@@ -160,6 +170,7 @@ void Seeddispersal(//int jahr,
                         seed.xcoo = 1000 * ((double)seed.xcoo / 1000 + jquer);
                         seed.ycoo = 1000 * ((double)seed.ycoo / 1000 + iquer);
                     }
+				} // end of normal mode not unlimited random dispersal
 
                     // check whether seed lands on plot or leaves the plot
                     bool sameausserhalb = false;

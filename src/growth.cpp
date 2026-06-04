@@ -124,6 +124,23 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 			if (tree.growing == true) {
 				double maxbasalwachstum = 0.0;
 				maxbasalwachstum = getMaxbasalwachstum(yearposition, weather_list, tree);
+
+				if(maxbasalwachstum>2){//check plausability
+					// cout << " WARNING: maxbasalwachstum = " << maxbasalwachstum 
+					// << "  ... envirimp= " << (double)tree.envirimpact / 10000  
+					// << "  / tree.densitywert=" << tree.densitywert 
+					// << endl;
+					maxbasalwachstum = 2;
+					// cout << " ... set maxbasalwachstum to a value of 2!" << endl;
+					
+					// cout << " Growthparameter:" << endl
+					// << "speciestrait[tree.species].gdbasalconst=" << speciestrait[tree.species].gdbasalconst 
+					// << "speciestrait[tree.species].gdbasalfac=" << speciestrait[tree.species].gdbasalfac
+					// << "tree.dbasal=" << tree.dbasal 
+					// << "speciestrait[tree.species].gdbasalfacq=" << speciestrait[tree.species].gdbasalfacq
+					// << endl;
+				}
+				
 // cout << "Basal dia = " << tree.dbasal << " -> " << maxbasalwachstum << endl;
 				tree.dbasalmax = 1000 * maxbasalwachstum;
 
@@ -133,7 +150,7 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				if (parameter[0].demlandscape) {
 					basalwachstum = basalwachstum * (double)tree.envirimpact / 10000;
 // if(basalwachstum>10)
-	// cout << " basalwachstum = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
+// cout << " basalwachstum = " << basalwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
 				}
 
 				if (basalwachstum < 0.0) {
@@ -160,7 +177,6 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 				// tree height update
 				if (parameter[0].allometryfunctiontype == 3) {// logistic growth
 					tree.height = 10 * exp(speciestrait[tree.species].heightloga/(1+exp((speciestrait[tree.species].heightlogb-log(tree.dbasal*10))/speciestrait[tree.species].heightlogc)));
-// cout << "H = " << tree.height << endl;
 				} else {
 					if ((double)tree.height / 10 < 130) {
 						if (parameter[0].allometryfunctiontype == 1) {
@@ -176,12 +192,30 @@ void Growth(Parameter* parameter, int yearposition, vector<VectorList<Tree>>& wo
 						}
 					}
 				}
+// if(parameter[0].ivort>15000) {
+// #pragma omp critical
+// {
+// cout << "----------------> Species = " << tree.species << endl;
+// cout << "Age = " << tree.age << endl;
+// cout << " Basal dia = " << tree.dbasal << " -> dbasalrel= " << tree.dbasalrel << " <- " << basalwachstum << " / " << maxbasalwachstum << " * " << tree.soilhumidity << " ... " << tree.elevation/10 << " ... " << tree.soilhumidity << endl;
+// cout << "H = " << tree.height << endl;
 
+// cout << exp(speciestrait[tree.species].gdbasalconst + speciestrait[tree.species].gdbasalfac * tree.dbasal + speciestrait[tree.species].gdbasalfacq * tree.dbasal * tree.dbasal) << endl;
+// cout << weather_list[yearposition].weatherfactor[tree.species] << endl;
+
+// } // pragma
+// }
 				double maxbreastwachstum = 0;
 				double breastwachstum = 0;
 
 				if ((double)tree.height / 10 >= 130) {
 					maxbreastwachstum = getMaxbreastwachstum(yearposition, weather_list, tree);
+					
+					if(maxbreastwachstum >2){//check plausability
+						// cout << " WARNING: maxbreastwachstum = " << maxbreastwachstum << "  ... envirimp= " << (double)tree.envirimpact / 10000 << endl;
+						maxbreastwachstum = 2;
+						cout << " ... set maxbreastwachstum to a value of 2!" << endl;
+					}
 
 					breastwachstum = maxbreastwachstum * (1.0 - tree.densitywert);
 

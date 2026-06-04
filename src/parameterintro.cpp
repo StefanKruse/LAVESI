@@ -495,17 +495,11 @@ void Parameterinput(void) {
 
     strcpy(uebergabestring, "seedintronumber");
     parameter[0].seedintronumber = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
-	parameter[0].seedintronumber = (int) parameter[0].seedintronumber * ((treerows/100)*(treecols/100)); // per ha
+	parameter[0].seedintronumber = (int) (double)parameter[0].seedintronumber * (((double)treerows/100)*((double)treecols/100)); // per ha
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumber);
     }
 
-    strcpy(uebergabestring, "seedintronumberpermanent");
-    parameter[0].seedintronumberpermanent = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
-	parameter[0].seedintronumberpermanent = (int) parameter[0].seedintronumberpermanent * ((treerows/100)*(treecols/100)); // per ha
-    if (parameter[0].parameterinputvis == true) {
-        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
-    }
 
     strcpy(uebergabestring, "seedintro_maxy");
     parameter[0].seedintro_maxy = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
@@ -516,6 +510,22 @@ void Parameterinput(void) {
     parameter[0].seedintro_maxx = (unsigned int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
     if (parameter[0].parameterinputvis == true) {
         printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintro_maxx);
+    }
+	
+    strcpy(uebergabestring, "seedintronumberpermanent");
+    parameter[0].seedintronumberpermanent = (int)(Parameterinput(&uebergabestring[0], stringlengthmax, divisionsign, &parameter[0]));
+	// adjust number of seeds per simulation area that should be initiated
+	double ynew=(double)treerows;
+	double xnew=(double)treecols;
+	if(parameter[0].seedintro_maxy > 0) {
+		ynew = parameter[0].seedintro_maxy;
+	}
+	if(parameter[0].seedintro_maxx > 0) {
+		xnew = parameter[0].seedintro_maxx;
+	}
+	parameter[0].seedintronumberpermanent = (int) (double)parameter[0].seedintronumberpermanent * ((ynew/100)*(xnew/100)); // per ha
+    if (parameter[0].parameterinputvis == true) {
+        printf("read:	%s <= %d ==> Main\n", uebergabestring, parameter[0].seedintronumberpermanent);
     }
 
     strcpy(uebergabestring, "yearswithseedintro");

@@ -9,6 +9,7 @@ extern vector<VectorList<Tree>> world_tree_list;
 extern vector<VectorList<Seed>> world_seed_list;
 
 void Seedin() {
+// cout << " Seedin() function called " << endl;
     RandomNumber<double> uniform(0, 1);
     int aktort = 0;
     for (vector<VectorList<Seed>>::iterator posw = world_seed_list.begin(); posw != world_seed_list.end(); ++posw) {
@@ -35,8 +36,11 @@ void Seedin() {
             } else {
                 seednobuffer = parameter[0].seedintronumber;
             }
+			
+// cout << "seednobuffer = " << seednobuffer << endl;
 
             for (int n = 0; n < seednobuffer; n++) {
+// cout << n << endl;
                 // calculate post-dispersal position
                 double jseed, iseed;
                 bool seedeintragen = false;
@@ -73,8 +77,28 @@ void Seedin() {
                 // seedwinddispersalmode==2 => randomly all over the plot
                 else if (parameter[0].seedwinddispersalmode == 2) {
                     jseed = maxx * uniform.draw();
-                    iseed = maxy * uniform.draw();
+                   // iseed = 1125135+ (maxy * uniform.draw());
+					iseed = maxy * uniform.draw();
+                    seedeintragen = true;
+                } 
+				// seedwinddispersalmode==3
+				else if (parameter[0].seedwinddispersalmode == 3) {
+                    jseed = maxx * uniform.draw();
+					
+                    double steps = 1000.0;  
+					double stretch = 100.0;     
 
+					double total_range = (double)(treerows - 1) - 5000.0;  
+					double number_of_steps = total_range / steps;       
+
+					int step_selected = (int)(uniform.draw() * number_of_steps);
+
+					double step_start_y = 5000.0 + step_selected * steps;
+
+					double ypos_in_stretch = uniform.draw() * stretch;
+
+					iseed = step_start_y + ypos_in_stretch;
+					
                     seedeintragen = true;
                 } else {
                     printf("\n\nLaVeSi was stopped\n");
@@ -129,6 +153,7 @@ void Seedin() {
             }
             seed_list.consolidate();
         }
+		cout << " check seedlistsize = " << seed_list.size() << endl;
     }
 }
 
